@@ -11,5 +11,6 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         print("Test Number 1")
+        print("hello")
     }
 }
