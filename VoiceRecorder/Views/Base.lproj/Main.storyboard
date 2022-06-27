@@ -31,7 +31,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Voice Memos" id="bKj-eF-RGO">
-                        <barButtonItem key="rightBarButtonItem" image="plus" catalog="system" style="plain" id="1H2-QD-bBg">
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="plus" catalog="system" id="1H2-QD-bBg">
                             <connections>
                                 <segue destination="hfC-T6-rVw" kind="presentation" id="JTO-SA-3a4"/>
                             </connections>
