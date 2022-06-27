@@ -25,8 +25,8 @@ class RecordDetailViewController: UIViewController {
     
     var audioFilePath = ""
     
-    let storage = Storage.storage().reference()
-    
+    let storage = Storage.storage()
+        
     let readyToRecordButtonImage = UIImage(systemName: "record.circle")
     let recordingButtonImage = UIImage(systemName: "record.circle.fill")
     
@@ -95,9 +95,23 @@ class RecordDetailViewController: UIViewController {
     }
     
     func uploadRecodeDataToFirebase() {
-        let storageRef = storage.child("/")
+        // Create a root reference
+        let storageRef = storage.reference()
+
+        // Create a reference to "mountains.jpg"
+        let mountainsRef = storageRef.child(audioFilePath)
+
+        // Create a reference to 'images/mountains.jpg'
+        let mountainImagesRef = storageRef.child("/")
+
+        // While the file names are the same, the references point to different files
+        mountainsRef.name == mountainImagesRef.name            // true
+        mountainsRef.fullPath == mountainImagesRef.fullPath    // false
         // File located on disk
-        let localFile = URL(string: audioFilePath)!
+        
+        
+        
+        let localFile = URL(fileURLWithPath: audioFilePath)
 
         // Create a reference to the file you want to upload
         let riversRef = storageRef.child("/")
