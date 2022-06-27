@@ -27,7 +27,7 @@
         <!--Voice Memos-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="VoiceRecorder" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="VoiceMemoListViewController" customModule="VoiceRecorder" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -36,13 +36,38 @@
                                 <rect key="frame" x="0.0" y="88" width="414" height="774"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="paS-TS-WAA">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="RecordFileCell" id="paS-TS-WAA" customClass="RecordFileCell" customModule="VoiceRecorder" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="44.5" width="414" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="paS-TS-WAA" id="Pmk-Gz-Itb">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="49t-1h-JvT">
+                                                    <rect key="frame" x="38" y="11.5" width="42" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HCl-7T-Xmi">
+                                                    <rect key="frame" x="352" y="11.5" width="42" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="HCl-7T-Xmi" firstAttribute="leading" relation="lessThanOrEqual" secondItem="49t-1h-JvT" secondAttribute="trailing" constant="272" id="6To-lg-iZr"/>
+                                                <constraint firstItem="49t-1h-JvT" firstAttribute="centerY" secondItem="Pmk-Gz-Itb" secondAttribute="centerY" id="EzJ-JQ-uOL"/>
+                                                <constraint firstItem="HCl-7T-Xmi" firstAttribute="centerY" secondItem="Pmk-Gz-Itb" secondAttribute="centerY" id="Wvm-ve-ytY"/>
+                                                <constraint firstItem="49t-1h-JvT" firstAttribute="leading" secondItem="Pmk-Gz-Itb" secondAttribute="leading" constant="38" id="c1m-YI-W5J"/>
+                                                <constraint firstAttribute="trailing" secondItem="HCl-7T-Xmi" secondAttribute="trailing" constant="20" symbolic="YES" id="yzL-An-Rrc"/>
+                                            </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="fileNameLable" destination="49t-1h-JvT" id="jru-t9-1f0"/>
+                                            <outlet property="recordPlayTimeLabel" destination="HCl-7T-Xmi" id="gnh-cW-Q3a"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
@@ -60,7 +85,7 @@
                         <barButtonItem key="rightBarButtonItem" title="Item" image="plus" catalog="system" id="9sS-TR-QHu"/>
                     </navigationItem>
                     <connections>
-                        <outlet property="recordFileListTableView" destination="ThA-pZ-tai" id="Xol-6W-IPn"/>
+                        <outlet property="recordFileListTableView" destination="ThA-pZ-tai" id="U4k-zZ-Zko"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
