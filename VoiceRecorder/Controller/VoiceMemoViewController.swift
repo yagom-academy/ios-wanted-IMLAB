@@ -6,15 +6,29 @@
 import UIKit
 
 class VoiceMemoViewController: UIViewController {
+    
+    // MARK: - IBOutlet
+    
+    @IBOutlet weak var voiceMemoTableView: UITableView!
+    
+    // MARK: - Properties
 
+    // MARK: - LifeCycles
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configureTableView()
         
     }
-
-    @IBOutlet weak var voiceMemoTableView: UITableView!
+    
+    // MARK: - IBActions
+    
+    @IBAction func moveToRecordDetail(_ sender: UIBarButtonItem) {
+        
+    }
+    
+    // MARK: - Methods
     
     func configureTableView() {
 
@@ -27,6 +41,8 @@ class VoiceMemoViewController: UIViewController {
     
     
 }
+
+// MARK: - Extensions
 
 extension VoiceMemoViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
