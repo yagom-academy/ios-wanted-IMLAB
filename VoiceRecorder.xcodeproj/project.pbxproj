@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9B0C3F0F4F6E0452809B26A0 /* Pods_VoiceRecorder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C586B39F26D646B373DD637 /* Pods_VoiceRecorder.framework */; };
 		C79B753E286985F900C2372A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C79B753D286985F900C2372A /* GoogleService-Info.plist */; };
-		C7E554CF286980F900A0A2A0 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = C7E554CE286980F900A0A2A0 /* FirebaseStorage */; };
 		DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65B28604278003DD2F5 /* AppDelegate.swift */; };
 		DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65D28604278003DD2F5 /* SceneDelegate.swift */; };
 		DE15E66028604278003DD2F5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65F28604278003DD2F5 /* ViewController.swift */; };
@@ -18,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4C586B39F26D646B373DD637 /* Pods_VoiceRecorder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VoiceRecorder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C79B753D286985F900C2372A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C7E554D5286983A900A0A2A0 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DE15E65828604278003DD2F5 /* VoiceRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -27,6 +28,8 @@
 		DE15E66228604278003DD2F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		DE15E66428604279003DD2F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DE15E66728604279003DD2F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		EA29BCF6FC58DF029B4AE1E8 /* Pods-VoiceRecorder.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VoiceRecorder.release.xcconfig"; path = "Target Support Files/Pods-VoiceRecorder/Pods-VoiceRecorder.release.xcconfig"; sourceTree = "<group>"; };
+		EC04FCFF83BFFEA745C12814 /* Pods-VoiceRecorder.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VoiceRecorder.debug.xcconfig"; path = "Target Support Files/Pods-VoiceRecorder/Pods-VoiceRecorder.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -34,13 +37,31 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C7E554CF286980F900A0A2A0 /* FirebaseStorage in Frameworks */,
+				9B0C3F0F4F6E0452809B26A0 /* Pods_VoiceRecorder.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		311CB781D6C62215A20DE44E /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				EC04FCFF83BFFEA745C12814 /* Pods-VoiceRecorder.debug.xcconfig */,
+				EA29BCF6FC58DF029B4AE1E8 /* Pods-VoiceRecorder.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		590655D0D6CA847508ECE2DB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4C586B39F26D646B373DD637 /* Pods_VoiceRecorder.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		C7E554C92869801E00A0A2A0 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
@@ -62,6 +83,8 @@
 			children = (
 				DE15E65A28604278003DD2F5 /* VoiceRecorder */,
 				DE15E65928604278003DD2F5 /* Products */,
+				311CB781D6C62215A20DE44E /* Pods */,
+				590655D0D6CA847508ECE2DB /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -95,18 +118,17 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DE15E66C28604279003DD2F5 /* Build configuration list for PBXNativeTarget "VoiceRecorder" */;
 			buildPhases = (
+				5F7CB66721AE6E9FDB2C67A2 /* [CP] Check Pods Manifest.lock */,
 				DE15E65428604278003DD2F5 /* Sources */,
 				DE15E65528604278003DD2F5 /* Frameworks */,
 				DE15E65628604278003DD2F5 /* Resources */,
+				EE5D032B9DE607DE19EF18BE /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = VoiceRecorder;
-			packageProductDependencies = (
-				C7E554CE286980F900A0A2A0 /* FirebaseStorage */,
-			);
 			productName = SNPLab;
 			productReference = DE15E65828604278003DD2F5 /* VoiceRecorder.app */;
 			productType = "com.apple.product-type.application";
@@ -135,9 +157,6 @@
 				Base,
 			);
 			mainGroup = DE15E64F28604278003DD2F5;
-			packageReferences = (
-				C7E554CD286980F900A0A2A0 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
-			);
 			productRefGroup = DE15E65928604278003DD2F5 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -160,6 +179,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		5F7CB66721AE6E9FDB2C67A2 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-VoiceRecorder-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EE5D032B9DE607DE19EF18BE /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-VoiceRecorder/Pods-VoiceRecorder-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-VoiceRecorder/Pods-VoiceRecorder-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VoiceRecorder/Pods-VoiceRecorder-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		DE15E65428604278003DD2F5 /* Sources */ = {
@@ -310,6 +371,7 @@
 		};
 		DE15E66D28604279003DD2F5 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EC04FCFF83BFFEA745C12814 /* Pods-VoiceRecorder.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -338,6 +400,7 @@
 		};
 		DE15E66E28604279003DD2F5 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EA29BCF6FC58DF029B4AE1E8 /* Pods-VoiceRecorder.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -386,25 +449,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		C7E554CD286980F900A0A2A0 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 9.0.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		C7E554CE286980F900A0A2A0 /* FirebaseStorage */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C7E554CD286980F900A0A2A0 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseStorage;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = DE15E65028604278003DD2F5 /* Project object */;
 }
