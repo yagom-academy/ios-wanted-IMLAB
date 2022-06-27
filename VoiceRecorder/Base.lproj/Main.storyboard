@@ -3,6 +3,7 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -24,6 +25,21 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="L1p-7h-a5q" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-552" y="100"/>
+        </scene>
+        <!--Record Voice View Controller-->
+        <scene sceneID="doJ-vK-LL8">
+            <objects>
+                <viewController storyboardIdentifier="RecordVoiceViewController" id="Nga-IX-kRE" customClass="RecordVoiceViewController" customModule="VoiceRecorder" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="eJS-2w-eoW">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="8uo-5k-hYJ"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="a79-iJ-XCL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1745" y="100"/>
         </scene>
         <!--Voice Recorder List Table View Controller-->
         <scene sceneID="tKw-he-vJ0">
@@ -49,6 +65,9 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="LsH-LY-bIx"/>
+                    <connections>
+                        <segue destination="Nga-IX-kRE" kind="presentation" identifier="RecordVoice" id="XTE-OV-rNL"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EpN-xH-A9A" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

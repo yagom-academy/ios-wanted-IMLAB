@@ -9,18 +9,32 @@ import UIKit
 
 class VoiceRecordTableViewCell: UITableViewCell {
     
-    let fileNameLabel : UILabel = {
-        let fileNameLabel = UILabel()
-        fileNameLabel.font = UIFont.boldSystemFont(ofSize: 20)
-        return fileNameLabel
+    static let g_identifier = "VoiceRecordListCell"
+    
+    let createVoiceRecordDateLable : UILabel = {
+        let createVoiceRecordDateLable = UILabel()
+        createVoiceRecordDateLable.translatesAutoresizingMaskIntoConstraints = false
+        createVoiceRecordDateLable.font = UIFont.boldSystemFont(ofSize: 20)
+        return createVoiceRecordDateLable
     }()
     
-    let timeLabel : UILabel = {
-        let timeLabel = UILabel()
-        timeLabel.font = UIFont.boldSystemFont(ofSize: 20)
-        return timeLabel
+    let voiceRecordLengthLabel : UILabel = {
+        let voiceRecordLengthLabel = UILabel()
+        voiceRecordLengthLabel.translatesAutoresizingMaskIntoConstraints = false
+        voiceRecordLengthLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        return voiceRecordLengthLabel
     }()
-
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setContentView()
+        autoLayout()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         setContentView()
@@ -28,23 +42,23 @@ class VoiceRecordTableViewCell: UITableViewCell {
     }
     
     func setContentView(){
-        self.contentView.addSubview(fileNameLabel)
-        self.contentView.addSubview(timeLabel)
+        self.contentView.addSubview(createVoiceRecordDateLable)
+        self.contentView.addSubview(voiceRecordLengthLabel)
     }
     
     func autoLayout(){
         NSLayoutConstraint.activate([
-            fileNameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            fileNameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
-            timeLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            timeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            createVoiceRecordDateLable.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            createVoiceRecordDateLable.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            voiceRecordLengthLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            voiceRecordLengthLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
         ])
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
-        // Configure the view for the selected state
+        
     }
 
 }

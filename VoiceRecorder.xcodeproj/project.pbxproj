@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9F25234128698A9C008A9819 /* VoiceRecorderListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F25234028698A9C008A9819 /* VoiceRecorderListTableViewController.swift */; };
+		9F25234328699DB4008A9819 /* RecordVoiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F25234228699DB4008A9819 /* RecordVoiceViewController.swift */; };
 		C77F4C2D2869925900B2646E /* VoiceRecordTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77F4C2C2869925900B2646E /* VoiceRecordTableViewCell.swift */; };
 		DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65B28604278003DD2F5 /* AppDelegate.swift */; };
 		DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65D28604278003DD2F5 /* SceneDelegate.swift */; };
@@ -18,6 +19,7 @@
 
 /* Begin PBXFileReference section */
 		9F25234028698A9C008A9819 /* VoiceRecorderListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRecorderListTableViewController.swift; sourceTree = "<group>"; };
+		9F25234228699DB4008A9819 /* RecordVoiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordVoiceViewController.swift; sourceTree = "<group>"; };
 		C77F4C2C2869925900B2646E /* VoiceRecordTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRecordTableViewCell.swift; sourceTree = "<group>"; };
 		DE15E65828604278003DD2F5 /* VoiceRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE15E65B28604278003DD2F5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -44,6 +46,7 @@
 			children = (
 				9F25234028698A9C008A9819 /* VoiceRecorderListTableViewController.swift */,
 				C77F4C2C2869925900B2646E /* VoiceRecordTableViewCell.swift */,
+				9F25234228699DB4008A9819 /* RecordVoiceViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -150,6 +153,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9F25234128698A9C008A9819 /* VoiceRecorderListTableViewController.swift in Sources */,
+				9F25234328699DB4008A9819 /* RecordVoiceViewController.swift in Sources */,
 				C77F4C2D2869925900B2646E /* VoiceRecordTableViewCell.swift in Sources */,
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
 				DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */,

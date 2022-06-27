@@ -10,7 +10,7 @@ import UIKit
 class VoiceRecorderListTableViewController: UITableViewController {
 
     var addButton: UIBarButtonItem = {
-        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: nil)
+        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: .)
         return addButton
     }()
     
@@ -21,11 +21,6 @@ class VoiceRecorderListTableViewController: UITableViewController {
         super.viewDidLoad()
         setUp()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
     func setUp() {
@@ -39,29 +34,35 @@ class VoiceRecorderListTableViewController: UITableViewController {
     }
     
     func setTableView() {
-        tableView.register(VoiceRecordTableViewCell.self, forCellReuseIdentifier: "ReusableCell")
-        tableView.rowHeight = 60
+        tableView.register(VoiceRecordTableViewCell.self, forCellReuseIdentifier: VoiceRecordTableViewCell.g_identifier)
     }
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
+        
         return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
+        
         return 10
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ReusableCell", for: indexPath) as? VoiceRecordTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: VoiceRecordTableViewCell.g_identifier, for: indexPath) as? VoiceRecordTableViewCell else {
             fatalError()
         }
         print("123123")
-        cell.fileNameLabel.text = "hello"
-        cell.timeLabel.text = "hello"
+        cell.createVoiceRecordDateLable.text = "hello"
+        cell.voiceRecordLengthLabel.text = "hello"
         return cell
     }
     
+    @IBAction func tabAddButton() {
+        guard let recordVoiceView = self.storyboard?.instantiateViewController(withIdentifier: "RecordVoiceViewController") as? RecordVoiceViewController else {
+            fatalError()
+        }
+        recordVoiceView.modalPresentationStyle = .automatic
+        self.present(recordVoiceView, animated: true)
+    }
 }
