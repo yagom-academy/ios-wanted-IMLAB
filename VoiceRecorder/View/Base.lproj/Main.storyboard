@@ -69,6 +69,9 @@
                             </label>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="2IU-Om-2nW">
                                 <rect key="frame" x="38" y="336.5" width="338" height="113"/>
+                                <connections>
+                                    <action selector="controlRecordProgressBar:" destination="ozQ-a5-b4X" eventType="valueChanged" id="9rp-0R-OJs"/>
+                                </connections>
                             </slider>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="apc-b5-Hp1">
                                 <rect key="frame" x="186" y="475.5" width="41.5" height="20.5"/>
@@ -83,16 +86,25 @@
                                         <rect key="frame" x="0.0" y="0.0" width="81.5" height="31"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="gobackward.5" catalog="system"/>
+                                        <connections>
+                                            <action selector="controlBackButton:" destination="ozQ-a5-b4X" eventType="touchUpInside" id="EJ0-Co-K4k"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Go-Dt-yoo">
                                         <rect key="frame" x="81.5" y="0.0" width="81" height="31"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="play.fill" catalog="system"/>
+                                        <connections>
+                                            <action selector="controlPlayButton:" destination="ozQ-a5-b4X" eventType="touchUpInside" id="T3y-I9-frO"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="chD-hW-jJO">
                                         <rect key="frame" x="162.5" y="0.0" width="81.5" height="31"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="goforward.5" catalog="system"/>
+                                        <connections>
+                                            <action selector="controlNextButton:" destination="ozQ-a5-b4X" eventType="touchUpInside" id="lfH-Gg-PJj"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                             </stackView>
@@ -101,6 +113,9 @@
                                 <color key="tintColor" systemColor="systemRedColor"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="record.circle" catalog="system"/>
+                                <connections>
+                                    <action selector="controlRecordButton:" destination="ozQ-a5-b4X" eventType="touchUpInside" id="owA-WP-8Nk"/>
+                                </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="JKT-6g-hs8"/>
@@ -125,6 +140,14 @@
                             <constraint firstItem="JKT-6g-hs8" firstAttribute="bottom" secondItem="SRg-j9-lGu" secondAttribute="bottom" constant="275" id="rAo-ki-MTM"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="cutoffLabel" destination="Uwp-S3-BQB" id="qR4-wg-zuB"/>
+                        <outlet property="durationLabel" destination="apc-b5-Hp1" id="zT1-sP-nFE"/>
+                        <outlet property="playButton" destination="6Go-Dt-yoo" id="2Af-Pw-YgZ"/>
+                        <outlet property="recordButton" destination="QZr-Sv-d2j" id="8Yh-2T-vd8"/>
+                        <outlet property="recordProgressBar" destination="2IU-Om-2nW" id="dq6-n5-TtK"/>
+                        <outlet property="recordWaveView" destination="0SJ-cc-UK2" id="G29-aI-thC"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kSc-Yg-5fQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
