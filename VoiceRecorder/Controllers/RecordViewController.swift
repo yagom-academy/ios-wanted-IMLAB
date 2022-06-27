@@ -2,17 +2,33 @@
 //  RecordViewController.swift
 //  VoiceRecorder
 //
-//  Created by 효우 on 2022/06/27.
-//
 
 import UIKit
 
 class RecordViewController: UIViewController {
-
+    
+    @IBOutlet weak var cutOffSlider: UISlider!
+    @IBOutlet weak var recordTimeLabel: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        
     }
 
-
+    @IBAction func didTapRecordButton(_ sender: UIButton) {
+        
+    }
+    
+    @IBAction func didTapPlayBack5Button(_ sender: UIButton) {
+        
+    }
+    
+    @IBAction func didTapPlayForward5Button(_ sender: UIButton) {
+        
+    }
+    
+    @IBAction func didTapPlayPauseButton(_ sender: UIButton) {
+        
+    }
 }

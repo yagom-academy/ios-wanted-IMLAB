@@ -62,7 +62,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="cutoff freq" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="96P-79-zEn">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="cutoff frequency" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="96P-79-zEn">
                                 <rect key="frame" x="16" y="192" width="382" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
@@ -84,6 +84,10 @@
                                         <state key="normal" image="circle.fill" catalog="system">
                                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="32"/>
                                         </state>
+                                        <state key="selected" image="stop.fill" catalog="system"/>
+                                        <connections>
+                                            <action selector="didTapRecordButton:" destination="hfC-T6-rVw" eventType="touchUpInside" id="Sxw-S3-T0d"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tpb-eI-pUV">
                                         <rect key="frame" x="98" y="0.0" width="88.5" height="39.5"/>
@@ -91,6 +95,9 @@
                                         <state key="normal" image="gobackward.5" catalog="system">
                                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="32"/>
                                         </state>
+                                        <connections>
+                                            <action selector="didTapPlayBack5Button:" destination="hfC-T6-rVw" eventType="touchUpInside" id="dbR-4T-Qf6"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x2c-KM-V3g">
                                         <rect key="frame" x="195.5" y="4.5" width="89" height="30.5"/>
@@ -98,6 +105,10 @@
                                         <state key="normal" image="play" catalog="system">
                                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="32"/>
                                         </state>
+                                        <state key="selected" image="pause.fill" catalog="system"/>
+                                        <connections>
+                                            <action selector="didTapPlayPauseButton:" destination="hfC-T6-rVw" eventType="touchUpInside" id="d83-sj-cwl"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F2S-lW-VA6">
                                         <rect key="frame" x="293.5" y="0.0" width="88.5" height="39.5"/>
@@ -105,6 +116,9 @@
                                         <state key="normal" image="goforward.5" catalog="system">
                                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="32"/>
                                         </state>
+                                        <connections>
+                                            <action selector="didTapPlayForward5Button:" destination="hfC-T6-rVw" eventType="touchUpInside" id="n52-cs-XS1"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                             </stackView>
@@ -130,6 +144,10 @@
                             <constraint firstItem="roU-vI-b2C" firstAttribute="top" secondItem="Iee-YG-Len" secondAttribute="top" constant="16" id="xum-1j-hT8"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="cutOffSlider" destination="upv-Mu-e34" id="Fdt-e8-hr4"/>
+                        <outlet property="recordTimeLabel" destination="gRT-WD-I6Z" id="CDW-mk-D5I"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="c3y-ap-Y7R" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -174,8 +192,8 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="9" translatesAutoresizingMaskIntoConstraints="NO" id="nl7-I1-MpL">
-                                <rect key="frame" x="141" y="806.5" width="132" height="39.5"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="nl7-I1-MpL">
+                                <rect key="frame" x="138" y="806.5" width="138" height="39.5"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wdY-eq-EiC">
                                         <rect key="frame" x="0.0" y="0.0" width="38" height="39.5"/>
@@ -183,20 +201,29 @@
                                         <state key="normal" image="gobackward.5" catalog="system">
                                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="32"/>
                                         </state>
+                                        <connections>
+                                            <action selector="didTapPlayBack5Button:" destination="lmi-ig-c4Q" eventType="touchUpInside" id="5C4-X6-SIf"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZXT-xL-ecs">
-                                        <rect key="frame" x="47" y="4.5" width="38" height="30.5"/>
+                                        <rect key="frame" x="50" y="4.5" width="38" height="30.5"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                         <state key="normal" image="play" catalog="system">
                                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="32"/>
                                         </state>
+                                        <connections>
+                                            <action selector="didTapPlayPauseButton:" destination="lmi-ig-c4Q" eventType="touchUpInside" id="4Eo-7q-68f"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KCt-VN-UiT">
-                                        <rect key="frame" x="94" y="0.0" width="38" height="39.5"/>
+                                        <rect key="frame" x="100" y="0.0" width="38" height="39.5"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                         <state key="normal" image="goforward.5" catalog="system">
                                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="32"/>
                                         </state>
+                                        <connections>
+                                            <action selector="didTapPlayForward5Button:" destination="lmi-ig-c4Q" eventType="touchUpInside" id="3V3-PK-er7"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                             </stackView>
@@ -238,6 +265,11 @@
                             <constraint firstItem="nl7-I1-MpL" firstAttribute="top" secondItem="PhE-fU-8gb" secondAttribute="bottom" constant="32" id="rTf-bt-Cn9"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="dateTitleLabel" destination="756-8S-E39" id="reP-vl-nGU"/>
+                        <outlet property="voiceChangeSegment" destination="qY9-Ow-Yxv" id="j2l-9F-4io"/>
+                        <outlet property="volumeSlider" destination="PhE-fU-8gb" id="QR5-MO-02f"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cw3-jC-kAq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -248,8 +280,10 @@
         <image name="circle.fill" catalog="system" width="128" height="121"/>
         <image name="gobackward.5" catalog="system" width="121" height="128"/>
         <image name="goforward.5" catalog="system" width="121" height="128"/>
+        <image name="pause.fill" catalog="system" width="116" height="128"/>
         <image name="play" catalog="system" width="120" height="128"/>
         <image name="plus" catalog="system" width="128" height="113"/>
+        <image name="stop.fill" catalog="system" width="128" height="113"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

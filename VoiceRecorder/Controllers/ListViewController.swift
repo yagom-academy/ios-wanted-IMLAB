@@ -32,6 +32,8 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+
         let playVC = storyboard?.instantiateViewController(withIdentifier: "PlayViewController") as! PlayViewController
         
         self.present(playVC, animated: true, completion: nil)
