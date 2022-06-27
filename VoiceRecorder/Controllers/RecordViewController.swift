@@ -19,15 +19,21 @@ class RecordViewController: UIViewController {
         AVSampleRateKey: 44_100.0
     ])
     var fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-    private lazy var fileName = fileURL.appendingPathComponent("\(UUID().uuidString).mp4")
+    private lazy var fileName = fileURL.appendingPathComponent("\(UUID().uuidString).m4a")
     var isRecord = false
+    var isPlay = false
+//    var progressTimer : Timer!
     
     var recordingSession: AVAudioSession!
+    var audioPlayer: AVAudioPlayer?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         requestRecord()
         audioRecorder.prepareToRecord()
+        
+        recordTimeLabel.text = "Press the record button"
     }
     
     @IBAction func didTapRecordButton(_ sender: UIButton) {
@@ -51,33 +57,48 @@ class RecordViewController: UIViewController {
     }
     
     @IBAction func didTapPlayPauseButton(_ sender: UIButton) {
-        let audioPlayer = try? AVAudioPlayer(contentsOf: fileName)
-        audioPlayer?.volume = 1.0
-        audioPlayer?.prepareToPlay()
-        audioPlayer?.play()
+
+        if isPlay {
+            sender.setImage(UIImage(systemName: "play"), for: .normal)
+            audioPlayer?.stop()
+        } else {
+            sender.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+            do {
+                audioPlayer = try AVAudioPlayer(contentsOf: fileName)
+                guard let sound = audioPlayer else { return }
+                print(fileName)
+                sound.volume = 1.0
+                sound.prepareToPlay()
+                sound.play()
+            } catch {
+                recordTimeLabel.text = "The recording file doesn't exist. Press the record button"
+            }
+        }
+        isPlay = !isPlay
+        
     }
     
     
     
     func requestRecord() {
-            recordingSession = AVAudioSession.sharedInstance()
-
-            do {
-                try recordingSession.setCategory(.playAndRecord, mode: .default)
-                try recordingSession.setActive(true)
-                recordingSession.requestRecordPermission() { allowed in
-                    DispatchQueue.main.async {
-                        if allowed {
-                            print("allowed record")
-                        } else {
-                            if let url = URL(string: UIApplication.openSettingsURLString) {
-                                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                                    }
+        recordingSession = AVAudioSession.sharedInstance()
+        
+        do {
+            try recordingSession.setCategory(.playAndRecord, mode: .default)
+            try recordingSession.setActive(true)
+            recordingSession.requestRecordPermission() { allowed in
+                DispatchQueue.main.async {
+                    if allowed {
+                        print("allowed record")
+                    } else {
+                        if let url = URL(string: UIApplication.openSettingsURLString) {
+                            UIApplication.shared.open(url, options: [:], completionHandler: nil)
                         }
                     }
                 }
-            } catch {
-                // failed to record!
             }
+        } catch {
+            print(" failed to record!")
         }
+    }
 }
