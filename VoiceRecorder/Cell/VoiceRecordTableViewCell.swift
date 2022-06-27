@@ -50,6 +50,7 @@ class VoiceRecordTableViewCell: UITableViewCell {
         NSLayoutConstraint.activate([
             createVoiceRecordDateLable.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             createVoiceRecordDateLable.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            
             voiceRecordLengthLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             voiceRecordLengthLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
         ])

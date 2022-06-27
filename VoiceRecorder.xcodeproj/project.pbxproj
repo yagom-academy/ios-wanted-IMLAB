@@ -10,6 +10,7 @@
 		9F25234128698A9C008A9819 /* VoiceRecorderListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F25234028698A9C008A9819 /* VoiceRecorderListTableViewController.swift */; };
 		9F25234328699DB4008A9819 /* RecordVoiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F25234228699DB4008A9819 /* RecordVoiceViewController.swift */; };
 		C77F4C2D2869925900B2646E /* VoiceRecordTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77F4C2C2869925900B2646E /* VoiceRecordTableViewCell.swift */; };
+		C77F4C2F2869A56500B2646E /* PlayVoiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77F4C2E2869A56500B2646E /* PlayVoiceViewController.swift */; };
 		DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65B28604278003DD2F5 /* AppDelegate.swift */; };
 		DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65D28604278003DD2F5 /* SceneDelegate.swift */; };
 		DE15E66328604278003DD2F5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66128604278003DD2F5 /* Main.storyboard */; };
@@ -21,6 +22,7 @@
 		9F25234028698A9C008A9819 /* VoiceRecorderListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRecorderListTableViewController.swift; sourceTree = "<group>"; };
 		9F25234228699DB4008A9819 /* RecordVoiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordVoiceViewController.swift; sourceTree = "<group>"; };
 		C77F4C2C2869925900B2646E /* VoiceRecordTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRecordTableViewCell.swift; sourceTree = "<group>"; };
+		C77F4C2E2869A56500B2646E /* PlayVoiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayVoiceViewController.swift; sourceTree = "<group>"; };
 		DE15E65828604278003DD2F5 /* VoiceRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE15E65B28604278003DD2F5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DE15E65D28604278003DD2F5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -45,10 +47,18 @@
 			isa = PBXGroup;
 			children = (
 				9F25234028698A9C008A9819 /* VoiceRecorderListTableViewController.swift */,
-				C77F4C2C2869925900B2646E /* VoiceRecordTableViewCell.swift */,
 				9F25234228699DB4008A9819 /* RecordVoiceViewController.swift */,
+				C77F4C2E2869A56500B2646E /* PlayVoiceViewController.swift */,
 			);
 			path = Controller;
+			sourceTree = "<group>";
+		};
+		C77F4C302869AB9200B2646E /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				C77F4C2C2869925900B2646E /* VoiceRecordTableViewCell.swift */,
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 		DE15E64F28604278003DD2F5 = {
@@ -70,9 +80,10 @@
 		DE15E65A28604278003DD2F5 /* VoiceRecorder */ = {
 			isa = PBXGroup;
 			children = (
+				C77F4C302869AB9200B2646E /* Cell */,
+				9F25233F28698A7B008A9819 /* Controller */,
 				DE15E65B28604278003DD2F5 /* AppDelegate.swift */,
 				DE15E65D28604278003DD2F5 /* SceneDelegate.swift */,
-				9F25233F28698A7B008A9819 /* Controller */,
 				DE15E66428604279003DD2F5 /* Assets.xcassets */,
 				DE15E66128604278003DD2F5 /* Main.storyboard */,
 				DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */,
@@ -155,6 +166,7 @@
 				9F25234128698A9C008A9819 /* VoiceRecorderListTableViewController.swift in Sources */,
 				9F25234328699DB4008A9819 /* RecordVoiceViewController.swift in Sources */,
 				C77F4C2D2869925900B2646E /* VoiceRecordTableViewCell.swift in Sources */,
+				C77F4C2F2869A56500B2646E /* PlayVoiceViewController.swift in Sources */,
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
 				DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */,
 			);
