@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B7A56DB12869A4D300EA639D /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = B7A56DB02869A4D300EA639D /* FirebaseStorage */; };
 		DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65B28604278003DD2F5 /* AppDelegate.swift */; };
 		DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65D28604278003DD2F5 /* SceneDelegate.swift */; };
 		DE15E66028604278003DD2F5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65F28604278003DD2F5 /* ViewController.swift */; };
@@ -29,12 +30,56 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B7A56DB12869A4D300EA639D /* FirebaseStorage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B7A56DB22869A4F600EA639D /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				B7A56DB52869A51400EA639D /* Play */,
+				B7A56DB42869A50A00EA639D /* CreateAudio */,
+				B7A56DB32869A50500EA639D /* Home */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
+		B7A56DB32869A50500EA639D /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				DE15E65F28604278003DD2F5 /* ViewController.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		B7A56DB42869A50A00EA639D /* CreateAudio */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = CreateAudio;
+			sourceTree = "<group>";
+		};
+		B7A56DB52869A51400EA639D /* Play */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Play;
+			sourceTree = "<group>";
+		};
+		B7A56DB62869A52700EA639D /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				DE15E66428604279003DD2F5 /* Assets.xcassets */,
+				DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */,
+				DE15E65B28604278003DD2F5 /* AppDelegate.swift */,
+				DE15E65D28604278003DD2F5 /* SceneDelegate.swift */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
 		DE15E64F28604278003DD2F5 = {
 			isa = PBXGroup;
 			children = (
@@ -54,11 +99,8 @@
 		DE15E65A28604278003DD2F5 /* VoiceRecorder */ = {
 			isa = PBXGroup;
 			children = (
-				DE15E65B28604278003DD2F5 /* AppDelegate.swift */,
-				DE15E65D28604278003DD2F5 /* SceneDelegate.swift */,
-				DE15E65F28604278003DD2F5 /* ViewController.swift */,
-				DE15E66428604279003DD2F5 /* Assets.xcassets */,
-				DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */,
+				B7A56DB22869A4F600EA639D /* Scenes */,
+				B7A56DB62869A52700EA639D /* Support */,
 				DE15E66928604279003DD2F5 /* Info.plist */,
 			);
 			path = VoiceRecorder;
@@ -80,6 +122,9 @@
 			dependencies = (
 			);
 			name = VoiceRecorder;
+			packageProductDependencies = (
+				B7A56DB02869A4D300EA639D /* FirebaseStorage */,
+			);
 			productName = SNPLab;
 			productReference = DE15E65828604278003DD2F5 /* VoiceRecorder.app */;
 			productType = "com.apple.product-type.application";
@@ -108,6 +153,9 @@
 				Base,
 			);
 			mainGroup = DE15E64F28604278003DD2F5;
+			packageReferences = (
+				B7A56DAF2869A4D300EA639D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			productRefGroup = DE15E65928604278003DD2F5 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -344,6 +392,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B7A56DAF2869A4D300EA639D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B7A56DB02869A4D300EA639D /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B7A56DAF2869A4D300EA639D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = DE15E65028604278003DD2F5 /* Project object */;
 }
