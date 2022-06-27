@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		763A2A942869B8E6007A6CF4 /* PlayingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763A2A932869B8E6007A6CF4 /* PlayingViewController.swift */; };
 		9B0C3F0F4F6E0452809B26A0 /* Pods_VoiceRecorder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C586B39F26D646B373DD637 /* Pods_VoiceRecorder.framework */; };
 		C79B753E286985F900C2372A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C79B753D286985F900C2372A /* GoogleService-Info.plist */; };
 		DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65B28604278003DD2F5 /* AppDelegate.swift */; };
@@ -23,7 +22,6 @@
 
 /* Begin PBXFileReference section */
 		4C586B39F26D646B373DD637 /* Pods_VoiceRecorder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VoiceRecorder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		763A2A932869B8E6007A6CF4 /* PlayingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayingViewController.swift; sourceTree = "<group>"; };
 		C79B753D286985F900C2372A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C7E554D5286983A900A0A2A0 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DE15E65828604278003DD2F5 /* VoiceRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -76,7 +74,6 @@
 				E16AC5AA28699D0D003DDD7D /* VoiceMemoTableViewCell.swift */,
 				E16AC5AE2869A0B4003DDD7D /* RecordDetailViewController.swift */,
 				E16AC5AB28699D0D003DDD7D /* VoiceMemoTableViewCell.xib */,
-				763A2A932869B8E6007A6CF4 /* PlayingViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -240,7 +237,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DE15E66028604278003DD2F5 /* VoiceMemoViewController.swift in Sources */,
-				763A2A942869B8E6007A6CF4 /* PlayingViewController.swift in Sources */,
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
 				E16AC5AF2869A0B4003DDD7D /* RecordDetailViewController.swift in Sources */,
 				E16AC5AC28699D0D003DDD7D /* VoiceMemoTableViewCell.swift in Sources */,
