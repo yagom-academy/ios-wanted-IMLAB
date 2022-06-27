@@ -44,8 +44,7 @@ class RecordDetailViewController: UIViewController {
                     if allowed {
                         self.startRecording()
                     } else {
-                        // TODO: 권한을 못받은 경우
-                        // Alert 창이 나오고, '확인'을 누르면 '권한 설정' 페이지로 이동
+                        self.showSettingViewController()
                     }
                 }
             })
@@ -90,6 +89,22 @@ class RecordDetailViewController: UIViewController {
     func getDocumentsDirectory() -> URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return paths[0]
+    }
+    
+    func showSettingViewController() {
+        let alert = UIAlertController(title: "접근권한", message: "마이크 접근권한이 필요합니다.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { _ in
+            guard let settingsUrl = URL(string: UIApplication.openSettingsURLString),
+                  UIApplication.shared.canOpenURL(settingsUrl) else {
+                      return
+                  }
+            
+            UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
+                print("Settings opened: \(success)")
+            })
+        }))
+        
+        present(alert, animated: true, completion: nil)
     }
 
     
