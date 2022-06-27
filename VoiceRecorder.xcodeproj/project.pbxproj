@@ -18,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1201D724286989B8005F046B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		12E1548F28697D4400F7EA19 /* RecordModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordModel.swift; sourceTree = "<group>"; };
 		B7E8082C286974C9005E35BC /* RecordFileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordFileCell.swift; sourceTree = "<group>"; };
 		DE15E65828604278003DD2F5 /* VoiceRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -27,7 +28,6 @@
 		DE15E66228604278003DD2F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		DE15E66428604279003DD2F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DE15E66728604279003DD2F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		DE15E66928604279003DD2F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,7 +100,7 @@
 				12E1549228697D6500F7EA19 /* Controller */,
 				DE15E66428604279003DD2F5 /* Assets.xcassets */,
 				DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */,
-				DE15E66928604279003DD2F5 /* Info.plist */,
+				1201D724286989B8005F046B /* Info.plist */,
 			);
 			path = VoiceRecorder;
 			sourceTree = "<group>";
@@ -327,8 +327,8 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = SNPLab/Info.plist;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "/Users/chubby/Desktop/ios-wanted-VoiceRecorder/VoiceRecorder/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -354,8 +354,8 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = SNPLab/Info.plist;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "/Users/chubby/Desktop/ios-wanted-VoiceRecorder/VoiceRecorder/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

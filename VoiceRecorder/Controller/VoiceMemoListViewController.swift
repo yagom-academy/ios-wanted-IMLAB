@@ -9,6 +9,12 @@ class VoiceMemoListViewController: UIViewController {
 
     @IBOutlet weak var recordFileListTableView: UITableView!
     
+    var voiceMemoList: [RecordModel] = [
+        RecordModel(recordFileName: "spring", recordTime: "03:00"),
+        RecordModel(recordFileName: "summer", recordTime: "02:11"),
+        RecordModel(recordFileName: "winter", recordTime: "04:28")
+    ]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -22,11 +28,14 @@ class VoiceMemoListViewController: UIViewController {
 
 extension VoiceMemoListViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        <#code#>
+        self.voiceMemoList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        <#code#>
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "RecordFileCell", for: indexPath) as? RecordFileCell else { return UITableViewCell() }
+        cell.fileNameLable.text = self.voiceMemoList[indexPath.row].recordFileName
+        cell.recordPlayTimeLabel.text = self.voiceMemoList[indexPath.row].recordTime
+        return cell
     }
     
     

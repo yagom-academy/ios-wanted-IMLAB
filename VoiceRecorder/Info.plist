@@ -2,6 +2,20 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleDisplayName</key>
+	<string>VoiceRecorder</string>
+	<key>CFBundleExecutable</key>
+	<string>VoiceRecorder</string>
+	<key>CFBundleIdentifier</key>
+	<string>net.yagom.VoiceRecorder</string>
+	<key>CFBundleName</key>
+	<string>VoiceRecorder</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -11,15 +25,35 @@
 			<key>UIWindowSceneSessionRoleApplication</key>
 			<array>
 				<dict>
+					<key>UISceneDelegateClassName</key>
+					<string>$(SWIFT_MODULE_NAME).SceneDelegate</string>
 					<key>UISceneConfigurationName</key>
 					<string>Default Configuration</string>
-					<key>UISceneDelegateClassName</key>
-					<string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
 					<key>UISceneStoryboardFile</key>
 					<string>Main</string>
 				</dict>
 			</array>
 		</dict>
 	</dict>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
+	<key>UILaunchScreen</key>
+	<dict>
+		<key>UILaunchScreen</key>
+		<dict/>
+	</dict>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~iphone</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
 </dict>
 </plist>
