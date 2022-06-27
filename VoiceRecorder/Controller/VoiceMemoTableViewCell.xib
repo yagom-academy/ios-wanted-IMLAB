@@ -7,22 +7,22 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="VoiceMemoTableViewCell" customModule="VoiceRecorder" customModuleProvider="target"/>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="VoiceMemoTableViewCell" rowHeight="61" id="KGk-i7-Jjw" customClass="VoiceMemoTableViewCell" customModule="VoiceRecorder" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="61"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="VoiceMemoTableViewCell" customModule="VoiceRecorder" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM" customClass="VoiceMemoTableViewCell" customModule="VoiceRecorder" customModuleProvider="target">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="61"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DmG-2c-DfE">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QGU-w6-A72">
                         <rect key="frame" x="16" y="12" width="42" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bnW-7a-NWH">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eR3-sp-6i3">
                         <rect key="frame" x="262" y="12" width="42" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
@@ -30,18 +30,18 @@
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="trailing" secondItem="bnW-7a-NWH" secondAttribute="trailing" constant="16" id="EaY-ii-N8D"/>
-                    <constraint firstItem="bnW-7a-NWH" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="12" id="NZK-x7-hIH"/>
-                    <constraint firstItem="DmG-2c-DfE" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="12" id="WzP-TH-bBh"/>
-                    <constraint firstItem="DmG-2c-DfE" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="gPl-oO-Z9k"/>
+                    <constraint firstItem="QGU-w6-A72" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="12" id="7Ah-f1-Vlz"/>
+                    <constraint firstAttribute="trailing" secondItem="eR3-sp-6i3" secondAttribute="trailing" constant="16" id="BLy-bl-eYa"/>
+                    <constraint firstItem="QGU-w6-A72" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="GmB-nK-CWR"/>
+                    <constraint firstItem="eR3-sp-6i3" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="12" id="MMr-p1-keH"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
-                <outlet property="durationLabel" destination="bnW-7a-NWH" id="3TO-BF-ebu"/>
-                <outlet property="timelineLabel" destination="DmG-2c-DfE" id="Vnd-gV-HOs"/>
+                <outlet property="durationLabel" destination="eR3-sp-6i3" id="fa2-ZU-SSL"/>
+                <outlet property="timelineLabel" destination="QGU-w6-A72" id="TB1-tk-lBR"/>
             </connections>
-            <point key="canvasLocation" x="88.405797101449281" y="116.85267857142857"/>
+            <point key="canvasLocation" x="133" y="102"/>
         </tableViewCell>
     </objects>
 </document>

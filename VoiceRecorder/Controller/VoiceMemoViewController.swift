@@ -17,7 +17,9 @@ class VoiceMemoViewController: UIViewController {
     @IBOutlet weak var voiceMemoTableView: UITableView!
     
     func configureTableView() {
-        voiceMemoTableView.register(VoiceMemoTableViewCell.self, forCellReuseIdentifier: "VoiceMemoTableViewCell")
+
+        let cell = UINib(nibName: "VoiceMemoTableViewCell", bundle: nil)
+        voiceMemoTableView.register(cell, forCellReuseIdentifier: "VoiceMemoTableViewCell")
         
         voiceMemoTableView.delegate = self
         voiceMemoTableView.dataSource = self
