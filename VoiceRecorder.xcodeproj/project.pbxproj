@@ -7,22 +7,30 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		362737A9286986E900592181 /* RecordListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362737A7286986E900592181 /* RecordListTableViewCell.swift */; };
+		362737AA286986E900592181 /* RecordListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 362737A8286986E900592181 /* RecordListTableViewCell.xib */; };
+		362737AD286987F200592181 /* RecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362737AC286987F200592181 /* RecordViewController.swift */; };
+		362737AF2869880000592181 /* PlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362737AE2869880000592181 /* PlayViewController.swift */; };
 		6B47CD74286975BE00C0912F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6B47CD73286975BE00C0912F /* GoogleService-Info.plist */; };
 		6B47CD772869763B00C0912F /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 6B47CD762869763B00C0912F /* FirebaseStorage */; };
 		DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65B28604278003DD2F5 /* AppDelegate.swift */; };
 		DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65D28604278003DD2F5 /* SceneDelegate.swift */; };
-		DE15E66028604278003DD2F5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65F28604278003DD2F5 /* ViewController.swift */; };
+		DE15E66028604278003DD2F5 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65F28604278003DD2F5 /* ListViewController.swift */; };
 		DE15E66328604278003DD2F5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66128604278003DD2F5 /* Main.storyboard */; };
 		DE15E66528604279003DD2F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66428604279003DD2F5 /* Assets.xcassets */; };
 		DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		362737A7286986E900592181 /* RecordListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListTableViewCell.swift; sourceTree = "<group>"; };
+		362737A8286986E900592181 /* RecordListTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RecordListTableViewCell.xib; sourceTree = "<group>"; };
+		362737AC286987F200592181 /* RecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewController.swift; sourceTree = "<group>"; };
+		362737AE2869880000592181 /* PlayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayViewController.swift; sourceTree = "<group>"; };
 		6B47CD73286975BE00C0912F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		DE15E65828604278003DD2F5 /* VoiceRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE15E65B28604278003DD2F5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DE15E65D28604278003DD2F5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		DE15E65F28604278003DD2F5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		DE15E65F28604278003DD2F5 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		DE15E66228604278003DD2F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		DE15E66428604279003DD2F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DE15E66728604279003DD2F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -41,6 +49,41 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		362737A4286984F600592181 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		362737A52869850300592181 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				DE15E66128604278003DD2F5 /* Main.storyboard */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		362737A62869851300592181 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				DE15E65F28604278003DD2F5 /* ListViewController.swift */,
+				362737AC286987F200592181 /* RecordViewController.swift */,
+				362737AE2869880000592181 /* PlayViewController.swift */,
+				362737AB286986F000592181 /* Cell */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		362737AB286986F000592181 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				362737A7286986E900592181 /* RecordListTableViewCell.swift */,
+				362737A8286986E900592181 /* RecordListTableViewCell.xib */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
 		DE15E64F28604278003DD2F5 = {
 			isa = PBXGroup;
 			children = (
@@ -62,12 +105,13 @@
 			children = (
 				DE15E65B28604278003DD2F5 /* AppDelegate.swift */,
 				DE15E65D28604278003DD2F5 /* SceneDelegate.swift */,
-				DE15E65F28604278003DD2F5 /* ViewController.swift */,
-				DE15E66128604278003DD2F5 /* Main.storyboard */,
 				DE15E66428604279003DD2F5 /* Assets.xcassets */,
 				DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */,
 				DE15E66928604279003DD2F5 /* Info.plist */,
 				6B47CD73286975BE00C0912F /* GoogleService-Info.plist */,
+				362737A4286984F600592181 /* Models */,
+				362737A52869850300592181 /* Views */,
+				362737A62869851300592181 /* Controllers */,
 			);
 			path = VoiceRecorder;
 			sourceTree = "<group>";
@@ -138,6 +182,7 @@
 			files = (
 				DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */,
 				6B47CD74286975BE00C0912F /* GoogleService-Info.plist in Resources */,
+				362737AA286986E900592181 /* RecordListTableViewCell.xib in Resources */,
 				DE15E66528604279003DD2F5 /* Assets.xcassets in Resources */,
 				DE15E66328604278003DD2F5 /* Main.storyboard in Resources */,
 			);
@@ -150,8 +195,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DE15E66028604278003DD2F5 /* ViewController.swift in Sources */,
+				DE15E66028604278003DD2F5 /* ListViewController.swift in Sources */,
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
+				362737AD286987F200592181 /* RecordViewController.swift in Sources */,
+				362737A9286986E900592181 /* RecordListTableViewCell.swift in Sources */,
+				362737AF2869880000592181 /* PlayViewController.swift in Sources */,
 				DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
