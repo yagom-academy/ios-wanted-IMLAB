@@ -31,6 +31,7 @@ class VoiceRecorderListTableViewController: UITableViewController {
     func setUp() {
         navigationItem.title = "Voice Memos"
         setAddBarButton()
+        setTableView()
     }
     
     func setAddBarButton() {
@@ -38,13 +39,14 @@ class VoiceRecorderListTableViewController: UITableViewController {
     }
     
     func setTableView() {
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "ReusableCell")
+        tableView.register(VoiceRecordTableViewCell.self, forCellReuseIdentifier: "ReusableCell")
+        tableView.rowHeight = 60
     }
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -53,10 +55,12 @@ class VoiceRecorderListTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ReusableCell", for: indexPath) as? UITableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ReusableCell", for: indexPath) as? VoiceRecordTableViewCell else {
             fatalError()
         }
-        cell.textLabel?.text = "\(array[indexPath.row])"
+        print("123123")
+        cell.fileNameLabel.text = "hello"
+        cell.timeLabel.text = "hello"
         return cell
     }
     
