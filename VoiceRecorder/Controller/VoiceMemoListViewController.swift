@@ -4,10 +4,14 @@
 //
 
 import UIKit
+import FirebaseCore
+import FirebaseFirestore
 
 class VoiceMemoListViewController: UIViewController {
 
     @IBOutlet weak var recordFileListTableView: UITableView!
+    
+    let db = Firestore.firestore()
     
     var voiceMemoList: [RecordModel] = [
         RecordModel(recordFileName: "spring", recordTime: "03:00"),
