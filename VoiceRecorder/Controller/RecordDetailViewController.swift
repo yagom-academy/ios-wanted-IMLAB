@@ -7,6 +7,7 @@
 
 import UIKit
 import AVFoundation
+import FirebaseStorage
 
 class RecordDetailViewController: UIViewController {
     // MARK: - IBOutlet
@@ -21,6 +22,10 @@ class RecordDetailViewController: UIViewController {
     // MARK: - Properties
     var recordingSession: AVAudioSession?
     var audioRecorder: AVAudioRecorder?
+    
+    var audioFilePath = ""
+    
+    let storage = Storage.storage().reference()
     
     let readyToRecordButtonImage = UIImage(systemName: "record.circle")
     let recordingButtonImage = UIImage(systemName: "record.circle.fill")
@@ -61,7 +66,7 @@ class RecordDetailViewController: UIViewController {
     
     func startRecording() {
         let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.m4a")
-
+        audioFilePath = audioFilename.path
         let settings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
             AVSampleRateKey: 12000,
@@ -84,6 +89,35 @@ class RecordDetailViewController: UIViewController {
         audioRecorder?.stop()
         audioRecorder = nil
         recordButton.setImage(readyToRecordButtonImage, for: .normal)
+        FileManager.default.fileExists(atPath: audioFilePath)
+        uploadRecodeDataToFirebase()
+        
+    }
+    
+    func uploadRecodeDataToFirebase() {
+        let storageRef = storage.child("/")
+        // File located on disk
+        let localFile = URL(string: audioFilePath)!
+
+        // Create a reference to the file you want to upload
+        let riversRef = storageRef.child("/")
+
+        // Upload the file to the path "images/rivers.jpg"
+        let uploadTask = riversRef.putFile(from: localFile, metadata: nil) { metadata, error in
+          guard let metadata = metadata else {
+            // Uh-oh, an error occurred!
+            return
+          }
+          // Metadata contains file metadata such as size, content-type.
+          let size = metadata.size
+          // You can also access to download URL after upload.
+          riversRef.downloadURL { (url, error) in
+            guard let downloadURL = url else {
+              // Uh-oh, an error occurred!
+              return
+            }
+          }
+        }
     }
     
     func getDocumentsDirectory() -> URL {
