@@ -3,7 +3,7 @@
 
 | <center>**UY**</center>   | <center>**호랭2**</center> | <center>**에리얼**</center>  |
 | -------------------------------------------------------- | --------------------------------------------------------- | ---------------------------------------------------------- |
-| [<img src="https://github.com/ScutiUY.png" width="100">](https://github.com/ScutiUY) |  [<img src="https://github.com/horeng2.png" width="100">](https://github.com/horeng2)| |
+| [<img src="https://github.com/ScutiUY.png" width="200">](https://github.com/ScutiUY) |  [<img src="https://github.com/horeng2.png" width="200">](https://github.com/horeng2)| |
 
 - 백로그 링크 or notion
 
