@@ -6,31 +6,19 @@
 //
 
 import UIKit
-import AVFAudio
+import AVFoundation
 
 class PlayViewController: UIViewController {
     
     var audio: Audio? {
         didSet {
             guard let url = audio?.url else { return }
-            var data: Data?
-            
-            do {
-                data = try Data(contentsOf: url)
-            } catch let error {
-                print(error.localizedDescription)
-            }
-            
-            guard let data = data else { return }
-            do {
-                audioPlayer = try AVAudioPlayer(data: data)
-            } catch let error {
-                print(error.localizedDescription)
-            }
+            let playerItem = AVPlayerItem(url: url)
+            self.audioPlayer = AVPlayer(playerItem: playerItem)
         }
     }
     
-    var audioPlayer: AVAudioPlayer?
+    var audioPlayer: AVPlayer?
     
     private lazy var backwardButton: UIButton = {
         let button = UIButton(type: .system)
@@ -122,18 +110,26 @@ private extension PlayViewController {
     }
     
     @objc func touchPlayPauseButton() {
-        if self.audioPlayer?.isPlaying == false {
+        switch self.audioPlayer?.timeControlStatus {
+        case .playing:
+            self.audioPlayer?.pause()
+            self.playPauseButton.isSelected.toggle()
+        case .paused:
             self.audioPlayer?.play()
             self.playPauseButton.isSelected.toggle()
-        } else {
-            self.audioPlayer?.stop()
-            self.playPauseButton.isSelected.toggle()
+        default: break
         }
     }
     
     @objc func touchBackwardButton() {
+        guard let currentTime = self.audioPlayer?.currentTime() else { return }
+        let time = CMTime(value: 5, timescale: 1)
+        self.audioPlayer?.seek(to: currentTime - time)
     }
     
     @objc func touchForwardButton() {
+        guard let currentTime = self.audioPlayer?.currentTime() else { return }
+        let time = CMTime(value: 5, timescale: 1)
+        self.audioPlayer?.seek(to: currentTime + time)
     }
 }
