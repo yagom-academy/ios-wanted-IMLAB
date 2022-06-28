@@ -11,6 +11,7 @@ class HomeViewController: UIViewController {
         let tableView = UITableView(frame: .zero, style: .plain)
         tableView.tableFooterView = UIView()
         tableView.dataSource = self
+        tableView.delegate = self
         tableView.register(HomeTableViewCell.self, forCellReuseIdentifier: HomeTableViewCell.identfier)
         return tableView
     }()
@@ -86,3 +87,11 @@ extension HomeViewController: UITableViewDataSource {
     }
 }
 
+extension HomeViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let audio = self.viewModel.audio(at: indexPath.row)
+        let playViewController = PlayViewController()
+        playViewController.audio = audio
+        self.present(playViewController, animated: true)
+    }
+}
