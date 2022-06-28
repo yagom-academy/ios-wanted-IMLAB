@@ -7,12 +7,17 @@ import UIKit
 import AVFoundation
 import FirebaseStorage
 
+protocol RecordViewControllerDelegate: AnyObject {
+    func didFinishRecord()
+}
+
 class RecordViewController: UIViewController {
     
     @IBOutlet weak var cutOffSlider: UISlider!
     @IBOutlet weak var recordTimeLabel: UILabel!
     @IBOutlet weak var playButton: UIButton!
     
+    weak var delegate: RecordViewControllerDelegate?
     private let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
 //    private lazy var fileName = fileURL.appendingPathComponent("\(Date.now.dateToString).m4a")
     private var fileName: URL?
@@ -30,7 +35,8 @@ class RecordViewController: UIViewController {
     
     var isRecord = false
     var isPlay = false
-//    var progressTimer : Timer!
+    var progressTimer : Timer?
+    var counter = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,8 +44,9 @@ class RecordViewController: UIViewController {
     }
     
     @IBAction func didTapRecordButton(_ sender: UIButton) {
-        print(fileName)
+//        print(fileName)
         if isRecord {
+            self.progressTimer?.invalidate()
             sender.setImage(Icon.circleFill.image, for: .normal)
             audioRecorder?.stop()
             let data = try! Data(contentsOf: audioRecorder!
@@ -49,6 +56,8 @@ class RecordViewController: UIViewController {
                 switch result {
                 case .success(_):
                     print("저장 성공🎉")
+                    self.delegate?.didFinishRecord()
+                    
                 case .failure(let error):
                     print("ERROR \(error.localizedDescription)🌡🌡")
                 }
@@ -58,16 +67,29 @@ class RecordViewController: UIViewController {
             setupAudioRecorder()
             audioRecorder?.prepareToRecord()
             audioRecorder?.record()
+            progressTimer = Timer.scheduledTimer(
+                timeInterval: 0.1,
+                target: self,
+                selector: #selector(update),
+                userInfo: nil,
+                repeats: true
+            )
         }
         isRecord = !isRecord
     }
     
-    @IBAction func didTapPlayBack5Button(_ sender: UIButton) {
+    @objc func update() {
+        counter += 0.1
+        recordTimeLabel.text = "\(counter)"
         
     }
     
+    @IBAction func didTapPlayBack5Button(_ sender: UIButton) {
+        audioPlayer?.currentTime = (audioPlayer?.currentTime ?? 0.0) - 5.0
+    }
+    
     @IBAction func didTapPlayForward5Button(_ sender: UIButton) {
-        
+        audioPlayer?.currentTime = (audioPlayer?.currentTime ?? 0.0) + 5.0
     }
     
     @IBAction func didTapPlayPauseButton(_ sender: UIButton) {
@@ -133,3 +155,4 @@ private extension RecordViewController {
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }
 }
+
