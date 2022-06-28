@@ -42,8 +42,23 @@ class FirebaseStorageManager {
         }
     }
     
-    func fetchVoiceVoiceMemoAtFirebase(with id: String) {
+    func fetchVoiceVoiceMemoAtFirebase(with id: String, completion: @escaping ((Result<Data, NetworkError>)-> Void)) {
         print(#function)
+        let reference = storage.reference().child("voiceMemo/\(id)")
+        reference.downloadURL { result in
+            switch result {
+            case .success(let url):
+                DispatchQueue.global().async {
+                    guard let data = try? Data(contentsOf: url) else {
+                        completion(.failure(.error))
+                        return
+                    }
+                    completion(.success(data))
+                }
+            case .failure(_):
+                completion(.failure(.error))
+            }
+        }
     }
     
     func removeVoiceMemoInFirebase(with id: String) {
