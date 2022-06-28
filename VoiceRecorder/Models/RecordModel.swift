@@ -10,5 +10,4 @@ import Foundation
 struct RecordModel {
     let name: String
     let data: Data
-    let playTime: String
 }

@@ -24,7 +24,17 @@ class ListViewController: UIViewController {
                 print("ERROR \(error.localizedDescription)🐸")
             }
         }
+        
     }
+    
+    @IBAction func didTapShowRecordView(_ sender: UIBarButtonItem) {
+        guard let recordVC = storyboard?.instantiateViewController(withIdentifier: "RecordViewController")
+                as? RecordViewController else { return }
+        recordVC.modalPresentationStyle = .popover
+        recordVC.delegate = self
+        self.present(recordVC, animated: true)
+    }
+    
 }
 
 extension ListViewController: UITableViewDelegate, UITableViewDataSource {
@@ -35,9 +45,9 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(
         _ tableView: UITableView,
         cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = recordListTableView.dequeueReusableCell(
-            withIdentifier: "RecordListTableViewCell", for: indexPath)
-        
+        guard let cell = recordListTableView.dequeueReusableCell(
+            withIdentifier: "RecordListTableViewCell", for: indexPath) as? RecordListTableViewCell else { return UITableViewCell() }
+            cell.setUpView(name: recordList[indexPath.row])
         return cell
     }
     
@@ -46,7 +56,6 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
         
         guard let playVC = storyboard?.instantiateViewController(withIdentifier: "PlayViewController")
                 as? PlayViewController else { return }
-        
         self.present(playVC, animated: true, completion: nil)
     }
 }
@@ -60,4 +69,20 @@ private extension ListViewController {
             forCellReuseIdentifier: "RecordListTableViewCell"
         )
     }
+}
+
+extension ListViewController: RecordViewControllerDelegate {
+    func didFinishRecord() {
+        StorageManager().get { result in
+            switch result {
+            case .success(let names):
+                self.recordList = names
+                self.recordListTableView.reloadData()
+            case .failure(let error):
+                print("ERROR \(error.localizedDescription)🐸")
+            }
+        }
+    }
+    
+    
 }

@@ -33,7 +33,7 @@
                     <navigationItem key="navigationItem" title="Voice Memos" id="bKj-eF-RGO">
                         <barButtonItem key="rightBarButtonItem" title="Item" image="plus" catalog="system" id="1H2-QD-bBg">
                             <connections>
-                                <segue destination="hfC-T6-rVw" kind="presentation" id="JTO-SA-3a4"/>
+                                <action selector="didTapShowRecordView:" destination="BYZ-38-t0r" id="3Je-hm-Fmw"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -48,16 +48,16 @@
         <!--Record View Controller-->
         <scene sceneID="1tQ-fQ-6yf">
             <objects>
-                <viewController id="hfC-T6-rVw" customClass="RecordViewController" customModule="VoiceRecorder" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="RecordViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="hfC-T6-rVw" customClass="RecordViewController" customModule="VoiceRecorder" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="pW1-cO-dEi">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="upv-Mu-e34">
                                 <rect key="frame" x="14" y="228.5" width="386" height="31"/>
                             </slider>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12:34.012" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gRT-WD-I6Z">
-                                <rect key="frame" x="170.5" y="274.5" width="73.5" height="20.5"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gRT-WD-I6Z">
+                                <rect key="frame" x="171.5" y="274.5" width="71" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
