@@ -23,9 +23,9 @@ class RecordDetailViewController: UIViewController {
     var recordingSession: AVAudioSession?
     var audioRecorder: AVAudioRecorder?
     
-    var audioFilePath = ""
-    
     let storage = Storage.storage()
+    
+    var audioFileURL : URL?
         
     let readyToRecordButtonImage = UIImage(systemName: "record.circle")
     let recordingButtonImage = UIImage(systemName: "record.circle.fill")
@@ -63,10 +63,10 @@ class RecordDetailViewController: UIViewController {
     func loadRecordingUI() {
         
     }
-    
+        
     func startRecording() {
-        let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.m4a")
-        audioFilePath = audioFilename.path
+        // 파일 생성
+        audioFileURL = getDocumentsDirectory().appendingPathComponent("recording3.m4a")
         let settings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
             AVSampleRateKey: 12000,
@@ -75,10 +75,9 @@ class RecordDetailViewController: UIViewController {
         ]
 
         do {
-            self.audioRecorder = try AVAudioRecorder(url: audioFilename, settings: settings)
-            self.audioRecorder?.delegate = self
-            audioRecorder?.record()
-
+            audioRecorder = try AVAudioRecorder(url: audioFileURL!, settings: settings) // force unwrapping
+//            audioRecorder?.delegate = self
+            audioRecorder?.record() // 이것의 상태를 조건으로 다른 것 control하는 듯
             recordButton.setImage(recordingButtonImage, for: .normal)
         } catch {
             finishRecording(success: false)
@@ -89,54 +88,20 @@ class RecordDetailViewController: UIViewController {
         audioRecorder?.stop()
         audioRecorder = nil
         recordButton.setImage(readyToRecordButtonImage, for: .normal)
-        FileManager.default.fileExists(atPath: audioFilePath)
-        uploadRecodeDataToFirebase()
-        
+        uploadRecordDataToFirebase()
     }
     
-    func uploadRecodeDataToFirebase() {
-        // Create a root reference
+    func uploadRecordDataToFirebase() {
         let storageRef = storage.reference()
-
-        // Create a reference to "mountains.jpg"
-        let mountainsRef = storageRef.child(audioFilePath)
-
-        // Create a reference to 'images/mountains.jpg'
-        let mountainImagesRef = storageRef.child("/")
-
-        // While the file names are the same, the references point to different files
-        mountainsRef.name == mountainImagesRef.name            // true
-        mountainsRef.fullPath == mountainImagesRef.fullPath    // false
-        // File located on disk
         
+        let riversRef = storageRef.child("recording3")
         
-        
-        let localFile = URL(fileURLWithPath: audioFilePath)
-
-        // Create a reference to the file you want to upload
-        let riversRef = storageRef.child("/")
-
-        // Upload the file to the path "images/rivers.jpg"
-        let uploadTask = riversRef.putFile(from: localFile, metadata: nil) { metadata, error in
-          guard let metadata = metadata else {
-            // Uh-oh, an error occurred!
-            return
-          }
-          // Metadata contains file metadata such as size, content-type.
-          let size = metadata.size
-          // You can also access to download URL after upload.
-          riversRef.downloadURL { (url, error) in
-            guard let downloadURL = url else {
-              // Uh-oh, an error occurred!
-              return
-            }
-          }
-        }
+        riversRef.putFile(from: audioFileURL!) // force unwrapping
     }
     
     func getDocumentsDirectory() -> URL {
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        return paths[0]
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask) // 해당 dir에 url
+        return paths[0] // 어떤 것들이 담겨있는지?
     }
     
     func showSettingViewController() {
