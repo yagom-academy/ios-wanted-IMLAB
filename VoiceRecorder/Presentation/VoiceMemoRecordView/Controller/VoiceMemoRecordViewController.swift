@@ -35,8 +35,7 @@ class VoiceMemoRecordViewController: UIViewController {
     }()
     
     let playOrPauseButton: UIButton = {
-        let size = CGRect.init(origin: CGPoint(), size: CGSize.init(width: 30, height: 30))
-        let button = UIButton.init(frame: size)
+        let button = UIButton.init()
         
         button.setImage(UIImage.init(systemName: "play"), for: .normal)
         button.setImage(UIImage.init(systemName: "pause.fill"), for: .selected)
@@ -44,12 +43,25 @@ class VoiceMemoRecordViewController: UIViewController {
     }()
     
     let recordButton: UIButton = {
-        let size = CGRect.init(origin: CGPoint(), size: CGSize.init(width: 30, height: 30))
-        let button = UIButton.init(frame: size)
+        let button = UIButton.init()
         
-        button.backgroundColor = .systemRed
+        button.tintColor = .systemRed
         button.setImage(UIImage.init(systemName: "circle.fill"), for: .normal)
         button.setImage(UIImage.init(systemName: "stop.fill"), for: .selected)
+        return button
+    }()
+    
+    let goForward5SecButton: UIButton = {
+        let button = UIButton.init()
+        
+        button.setImage(UIImage.init(systemName: "goforward.5"), for: .normal)
+        return button
+    }()
+    
+    let goBackward5SecButton: UIButton = {
+        let button = UIButton.init()
+        
+        button.setImage(UIImage.init(systemName: "gobackward.5"), for: .normal)
         return button
     }()
     
@@ -122,14 +134,17 @@ class VoiceMemoRecordViewController: UIViewController {
     private func designateButtons() {
         let stackView = UIStackView()
         stackView.axis = .horizontal
+        stackView.spacing = 10
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(stackView)
         stackView.addArrangedSubview(recordButton)
+        stackView.addArrangedSubview(goBackward5SecButton)
         stackView.addArrangedSubview(playOrPauseButton)
+        stackView.addArrangedSubview(goForward5SecButton)
         
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo:playTimeLabel.safeAreaLayoutGuide.bottomAnchor, constant: 20),
-            stackView.leadingAnchor.constraint(equalTo: idonknowSilder.safeAreaLayoutGuide.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: idonknowSilder.safeAreaLayoutGuide.trailingAnchor)
+            stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
 }
