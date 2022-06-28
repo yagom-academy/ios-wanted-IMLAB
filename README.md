@@ -1,9 +1,9 @@
 
 ## 👨‍👩‍👦‍👦 팀원 소개
 
-| <center>**UY**</center>   | <center>**호랭2**</center> | <center>**에리얼**</center>  |
-| -------------------------------------------------------- | --------------------------------------------------------- | ---------------------------------------------------------- |
-| [<img src="https://github.com/ScutiUY.png" width="200">](https://github.com/ScutiUY) |  [<img src="https://github.com/horeng2.png" width="200">](https://github.com/horeng2)| |
+| <center>**UY**</center>   | <center>**에리얼**</center> |
+| -------------------------------------------------------- | --------------------------------------------------------- |
+| [<img src="https://github.com/ScutiUY.png" width="200">](https://github.com/ScutiUY) |  [<img src="https://github.com/BAEKYUJEONG.png" width="200">](https://github.com/BAEKYUJEONG)| 
 
 - 백로그 링크 or notion
 
