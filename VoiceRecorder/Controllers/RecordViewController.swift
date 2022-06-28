@@ -10,9 +10,10 @@ class RecordViewController: UIViewController {
     
     @IBOutlet weak var cutOffSlider: UISlider!
     @IBOutlet weak var recordTimeLabel: UILabel!
+    @IBOutlet weak var playButton: UIButton!
     
     private let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-    private lazy var fileName = fileURL.appendingPathComponent("\(UUID().uuidString).m4a")
+    private lazy var fileName = fileURL.appendingPathComponent("\(Date.now.dateToString).m4a")
     private let recorderSetting: [String: Any] = [
         AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
         AVEncoderAudioQualityKey: AVAudioQuality.max.rawValue,
@@ -41,6 +42,7 @@ class RecordViewController: UIViewController {
             audioRecorder?.stop()
         } else {
             sender.setImage(Icon.circle.image, for: .normal)
+            audioRecorder?.prepareToRecord()
             audioRecorder?.record()
         }
         isRecord = !isRecord
@@ -61,12 +63,23 @@ class RecordViewController: UIViewController {
         } else {
             sender.setImage(Icon.pauseFill.image, for: .normal)
             playAudio()
+            setupAudioPlayer()
         }
         isPlay = !isPlay
     }
 }
 
+extension RecordViewController: AVAudioPlayerDelegate {
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        isPlay = false
+        playButton.setImage(Icon.play.image, for: .normal)
+    }
+}
+
 private extension RecordViewController {
+    func setupAudioPlayer() {
+        audioPlayer?.delegate = self
+    }
     func playAudio() {
         do {
             audioPlayer = try AVAudioPlayer(contentsOf: fileName)
@@ -80,7 +93,6 @@ private extension RecordViewController {
     func setupAudioRecorder() {
         do {
             audioRecorder = try AVAudioRecorder(url: fileName, settings: recorderSetting)
-            audioRecorder?.prepareToRecord()
         } catch {
             print("ERROR \(error.localizedDescription)")
         }

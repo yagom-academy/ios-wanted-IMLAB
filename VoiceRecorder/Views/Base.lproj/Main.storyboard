@@ -146,6 +146,7 @@
                     </view>
                     <connections>
                         <outlet property="cutOffSlider" destination="upv-Mu-e34" id="Fdt-e8-hr4"/>
+                        <outlet property="playButton" destination="x2c-KM-V3g" id="yYU-XX-VpI"/>
                         <outlet property="recordTimeLabel" destination="gRT-WD-I6Z" id="CDW-mk-D5I"/>
                     </connections>
                 </viewController>
