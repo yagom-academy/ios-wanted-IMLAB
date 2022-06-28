@@ -5,6 +5,7 @@
 
 import UIKit
 import AVFoundation
+import FirebaseStorage
 
 class RecordViewController: UIViewController {
     
@@ -13,7 +14,9 @@ class RecordViewController: UIViewController {
     @IBOutlet weak var playButton: UIButton!
     
     private let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-    private lazy var fileName = fileURL.appendingPathComponent("\(Date.now.dateToString).m4a")
+//    private lazy var fileName = fileURL.appendingPathComponent("\(Date.now.dateToString).m4a")
+    private var fileName: URL?
+    private var recordDate: String?
     private let recorderSetting: [String: Any] = [
         AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
         AVEncoderAudioQualityKey: AVAudioQuality.max.rawValue,
@@ -32,7 +35,6 @@ class RecordViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         requestRecord()
-        setupAudioRecorder()
     }
     
     @IBAction func didTapRecordButton(_ sender: UIButton) {
@@ -40,8 +42,20 @@ class RecordViewController: UIViewController {
         if isRecord {
             sender.setImage(Icon.circleFill.image, for: .normal)
             audioRecorder?.stop()
+            let data = try! Data(contentsOf: audioRecorder!
+                .url)
+            
+            StorageManager().upload(data: data, fileName: recordDate ?? "") { result in
+                switch result {
+                case .success(_):
+                    print("저장 성공🎉")
+                case .failure(let error):
+                    print("ERROR \(error.localizedDescription)🌡🌡")
+                }
+            }
         } else {
             sender.setImage(Icon.circle.image, for: .normal)
+            setupAudioRecorder()
             audioRecorder?.prepareToRecord()
             audioRecorder?.record()
         }
@@ -82,6 +96,7 @@ private extension RecordViewController {
     }
     func playAudio() {
         do {
+            guard let fileName = fileName else { return }
             audioPlayer = try AVAudioPlayer(contentsOf: fileName)
             audioPlayer?.volume = 1.0
             audioPlayer?.prepareToPlay()
@@ -92,6 +107,9 @@ private extension RecordViewController {
     }
     func setupAudioRecorder() {
         do {
+            recordDate = Date.now.dateToString
+            fileName = fileURL.appendingPathComponent("\(recordDate ?? "").m4a")
+            guard let fileName = fileName else { return }
             audioRecorder = try AVAudioRecorder(url: fileName, settings: recorderSetting)
         } catch {
             print("ERROR \(error.localizedDescription)")

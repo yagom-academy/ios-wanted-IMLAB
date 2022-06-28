@@ -13,9 +13,10 @@
 		362737AF2869880000592181 /* PlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362737AE2869880000592181 /* PlayViewController.swift */; };
 		6B47CD74286975BE00C0912F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6B47CD73286975BE00C0912F /* GoogleService-Info.plist */; };
 		6B47CD772869763B00C0912F /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 6B47CD762869763B00C0912F /* FirebaseStorage */; };
-		6B52A49F2869955E006B74D2 /* RecordingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B52A49E2869955E006B74D2 /* RecordingManager.swift */; };
+		6B52A49F2869955E006B74D2 /* RecordModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B52A49E2869955E006B74D2 /* RecordModel.swift */; };
 		6B8DC36D286AC7A000DF230B /* Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8DC36C286AC7A000DF230B /* Icon.swift */; };
 		6B8DC370286ACE4F00DF230B /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8DC36F286ACE4F00DF230B /* Date+.swift */; };
+		6B8DC373286AD8C400DF230B /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8DC372286AD8C400DF230B /* StorageManager.swift */; };
 		DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65B28604278003DD2F5 /* AppDelegate.swift */; };
 		DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65D28604278003DD2F5 /* SceneDelegate.swift */; };
 		DE15E66028604278003DD2F5 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65F28604278003DD2F5 /* ListViewController.swift */; };
@@ -30,9 +31,10 @@
 		362737AC286987F200592181 /* RecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewController.swift; sourceTree = "<group>"; };
 		362737AE2869880000592181 /* PlayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayViewController.swift; sourceTree = "<group>"; };
 		6B47CD73286975BE00C0912F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		6B52A49E2869955E006B74D2 /* RecordingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingManager.swift; sourceTree = "<group>"; };
+		6B52A49E2869955E006B74D2 /* RecordModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordModel.swift; sourceTree = "<group>"; };
 		6B8DC36C286AC7A000DF230B /* Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Icon.swift; sourceTree = "<group>"; };
 		6B8DC36F286ACE4F00DF230B /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
+		6B8DC372286AD8C400DF230B /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		DE15E65828604278003DD2F5 /* VoiceRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE15E65B28604278003DD2F5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DE15E65D28604278003DD2F5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -86,7 +88,7 @@
 		6B52A49C2869954E006B74D2 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				6B52A49E2869955E006B74D2 /* RecordingManager.swift */,
+				6B52A49E2869955E006B74D2 /* RecordModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -105,6 +107,14 @@
 				6B8DC36F286ACE4F00DF230B /* Date+.swift */,
 			);
 			path = Extension;
+			sourceTree = "<group>";
+		};
+		6B8DC374286ADA0900DF230B /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				6B8DC372286AD8C400DF230B /* StorageManager.swift */,
+			);
+			path = Manager;
 			sourceTree = "<group>";
 		};
 		DE15E64F28604278003DD2F5 = {
@@ -132,6 +142,7 @@
 				DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */,
 				DE15E66928604279003DD2F5 /* Info.plist */,
 				6B47CD73286975BE00C0912F /* GoogleService-Info.plist */,
+				6B8DC374286ADA0900DF230B /* Manager */,
 				6B8DC371286ACE5E00DF230B /* Extension */,
 				6B8DC36E286AC7AE00DF230B /* Configuration */,
 				6B52A49C2869954E006B74D2 /* Models */,
@@ -221,12 +232,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				DE15E66028604278003DD2F5 /* ListViewController.swift in Sources */,
-				6B52A49F2869955E006B74D2 /* RecordingManager.swift in Sources */,
+				6B52A49F2869955E006B74D2 /* RecordModel.swift in Sources */,
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
 				362737AD286987F200592181 /* RecordViewController.swift in Sources */,
 				362737A9286986E900592181 /* RecordListTableViewCell.swift in Sources */,
 				362737AF2869880000592181 /* PlayViewController.swift in Sources */,
 				6B8DC36D286AC7A000DF230B /* Icon.swift in Sources */,
+				6B8DC373286AD8C400DF230B /* StorageManager.swift in Sources */,
 				6B8DC370286ACE4F00DF230B /* Date+.swift in Sources */,
 				DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */,
 			);
