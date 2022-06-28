@@ -5,7 +5,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class HomeViewController: UIViewController {
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
@@ -28,9 +28,14 @@ class ViewController: UIViewController {
         
         self.viewModel.fetch()
     }
+    
+    
+    func setupLayOut(){
+        
+    }
 }
 
-private extension ViewController {
+private extension HomeViewController {
     func configure() {
         self.configureNavigation()
         self.addSubViews()
@@ -43,7 +48,10 @@ private extension ViewController {
     }
     
     func addSubViews() {
-        self.view.addSubview(self.tableView)
+        
+        [tableView].forEach{
+            view.addSubview($0)
+        }
     }
     
     func makeConstraints() {
@@ -57,13 +65,13 @@ private extension ViewController {
     }
     
     @objc func touchAddButton() {
-        print("add")
+        let controller = RecordViewController()
+        self.present(controller, animated: true)
     }
 }
 
 // MARK: - UITableViewDataSource
-
-extension ViewController: UITableViewDataSource {
+extension HomeViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.viewModel.audiosCount()
     }
@@ -77,3 +85,4 @@ extension ViewController: UITableViewDataSource {
         return cell
     }
 }
+
