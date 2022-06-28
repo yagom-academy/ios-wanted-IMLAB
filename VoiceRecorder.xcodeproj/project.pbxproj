@@ -7,11 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-<<<<<<< HEAD
-=======
 		68F56624286AE3340068A5CE /* RecordCheckViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F56623286AE3340068A5CE /* RecordCheckViewController.swift */; };
-		D18720387E06765C38016E07 /* Pods_VoiceRecorder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3061BC83DD8DD0B81CBAA37 /* Pods_VoiceRecorder.framework */; };
->>>>>>> 673270288d03cd07b8f65718ec97cc42065f710f
 		DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65B28604278003DD2F5 /* AppDelegate.swift */; };
 		DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65D28604278003DD2F5 /* SceneDelegate.swift */; };
 		DE15E66028604278003DD2F5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65F28604278003DD2F5 /* ViewController.swift */; };
@@ -22,12 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-<<<<<<< HEAD
-=======
-		3239C0DE476D68C6E34D5055 /* Pods-VoiceRecorder.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VoiceRecorder.release.xcconfig"; path = "Target Support Files/Pods-VoiceRecorder/Pods-VoiceRecorder.release.xcconfig"; sourceTree = "<group>"; };
 		68F56623286AE3340068A5CE /* RecordCheckViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordCheckViewController.swift; sourceTree = "<group>"; };
-		B3061BC83DD8DD0B81CBAA37 /* Pods_VoiceRecorder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VoiceRecorder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
->>>>>>> 673270288d03cd07b8f65718ec97cc42065f710f
 		DE15E65828604278003DD2F5 /* VoiceRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE15E65B28604278003DD2F5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DE15E65D28604278003DD2F5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -50,26 +41,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-<<<<<<< HEAD
-=======
-		13B7E08E26855E59C888B47F /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				FFCA92E386DB9E8C58C0112E /* Pods-VoiceRecorder.debug.xcconfig */,
-				3239C0DE476D68C6E34D5055 /* Pods-VoiceRecorder.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
-		8ED99F63EA3B2804541A9207 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				B3061BC83DD8DD0B81CBAA37 /* Pods_VoiceRecorder.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
->>>>>>> 673270288d03cd07b8f65718ec97cc42065f710f
 		DE15E64F28604278003DD2F5 = {
 			isa = PBXGroup;
 			children = (
