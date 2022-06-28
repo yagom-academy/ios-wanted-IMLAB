@@ -12,7 +12,11 @@ class RecordListTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-
+         
+    }
+    
+    func setUpView(name: String) {
+        dateTitleLabel.text = name
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

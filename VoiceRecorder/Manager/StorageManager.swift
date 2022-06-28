@@ -35,7 +35,14 @@ struct StorageManager {
             
             if let result = result {
                 let names = result.items.map { $0.name }
-                
+                let datas = result.items.map { item in item.getData(maxSize: Int64.max) { result in
+                    switch result {
+                    case .success(let data):
+                        let recordModel = RecordModel(name: item.name, data: data)
+                    case .failure(let error):
+                        print("error")
+                    }
+                }}
                 completion(.success(names))
             }
         }
