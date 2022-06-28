@@ -10,6 +10,7 @@
 		0E9A9D1B2869A723006201BE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E9A9D1A2869A723006201BE /* GoogleService-Info.plist */; };
 		0EEFBFE82869C7D700AD8075 /* FirebaseStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEFBFE72869C7D700AD8075 /* FirebaseStorageManager.swift */; };
 		5A0231B2EB486B3F62CF4659 /* Pods_VoiceRecorder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2163F30A9B1B9D86A1CE8B04 /* Pods_VoiceRecorder.framework */; };
+		B0C058DC286AD73F008426B2 /* VoiceMemoRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C058DB286AD73F008426B2 /* VoiceMemoRecordViewController.swift */; };
 		DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65B28604278003DD2F5 /* AppDelegate.swift */; };
 		DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65D28604278003DD2F5 /* SceneDelegate.swift */; };
 		DE15E66028604278003DD2F5 /* VoiceMemoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65F28604278003DD2F5 /* VoiceMemoListViewController.swift */; };
@@ -23,6 +24,7 @@
 		2163F30A9B1B9D86A1CE8B04 /* Pods_VoiceRecorder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VoiceRecorder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DF64A10A912BF4D1D132F98 /* Pods-VoiceRecorder.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VoiceRecorder.release.xcconfig"; path = "Target Support Files/Pods-VoiceRecorder/Pods-VoiceRecorder.release.xcconfig"; sourceTree = "<group>"; };
 		94C8CB0AF00BF4C86F3AC7FA /* Pods-VoiceRecorder.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VoiceRecorder.debug.xcconfig"; path = "Target Support Files/Pods-VoiceRecorder/Pods-VoiceRecorder.debug.xcconfig"; sourceTree = "<group>"; };
+		B0C058DB286AD73F008426B2 /* VoiceMemoRecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceMemoRecordViewController.swift; sourceTree = "<group>"; };
 		DE15E65828604278003DD2F5 /* VoiceRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE15E65B28604278003DD2F5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DE15E65D28604278003DD2F5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -91,6 +93,7 @@
 		B096C04428698E3B00077FC4 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				B0C058D9286AD709008426B2 /* VoiceMemoRecordView */,
 				B096C04528698E4400077FC4 /* VoiceMemoListView */,
 			);
 			path = Presentation;
@@ -108,6 +111,22 @@
 			isa = PBXGroup;
 			children = (
 				DE15E65F28604278003DD2F5 /* VoiceMemoListViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		B0C058D9286AD709008426B2 /* VoiceMemoRecordView */ = {
+			isa = PBXGroup;
+			children = (
+				B0C058DA286AD72A008426B2 /* Controller */,
+			);
+			path = VoiceMemoRecordView;
+			sourceTree = "<group>";
+		};
+		B0C058DA286AD72A008426B2 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				B0C058DB286AD73F008426B2 /* VoiceMemoRecordViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -257,6 +276,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0C058DC286AD73F008426B2 /* VoiceMemoRecordViewController.swift in Sources */,
 				0EEFBFE82869C7D700AD8075 /* FirebaseStorageManager.swift in Sources */,
 				DE15E66028604278003DD2F5 /* VoiceMemoListViewController.swift in Sources */,
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
@@ -400,7 +420,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8PRV428ULN;
+				DEVELOPMENT_TEAM = PSH4C5839A;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VoiceRecorder/Resource/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -428,7 +448,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8PRV428ULN;
+				DEVELOPMENT_TEAM = PSH4C5839A;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VoiceRecorder/Resource/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
