@@ -10,6 +10,10 @@ import AVFAudio
 import AVFoundation
 
 class RecordCheckViewController: UIViewController {
+    
+    var audioReorder : AVAudioRecorder!
+    
+    // let session = AVAudioSession.sharedInstance()
 
     override func viewDidLoad() {
         super.viewDidLoad()
