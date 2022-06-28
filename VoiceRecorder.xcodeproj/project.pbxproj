@@ -9,21 +9,27 @@
 /* Begin PBXBuildFile section */
 		DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65B28604278003DD2F5 /* AppDelegate.swift */; };
 		DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65D28604278003DD2F5 /* SceneDelegate.swift */; };
-		DE15E66028604278003DD2F5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65F28604278003DD2F5 /* ViewController.swift */; };
-		DE15E66328604278003DD2F5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66128604278003DD2F5 /* Main.storyboard */; };
 		DE15E66528604279003DD2F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66428604279003DD2F5 /* Assets.xcassets */; };
 		DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */; };
+		EC6C5C4A286AF785003EFEC7 /* PlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6C5C49286AF785003EFEC7 /* PlayViewController.swift */; };
+		EC6C5C4C286AF78D003EFEC7 /* RecordingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6C5C4B286AF78D003EFEC7 /* RecordingViewController.swift */; };
+		EC6C5C4E286AF795003EFEC7 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6C5C4D286AF795003EFEC7 /* HomeViewController.swift */; };
+		ECA60CE0286AF9DD00C7D5EB /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA60CDF286AF9DD00C7D5EB /* BaseViewController.swift */; };
+		ECA60CE3286AFB0D00C7D5EB /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = ECA60CE2286AFB0D00C7D5EB /* FirebaseStorage */; };
+		ECA60CE5286AFB0D00C7D5EB /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = ECA60CE4286AFB0D00C7D5EB /* FirebaseStorageCombine-Community */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		DE15E65828604278003DD2F5 /* VoiceRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE15E65B28604278003DD2F5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DE15E65D28604278003DD2F5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		DE15E65F28604278003DD2F5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		DE15E66228604278003DD2F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		DE15E66428604279003DD2F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DE15E66728604279003DD2F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DE15E66928604279003DD2F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EC6C5C49286AF785003EFEC7 /* PlayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayViewController.swift; sourceTree = "<group>"; };
+		EC6C5C4B286AF78D003EFEC7 /* RecordingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingViewController.swift; sourceTree = "<group>"; };
+		EC6C5C4D286AF795003EFEC7 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		ECA60CDF286AF9DD00C7D5EB /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +37,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ECA60CE5286AFB0D00C7D5EB /* FirebaseStorageCombine-Community in Frameworks */,
+				ECA60CE3286AFB0D00C7D5EB /* FirebaseStorage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,15 +64,81 @@
 		DE15E65A28604278003DD2F5 /* VoiceRecorder */ = {
 			isa = PBXGroup;
 			children = (
-				DE15E65B28604278003DD2F5 /* AppDelegate.swift */,
-				DE15E65D28604278003DD2F5 /* SceneDelegate.swift */,
-				DE15E65F28604278003DD2F5 /* ViewController.swift */,
-				DE15E66128604278003DD2F5 /* Main.storyboard */,
-				DE15E66428604279003DD2F5 /* Assets.xcassets */,
-				DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */,
+				EC6C5C44286AF750003EFEC7 /* Application */,
+				EC6C5C45286AF759003EFEC7 /* Presentation */,
+				ECA60CE6286AFB3C00C7D5EB /* Resource */,
+				ECA60CDD286AF9CE00C7D5EB /* Util */,
 				DE15E66928604279003DD2F5 /* Info.plist */,
 			);
 			path = VoiceRecorder;
+			sourceTree = "<group>";
+		};
+		EC6C5C44286AF750003EFEC7 /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				DE15E65B28604278003DD2F5 /* AppDelegate.swift */,
+				DE15E65D28604278003DD2F5 /* SceneDelegate.swift */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
+		EC6C5C45286AF759003EFEC7 /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				EC6C5C48286AF776003EFEC7 /* Play */,
+				EC6C5C47286AF76F003EFEC7 /* Recording */,
+				EC6C5C46286AF769003EFEC7 /* Home */,
+			);
+			name = Presentation;
+			sourceTree = "<group>";
+		};
+		EC6C5C46286AF769003EFEC7 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				EC6C5C4D286AF795003EFEC7 /* HomeViewController.swift */,
+			);
+			name = Home;
+			sourceTree = "<group>";
+		};
+		EC6C5C47286AF76F003EFEC7 /* Recording */ = {
+			isa = PBXGroup;
+			children = (
+				EC6C5C4B286AF78D003EFEC7 /* RecordingViewController.swift */,
+			);
+			name = Recording;
+			sourceTree = "<group>";
+		};
+		EC6C5C48286AF776003EFEC7 /* Play */ = {
+			isa = PBXGroup;
+			children = (
+				EC6C5C49286AF785003EFEC7 /* PlayViewController.swift */,
+			);
+			name = Play;
+			sourceTree = "<group>";
+		};
+		ECA60CDD286AF9CE00C7D5EB /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				ECA60CDE286AF9D300C7D5EB /* Base */,
+			);
+			path = Util;
+			sourceTree = "<group>";
+		};
+		ECA60CDE286AF9D300C7D5EB /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				ECA60CDF286AF9DD00C7D5EB /* BaseViewController.swift */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
+		ECA60CE6286AFB3C00C7D5EB /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				DE15E66428604279003DD2F5 /* Assets.xcassets */,
+				DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */,
+			);
+			path = Resource;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -83,6 +157,10 @@
 			dependencies = (
 			);
 			name = VoiceRecorder;
+			packageProductDependencies = (
+				ECA60CE2286AFB0D00C7D5EB /* FirebaseStorage */,
+				ECA60CE4286AFB0D00C7D5EB /* FirebaseStorageCombine-Community */,
+			);
 			productName = SNPLab;
 			productReference = DE15E65828604278003DD2F5 /* VoiceRecorder.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +189,9 @@
 				Base,
 			);
 			mainGroup = DE15E64F28604278003DD2F5;
+			packageReferences = (
+				ECA60CE1286AFB0D00C7D5EB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			productRefGroup = DE15E65928604278003DD2F5 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -127,7 +208,6 @@
 			files = (
 				DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */,
 				DE15E66528604279003DD2F5 /* Assets.xcassets in Resources */,
-				DE15E66328604278003DD2F5 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,23 +218,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DE15E66028604278003DD2F5 /* ViewController.swift in Sources */,
+				EC6C5C4E286AF795003EFEC7 /* HomeViewController.swift in Sources */,
+				EC6C5C4C286AF78D003EFEC7 /* RecordingViewController.swift in Sources */,
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
+				EC6C5C4A286AF785003EFEC7 /* PlayViewController.swift in Sources */,
 				DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */,
+				ECA60CE0286AF9DD00C7D5EB /* BaseViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		DE15E66128604278003DD2F5 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				DE15E66228604278003DD2F5 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -216,6 +291,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "VoiceRecorder/Info.plist\n";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -270,6 +346,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "VoiceRecorder/Info.plist\n";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -288,10 +365,9 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = SNPLab/Info.plist;
+				INFOPLIST_FILE = VoiceRecorder/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -315,10 +391,9 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = SNPLab/Info.plist;
+				INFOPLIST_FILE = VoiceRecorder/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -356,6 +431,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		ECA60CE1286AFB0D00C7D5EB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		ECA60CE2286AFB0D00C7D5EB /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = ECA60CE1286AFB0D00C7D5EB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+		ECA60CE4286AFB0D00C7D5EB /* FirebaseStorageCombine-Community */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = ECA60CE1286AFB0D00C7D5EB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseStorageCombine-Community";
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = DE15E65028604278003DD2F5 /* Project object */;
 }
