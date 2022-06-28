@@ -15,6 +15,8 @@
 		DE15E66028604278003DD2F5 /* VoiceMemoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65F28604278003DD2F5 /* VoiceMemoListViewController.swift */; };
 		DE15E66528604279003DD2F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66428604279003DD2F5 /* Assets.xcassets */; };
 		DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */; };
+		FF76356C286AE23200147127 /* VoiceMemoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF76356B286AE23200147127 /* VoiceMemoCell.swift */; };
+		FF76356E286AE60C00147127 /* VoiceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF76356D286AE60C00147127 /* VoiceData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +32,8 @@
 		DE15E66428604279003DD2F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DE15E66728604279003DD2F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DE15E66928604279003DD2F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FF76356B286AE23200147127 /* VoiceMemoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceMemoCell.swift; sourceTree = "<group>"; };
+		FF76356D286AE60C00147127 /* VoiceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +103,7 @@
 		B096C04528698E4400077FC4 /* VoiceMemoListView */ = {
 			isa = PBXGroup;
 			children = (
+				FF76356A286AE20000147127 /* View */,
 				B096C04728698E7600077FC4 /* Controller */,
 			);
 			path = VoiceMemoListView;
@@ -140,6 +145,15 @@
 				DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */,
 			);
 			path = VoiceRecorder;
+			sourceTree = "<group>";
+		};
+		FF76356A286AE20000147127 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				FF76356B286AE23200147127 /* VoiceMemoCell.swift */,
+				FF76356D286AE60C00147127 /* VoiceData.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -257,8 +271,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF76356E286AE60C00147127 /* VoiceData.swift in Sources */,
 				0EEFBFE82869C7D700AD8075 /* FirebaseStorageManager.swift in Sources */,
 				DE15E66028604278003DD2F5 /* VoiceMemoListViewController.swift in Sources */,
+				FF76356C286AE23200147127 /* VoiceMemoCell.swift in Sources */,
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
 				DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */,
 			);
@@ -400,7 +416,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8PRV428ULN;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VoiceRecorder/Resource/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -428,7 +444,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8PRV428ULN;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VoiceRecorder/Resource/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
