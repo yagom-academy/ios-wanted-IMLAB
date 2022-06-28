@@ -14,11 +14,13 @@ class PlayViewController: UIViewController {
         didSet {
             guard let url = audio?.url else { return }
             let playerItem = AVPlayerItem(url: url)
-            self.audioPlayer = AVPlayer(playerItem: playerItem)
+            self.avPlayer = AVPlayer(playerItem: playerItem)
+            self.avPlayer.volume = self.volumeSize
         }
     }
     
-    var audioPlayer: AVPlayer?
+    private var avPlayer = AVPlayer()
+    private let volumeSize: Float = 0.5
     
     private lazy var backwardButton: UIButton = {
         let button = UIButton(type: .system)
@@ -58,8 +60,10 @@ class PlayViewController: UIViewController {
         return label
     }()
     
-    private let volumeSlider: UISlider = {
+    private lazy var volumeSlider: UISlider = {
         let slider = UISlider()
+        slider.addTarget(self, action: #selector(changeVolumeSlider), for: .valueChanged)
+        slider.setValue(self.volumeSize, animated: false)
         return slider
     }()
     
@@ -110,26 +114,30 @@ private extension PlayViewController {
     }
     
     @objc func touchPlayPauseButton() {
-        switch self.audioPlayer?.timeControlStatus {
+        switch self.avPlayer.timeControlStatus {
         case .playing:
-            self.audioPlayer?.pause()
+            self.avPlayer.pause()
             self.playPauseButton.isSelected.toggle()
         case .paused:
-            self.audioPlayer?.play()
+            self.avPlayer.play()
             self.playPauseButton.isSelected.toggle()
         default: break
         }
     }
     
     @objc func touchBackwardButton() {
-        guard let currentTime = self.audioPlayer?.currentTime() else { return }
+        let currentTime = self.avPlayer.currentTime()
         let time = CMTime(value: 5, timescale: 1)
-        self.audioPlayer?.seek(to: currentTime - time)
+        self.avPlayer.seek(to: currentTime - time)
     }
     
     @objc func touchForwardButton() {
-        guard let currentTime = self.audioPlayer?.currentTime() else { return }
+        let currentTime = self.avPlayer.currentTime()
         let time = CMTime(value: 5, timescale: 1)
-        self.audioPlayer?.seek(to: currentTime + time)
+        self.avPlayer.seek(to: currentTime + time)
+    }
+    
+    @objc func changeVolumeSlider(_ sender: UISlider) {
+        self.avPlayer.volume = sender.value
     }
 }
