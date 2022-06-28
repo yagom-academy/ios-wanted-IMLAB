@@ -17,6 +17,7 @@ class FirebaseStorageManager {
     
     static let shared = FirebaseStorageManager()
     private let storage = Storage.storage()
+    private let storageReferenceStr = "voiceMemo/"
     
     private init() { }
     
@@ -28,7 +29,7 @@ class FirebaseStorageManager {
             return
         }
         let voiceMemoID = UUID().uuidString
-        let reference = storage.reference().child("voiceMemo/\(voiceMemoID)")
+        let reference = storage.reference().child("\(storageReferenceStr)\(voiceMemoID)")
         let metaData = StorageMetadata()
         metaData.contentType = "audio/mpeg"
         
@@ -44,7 +45,7 @@ class FirebaseStorageManager {
     
     func fetchVoiceVoiceMemoAtFirebase(with id: String, completion: @escaping ((Result<Data, NetworkError>)-> Void)) {
         print(#function)
-        let reference = storage.reference().child("voiceMemo/\(id)")
+        let reference = storage.reference().child("\(storageReferenceStr)\(id)")
         reference.downloadURL { result in
             switch result {
             case .success(let url):
@@ -61,8 +62,16 @@ class FirebaseStorageManager {
         }
     }
     
-    func removeVoiceMemoInFirebase(with id: String) {
+    func removeVoiceMemoInFirebase(with id: String, completion: @escaping ((Result<Bool, NetworkError>) -> Void)) {
         print(#function)
+        let reference = storage.reference().child("\(storageReferenceStr)\(id)")
+        
+        reference.delete { error in
+            guard error != nil else {
+                completion(.failure(.error))
+                return
+            }
+            completion(.success(true))
+        }
     }
-    
 }
