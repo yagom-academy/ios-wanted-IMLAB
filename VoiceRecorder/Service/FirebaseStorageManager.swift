@@ -7,6 +7,7 @@
 
 import Foundation
 import FirebaseStorage
+import UIKit
 
 class FirebaseStorageManager {
     static let shared = FirebaseStorageManager()
@@ -40,5 +41,10 @@ class FirebaseStorageManager {
                 }
             }
         }
+    }
+    
+    func uploadData(url:URL,fileName:String){
+        guard let deviceId = UIDevice.current.identifierForVendor?.uuidString else{return}
+        storage.child("\(deviceId)/\(fileName)").putFile(from: url)
     }
 }

@@ -10,44 +10,67 @@ import UIKit
 import AVFoundation
 
 class RecordViewController:UIViewController{
+    let firebaseManger = FirebaseStorageManager.shared
     let step:Float = 10
     var recorder:AVAudioRecorder?
-    var audioPlayer:AVAudioPlayer!
+    var audioPlayer:AVAudioPlayer?
     var isPermissionGrant:Bool = false
     
+    public private(set) var isRecording = false
+    
     lazy var controlStackView:UIStackView = {
+        let recordButton = UIButton()
+        recordButton.setImage(UIImage(systemName: "circle.fill"), for: .normal)
+        recordButton.addTarget(self, action: #selector(didTapRecord(_:)), for: .touchUpInside)
+        
         let previusButton = UIButton()
         previusButton.setImage(UIImage(systemName: "gobackward.5"), for: .normal)
         previusButton.addTarget(self, action: #selector(previusSec), for: .touchUpInside)
         
         let playPauseButton = UIButton()
         playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
-        playPauseButton.addTarget(self, action: #selector(playPause), for: .touchUpInside)
+        playPauseButton.addTarget(self, action: #selector(playPause(_:)), for: .touchUpInside)
         
         let nextButton = UIButton()
         nextButton.setImage(UIImage(systemName: "goforward.5"), for: .normal)
         nextButton.addTarget(self, action: #selector(nextSec), for: .touchUpInside)
         
-        let stackView = UIStackView(arrangedSubviews: [previusButton,playPauseButton,nextButton])
+        let stackView = UIStackView(arrangedSubviews: [recordButton,previusButton,playPauseButton,nextButton])
         stackView.distribution = .fillEqually
         
         return stackView
     }()
-    
-    lazy var segmentedControl:UISegmentedControl = {
-        let controller = UISegmentedControl(items: ["일반 목소리","아기 목소리","할아버지 목소리"])
-        controller.selectedSegmentIndex = 0
-        return controller
-    }()
-    
+    @objc func didTapRecord(_ sender:UIButton){
+        
+        if isPermissionGrant{
+            if let recorder = recorder {
+                if !recorder.isRecording{
+                    recodingVoice()
+                    sender.setImage(UIImage(systemName: "stop.fill"), for: .normal)
+                }else{
+                    stopRecord()
+                    sender.setImage(UIImage(systemName: "circle.fill"), for: .normal)
+                }
+            }
+
+        }
+        
+    }
     @objc func previusSec(){
         print("tapped prev")
     }
     @objc func nextSec(){
         print("tapped next")
     }
-    @objc func playPause(){
-        print("Tapped play")
+    @objc func playPause(_ sender:UIButton){
+        if let recorder = recorder {
+            if !recorder.isRecording{
+                audioPlayer = try? AVAudioPlayer(contentsOf: recorder.url)
+                audioPlayer?.delegate = self
+                audioPlayer?.volume = volumeBar.value
+                audioPlayer?.play()
+            }
+        }
     }
     
     lazy var volumeBar:UISlider = {
@@ -55,13 +78,12 @@ class RecordViewController:UIViewController{
         slider.maximumValue = 100
         slider.minimumValue = 0
         slider.setValue(50, animated: false)
-        slider.addTarget(self, action: #selector(touchSlider(_:)), for: .editingDidEnd)
+        slider.addTarget(self, action: #selector(touchSlider(_:)), for: .editingChanged)
         return slider
     }()
     
     @objc func touchSlider(_ sender:UISlider!){
-        let roundValue = round(sender.value / step) * step
-        self.volumeBar.setValue(roundValue, animated: true)
+        self.audioPlayer?.volume = sender.value
     }
     
     override func viewDidLoad() {
@@ -69,25 +91,36 @@ class RecordViewController:UIViewController{
         view.backgroundColor = .systemBackground
         
         checkPermission()
-        setUpRecorder()
-        
-        [controlStackView,volumeBar,segmentedControl].forEach{
+        setupRecoder()
+        configure()
+    }
+}
+
+//MARK: - View Configure
+private extension RecordViewController{
+    func configure(){
+        addSubViews()
+        makeConstrains()
+    }
+    
+    func addSubViews(){
+        [controlStackView,volumeBar].forEach{
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
-        
-        controlStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        controlStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
-        controlStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
-        controlStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: -50).isActive = true
-        
-        volumeBar.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 30).isActive = true
-        volumeBar.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -30).isActive = true
-        volumeBar.bottomAnchor.constraint(equalTo: controlStackView.topAnchor,constant: -50).isActive = true
-        
-        segmentedControl.leadingAnchor.constraint(equalTo: volumeBar.leadingAnchor).isActive = true
-        segmentedControl.trailingAnchor.constraint(equalTo: volumeBar.trailingAnchor).isActive = true
-        segmentedControl.bottomAnchor.constraint(equalTo: volumeBar.topAnchor,constant: -30).isActive = true
+    }
+    
+    func makeConstrains(){
+        NSLayoutConstraint.activate([
+            controlStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            controlStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            controlStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            controlStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: -50),
+            
+            volumeBar.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 30),
+            volumeBar.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -30),
+            volumeBar.bottomAnchor.constraint(equalTo: controlStackView.topAnchor,constant: -50)
+        ])
     }
 }
 
@@ -107,46 +140,117 @@ extension RecordViewController{
         }
     }
     
-    private func setUpRecorder(){
-        if self.isPermissionGrant{
+    func setupRecoder(){
+        let recordSettings = [AVFormatIDKey : NSNumber(value: kAudioFormatAppleLossless as UInt32),
+                              AVEncoderAudioQualityKey : AVAudioQuality.max.rawValue,
+                              AVEncoderBitRateKey : 320000,
+                              AVNumberOfChannelsKey : 2,
+                              AVSampleRateKey : 44100.0 ] as [String : Any]
+        let session = AVAudioSession.sharedInstance()
+        
+        let directory = FileManager.default.urls(for: FileManager.SearchPathDirectory.documentDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).first
+        let audioFileName = convertString() + ".m4a"
+        let audioFileURL = directory!.appendingPathComponent(audioFileName)
+        
+        do{
+            try session.setCategory(.playAndRecord)
+        } catch {
+            print("Could not setting session \(error)")
+        }
+        
+        recorder = try? AVAudioRecorder(url: audioFileURL, settings: recordSettings)
+        recorder?.delegate = self
+        recorder?.isMeteringEnabled = true
+        recorder?.prepareToRecord()
+    }
+    
+    func recodingVoice(){
+        if let recoder = self.recorder{
             let session = AVAudioSession.sharedInstance()
             
-            let audioFileName = "voiceRecoders_\(convertString()).m4a"
-            let directoryURL = FileManager.default.urls(for:.documentDirectory,in: .userDomainMask).first
-            let audioFileURL = directoryURL!.appendingPathComponent(audioFileName)
-            
-            
             do{
-                try session.setCategory(.playAndRecord,mode: .default)
-            }catch let err{
-                print("Error in Setup Recorder \(err)")
+                try session.setActive(true)
+            } catch {
+                print("Could not active recorder \(error)")
             }
             
-            let setting = [
-                AVFormatIDKey:NSNumber(value: kAudioFileMPEG4Type as UInt32),
-                AVSampleRateKey:44100.0,
-                AVNumberOfChannelsKey:2
-            ]
             
-            recorder = try? AVAudioRecorder(url: audioFileURL,settings: setting)
-            recorder?.delegate = self
-            recorder?.isMeteringEnabled = true
-            recorder?.prepareToRecord()
+            recoder.record()
+        }
+
+    }
+    
+    func stopRecord(){
+        if let recoder = self.recorder{
+            recoder.stop()
+            let session = AVAudioSession.sharedInstance()
+            do{
+                try session.setActive(false)
+            } catch {
+                print("Could not stop record \(error)")
+            }
             
-            print("Success Ready")
+
         }
     }
     
-    private func convertString()->String{
+    func playRecord(){
+        if let recorder = recorder{
+            if !recorder.isRecording{
+                print("play")
+                do{
+                    audioPlayer = try AVAudioPlayer(contentsOf: recorder.url)
+                } catch {
+                    print("Could not init player")
+                }
+
+                audioPlayer?.delegate = self
+                audioPlayer?.play()
+            }
+        }
+    }
+    
+    func stopPlay(){
+        if let player = audioPlayer{
+            if player.isPlaying{
+                player.stop()
+            }
+        }
+    }
+    
+    func convertString()->String{
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy_MM_dd_HH:mm:ss"
         dateFormatter.locale = Locale(identifier: "ko_KR")
         return dateFormatter.string(from: Date())
     }
+
 }
 
 extension RecordViewController:AVAudioRecorderDelegate{
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
+        print("Did Record finish \(flag)")
+        if flag{
+            
+            firebaseManger.uploadData(url: recorder.url, fileName:"\(convertString()).m4a")
+        }
+    }
+}
+
+extension RecordViewController:AVAudioPlayerDelegate{
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         print(flag)
     }
 }
+
+
+//MARK: - PREVIEWS
+#if canImport(swiftUI) && DEBUG
+import SwiftUI
+
+struct RecordViewController_Previews:PreviewProvider{
+    static var previews: some View{
+        RecordViewController().showPreview()
+    }
+}
+#endif
