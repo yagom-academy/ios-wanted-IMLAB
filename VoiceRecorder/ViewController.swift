@@ -16,7 +16,13 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+       
+        plusButton.addTarget(self, action: #selector(plusButtonClicked), for: .touchUpInside)
+    }
+    
+    @objc func plusButtonClicked() {
+        let recordCheckVC = RecordCheckViewController()
+        self.present(recordCheckVC, animated: true)
     }
 }
 
