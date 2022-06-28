@@ -36,6 +36,7 @@ class RecordViewController: UIViewController {
     var isPlay = false
     var progressTimer: Timer?
     var counter = 0.0
+    var currentPlayTime = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,7 +57,6 @@ class RecordViewController: UIViewController {
                 case .success(_):
                     print("저장 성공🎉")
                     self.delegate?.didFinishRecord()
-
                 case .failure(let error):
                     print("ERROR \(error.localizedDescription)🌡🌡")
                 }
@@ -93,6 +93,7 @@ class RecordViewController: UIViewController {
     @IBAction func didTapPlayPauseButton(_ sender: UIButton) {
         if isPlay {
             sender.setImage(Icon.play.image, for: .normal)
+            currentPlayTime = audioPlayer?.currentTime ?? 0.0
             progressTimer?.invalidate()
             audioPlayer?.stop()
         } else {
@@ -115,6 +116,8 @@ class RecordViewController: UIViewController {
 extension RecordViewController: AVAudioPlayerDelegate {
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         isPlay = false
+        currentPlayTime = 0.0
+        counter = 0.0
         progressTimer?.invalidate()
         playButton.setImage(Icon.play.image, for: .normal)
     }
@@ -129,6 +132,7 @@ private extension RecordViewController {
             guard let fileName = fileName else { return }
             audioPlayer = try AVAudioPlayer(contentsOf: fileName)
             audioPlayer?.volume = 1.0
+            audioPlayer?.currentTime = currentPlayTime
             audioPlayer?.prepareToPlay()
             audioPlayer?.play()
         } catch {
