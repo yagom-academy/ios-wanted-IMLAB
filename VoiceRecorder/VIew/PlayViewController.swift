@@ -16,11 +16,47 @@ class PlayViewController: UIViewController {
             let playerItem = AVPlayerItem(url: url)
             self.avPlayer = AVPlayer(playerItem: playerItem)
             self.avPlayer.volume = self.volumeSize
+            
+            do {
+                let audioFile = try AVAudioFile(forReading: url)
+                let format = audioFile.fileFormat
+                self.audioFile = audioFile
+                
+                self.audioEngine.attach(playerNode)
+                self.audioEngine.attach(pitchControl)
+                self.audioEngine.connect(playerNode, to: pitchControl, format: format)
+                self.audioEngine.connect(pitchControl, to: self.audioEngine.mainMixerNode, format: format)
+                self.audioEngine.prepare()
+                
+                do {
+                    try self.audioEngine.start()
+                } catch let error {
+                    print("audioEngineError: \(error.localizedDescription)")
+                }
+            } catch let error {
+                print("audioFileError:\(error.localizedDescription)")
+            }
+            
         }
     }
     
+//    var pitchIndex: Int = 1 {
+//        didSet {
+//            print(pitchIndex)
+//            let value = allPlaybackPitches[pitchIndex]
+//            self.pitchControl.pitch = 1200 * Float(value)
+//        }
+//    }
+    
+    let allPlaybackPitches: [Double] = [-0.5, 0, 0.5]
+    
     private var avPlayer = AVPlayer()
     private let volumeSize: Float = 0.5
+    
+    private let audioEngine = AVAudioEngine()
+    private let playerNode = AVAudioPlayerNode()
+    private let pitchControl = AVAudioUnitTimePitch()
+    private var audioFile: AVAudioFile?
     
     private lazy var backwardButton: UIButton = {
         let button = UIButton(type: .system)
@@ -153,6 +189,8 @@ private extension PlayViewController {
     }
     
     @objc func pitchSegmentedControlValueChanged(_ sender: UISegmentedControl) {
-        print(sender.selectedSegmentIndex)
+        let value = allPlaybackPitches[sender.selectedSegmentIndex]
+        print(value)
+        self.pitchControl.pitch = 1200 * Float(value)
     }
 }
