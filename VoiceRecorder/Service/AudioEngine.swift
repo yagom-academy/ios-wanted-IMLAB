@@ -10,23 +10,21 @@ import AVFAudio
 
 class AudioEngine{
     
-    private var recordedFileURL = URL(fileURLWithPath: "record.m4a", isDirectory: false, relativeTo: URL(fileURLWithPath: NSTemporaryDirectory()))
+    private var recordedFileURL:URL
     private var recordedFilePlayer = AVAudioPlayerNode()
     private var recordedFile: AVAudioFile?
     private var engine = AVAudioEngine()
     public private(set) var isRecording = false
     private var isNewRecordingAvailable = false
-    public private(set) var voiceIOFormat: AVAudioFormat
 
 
     enum AudioEngingError:Error{
         case bufferError
     }
     
-    init() throws{
+    init(recordedFileUrl:URL){
+        self.recordedFileURL = recordedFileUrl
         engine.attach(recordedFilePlayer)
-        print("\(recordedFileURL)")
-        voiceIOFormat = AVAudioPCMBuffer(pcmFormat: .init(), frameCapacity: 10)!.format
     }
     
     func setup(){
@@ -41,20 +39,14 @@ class AudioEngine{
         
         let output = engine.outputNode
         let mainMixer = engine.mainMixerNode
-        
-        engine.connect(recordedFilePlayer, to: mainMixer, format: voiceIOFormat)
-        
-        input.installTap(onBus: 0, bufferSize: 256, format: voiceIOFormat) { buffer, when in
-            if self.isRecording{
-                do{
-                    try self.recordedFile?.write(from: buffer)
-                } catch {
-                    print("Could not write buffer \(error)")
-                }
-            }
+        do{
+            let audioFile = try AVAudioFile(forReading: recordedFileURL)
+            let format = audioFile.fileFormat
+            engine.connect(recordedFilePlayer, to: output, format: format)
+            engine.prepare()
+        } catch{
+            print("Could not read file \(error.localizedDescription)")
         }
-        
-        engine.prepare()
     }
     
     private static func getBuffer(fileURL:URL)->AVAudioPCMBuffer?{

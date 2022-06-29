@@ -93,5 +93,6 @@ extension HomeViewController: UITableViewDelegate {
         let playViewController = PlayViewController()
         playViewController.audio = audio
         self.present(playViewController, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }

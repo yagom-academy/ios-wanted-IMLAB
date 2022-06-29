@@ -12,39 +12,39 @@ import UIKit
 class FirebaseStorageManager {
     static let shared = FirebaseStorageManager()
     private let storage = Storage.storage().reference().child("voiceRecords")
+    private let deviceId:String?
     
-    private init() { }
+    private init() {
+        
+        self.deviceId = UIDevice.current.identifierForVendor?.uuidString
+    }
     
     func fetch(completion: @escaping (Result<Audio, Error>) -> Void) {
-        storage.listAll { result, error in
-            if let error = error {
-                completion(.failure(error))
-            }
-            
-            if let result = result {
-                result.items.forEach { item in
-                    item.downloadURL { url, error in
-                        if let url = url {
-                            item.getMetadata { metaData, error in
-                                if let metaData = metaData {
-                                    let dateFormatter = DateFormatter()
-                                    dateFormatter.dateFormat = "yyyy_MM_dd_HH:mm:ss"
-                                    let dateString = dateFormatter.string(from: metaData.timeCreated ?? Date())
-                                    
-                                    let titleString = "\(self.storage.name)_\(dateString)"
-                                    let audio = Audio(title: titleString, url: url)
-                                    completion(.success(audio))
-                                }
+        
+        if let deviceId = deviceId {
+            storage.child(deviceId).listAll { result in
+                switch result{
+                case .success(let result):
+                    result.items.forEach { item in
+                        let timeTitle = item.name.replacingOccurrences(of: ".m4a", with: "")
+                        let title = "voiceRecords_" + timeTitle
+                        item.downloadURL { url, err in
+                            if let url = url{
+                                let audio = Audio(title: title, url: url)
+                                completion(.success(audio))
                             }
                         }
                     }
+                case .failure(let err):
+                    print("Error in fetch FirebaseManager \(err.localizedDescription)")
                 }
             }
         }
     }
     
     func uploadData(url:URL,fileName:String){
-        guard let deviceId = UIDevice.current.identifierForVendor?.uuidString else{return}
-        storage.child("\(deviceId)/\(fileName)").putFile(from: url)
+        if let deviceId = deviceId {
+            storage.child("\(deviceId)/\(fileName)").putFile(from: url)
+        }
     }
 }

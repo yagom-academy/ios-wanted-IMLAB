@@ -8,38 +8,61 @@
 import Foundation
 import UIKit
 import AVFoundation
+import MediaPlayer
 
 class RecordViewController:UIViewController{
     let firebaseManger = FirebaseStorageManager.shared
     let step:Float = 10
     var recorder:AVAudioRecorder?
     var audioPlayer:AVAudioPlayer?
+    var player:AVQueuePlayer!
+    var playerLooper:AVPlayerLooper!
     var isPermissionGrant:Bool = false
     
     public private(set) var isRecording = false
+    var engine:AudioEngine?
+    
+    lazy var recordButton:UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "circle.fill"), for: .normal)
+        button.addTarget(self, action: #selector(didTapRecord(_:)), for: .touchUpInside)
+        return button
+    }()
+    
+    lazy var prevButton:UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "gobackward.5"), for: .normal)
+        button.addTarget(self, action: #selector(previusSec), for: .touchUpInside)
+        button.isEnabled = false
+
+        return button
+    }()
+    
+    lazy var nextButton:UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "goforward.5"), for: .normal)
+        button.addTarget(self, action: #selector(nextSec), for: .touchUpInside)
+        button.isEnabled = false
+
+        return button
+    }()
+    
+    lazy var playButton:UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "play.fill"), for: .normal)
+        button.addTarget(self, action: #selector(playPause(_:)), for: .touchUpInside)
+        button.isEnabled = false
+
+        return button
+    }()
     
     lazy var controlStackView:UIStackView = {
-        let recordButton = UIButton()
-        recordButton.setImage(UIImage(systemName: "circle.fill"), for: .normal)
-        recordButton.addTarget(self, action: #selector(didTapRecord(_:)), for: .touchUpInside)
-        
-        let previusButton = UIButton()
-        previusButton.setImage(UIImage(systemName: "gobackward.5"), for: .normal)
-        previusButton.addTarget(self, action: #selector(previusSec), for: .touchUpInside)
-        
-        let playPauseButton = UIButton()
-        playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
-        playPauseButton.addTarget(self, action: #selector(playPause(_:)), for: .touchUpInside)
-        
-        let nextButton = UIButton()
-        nextButton.setImage(UIImage(systemName: "goforward.5"), for: .normal)
-        nextButton.addTarget(self, action: #selector(nextSec), for: .touchUpInside)
-        
-        let stackView = UIStackView(arrangedSubviews: [recordButton,previusButton,playPauseButton,nextButton])
+        let stackView = UIStackView(arrangedSubviews: [recordButton,prevButton,playButton,nextButton])
         stackView.distribution = .fillEqually
         
         return stackView
     }()
+    
     @objc func didTapRecord(_ sender:UIButton){
         
         if isPermissionGrant{
@@ -47,43 +70,63 @@ class RecordViewController:UIViewController{
                 if !recorder.isRecording{
                     recodingVoice()
                     sender.setImage(UIImage(systemName: "stop.fill"), for: .normal)
+                    playButton.isEnabled = false
+                    prevButton.isEnabled = false
+                    nextButton.isEnabled = false
                 }else{
                     stopRecord()
                     sender.setImage(UIImage(systemName: "circle.fill"), for: .normal)
+                    playButton.isEnabled = true
+                    prevButton.isEnabled = true
+                    nextButton.isEnabled = true
                 }
             }
-
         }
+        //TODO: - Permission denied
         
     }
     @objc func previusSec(){
-        print("tapped prev")
+        if let currentTime = self.player.currentItem?.currentTime(){
+            let time = CMTime(value: 5, timescale: 1)
+            self.player.seek(to: currentTime - time)
+        }
     }
     @objc func nextSec(){
-        print("tapped next")
+        if let currentTime = self.player.currentItem?.currentTime(){
+            let time = CMTime(value: 5, timescale: 1)
+            self.player.seek(to: currentTime + time)
+        }
     }
     @objc func playPause(_ sender:UIButton){
         if let recorder = recorder {
             if !recorder.isRecording{
-                audioPlayer = try? AVAudioPlayer(contentsOf: recorder.url)
-                audioPlayer?.delegate = self
-                audioPlayer?.volume = volumeBar.value
-                audioPlayer?.play()
+                switch player.timeControlStatus{
+                case .playing:
+                    self.stopPlay()
+                    sender.setImage(UIImage(systemName: "play.fill"), for: .normal)
+                case .paused:
+                    self.playRecord()
+                    sender.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+
+                default: break
+                    
+                }
             }
         }
     }
     
     lazy var volumeBar:UISlider = {
         let slider = UISlider()
+        slider.setThumbImage(UIImage(systemName: "circle.fill"), for: .normal)
         slider.maximumValue = 100
         slider.minimumValue = 0
         slider.setValue(50, animated: false)
-        slider.addTarget(self, action: #selector(touchSlider(_:)), for: .editingChanged)
+        slider.addTarget(self, action: #selector(touchSlider(_:)), for: .valueChanged)
         return slider
     }()
     
     @objc func touchSlider(_ sender:UISlider!){
-        self.audioPlayer?.volume = sender.value
+        self.player?.volume = sender.value
     }
     
     override func viewDidLoad() {
@@ -104,6 +147,7 @@ private extension RecordViewController{
     }
     
     func addSubViews(){
+        
         [controlStackView,volumeBar].forEach{
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
@@ -119,7 +163,7 @@ private extension RecordViewController{
             
             volumeBar.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 30),
             volumeBar.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -30),
-            volumeBar.bottomAnchor.constraint(equalTo: controlStackView.topAnchor,constant: -50)
+            volumeBar.bottomAnchor.constraint(equalTo: controlStackView.topAnchor,constant: -50),
         ])
     }
 }
@@ -154,6 +198,7 @@ extension RecordViewController{
         
         do{
             try session.setCategory(.playAndRecord)
+
         } catch {
             print("Could not setting session \(error)")
         }
@@ -186,36 +231,21 @@ extension RecordViewController{
             let session = AVAudioSession.sharedInstance()
             do{
                 try session.setActive(false)
+                engine?.setup()
             } catch {
                 print("Could not stop record \(error)")
             }
-            
-
         }
     }
     
     func playRecord(){
-        if let recorder = recorder{
-            if !recorder.isRecording{
-                print("play")
-                do{
-                    audioPlayer = try AVAudioPlayer(contentsOf: recorder.url)
-                } catch {
-                    print("Could not init player")
-                }
-
-                audioPlayer?.delegate = self
-                audioPlayer?.play()
-            }
-        }
+        player?.volume = volumeBar.value
+        player?.play()
     }
     
     func stopPlay(){
-        if let player = audioPlayer{
-            if player.isPlaying{
-                player.stop()
-            }
-        }
+        player?.volume = volumeBar.value
+        player?.pause()
     }
     
     func convertString()->String{
@@ -231,15 +261,11 @@ extension RecordViewController:AVAudioRecorderDelegate{
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
         print("Did Record finish \(flag)")
         if flag{
-            
+            let playItem = AVPlayerItem(url: recorder.url)
+            player = AVQueuePlayer(playerItem: playItem)
+            self.playerLooper = AVPlayerLooper(player: player, templateItem: playItem)
             firebaseManger.uploadData(url: recorder.url, fileName:"\(convertString()).m4a")
         }
-    }
-}
-
-extension RecordViewController:AVAudioPlayerDelegate{
-    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        print(flag)
     }
 }
 
