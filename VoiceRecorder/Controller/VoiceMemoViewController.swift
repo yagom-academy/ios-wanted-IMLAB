@@ -27,7 +27,16 @@ class VoiceMemoViewController: UIViewController {
         super.viewDidLoad()
         
         configureTableView()
-        getDataFromFirebase()
+        items = FireStorageManager.shared.getDataFromFirebase()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        if items.isEmpty == false {
+            DispatchQueue.main.async {
+                self.voiceMemoTableView.reloadData()
+            }
+        }
     }
     
     // MARK: - IBActions
@@ -38,21 +47,21 @@ class VoiceMemoViewController: UIViewController {
     
     // MARK: - Methods
     
-    func getDataFromFirebase() {
-        let storage = Storage.storage()
-        let storageRef = storage.reference()
-        let fileRef = storageRef.child(RefString.recording)
-        
-        fileRef.listAll() { (result, error) in
-            if let error = error {
-                print(error)
-            }
-            for item in result.items {
-                self.items.append(item)
-            }
-            self.voiceMemoTableView.reloadData()
-        }
-    }
+//    func getDataFromFirebase() {
+//        let storage = Storage.storage()
+//        let storageRef = storage.reference()
+//        let fileRef = storageRef.child(RefString.recording)
+//
+//        fileRef.listAll() { (result, error) in
+//            if let error = error {
+//                print(error)
+//            }
+//            for item in result.items {
+//                self.items.append(item)
+//            }
+//            self.voiceMemoTableView.reloadData()
+//        }
+//    }
 
     func configureTableView() {
         
