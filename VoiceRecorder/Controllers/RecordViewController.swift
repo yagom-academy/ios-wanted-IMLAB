@@ -45,11 +45,13 @@ class RecordViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         requestRecord()
+        setupButton(isHidden: true)
     }
     
     @IBAction func didTapRecordButton(_ sender: UIButton) {
         if isRecord {
             progressTimer?.invalidate()
+            setupButton(isHidden: false)
             counter = 0.0
             sender.setImage(Icon.circleFill.image, for: .normal)
             audioRecorder?.stop()
@@ -88,10 +90,16 @@ class RecordViewController: UIViewController {
     
     @IBAction func didTapPlayBack5Button(_ sender: UIButton) {
         audioPlayer?.currentTime = (audioPlayer?.currentTime ?? 0.0) - 5.0
+        counter = audioPlayer?.currentTime ?? 0.0
+        currentPlayTime = audioPlayer?.currentTime ?? 0.0
+        print(currentPlayTime)
     }
     
     @IBAction func didTapPlayForward5Button(_ sender: UIButton) {
         audioPlayer?.currentTime = (audioPlayer?.currentTime ?? 0.0) + 5.0
+        counter = audioPlayer?.currentTime ?? 0.0
+        currentPlayTime = audioPlayer?.currentTime ?? 0.0
+        print(currentPlayTime)
     }
     
     @IBAction func didTapPlayPauseButton(_ sender: UIButton) {
@@ -169,5 +177,14 @@ private extension RecordViewController {
     func openSetting() {
         guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
+    }
+    
+    func setupButton(isHidden: Bool) {
+        playButton.isHidden = isHidden
+        playBackwardButton.isHidden = isHidden
+        playForwardButton.isHidden = isHidden
+        if isHidden == false {
+            recordButton.isHidden = true
+        }
     }
 }
