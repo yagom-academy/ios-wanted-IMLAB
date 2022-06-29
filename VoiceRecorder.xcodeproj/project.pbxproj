@@ -82,6 +82,13 @@
 			path = Support;
 			sourceTree = "<group>";
 		};
+		B7A56DCB286B327900EA639D /* Network */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
 		DE15E64F28604278003DD2F5 = {
 			isa = PBXGroup;
 			children = (
@@ -101,6 +108,7 @@
 		DE15E65A28604278003DD2F5 /* VoiceRecorder */ = {
 			isa = PBXGroup;
 			children = (
+				B7A56DCB286B327900EA639D /* Network */,
 				B7A56DB22869A4F600EA639D /* Scenes */,
 				B7A56DB62869A52700EA639D /* Support */,
 				DE15E66928604279003DD2F5 /* Info.plist */,
