@@ -48,4 +48,20 @@ struct StorageManager {
         }
     }
     
+    func delete(fileName: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        let storageRef = storage.reference()
+        let desertRef = storageRef.child("record/\(fileName)")
+        
+        desertRef.delete { error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            } else {
+                completion(.success(()))
+                return
+            }
+        }
+        
+    }
+    
 }

@@ -45,11 +45,11 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(
         _ tableView: UITableView,
         cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = recordListTableView.dequeueReusableCell(
-            withIdentifier: "RecordListTableViewCell", for: indexPath) as? RecordListTableViewCell else { return UITableViewCell() }
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: "RecordListTableViewCell", for: indexPath) as? RecordListTableViewCell else { return UITableViewCell() }
             cell.setUpView(name: recordList[indexPath.row])
-        return cell
-    }
+            return cell
+        }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
@@ -57,6 +57,20 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
         guard let playVC = storyboard?.instantiateViewController(withIdentifier: "PlayViewController")
                 as? PlayViewController else { return }
         self.present(playVC, animated: true, completion: nil)
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            StorageManager().delete(fileName: recordList[indexPath.row]) { result in
+                switch result {
+                case .success(_ ):
+                    self.recordList.remove(at: indexPath.row)
+                    tableView.deleteRows(at: [indexPath], with: .fade)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+        }
     }
 }
 
