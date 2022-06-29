@@ -14,9 +14,9 @@ class RecordDetailViewController: UIViewController {
     // MARK: - Enums
     
     enum RecordFileString {
-        static var fileName = ""
+        static var fileName = "recording"
         static let fileExtension = ".m4a"
-        static var fileFullName = "\(fileName)\(fileExtension)"
+        static var fileFullName = "recording\(fileName)\(fileExtension)"
     }
     
     // MARK: - IBOutlet
@@ -83,11 +83,11 @@ class RecordDetailViewController: UIViewController {
     }
         
     func startRecording() {
-        RecordFileString.fileName = makeFileName()
+        RecordFileString.fileName += makeFileName()
         // 파일 생성
         print(RecordFileString.fileFullName)
-        audioFileURL = getDocumentsDirectory().appendingPathComponent("recording4.m4a")
-        let audioFileURL = getDocumentsDirectory().appendingPathComponent("recording4.m4a")
+        audioFileURL = getDocumentsDirectory().appendingPathComponent(RecordFileString.fileFullName)
+        let audioFileURL = getDocumentsDirectory().appendingPathComponent(RecordFileString.fileFullName)
         let settings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
             AVSampleRateKey: 12000,
@@ -118,8 +118,8 @@ class RecordDetailViewController: UIViewController {
         }
 
         let storageRef = storage.reference()
-        
-        let riversRef = storageRef.child("recording4")
+                
+        let riversRef = storageRef.child("recording/\(RecordFileString.fileName)")
         
         riversRef.putFile(from: url) // force unwrapping
     }
