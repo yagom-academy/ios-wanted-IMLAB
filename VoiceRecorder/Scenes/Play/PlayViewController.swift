@@ -48,6 +48,13 @@ class PlayViewController: UIViewController {
       return
     }
     audio = Audio(fileURL)
+    audio?.playerProgress.bind({ value in
+      self.playView.recorderSlider.value = Float(value)
+    })
+    audio?.playerTime.bind({ time in
+      self.playView.totalTimeLabel.text = time.remainingText
+      self.playView.spendTimeLabel.text = time.elapsedText
+    })
   }
 
   func setupAction() {

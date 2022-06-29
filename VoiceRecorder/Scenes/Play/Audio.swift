@@ -63,6 +63,10 @@ class Audio {
   var audioSampleRate: Double = 0
   var audioLengthSeconds: Double = 0
 
+  //  var playerProgress: Double = 0
+  var playerProgress: Observable<Double> = Observable(0.0)
+  var playerTime: Observable<PlayerTime> = Observable(.zero)
+
   var displayLink: CADisplayLink?
   var seekFrame: AVAudioFramePosition = 0
   var currentPosition: AVAudioFramePosition = 0
@@ -209,13 +213,15 @@ class Audio {
   private func setupDisplayLink() {
     displayLink = CADisplayLink(
       target: self,
-      selector: #selector(updateDisplay))
+      selector: #selector(updateDisplay)
+    )
     displayLink?.add(to: .current, forMode: .default)
     displayLink?.isPaused = true
   }
 
 
-  @objc private func updateDisplay() {
+  @objc
+  private func updateDisplay() {
     currentPosition = currentFrame + seekFrame
     currentPosition = max(currentPosition, 0)
     currentPosition = min(currentPosition, audioLengthSamples)
@@ -229,5 +235,14 @@ class Audio {
       isPlaying = false
       displayLink?.isPaused = true
     }
+
+    playerProgress.value = Double(currentPosition) / Double(audioLengthSamples)
+
+    let time = Double(currentPosition) / audioSampleRate
+    playerTime.value = PlayerTime(
+      elapsedTime: time,
+      remainingTime: audioLengthSeconds - time
+    )
   }
+
 }
