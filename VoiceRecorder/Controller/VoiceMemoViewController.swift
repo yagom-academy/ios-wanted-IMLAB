@@ -12,6 +12,8 @@ class VoiceMemoViewController: UIViewController {
     @IBOutlet weak var voiceMemoTableView: UITableView!
     
     // MARK: - Properties
+    
+    var items: [String] = ["테스트", "ㅁㅁㅁ", "test", "aaa"]
 
     // MARK: - LifeCycles
     
@@ -46,7 +48,7 @@ class VoiceMemoViewController: UIViewController {
 
 extension VoiceMemoViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return items.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -57,6 +59,12 @@ extension VoiceMemoViewController: UITableViewDataSource {
         return cell
     }
     
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            items.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
+    }
     
 }
 
