@@ -33,7 +33,7 @@ class RecordDetailViewController: UIViewController {
     var audioRecorder: AVAudioRecorder?
         
     var audioFileURL : URL?
-        
+            
     let readyToRecordButtonImage = UIImage(systemName: "record.circle")
     let recordingButtonImage = UIImage(systemName: "record.circle.fill")
     
@@ -70,18 +70,10 @@ class RecordDetailViewController: UIViewController {
     func loadRecordingUI() {
         
     }
-    
-    func makeFileName() -> String {
-        let formatter = DateFormatter()
-        
-        formatter.locale = Locale(identifier: "ko")
-        formatter.dateFormat = "_yyyy_MM_dd_HH:mm:ss"
-        let currentDateString = formatter.string(from: Date())
-        return currentDateString
-    }
         
     func startRecording() {
-        RecordFileString.fileName += makeFileName()
+        let fileName = DataFormatter.makeFileName()
+        RecordFileString.fileName += fileName
         // 파일 생성
         guard let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {return}
         audioFileURL = fileURL.appendingPathComponent(RecordFileString.fileFullName)
