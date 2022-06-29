@@ -40,8 +40,6 @@ class VoiceMemoViewController: UIViewController {
         voiceMemoTableView.delegate = self
         voiceMemoTableView.dataSource = self
     }
-    
-    
 }
 
 // MARK: - Extensions
@@ -69,6 +67,9 @@ extension VoiceMemoViewController: UITableViewDataSource {
 }
 
 extension VoiceMemoViewController: UITableViewDelegate {
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let playingVC = self.storyboard?.instantiateViewController(withIdentifier: "PlayingViewController") as? PlayingViewController else {return}
+        present(playingVC, animated: true)
+    }
 }
 
