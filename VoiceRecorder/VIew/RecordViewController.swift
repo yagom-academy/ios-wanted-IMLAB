@@ -20,6 +20,7 @@ class RecordViewController:UIViewController{
     var isPermissionGrant:Bool = false
     
     public private(set) var isRecording = false
+    private var audioEngine: AudioEngine!
     var engine:AudioEngine?
     
     lazy var recordButton:UIButton = {
@@ -34,7 +35,7 @@ class RecordViewController:UIViewController{
         button.setImage(UIImage(systemName: "gobackward.5"), for: .normal)
         button.addTarget(self, action: #selector(previusSec), for: .touchUpInside)
         button.isEnabled = false
-
+        
         return button
     }()
     
@@ -43,7 +44,7 @@ class RecordViewController:UIViewController{
         button.setImage(UIImage(systemName: "goforward.5"), for: .normal)
         button.addTarget(self, action: #selector(nextSec), for: .touchUpInside)
         button.isEnabled = false
-
+        
         return button
     }()
     
@@ -52,7 +53,7 @@ class RecordViewController:UIViewController{
         button.setImage(UIImage(systemName: "play.fill"), for: .normal)
         button.addTarget(self, action: #selector(playPause(_:)), for: .touchUpInside)
         button.isEnabled = false
-
+        
         return button
     }()
     
@@ -64,54 +65,48 @@ class RecordViewController:UIViewController{
     }()
     
     @objc func didTapRecord(_ sender:UIButton){
-        
         if isPermissionGrant{
-            if let recorder = recorder {
-                if !recorder.isRecording{
-                    recodingVoice()
-                    sender.setImage(UIImage(systemName: "stop.fill"), for: .normal)
-                    playButton.isEnabled = false
-                    prevButton.isEnabled = false
-                    nextButton.isEnabled = false
-                }else{
-                    stopRecord()
-                    sender.setImage(UIImage(systemName: "circle.fill"), for: .normal)
-                    playButton.isEnabled = true
-                    prevButton.isEnabled = true
-                    nextButton.isEnabled = true
-                }
+            audioEngine.checkEngineRunning()
+            audioEngine.toggleRecording()
+            
+            if audioEngine.isRecording{
+                sender.setImage(UIImage(systemName: "stop.fill"), for: .normal)
+                playButton.isEnabled = false
+                prevButton.isEnabled = false
+                nextButton.isEnabled = false
+            }else{
+                sender.setImage(UIImage(systemName: "circle.fill"), for: .normal)
+                playButton.isEnabled = true
+                prevButton.isEnabled = true
+                nextButton.isEnabled = true
+                audioEngine.firebaseUpload()
             }
+        }else{
+            sender.isEnabled = false
         }
+        
         //TODO: - Permission denied
         
     }
     @objc func previusSec(){
-        if let currentTime = self.player.currentItem?.currentTime(){
-            let time = CMTime(value: 5, timescale: 1)
-            self.player.seek(to: currentTime - time)
-        }
+        print("pre Tapped")
     }
     @objc func nextSec(){
-        if let currentTime = self.player.currentItem?.currentTime(){
-            let time = CMTime(value: 5, timescale: 1)
-            self.player.seek(to: currentTime + time)
-        }
+        print("next Tapped")
     }
     @objc func playPause(_ sender:UIButton){
-        if let recorder = recorder {
-            if !recorder.isRecording{
-                switch player.timeControlStatus{
-                case .playing:
-                    self.stopPlay()
-                    sender.setImage(UIImage(systemName: "play.fill"), for: .normal)
-                case .paused:
-                    self.playRecord()
-                    sender.setImage(UIImage(systemName: "pause.fill"), for: .normal)
-
-                default: break
-                    
-                }
+        audioEngine.checkEngineRunning()
+        audioEngine.togglePlaying {
+            DispatchQueue.main.async {
+                
+                sender.setImage(UIImage(systemName: "play.fill"), for: .normal)
             }
+        }
+        
+        if audioEngine.isPlaying{
+            sender.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+        }else{
+            sender.setImage(UIImage(systemName: "play.fill"), for: .normal)
         }
     }
     
@@ -134,7 +129,7 @@ class RecordViewController:UIViewController{
         view.backgroundColor = .systemBackground
         
         checkPermission()
-        setupRecoder()
+        setupAudioEngine()
         configure()
     }
 }
@@ -184,77 +179,18 @@ extension RecordViewController{
         }
     }
     
-    func setupRecoder(){
-        let recordSettings = [AVFormatIDKey : NSNumber(value: kAudioFormatAppleLossless as UInt32),
-                              AVEncoderAudioQualityKey : AVAudioQuality.max.rawValue,
-                              AVEncoderBitRateKey : 320000,
-                              AVNumberOfChannelsKey : 2,
-                              AVSampleRateKey : 44100.0 ] as [String : Any]
-        let session = AVAudioSession.sharedInstance()
-        
-        let directory = FileManager.default.urls(for: FileManager.SearchPathDirectory.documentDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).first
-        let audioFileName = convertString() + ".m4a"
-        let audioFileURL = directory!.appendingPathComponent(audioFileName)
-        
+    func setupAudioEngine(){
+        let audioSession = AVAudioSession.sharedInstance()
         do{
-            try session.setCategory(.playAndRecord)
-
+            audioEngine = try AudioEngine()
+            try audioSession.setCategory(.playAndRecord,options: .defaultToSpeaker)
+            
+            audioEngine.setup()
+            audioEngine.start()
         } catch {
-            print("Could not setting session \(error)")
-        }
-        
-        recorder = try? AVAudioRecorder(url: audioFileURL, settings: recordSettings)
-        recorder?.delegate = self
-        recorder?.isMeteringEnabled = true
-        recorder?.prepareToRecord()
-    }
-    
-    func recodingVoice(){
-        if let recoder = self.recorder{
-            let session = AVAudioSession.sharedInstance()
-            
-            do{
-                try session.setActive(true)
-            } catch {
-                print("Could not active recorder \(error)")
-            }
-            
-            
-            recoder.record()
-        }
-
-    }
-    
-    func stopRecord(){
-        if let recoder = self.recorder{
-            recoder.stop()
-            let session = AVAudioSession.sharedInstance()
-            do{
-                try session.setActive(false)
-                engine?.setup()
-            } catch {
-                print("Could not stop record \(error)")
-            }
+            print("Could not setup engine \(error)")
         }
     }
-    
-    func playRecord(){
-        player?.volume = volumeBar.value
-        player?.play()
-    }
-    
-    func stopPlay(){
-        player?.volume = volumeBar.value
-        player?.pause()
-    }
-    
-    func convertString()->String{
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy_MM_dd_HH:mm:ss"
-        dateFormatter.locale = Locale(identifier: "ko_KR")
-        return dateFormatter.string(from: Date())
-    }
-
 }
 
 extension RecordViewController:AVAudioRecorderDelegate{
@@ -264,7 +200,7 @@ extension RecordViewController:AVAudioRecorderDelegate{
             let playItem = AVPlayerItem(url: recorder.url)
             player = AVQueuePlayer(playerItem: playItem)
             self.playerLooper = AVPlayerLooper(player: player, templateItem: playItem)
-            firebaseManger.uploadData(url: recorder.url, fileName:"\(convertString()).m4a")
+            firebaseManger.uploadData(url: recorder.url, fileName:"\(Date().convertString()).m4a")
         }
     }
 }

@@ -10,6 +10,14 @@ import Foundation
 //UI
 
 //UTILS
+extension Date{
+    func convertString()->String{
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy_MM_dd_HH:mm:ss"
+        dateFormatter.locale = Locale(identifier: "ko_KR")
+        return dateFormatter.string(from: self)
+    }
+}
 
 //UIVIEW
 #if canImport(swiftUI) && DEBUG

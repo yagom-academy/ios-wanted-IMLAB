@@ -22,6 +22,7 @@
 		182C873A286B22C600F3C24D /* AudioEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182C8739286B22C600F3C24D /* AudioEngine.swift */; };
 		18D1497028697D5700A91B95 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 18D1496F28697D5700A91B95 /* FirebaseAnalytics */; };
 		18D1497228697D5700A91B95 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 18D1497128697D5700A91B95 /* FirebaseStorage */; };
+		18F41487286C2AA100BB9911 /* AudioLevels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F41486286C2AA100BB9911 /* AudioLevels.swift */; };
 		DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -40,6 +41,7 @@
 		01696160286ADEFA0020AAAC /* PlayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayViewController.swift; sourceTree = "<group>"; };
 		182C8731286AD69700F3C24D /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		182C8739286B22C600F3C24D /* AudioEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioEngine.swift; sourceTree = "<group>"; };
+		18F41486286C2AA100BB9911 /* AudioLevels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioLevels.swift; sourceTree = "<group>"; };
 		DE15E65828604278003DD2F5 /* VoiceRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE15E66728604279003DD2F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -72,6 +74,7 @@
 			isa = PBXGroup;
 			children = (
 				01696158286ACF280020AAAC /* Audio.swift */,
+				18F41486286C2AA100BB9911 /* AudioLevels.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -215,6 +218,7 @@
 			files = (
 				0146B7B0286BE37100DD28D2 /* SceneDelegate.swift in Sources */,
 				182C8732286AD69700F3C24D /* Extensions.swift in Sources */,
+				18F41487286C2AA100BB9911 /* AudioLevels.swift in Sources */,
 				0146B7B2286BE38F00DD28D2 /* HomeViewController.swift in Sources */,
 				0146B7A8286BE34700DD28D2 /* AppDelegate.swift in Sources */,
 				182C873A286B22C600F3C24D /* AudioEngine.swift in Sources */,

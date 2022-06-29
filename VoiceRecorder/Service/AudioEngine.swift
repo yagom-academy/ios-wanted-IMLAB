@@ -7,24 +7,31 @@
 
 import Foundation
 import AVFAudio
+import Accelerate
 
 class AudioEngine{
     
-    private var recordedFileURL:URL
+    private var recordedFileURL = URL(fileURLWithPath: "input.caf", isDirectory: false, relativeTo: URL(fileURLWithPath: NSTemporaryDirectory()))
     private var recordedFilePlayer = AVAudioPlayerNode()
     private var recordedFile: AVAudioFile?
     private var engine = AVAudioEngine()
     public private(set) var isRecording = false
     private var isNewRecordingAvailable = false
-
+    public private(set) var voiceIOFormat:AVAudioFormat
 
     enum AudioEngingError:Error{
         case bufferError
+        case formatError
     }
     
-    init(recordedFileUrl:URL){
-        self.recordedFileURL = recordedFileUrl
+    init() throws{
         engine.attach(recordedFilePlayer)
+        print("Record file URL: \(recordedFileURL.absoluteString)")
+        guard let voiceIOFormat = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: 8000, channels: 1, interleaved: true) else{
+            throw AudioEngingError.formatError
+        }
+        self.voiceIOFormat = voiceIOFormat
+
     }
     
     func setup(){
@@ -36,16 +43,26 @@ class AudioEngine{
             return
         }
 
-        
         let output = engine.outputNode
         let mainMixer = engine.mainMixerNode
-        do{
-            let audioFile = try AVAudioFile(forReading: recordedFileURL)
-            let format = audioFile.fileFormat
-            engine.connect(recordedFilePlayer, to: output, format: format)
-            engine.prepare()
-        } catch{
-            print("Could not read file \(error.localizedDescription)")
+        
+        engine.connect(recordedFilePlayer, to: mainMixer, format: voiceIOFormat)
+        engine.connect(mainMixer, to: output, format: voiceIOFormat)
+        
+        input.installTap(onBus: 0, bufferSize: 256, format: voiceIOFormat) { buffer, when in
+            if self.isRecording{
+                do{
+                    try self.recordedFile?.write(from: buffer)
+                } catch {
+                    print("could not write buffer : \(error)")
+                }
+                self.convertData(buffer: buffer)
+            }
+        }
+        
+        mainMixer.installTap(onBus: 0, bufferSize: 1024, format: nil) { buffer, when in
+            self.convertData(buffer: buffer)
+//            print(buffer.int16ChannelData)
         }
     }
     
@@ -98,7 +115,7 @@ class AudioEngine{
             recordedFilePlayer.stop()
             
             do{
-                recordedFile = try AVAudioFile(forWriting: recordedFileURL,settings: [:])
+                recordedFile = try AVAudioFile(forWriting: recordedFileURL,settings: voiceIOFormat.settings)
                 isNewRecordingAvailable = true
                 isRecording = true
             } catch {
@@ -111,16 +128,15 @@ class AudioEngine{
         return recordedFilePlayer.isPlaying
     }
     
-    func togglePlaying(){
+    func togglePlaying(completion:@escaping()->Void){
         if recordedFilePlayer.isPlaying{
             recordedFilePlayer.pause()
         }else{
-            if isNewRecordingAvailable{
-                print(recordedFileURL)
-                guard let recordedBuffer = AudioEngine.getBuffer(fileURL: recordedFileURL) else{return}
-                
-                recordedFilePlayer.scheduleBuffer(recordedBuffer,at: nil,options: .loops)
-                isNewRecordingAvailable = false
+            guard let recordedBuffer = AudioEngine.getBuffer(fileURL: recordedFileURL) else{return}
+            
+            recordedFilePlayer.scheduleBuffer(recordedBuffer,at: nil) {
+                self.recordedFilePlayer.pause()
+                completion()
             }
             
             recordedFilePlayer.play()
@@ -129,11 +145,59 @@ class AudioEngine{
     }
 }
 
+//MARK: - 외부함수
 extension AudioEngine{
-    func convertString()->String{
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy_MM_dd_HH:mm:ss"
-        dateFormatter.locale = Locale(identifier: "ko_KR")
-        return dateFormatter.string(from: Date())
+    
+    func firebaseUpload(){
+        FirebaseStorageManager.shared.uploadData(url: self.recordedFileURL, fileName: Date().convertString()+".m4a")
+    }
+    
+    //buffer를 float으로 변환하는 함수
+    //float으로 변환하여 파형으로 전달?
+    func convertData(buffer:AVAudioPCMBuffer){
+        let channelCount = Int(buffer.format.channelCount)
+        let length = vDSP_Length(buffer.frameLength)
+        if let floatData = buffer.floatChannelData{
+            for channel in 0..<channelCount{
+                print(calculatePowers(data: floatData[channel], strideFrames: buffer.stride, length: length))
+            }
+        } else if let int16Data = buffer.int16ChannelData{
+            for channel in 0..<channelCount{
+                var floatChannelData:[Float] = Array(repeating: Float(0.0), count: Int(buffer.frameLength))
+                vDSP_vflt16(int16Data[channel], buffer.stride, &floatChannelData, buffer.stride, length)
+                var scalar = Float(INT16_MAX)
+                vDSP_vsdiv(floatChannelData, buffer.stride, &scalar, &floatChannelData, buffer.stride, length)
+                
+                calculatePowers(data: floatChannelData, strideFrames: buffer.stride, length: length)
+            }
+        } else if let int32Data = buffer.int32ChannelData{
+            for channel in 0..<channelCount {
+                // Convert the data from int32 to float values before calculating the power values.
+                var floatChannelData: [Float] = Array(repeating: Float(0.0), count: Int(buffer.frameLength))
+                vDSP_vflt32(int32Data[channel], buffer.stride, &floatChannelData, buffer.stride, length)
+                var scalar = Float(INT32_MAX)
+                vDSP_vsdiv(floatChannelData, buffer.stride, &scalar, &floatChannelData, buffer.stride, length)
+
+                calculatePowers(data: floatChannelData, strideFrames: buffer.stride, length: length)
+            }
+        }
+    }
+    
+    //buffer의 데이터의 상한선과 하한선을 결정한다.
+    private func calculatePowers(data:UnsafePointer<Float>,strideFrames:Int,length:vDSP_Length){
+        var max:Float = 0.0
+        vDSP_maxv(data, strideFrames, &max, length)
+        if max < 0.000_000_01{
+            max = 0.000_000_01
+        }
+        
+        var rms:Float = 0.0
+        vDSP_rmsqv(data, strideFrames, &rms, length)
+        if rms < 0.000_000_01{
+            rms = 0.000_000_01
+        }
+        
+        print(log10(rms))
+        print(log10(max))
     }
 }

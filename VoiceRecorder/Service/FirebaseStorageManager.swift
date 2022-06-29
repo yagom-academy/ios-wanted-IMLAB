@@ -15,7 +15,6 @@ class FirebaseStorageManager {
     private let deviceId:String?
     
     private init() {
-        
         self.deviceId = UIDevice.current.identifierForVendor?.uuidString
     }
     
