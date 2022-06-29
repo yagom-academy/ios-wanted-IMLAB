@@ -7,8 +7,13 @@
 
 import UIKit
 
-class CreateAudioViewController: UIViewController {
+import AVFoundation
 
+class CreateAudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
+
+    var audioRecorder: AVAudioRecorder?
+    var audioPlayer: AVAudioPlayer?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         config()
@@ -76,9 +81,29 @@ class CreateAudioViewController: UIViewController {
         ])
     }
     
-    @objc private func tapRecordingButton(state: UIControl.State) {
+    @objc private func tapRecordingButton() {
         if recordingButton.isSelected{
             recordingButton.isSelected = false
+            audioRecorder?.stop()
+            do {
+                if let audioRecorder = audioRecorder{
+                    let data = try Data(contentsOf: audioRecorder.url)
+                    print(data)
+                    FirebaseService.uploadAudio(fileName: "shinTmp.mp3", data: data) { err in
+                        print("firebase err: \(String(describing: err?.localizedDescription))")
+                    }
+                    // Data로 변환됐는지 확인하기 위한 부분
+//                    do {
+//                        try audioPlayer = AVAudioPlayer(data: data)
+//                        audioPlayer?.delegate = self
+//                        audioPlayer?.play()
+//                    } catch {
+//                        print("error: \(error.localizedDescription)")
+//                    }
+                }
+            } catch {
+                print("error: \(error.localizedDescription)")
+            }
             playPauseButton.isEnabled = true
             rewindButton.isEnabled = true
             forwardButton.isEnabled = true
@@ -87,8 +112,44 @@ class CreateAudioViewController: UIViewController {
             playPauseButton.isEnabled = false
             rewindButton.isEnabled = false
             forwardButton.isEnabled = false
+            self.record()
         }
     }
-    @objc private func tapPlayPauseButton(state: UIControl.State) {
+    @objc private func tapPlayPauseButton() {
+        guard !(audioRecorder?.isRecording)! else { return }
+        do {
+            if let audioRecorder = audioRecorder{
+                try audioPlayer = AVAudioPlayer(contentsOf: audioRecorder.url)
+                audioPlayer?.delegate = self
+                audioPlayer?.play()
+            }
+        } catch {
+            print("error: \(error.localizedDescription)")
+        }
+    }
+    func record() {
+      let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        .appendingPathComponent("fileName.m4a")
+      let settings = [
+        AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
+        AVSampleRateKey: 12000,
+        AVNumberOfChannelsKey: 1,
+        AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
+      ]
+      
+      do {
+        try AVAudioSession.sharedInstance().setCategory(.playAndRecord)
+      } catch {
+        print("error: \(error.localizedDescription)")
+      }
+      
+      do {
+        self.audioRecorder = try AVAudioRecorder(url: fileURL, settings: settings)
+          self.audioRecorder?.delegate = self
+          self.audioRecorder?.record()
+      } catch {
+        print("error: \(error.localizedDescription)")
+          self.audioRecorder?.stop()
+      }
     }
 }
