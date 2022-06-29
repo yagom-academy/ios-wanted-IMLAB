@@ -9,7 +9,7 @@ class ListViewController: UIViewController {
     
     @IBOutlet weak var recordListTableView: UITableView!
     
-    var recordList = [String]()
+    var recordList = [RecordModel]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -17,14 +17,13 @@ class ListViewController: UIViewController {
         setupRecordListTableView()
         StorageManager().get { result in
             switch result {
-            case .success(let names):
-                self.recordList = names
+            case .success(let recordFile):
+                self.recordList.append(recordFile)
                 self.recordListTableView.reloadData()
             case .failure(let error):
                 print("ERROR \(error.localizedDescription)🐸")
             }
         }
-        
     }
     
     @IBAction func didTapShowRecordView(_ sender: UIBarButtonItem) {
@@ -34,7 +33,6 @@ class ListViewController: UIViewController {
         recordVC.delegate = self
         self.present(recordVC, animated: true)
     }
-    
 }
 
 extension ListViewController: UITableViewDelegate, UITableViewDataSource {
@@ -47,7 +45,7 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
         cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: "RecordListTableViewCell", for: indexPath) as? RecordListTableViewCell else { return UITableViewCell() }
-            cell.setUpView(name: recordList[indexPath.row])
+            cell.setUpView(recordFile: recordList[indexPath.row])
             return cell
         }
     
@@ -61,7 +59,7 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            StorageManager().delete(fileName: recordList[indexPath.row]) { result in
+            StorageManager().delete(fileName: recordList[indexPath.row].name) { result in
                 switch result {
                 case .success(_ ):
                     self.recordList.remove(at: indexPath.row)
@@ -87,16 +85,15 @@ private extension ListViewController {
 
 extension ListViewController: RecordViewControllerDelegate {
     func didFinishRecord() {
+        recordList = []
         StorageManager().get { result in
             switch result {
-            case .success(let names):
-                self.recordList = names
+            case .success(let recordFile):
+                self.recordList.append(recordFile)
                 self.recordListTableView.reloadData()
             case .failure(let error):
                 print("ERROR \(error.localizedDescription)🐸")
             }
         }
     }
-    
-    
 }

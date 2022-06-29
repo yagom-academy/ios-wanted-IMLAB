@@ -15,8 +15,9 @@ class RecordListTableViewCell: UITableViewCell {
          
     }
     
-    func setUpView(name: String) {
-        dateTitleLabel.text = name
+    func setUpView(recordFile: RecordModel) {
+        dateTitleLabel.text = recordFile.name
+        recordTimeLabel.text = recordFile.playTime
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

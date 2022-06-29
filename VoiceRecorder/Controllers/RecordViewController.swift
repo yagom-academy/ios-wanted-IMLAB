@@ -59,8 +59,8 @@ class RecordViewController: UIViewController {
             counter = 0.0
             sender.setImage(Icon.circleFill.image, for: .normal)
             audioRecorder?.stop()
-            let data = try! Data(contentsOf: audioRecorder!
-                .url)
+            guard let url = audioRecorder?.url,
+                  let data = try? Data(contentsOf: url) else { return }
             
             StorageManager().upload(data: data, fileName: recordDate ?? "") { result in
                 switch result {
@@ -96,14 +96,12 @@ class RecordViewController: UIViewController {
         audioPlayer?.currentTime = (audioPlayer?.currentTime ?? 0.0) - 5.0
         counter = audioPlayer?.currentTime ?? 0.0
         currentPlayTime = audioPlayer?.currentTime ?? 0.0
-        print(currentPlayTime)
     }
     
     @IBAction func didTapPlayForward5Button(_ sender: UIButton) {
         audioPlayer?.currentTime = (audioPlayer?.currentTime ?? 0.0) + 5.0
         counter = audioPlayer?.currentTime ?? 0.0
         currentPlayTime = audioPlayer?.currentTime ?? 0.0
-        print(currentPlayTime)
     }
     
     @IBAction func didTapPlayPauseButton(_ sender: UIButton) {

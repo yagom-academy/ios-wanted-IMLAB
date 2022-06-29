@@ -25,7 +25,7 @@ struct StorageManager {
         }
     }
     
-    func get(completion: @escaping (Result<[String], Error>) -> Void) {
+    func get(completion: @escaping (Result<RecordModel, Error>) -> Void) {
         let storageRef = storage.reference()
         let recordRef = storageRef.child("record/")
         recordRef.listAll { result, error in
@@ -34,16 +34,17 @@ struct StorageManager {
             }
             
             if let result = result {
-                let names = result.items.map { $0.name }
-                let datas = result.items.map { item in item.getData(maxSize: Int64.max) { result in
-                    switch result {
-                    case .success(let data):
-                        let recordModel = RecordModel(name: item.name, data: data)
-                    case .failure(let error):
-                        print("error")
+                result.items.forEach { item in item.getData(maxSize: .max) { data, _ in
+                    if let error = error {
+                        completion(.failure(error))
+                        return
+                    }
+                    if let data = data {
+                        let model = RecordModel(name: item.name, data: data)
+                        completion(.success(model))
+                        return
                     }
                 }}
-                completion(.success(names))
             }
         }
     }
