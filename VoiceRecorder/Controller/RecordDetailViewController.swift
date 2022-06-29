@@ -10,6 +10,15 @@ import AVFoundation
 import FirebaseStorage
 
 class RecordDetailViewController: UIViewController {
+    
+    // MARK: - Enums
+    
+    enum RecordFileString {
+        static var fileName = ""
+        static let fileExtension = ".m4a"
+        static var fileFullName = "\(fileName)\(fileExtension)"
+    }
+    
     // MARK: - IBOutlet
     
     @IBOutlet weak var recordWaveView: UIView!
@@ -63,9 +72,20 @@ class RecordDetailViewController: UIViewController {
     func loadRecordingUI() {
         
     }
+    
+    func makeFileName() -> String {
+        let formatter = DateFormatter()
+        
+        formatter.locale = Locale(identifier: "ko")
+        formatter.dateFormat = "_yyyy_MM_dd_HH:mm:ss"
+        let currentDateString = formatter.string(from: Date())
+        return currentDateString
+    }
         
     func startRecording() {
+        RecordFileString.fileName = makeFileName()
         // 파일 생성
+        print(RecordFileString.fileFullName)
         audioFileURL = getDocumentsDirectory().appendingPathComponent("recording4.m4a")
         let audioFileURL = getDocumentsDirectory().appendingPathComponent("recording4.m4a")
         let settings = [
