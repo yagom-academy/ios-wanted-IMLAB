@@ -8,12 +8,14 @@
 import UIKit
 
 class RecordAndPlayView: UIView {
+    let manager = RecordManager()
+    
     private let buttonStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.distribution = .equalSpacing
         stackView.spacing = 40
-//        stackView.isHidden = true
+        stackView.isHidden = true
         
         let backwardButton: UIButton = {
             let button = UIButton()
@@ -32,6 +34,8 @@ class RecordAndPlayView: UIView {
             button.tintColor = .label
             button.widthAnchor.constraint(equalToConstant: 40).isActive = true
             button.heightAnchor.constraint(equalToConstant: 40).isActive = true
+            
+            button.addTarget(self, action: #selector(didTapPlayButton(sender:)), for: .touchUpInside)
             
             return button
         }()
@@ -53,6 +57,16 @@ class RecordAndPlayView: UIView {
         return stackView
     }()
     
+    @objc func didTapPlayButton(sender: UIButton) {
+        sender.isSelected = !sender.isSelected
+        
+        if manager.isPlaying() {
+            manager.pausePlay()
+        } else {
+            manager.startPlay()
+        }
+    }
+    
     private let recordButton: UIButton = {
         let button = UIButton()
         button.setImage(systemName: "circle.fill", state: .normal)
@@ -61,13 +75,29 @@ class RecordAndPlayView: UIView {
         button.widthAnchor.constraint(equalToConstant: 50).isActive = true
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
+        
+        button.addTarget(self, action: #selector(didTapRecordButton(sender:)), for: .touchUpInside)
+        
         return button
     }()
+    
+    @objc func didTapRecordButton(sender: UIButton) {
+        sender.isSelected = !sender.isSelected
+        
+        if sender.isSelected {
+            manager.startRecord()
+        } else {
+            manager.endRecord()
+            manager.makePlayer()
+            buttonStackView.isHidden = false
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         layout()
+        manager.initRecordSession()
     }
     
     required init?(coder: NSCoder) {

@@ -12,6 +12,7 @@
 		04FF939F286C004200EB34B6 /* CutoffFrequencyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF939E286C004200EB34B6 /* CutoffFrequencyView.swift */; };
 		04FF93A1286C004C00EB34B6 /* RecordAndPlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF93A0286C004C00EB34B6 /* RecordAndPlayView.swift */; };
 		04FF93A4286C15AA00EB34B6 /* UIButton+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF93A3286C15AA00EB34B6 /* UIButton+.swift */; };
+		04FF93A7286C270600EB34B6 /* RecordManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF93A6286C270600EB34B6 /* RecordManager.swift */; };
 		DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65B28604278003DD2F5 /* AppDelegate.swift */; };
 		DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65D28604278003DD2F5 /* SceneDelegate.swift */; };
 		DE15E66028604278003DD2F5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65F28604278003DD2F5 /* ViewController.swift */; };
@@ -25,6 +26,7 @@
 		04FF939E286C004200EB34B6 /* CutoffFrequencyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CutoffFrequencyView.swift; sourceTree = "<group>"; };
 		04FF93A0286C004C00EB34B6 /* RecordAndPlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordAndPlayView.swift; sourceTree = "<group>"; };
 		04FF93A3286C15AA00EB34B6 /* UIButton+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+.swift"; sourceTree = "<group>"; };
+		04FF93A6286C270600EB34B6 /* RecordManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordManager.swift; sourceTree = "<group>"; };
 		DE15E65828604278003DD2F5 /* VoiceRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE15E65B28604278003DD2F5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DE15E65D28604278003DD2F5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -48,7 +50,9 @@
 		04FF9395286BF01600EB34B6 /* Record */ = {
 			isa = PBXGroup;
 			children = (
+				04FF93A8286C270E00EB34B6 /* Manager */,
 				04FF93A2286C126700EB34B6 /* Scene */,
+				04FF93A5286C15AF00EB34B6 /* Extension */,
 			);
 			path = Record;
 			sourceTree = "<group>";
@@ -60,7 +64,6 @@
 				04FF939C286C003500EB34B6 /* FrequencyView.swift */,
 				04FF939E286C004200EB34B6 /* CutoffFrequencyView.swift */,
 				04FF93A0286C004C00EB34B6 /* RecordAndPlayView.swift */,
-				04FF93A5286C15AF00EB34B6 /* Extension */,
 			);
 			path = Scene;
 			sourceTree = "<group>";
@@ -71,6 +74,14 @@
 				04FF93A3286C15AA00EB34B6 /* UIButton+.swift */,
 			);
 			path = Extension;
+			sourceTree = "<group>";
+		};
+		04FF93A8286C270E00EB34B6 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				04FF93A6286C270600EB34B6 /* RecordManager.swift */,
+			);
+			path = Manager;
 			sourceTree = "<group>";
 		};
 		DE15E64F28604278003DD2F5 = {
@@ -173,6 +184,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04FF93A7286C270600EB34B6 /* RecordManager.swift in Sources */,
 				DE15E66028604278003DD2F5 /* ViewController.swift in Sources */,
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
 				04FF939F286C004200EB34B6 /* CutoffFrequencyView.swift in Sources */,

@@ -16,7 +16,7 @@ class RecordViewController: UIViewController {
     init() {
         super.init(nibName: nil, bundle: nil)
         
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         layout()
     }
     
