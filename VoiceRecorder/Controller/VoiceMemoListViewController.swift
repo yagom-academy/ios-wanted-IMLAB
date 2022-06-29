@@ -22,7 +22,6 @@ class VoiceMemoListViewController: UIViewController {
         firebaseStorage = FirebaseStorage(firebaseStoreUpload: UploadRecordfile(), firebaseStoreDownload: DownloadRecordfile(), firebaseStoreDelete: DeleteRecordfile())
         recordFileListTableView.delegate = self
         recordFileListTableView.dataSource = self
-        // Do any additional setup after loading the view.
     }
 }
 
