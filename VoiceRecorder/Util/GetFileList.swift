@@ -26,6 +26,8 @@ class GetFileList : FirebaseStoreFileList {
                 filePaths.append(data.fullPath)
             }
         }
+        
+        return filePaths
     }
     
     
