@@ -26,6 +26,7 @@ class RecordCheckViewController: UIViewController {
     }()
     
     private var audioRecorder: AVAudioRecorder?
+    private var audioPlayer: AVAudioPlayer?
     private lazy var recordURL: URL = {
         var documentsURL: URL = {
             let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
@@ -44,6 +45,7 @@ class RecordCheckViewController: UIViewController {
         setLayout()
         
         recordButton.addTarget(self, action: #selector(control), for: .touchUpInside)
+        playButton.addTarget(self, action: #selector(play), for: .touchUpInside)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -180,5 +182,28 @@ extension RecordCheckViewController: AVAudioRecorderDelegate {
         audioRecorder?.delegate = self
         audioRecorder?.isMeteringEnabled = true
         audioRecorder?.prepareToRecord()
+    }
+}
+
+extension RecordCheckViewController: AVAudioPlayerDelegate {
+    
+    /// 재생
+    @objc private func play() {
+        if let recorder = audioRecorder {
+            if !recorder.isRecording {
+                let audioSession = AVAudioSession.sharedInstance()
+                audioPlayer = try? AVAudioPlayer(contentsOf: recorder.url)
+                audioPlayer?.volume = audioSession.outputVolume
+                audioPlayer?.delegate = self
+                audioPlayer?.play()
+                recordButton.isEnabled = false
+            }
+        }
+    }
+    
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        if flag {
+            recordButton.isEnabled = true
+        }
     }
 }
