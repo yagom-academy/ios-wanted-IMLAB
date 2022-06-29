@@ -149,7 +149,17 @@ class Audio {
     }
   }
 
-
+  func changePitch(_ index: Int) {
+    switch index {
+    case 0:
+      pitchControl.pitch = 0
+    case 1:
+      pitchControl.pitch = 100
+    case 2:
+      pitchControl.pitch = -100
+    default: return
+    }
+  }
 
   func skip(forwards: Bool) {
     let timeToSeek: Double

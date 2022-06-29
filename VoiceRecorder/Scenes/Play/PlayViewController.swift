@@ -18,7 +18,7 @@ class PlayViewController: UIViewController {
     setupView()
     setupConstraints()
     setupAudio()
-    setupButtonAction()
+    setupAction()
   }
 
   func setupView() {
@@ -50,7 +50,7 @@ class PlayViewController: UIViewController {
     audio = Audio(fileURL)
   }
 
-  func setupButtonAction() {
+  func setupAction() {
     playView.playButton.backButton.addTarget(
       self,
       action: #selector(backButtonclicked),
@@ -65,6 +65,12 @@ class PlayViewController: UIViewController {
       self,
       action: #selector(forwardButtonClicked),
       for: .touchUpInside
+    )
+
+    playView.segmentControl.addTarget(
+      self,
+      action: #selector(segconChanged(segcon:)),
+      for: .valueChanged
     )
   }
 
@@ -98,5 +104,10 @@ class PlayViewController: UIViewController {
     audio?.skip(forwards: true)
   }
 
+  @objc
+  func segconChanged(segcon: UISegmentedControl) {
+    guard audio != nil else { return }
+    audio?.changePitch(segcon.selectedSegmentIndex)
+  }
 
 }
