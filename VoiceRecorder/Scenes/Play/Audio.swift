@@ -182,6 +182,7 @@ class Audio {
 
     let offset = AVAudioFramePosition(time * audioSampleRate)
     seekFrame = currentPosition + offset
+    // 재생파일 시작과 끝을 넘어가는 case 대비
     seekFrame = max(seekFrame, 0)
     seekFrame = min(seekFrame, audioLengthSamples)
     currentPosition = seekFrame
@@ -210,8 +211,35 @@ class Audio {
   }
 
   // MARK: - 슬라이더
-  private func seek(to value: Float) {
-    
+  func seek(to value: Float) {
+    guard let audioFile = audioFile else {
+      return
+    }
+    let sliderValue = audioLengthSeconds * Double(value) // Double
+    seekFrame = AVAudioFramePosition(sliderValue * audioSampleRate)
+    currentPosition = seekFrame
+
+    let wasPlaying = audioPlayer.isPlaying
+    audioPlayer.stop()
+
+    if currentPosition < audioLengthSamples {
+      updateDisplay()
+      needsFileScheduled = false
+
+      let frameCount = AVAudioFrameCount(audioLengthSamples - seekFrame)
+      audioPlayer.scheduleSegment(
+        audioFile,
+        startingFrame: seekFrame,
+        frameCount: frameCount,
+        at: nil
+      ) {
+        self.needsFileScheduled = true
+      }
+
+      if wasPlaying {
+        audioPlayer.play()
+      }
+    }
   }
 
 

@@ -131,7 +131,7 @@ class PlayViewController: UIViewController {
 
   @objc
   func sliderValueChanged(_ sender: UISlider) {
-    print(sender.value)
+    audio?.seek(to: sender.value)
   }
 
 }
