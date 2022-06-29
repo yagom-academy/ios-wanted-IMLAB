@@ -10,7 +10,7 @@ class VoiceMemoListViewController: UIViewController {
 
     // MARK: - Properties
     
-    let voiceMemoData: [VoiceData] = [
+    var voiceMemoData: [VoiceData] = [
         VoiceData(title: "2022. 05. 08 12:33:44", time: "01:33"),
         VoiceData(title: "2022. 05. 08 12:38:44", time: "02:11"),
     ]
@@ -60,7 +60,8 @@ extension VoiceMemoListViewController {
     
     // MARK: - Action Method
     @objc private func buttonPressed() {
-        print("두번째 화면으로 이동")
+        let recordVC = VoiceMemoRecordViewController()
+        self.present(recordVC, animated: true, completion: nil)
     }
 }
 
@@ -78,6 +79,16 @@ extension VoiceMemoListViewController: UITableViewDelegate, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //세번째 화면으로 이동
-        
+        let playVC = VoiceMemoPlayViewController()
+        self.present(playVC, animated: true, completion: nil)
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            voiceMemoData.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        } else if editingStyle == .insert {
+            
+        }
     }
 }
