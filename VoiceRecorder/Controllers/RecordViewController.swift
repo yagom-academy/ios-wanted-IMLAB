@@ -47,6 +47,10 @@ class RecordViewController: UIViewController {
         requestRecord()
         setupButton(isHidden: true)
     }
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        cancelRecording()
+    }
     
     @IBAction func didTapRecordButton(_ sender: UIButton) {
         if isRecord {
@@ -186,5 +190,10 @@ private extension RecordViewController {
         if isHidden == false {
             recordButton.isHidden = true
         }
+    }
+    
+    func cancelRecording() {
+        audioRecorder?.stop()
+        audioRecorder?.deleteRecording()
     }
 }
