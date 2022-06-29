@@ -66,7 +66,8 @@ class RecordDetailViewController: UIViewController {
         
     func startRecording() {
         // 파일 생성
-        audioFileURL = getDocumentsDirectory().appendingPathComponent("recording3.m4a")
+        audioFileURL = getDocumentsDirectory().appendingPathComponent("recording4.m4a")
+        let audioFileURL = getDocumentsDirectory().appendingPathComponent("recording4.m4a")
         let settings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
             AVSampleRateKey: 12000,
@@ -75,28 +76,32 @@ class RecordDetailViewController: UIViewController {
         ]
 
         do {
-            audioRecorder = try AVAudioRecorder(url: audioFileURL!, settings: settings) // force unwrapping
+            audioRecorder = try AVAudioRecorder(url: audioFileURL, settings: settings) // force unwrapping
 //            audioRecorder?.delegate = self
             audioRecorder?.record() // 이것의 상태를 조건으로 다른 것 control하는 듯
             recordButton.setImage(recordingButtonImage, for: .normal)
         } catch {
-            finishRecording(success: false)
+            finishRecording(success: false, audioFileURL)
         }
     }
     
-    func finishRecording(success: Bool) {
+    func finishRecording(success: Bool, _ url: URL?) {
         audioRecorder?.stop()
         audioRecorder = nil
         recordButton.setImage(readyToRecordButtonImage, for: .normal)
-        uploadRecordDataToFirebase()
+        uploadRecordDataToFirebase(url)
     }
     
-    func uploadRecordDataToFirebase() {
+    func uploadRecordDataToFirebase(_ url: URL?) {
+        guard let url = url else {
+            return
+        }
+
         let storageRef = storage.reference()
         
-        let riversRef = storageRef.child("recording3")
+        let riversRef = storageRef.child("recording4")
         
-        riversRef.putFile(from: audioFileURL!) // force unwrapping
+        riversRef.putFile(from: url) // force unwrapping
     }
     
     func getDocumentsDirectory() -> URL {
@@ -130,7 +135,7 @@ class RecordDetailViewController: UIViewController {
         if audioRecorder == nil {
             setupAudioRecorder()
         } else {
-            finishRecording(success: true)
+            finishRecording(success: true, audioFileURL)
         }
     }
     
