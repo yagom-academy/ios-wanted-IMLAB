@@ -37,12 +37,16 @@ class PlayVoiceViewController: UIViewController {
     
     func setView(){
         self.view.addSubview(playAndPauseButton)
+        self.view.addSubview(fileNameLabel)
     }
     
     func autolayOut(){
         NSLayoutConstraint.activate([
             playAndPauseButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             playAndPauseButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            fileNameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            fileNameLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 30),
         ])
     }
     
