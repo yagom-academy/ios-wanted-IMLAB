@@ -27,10 +27,10 @@ class PlayingViewController: UIViewController {
         initialPlay()
     }
     func initialPlay() {
-        let url = Bundle.main.url(forResource: "마음을 드려요(MR) - IU", withExtension: "mp3") // local에 있는 파일을 찾을 때 사용
+        let url = Bundle.main.url(forResource: "마음을 드려요(MR) - IU", withExtension: "mp3")
+        // local url 가져와야함
         if let findUrl = url {
             do {
-                print(findUrl)
                 player = try AVAudioPlayer(contentsOf: findUrl)
                 player?.prepareToPlay() // 실제 호출과 기기의 플레이 간의 딜레이를 줄여줌
             }
@@ -46,7 +46,6 @@ class PlayingViewController: UIViewController {
         }
         else {
             player?.pause()
-            //            timer.invalidate() // 타이머가 중첩되는 것을 방지하기위해 설정 => 영향을 주지 못함 그래서 isValid를 사용해서 timer 선택적으로 call
             player?.prepareToPlay()
         }
     }

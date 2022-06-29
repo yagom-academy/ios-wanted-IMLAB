@@ -58,7 +58,6 @@ class VoiceMemoViewController: UIViewController {
         
         let cell = UINib(nibName: VoiceMemoTableViewCell.identifier, bundle: nil)
         voiceMemoTableView.register(cell, forCellReuseIdentifier: VoiceMemoTableViewCell.identifier)
-        
         voiceMemoTableView.delegate = self
         voiceMemoTableView.dataSource = self
     }
@@ -84,7 +83,6 @@ extension VoiceMemoViewController: UITableViewDataSource {
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
-    
 }
 
 extension VoiceMemoViewController: UITableViewDelegate {
