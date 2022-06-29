@@ -85,7 +85,10 @@ class VoiceRecorderListTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "PlayVoice"{
             let vc = segue.destination as! PlayVoiceViewController
-            vc.voiceRecordViewModel = selectRecord
+            if let selectRecord = selectRecord {
+                vc.voiceRecordViewModel = selectRecord
+                vc.playVoiceManager = PlayVoiceManager(url: selectRecord.url)
+            }
         }
     }
 }

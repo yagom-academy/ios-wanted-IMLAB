@@ -9,6 +9,7 @@ import UIKit
 
 class PlayVoiceViewController: UIViewController {
     
+    var playVoiceManager : PlayVoiceManager!
     var voiceRecordViewModel : VoiceRecordViewModel!
 
     var playAndPauseButton: UIButton = {
@@ -20,10 +21,18 @@ class PlayVoiceViewController: UIViewController {
         return playAndPauseButton
     }()
     
+    var fileNameLabel : UILabel = {
+        let fileNameLabel = UILabel()
+        fileNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        fileNameLabel.font = .boldSystemFont(ofSize: 20)
+        return fileNameLabel
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setView()
         autolayOut()
+        setUIText()
     }
     
     func setView(){
@@ -37,7 +46,11 @@ class PlayVoiceViewController: UIViewController {
         ])
     }
     
+    func setUIText(){
+        fileNameLabel.text = voiceRecordViewModel.fileName
+    }
+    
     @objc func tapButton(){
-        print("tap button")
+        playVoiceManager.playAudio()
     }
 }
