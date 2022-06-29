@@ -8,6 +8,8 @@
 import UIKit
 
 class RecordVoiceViewController: UIViewController {
+
+    var recorderViewModel = RecorderViewModel()
         
     let waveGraphImageView : UIImageView = {
         let waveGraphImageView = UIImageView()
@@ -40,18 +42,31 @@ class RecordVoiceViewController: UIViewController {
     let record_start_stop_button : UIButton = {
         let record_start_stop_button = UIButton()
         record_start_stop_button.translatesAutoresizingMaskIntoConstraints = false
+        record_start_stop_button.addTarget(self, action: #selector(tab_record_start_stop_Button), for: .touchDown)
         return record_start_stop_button
     }()
+    
+    @objc func tab_record_start_stop_Button() {
+        if recorderViewModel.isRecording() {
+            recorderViewModel.stopRecording()
+            record_start_stop_button.setImage(UIImage(systemName: "circle.fill"), for: .normal)
+            record_start_stop_button.tintColor = .red
+            print("recording stop")
+        } else {
+            recorderViewModel.startRecording()
+            record_start_stop_button.setImage(UIImage(systemName: "stop.fill"), for: .normal)
+            record_start_stop_button.tintColor = .black
+            print("recording start")
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setView()
         autoLayout()
         setUI()
-        
     }
     
-
     func setView() {
         self.view.addSubview(waveGraphImageView)
         
@@ -87,7 +102,6 @@ class RecordVoiceViewController: UIViewController {
         ])
     }
     
-
     func setUI() {
         waveGraphImageView.image = UIImage(systemName: "square.fill")
         progressSlider.tintColor = .blue
