@@ -16,6 +16,7 @@
 		C730AA9A286BEB9C0004D11C /* RecordFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C730AA99286BEB9C0004D11C /* RecordFile.swift */; };
 		C730AA9E286BF5190004D11C /* VoiceRecordListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C730AA9D286BF5190004D11C /* VoiceRecordListViewModel.swift */; };
 		C730AAA0286BF5400004D11C /* VoiceRecordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C730AA9F286BF5400004D11C /* VoiceRecordViewModel.swift */; };
+		C730AAA4286C3F820004D11C /* PlayVoiceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C730AAA3286C3F820004D11C /* PlayVoiceViewModel.swift */; };
 		C77F4C2D2869925900B2646E /* VoiceRecordTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77F4C2C2869925900B2646E /* VoiceRecordTableViewCell.swift */; };
 		C77F4C2F2869A56500B2646E /* PlayVoiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77F4C2E2869A56500B2646E /* PlayVoiceViewController.swift */; };
 		DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65B28604278003DD2F5 /* AppDelegate.swift */; };
@@ -36,6 +37,7 @@
 		C730AA99286BEB9C0004D11C /* RecordFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordFile.swift; sourceTree = "<group>"; };
 		C730AA9D286BF5190004D11C /* VoiceRecordListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRecordListViewModel.swift; sourceTree = "<group>"; };
 		C730AA9F286BF5400004D11C /* VoiceRecordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRecordViewModel.swift; sourceTree = "<group>"; };
+		C730AAA3286C3F820004D11C /* PlayVoiceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayVoiceViewModel.swift; sourceTree = "<group>"; };
 		C77F4C2C2869925900B2646E /* VoiceRecordTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRecordTableViewCell.swift; sourceTree = "<group>"; };
 		C77F4C2E2869A56500B2646E /* PlayVoiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayVoiceViewController.swift; sourceTree = "<group>"; };
 		DE15E65828604278003DD2F5 /* VoiceRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -101,6 +103,7 @@
 				C730AA9D286BF5190004D11C /* VoiceRecordListViewModel.swift */,
 				C730AA9F286BF5400004D11C /* VoiceRecordViewModel.swift */,
 				9F9DA2EC286C1D84004AE2EA /* RecorderViewModel.swift */,
+				C730AAA3286C3F820004D11C /* PlayVoiceViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -281,6 +284,7 @@
 				C77F4C2D2869925900B2646E /* VoiceRecordTableViewCell.swift in Sources */,
 				C730AAA0286BF5400004D11C /* VoiceRecordViewModel.swift in Sources */,
 				C77F4C2F2869A56500B2646E /* PlayVoiceViewController.swift in Sources */,
+				C730AAA4286C3F820004D11C /* PlayVoiceViewModel.swift in Sources */,
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
 				C730AA9E286BF5190004D11C /* VoiceRecordListViewModel.swift in Sources */,
 				C730AA97286BEAE80004D11C /* FirebaseStorageManager.swift in Sources */,
