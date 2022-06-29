@@ -4,6 +4,8 @@
 //
 
 import UIKit
+import FirebaseStorage
+import AVFAudio
 
 class VoiceMemoViewController: UIViewController {
     
@@ -13,7 +15,12 @@ class VoiceMemoViewController: UIViewController {
     
     // MARK: - Properties
     
-    var items: [String] = ["테스트", "ㅁㅁㅁ", "test", "aaa"]
+    var items: [StorageReference] = []
+    let storage = Storage.storage()
+    
+    var player: AVAudioPlayer?
+        
+    var flag : Int = 0
 
     // MARK: - LifeCycles
     
@@ -21,7 +28,7 @@ class VoiceMemoViewController: UIViewController {
         super.viewDidLoad()
         
         configureTableView()
-        
+//        getDataFromFirebase()
     }
     
     // MARK: - IBActions
@@ -31,6 +38,40 @@ class VoiceMemoViewController: UIViewController {
     }
     
     // MARK: - Methods
+    
+    func getDataFromFirebase() {
+        let storageRef = storage.reference()
+        let fileRef = storageRef.child("recording/")
+        
+        let localURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        print(localURL)
+        let finalURL = localURL.appendingPathComponent("recording/")
+        fileRef.write(toFile: finalURL)
+            do {
+                player = try AVAudioPlayer(contentsOf: finalURL)
+                player?.prepareToPlay()
+                player?.play()
+            } catch {
+                print(error)
+            }
+        
+//        fileRef.getData(maxSize: Int64(1 * 1024 * 1024)) {data, error in
+//            if let error = error {
+//                print(error)
+//            } else {
+//                print(data)
+//            }
+//        }
+        fileRef.listAll() {result, error in
+            if let error = error {
+                print(error)
+            }
+            for item in result.items {
+                print(item)
+            }
+        }
+        
+    }
     
     func configureTableView() {
 
@@ -51,9 +92,32 @@ extension VoiceMemoViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "VoiceMemoTableViewCell", for: indexPath) as? VoiceMemoTableViewCell else { return UITableViewCell() }
+        // test
+        let storageRef = storage.reference()
+        let fileRef = storageRef.child("recording/")
         
-        cell.timelineLabel.text = "test"
-        cell.durationLabel.text = "duration"
+        let localURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        print(localURL)
+        let finalURL = localURL.appendingPathComponent("recording/")
+        fileRef.write(toFile: finalURL)
+    
+        if flag == 0 {
+            fileRef.listAll() {result, error in
+                if let error = error {
+                    print(error)
+                }
+                for item in result.items {
+                    print(item)
+                    self.items.append(item)
+                }
+                DispatchQueue.main.async {
+                    tableView.reloadData()
+                }
+                print(self.items)
+            }
+            flag = 1
+        }
+//        cell.timelineLabel.text = recordName[indexPath.row]
         return cell
     }
     
