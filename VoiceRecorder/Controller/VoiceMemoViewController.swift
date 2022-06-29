@@ -28,7 +28,7 @@ class VoiceMemoViewController: UIViewController {
         super.viewDidLoad()
         
         configureTableView()
-//        getDataFromFirebase()
+        getDataFromFirebase()
     }
     
     // MARK: - IBActions
@@ -43,34 +43,20 @@ class VoiceMemoViewController: UIViewController {
         let storageRef = storage.reference()
         let fileRef = storageRef.child("recording/")
         
-        let localURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        print(localURL)
-        let finalURL = localURL.appendingPathComponent("recording/")
-        fileRef.write(toFile: finalURL)
-            do {
-                player = try AVAudioPlayer(contentsOf: finalURL)
-                player?.prepareToPlay()
-                player?.play()
-            } catch {
-                print(error)
-            }
-        
-//        fileRef.getData(maxSize: Int64(1 * 1024 * 1024)) {data, error in
-//            if let error = error {
-//                print(error)
-//            } else {
-//                print(data)
-//            }
-//        }
-        fileRef.listAll() {result, error in
+        fileRef.listAll() { (result, error) in
             if let error = error {
                 print(error)
             }
             for item in result.items {
-                print(item)
+                if self.flag == 0 {
+                    self.items.append(item)
+                }
+            }
+            self.flag = 1
+            if self.flag == 1 {
+                self.voiceMemoTableView.reloadData()
             }
         }
-        
     }
     
     func configureTableView() {
@@ -92,32 +78,8 @@ extension VoiceMemoViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "VoiceMemoTableViewCell", for: indexPath) as? VoiceMemoTableViewCell else { return UITableViewCell() }
-        // test
-        let storageRef = storage.reference()
-        let fileRef = storageRef.child("recording/")
-        
-        let localURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        print(localURL)
-        let finalURL = localURL.appendingPathComponent("recording/")
-        fileRef.write(toFile: finalURL)
-    
-        if flag == 0 {
-            fileRef.listAll() {result, error in
-                if let error = error {
-                    print(error)
-                }
-                for item in result.items {
-                    print(item)
-                    self.items.append(item)
-                }
-                DispatchQueue.main.async {
-                    tableView.reloadData()
-                }
-                print(self.items)
-            }
-            flag = 1
-        }
-//        cell.timelineLabel.text = recordName[indexPath.row]
+        cell.timelineLabel.text = items[indexPath.row].name
+        cell.durationLabel.text = "02:11"
         return cell
     }
     
