@@ -9,8 +9,10 @@ class ViewController: UIViewController {
     private let tableView = UITableView()
     
     init() {
+        
+        
         super.init(nibName: nil, bundle: nil)
-    
+        
         attribute()
         layout()
     }
