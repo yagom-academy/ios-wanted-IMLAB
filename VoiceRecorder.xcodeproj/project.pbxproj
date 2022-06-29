@@ -7,12 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		968E6869286C0C3E000DE0DB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 968E6868286C0C3E000DE0DB /* GoogleService-Info.plist */; };
 		DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65B28604278003DD2F5 /* AppDelegate.swift */; };
 		DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65D28604278003DD2F5 /* SceneDelegate.swift */; };
 		DE15E66528604279003DD2F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66428604279003DD2F5 /* Assets.xcassets */; };
 		DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */; };
-		EC4C063C286C091800F311FC /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = EC4C063B286C091800F311FC /* FirebaseStorage */; };
-		EC4C063E286C091800F311FC /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = EC4C063D286C091800F311FC /* FirebaseStorageCombine-Community */; };
 		ECB8A5DE286BECF200B1D363 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB8A5DD286BECF200B1D363 /* BaseViewController.swift */; };
 		ECB8A5E0286BED1B00B1D363 /* ViewPresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB8A5DF286BED1B00B1D363 /* ViewPresentable.swift */; };
 		ECB8A5E7286BED7A00B1D363 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB8A5E6286BED7A00B1D363 /* HomeViewController.swift */; };
@@ -24,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		968E6868286C0C3E000DE0DB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		DE15E65828604278003DD2F5 /* VoiceRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE15E65B28604278003DD2F5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DE15E65D28604278003DD2F5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -45,8 +45,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EC4C063E286C091800F311FC /* FirebaseStorageCombine-Community in Frameworks */,
-				EC4C063C286C091800F311FC /* FirebaseStorage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,6 +75,7 @@
 				ECB8A5D9286BECD400B1D363 /* Resource */,
 				ECB8A5D8286BECCA00B1D363 /* Application */,
 				DE15E66928604279003DD2F5 /* Info.plist */,
+				968E6868286C0C3E000DE0DB /* GoogleService-Info.plist */,
 			);
 			path = VoiceRecorder;
 			sourceTree = "<group>";
@@ -178,8 +177,6 @@
 			);
 			name = VoiceRecorder;
 			packageProductDependencies = (
-				EC4C063B286C091800F311FC /* FirebaseStorage */,
-				EC4C063D286C091800F311FC /* FirebaseStorageCombine-Community */,
 			);
 			productName = SNPLab;
 			productReference = DE15E65828604278003DD2F5 /* VoiceRecorder.app */;
@@ -210,7 +207,7 @@
 			);
 			mainGroup = DE15E64F28604278003DD2F5;
 			packageReferences = (
-				EC4C063A286C091800F311FC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				968E686A286C0DDF000DE0DB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = DE15E65928604278003DD2F5 /* Products */;
 			projectDirPath = "";
@@ -228,6 +225,7 @@
 			files = (
 				DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */,
 				DE15E66528604279003DD2F5 /* Assets.xcassets in Resources */,
+				968E6869286C0C3E000DE0DB /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -457,7 +455,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		EC4C063A286C091800F311FC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+		968E686A286C0DDF000DE0DB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
 			requirement = {
@@ -466,19 +464,6 @@
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		EC4C063B286C091800F311FC /* FirebaseStorage */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EC4C063A286C091800F311FC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseStorage;
-		};
-		EC4C063D286C091800F311FC /* FirebaseStorageCombine-Community */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EC4C063A286C091800F311FC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = "FirebaseStorageCombine-Community";
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = DE15E65028604278003DD2F5 /* Project object */;
 }
