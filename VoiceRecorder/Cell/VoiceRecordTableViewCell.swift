@@ -14,7 +14,7 @@ class VoiceRecordTableViewCell: UITableViewCell {
     let createVoiceRecordDateLable : UILabel = {
         let createVoiceRecordDateLable = UILabel()
         createVoiceRecordDateLable.translatesAutoresizingMaskIntoConstraints = false
-        createVoiceRecordDateLable.font = UIFont.boldSystemFont(ofSize: 20)
+        createVoiceRecordDateLable.font = UIFont.boldSystemFont(ofSize: 15)
         return createVoiceRecordDateLable
     }()
     

@@ -8,7 +8,7 @@ class FirebaseStorageManager{
         
     }
     
-    func fetchRecordList(completion : @escaping([RecordFile])->()){
+    func fetchRecordList(completion : @escaping([RecordFile]?)->()){
         let storageRef = storage.reference().child("record")
         var recordFileList : [RecordFile] = []
         //파일 리스트를 가져옴
