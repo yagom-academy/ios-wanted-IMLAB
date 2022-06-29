@@ -25,6 +25,13 @@ class ViewController: UIViewController {
         self.view.backgroundColor = .white
         self.title = " 녹음기 "
         
+        let barButton = UIBarButtonItem(
+            image: UIImage(systemName: "plus"),
+            style: .plain,
+            target: self,
+            action: #selector(didTapRightBarButton))
+        self.navigationItem.rightBarButtonItem = barButton
+        
         //temp
         self.tableView.backgroundColor = .blue
     }
@@ -39,6 +46,10 @@ class ViewController: UIViewController {
         tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
         
+    }
+    
+    @objc func didTapRightBarButton() {
+        self.navigationController?.pushViewController(RecordViewController(), animated: true)
     }
 }
 
