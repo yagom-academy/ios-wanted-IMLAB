@@ -16,6 +16,7 @@ class VoiceRecorderListTableViewController: UITableViewController {
     
     let firebaseStorageManger = FirebaseStorageManager()
     var voiceRecordListViewModel : VoiceRecordListViewModel = VoiceRecordListViewModel(voiceRecordList: [])
+    var selectRecord : VoiceRecordViewModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,7 +78,14 @@ class VoiceRecorderListTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectRecord = voiceRecordListViewModel.ListAtIndex(index: indexPath.row)
         self.performSegue(withIdentifier: "PlayVoice", sender: self)
-        print(voiceRecordListViewModel.ListAtIndex(index: indexPath.row))
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "PlayVoice"{
+            let vc = segue.destination as! PlayVoiceViewController
+            vc.voiceRecordViewModel = selectRecord
+        }
     }
 }
