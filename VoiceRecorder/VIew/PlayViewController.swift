@@ -12,51 +12,24 @@ class PlayViewController: UIViewController {
     
     var audio: Audio? {
         didSet {
+            self.titleLabel.text = audio?.title
             guard let url = audio?.url else { return }
-            let playerItem = AVPlayerItem(url: url)
-            self.avPlayer = AVPlayer(playerItem: playerItem)
-            self.avPlayer.volume = self.volumeSize
-            
-            do {
-                let audioFile = try AVAudioFile(forReading: url)
-                let format = audioFile.fileFormat
-                self.audioFile = audioFile
-                
-                self.audioEngine.attach(playerNode)
-                self.audioEngine.attach(pitchControl)
-                self.audioEngine.connect(playerNode, to: pitchControl, format: format)
-                self.audioEngine.connect(pitchControl, to: self.audioEngine.mainMixerNode, format: format)
-                self.audioEngine.prepare()
-                
-                do {
-                    try self.audioEngine.start()
-                } catch let error {
-                    print("audioEngineError: \(error.localizedDescription)")
-                }
-            } catch let error {
-                print("audioFileError:\(error.localizedDescription)")
-            }
-            
+            self.setAudio(url)
         }
     }
     
-//    var pitchIndex: Int = 1 {
-//        didSet {
-//            print(pitchIndex)
-//            let value = allPlaybackPitches[pitchIndex]
-//            self.pitchControl.pitch = 1200 * Float(value)
-//        }
-//    }
-    
-    let allPlaybackPitches: [Double] = [-0.5, 0, 0.5]
-    
-    private var avPlayer = AVPlayer()
     private let volumeSize: Float = 0.5
     
     private let audioEngine = AVAudioEngine()
     private let playerNode = AVAudioPlayerNode()
     private let pitchControl = AVAudioUnitTimePitch()
     private var audioFile: AVAudioFile?
+    
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        return label
+    }()
     
     private lazy var backwardButton: UIButton = {
         let button = UIButton(type: .system)
@@ -125,6 +98,9 @@ class PlayViewController: UIViewController {
 }
 
 private extension PlayViewController {
+    
+    // MARK: - Configure UI
+    
     func configure() {
         self.configureView()
         self.addSubViews()
@@ -136,61 +112,125 @@ private extension PlayViewController {
     }
     
     func addSubViews() {
-        [self.buttonStackView, self.volumeStackView, self.pitchSegmentedControl].forEach {
+        [self.titleLabel, self.buttonStackView,
+         self.volumeStackView, self.pitchSegmentedControl].forEach {
             self.view.addSubview($0)
         }
     }
     
     func makeConstraints() {
-        [self.buttonStackView, self.volumeStackView, self.pitchSegmentedControl].forEach {
+        [self.titleLabel, self.buttonStackView,
+         self.volumeStackView, self.pitchSegmentedControl].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         NSLayoutConstraint.activate([
-            self.buttonStackView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 32.0),
-            self.buttonStackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 32.0),
-            self.buttonStackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -32.0),
+            self.titleLabel.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 32.0),
+            self.titleLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 32.0),
+            self.titleLabel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -32.0),
+            
+            self.buttonStackView.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor, constant: 32.0),
+            self.buttonStackView.leadingAnchor.constraint(equalTo: self.titleLabel.leadingAnchor),
+            self.buttonStackView.trailingAnchor.constraint(equalTo: self.titleLabel.trailingAnchor),
             
             self.volumeStackView.topAnchor.constraint(equalTo: self.buttonStackView.bottomAnchor, constant: 32.0),
-            self.volumeStackView.leadingAnchor.constraint(equalTo: self.buttonStackView.leadingAnchor),
-            self.volumeStackView.trailingAnchor.constraint(equalTo: self.buttonStackView.trailingAnchor),
+            self.volumeStackView.leadingAnchor.constraint(equalTo: self.titleLabel.leadingAnchor),
+            self.volumeStackView.trailingAnchor.constraint(equalTo: self.titleLabel.trailingAnchor),
             
             self.pitchSegmentedControl.topAnchor.constraint(equalTo: self.volumeStackView.bottomAnchor, constant: 32.0),
-            self.pitchSegmentedControl.leadingAnchor.constraint(equalTo: self.buttonStackView.leadingAnchor),
-            self.pitchSegmentedControl.trailingAnchor.constraint(equalTo: self.buttonStackView.trailingAnchor),
+            self.pitchSegmentedControl.leadingAnchor.constraint(equalTo: self.titleLabel.leadingAnchor),
+            self.pitchSegmentedControl.trailingAnchor.constraint(equalTo: self.titleLabel.trailingAnchor),
         ])
     }
     
+    // MARK: - objc func
+    
     @objc func touchPlayPauseButton() {
-        switch self.avPlayer.timeControlStatus {
-        case .playing:
-            self.avPlayer.pause()
-            self.playPauseButton.isSelected.toggle()
-        case .paused:
-            self.avPlayer.play()
-            self.playPauseButton.isSelected.toggle()
-        default: break
+        if self.playerNode.isPlaying == false {
+            self.playerNode.play()
+        } else {
+            self.playerNode.pause()
         }
+        self.playPauseButton.isSelected.toggle()
     }
     
     @objc func touchBackwardButton() {
-        let currentTime = self.avPlayer.currentTime()
-        let time = CMTime(value: 5, timescale: 1)
-        self.avPlayer.seek(to: currentTime - time)
+//        let currentTime = self.avPlayer.currentTime()
+//        let time = CMTime(value: 5, timescale: 1)
+//        self.avPlayer.seek(to: currentTime - time)
     }
     
     @objc func touchForwardButton() {
-        let currentTime = self.avPlayer.currentTime()
-        let time = CMTime(value: 5, timescale: 1)
-        self.avPlayer.seek(to: currentTime + time)
+//        let currentTime = self.avPlayer.currentTime()
+//        let time = CMTime(value: 5, timescale: 1)
+//        self.avPlayer.seek(to: currentTime + time)
     }
     
     @objc func volumeSliderValueChanged(_ sender: UISlider) {
-        self.avPlayer.volume = sender.value
+        self.playerNode.volume = sender.value
     }
     
     @objc func pitchSegmentedControlValueChanged(_ sender: UISegmentedControl) {
-        let value = allPlaybackPitches[sender.selectedSegmentIndex]
-        print(value)
+        let pitches: [Double] = [0, 0.5, -0.5]
+        let value = pitches[sender.selectedSegmentIndex]
         self.pitchControl.pitch = 1200 * Float(value)
+    }
+    
+    // MARK: - Configure AVAudioEngine
+    
+    func setAudio(_ url: URL) {
+        // 파일에 항상 같은 이름으로 저장
+        let documentURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let fileURL = documentURL.appendingPathComponent("Record.mp3")
+        
+        URLSession.shared.downloadTask(with: url) { localUrl, response, error in
+            guard let localUrl = localUrl, error == nil else { return }
+            do {
+                if FileManager.default.fileExists(atPath: fileURL.path) {
+                    try FileManager.default.removeItem(at: fileURL)
+                }
+                try FileManager.default.moveItem(at: localUrl, to: fileURL)
+                self.configureAudioFile(fileURL)
+            } catch {
+                print("FileManager Error: \(error.localizedDescription)")
+            }
+        }.resume()
+    }
+    
+    func configureAudioFile(_ url: URL) {
+        // local에 저장된 file의 url을 사용하여 AVAudioFile을 생성한 후 할당
+        do {
+            let file = try AVAudioFile(forReading: url)
+            self.audioFile = file
+            self.configureAudioEngine()
+        } catch {
+            print("AVAudioFile Error: \(error.localizedDescription)")
+        }
+    }
+    
+    func configureAudioEngine() {
+        // 2: connect the components to our playback engine
+        // 컴포넌트를 재생 엔진에 연결
+        self.audioEngine.attach(self.playerNode)
+        self.audioEngine.attach(self.pitchControl)
+
+        // 3: arrange the parts so that output from one is input to another
+        // 한 쪽의 출력이 다른쪽에 입력되도록 연결하여 정렬
+        self.audioEngine.connect(self.playerNode, to: self.pitchControl, format: nil)
+        self.audioEngine.connect(self.pitchControl, to: self.audioEngine.mainMixerNode, format: nil)
+
+        // 4: prepare the player to play its file from the beginning
+        // 플레이어가 파일을 재생하도록 준비
+        guard let audioFile = self.audioFile else { return }
+        self.playerNode.scheduleFile(audioFile, at: nil)
+        self.playerNode.volume = self.volumeSize
+
+        self.audioEngine.prepare()
+        
+        // 5: start the engine
+        do {
+            try self.audioEngine.start()
+        } catch {
+            print("AudioEngine Error: \(error.localizedDescription)")
+        }
     }
 }
