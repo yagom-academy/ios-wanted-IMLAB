@@ -6,37 +6,41 @@
 //
 
 import UIKit
-import AVFAudio
+import AVFoundation
 
 struct RecorderViewModel{
     
     private var recorder : AVAudioRecorder?
     
-    init(_ url : URL){
+    init(){
         self.recorder = nil // 초기화
-        let settings = [
+        let soundFileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("myRecoding.m4a")
+        let recordSettings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
             AVSampleRateKey: 12000,
             AVNumberOfChannelsKey: 1,
             AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
-        ]
+          ]
+        
         do {
-            let recorder = try AVAudioRecorder(url: url, settings: settings)
-            self.recorder = recorder
-            // AVAudioRecorder가 throw를 할 수 있기 때문에 do 사용
-        }
-        catch {
-            print("error")
+            try recorder = AVAudioRecorder(url: soundFileURL, settings: recordSettings)
+            recorder?.prepareToRecord()
+        } catch {
+            print("audioSession Error: \(error.localizedDescription)")
         }
     }
     
     func startRecording() {
-        self.recorder?.prepareToRecord() //init보다는 startRecording 쪽으로 묶이는 게 더 자연스러워 보여서
         self.recorder?.record()
     }
     
     func stopRecording() {
         self.recorder?.stop()
         // 파일 업로드
+    }
+    
+    func isRecording() -> Bool {
+        return self.recorder?.isRecording ?? false
     }
 }
