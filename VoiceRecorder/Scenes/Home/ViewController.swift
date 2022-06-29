@@ -17,7 +17,7 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
         
         let storage = Storage.storage()
-        let reference = storage.reference().child("audioName")
+        let reference = storage.reference()
         
         
         reference.listAll { result, error in
