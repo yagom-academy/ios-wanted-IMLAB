@@ -55,7 +55,7 @@ class Audio {
   let engine = AVAudioEngine()
   let pitchControl = AVAudioUnitTimePitch()
 
-  var isPlaying = false
+  var isPlaying: Observable<Bool> = Observable(false)
   var isPlayerReady = false
   var needsFileScheduled = true
 
@@ -63,7 +63,6 @@ class Audio {
   var audioSampleRate: Double = 0
   var audioLengthSeconds: Double = 0
 
-  //  var playerProgress: Double = 0
   var playerProgress: Observable<Double> = Observable(0.0)
   var playerTime: Observable<PlayerTime> = Observable(.zero)
 
@@ -138,7 +137,7 @@ class Audio {
   }
 
   func playOrPause() {
-    isPlaying.toggle()
+    isPlaying.value.toggle()
 
     if audioPlayer.isPlaying {
       displayLink?.isPaused = true
@@ -175,7 +174,7 @@ class Audio {
     seek(to: timeToSeek)
   }
 
-  // MARK: Audio adjustments
+  // MARK: - 5초 전,후를 위한 로직
   private func seek(to time: Double) {
     guard let audioFile = audioFile else {
       return
@@ -210,6 +209,12 @@ class Audio {
     }
   }
 
+  // MARK: - 슬라이더
+  private func seek(to value: Float) {
+    
+  }
+
+
   private func setupDisplayLink() {
     displayLink = CADisplayLink(
       target: self,
@@ -232,7 +237,7 @@ class Audio {
       seekFrame = 0
       currentPosition = 0
 
-      isPlaying = false
+      isPlaying.value = false
       displayLink?.isPaused = true
     }
 
@@ -244,5 +249,4 @@ class Audio {
       remainingTime: audioLengthSeconds - time
     )
   }
-
 }

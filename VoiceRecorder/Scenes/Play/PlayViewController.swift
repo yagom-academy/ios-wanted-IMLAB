@@ -18,6 +18,7 @@ class PlayViewController: UIViewController {
     setupView()
     setupConstraints()
     setupAudio()
+    bind()
     setupAction()
   }
 
@@ -47,13 +48,32 @@ class PlayViewController: UIViewController {
       print("음원없음")
       return
     }
+
     audio = Audio(fileURL)
+  }
+
+  func bind() {
     audio?.playerProgress.bind({ value in
       self.playView.recorderSlider.value = Float(value)
     })
+
     audio?.playerTime.bind({ time in
       self.playView.totalTimeLabel.text = time.remainingText
       self.playView.spendTimeLabel.text = time.elapsedText
+    })
+
+    audio?.isPlaying.bind({ isplay in
+      if isplay == false {
+        self.playView.playButton.playButton.setImage(
+          UIImage(systemName: "play.circle.fill"),
+          for: .normal
+        )
+      } else {
+        self.playView.playButton.playButton.setImage(
+          UIImage(systemName: "pause.circle.fill"),
+          for: .normal
+        )
+      }
     })
   }
 
@@ -73,10 +93,14 @@ class PlayViewController: UIViewController {
       action: #selector(forwardButtonClicked),
       for: .touchUpInside
     )
-
     playView.segmentControl.addTarget(
       self,
       action: #selector(segconChanged(segcon:)),
+      for: .valueChanged
+    )
+    playView.recorderSlider.addTarget(
+      self,
+      action: #selector(sliderValueChanged(_:)),
       for: .valueChanged
     )
   }
@@ -84,18 +108,6 @@ class PlayViewController: UIViewController {
   @objc
   func playButtonClicked() {
     print(#function)
-    guard let isplaying = audio?.isPlaying else { return }
-    if isplaying {
-      playView.playButton.playButton.setImage(
-        UIImage(systemName: "play.circle.fill"),
-        for: .normal
-      )
-    } else {
-      playView.playButton.playButton.setImage(
-        UIImage(systemName: "pause.circle.fill"),
-        for: .normal
-      )
-    }
     audio?.playOrPause()
   }
 
@@ -115,6 +127,11 @@ class PlayViewController: UIViewController {
   func segconChanged(segcon: UISegmentedControl) {
     guard audio != nil else { return }
     audio?.changePitch(segcon.selectedSegmentIndex)
+  }
+
+  @objc
+  func sliderValueChanged(_ sender: UISlider) {
+    print(sender.value)
   }
 
 }
