@@ -13,7 +13,7 @@ struct StorageManager {
     
     func upload(data: Data, fileName: String, completion: @escaping (Result<Void, Error>) -> Void) {
         let storageRef = storage.reference()
-        let recordRef = storageRef.child("record/\(fileName).m4a")
+        let recordRef = storageRef.child("\(StoragePath.voiceRecords.rawValue)/\(fileName).m4a")
         
         recordRef.putData(data) { _, error in
             if let error = error {
@@ -27,7 +27,7 @@ struct StorageManager {
     
     func get(completion: @escaping (Result<RecordModel, Error>) -> Void) {
         let storageRef = storage.reference()
-        let recordRef = storageRef.child("record/")
+        let recordRef = storageRef.child("\(StoragePath.voiceRecords.rawValue)/")
         recordRef.listAll { result, error in
             if let error = error {
                 completion(.failure(error))
@@ -51,7 +51,7 @@ struct StorageManager {
     
     func delete(fileName: String, completion: @escaping (Result<Void, Error>) -> Void) {
         let storageRef = storage.reference()
-        let desertRef = storageRef.child("record/\(fileName)")
+        let desertRef = storageRef.child("\(StoragePath.voiceRecords.rawValue)/\(fileName)")
         
         desertRef.delete { error in
             if let error = error {

@@ -16,7 +16,7 @@ class RecordListTableViewCell: UITableViewCell {
     }
     
     func setUpView(recordFile: RecordModel) {
-        dateTitleLabel.text = recordFile.name
+        dateTitleLabel.text = "\(StoragePath.voiceRecords.rawValue)_" + recordFile.name.dropLast(4)
         recordTimeLabel.text = recordFile.playTime
     }
 
