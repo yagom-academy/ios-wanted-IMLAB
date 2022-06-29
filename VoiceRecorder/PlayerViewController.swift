@@ -23,11 +23,24 @@ class PlayerViewController: UIViewController {
     private let forwardButton = UIButton()
     private let backwardButton = UIButton()
 
+    private var audioPlayer: PlayerManager!
+    private var isPlaying = false
+
+    private let sampleURL = URL(string: "https://firebasestorage.googleapis.com:443/v0/b/sampleapp-9e55d.appspot.com/o/audio%2F2022.06.27_18:05:55%2B11.m4a?alt=media&token=1a9cd60b-95cd-4a39-ad25-7adea9eebd19")
+
     init() {
         super.init(nibName: nil, bundle: nil)
 
         attribute()
         layout()
+
+        // 버튼 핸들러 추가
+        configureButtonHandler()
+
+        // 임시 플레이어
+        audioPlayer = PlayerManager(url: sampleURL!)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(audioDidEnd(notification:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
     }
 
     required init?(coder: NSCoder) {
@@ -37,7 +50,11 @@ class PlayerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     }
+}
 
+// MARK: - Attribute, Layout
+
+extension PlayerViewController {
     private func attribute() {
         safearea = view.safeAreaLayoutGuide
 
@@ -59,7 +76,7 @@ class PlayerViewController: UIViewController {
         buttonStackView.axis = .horizontal
         buttonStackView.distribution = .equalSpacing
 
-        playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+        setPlayPauseButtonState()
         playPauseButton.backgroundColor = .systemBlue.withAlphaComponent(0.3)
 
         forwardButton.setImage(UIImage(systemName: "goforward.5"), for: .normal)
@@ -84,7 +101,7 @@ class PlayerViewController: UIViewController {
         ]
 
         NSLayoutConstraint.activate(mainStackViewConstraints)
-        
+
         // 파일명, 파형, 음성변조, 볼륨, 버튼
         let mainStackViewItems = [
             fileNameLabel,
@@ -106,10 +123,10 @@ class PlayerViewController: UIViewController {
             ]
             NSLayoutConstraint.activate(constraints)
         }
-        
+
         // 버튼
         let buttonStackViewItems = [
-            backwardButton, playPauseButton, forwardButton
+            backwardButton, playPauseButton, forwardButton,
         ]
 
         buttonStackViewItems.forEach {
@@ -121,5 +138,53 @@ class PlayerViewController: UIViewController {
 
             $0.layer.cornerRadius = 25
         }
+    }
+}
+
+// MARK: - Button (Actions, States)
+
+extension PlayerViewController {
+    // 버튼 이미지 관리
+    private func setPlayPauseButtonState() {
+        if isPlaying {
+            playPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+        } else {
+            playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+        }
+    }
+
+    // 버튼 핸들러 추가
+    private func configureButtonHandler() {
+        playPauseButton.addTarget(self, action: #selector(handlePlayPauseButton), for: .touchUpInside)
+        backwardButton.addTarget(self, action: #selector(handleBackwardButton), for: .touchUpInside)
+        forwardButton.addTarget(self, action: #selector(handleForwardButton), for: .touchUpInside)
+    }
+
+    // 재생, 일시정지 버튼
+    @objc private func handlePlayPauseButton() {
+        if isPlaying {
+            audioPlayer.pausePlayer()
+        } else {
+            audioPlayer.startPlayer()
+        }
+        isPlaying.toggle()
+        setPlayPauseButtonState()
+    }
+
+    // -5초
+    @objc private func handleBackwardButton() {
+        audioPlayer.seek(-)
+    }
+
+    // +5초
+    @objc private func handleForwardButton() {
+        audioPlayer.seek(+)
+    }
+
+    // 재생 끝나면 플레이어, 버튼, 재생상태 초기화
+    @objc private func audioDidEnd(notification: NSNotification) {
+        audioPlayer.initPlayer()
+        isPlaying.toggle()
+        setPlayPauseButtonState()
     }
 }
