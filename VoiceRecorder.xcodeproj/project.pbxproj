@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04FF9394286BEEFB00EB34B6 /* RecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF9393286BEEFB00EB34B6 /* RecordViewController.swift */; };
+		04FF939D286C003500EB34B6 /* FrequencyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF939C286C003500EB34B6 /* FrequencyView.swift */; };
+		04FF939F286C004200EB34B6 /* CutoffFrequencyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF939E286C004200EB34B6 /* CutoffFrequencyView.swift */; };
+		04FF93A1286C004C00EB34B6 /* RecordAndPlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF93A0286C004C00EB34B6 /* RecordAndPlayView.swift */; };
+		04FF93A4286C15AA00EB34B6 /* UIButton+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF93A3286C15AA00EB34B6 /* UIButton+.swift */; };
 		DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65B28604278003DD2F5 /* AppDelegate.swift */; };
 		DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65D28604278003DD2F5 /* SceneDelegate.swift */; };
 		DE15E66028604278003DD2F5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65F28604278003DD2F5 /* ViewController.swift */; };
@@ -15,6 +20,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		04FF9393286BEEFB00EB34B6 /* RecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewController.swift; sourceTree = "<group>"; };
+		04FF939C286C003500EB34B6 /* FrequencyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrequencyView.swift; sourceTree = "<group>"; };
+		04FF939E286C004200EB34B6 /* CutoffFrequencyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CutoffFrequencyView.swift; sourceTree = "<group>"; };
+		04FF93A0286C004C00EB34B6 /* RecordAndPlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordAndPlayView.swift; sourceTree = "<group>"; };
+		04FF93A3286C15AA00EB34B6 /* UIButton+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+.swift"; sourceTree = "<group>"; };
 		DE15E65828604278003DD2F5 /* VoiceRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE15E65B28604278003DD2F5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DE15E65D28604278003DD2F5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -35,6 +45,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		04FF9395286BF01600EB34B6 /* Record */ = {
+			isa = PBXGroup;
+			children = (
+				04FF93A2286C126700EB34B6 /* Scene */,
+			);
+			path = Record;
+			sourceTree = "<group>";
+		};
+		04FF93A2286C126700EB34B6 /* Scene */ = {
+			isa = PBXGroup;
+			children = (
+				04FF9393286BEEFB00EB34B6 /* RecordViewController.swift */,
+				04FF939C286C003500EB34B6 /* FrequencyView.swift */,
+				04FF939E286C004200EB34B6 /* CutoffFrequencyView.swift */,
+				04FF93A0286C004C00EB34B6 /* RecordAndPlayView.swift */,
+				04FF93A5286C15AF00EB34B6 /* Extension */,
+			);
+			path = Scene;
+			sourceTree = "<group>";
+		};
+		04FF93A5286C15AF00EB34B6 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				04FF93A3286C15AA00EB34B6 /* UIButton+.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
 		DE15E64F28604278003DD2F5 = {
 			isa = PBXGroup;
 			children = (
@@ -57,6 +95,7 @@
 				DE15E65B28604278003DD2F5 /* AppDelegate.swift */,
 				DE15E65D28604278003DD2F5 /* SceneDelegate.swift */,
 				DE15E65F28604278003DD2F5 /* ViewController.swift */,
+				04FF9395286BF01600EB34B6 /* Record */,
 				DE15E66428604279003DD2F5 /* Assets.xcassets */,
 				DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */,
 				DE15E66928604279003DD2F5 /* Info.plist */,
@@ -136,7 +175,12 @@
 			files = (
 				DE15E66028604278003DD2F5 /* ViewController.swift in Sources */,
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
+				04FF939F286C004200EB34B6 /* CutoffFrequencyView.swift in Sources */,
 				DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */,
+				04FF939D286C003500EB34B6 /* FrequencyView.swift in Sources */,
+				04FF93A1286C004C00EB34B6 /* RecordAndPlayView.swift in Sources */,
+				04FF9394286BEEFB00EB34B6 /* RecordViewController.swift in Sources */,
+				04FF93A4286C15AA00EB34B6 /* UIButton+.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
