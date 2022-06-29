@@ -117,6 +117,47 @@ extension RecordCheckViewController {
         
     }
     
+    /// 녹음 시작
+    private func record() {
+        requestMicrophoneAccess { [weak self] allowed in
+            if allowed {
+                guard let self = self else { return }
+                if let recorder = self.audioRecorder {
+                    let audioSession = AVAudioSession.sharedInstance()
+                    guard !recorder.isRecording else {
+                        print("이미 녹음 중")
+                        return
+                    }
+
+                    do {
+                        try audioSession.setActive(true)
+                    } catch {
+                        fatalError(error.localizedDescription)
+                    }
+
+                    recorder.record()
+                    self.recordButtonToggle()
+                }
+            }
+        }
+    }
+
+    /// 녹음 정지
+    private func stop() {
+        if let recorder = self.audioRecorder {
+            if recorder.isRecording {
+                self.audioRecorder?.stop()
+                self.recordButtonToggle()
+                let audioSession = AVAudioSession.sharedInstance()
+                do {
+                    try audioSession.setActive(false)
+                } catch {
+                    fatalError(error.localizedDescription)
+                }
+            }
+        }
+    }
+    
 }
 
 extension RecordCheckViewController: AVAudioRecorderDelegate {
