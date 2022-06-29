@@ -25,10 +25,8 @@ enum FirebaseService {
         
     }
     
-    static func makeURL(fileName: String, completion: @escaping (Result <URL, Error>) -> Void)  {
+    static func makeURL(endPoint: EndPoint, completion: @escaping (Result <URL, Error>) -> Void)  {
         
-        let endPoint = EndPoint(fileName: fileName)
-       
         endPoint.path.downloadURL{ url, error in
             if let error = error as? NSError {
                 completion(.failure(error))
@@ -41,25 +39,22 @@ enum FirebaseService {
     }
     
     
-    static func uploadAudio(fileName: String, data: Data, completion: @escaping (Error?) -> Void) {
-       
-        let endPoint = EndPoint(fileName: fileName)
+    static func uploadAudio(audio: AudioInfo, completion: @escaping (Result <StorageMetadata, Error>) -> Void) {
         
-        endPoint.path.putData(data) { storageMetadata, error in
-            if let error = error as? NSError {
-                completion(error)
-                return
+        let endPoint = EndPoint(fileName: audio.id.uuidString)
+        endPoint.path.putData(audio.data, metadata: audio.metadata){ result in
+            switch result {
+            case .success(let metaData):
+                completion(.success(metaData))
+            case .failure(let error):
+                completion(.failure(error))
             }
-            guard storageMetadata != nil else {return}
-            completion(nil)
-            return
         }
     }
     
-    static func delete(fileName: String, completion: @escaping (Error?) -> Void) {
+    static func delete(audio: AudioInfo, completion: @escaping (Error?) -> Void) {
         
-        let endPoint = EndPoint(fileName: fileName)
-        
+        let endPoint = EndPoint(fileName: audio.id.uuidString)
         endPoint.path.delete { error in
             if let error = error as? NSError {
                 completion(error)
