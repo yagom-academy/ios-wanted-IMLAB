@@ -11,6 +11,8 @@
 		9F25234328699DB4008A9819 /* RecordVoiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F25234228699DB4008A9819 /* RecordVoiceViewController.swift */; };
 		BA6EAE60623159BD72E525BB /* Pods_VoiceRecorder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFBFADDAE47812F2F622743D /* Pods_VoiceRecorder.framework */; };
 		C730AA93286BDFA70004D11C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C730AA92286BDFA70004D11C /* GoogleService-Info.plist */; };
+		C730AA97286BEAE80004D11C /* FirebaseStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C730AA96286BEAE80004D11C /* FirebaseStorageManager.swift */; };
+		C730AA9A286BEB9C0004D11C /* RecordFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C730AA99286BEB9C0004D11C /* RecordFile.swift */; };
 		C77F4C2D2869925900B2646E /* VoiceRecordTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77F4C2C2869925900B2646E /* VoiceRecordTableViewCell.swift */; };
 		C77F4C2F2869A56500B2646E /* PlayVoiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77F4C2E2869A56500B2646E /* PlayVoiceViewController.swift */; };
 		DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65B28604278003DD2F5 /* AppDelegate.swift */; };
@@ -26,6 +28,8 @@
 		9F25234028698A9C008A9819 /* VoiceRecorderListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRecorderListTableViewController.swift; sourceTree = "<group>"; };
 		9F25234228699DB4008A9819 /* RecordVoiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordVoiceViewController.swift; sourceTree = "<group>"; };
 		C730AA92286BDFA70004D11C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		C730AA96286BEAE80004D11C /* FirebaseStorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorageManager.swift; sourceTree = "<group>"; };
+		C730AA99286BEB9C0004D11C /* RecordFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordFile.swift; sourceTree = "<group>"; };
 		C77F4C2C2869925900B2646E /* VoiceRecordTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRecordTableViewCell.swift; sourceTree = "<group>"; };
 		C77F4C2E2869A56500B2646E /* PlayVoiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayVoiceViewController.swift; sourceTree = "<group>"; };
 		DE15E65828604278003DD2F5 /* VoiceRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -69,6 +73,22 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		C730AA95286BEACA0004D11C /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				C730AA96286BEAE80004D11C /* FirebaseStorageManager.swift */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
+		C730AA98286BEB7D0004D11C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				C730AA99286BEB9C0004D11C /* RecordFile.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		C77F4C302869AB9200B2646E /* Cell */ = {
 			isa = PBXGroup;
 			children = (
@@ -106,6 +126,8 @@
 		DE15E65A28604278003DD2F5 /* VoiceRecorder */ = {
 			isa = PBXGroup;
 			children = (
+				C730AA98286BEB7D0004D11C /* Model */,
+				C730AA95286BEACA0004D11C /* Manager */,
 				C77F4C302869AB9200B2646E /* Cell */,
 				9F25233F28698A7B008A9819 /* Controller */,
 				DE15E65B28604278003DD2F5 /* AppDelegate.swift */,
@@ -237,9 +259,11 @@
 			files = (
 				9F25234128698A9C008A9819 /* VoiceRecorderListTableViewController.swift in Sources */,
 				9F25234328699DB4008A9819 /* RecordVoiceViewController.swift in Sources */,
+				C730AA9A286BEB9C0004D11C /* RecordFile.swift in Sources */,
 				C77F4C2D2869925900B2646E /* VoiceRecordTableViewCell.swift in Sources */,
 				C77F4C2F2869A56500B2646E /* PlayVoiceViewController.swift in Sources */,
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
+				C730AA97286BEAE80004D11C /* FirebaseStorageManager.swift in Sources */,
 				DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

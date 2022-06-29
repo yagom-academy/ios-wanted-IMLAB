@@ -14,11 +14,15 @@ class VoiceRecorderListTableViewController: UITableViewController {
         return addButton
     }()
     
+    let firebaseStorageManger = FirebaseStorageManager()
     let recordVoiceListViewModel = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setUp()
+        firebaseStorageManger.fetchRecordList { result in
+            print(result)
+        }
     }
 
     func setUp() {
