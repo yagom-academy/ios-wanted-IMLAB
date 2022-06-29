@@ -24,8 +24,15 @@ class FirebaseStorage {
         uploadHandler.uploadToFirebase(fileUrl: fileUrl, fileName: fileName)
     }
     
-    func downloadFile(fileUrl:URL,fileName:String) {
-        downloadHandler.downloadFromFirebase(fileUrl: fileUrl, fileName: fileName)
+    func downloadFile(fileUrl:URL,fileName:String, Hander : @escaping (Result<String, Error>) -> ()) {
+        downloadHandler.downloadFromFirebase(fileName: fileName) { result in
+            switch result {
+            case .success(let fileUrl) :
+                Hander(.success(fileUrl))
+            case .failure(let error) :
+                print(error)
+            }
+        }
     }
     
     func deleteFile(fileName:String) {

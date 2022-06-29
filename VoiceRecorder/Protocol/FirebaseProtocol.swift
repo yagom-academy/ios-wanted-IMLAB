@@ -13,7 +13,7 @@ protocol FirebaseStoreUpload {
 }
 
 protocol FirebaseStoreDownload {
-    func downloadFromFirebase(fileUrl:URL,fileName:String)
+    func downloadFromFirebase(fileName:String, handler: @escaping (Result<String , Error>) -> ())
 }
 
 protocol FirebaseStoreFileList {
