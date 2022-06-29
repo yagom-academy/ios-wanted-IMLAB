@@ -15,7 +15,11 @@ class RecordViewController: UIViewController {
     
     @IBOutlet weak var cutOffSlider: UISlider!
     @IBOutlet weak var recordTimeLabel: UILabel!
+    
+    @IBOutlet weak var recordButton: UIButton!
     @IBOutlet weak var playButton: UIButton!
+    @IBOutlet weak var playBackwardButton: UIButton!
+    @IBOutlet weak var playForwardButton: UIButton!
     
     weak var delegate: RecordViewControllerDelegate?
     private let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]

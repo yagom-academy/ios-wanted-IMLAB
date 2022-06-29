@@ -70,10 +70,10 @@
 		362737A62869851300592181 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				362737AB286986F000592181 /* Cell */,
 				DE15E65F28604278003DD2F5 /* ListViewController.swift */,
-				362737AE2869880000592181 /* PlayViewController.swift */,
 				362737AC286987F200592181 /* RecordViewController.swift */,
+				362737AE2869880000592181 /* PlayViewController.swift */,
+				362737AB286986F000592181 /* Cell */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -140,17 +140,17 @@
 			isa = PBXGroup;
 			children = (
 				DE15E65B28604278003DD2F5 /* AppDelegate.swift */,
+				DE15E65D28604278003DD2F5 /* SceneDelegate.swift */,
+				DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */,
 				DE15E66428604279003DD2F5 /* Assets.xcassets */,
-				6B8DC36E286AC7AE00DF230B /* Configuration */,
-				362737A62869851300592181 /* Controllers */,
-				6B8DC371286ACE5E00DF230B /* Extension */,
 				6B47CD73286975BE00C0912F /* GoogleService-Info.plist */,
 				DE15E66928604279003DD2F5 /* Info.plist */,
-				DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */,
+				6B8DC36E286AC7AE00DF230B /* Configuration */,
+				6B8DC371286ACE5E00DF230B /* Extension */,
 				6B8DC374286ADA0900DF230B /* Manager */,
 				6B52A49C2869954E006B74D2 /* Models */,
-				DE15E65D28604278003DD2F5 /* SceneDelegate.swift */,
 				362737A52869850300592181 /* Views */,
+				362737A62869851300592181 /* Controllers */,
 			);
 			path = VoiceRecorder;
 			sourceTree = "<group>";
@@ -393,9 +393,11 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VoiceRecorder/Info.plist;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "녹음을 위해 마이크 사용 권한";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -407,7 +409,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -420,9 +422,11 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VoiceRecorder/Info.plist;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "녹음을 위해 마이크 사용 권한";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -434,7 +438,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
