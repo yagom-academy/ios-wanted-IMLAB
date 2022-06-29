@@ -88,7 +88,6 @@ class CreateAudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudi
             do {
                 if let audioRecorder = audioRecorder{
                     let data = try Data(contentsOf: audioRecorder.url)
-                    print(data)
                     FirebaseService.uploadAudio(fileName: "shinTmp.mp3", data: data) { err in
                         print("firebase err: \(String(describing: err?.localizedDescription))")
                     }
