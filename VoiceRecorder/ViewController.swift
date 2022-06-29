@@ -35,8 +35,16 @@ class ViewController: UIViewController {
     }
     
     @objc func plusButtonClicked() {
-        let recordCheckVC = RecordCheckViewController()
-        self.present(recordCheckVC, animated: true)
+        
+        let sheetViewController = VoicePlayingViewController()
+        if let sheetController = sheetViewController.sheetPresentationController {
+          sheetController.detents = [.medium(), .large()]
+          sheetController.preferredCornerRadius = 4
+          sheetController.prefersGrabberVisible = true
+        }
+        sheetViewController.fetchRecordedDataFromMainVC(data: nil)
+        present(sheetViewController, animated: true, completion: nil)
+        
     }
 }
 
