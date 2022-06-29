@@ -62,7 +62,7 @@ class PlayViewController: UIViewController {
     
     private lazy var volumeSlider: UISlider = {
         let slider = UISlider()
-        slider.addTarget(self, action: #selector(changeVolumeSlider), for: .valueChanged)
+        slider.addTarget(self, action: #selector(volumeSliderValueChanged(_:)), for: .valueChanged)
         slider.setValue(self.volumeSize, animated: false)
         return slider
     }()
@@ -72,6 +72,13 @@ class PlayViewController: UIViewController {
         stackView.axis = .horizontal
         stackView.spacing = 10
         return stackView
+    }()
+    
+    private lazy var pitchSegmentedControl: UISegmentedControl = {
+        let segmentedControl = UISegmentedControl(items: ["일반 목소리", "아기 목소리", "할아버지 목소리"])
+        segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.addTarget(self, action: #selector(pitchSegmentedControlValueChanged(_:)), for: .valueChanged)
+        return segmentedControl
     }()
     
     override func viewDidLoad() {
@@ -93,23 +100,27 @@ private extension PlayViewController {
     }
     
     func addSubViews() {
-        [self.buttonStackView, self.volumeStackView].forEach {
+        [self.buttonStackView, self.volumeStackView, self.pitchSegmentedControl].forEach {
             self.view.addSubview($0)
         }
     }
     
     func makeConstraints() {
-        [self.buttonStackView, self.volumeStackView].forEach {
+        [self.buttonStackView, self.volumeStackView, self.pitchSegmentedControl].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         NSLayoutConstraint.activate([
-            self.buttonStackView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 16.0),
+            self.buttonStackView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 32.0),
             self.buttonStackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 32.0),
             self.buttonStackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -32.0),
             
-            self.volumeStackView.topAnchor.constraint(equalTo: self.buttonStackView.bottomAnchor, constant: 16.0),
-            self.volumeStackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 32.0),
-            self.volumeStackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -32.0),
+            self.volumeStackView.topAnchor.constraint(equalTo: self.buttonStackView.bottomAnchor, constant: 32.0),
+            self.volumeStackView.leadingAnchor.constraint(equalTo: self.buttonStackView.leadingAnchor),
+            self.volumeStackView.trailingAnchor.constraint(equalTo: self.buttonStackView.trailingAnchor),
+            
+            self.pitchSegmentedControl.topAnchor.constraint(equalTo: self.volumeStackView.bottomAnchor, constant: 32.0),
+            self.pitchSegmentedControl.leadingAnchor.constraint(equalTo: self.buttonStackView.leadingAnchor),
+            self.pitchSegmentedControl.trailingAnchor.constraint(equalTo: self.buttonStackView.trailingAnchor),
         ])
     }
     
@@ -137,7 +148,11 @@ private extension PlayViewController {
         self.avPlayer.seek(to: currentTime + time)
     }
     
-    @objc func changeVolumeSlider(_ sender: UISlider) {
+    @objc func volumeSliderValueChanged(_ sender: UISlider) {
         self.avPlayer.volume = sender.value
+    }
+    
+    @objc func pitchSegmentedControlValueChanged(_ sender: UISegmentedControl) {
+        print(sender.selectedSegmentIndex)
     }
 }
