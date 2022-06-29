@@ -12,6 +12,7 @@
 		DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65D28604278003DD2F5 /* SceneDelegate.swift */; };
 		DE15E66528604279003DD2F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66428604279003DD2F5 /* Assets.xcassets */; };
 		DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */; };
+		DF6408D1286C23DA00567DAC /* AudioInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6408D0286C23DA00567DAC /* AudioInformation.swift */; };
 		ECB8A5DE286BECF200B1D363 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB8A5DD286BECF200B1D363 /* BaseViewController.swift */; };
 		ECB8A5E0286BED1B00B1D363 /* ViewPresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB8A5DF286BED1B00B1D363 /* ViewPresentable.swift */; };
 		ECB8A5E7286BED7A00B1D363 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB8A5E6286BED7A00B1D363 /* HomeViewController.swift */; };
@@ -30,6 +31,7 @@
 		DE15E66428604279003DD2F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DE15E66728604279003DD2F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DE15E66928604279003DD2F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DF6408D0286C23DA00567DAC /* AudioInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioInformation.swift; sourceTree = "<group>"; };
 		ECB8A5DD286BECF200B1D363 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		ECB8A5DF286BED1B00B1D363 /* ViewPresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewPresentable.swift; sourceTree = "<group>"; };
 		ECB8A5E6286BED7A00B1D363 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -70,6 +72,7 @@
 		DE15E65A28604278003DD2F5 /* VoiceRecorder */ = {
 			isa = PBXGroup;
 			children = (
+				DF6408CC286C234700567DAC /* Domain */,
 				ECB8A5E1286BED5700B1D363 /* Presentation */,
 				ECB8A5DA286BECDD00B1D363 /* Util */,
 				ECB8A5D9286BECD400B1D363 /* Resource */,
@@ -78,6 +81,38 @@
 				968E6868286C0C3E000DE0DB /* GoogleService-Info.plist */,
 			);
 			path = VoiceRecorder;
+			sourceTree = "<group>";
+		};
+		DF6408CC286C234700567DAC /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				DF6408CD286C234D00567DAC /* Entity */,
+				DF6408CF286C238A00567DAC /* Interface */,
+				DF6408CE286C235D00567DAC /* UseCase */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		DF6408CD286C234D00567DAC /* Entity */ = {
+			isa = PBXGroup;
+			children = (
+				DF6408D0286C23DA00567DAC /* AudioInformation.swift */,
+			);
+			path = Entity;
+			sourceTree = "<group>";
+		};
+		DF6408CE286C235D00567DAC /* UseCase */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = UseCase;
+			sourceTree = "<group>";
+		};
+		DF6408CF286C238A00567DAC /* Interface */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Interface;
 			sourceTree = "<group>";
 		};
 		ECB8A5D8286BECCA00B1D363 /* Application */ = {
@@ -244,6 +279,7 @@
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
 				ECB8A5EF286BED9800B1D363 /* RecordingView.swift in Sources */,
 				ECB8A5ED286BED8F00B1D363 /* PlayView.swift in Sources */,
+				DF6408D1286C23DA00567DAC /* AudioInformation.swift in Sources */,
 				DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */,
 				ECB8A5E7286BED7A00B1D363 /* HomeViewController.swift in Sources */,
 			);
