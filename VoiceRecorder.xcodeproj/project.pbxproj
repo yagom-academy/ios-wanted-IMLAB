@@ -9,6 +9,12 @@
 /* Begin PBXBuildFile section */
 		0E32554069C071CA1D59DC04 /* Pods_VoiceRecorder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9BFC1627DF83D91CB89EB12 /* Pods_VoiceRecorder.framework */; };
 		12E1549028697D4400F7EA19 /* RecordModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E1548F28697D4400F7EA19 /* RecordModel.swift */; };
+		B7545781286AC79800EFCDA2 /* FirebaseProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7545780286AC79800EFCDA2 /* FirebaseProtocol.swift */; };
+		B7545783286AE18B00EFCDA2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B7545782286AE18B00EFCDA2 /* GoogleService-Info.plist */; };
+		B7545785286AE33D00EFCDA2 /* UploadRecordfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7545784286AE33D00EFCDA2 /* UploadRecordfile.swift */; };
+		B7545787286AE34B00EFCDA2 /* DownloadRecordfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7545786286AE34B00EFCDA2 /* DownloadRecordfile.swift */; };
+		B7545789286AE35800EFCDA2 /* DeleteRecordfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7545788286AE35800EFCDA2 /* DeleteRecordfile.swift */; };
+		B7E274972869BA0300FBB977 /* FirebaseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E274962869BA0300FBB977 /* FirebaseStorage.swift */; };
 		B7E8082D286974C9005E35BC /* RecordFileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E8082C286974C9005E35BC /* RecordFileCell.swift */; };
 		DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65B28604278003DD2F5 /* AppDelegate.swift */; };
 		DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65D28604278003DD2F5 /* SceneDelegate.swift */; };
@@ -23,6 +29,12 @@
 		12E1548F28697D4400F7EA19 /* RecordModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordModel.swift; sourceTree = "<group>"; };
 		73E59906131CF5BC431F5250 /* Pods-VoiceRecorder.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VoiceRecorder.debug.xcconfig"; path = "Target Support Files/Pods-VoiceRecorder/Pods-VoiceRecorder.debug.xcconfig"; sourceTree = "<group>"; };
 		B1A3C0E2C0AF20E02F5B9AD9 /* Pods-VoiceRecorder.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VoiceRecorder.release.xcconfig"; path = "Target Support Files/Pods-VoiceRecorder/Pods-VoiceRecorder.release.xcconfig"; sourceTree = "<group>"; };
+		B7545780286AC79800EFCDA2 /* FirebaseProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseProtocol.swift; sourceTree = "<group>"; };
+		B7545782286AE18B00EFCDA2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		B7545784286AE33D00EFCDA2 /* UploadRecordfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadRecordfile.swift; sourceTree = "<group>"; };
+		B7545786286AE34B00EFCDA2 /* DownloadRecordfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadRecordfile.swift; sourceTree = "<group>"; };
+		B7545788286AE35800EFCDA2 /* DeleteRecordfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteRecordfile.swift; sourceTree = "<group>"; };
+		B7E274962869BA0300FBB977 /* FirebaseStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorage.swift; sourceTree = "<group>"; };
 		B7E8082C286974C9005E35BC /* RecordFileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordFileCell.swift; sourceTree = "<group>"; };
 		DE15E65828604278003DD2F5 /* VoiceRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE15E65B28604278003DD2F5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -79,6 +91,25 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		B754577F286AC20600EFCDA2 /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				B7545780286AC79800EFCDA2 /* FirebaseProtocol.swift */,
+			);
+			path = Protocol;
+			sourceTree = "<group>";
+		};
+		B7E274952869B9CC00FBB977 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				B7E274962869BA0300FBB977 /* FirebaseStorage.swift */,
+				B7545784286AE33D00EFCDA2 /* UploadRecordfile.swift */,
+				B7545786286AE34B00EFCDA2 /* DownloadRecordfile.swift */,
+				B7545788286AE35800EFCDA2 /* DeleteRecordfile.swift */,
+			);
+			path = Util;
+			sourceTree = "<group>";
+		};
 		B7E8082B2869746B005E35BC /* Source */ = {
 			isa = PBXGroup;
 			children = (
@@ -108,6 +139,8 @@
 		DE15E65A28604278003DD2F5 /* VoiceRecorder */ = {
 			isa = PBXGroup;
 			children = (
+				B754577F286AC20600EFCDA2 /* Protocol */,
+				B7E274952869B9CC00FBB977 /* Util */,
 				B7E8082B2869746B005E35BC /* Source */,
 				DE15E65B28604278003DD2F5 /* AppDelegate.swift */,
 				DE15E65D28604278003DD2F5 /* SceneDelegate.swift */,
@@ -116,6 +149,7 @@
 				12E1549228697D6500F7EA19 /* Controller */,
 				DE15E66428604279003DD2F5 /* Assets.xcassets */,
 				DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */,
+				B7545782286AE18B00EFCDA2 /* GoogleService-Info.plist */,
 				1201D724286989B8005F046B /* Info.plist */,
 			);
 			path = VoiceRecorder;
@@ -190,6 +224,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */,
+				B7545783286AE18B00EFCDA2 /* GoogleService-Info.plist in Resources */,
 				DE15E66528604279003DD2F5 /* Assets.xcassets in Resources */,
 				DE15E66328604278003DD2F5 /* Main.storyboard in Resources */,
 			);
@@ -247,7 +282,12 @@
 				DE15E66028604278003DD2F5 /* VoiceMemoListViewController.swift in Sources */,
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
 				B7E8082D286974C9005E35BC /* RecordFileCell.swift in Sources */,
+				B7545789286AE35800EFCDA2 /* DeleteRecordfile.swift in Sources */,
+				B7545781286AC79800EFCDA2 /* FirebaseProtocol.swift in Sources */,
 				12E1549028697D4400F7EA19 /* RecordModel.swift in Sources */,
+				B7545787286AE34B00EFCDA2 /* DownloadRecordfile.swift in Sources */,
+				B7545785286AE33D00EFCDA2 /* UploadRecordfile.swift in Sources */,
+				B7E274972869BA0300FBB977 /* FirebaseStorage.swift in Sources */,
 				DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
