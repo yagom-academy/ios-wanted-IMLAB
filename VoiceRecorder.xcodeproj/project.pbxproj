@@ -15,6 +15,10 @@
 		DE15E66328604278003DD2F5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66128604278003DD2F5 /* Main.storyboard */; };
 		DE15E66528604279003DD2F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66428604279003DD2F5 /* Assets.xcassets */; };
 		DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */; };
+		F00A2C91286BE36800ED57A8 /* VoicePlayingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00A2C90286BE36800ED57A8 /* VoicePlayingViewController.swift */; };
+		F00A2C94286BE8E400ED57A8 /* NSLayoutConstraint+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00A2C93286BE8E400ED57A8 /* NSLayoutConstraint+extension.swift */; };
+		F00A2C98286BEF6C00ED57A8 /* PlayControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00A2C97286BEF6C00ED57A8 /* PlayControlView.swift */; };
+		F0D559DC286C1AEB0078BCF3 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D559DB286C1AEB0078BCF3 /* SoundManager.swift */; };
 		F0F489B528697A3F00DC716D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F0F489B428697A3F00DC716D /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
@@ -28,6 +32,10 @@
 		DE15E66428604279003DD2F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DE15E66728604279003DD2F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DE15E66928604279003DD2F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F00A2C90286BE36800ED57A8 /* VoicePlayingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoicePlayingViewController.swift; sourceTree = "<group>"; };
+		F00A2C93286BE8E400ED57A8 /* NSLayoutConstraint+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSLayoutConstraint+extension.swift"; sourceTree = "<group>"; };
+		F00A2C97286BEF6C00ED57A8 /* PlayControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayControlView.swift; sourceTree = "<group>"; };
+		F0D559DB286C1AEB0078BCF3 /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
 		F0F489B428697A3F00DC716D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -62,6 +70,9 @@
 		DE15E65A28604278003DD2F5 /* VoiceRecorder */ = {
 			isa = PBXGroup;
 			children = (
+				F0D559DA286C1AD30078BCF3 /* SoundManager */,
+				F00A2C92286BE8D200ED57A8 /* MISC */,
+				F00A2C8F286BE20400ED57A8 /* PlayRecordedVoice */,
 				DE15E65B28604278003DD2F5 /* AppDelegate.swift */,
 				DE15E65D28604278003DD2F5 /* SceneDelegate.swift */,
 				DE15E65F28604278003DD2F5 /* ViewController.swift */,
@@ -73,6 +84,47 @@
 				F0F489B428697A3F00DC716D /* GoogleService-Info.plist */,
 			);
 			path = VoiceRecorder;
+			sourceTree = "<group>";
+		};
+		F00A2C8F286BE20400ED57A8 /* PlayRecordedVoice */ = {
+			isa = PBXGroup;
+			children = (
+				F00A2C96286BEEB800ED57A8 /* VC */,
+				F00A2C95286BEEB400ED57A8 /* View */,
+			);
+			path = PlayRecordedVoice;
+			sourceTree = "<group>";
+		};
+		F00A2C92286BE8D200ED57A8 /* MISC */ = {
+			isa = PBXGroup;
+			children = (
+				F00A2C93286BE8E400ED57A8 /* NSLayoutConstraint+extension.swift */,
+			);
+			path = MISC;
+			sourceTree = "<group>";
+		};
+		F00A2C95286BEEB400ED57A8 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F00A2C97286BEF6C00ED57A8 /* PlayControlView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		F00A2C96286BEEB800ED57A8 /* VC */ = {
+			isa = PBXGroup;
+			children = (
+				F00A2C90286BE36800ED57A8 /* VoicePlayingViewController.swift */,
+			);
+			path = VC;
+			sourceTree = "<group>";
+		};
+		F0D559DA286C1AD30078BCF3 /* SoundManager */ = {
+			isa = PBXGroup;
+			children = (
+				F0D559DB286C1AEB0078BCF3 /* SoundManager.swift */,
+			);
+			path = SoundManager;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -153,10 +205,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F00A2C91286BE36800ED57A8 /* VoicePlayingViewController.swift in Sources */,
+				F0D559DC286C1AEB0078BCF3 /* SoundManager.swift in Sources */,
+				F00A2C94286BE8E400ED57A8 /* NSLayoutConstraint+extension.swift in Sources */,
 				DE15E66028604278003DD2F5 /* ViewController.swift in Sources */,
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
 				68F56624286AE3340068A5CE /* RecordCheckViewController.swift in Sources */,
 				DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */,
+				F00A2C98286BEF6C00ED57A8 /* PlayControlView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
