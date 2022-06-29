@@ -9,6 +9,10 @@ import AVFAudio
 
 class VoiceMemoViewController: UIViewController {
     
+    private enum RefString {
+        static let recording: String = "recording/"
+    }
+    
     // MARK: - IBOutlet
     
     @IBOutlet weak var voiceMemoTableView: UITableView!
@@ -16,12 +20,7 @@ class VoiceMemoViewController: UIViewController {
     // MARK: - Properties
     
     var items: [StorageReference] = []
-    let storage = Storage.storage()
     
-    var player: AVAudioPlayer?
-        
-    var flag : Int = 0
-
     // MARK: - LifeCycles
     
     override func viewDidLoad() {
@@ -40,29 +39,25 @@ class VoiceMemoViewController: UIViewController {
     // MARK: - Methods
     
     func getDataFromFirebase() {
+        let storage = Storage.storage()
         let storageRef = storage.reference()
-        let fileRef = storageRef.child("recording/")
+        let fileRef = storageRef.child(RefString.recording)
         
         fileRef.listAll() { (result, error) in
             if let error = error {
                 print(error)
             }
             for item in result.items {
-                if self.flag == 0 {
-                    self.items.append(item)
-                }
+                self.items.append(item)
             }
-            self.flag = 1
-            if self.flag == 1 {
-                self.voiceMemoTableView.reloadData()
-            }
+            self.voiceMemoTableView.reloadData()
         }
     }
-    
-    func configureTableView() {
 
-        let cell = UINib(nibName: "VoiceMemoTableViewCell", bundle: nil)
-        voiceMemoTableView.register(cell, forCellReuseIdentifier: "VoiceMemoTableViewCell")
+    func configureTableView() {
+        
+        let cell = UINib(nibName: VoiceMemoTableViewCell.identifier, bundle: nil)
+        voiceMemoTableView.register(cell, forCellReuseIdentifier: VoiceMemoTableViewCell.identifier)
         
         voiceMemoTableView.delegate = self
         voiceMemoTableView.dataSource = self
@@ -77,7 +72,7 @@ extension VoiceMemoViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "VoiceMemoTableViewCell", for: indexPath) as? VoiceMemoTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: VoiceMemoTableViewCell.identifier, for: indexPath) as? VoiceMemoTableViewCell else { return UITableViewCell() }
         cell.timelineLabel.text = items[indexPath.row].name
         cell.durationLabel.text = "02:11"
         return cell
@@ -94,7 +89,7 @@ extension VoiceMemoViewController: UITableViewDataSource {
 
 extension VoiceMemoViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let playingVC = self.storyboard?.instantiateViewController(withIdentifier: "PlayingViewController") as? PlayingViewController else {return}
+        guard let playingVC = self.storyboard?.instantiateViewController(withIdentifier: PlayingViewController.identifier) as? PlayingViewController else {return}
         present(playingVC, animated: true)
     }
 }

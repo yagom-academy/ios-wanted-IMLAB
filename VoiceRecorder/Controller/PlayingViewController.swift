@@ -9,6 +9,8 @@ import UIKit
 import AVFoundation
 
 class PlayingViewController: UIViewController {
+    
+    static let identifier: String = "PlayingViewController"
 
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var waveView: UIView!

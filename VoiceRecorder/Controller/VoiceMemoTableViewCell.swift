@@ -8,6 +8,8 @@
 import UIKit
 
 class VoiceMemoTableViewCell: UITableViewCell {
+    
+    static let identifier: String = "VoiceMemoTableViewCell"
 
     @IBOutlet weak var timelineLabel: UILabel!
     @IBOutlet weak var durationLabel: UILabel!
