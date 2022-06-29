@@ -1,0 +1,102 @@
+//
+//  PlayViewController.swift
+//  VoiceRecorder
+//
+//  Created by Bran on 2022/06/29.
+//
+
+import AVFoundation
+import UIKit
+
+class PlayViewController: UIViewController {
+
+  let playView = PlayView()
+  var audio: Audio?
+
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    setupView()
+    setupConstraints()
+    setupAudio()
+    setupButtonAction()
+  }
+
+  func setupView() {
+    view.backgroundColor = .white
+    playView.translatesAutoresizingMaskIntoConstraints = false
+    view.addSubview(playView)
+  }
+
+  func setupConstraints() {
+    NSLayoutConstraint.activate([
+      playView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+      playView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+      playView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+      playView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+    ])
+  }
+
+  // MARK: - Test를 위한 Sample Data 추가 상태
+  func setupAudio() {
+    guard
+      let fileURL = Bundle.main.url(
+        forResource: "Til I Hear'em Say (Instrumental) - NEFFEX",
+        withExtension: "mp3"
+      )
+    else {
+      print("음원없음")
+      return
+    }
+    audio = Audio(fileURL)
+  }
+
+  func setupButtonAction() {
+    playView.playButton.backButton.addTarget(
+      self,
+      action: #selector(backButtonclicked),
+      for: .touchUpInside
+    )
+    playView.playButton.playButton.addTarget(
+      self,
+      action: #selector(playButtonClicked),
+      for: .touchUpInside
+    )
+    playView.playButton.forwordButton.addTarget(
+      self,
+      action: #selector(forwardButtonClicked),
+      for: .touchUpInside
+    )
+  }
+
+  @objc
+  func playButtonClicked() {
+    print(#function)
+    guard let isplaying = audio?.isPlaying else { return }
+    if isplaying {
+      playView.playButton.playButton.setImage(
+        UIImage(systemName: "play.circle.fill"),
+        for: .normal
+      )
+    } else {
+      playView.playButton.playButton.setImage(
+        UIImage(systemName: "pause.circle.fill"),
+        for: .normal
+      )
+    }
+    audio?.playOrPause()
+  }
+
+  @objc
+  func backButtonclicked() {
+    guard audio != nil else { return }
+    audio?.skip(forwards: false)
+  }
+
+  @objc
+  func forwardButtonClicked() {
+    guard audio != nil else { return }
+    audio?.skip(forwards: true)
+  }
+
+
+}

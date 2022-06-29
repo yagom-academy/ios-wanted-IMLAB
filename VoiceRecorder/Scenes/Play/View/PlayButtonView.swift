@@ -32,7 +32,7 @@ class PlayButtonView: UIView {
   }
 
   private func setBuputton() {
-    var imageConfig = UIImage.SymbolConfiguration(pointSize: 35)
+    let imageConfig = UIImage.SymbolConfiguration(pointSize: 35)
 
     backButton.setImage(UIImage(systemName: "gobackward.5"), for: .normal)
     playButton.setImage(UIImage(systemName: "play.circle.fill"), for: .normal)
