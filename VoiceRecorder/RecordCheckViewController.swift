@@ -10,6 +10,23 @@ import AVFoundation
 
 class RecordCheckViewController: UIViewController {
     
+    var recordButton: UIButton = {
+        var button = UIButton()
+        //button.setImage(UIImage(named: "circle.fill"), for: .normal)
+        //button.tintColor = .systemRed
+        button.setTitle("record", for: .normal)
+        button.backgroundColor = .systemRed
+        return button
+    }()
+    
+    var playButton: UIButton = {
+        var button = UIButton()
+        //button.setImage(UIImage(named: "play"), for: .normal)
+        button.setTitle("play", for: .normal)
+        button.backgroundColor = .blue
+        return button
+    }()
+    
     private var audioRecorder: AVAudioRecorder?
     private lazy var recordURL: URL = {
         var documentsURL: URL = {
@@ -26,7 +43,9 @@ class RecordCheckViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .brown
+        setLayout()
         
+        recordButton.addTarget(self, action: #selector(control), for: .touchUpInside)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -39,6 +58,32 @@ class RecordCheckViewController: UIViewController {
             } else {
                 // 녹음 권한 거부
             }
+        }
+    }
+    
+    func setLayout() {
+        recordButton.translatesAutoresizingMaskIntoConstraints = false
+        playButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(recordButton)
+        view.addSubview(playButton)
+        
+        NSLayoutConstraint.activate([
+            recordButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            recordButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -30),
+            recordButton.widthAnchor.constraint(equalToConstant: 80),
+            recordButton.heightAnchor.constraint(equalToConstant: 80),
+            
+            playButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            playButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            playButton.widthAnchor.constraint(equalToConstant: 60),
+            playButton.heightAnchor.constraint(equalToConstant: 60)
+        ])
+    }
+    
+    func recordButtonToggle() {
+        DispatchQueue.main.async {
+            self.playButton.isEnabled.toggle()
         }
     }
     
@@ -67,6 +112,15 @@ extension RecordCheckViewController {
         }
     }
     
+    /// 녹음 시작 & 정지 컨트롤
+    @objc private func control() {
+        
+    }
+    
+}
+
+extension RecordCheckViewController: AVAudioRecorderDelegate {
+    
     /// AVAudioRecorder 초기화
     private func configure() {
         let recorderSettings: [String: Any] = [
@@ -81,8 +135,4 @@ extension RecordCheckViewController {
         audioRecorder?.isMeteringEnabled = true
         audioRecorder?.prepareToRecord()
     }
-}
-
-extension RecordCheckViewController: AVAudioRecorderDelegate {
-    
 }
