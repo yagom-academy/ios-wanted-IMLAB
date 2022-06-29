@@ -14,11 +14,21 @@ class VoiceRecorderListTableViewController: UITableViewController {
         return addButton
     }()
     
-    let recordVoiceListViewModel = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    let firebaseStorageManger = FirebaseStorageManager()
+    var voiceRecordListViewModel : VoiceRecordListViewModel = VoiceRecordListViewModel(voiceRecordList: [])
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setUp()
+        firebaseStorageManger.fetchRecordList { result in
+            if let result = result{
+                self.voiceRecordListViewModel = VoiceRecordListViewModel(voiceRecordList: result)
+                print(self.voiceRecordListViewModel.voiceRecordList)
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
+        }
     }
 
     func setUp() {
@@ -48,15 +58,15 @@ class VoiceRecorderListTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return recordVoiceListViewModel.count
+        return self.voiceRecordListViewModel.numOfList()
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let voiceRecodeFile = voiceRecordListViewModel.ListAtIndex(index: indexPath.row)
         guard let cell = tableView.dequeueReusableCell(withIdentifier: VoiceRecordTableViewCell.g_identifier, for: indexPath) as? VoiceRecordTableViewCell else {
             fatalError()
         }
-        cell.createVoiceRecordDateLable.text = "hello"
-        cell.voiceRecordLengthLabel.text = "hello"
+        cell.createVoiceRecordDateLable.text = voiceRecodeFile.fileName
         return cell
     }
     
@@ -68,5 +78,6 @@ class VoiceRecorderListTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.performSegue(withIdentifier: "PlayVoice", sender: self)
+        print(voiceRecordListViewModel.ListAtIndex(index: indexPath.row))
     }
 }
