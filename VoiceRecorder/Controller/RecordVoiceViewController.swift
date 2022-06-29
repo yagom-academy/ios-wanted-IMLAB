@@ -93,7 +93,8 @@ class RecordVoiceViewController: UIViewController {
         progressSlider.tintColor = .blue
         progressSlider.value = 0.5
         progressTimeLabel.text = "00:00:00"
-        record_start_stop_button.setImage(UIImage(systemName: "play.fill"), for: .normal)
+        record_start_stop_button.setImage(UIImage(systemName: "circle.fill"), for: .normal)
+        record_start_stop_button.tintColor = .red
     }
 
 }
