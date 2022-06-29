@@ -39,4 +39,8 @@ struct RecorderViewModel{
         self.recorder?.stop()
         // 파일 업로드
     }
+    
+    func isRecording() -> Bool {
+        self.recorder?.isRecording ?? false
+    }
 }
