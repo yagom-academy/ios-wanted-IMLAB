@@ -10,19 +10,17 @@ import AVFoundation
 
 class RecordCheckViewController: UIViewController {
     
+    var isStartRecording: Bool = false
     var recordButton: UIButton = {
         var button = UIButton()
-        //button.setImage(UIImage(named: "circle.fill"), for: .normal)
-        //button.tintColor = .systemRed
-        button.setTitle("record", for: .normal)
-        button.backgroundColor = .systemRed
+        button.setImage(UIImage(systemName: "circle.fill"), for: .normal)
+        button.tintColor = .systemRed
         return button
     }()
     
     var playButton: UIButton = {
         var button = UIButton()
-        //button.setImage(UIImage(named: "play"), for: .normal)
-        button.setTitle("play", for: .normal)
+        button.setImage(UIImage(systemName: "play"), for: .normal)
         button.backgroundColor = .blue
         return button
     }()
@@ -83,7 +81,8 @@ class RecordCheckViewController: UIViewController {
     
     func recordButtonToggle() {
         DispatchQueue.main.async {
-            self.playButton.isEnabled.toggle()
+            let image = self.isStartRecording ? UIImage(systemName: "square.circle") : UIImage(systemName: "circle.fill")
+            self.recordButton.setImage(image, for: .normal)
         }
     }
     
@@ -114,7 +113,13 @@ extension RecordCheckViewController {
     
     /// 녹음 시작 & 정지 컨트롤
     @objc private func control() {
+        isStartRecording = !isStartRecording
         
+        if isStartRecording { // 녹음 시작일 때
+            record()
+        } else { // 녹음 끝일 때
+            stop()
+        }
     }
     
     /// 녹음 시작
