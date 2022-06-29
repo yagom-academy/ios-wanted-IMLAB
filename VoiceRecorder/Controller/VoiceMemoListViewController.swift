@@ -4,14 +4,12 @@
 //
 
 import UIKit
-import FirebaseCore
-import FirebaseFirestore
 
 class VoiceMemoListViewController: UIViewController {
 
     @IBOutlet weak var recordFileListTableView: UITableView!
     
-    let db = Firestore.firestore()
+    var firebaseStorage : FirebaseStorage?
     
     var voiceMemoList: [RecordModel] = [
         RecordModel(recordFileName: "spring", recordTime: "03:00"),
@@ -21,13 +19,11 @@ class VoiceMemoListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        firebaseStorage = FirebaseStorage(firebaseStoreUpload: UploadRecordfile(), firebaseStoreDownload: DownloadRecordfile(), firebaseStoreDelete: DeleteRecordfile())
         recordFileListTableView.delegate = self
         recordFileListTableView.dataSource = self
         // Do any additional setup after loading the view.
     }
-
-
 }
 
 extension VoiceMemoListViewController : UITableViewDataSource {
@@ -41,8 +37,6 @@ extension VoiceMemoListViewController : UITableViewDataSource {
         cell.recordPlayTimeLabel.text = self.voiceMemoList[indexPath.row].recordTime
         return cell
     }
-    
-    
 }
 
 extension VoiceMemoListViewController : UITableViewDelegate {
