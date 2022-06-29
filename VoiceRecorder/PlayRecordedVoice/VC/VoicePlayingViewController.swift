@@ -42,6 +42,7 @@ class VoicePlayingViewController: UIViewController {
     
     private lazy var volumeSlider: UISlider = {
         var slider = UISlider()
+        slider.setValue(0.5, animated: true)
         slider.minimumValueImage = UIImage(systemName: "speaker")
         slider.maximumValueImage = UIImage(systemName: "speaker.wave.3")
         return slider
@@ -57,6 +58,7 @@ class VoicePlayingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureLayoutOfVoicePlayVC()
+        addViewsActionsToVC()
     }
     
     private func configureLayoutOfVoicePlayVC() {
@@ -136,8 +138,17 @@ class VoicePlayingViewController: UIViewController {
         soundManager = SoundManager()
         soundManager.delegate = self
     }
+    
+    func addViewsActionsToVC() {
+        volumeSlider.addTarget(self, action: #selector(changeVolumeValue), for: .valueChanged)
+    }
+    
+    @objc func changeVolumeValue() {
+        soundManager.player.volume = volumeSlider.value
+    }
 }
 
+// MARK: - Sound Control Button Delegate
 
 extension VoicePlayingViewController: SoundButtonActionDelegate {
     func playButtonTouchUpinside(sender: UIButton) {
@@ -159,8 +170,11 @@ extension VoicePlayingViewController: SoundButtonActionDelegate {
     }
 }
 
+
+// MARK: - SoundeManager Delegate
+
 extension VoicePlayingViewController: ReceiveSoundManagerStatus {
     func observeAudioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        
+        playControlView.playButton.isSelected = false // 멘토님께 질문 - 접근 방식이 맞는지
     }
 }
