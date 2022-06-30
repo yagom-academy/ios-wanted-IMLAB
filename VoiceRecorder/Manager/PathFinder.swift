@@ -31,11 +31,26 @@ class PathFinder {
     }
     
     func getPath(fileName: String) -> URL {
-        let fileNameToAppend = "/\(fileName)"
+        let fileNameToAppend = "\(fileName)"
         var pathToReturn = basePath
         pathToReturn.appendPathComponent(fileNameToAppend)
         
         return pathToReturn
+    }
+    
+    func getPathWithTime() -> URL {
+        let timeNow = Date.now.formatted(
+            Date.FormatStyle()
+                .year(.defaultDigits)
+                .month(.twoDigits)
+                .day(.defaultDigits)
+                .hour(.twoDigits(amPM: .abbreviated))
+                .minute(.twoDigits)
+                .second(.twoDigits))
+        
+        let converted = timeNow.components(separatedBy: "/").joined(separator: "_")
+        
+        return getPath(fileName: converted)
     }
     
 }
