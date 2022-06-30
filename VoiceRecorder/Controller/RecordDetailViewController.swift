@@ -149,7 +149,7 @@ class RecordDetailViewController: UIViewController {
     }
     
     func playSound() {
-        if !(player?.isPlaying == true) {
+        if player?.isPlaying == false {
             player?.play()
             playButton.setImage(pauseButtonImage, for: .normal)
         }
