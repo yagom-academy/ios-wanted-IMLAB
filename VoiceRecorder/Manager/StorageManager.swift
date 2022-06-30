@@ -8,8 +8,11 @@
 import Foundation
 import FirebaseStorage
 
-struct StorageManager {
+class StorageManager {
+    static let shared = StorageManager()
     private let storage = Storage.storage()
+    
+    private init() {}
     
     func upload(data: Data, fileName: String, completion: @escaping (Result<Void, Error>) -> Void) {
         let storageRef = storage.reference()
@@ -44,7 +47,8 @@ struct StorageManager {
                         completion(.success(model))
                         return
                     }
-                }}
+                }
+                }
             }
         }
     }
@@ -62,7 +66,5 @@ struct StorageManager {
                 return
             }
         }
-        
     }
-    
 }
