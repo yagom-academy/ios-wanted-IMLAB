@@ -8,6 +8,12 @@
 import Foundation
 import AVFoundation
 
+protocol Recording {
+    func resumeRecording() throws
+    func pauseRecording()
+    func stopRecording()
+}
+
 class Recorder {
     enum RecordingState {
         case record
@@ -73,5 +79,42 @@ extension Recorder {
         //filerParams = AVAudioUnitEQFilterParameters()
         
         //filerParams.frequency
+    }
+    
+    /// 녹음을 실행
+    fileprivate func startRecording() throws {
+        let tapNode: AVAudioNode = mixerNode
+        let format = tapNode.outputFormat(forBus: 0)
+        
+        let documentURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let file = try AVAudioFile(forWriting: documentURL.appendingPathComponent("recording.caf"), settings: format.settings)
+        
+        tapNode.installTap(onBus: 0, bufferSize: 4096, format: format) { buffer, time in
+            try? file.write(from: buffer)
+        }
+        
+        // 엔진을 실행
+        try engine.start()
+        
+        state = .record
+    }
+}
+
+extension Recorder: Recording {
+    
+    func resumeRecording() throws {
+        try engine.start()
+        state = .record
+    }
+    
+    func pauseRecording() {
+        engine.pause()
+        state = .pause
+    }
+    
+    func stopRecording() {
+        mixerNode.removeTap(onBus: 0)
+        engine.stop()
+        state = .stop
     }
 }
