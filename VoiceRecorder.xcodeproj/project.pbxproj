@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9F02BE6C286D220C007F715D /* RecordVoiceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F02BE6B286D220C007F715D /* RecordVoiceManager.swift */; };
 		9F25234128698A9C008A9819 /* VoiceRecorderListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F25234028698A9C008A9819 /* VoiceRecorderListTableViewController.swift */; };
 		9F25234328699DB4008A9819 /* RecordVoiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F25234228699DB4008A9819 /* RecordVoiceViewController.swift */; };
 		9F99812B286C6D84004AE695 /* DrawWaveFormManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F99812A286C6D84004AE695 /* DrawWaveFormManager.swift */; };
@@ -31,6 +32,7 @@
 /* Begin PBXFileReference section */
 		3128A5B1A963EEDBE726C8EB /* Pods-VoiceRecorder.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VoiceRecorder.release.xcconfig"; path = "Target Support Files/Pods-VoiceRecorder/Pods-VoiceRecorder.release.xcconfig"; sourceTree = "<group>"; };
 		7E7122FD536312EB0F65E070 /* Pods-VoiceRecorder.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VoiceRecorder.debug.xcconfig"; path = "Target Support Files/Pods-VoiceRecorder/Pods-VoiceRecorder.debug.xcconfig"; sourceTree = "<group>"; };
+		9F02BE6B286D220C007F715D /* RecordVoiceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordVoiceManager.swift; sourceTree = "<group>"; };
 		9F25234028698A9C008A9819 /* VoiceRecorderListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRecorderListTableViewController.swift; sourceTree = "<group>"; };
 		9F25234228699DB4008A9819 /* RecordVoiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordVoiceViewController.swift; sourceTree = "<group>"; };
 		9F99812A286C6D84004AE695 /* DrawWaveFormManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawWaveFormManager.swift; sourceTree = "<group>"; };
@@ -91,6 +93,7 @@
 				C730AA96286BEAE80004D11C /* FirebaseStorageManager.swift */,
 				9F99812A286C6D84004AE695 /* DrawWaveFormManager.swift */,
 				C730AAA7286C702B0004D11C /* PlayVoiceManager.swift */,
+				9F02BE6B286D220C007F715D /* RecordVoiceManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -292,6 +295,7 @@
 				C730AAA0286BF5400004D11C /* VoiceRecordViewModel.swift in Sources */,
 				C77F4C2F2869A56500B2646E /* PlayVoiceViewController.swift in Sources */,
 				C730AAA4286C3F820004D11C /* PlayVoiceViewModel.swift in Sources */,
+				9F02BE6C286D220C007F715D /* RecordVoiceManager.swift in Sources */,
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
 				C730AAA8286C702B0004D11C /* PlayVoiceManager.swift in Sources */,
 				C730AA9E286BF5190004D11C /* VoiceRecordListViewModel.swift in Sources */,
