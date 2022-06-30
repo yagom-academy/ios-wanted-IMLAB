@@ -15,8 +15,9 @@
 		DF6408D1286C23DA00567DAC /* AudioInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6408D0286C23DA00567DAC /* AudioInformation.swift */; };
 		DF6408E6286D63F300567DAC /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = DF6408E5286D63F300567DAC /* FirebaseStorage */; };
 		DF6408E8286D63F300567DAC /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = DF6408E7286D63F300567DAC /* FirebaseStorageCombine-Community */; };
+		DF6408EC286D651400567DAC /* FirebaseRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6408EB286D651400567DAC /* FirebaseRepository.swift */; };
 		EC4C064A286D3BC200F311FC /* AudioURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4C0649286D3BC200F311FC /* AudioURL.swift */; };
-		EC4C064E286D42EE00F311FC /* FirebaseRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4C064D286D42EE00F311FC /* FirebaseRepository.swift */; };
+		EC4C064E286D42EE00F311FC /* FirebaseRepositoryInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4C064D286D42EE00F311FC /* FirebaseRepositoryInterface.swift */; };
 		EC4C0651286D433300F311FC /* FirebaseUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4C0650286D433300F311FC /* FirebaseUseCase.swift */; };
 		ECB8A5DE286BECF200B1D363 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB8A5DD286BECF200B1D363 /* BaseViewController.swift */; };
 		ECB8A5E0286BED1B00B1D363 /* ViewPresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB8A5DF286BED1B00B1D363 /* ViewPresentable.swift */; };
@@ -37,8 +38,9 @@
 		DE15E66728604279003DD2F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DE15E66928604279003DD2F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DF6408D0286C23DA00567DAC /* AudioInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioInformation.swift; sourceTree = "<group>"; };
+		DF6408EB286D651400567DAC /* FirebaseRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseRepository.swift; sourceTree = "<group>"; };
 		EC4C0649286D3BC200F311FC /* AudioURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioURL.swift; sourceTree = "<group>"; };
-		EC4C064D286D42EE00F311FC /* FirebaseRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseRepository.swift; sourceTree = "<group>"; };
+		EC4C064D286D42EE00F311FC /* FirebaseRepositoryInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseRepositoryInterface.swift; sourceTree = "<group>"; };
 		EC4C0650286D433300F311FC /* FirebaseUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseUseCase.swift; sourceTree = "<group>"; };
 		ECB8A5DD286BECF200B1D363 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		ECB8A5DF286BED1B00B1D363 /* ViewPresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewPresentable.swift; sourceTree = "<group>"; };
@@ -82,6 +84,7 @@
 		DE15E65A28604278003DD2F5 /* VoiceRecorder */ = {
 			isa = PBXGroup;
 			children = (
+				DF6408E9286D64E600567DAC /* Data */,
 				DF6408CC286C234700567DAC /* Domain */,
 				ECB8A5E1286BED5700B1D363 /* Presentation */,
 				ECB8A5DA286BECDD00B1D363 /* Util */,
@@ -112,6 +115,22 @@
 			path = Entity;
 			sourceTree = "<group>";
 		};
+		DF6408E9286D64E600567DAC /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				DF6408EA286D64E900567DAC /* Repository */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		DF6408EA286D64E900567DAC /* Repository */ = {
+			isa = PBXGroup;
+			children = (
+				DF6408EB286D651400567DAC /* FirebaseRepository.swift */,
+			);
+			path = Repository;
+			sourceTree = "<group>";
+		};
 		EC4C064B286D426100F311FC /* Inteface */ = {
 			isa = PBXGroup;
 			children = (
@@ -123,7 +142,7 @@
 		EC4C064C286D42DD00F311FC /* Repository */ = {
 			isa = PBXGroup;
 			children = (
-				EC4C064D286D42EE00F311FC /* FirebaseRepository.swift */,
+				EC4C064D286D42EE00F311FC /* FirebaseRepositoryInterface.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -298,11 +317,12 @@
 				ECB8A5EB286BED8900B1D363 /* PlayViewController.swift in Sources */,
 				ECB8A5E0286BED1B00B1D363 /* ViewPresentable.swift in Sources */,
 				ECB8A5DE286BECF200B1D363 /* BaseViewController.swift in Sources */,
-				EC4C064E286D42EE00F311FC /* FirebaseRepository.swift in Sources */,
+				EC4C064E286D42EE00F311FC /* FirebaseRepositoryInterface.swift in Sources */,
 				ECB8A5E9286BED8200B1D363 /* RecordingViewController.swift in Sources */,
 				ECB8A5F1286BED9D00B1D363 /* HomeView.swift in Sources */,
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
 				EC4C064A286D3BC200F311FC /* AudioURL.swift in Sources */,
+				DF6408EC286D651400567DAC /* FirebaseRepository.swift in Sources */,
 				EC4C0651286D433300F311FC /* FirebaseUseCase.swift in Sources */,
 				ECB8A5EF286BED9800B1D363 /* RecordingView.swift in Sources */,
 				ECB8A5ED286BED8F00B1D363 /* PlayView.swift in Sources */,
