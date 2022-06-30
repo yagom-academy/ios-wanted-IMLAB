@@ -10,6 +10,7 @@ import UIKit
 class RecordVoiceViewController: UIViewController {
 
     var recordVoiceManager = RecordVoiceManager()
+    var drawWaveFormManager = DrawWaveFormManager()
         
     let waveFormView : UIView = {
         let waveFormView = UIView()
@@ -54,6 +55,7 @@ class RecordVoiceViewController: UIViewController {
             print("recording stop")
         } else {
             recordVoiceManager.startRecording()
+            drawWaveFormManager.startDrawing(of: recordVoiceManager.recorder!, in: waveFormView)
             record_start_stop_button.setImage(UIImage(systemName: "stop.fill"), for: .normal)
             record_start_stop_button.tintColor = .black
             print("recording start")
