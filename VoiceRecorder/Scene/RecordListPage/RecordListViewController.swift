@@ -16,7 +16,7 @@ class RecordListViewController: UIViewController {
         attribute()
         layout()
         setRefresh()
-        RecordNetworkManager().saveRecord(filename: "bb")
+//        RecordNetworkManager().saveRecord(filename: "bb")
     }
     
     required init?(coder: NSCoder) {
@@ -110,6 +110,8 @@ extension RecordListViewController: UITableViewDataSource, UITableViewDelegate {
         
         let data = viewModel.getCellData(indexPath)
         let vc = PlayerViewController()
+        vc.setData(data)
+        
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }

@@ -9,6 +9,7 @@ import UIKit
 
 class PlayerViewController: UIViewController {
     private var safearea: UILayoutGuide!
+    private let viewModel = PlayerViewModel()
 
     private let mainStackView = UIStackView()
     private let buttonStackView = UIStackView()
@@ -23,7 +24,6 @@ class PlayerViewController: UIViewController {
     private let forwardButton = UIButton()
     private let backwardButton = UIButton()
 
-    private var audioPlayer: PlayerManager!
     private var isPlaying = false
 
     private let sampleURL = URL(string: "https://firebasestorage.googleapis.com:443/v0/b/sampleapp-9e55d.appspot.com/o/audio%2F2022.06.27_18:05:55%2B11.m4a?alt=media&token=1a9cd60b-95cd-4a39-ad25-7adea9eebd19")
@@ -38,17 +38,23 @@ class PlayerViewController: UIViewController {
         configureButtonHandler()
 
         // 임시 플레이어
-        audioPlayer = PlayerManager(url: sampleURL!)
-
-        NotificationCenter.default.addObserver(self, selector: #selector(audioDidEnd(notification:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
+//        audioPlayer = PlayerManager(url: sampleURL!)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(audioDidEnd(notification:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
     }
 }
 
@@ -56,8 +62,8 @@ class PlayerViewController: UIViewController {
 
 extension PlayerViewController {
     private func attribute() {
-        self.title = "녹음파일 재생"
-        
+//        title = "녹음파일 재생"
+
         safearea = view.safeAreaLayoutGuide
 
         view.backgroundColor = .white
@@ -79,6 +85,7 @@ extension PlayerViewController {
         buttonStackView.distribution = .equalSpacing
 
         setPlayPauseButtonState()
+        playPauseButton.isEnabled = false
         playPauseButton.backgroundColor = .systemBlue.withAlphaComponent(0.3)
 
         forwardButton.setImage(UIImage(systemName: "goforward.5"), for: .normal)
@@ -164,29 +171,38 @@ extension PlayerViewController {
 
     // 재생, 일시정지 버튼
     @objc private func handlePlayPauseButton() {
-        if isPlaying {
-            audioPlayer.pausePlayer()
-        } else {
-            audioPlayer.startPlayer()
-        }
-        isPlaying.toggle()
+        isPlaying = viewModel.onTappedPlayPauseButton()
         setPlayPauseButtonState()
     }
 
     // -5초
     @objc private func handleBackwardButton() {
-        audioPlayer.seek(-)
+        viewModel.onTappedBackwardButton()
     }
 
     // +5초
     @objc private func handleForwardButton() {
-        audioPlayer.seek(+)
+        viewModel.onTappedForwardButton()
     }
 
-    // 재생 끝나면 플레이어, 버튼, 재생상태 초기화
+    // 재생상태 초기화
     @objc private func audioDidEnd(notification: NSNotification) {
-        audioPlayer.initPlayer()
+//        viewModel.setPlayerItem() // TODO: - 0초로 돌리기 (메소드 따로 만들어서)
         isPlaying.toggle()
         setPlayPauseButtonState()
+    }
+}
+
+extension PlayerViewController {
+    func setData(_ filename: String) {
+        viewModel.update(filename) {
+            let fileData = self.viewModel.getFileData()
+
+            self.title = fileData?.fileName ?? "no filename"
+
+            self.viewModel.setPlayerItem()
+
+            self.playPauseButton.isEnabled = true
+        }
     }
 }
