@@ -36,6 +36,7 @@ class VoiceMemoViewController: UIViewController {
     
     @IBAction func moveToRecordDetail(_ sender: UIBarButtonItem) {
         
+        
     }
     
     // MARK: - Methods
