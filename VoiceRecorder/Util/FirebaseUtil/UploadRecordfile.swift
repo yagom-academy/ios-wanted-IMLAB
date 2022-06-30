@@ -16,7 +16,7 @@ class UploadRecordfile : FirebaseStoreUpload {
         uploadMetadata.contentType = "audio/m4a"
         uploadMetadata.customMetadata = ["totalTime" : "\(totalTime)"]
         do {
-            let recordRef = storageRef.child("voiceRecords").child("\(fileName).m4a")
+            let recordRef = storageRef.child("voiceRecords").child("\(fileName)")
             let audioData = try Data(contentsOf: fileUrl)
             let uploadTask = recordRef.putData(audioData, metadata: uploadMetadata) { data, error in
                 if let error = error {

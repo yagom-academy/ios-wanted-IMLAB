@@ -9,17 +9,44 @@ class VoiceMemoListViewController: UIViewController {
 
     @IBOutlet weak var recordFileListTableView: UITableView!
     
-    var firebaseStorage = FirebaseStorage.shared
-    
-    var voiceMemoList: [RecordModel] = [
-        RecordModel(recordFileName: "spring", recordTime: "03:00"),
-        RecordModel(recordFileName: "summer", recordTime: "02:11"),
-        RecordModel(recordFileName: "winter", recordTime: "04:28")
-    ]
+    var voiceMemoList: [RecordModel] = [RecordModel]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        FirebaseStorage.shared.getFileList { result in
+            switch result {
+            case .success(let fileList) :
+                var count = 0
+                if fileList.count == 0 { return }
+                
+                for fileName in fileList {
+                    FirebaseStorage.shared.getFileMetaData(fileName: fileName) { result in
+                        switch result {
+                        case .success(let totalTime) :
+                            
+                            count += 1
+                            let index = fileName.firstIndex(of: "/") ?? fileName.startIndex
+                            let range = fileName.index(after: index)..<fileName.endIndex
+                            let filePath = String(fileName[range])
+                            
+                            self.voiceMemoList.append(RecordModel(recordFileName: String(filePath), recordTime: totalTime))
+                            if count == fileList.count {
+                                DispatchQueue.main.async {
+                                    self.recordFileListTableView.reloadData()
+                                }
+                            }
+                        case .failure(let error) :
+                            print(error.localizedDescription)
+                        }
+                    }
+                    
+                    
+                    
+                }
+            case .failure(let error) :
+                print(error.localizedDescription)
+            }
+        }
         recordFileListTableView.delegate = self
         recordFileListTableView.dataSource = self
     }
