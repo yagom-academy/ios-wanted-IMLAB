@@ -159,11 +159,11 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="goBackwardButton" destination="FaY-IW-oDw" id="hor-FS-9YN"/>
-                        <outlet property="goForwardButton" destination="1xa-eD-Y9T" id="9gs-7M-ONx"/>
-                        <outlet property="playButton" destination="WJj-Hx-Tya" id="bjy-Op-Gkg"/>
-                        <outlet property="recordTimeLabel" destination="Y8P-W7-Nca" id="0xk-gC-IFF"/>
-                        <outlet property="recordingButton" destination="8jP-wJ-9ig" id="dL7-bw-G99"/>
+                        <outlet property="goBackwardButton" destination="FaY-IW-oDw" id="iEO-zl-v0T"/>
+                        <outlet property="goForwardButton" destination="1xa-eD-Y9T" id="aFz-tK-jQz"/>
+                        <outlet property="playButton" destination="WJj-Hx-Tya" id="P91-gm-3qH"/>
+                        <outlet property="recordTimeLabel" destination="Y8P-W7-Nca" id="EBE-iG-18Q"/>
+                        <outlet property="recordingButton" destination="8jP-wJ-9ig" id="KmF-wy-kNF"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3Bz-rK-kMK" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
