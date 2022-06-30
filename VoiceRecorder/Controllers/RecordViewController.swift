@@ -13,6 +13,9 @@ protocol RecordViewControllerDelegate: AnyObject {
 
 class RecordViewController: UIViewController {
     
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var waveformView: UIView!
+    
     @IBOutlet weak var cutOffSlider: UISlider!
     @IBOutlet weak var recordTimeLabel: UILabel!
     
