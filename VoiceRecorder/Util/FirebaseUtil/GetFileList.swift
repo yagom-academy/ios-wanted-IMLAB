@@ -9,9 +9,7 @@ import Foundation
 import FirebaseStorage
 
 class GetFileList : FirebaseStoreFileList {
-    
-    func getFirebaseStoreFileList() -> [String] {
-        
+    func getFirebaseStoreFileList(handler: @escaping (Result<[String], Error>) -> ()) {
         var filePaths = [String]()
         let storageReference = Storage.storage().reference().child("voiceRecords")
         storageReference.listAll { result, error in
@@ -25,10 +23,8 @@ class GetFileList : FirebaseStoreFileList {
             for data in datas.items {
                 filePaths.append(data.fullPath)
             }
+            
+            handler(.success(filePaths))
         }
-        
-        return filePaths
     }
-    
-    
 }

@@ -41,8 +41,15 @@ class FirebaseStorage {
         deleteHandler.deleteOnTheFirebase(fileName: fileName)
     }
     
-    func getFileLset() -> [String] {
-        return getFileList.getFirebaseStoreFileList()
+    func getFileList(handler : @escaping (Result<[String], Error>) -> ()) {
+        getFileList.getFirebaseStoreFileList { result in
+            switch result {
+            case .success(let filePaths) :
+                handler(.success(filePaths))
+            case .failure(let error) :
+                print(error)
+            }
+        }
     }
 }
 

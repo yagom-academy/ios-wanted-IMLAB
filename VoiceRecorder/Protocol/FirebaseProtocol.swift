@@ -17,7 +17,7 @@ protocol FirebaseStoreDownload {
 }
 
 protocol FirebaseStoreFileList {
-    func getFirebaseStoreFileList() -> [String]
+    func getFirebaseStoreFileList(handler : @escaping (Result<[String] , Error>) -> ())
 }
 
 protocol FirebaseStoreDelete {

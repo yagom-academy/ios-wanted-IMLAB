@@ -11,9 +11,15 @@ import AVFoundation
 class AudioRecoderHandler {
     
     var audioRecorder = AVAudioRecorder()
-    let localFileURL = LocalFileHandler().localFileURL
-    let recordFileName = LocalFileHandler().localFileName
-    let recordSettings: [String: Any] = [
+    var localFileHandler : LocalFileProtocol
+    var updateTimeInterval : UpdateTimer
+    
+    init(handler : LocalFileProtocol, updateTimeInterval : UpdateTimer ){
+        self.localFileHandler = handler
+        self.updateTimeInterval = updateTimeInterval
+    }
+    
+    var recordSettings : [String: Any] = [
         AVFormatIDKey: NSNumber(value: kAudioFormatAppleLossless as UInt32),
         AVEncoderAudioQualityKey: AVAudioQuality.max.rawValue,
         AVEncoderBitRateKey: 320000,
@@ -23,7 +29,7 @@ class AudioRecoderHandler {
     
     func prepareToRecord() {
         do {
-            let recordFileURL = localFileURL.appendingPathComponent("\(recordFileName).m4a")
+            let recordFileURL = localFileHandler.localFileURL.appendingPathComponent("\(localFileHandler.localFileName).m4a")
             let audioRecorder = try AVAudioRecorder(url: recordFileURL, settings: recordSettings)
             self.audioRecorder = audioRecorder
             self.audioRecorder.prepareToRecord()
@@ -40,14 +46,11 @@ class AudioRecoderHandler {
     
     func stopRecord() {
         self.audioRecorder.stop()
-        let recordFileURL = localFileURL.appendingPathComponent("\(recordFileName).m4a")
-        UploadRecordfile().uploadToFirebase(fileUrl: recordFileURL, fileName: recordFileName)
+        let recordFileURL = localFileHandler.localFileURL.appendingPathComponent("\(localFileHandler.localFileName).m4a")
+        UploadRecordfile().uploadToFirebase(fileUrl: recordFileURL, fileName: localFileHandler.localFileName)
     }
     
     func updateTimer(_ time: TimeInterval) -> String {
-        let min = Int(time/60)
-        let sec = Int(time.truncatingRemainder(dividingBy: 60))
-        let strTime = String(format: "%02d:%02d", min, sec)
-        return strTime
+        return updateTimeInterval.updateTimer(time)
     }
 }
