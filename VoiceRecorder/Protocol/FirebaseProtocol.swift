@@ -9,7 +9,7 @@ import Foundation
 
 
 protocol FirebaseStoreUpload {
-    func uploadToFirebase(fileUrl:URL,fileName:String)
+    func uploadToFirebase(fileUrl:URL,fileName:String,totalTime: String)
 }
 
 protocol FirebaseStoreDownload {
@@ -22,6 +22,10 @@ protocol FirebaseStoreFileList {
 
 protocol FirebaseStoreDelete {
     func deleteOnTheFirebase(fileName:String)
+}
+
+protocol FirebaseStoreFileMetaData {
+    func getFirebaseStoreFileMetaData(fileName:String, handler: @escaping(Result<String, Error>)->())
 }
 
 

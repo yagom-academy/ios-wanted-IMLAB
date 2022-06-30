@@ -10,10 +10,11 @@ import FirebaseStorage
 
 class UploadRecordfile : FirebaseStoreUpload {
     
-    func uploadToFirebase(fileUrl: URL, fileName: String) {
+    func uploadToFirebase(fileUrl: URL, fileName: String, totalTime : String) {
         let storageRef = Storage.storage().reference()
         let uploadMetadata = StorageMetadata.init()
         uploadMetadata.contentType = "audio/m4a"
+        uploadMetadata.customMetadata = ["totalTime" : "\(totalTime)"]
         do {
             let recordRef = storageRef.child("voiceRecords").child("\(fileName).m4a")
             let audioData = try Data(contentsOf: fileUrl)
