@@ -66,6 +66,7 @@ class PlayVoiceViewController: UIViewController {
         setView()
         autolayOut()
         setUIText()
+        playVoiceManager.delegate = self
     }
     
     func setView(){
@@ -110,5 +111,11 @@ class PlayVoiceViewController: UIViewController {
     
     @objc func slideVolumeButton(_ sender : UISlider){
         playVoiceManager.setVolume(volume: sender.value)
+    }
+}
+
+extension PlayVoiceViewController : PlayVoiceDelegate{
+    func playEndTime() {
+        tapButton()
     }
 }

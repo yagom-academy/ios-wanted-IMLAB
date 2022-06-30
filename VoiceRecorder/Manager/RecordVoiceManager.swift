@@ -25,6 +25,7 @@ class RecordVoiceManager{
         do {
             try recorder = AVAudioRecorder(url: soundFileURL, settings: recordSettings)
             recorder?.prepareToRecord()
+            recorder?.isMeteringEnabled = true
         } catch {
             print("audioSession Error: \(error.localizedDescription)")
         }
@@ -37,9 +38,10 @@ class RecordVoiceManager{
     func stopRecording(completion : @escaping ()->Void) {
         self.recorder?.stop()
         // 파일 업로드
-        FirebaseStorageManager().uploadRecord {
-            completion()
-        }
+//        FirebaseStorageManager().uploadRecord {
+//            completion()
+//        }
+        // 당장은 서버에 업로드 되지 않게 처리(테스트 해봐야 하니까)
     }
     
     func isRecording() -> Bool {

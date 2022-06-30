@@ -5,12 +5,18 @@
 //  Created by JunHwan Kim on 2022/06/29.
 //
 
+protocol PlayVoiceDelegate{
+    func playEndTime()
+}
+
 import Foundation
 import AVFoundation
+import NotificationCenter
 
 class PlayVoiceManager{
     var player : AVPlayer!
     var isPlay = false
+    var delegate : PlayVoiceDelegate?
     
     init(url : URL){
         player = {
@@ -18,10 +24,11 @@ class PlayVoiceManager{
             let playerItem = AVPlayerItem(url: url)
             player.replaceCurrentItem(with: playerItem)
             player.volume = 0.5
-            print("player ready on")
             return player
         }()
+        NotificationCenter.default.addObserver(self, selector: #selector(playerDidFinishPlaying), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: player.currentItem)
     }
+    
     
     func playAudio(){
         isPlay = true
@@ -43,5 +50,10 @@ class PlayVoiceManager{
     
     func getVolume()->Float{
         return player.volume
+    }
+    
+    @objc func playerDidFinishPlaying(){
+        delegate?.playEndTime()
+        self.player.seek(to: CMTimeMakeWithSeconds(0, preferredTimescale: Int32(NSEC_PER_SEC)))
     }
 }
