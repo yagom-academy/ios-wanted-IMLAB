@@ -19,6 +19,9 @@
 		B7545785286AE33D00EFCDA2 /* UploadRecordfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7545784286AE33D00EFCDA2 /* UploadRecordfile.swift */; };
 		B7545787286AE34B00EFCDA2 /* DownloadRecordfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7545786286AE34B00EFCDA2 /* DownloadRecordfile.swift */; };
 		B7545789286AE35800EFCDA2 /* DeleteRecordfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7545788286AE35800EFCDA2 /* DeleteRecordfile.swift */; };
+		B78E6BE9286D4B53005AC140 /* LocalFileProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = B78E6BE8286D4B53005AC140 /* LocalFileProtocol.swift */; };
+		B78E6BED286D531F005AC140 /* TimerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = B78E6BEC286D531F005AC140 /* TimerProtocol.swift */; };
+		B78E6BEF286D53EE005AC140 /* UpdateTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = B78E6BEE286D53EE005AC140 /* UpdateTimeInterval.swift */; };
 		B7E274972869BA0300FBB977 /* FirebaseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E274962869BA0300FBB977 /* FirebaseStorage.swift */; };
 		B7E8082D286974C9005E35BC /* RecordFileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E8082C286974C9005E35BC /* RecordFileCell.swift */; };
 		DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65B28604278003DD2F5 /* AppDelegate.swift */; };
@@ -44,6 +47,9 @@
 		B7545784286AE33D00EFCDA2 /* UploadRecordfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadRecordfile.swift; sourceTree = "<group>"; };
 		B7545786286AE34B00EFCDA2 /* DownloadRecordfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadRecordfile.swift; sourceTree = "<group>"; };
 		B7545788286AE35800EFCDA2 /* DeleteRecordfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteRecordfile.swift; sourceTree = "<group>"; };
+		B78E6BE8286D4B53005AC140 /* LocalFileProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFileProtocol.swift; sourceTree = "<group>"; };
+		B78E6BEC286D531F005AC140 /* TimerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerProtocol.swift; sourceTree = "<group>"; };
+		B78E6BEE286D53EE005AC140 /* UpdateTimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateTimeInterval.swift; sourceTree = "<group>"; };
 		B7E274962869BA0300FBB977 /* FirebaseStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorage.swift; sourceTree = "<group>"; };
 		B7E8082C286974C9005E35BC /* RecordFileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordFileCell.swift; sourceTree = "<group>"; };
 		DE15E65828604278003DD2F5 /* VoiceRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -106,21 +112,40 @@
 			isa = PBXGroup;
 			children = (
 				B7545780286AC79800EFCDA2 /* FirebaseProtocol.swift */,
+				B78E6BE8286D4B53005AC140 /* LocalFileProtocol.swift */,
+				B78E6BEC286D531F005AC140 /* TimerProtocol.swift */,
 			);
 			path = Protocol;
+			sourceTree = "<group>";
+		};
+		B78E6BEA286D506C005AC140 /* FirebaseUtil */ = {
+			isa = PBXGroup;
+			children = (
+				B7545784286AE33D00EFCDA2 /* UploadRecordfile.swift */,
+				B7545786286AE34B00EFCDA2 /* DownloadRecordfile.swift */,
+				B7545788286AE35800EFCDA2 /* DeleteRecordfile.swift */,
+				B7202644286BEB2400466FBA /* GetFileList.swift */,
+			);
+			path = FirebaseUtil;
+			sourceTree = "<group>";
+		};
+		B78E6BEB286D5093005AC140 /* LocalFileUtil */ = {
+			isa = PBXGroup;
+			children = (
+				12BCEDB9286D36D7006C1783 /* LocalFileHandler.swift */,
+			);
+			path = LocalFileUtil;
 			sourceTree = "<group>";
 		};
 		B7E274952869B9CC00FBB977 /* Util */ = {
 			isa = PBXGroup;
 			children = (
 				B7E274962869BA0300FBB977 /* FirebaseStorage.swift */,
-				B7545784286AE33D00EFCDA2 /* UploadRecordfile.swift */,
-				B7545786286AE34B00EFCDA2 /* DownloadRecordfile.swift */,
-				B7545788286AE35800EFCDA2 /* DeleteRecordfile.swift */,
-				B7202644286BEB2400466FBA /* GetFileList.swift */,
-				12BCEDB9286D36D7006C1783 /* LocalFileHandler.swift */,
 				12BCEDC1286D3BEF006C1783 /* AudioRecorderHandler.swift */,
+				B78E6BEE286D53EE005AC140 /* UpdateTimeInterval.swift */,
 				12BCEDBF286D3AB3006C1783 /* UIViewExtension.swift */,
+				B78E6BEA286D506C005AC140 /* FirebaseUtil */,
+				B78E6BEB286D5093005AC140 /* LocalFileUtil */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -157,8 +182,8 @@
 				B754577F286AC20600EFCDA2 /* Protocol */,
 				B7E274952869B9CC00FBB977 /* Util */,
 				B7E8082B2869746B005E35BC /* Source */,
-				DE15E65B28604278003DD2F5 /* AppDelegate.swift */,
 				DE15E65D28604278003DD2F5 /* SceneDelegate.swift */,
+				DE15E65B28604278003DD2F5 /* AppDelegate.swift */,
 				12E1549128697D4800F7EA19 /* Model */,
 				12E1549328697D6C00F7EA19 /* View */,
 				12E1549228697D6500F7EA19 /* Controller */,
@@ -295,6 +320,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				DE15E66028604278003DD2F5 /* VoiceMemoListViewController.swift in Sources */,
+				B78E6BE9286D4B53005AC140 /* LocalFileProtocol.swift in Sources */,
+				B78E6BED286D531F005AC140 /* TimerProtocol.swift in Sources */,
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
 				B7E8082D286974C9005E35BC /* RecordFileCell.swift in Sources */,
 				B7545789286AE35800EFCDA2 /* DeleteRecordfile.swift in Sources */,
@@ -309,6 +336,7 @@
 				DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */,
 				12BCEDC2286D3BEF006C1783 /* AudioRecorderHandler.swift in Sources */,
 				12BCEDBA286D36D7006C1783 /* LocalFileHandler.swift in Sources */,
+				B78E6BEF286D53EE005AC140 /* UpdateTimeInterval.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

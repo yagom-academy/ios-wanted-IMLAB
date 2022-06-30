@@ -19,7 +19,7 @@ class RecordingViewController: UIViewController {
     var inRecordMode = true
     var inPlayMode = true
     
-    let audioRecorderHandler = AudioRecoderHandler()
+    let audioRecorderHandler = AudioRecoderHandler(handler: LocalFileHandler(), updateTimeInterval: UpdateTimeInterval())
     
     override func viewDidLoad() {
         super.viewDidLoad()
