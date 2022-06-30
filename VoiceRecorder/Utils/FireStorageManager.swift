@@ -21,7 +21,9 @@ class FireStorageManager {
         enum contentType {
             static let audio: String = ".m4a"
         }
-        static var fileFullName: String = "recording\(Path.fileName)"
+        static var fileFullName: String {
+            return ("recording\(Path.fileName)")
+        }
         
     }
     
