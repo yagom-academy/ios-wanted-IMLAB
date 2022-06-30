@@ -9,8 +9,8 @@ import UIKit
 
 class RecordVoiceViewController: UIViewController {
 
-    var recordVoiceManager = RecordVoiceManager()
-    var drawWaveFormManager = DrawWaveFormManager()
+    var recordVoiceManager : RecordVoiceManager!
+    var drawWaveFormManager : DrawWaveFormManager!
         
     let waveFormView : UIView = {
         let waveFormView = UIView()
@@ -43,13 +43,14 @@ class RecordVoiceViewController: UIViewController {
     let record_start_stop_button : UIButton = {
         let record_start_stop_button = UIButton()
         record_start_stop_button.translatesAutoresizingMaskIntoConstraints = false
-        record_start_stop_button.addTarget(self, action: #selector(tab_record_start_stop_Button), for: .touchDown)
+        record_start_stop_button.addTarget(self, action: #selector(tab_record_start_stop_Button), for: .touchUpInside)
         return record_start_stop_button
     }()
     
     @objc func tab_record_start_stop_Button() {
         if recordVoiceManager.isRecording() {
             recordVoiceManager.stopRecording()
+            drawWaveFormManager.stopDrawing()
             record_start_stop_button.setImage(UIImage(systemName: "circle.fill"), for: .normal)
             record_start_stop_button.tintColor = .red
             print("recording stop")

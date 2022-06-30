@@ -19,6 +19,10 @@ class DrawWaveFormManager{
     private var start : CGPoint!
     
     func prepareDrawing(in view : UIView){
+        if pencil != nil && waveLayer != nil {
+            pencil.removeAllPoints()
+            waveLayer.removeFromSuperlayer()
+        }
         pencil = UIBezierPath(rect: view.bounds)
         firstPoint = CGPoint(x: 6, y: (view.bounds.midY))
         jump = (view.bounds.width - (firstPoint.x * 2))/200
@@ -35,9 +39,8 @@ class DrawWaveFormManager{
         })
     }
     
-    func stopDrawing(of recorder : AVAudioRecorder, in view : UIView){
-        
-        // 타이머를 종료하고
+    func stopDrawing(){
+        timer.invalidate()
         // view도 깨끗하게 만들고
     }
     
