@@ -17,7 +17,7 @@ struct LocalFileHandler : LocalFileProtocol {
         get {
             let date = NSDate()
             let formatter = DateFormatter()
-            formatter.dateFormat = "yyyy. MM. dd HH:mm:ss"
+            formatter.dateFormat = "yyyy_MM_dd_HH:mm:ss"
             let fileName = formatter.string(from: date as Date)
             return fileName
         }

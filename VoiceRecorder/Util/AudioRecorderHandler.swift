@@ -13,6 +13,8 @@ class AudioRecoderHandler {
     var audioRecorder = AVAudioRecorder()
     var localFileHandler : LocalFileProtocol
     var updateTimeInterval : UpdateTimer
+    var fileName : String?
+    
     
     init(handler : LocalFileProtocol, updateTimeInterval : UpdateTimer ){
         self.localFileHandler = handler
@@ -27,11 +29,47 @@ class AudioRecoderHandler {
         AVSampleRateKey: 441000.0
     ]
     
+    private func enableBuiltInMic() {
+        // Get the shared audio session.
+        let session = AVAudioSession.sharedInstance()
+        // Find the built-in microphone input.
+        guard let availableInputs = session.availableInputs,
+              let builtInMicInput = availableInputs.first(where: { $0.portType == .builtInMic }) else {
+            print("The device must have a built-in microphone.")
+            return
+        }
+        // Make the built-in microphone input the preferred input.
+        do {
+            try session.setPreferredInput(builtInMicInput)
+        } catch {
+            print("Unable to set the built-in mic as the preferred input.")
+        }
+    }
+    
     func prepareToRecord() {
         do {
-            let recordFileURL = localFileHandler.localFileURL.appendingPathComponent("\(localFileHandler.localFileName).m4a")
+            try AVAudioSession.sharedInstance().setCategory(.record, mode: .default, options: .allowBluetooth)
+            try AVAudioSession.sharedInstance().setActive(true)
+            
+            AVAudioSession.sharedInstance().requestRecordPermission { allowed in
+                DispatchQueue.main.async {
+                    if allowed {
+                        print("허용함")
+                    } else {
+                        //mic disabled!
+                    }
+                }
+            }
+            
+            enableBuiltInMic()
+            
+            fileName = "voiceRecords_\(localFileHandler.localFileName).m4a"
+            guard let fileName = fileName else { return }
+
+            let recordFileURL = localFileHandler.localFileURL.appendingPathComponent(fileName)
             let audioRecorder = try AVAudioRecorder(url: recordFileURL, settings: recordSettings)
             self.audioRecorder = audioRecorder
+            audioRecorder.isMeteringEnabled = true
             self.audioRecorder.prepareToRecord()
             print(recordFileURL)
         } catch let error {
@@ -46,8 +84,11 @@ class AudioRecoderHandler {
     
     func stopRecord() {
         self.audioRecorder.stop()
-        let recordFileURL = localFileHandler.localFileURL.appendingPathComponent("\(localFileHandler.localFileName).m4a")
-        UploadRecordfile().uploadToFirebase(fileUrl: recordFileURL, fileName: localFileHandler.localFileName)
+        guard let fileName = fileName else {
+            return
+        }
+        let recordFileURL = localFileHandler.localFileURL.appendingPathComponent(fileName)
+        UploadRecordfile().uploadToFirebase(fileUrl: recordFileURL, fileName: fileName)
     }
     
     func updateTimer(_ time: TimeInterval) -> String {
