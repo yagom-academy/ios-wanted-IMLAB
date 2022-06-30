@@ -19,7 +19,7 @@ class VoiceMemoListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        firebaseStorage = FirebaseStorage(firebaseStoreUpload: UploadRecordfile(), firebaseStoreDownload: DownloadRecordfile(), firebaseStoreDelete: DeleteRecordfile())
+        firebaseStorage = FirebaseStorage(UploadRecordfile(),DownloadRecordfile(), DeleteRecordfile(), GetFileList())
         recordFileListTableView.delegate = self
         recordFileListTableView.dataSource = self
     }
