@@ -23,9 +23,8 @@ class DrawWaveFormManager{
             pencil.removeAllPoints()
             waveLayer.removeFromSuperlayer()
         }
-        pencil = UIBezierPath(rect: view.bounds)
+        pencil = UIBezierPath()
         firstPoint = CGPoint(x: 0, y: (view.bounds.midY))
-        print("x: \(firstPoint.x)")
         jump = view.bounds.width/112
         waveLayer = CAShapeLayer()
         start = firstPoint
@@ -58,27 +57,27 @@ class DrawWaveFormManager{
         case ..<(-55):
             traitLength = minTraitLength
         case (-55)..<(-40):
-            traitLength = (maxTraitLength + minTraitLength) * (5/10) * CGFloat(input) / -65
-        case (-40)..<(-20):
             traitLength = (maxTraitLength + minTraitLength) * (7/10) * CGFloat(input) / -65
+        case (-40)..<(-20):
+            traitLength = (maxTraitLength + minTraitLength) * (8/10) * CGFloat(input) / -65
         case (-20)..<(-1):
             traitLength = (maxTraitLength + minTraitLength) * CGFloat(input) / -65
         default:
             traitLength = maxTraitLength
         }
         
-        print("input: \(input), traitLength: \(traitLength!)")
+//        print("input: \(input), traitLength: \(traitLength!)")
         
         pencil.move(to: start)
         pencil.addLine(to: CGPoint(x: start.x, y: start.y + traitLength))
-        
+
         pencil.move(to: start)
         pencil.addLine(to: CGPoint(x: start.x, y: start.y - traitLength))
         
         waveLayer.strokeColor = UIColor.red.cgColor
         
         waveLayer.path = pencil.cgPath
-        waveLayer.fillColor = UIColor.clear.cgColor
+        waveLayer.fillColor = UIColor.systemGray6.cgColor
         
         waveLayer.lineWidth = jump/10
         
