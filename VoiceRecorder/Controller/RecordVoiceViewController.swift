@@ -5,10 +5,14 @@
 //  Created by hayeon on 2022/06/27.
 //
 
-import UIKit
+protocol RecordVoiceDelegate{
+    func updateList()
+}
 
+import UIKit
 class RecordVoiceViewController: UIViewController {
 
+    var delegate : RecordVoiceDelegate?
     var recordVoiceManager = RecordVoiceManager()
     var drawWaveFormManager = DrawWaveFormManager()
         
@@ -49,7 +53,9 @@ class RecordVoiceViewController: UIViewController {
     
     @objc func tab_record_start_stop_Button() {
         if recordVoiceManager.isRecording() {
-            recordVoiceManager.stopRecording()
+            recordVoiceManager.stopRecording {
+                self.delegate?.updateList()
+            }
             drawWaveFormManager.stopDrawing()
             record_start_stop_button.setImage(UIImage(systemName: "circle.fill"), for: .normal)
             record_start_stop_button.tintColor = .red

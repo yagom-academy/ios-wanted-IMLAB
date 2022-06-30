@@ -9,7 +9,6 @@ import Foundation
 import AVFoundation
 
 class RecordVoiceManager{
-    
     var recorder : AVAudioRecorder?
     
     init(){
@@ -35,9 +34,12 @@ class RecordVoiceManager{
         self.recorder?.record()
     }
     
-    func stopRecording() {
+    func stopRecording(completion : @escaping ()->Void) {
         self.recorder?.stop()
         // 파일 업로드
+        FirebaseStorageManager().uploadRecord {
+            completion()
+        }
     }
     
     func isRecording() -> Bool {
