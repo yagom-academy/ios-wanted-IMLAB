@@ -25,6 +25,13 @@ class PlayViewController: UIViewController {
     private let pitchControl = AVAudioUnitTimePitch()
     private var audioFile: AVAudioFile?
     
+    private var audioSampleRate: Double = 0
+    private var audioLengthSeconds: Double = 0
+
+    private var seekFrame: AVAudioFramePosition = 0
+    private var currentPosition: AVAudioFramePosition = 0
+    private var audioLengthSamples: AVAudioFramePosition = 0
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
@@ -154,12 +161,14 @@ private extension PlayViewController {
     }
     
     @objc func touchBackwardButton() {
+        skip(forwards: false)
 //        let currentTime = self.avPlayer.currentTime()
 //        let time = CMTime(value: 5, timescale: 1)
 //        self.avPlayer.seek(to: currentTime - time)
     }
     
     @objc func touchForwardButton() {
+        skip(forwards: true)
 //        let currentTime = self.avPlayer.currentTime()
 //        let time = CMTime(value: 5, timescale: 1)
 //        self.avPlayer.seek(to: currentTime + time)
@@ -201,6 +210,14 @@ private extension PlayViewController {
         do {
             let file = try AVAudioFile(forReading: url)
             self.audioFile = file
+            
+            let format = file.processingFormat
+
+            audioLengthSamples = file.length
+            audioSampleRate = format.sampleRate
+            audioLengthSeconds = Double(audioLengthSamples) / audioSampleRate
+
+            
             self.configureAudioEngine()
         } catch {
             print("AVAudioFile Error: \(error.localizedDescription)")
@@ -232,5 +249,51 @@ private extension PlayViewController {
         } catch {
             print("AudioEngine Error: \(error.localizedDescription)")
         }
+    }
+    
+    func skip(forwards: Bool) {
+      let timeToSeek: Double
+
+      if forwards {
+        timeToSeek = 5
+      } else {
+        timeToSeek = -5
+      }
+
+      seek(to: timeToSeek)
+    }
+    
+    func seek(to time: Double) {
+      guard let audioFile = audioFile else {
+        return
+      }
+
+      let offset = AVAudioFramePosition(time * audioSampleRate)
+      seekFrame = currentPosition + offset
+      seekFrame = max(seekFrame, 0)
+      seekFrame = min(seekFrame, audioLengthSamples)
+      currentPosition = seekFrame
+
+      let wasPlaying = playerNode.isPlaying
+        playerNode.stop()
+
+      if currentPosition < audioLengthSamples {
+//        updateDisplay()
+//        needsFileScheduled = false
+
+        let frameCount = AVAudioFrameCount(audioLengthSamples - seekFrame)
+        playerNode.scheduleSegment(
+          audioFile,
+          startingFrame: seekFrame,
+          frameCount: frameCount,
+          at: nil
+        ) {
+//          self.needsFileScheduled = true
+        }
+
+        if wasPlaying {
+          playerNode.play()
+        }
+      }
     }
 }
