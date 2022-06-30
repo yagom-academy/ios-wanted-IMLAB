@@ -10,7 +10,7 @@ import AVFoundation
 
 class RecordVoiceManager{
     
-    private var recorder : AVAudioRecorder?
+    var recorder : AVAudioRecorder?
     
     init(){
         self.recorder = nil // 초기화
