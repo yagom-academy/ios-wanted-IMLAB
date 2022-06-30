@@ -10,16 +10,20 @@ import FirebaseStorage
 
 class FirebaseStorage {
     
+    static let shared = FirebaseStorage(UploadRecordfile(), DownloadRecordfile(), DeleteRecordfile(), GetFileList(), GetFileMetaData())
+    
     var uploadHandler : FirebaseStoreUpload
     var downloadHandler : FirebaseStoreDownload
     var deleteHandler : FirebaseStoreDelete
     var getFileList : FirebaseStoreFileList
+    var getFileMetatData : FirebaseStoreFileMetaData
     
-    init(_ firebaseStoreUpload : FirebaseStoreUpload,_ firebaseStoreDownload : FirebaseStoreDownload, _ firebaseStoreDelete : FirebaseStoreDelete,_ GetfirebaseStoreFileList : FirebaseStoreFileList) {
+    private init(_ firebaseStoreUpload : FirebaseStoreUpload,_ firebaseStoreDownload : FirebaseStoreDownload, _ firebaseStoreDelete : FirebaseStoreDelete,_ GetfirebaseStoreFileList : FirebaseStoreFileList,_ GetfirebaseStoreMetaData : FirebaseStoreFileMetaData) {
         self.uploadHandler = firebaseStoreUpload
         self.downloadHandler = firebaseStoreDownload
         self.deleteHandler = firebaseStoreDelete
         self.getFileList = GetfirebaseStoreFileList
+        self.getFileMetatData = GetfirebaseStoreMetaData
     }
     
     func uploadFile(fileUrl:URL,fileName:String) {

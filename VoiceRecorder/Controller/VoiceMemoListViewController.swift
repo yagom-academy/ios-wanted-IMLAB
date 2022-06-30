@@ -9,7 +9,7 @@ class VoiceMemoListViewController: UIViewController {
 
     @IBOutlet weak var recordFileListTableView: UITableView!
     
-    var firebaseStorage : FirebaseStorage?
+    var firebaseStorage = FirebaseStorage.shared
     
     var voiceMemoList: [RecordModel] = [
         RecordModel(recordFileName: "spring", recordTime: "03:00"),
@@ -19,7 +19,7 @@ class VoiceMemoListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        firebaseStorage = FirebaseStorage(UploadRecordfile(),DownloadRecordfile(), DeleteRecordfile(), GetFileList())
+        
         recordFileListTableView.delegate = self
         recordFileListTableView.dataSource = self
     }

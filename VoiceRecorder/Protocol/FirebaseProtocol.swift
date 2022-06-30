@@ -24,4 +24,8 @@ protocol FirebaseStoreDelete {
     func deleteOnTheFirebase(fileName:String)
 }
 
+protocol FirebaseStoreFileMetaData {
+    func getFirebaseStoreFileMetaData(fileName:String, handler: @escaping(Result<String, Error>)->())
+}
+
 
