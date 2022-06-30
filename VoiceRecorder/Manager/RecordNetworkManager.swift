@@ -5,17 +5,17 @@
 //  Created by 김기림 on 2022/06/29.
 //
 
-import Foundation
 import FirebaseStorage
+import Foundation
 
 struct RecordNetworkManager {
     let storageRef = Storage.storage().reference().child("record")
-    
-    func saveRecord(filename: String, completion: ((Bool) -> ())? = nil) {
+
+    func saveRecord(filename: String, completion: ((Bool) -> Void)? = nil) {
         let localRecordFileURL = Config.getRecordFilePath()
-        
+
         let recordRef = storageRef.child(filename)
-        
+
         do {
             let data = try Data(contentsOf: localRecordFileURL)
             DispatchQueue.global().async {
@@ -39,8 +39,8 @@ struct RecordNetworkManager {
             completion?(false)
         }
     }
-    
-    func getRecordData(filename: String, completion: ((Data?) -> ())? = nil) {
+
+    func getRecordData(filename: String, completion: ((Data?) -> Void)? = nil) {
         let recordRef = storageRef.child(filename)
         DispatchQueue.global().async {
             recordRef.getData(maxSize: 1000000) { data, error in
@@ -57,12 +57,11 @@ struct RecordNetworkManager {
                 }
             }
         }
-        
     }
-    
-    func getRecordMetaData(filename: String, completion: ((StorageMetadata?) -> ())? = nil) {
+
+    func getRecordMetaData(filename: String, completion: ((StorageMetadata?) -> Void)? = nil) {
         let recordRef = storageRef.child(filename)
-        
+
         DispatchQueue.global().async {
             recordRef.getMetadata { metadata, error in
                 if let error = error {
@@ -79,8 +78,8 @@ struct RecordNetworkManager {
             }
         }
     }
-    
-    func getRecordList(completion: (([String]?) -> ())? = nil) {
+
+    func getRecordList(completion: (([String]?) -> Void)? = nil) {
         DispatchQueue.global().async {
             storageRef.listAll { data, error in
                 if let error = error {
@@ -97,11 +96,13 @@ struct RecordNetworkManager {
                     }
                     return
                 }
-                //MARK: Prefix가 뭐지?
-                for prefix in data.prefixes {
-                    print(prefix)
+
+                // MARK: Prefix가 뭐지?
+
+                for _prefix in data.prefixes {
+                    print(_prefix)
                 }
-                
+
                 let result = data.items.map { $0.name }
                 DispatchQueue.main.async {
                     completion?(result)
@@ -109,8 +110,8 @@ struct RecordNetworkManager {
             }
         }
     }
-    
-    func deleteRecord(filename: String, completion: ((Bool) -> ())? = nil) {
+
+    func deleteRecord(filename: String, completion: ((Bool) -> Void)? = nil) {
         let recordRef = storageRef.child(filename)
         DispatchQueue.global().async {
             recordRef.delete { error in

@@ -50,7 +50,7 @@ class RecordListViewController: UIViewController {
     
     @objc private func presentRecordPage() {
         
-        let vc = ViewController() //TODO: Record 페이지 연결하기 [x]
+        let vc = RecordViewController()
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -109,7 +109,7 @@ extension RecordListViewController: UITableViewDataSource, UITableViewDelegate {
 //        }
         
         let data = viewModel.getCellData(indexPath)
-        let vc = ViewController() //TODO: 셀클릭시 열어줄 페이지 연결 [x]
+        let vc = PlayerViewController()
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }

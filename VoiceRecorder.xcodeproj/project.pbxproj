@@ -7,35 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-
 		04FF9394286BEEFB00EB34B6 /* RecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF9393286BEEFB00EB34B6 /* RecordViewController.swift */; };
 		04FF939D286C003500EB34B6 /* FrequencyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF939C286C003500EB34B6 /* FrequencyView.swift */; };
 		04FF939F286C004200EB34B6 /* CutoffFrequencyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF939E286C004200EB34B6 /* CutoffFrequencyView.swift */; };
 		04FF93A1286C004C00EB34B6 /* RecordAndPlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF93A0286C004C00EB34B6 /* RecordAndPlayView.swift */; };
 		04FF93A4286C15AA00EB34B6 /* UIButton+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF93A3286C15AA00EB34B6 /* UIButton+.swift */; };
-
 		04FF93A7286C270600EB34B6 /* RecordManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF93A6286C270600EB34B6 /* RecordManager.swift */; };
-
-
-
-
-
 		0D2E6BB2286BE0C5003D2EE1 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D2E6BB1286BE0C5003D2EE1 /* PlayerViewController.swift */; };
 		0D2E6BB4286C21B3003D2EE1 /* PlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D2E6BB3286C21B3003D2EE1 /* PlayerManager.swift */; };
-
-
-
-
-
+		0D8172E5286D69140009E8AA /* FileData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D8172E4286D69140009E8AA /* FileData.swift */; };
 		DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65B28604278003DD2F5 /* AppDelegate.swift */; };
 		DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65D28604278003DD2F5 /* SceneDelegate.swift */; };
-		DE15E66028604278003DD2F5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65F28604278003DD2F5 /* ViewController.swift */; };
 		DE15E66528604279003DD2F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66428604279003DD2F5 /* Assets.xcassets */; };
 		DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */; };
 		FEA53309286C3D18002E1169 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FEA53308286C3D18002E1169 /* GoogleService-Info.plist */; };
 		FEA5330C286C3D48002E1169 /* CustomNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA5330B286C3D48002E1169 /* CustomNavigationController.swift */; };
 		FEA53310286C3DC8002E1169 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA5330F286C3DC8002E1169 /* Config.swift */; };
-		FEEC697C286C3AB0002E020F /* RecordListVeiwController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEEC697B286C3AB0002E020F /* RecordListVeiwController.swift */; };
+		FEEC697C286C3AB0002E020F /* RecordListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEEC697B286C3AB0002E020F /* RecordListViewController.swift */; };
 		FEEC697E286C3ACF002E020F /* RecordListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEEC697D286C3ACF002E020F /* RecordListViewModel.swift */; };
 		FEEC6981286C3AEE002E020F /* RecordListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEEC6980286C3AEE002E020F /* RecordListCell.swift */; };
 		FEEC6984286C3B2D002E020F /* RecordNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEEC6983286C3B2D002E020F /* RecordNetworkManager.swift */; };
@@ -43,31 +31,25 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-
 		04FF9393286BEEFB00EB34B6 /* RecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewController.swift; sourceTree = "<group>"; };
 		04FF939C286C003500EB34B6 /* FrequencyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrequencyView.swift; sourceTree = "<group>"; };
 		04FF939E286C004200EB34B6 /* CutoffFrequencyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CutoffFrequencyView.swift; sourceTree = "<group>"; };
 		04FF93A0286C004C00EB34B6 /* RecordAndPlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordAndPlayView.swift; sourceTree = "<group>"; };
 		04FF93A3286C15AA00EB34B6 /* UIButton+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+.swift"; sourceTree = "<group>"; };
-
 		04FF93A6286C270600EB34B6 /* RecordManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordManager.swift; sourceTree = "<group>"; };
-
-
 		0D2E6BB1286BE0C5003D2EE1 /* PlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
 		0D2E6BB3286C21B3003D2EE1 /* PlayerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerManager.swift; sourceTree = "<group>"; };
-
-
+		0D8172E4286D69140009E8AA /* FileData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileData.swift; sourceTree = "<group>"; };
 		DE15E65828604278003DD2F5 /* VoiceRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE15E65B28604278003DD2F5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DE15E65D28604278003DD2F5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		DE15E65F28604278003DD2F5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		DE15E66428604279003DD2F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DE15E66728604279003DD2F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DE15E66928604279003DD2F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FEA53308286C3D18002E1169 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FEA5330B286C3D48002E1169 /* CustomNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationController.swift; sourceTree = "<group>"; };
 		FEA5330F286C3DC8002E1169 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
-		FEEC697B286C3AB0002E020F /* RecordListVeiwController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListVeiwController.swift; sourceTree = "<group>"; };
+		FEEC697B286C3AB0002E020F /* RecordListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListViewController.swift; sourceTree = "<group>"; };
 		FEEC697D286C3ACF002E020F /* RecordListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListViewModel.swift; sourceTree = "<group>"; };
 		FEEC6980286C3AEE002E020F /* RecordListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListCell.swift; sourceTree = "<group>"; };
 		FEEC6983286C3B2D002E020F /* RecordNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordNetworkManager.swift; sourceTree = "<group>"; };
@@ -85,25 +67,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		04FF9395286BF01600EB34B6 /* Record */ = {
+		04FF93A2286C126700EB34B6 /* RecordPage */ = {
 			isa = PBXGroup;
 			children = (
-				04FF93A8286C270E00EB34B6 /* Manager */,
-				04FF93A2286C126700EB34B6 /* Scene */,
-				04FF93A5286C15AF00EB34B6 /* Extension */,
-			);
-			path = Record;
-			sourceTree = "<group>";
-		};
-		04FF93A2286C126700EB34B6 /* Scene */ = {
-			isa = PBXGroup;
-			children = (
+				0D8172DF286D67F10009E8AA /* SubComponents */,
 				04FF9393286BEEFB00EB34B6 /* RecordViewController.swift */,
-				04FF939C286C003500EB34B6 /* FrequencyView.swift */,
-				04FF939E286C004200EB34B6 /* CutoffFrequencyView.swift */,
-				04FF93A0286C004C00EB34B6 /* RecordAndPlayView.swift */,
 			);
-			path = Scene;
+			path = RecordPage;
 			sourceTree = "<group>";
 		};
 		04FF93A5286C15AF00EB34B6 /* Extension */ = {
@@ -114,10 +84,59 @@
 			path = Extension;
 			sourceTree = "<group>";
 		};
-		04FF93A8286C270E00EB34B6 /* Manager */ = {
+		0D8172DD286D678D0009E8AA /* Scene */ = {
 			isa = PBXGroup;
 			children = (
+				FEA5330B286C3D48002E1169 /* CustomNavigationController.swift */,
+				0D8172E0286D68070009E8AA /* PlayerPage */,
+				04FF93A2286C126700EB34B6 /* RecordPage */,
+				0D8172DE286D67A50009E8AA /* RecordListPage */,
+			);
+			path = Scene;
+			sourceTree = "<group>";
+		};
+		0D8172DE286D67A50009E8AA /* RecordListPage */ = {
+			isa = PBXGroup;
+			children = (
+				FEEC697F286C3AD8002E020F /* SubComponents */,
+				FEEC697B286C3AB0002E020F /* RecordListViewController.swift */,
+				FEEC697D286C3ACF002E020F /* RecordListViewModel.swift */,
+			);
+			path = RecordListPage;
+			sourceTree = "<group>";
+		};
+		0D8172DF286D67F10009E8AA /* SubComponents */ = {
+			isa = PBXGroup;
+			children = (
+				04FF939C286C003500EB34B6 /* FrequencyView.swift */,
+				04FF939E286C004200EB34B6 /* CutoffFrequencyView.swift */,
+				04FF93A0286C004C00EB34B6 /* RecordAndPlayView.swift */,
+			);
+			path = SubComponents;
+			sourceTree = "<group>";
+		};
+		0D8172E0286D68070009E8AA /* PlayerPage */ = {
+			isa = PBXGroup;
+			children = (
+				0D2E6BB1286BE0C5003D2EE1 /* PlayerViewController.swift */,
+			);
+			path = PlayerPage;
+			sourceTree = "<group>";
+		};
+		0D8172E1286D68260009E8AA /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+				0D8172E4286D69140009E8AA /* FileData.swift */,
+			);
+			path = Entities;
+			sourceTree = "<group>";
+		};
+		0D8172E2286D68480009E8AA /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				FEEC6983286C3B2D002E020F /* RecordNetworkManager.swift */,
 				04FF93A6286C270600EB34B6 /* RecordManager.swift */,
+				0D2E6BB3286C21B3003D2EE1 /* PlayerManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -141,19 +160,13 @@
 		DE15E65A28604278003DD2F5 /* VoiceRecorder */ = {
 			isa = PBXGroup;
 			children = (
+				04FF93A5286C15AF00EB34B6 /* Extension */,
 				FEA5330D286C3DA9002E1169 /* Config */,
-				FEEC6982286C3B07002E020F /* Network */,
-				FEEC697A286C3A6A002E020F /* RecordListPage */,
+				0D8172E2286D68480009E8AA /* Manager */,
+				0D8172E1286D68260009E8AA /* Entities */,
+				0D8172DD286D678D0009E8AA /* Scene */,
 				DE15E65B28604278003DD2F5 /* AppDelegate.swift */,
 				DE15E65D28604278003DD2F5 /* SceneDelegate.swift */,
-				FEA5330B286C3D48002E1169 /* CustomNavigationController.swift */,
-				DE15E65F28604278003DD2F5 /* ViewController.swift */,
-
-				04FF9395286BF01600EB34B6 /* Record */,
-
-				0D2E6BB1286BE0C5003D2EE1 /* PlayerViewController.swift */,
-				0D2E6BB3286C21B3003D2EE1 /* PlayerManager.swift */,
-
 				DE15E66428604279003DD2F5 /* Assets.xcassets */,
 				DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */,
 				DE15E66928604279003DD2F5 /* Info.plist */,
@@ -170,30 +183,12 @@
 			path = Config;
 			sourceTree = "<group>";
 		};
-		FEEC697A286C3A6A002E020F /* RecordListPage */ = {
-			isa = PBXGroup;
-			children = (
-				FEEC697B286C3AB0002E020F /* RecordListVeiwController.swift */,
-				FEEC697D286C3ACF002E020F /* RecordListViewModel.swift */,
-				FEEC697F286C3AD8002E020F /* SubComponents */,
-			);
-			path = RecordListPage;
-			sourceTree = "<group>";
-		};
 		FEEC697F286C3AD8002E020F /* SubComponents */ = {
 			isa = PBXGroup;
 			children = (
 				FEEC6980286C3AEE002E020F /* RecordListCell.swift */,
 			);
 			path = SubComponents;
-			sourceTree = "<group>";
-		};
-		FEEC6982286C3B07002E020F /* Network */ = {
-			isa = PBXGroup;
-			children = (
-				FEEC6983286C3B2D002E020F /* RecordNetworkManager.swift */,
-			);
-			path = Network;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -273,29 +268,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-
 				04FF93A7286C270600EB34B6 /* RecordManager.swift in Sources */,
-
 				0D2E6BB4286C21B3003D2EE1 /* PlayerManager.swift in Sources */,
 				FEEC6981286C3AEE002E020F /* RecordListCell.swift in Sources */,
 				FEEC697E286C3ACF002E020F /* RecordListViewModel.swift in Sources */,
 				FEA53310286C3DC8002E1169 /* Config.swift in Sources */,
-
-				DE15E66028604278003DD2F5 /* ViewController.swift in Sources */,
 				0D2E6BB2286BE0C5003D2EE1 /* PlayerViewController.swift in Sources */,
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
-
 				04FF939F286C004200EB34B6 /* CutoffFrequencyView.swift in Sources */,
 				04FF939D286C003500EB34B6 /* FrequencyView.swift in Sources */,
 				04FF93A1286C004C00EB34B6 /* RecordAndPlayView.swift in Sources */,
 				04FF9394286BEEFB00EB34B6 /* RecordViewController.swift in Sources */,
+				0D8172E5286D69140009E8AA /* FileData.swift in Sources */,
 				04FF93A4286C15AA00EB34B6 /* UIButton+.swift in Sources */,
-
 				FEA5330C286C3D48002E1169 /* CustomNavigationController.swift in Sources */,
 				DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */,
 				FEEC6984286C3B2D002E020F /* RecordNetworkManager.swift in Sources */,
-				FEEC697C286C3AB0002E020F /* RecordListVeiwController.swift in Sources */,
-
+				FEEC697C286C3AB0002E020F /* RecordListViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

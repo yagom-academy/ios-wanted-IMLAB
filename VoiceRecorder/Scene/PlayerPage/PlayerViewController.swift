@@ -56,6 +56,8 @@ class PlayerViewController: UIViewController {
 
 extension PlayerViewController {
     private func attribute() {
+        self.title = "녹음파일 재생"
+        
         safearea = view.safeAreaLayoutGuide
 
         view.backgroundColor = .white
