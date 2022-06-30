@@ -1,10 +1,11 @@
 import Foundation
 import FirebaseStorage
 
+
 class FirebaseStorageManager{
     let storage = Storage.storage()
     
-    func uploadRecord(){
+    func uploadRecord(completion : @escaping ()->Void){
         print("upload file")
         //파일 위치
         let localFile = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("myRecoding.m4a")
@@ -26,6 +27,8 @@ class FirebaseStorageManager{
                 return
             }
             print("complete upload file \(meta)")
+            //스토리지에 저장 완료시 테이블 뷰 업데이트
+            completion()
         }
     }
     
@@ -50,6 +53,8 @@ class FirebaseStorageManager{
                             recordFileList.append(RecordFile(fileName: fileName, url: url))
                             count += 1
                             if count == resultCount{
+                                //가장 최근에 녹음한것이 위로 올라가도록 정렬
+                                recordFileList.sort {$0.fileName > $1.fileName}
                                 completion(recordFileList)
                             }
                         }

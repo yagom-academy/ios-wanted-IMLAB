@@ -21,6 +21,17 @@ class VoiceRecorderListTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUp()
+        updateTableViewList()
+    }
+
+    func setUp() {
+        navigationItem.title = "Voice Memos"
+        setAddBarButton()
+        setTableView()
+    }
+    
+    func updateTableViewList(){
+        print("Update tableView")
         firebaseStorageManger.fetchRecordList { result in
             if let result = result{
                 self.voiceRecordListViewModel = VoiceRecordListViewModel(voiceRecordList: result)
@@ -30,12 +41,6 @@ class VoiceRecorderListTableViewController: UITableViewController {
                 }
             }
         }
-    }
-
-    func setUp() {
-        navigationItem.title = "Voice Memos"
-        setAddBarButton()
-        setTableView()
     }
     
     func setAddBarButton() {
@@ -90,5 +95,16 @@ class VoiceRecorderListTableViewController: UITableViewController {
                 vc.playVoiceManager = PlayVoiceManager(url: selectRecord.url)
             }
         }
+        else if segue.identifier == "RecordVoice"{
+            let vc = segue.destination as! RecordVoiceViewController
+            vc.delegate = self
+        }
+    }
+}
+
+extension VoiceRecorderListTableViewController : RecordVoiceDelegate{
+    func updateList() {
+        print("Update List")
+        updateTableViewList()
     }
 }
