@@ -24,16 +24,16 @@ class DrawWaveFormManager{
             waveLayer.removeFromSuperlayer()
         }
         pencil = UIBezierPath(rect: view.bounds)
-        firstPoint = CGPoint(x: 6, y: (view.bounds.midY))
-        jump = (view.bounds.width - (firstPoint.x * 2))/200
+        firstPoint = CGPoint(x: 0, y: (view.bounds.midY))
+        print("x: \(firstPoint.x)")
+        jump = view.bounds.width/112
         waveLayer = CAShapeLayer()
         start = firstPoint
     }
     
     func startDrawing(of recorder : AVAudioRecorder, in view : UIView){
         prepareDrawing(in: view)
-        
-        timer = Timer.scheduledTimer(withTimeInterval: 0.02, repeats: true, block: { timer in
+        timer = Timer.scheduledTimer(withTimeInterval: 1/14, repeats: true, block: { timer in
             recorder.updateMeters() // 마이크 평균 및 최대 전력값을 업데이트
             self.drawWaveForm(recorder.averagePower(forChannel: 0), in: view)
         })
@@ -49,35 +49,38 @@ class DrawWaveFormManager{
     }
     
     func drawWaveForm(_ input : Float, in view : UIView) {
-        // 일단은 따라 써보자.
+
+        let viewHeight = view.bounds.height
+        let maxTraitLength = (viewHeight/2) - 10
+        let minTraitLength = 1/viewHeight
         
         switch input {
         case ..<(-55):
-            traitLength = 0.2
+            traitLength = minTraitLength
         case (-55)..<(-40):
-            traitLength = (CGFloat(input) + 56)/3
+            traitLength = (maxTraitLength + minTraitLength) * (5/10) * CGFloat(input) / -65
         case (-40)..<(-20):
-            traitLength = (CGFloat(input) + 41)/2
-        case (-20)..<(-10):
-            traitLength = (CGFloat(input) + 21)*5
+            traitLength = (maxTraitLength + minTraitLength) * (7/10) * CGFloat(input) / -65
+        case (-20)..<(-1):
+            traitLength = (maxTraitLength + minTraitLength) * CGFloat(input) / -65
         default:
-            traitLength = (CGFloat(input) + 20)*4
+            traitLength = maxTraitLength
         }
         
-        pencil.lineWidth = jump
+        print("input: \(input), traitLength: \(traitLength!)")
         
         pencil.move(to: start)
         pencil.addLine(to: CGPoint(x: start.x, y: start.y + traitLength))
         
         pencil.move(to: start)
-        pencil.addLine(to: CGPoint(x: start.x, y: start.y + traitLength))
+        pencil.addLine(to: CGPoint(x: start.x, y: start.y - traitLength))
         
-        waveLayer.strokeColor = UIColor.black.cgColor
+        waveLayer.strokeColor = UIColor.red.cgColor
         
         waveLayer.path = pencil.cgPath
         waveLayer.fillColor = UIColor.clear.cgColor
         
-        waveLayer.lineWidth = jump
+        waveLayer.lineWidth = jump/10
         
         view.layer.addSublayer(waveLayer)
         waveLayer.contentsCenter = view.frame
