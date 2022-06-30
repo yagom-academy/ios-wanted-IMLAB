@@ -36,6 +36,24 @@ class RecordDetailViewController: UIViewController {
         
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        if audioRecorder != nil {
+            // 오디오 중지
+            audioRecorder?.stop()
+            audioRecorder = nil
+            // 로컬에 생성된 파일 삭제
+            if let audioFileURL = audioFileURL {
+                do {
+                    print(audioFileURL)
+                    try FileManager.default.removeItem(at: audioFileURL)
+                } catch {
+                    print(error)
+                }
+            }
+        } else {
+            print("close")
+        }
+    }
     // MARK: - Methods
     
     func setupAudioRecorder() {
@@ -65,7 +83,8 @@ class RecordDetailViewController: UIViewController {
         
     func startRecording() {
         let fileName = DataFormatter.makeFileName()
-        FireStorageManager.RecordFileString.Path.fileName += fileName
+        FireStorageManager.RecordFileString.Path.fileName = fileName
+        FireStorageManager.RecordFileString.fileFullName = "recording\(FireStorageManager.RecordFileString.Path.fileName)" // 모달 닫고 다시 추가했을 때 전에 추가하려던 파일을 그대로 사용하는 문제가 있어서 일단 새로 할당하는 식으로 만들어 놓음 => enum에 있는 변수가 계속해서 할당이 되지않는느낌..?
         // 파일 생성
         guard let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {return}
         audioFileURL = fileURL.appendingPathComponent(FireStorageManager.RecordFileString.fileFullName)
@@ -139,5 +158,9 @@ class RecordDetailViewController: UIViewController {
 // MARK: - Extensions
 
 extension RecordDetailViewController: AVAudioRecorderDelegate {
+    
+}
+
+extension RecordDetailViewController: UIAdaptivePresentationControllerDelegate {
     
 }

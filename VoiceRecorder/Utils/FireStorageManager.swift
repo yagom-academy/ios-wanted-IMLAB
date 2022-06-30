@@ -21,7 +21,7 @@ class FireStorageManager {
         enum contentType {
             static let audio: String = ".m4a"
         }
-        static let fileFullName: String = "recording\(Path.fileName)"
+        static var fileFullName: String = "recording\(Path.fileName)"
         
     }
     
@@ -33,8 +33,10 @@ class FireStorageManager {
             return
         }
         let storageRef = storage.reference()
+        let metadata = StorageMetadata()
+        metadata.contentType = "audio/x-m4a"
         let fileRef = storageRef.child("\(RecordFileString.Ref.recordDir)\(RecordFileString.fileFullName)")
-        fileRef.putFile(from: url)
+        fileRef.putFile(from: url, metadata: metadata)
     }
     
     func fetchData(completion: @escaping ([StorageReference]) -> Void )  {
