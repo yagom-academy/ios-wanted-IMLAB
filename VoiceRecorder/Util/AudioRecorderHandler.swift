@@ -24,7 +24,6 @@ class AudioRecoderHandler {
     func prepareToRecord() {
         do {
             let recordFileURL = localFileURL.appendingPathComponent("\(recordFileName).m4a")
-            UploadRecordfile().uploadToFirebase(fileUrl: recordFileURL, fileName: recordFileName)
             let audioRecorder = try AVAudioRecorder(url: recordFileURL, settings: recordSettings)
             self.audioRecorder = audioRecorder
             self.audioRecorder.prepareToRecord()
@@ -41,6 +40,8 @@ class AudioRecoderHandler {
     
     func stopRecord() {
         self.audioRecorder.stop()
+        let recordFileURL = localFileURL.appendingPathComponent("\(recordFileName).m4a")
+        UploadRecordfile().uploadToFirebase(fileUrl: recordFileURL, fileName: recordFileName)
     }
     
     func updateTimer(_ time: TimeInterval) -> String {
