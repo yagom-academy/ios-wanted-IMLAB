@@ -116,50 +116,34 @@
                                     </button>
                                 </subviews>
                             </stackView>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PZq-Do-z5f">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tfq-CC-0oZ">
                                 <rect key="frame" x="16" y="64" width="382" height="150"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Fsp-D0-bGO">
-                                        <rect key="frame" x="0.0" y="0.0" width="382" height="150"/>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="382" id="ymj-BP-72n"/>
-                                        </constraints>
-                                    </view>
-                                </subviews>
+                                <color key="backgroundColor" systemColor="systemGray5Color"/>
                                 <constraints>
-                                    <constraint firstItem="Fsp-D0-bGO" firstAttribute="bottom" secondItem="bj2-Ni-IfO" secondAttribute="bottom" id="0zw-wd-AI7"/>
-                                    <constraint firstAttribute="bottom" secondItem="Fsp-D0-bGO" secondAttribute="bottom" id="4rQ-S8-Mog"/>
-                                    <constraint firstItem="Fsp-D0-bGO" firstAttribute="top" secondItem="jnx-P6-ppx" secondAttribute="top" id="Yie-AX-0pn"/>
-                                    <constraint firstItem="Fsp-D0-bGO" firstAttribute="leading" secondItem="bj2-Ni-IfO" secondAttribute="leading" constant="67" id="ZF7-mN-3MG"/>
-                                    <constraint firstItem="Fsp-D0-bGO" firstAttribute="trailing" secondItem="bj2-Ni-IfO" secondAttribute="trailing" id="aU8-r3-ORo"/>
-                                    <constraint firstItem="jnx-P6-ppx" firstAttribute="trailing" secondItem="Fsp-D0-bGO" secondAttribute="trailing" id="by7-Xw-xg6"/>
-                                    <constraint firstItem="Fsp-D0-bGO" firstAttribute="leading" secondItem="jnx-P6-ppx" secondAttribute="leading" id="hNa-K9-vmB"/>
-                                    <constraint firstItem="Fsp-D0-bGO" firstAttribute="top" secondItem="bj2-Ni-IfO" secondAttribute="top" constant="18" id="jsA-bz-wql"/>
-                                    <constraint firstItem="Fsp-D0-bGO" firstAttribute="height" secondItem="jnx-P6-ppx" secondAttribute="height" id="jxj-mb-Vhy"/>
-                                    <constraint firstAttribute="height" constant="150" id="lLU-Z9-YYd"/>
+                                    <constraint firstAttribute="height" constant="150" id="il3-i9-KfL"/>
                                 </constraints>
-                                <viewLayoutGuide key="contentLayoutGuide" id="bj2-Ni-IfO"/>
-                                <viewLayoutGuide key="frameLayoutGuide" id="jnx-P6-ppx"/>
-                            </scrollView>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isRound" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Iee-YG-Len"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="PZq-Do-z5f" firstAttribute="leading" secondItem="Iee-YG-Len" secondAttribute="leading" constant="16" id="8bi-c2-OWq"/>
                             <constraint firstItem="gRT-WD-I6Z" firstAttribute="top" secondItem="upv-Mu-e34" secondAttribute="bottom" constant="16" id="8yi-Mt-xaY"/>
+                            <constraint firstItem="tfq-CC-0oZ" firstAttribute="leading" secondItem="Iee-YG-Len" secondAttribute="leading" constant="16" id="Ayv-Y9-nZl"/>
                             <constraint firstItem="TI4-JT-Y4w" firstAttribute="top" secondItem="gRT-WD-I6Z" secondAttribute="bottom" constant="32" id="CUp-Aa-LWl"/>
                             <constraint firstItem="TI4-JT-Y4w" firstAttribute="leading" secondItem="Iee-YG-Len" secondAttribute="leading" constant="16" id="EZ1-Uj-v0D"/>
-                            <constraint firstItem="PZq-Do-z5f" firstAttribute="top" secondItem="Iee-YG-Len" secondAttribute="top" constant="20" id="NO3-dv-pHU"/>
+                            <constraint firstItem="96P-79-zEn" firstAttribute="top" secondItem="tfq-CC-0oZ" secondAttribute="bottom" constant="20" id="Gs8-1D-fmr"/>
+                            <constraint firstItem="Iee-YG-Len" firstAttribute="trailing" secondItem="tfq-CC-0oZ" secondAttribute="trailing" constant="16" id="Nf6-d8-dEO"/>
+                            <constraint firstItem="tfq-CC-0oZ" firstAttribute="top" secondItem="Iee-YG-Len" secondAttribute="top" constant="20" id="UPf-tL-ucj"/>
                             <constraint firstItem="gRT-WD-I6Z" firstAttribute="centerX" secondItem="upv-Mu-e34" secondAttribute="centerX" id="VOe-EI-DBW"/>
                             <constraint firstItem="Iee-YG-Len" firstAttribute="trailing" secondItem="upv-Mu-e34" secondAttribute="trailing" constant="16" id="Yhn-d8-vE0"/>
                             <constraint firstItem="upv-Mu-e34" firstAttribute="leading" secondItem="Iee-YG-Len" secondAttribute="leading" constant="16" id="Yro-mA-RP7"/>
                             <constraint firstItem="Iee-YG-Len" firstAttribute="trailing" secondItem="96P-79-zEn" secondAttribute="trailing" constant="16" id="c2t-Pr-V7X"/>
                             <constraint firstItem="upv-Mu-e34" firstAttribute="top" secondItem="96P-79-zEn" secondAttribute="bottom" constant="16" id="dGC-VA-RX6"/>
                             <constraint firstItem="TI4-JT-Y4w" firstAttribute="centerX" secondItem="pW1-cO-dEi" secondAttribute="centerX" id="fVQ-S4-EKb"/>
-                            <constraint firstItem="96P-79-zEn" firstAttribute="top" secondItem="PZq-Do-z5f" secondAttribute="bottom" constant="20" id="hoX-JD-Oy4"/>
                             <constraint firstItem="96P-79-zEn" firstAttribute="leading" secondItem="Iee-YG-Len" secondAttribute="leading" constant="16" id="l1a-wb-hqk"/>
-                            <constraint firstItem="Iee-YG-Len" firstAttribute="trailing" secondItem="PZq-Do-z5f" secondAttribute="trailing" constant="16" id="qHg-2K-78x"/>
                             <constraint firstItem="Iee-YG-Len" firstAttribute="trailing" secondItem="TI4-JT-Y4w" secondAttribute="trailing" constant="16" id="s0J-F0-lq3"/>
                         </constraints>
                     </view>
@@ -170,8 +154,6 @@
                         <outlet property="playForwardButton" destination="F2S-lW-VA6" id="JSZ-ae-C4a"/>
                         <outlet property="recordButton" destination="gBD-le-cBS" id="Rya-2X-Ztq"/>
                         <outlet property="recordTimeLabel" destination="gRT-WD-I6Z" id="CDW-mk-D5I"/>
-                        <outlet property="scrollView" destination="PZq-Do-z5f" id="a1o-1N-lpx"/>
-                        <outlet property="waveformView" destination="Fsp-D0-bGO" id="idp-sq-7tk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="c3y-ap-Y7R" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -311,6 +293,9 @@
         <image name="stop.fill" catalog="system" width="128" height="113"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray5Color">
+            <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemRedColor">
             <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
