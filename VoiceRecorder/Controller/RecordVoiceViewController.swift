@@ -9,8 +9,8 @@ import UIKit
 
 class RecordVoiceViewController: UIViewController {
 
-    var recordVoiceManager : RecordVoiceManager!
-    var drawWaveFormManager : DrawWaveFormManager!
+    var recordVoiceManager = RecordVoiceManager()
+    var drawWaveFormManager = DrawWaveFormManager()
         
     let waveFormView : UIView = {
         let waveFormView = UIView()
