@@ -10,13 +10,13 @@ import FirebaseStorage
 
 class GetFileMetaData : FirebaseStoreFileMetaData {
     func getFirebaseStoreFileMetaData(fileName: String, handler: @escaping (Result<String, Error>) -> ()) {
-        let storageReference = Storage.storage().reference().child("voiceRecords").child(fileName)
+        let storageReference = Storage.storage().reference().child("\(fileName)")
         storageReference.getMetadata { metadata, error in
             if let error = error {
                 print(error.localizedDescription)
             }
-            
-            
+            guard let totalTime = metadata?.customMetadata?["totalTime"] else { handler(.success("00:00")); return }
+            handler(.success(totalTime))
         }
         
     }
