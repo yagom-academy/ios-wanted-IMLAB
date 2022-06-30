@@ -74,4 +74,28 @@ class FirebaseStorageManager {
             completion(.success(true))
         }
     }
+    
+    func listAll() {
+        storageReference.listAll {
+            (result, error) in
+            
+            if let error = error {
+                print(error)
+                return
+            }
+            
+            guard let result = result else {
+                print("no result")
+                return
+            }
+            
+            for pre in result.prefixes {
+                print("pre:", pre)
+            }
+            
+            for item in result.items {
+                print("item:", item)
+                print(item.fullPath)
+            }
+        }
 }
