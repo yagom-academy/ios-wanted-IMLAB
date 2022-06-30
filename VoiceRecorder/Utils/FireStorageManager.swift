@@ -22,7 +22,6 @@ class FireStorageManager {
             static let audio: String = ".m4a"
         }
         static let fileFullName: String = "recording\(Path.fileName)"
-        
     }
     
     var items: [StorageReference] = []
