@@ -47,6 +47,7 @@ class PathFinder {
                 .hour(.twoDigits(amPM: .abbreviated))
                 .minute(.twoDigits)
                 .second(.twoDigits))
+        return timeNow
     }
     
     func getPathWithTime() -> URL {
