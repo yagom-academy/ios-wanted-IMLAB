@@ -115,7 +115,7 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
-                                            <action selector="recordingButtonTapped:" destination="X5L-vM-0v8" eventType="touchUpInside" id="KMo-ep-ArS"/>
+                                            <action selector="recordingButtonTapped:" destination="X5L-vM-0v8" eventType="touchUpInside" id="Ud8-Q7-axf"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FaY-IW-oDw">

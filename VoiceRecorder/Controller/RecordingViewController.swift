@@ -19,6 +19,8 @@ class RecordingViewController: UIViewController {
     var inRecordMode = true
     var inPlayMode = true
     
+    let audioRecorderHandler = AudioRecoderHandler()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.recordTimeLabel.text = "00:00"
@@ -32,4 +34,29 @@ class RecordingViewController: UIViewController {
         self.goBackwardButton.isEnabled = goBack
         self.goForwardButton.isEnabled = goForward
     }
+    
+    @IBAction func recordingButtonTapped(_ sender: UIButton) {
+        if inRecordMode {
+            sender.controlFlashAnimate(recordingMode: true)
+            self.playButton.isEnabled = false
+            audioRecorderHandler.startRecord()
+            self.progressTimer = Timer.scheduledTimer(timeInterval: 0.1,
+                                                      target: self,
+                                                      selector: #selector(updateRecordTime),
+                                                      userInfo: nil,
+                                                      repeats: true)
+            inRecordMode = !inRecordMode
+        } else {
+            sender.controlFlashAnimate(recordingMode: false)
+            self.playButton.isEnabled = true
+            audioRecorderHandler.stopRecord()
+            progressTimer.invalidate()
+            inRecordMode = !inRecordMode
+        }
+    }
+    
+    @objc func updateRecordTime() {
+        self.recordTimeLabel.text = audioRecorderHandler.updateTimer(audioRecorderHandler.audioRecorder.currentTime)
+    }
+    
 }
