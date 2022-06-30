@@ -103,9 +103,15 @@ class RecordViewController: UIViewController {
     
     @objc func update() {
         counter += 0.01
+        if let audioPlayer = audioPlayer {
+            if counter > audioPlayer.duration {
+                counter = audioPlayer.duration
+            }
+        }
         recordTimeLabel.text = "\(counter.toString)"
+        
         audioRecorder?.updateMeters()
-        writeWaves(audioRecorder!.averagePower(forChannel: 0), true)
+        //        writeWaves(audioRecorder!.averagePower(forChannel: 0), true)
     }
     
     @IBAction func didTapPlayBack5Button(_ sender: UIButton) {
@@ -122,14 +128,11 @@ class RecordViewController: UIViewController {
     
     @IBAction func didTapPlayPauseButton(_ sender: UIButton) {
         if isPlay {
+            progressTimer?.invalidate()
             sender.setImage(Icon.play.image, for: .normal)
             currentPlayTime = audioPlayer?.currentTime ?? 0.0
-            progressTimer?.invalidate()
             audioPlayer?.stop()
         } else {
-            sender.setImage(Icon.pauseFill.image, for: .normal)
-            playAudio()
-            
             progressTimer = Timer.scheduledTimer(
                 timeInterval: 0.01,
                 target: self,
@@ -137,6 +140,12 @@ class RecordViewController: UIViewController {
                 userInfo: nil,
                 repeats: true
             )
+            sender.setImage(Icon.pauseFill.image, for: .normal)
+            playAudio()
+            if currentPlayTime >= audioPlayer?.duration ?? 0.0 {
+                currentPlayTime = 0.0
+                counter = 0
+            }
             setupAudioPlayer()
         }
         isPlay = !isPlay
@@ -182,7 +191,7 @@ private extension RecordViewController {
     }
     
     func requestRecord() {
-        enableBuiltInMic()
+        //        enableBuiltInMic()
         recordingSession.requestRecordPermission({ allowed in
             DispatchQueue.main.async {
                 if allowed {
@@ -229,19 +238,19 @@ private extension RecordViewController {
         } else {
             scrollView.setContentOffset(CGPoint(x: 0.0, y: 0.0), animated: true)
         }
-
-
+        
+        
         if !bool {
-
+            
             start = firstPoint
-
+            
             if progressTimer != nil || audioRecorder != nil {
                 progressTimer?.invalidate()
                 audioRecorder?.stop()
             }
-
+            
         } else {
-
+            
             if input < -55 {
                 traitLength = 0.2
             } else if input < -40 && input > -55 {
@@ -254,35 +263,35 @@ private extension RecordViewController {
                 traitLength = (CGFloat(input) + 20) * 4
             }
         }
-
+        
         pencil.lineWidth = 4.0
-
+        
         pencil.move(to: start)
         pencil.addLine(to: CGPoint(x: start.x, y: start.y + (traitLength ?? 0.0)))
-
+        
         pencil.move(to: start)
         pencil.addLine(to: CGPoint(x: start.x, y: start.y - (traitLength ?? 0.0)))
-
+        
         waveLayer.strokeColor = UIColor.red.cgColor
-
+        
         waveLayer.path = pencil.cgPath
         waveLayer.fillColor = UIColor.clear.cgColor
-
-//        waveLayer.lineWidth = 4.0
-
+        
+        //        waveLayer.lineWidth = 4.0
+        
         waveformView.layer.addSublayer(waveLayer)
         waveLayer.contentsCenter = waveformView.frame
         waveformView.setNeedsDisplay()
-
-//        if start.x + 10.0 >= waveformView.frame.maxX {
-//            waveformView.removeConstraints(waveformView.constraints)
-//            waveformView.translatesAutoresizingMaskIntoConstraints = false
-//            waveformView.widthAnchor.constraint(equalToConstant: waveformView.frame.width + width).isActive = true
-//            waveformView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
-//            waveformView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
-//            waveformView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
-//        }
-
+        
+        //        if start.x + 10.0 >= waveformView.frame.maxX {
+        //            waveformView.removeConstraints(waveformView.constraints)
+        //            waveformView.translatesAutoresizingMaskIntoConstraints = false
+        //            waveformView.widthAnchor.constraint(equalToConstant: waveformView.frame.width + width).isActive = true
+        //            waveformView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
+        //            waveformView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
+        //            waveformView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
+        //        }
+        
         start = CGPoint(x: start.x + 10.0, y: start.y)
         
     }
