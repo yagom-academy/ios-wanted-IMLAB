@@ -116,47 +116,50 @@
                                     </button>
                                 </subviews>
                             </stackView>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zsW-IH-c6x">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PZq-Do-z5f">
                                 <rect key="frame" x="16" y="64" width="382" height="150"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Y2Y-sm-uNB">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Fsp-D0-bGO">
                                         <rect key="frame" x="0.0" y="0.0" width="382" height="150"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="382" id="ymj-BP-72n"/>
+                                        </constraints>
                                     </view>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="g9J-0F-GFx" firstAttribute="trailing" secondItem="Y2Y-sm-uNB" secondAttribute="trailing" id="4si-LP-TAt"/>
-                                    <constraint firstItem="Y2Y-sm-uNB" firstAttribute="bottom" secondItem="1PH-q0-U5d" secondAttribute="bottom" id="9Uy-8R-qB7"/>
-                                    <constraint firstItem="Y2Y-sm-uNB" firstAttribute="leading" secondItem="1PH-q0-U5d" secondAttribute="leading" id="Elv-s9-35T"/>
-                                    <constraint firstItem="Y2Y-sm-uNB" firstAttribute="top" secondItem="1PH-q0-U5d" secondAttribute="top" id="LQ6-M7-1y0"/>
-                                    <constraint firstItem="Y2Y-sm-uNB" firstAttribute="top" secondItem="g9J-0F-GFx" secondAttribute="top" id="Meb-EZ-xd4"/>
-                                    <constraint firstAttribute="height" constant="150" id="QCm-uf-oFb"/>
-                                    <constraint firstItem="g9J-0F-GFx" firstAttribute="bottom" secondItem="Y2Y-sm-uNB" secondAttribute="bottom" id="fQM-KI-TBo"/>
-                                    <constraint firstItem="Y2Y-sm-uNB" firstAttribute="trailing" secondItem="1PH-q0-U5d" secondAttribute="trailing" id="vMr-1J-wS8"/>
-                                    <constraint firstItem="Y2Y-sm-uNB" firstAttribute="height" secondItem="g9J-0F-GFx" secondAttribute="height" id="vi3-IU-o6I"/>
-                                    <constraint firstItem="Y2Y-sm-uNB" firstAttribute="leading" secondItem="g9J-0F-GFx" secondAttribute="leading" id="xrg-5f-bvf"/>
+                                    <constraint firstItem="Fsp-D0-bGO" firstAttribute="bottom" secondItem="bj2-Ni-IfO" secondAttribute="bottom" id="0zw-wd-AI7"/>
+                                    <constraint firstAttribute="bottom" secondItem="Fsp-D0-bGO" secondAttribute="bottom" id="4rQ-S8-Mog"/>
+                                    <constraint firstItem="Fsp-D0-bGO" firstAttribute="top" secondItem="jnx-P6-ppx" secondAttribute="top" id="Yie-AX-0pn"/>
+                                    <constraint firstItem="Fsp-D0-bGO" firstAttribute="leading" secondItem="bj2-Ni-IfO" secondAttribute="leading" constant="67" id="ZF7-mN-3MG"/>
+                                    <constraint firstItem="Fsp-D0-bGO" firstAttribute="trailing" secondItem="bj2-Ni-IfO" secondAttribute="trailing" id="aU8-r3-ORo"/>
+                                    <constraint firstItem="jnx-P6-ppx" firstAttribute="trailing" secondItem="Fsp-D0-bGO" secondAttribute="trailing" id="by7-Xw-xg6"/>
+                                    <constraint firstItem="Fsp-D0-bGO" firstAttribute="leading" secondItem="jnx-P6-ppx" secondAttribute="leading" id="hNa-K9-vmB"/>
+                                    <constraint firstItem="Fsp-D0-bGO" firstAttribute="top" secondItem="bj2-Ni-IfO" secondAttribute="top" constant="18" id="jsA-bz-wql"/>
+                                    <constraint firstItem="Fsp-D0-bGO" firstAttribute="height" secondItem="jnx-P6-ppx" secondAttribute="height" id="jxj-mb-Vhy"/>
+                                    <constraint firstAttribute="height" constant="150" id="lLU-Z9-YYd"/>
                                 </constraints>
-                                <viewLayoutGuide key="contentLayoutGuide" id="1PH-q0-U5d"/>
-                                <viewLayoutGuide key="frameLayoutGuide" id="g9J-0F-GFx"/>
+                                <viewLayoutGuide key="contentLayoutGuide" id="bj2-Ni-IfO"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="jnx-P6-ppx"/>
                             </scrollView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Iee-YG-Len"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="PZq-Do-z5f" firstAttribute="leading" secondItem="Iee-YG-Len" secondAttribute="leading" constant="16" id="8bi-c2-OWq"/>
                             <constraint firstItem="gRT-WD-I6Z" firstAttribute="top" secondItem="upv-Mu-e34" secondAttribute="bottom" constant="16" id="8yi-Mt-xaY"/>
                             <constraint firstItem="TI4-JT-Y4w" firstAttribute="top" secondItem="gRT-WD-I6Z" secondAttribute="bottom" constant="32" id="CUp-Aa-LWl"/>
                             <constraint firstItem="TI4-JT-Y4w" firstAttribute="leading" secondItem="Iee-YG-Len" secondAttribute="leading" constant="16" id="EZ1-Uj-v0D"/>
-                            <constraint firstItem="96P-79-zEn" firstAttribute="top" secondItem="zsW-IH-c6x" secondAttribute="bottom" constant="20" id="KUp-Qs-fNI"/>
-                            <constraint firstItem="zsW-IH-c6x" firstAttribute="top" secondItem="Iee-YG-Len" secondAttribute="top" constant="20" id="O3e-mz-BoK"/>
-                            <constraint firstItem="Iee-YG-Len" firstAttribute="trailing" secondItem="zsW-IH-c6x" secondAttribute="trailing" constant="16" id="Obc-Hi-pmT"/>
+                            <constraint firstItem="PZq-Do-z5f" firstAttribute="top" secondItem="Iee-YG-Len" secondAttribute="top" constant="20" id="NO3-dv-pHU"/>
                             <constraint firstItem="gRT-WD-I6Z" firstAttribute="centerX" secondItem="upv-Mu-e34" secondAttribute="centerX" id="VOe-EI-DBW"/>
                             <constraint firstItem="Iee-YG-Len" firstAttribute="trailing" secondItem="upv-Mu-e34" secondAttribute="trailing" constant="16" id="Yhn-d8-vE0"/>
                             <constraint firstItem="upv-Mu-e34" firstAttribute="leading" secondItem="Iee-YG-Len" secondAttribute="leading" constant="16" id="Yro-mA-RP7"/>
                             <constraint firstItem="Iee-YG-Len" firstAttribute="trailing" secondItem="96P-79-zEn" secondAttribute="trailing" constant="16" id="c2t-Pr-V7X"/>
                             <constraint firstItem="upv-Mu-e34" firstAttribute="top" secondItem="96P-79-zEn" secondAttribute="bottom" constant="16" id="dGC-VA-RX6"/>
                             <constraint firstItem="TI4-JT-Y4w" firstAttribute="centerX" secondItem="pW1-cO-dEi" secondAttribute="centerX" id="fVQ-S4-EKb"/>
+                            <constraint firstItem="96P-79-zEn" firstAttribute="top" secondItem="PZq-Do-z5f" secondAttribute="bottom" constant="20" id="hoX-JD-Oy4"/>
                             <constraint firstItem="96P-79-zEn" firstAttribute="leading" secondItem="Iee-YG-Len" secondAttribute="leading" constant="16" id="l1a-wb-hqk"/>
-                            <constraint firstItem="zsW-IH-c6x" firstAttribute="leading" secondItem="Iee-YG-Len" secondAttribute="leading" constant="16" id="mGd-4h-ruE"/>
+                            <constraint firstItem="Iee-YG-Len" firstAttribute="trailing" secondItem="PZq-Do-z5f" secondAttribute="trailing" constant="16" id="qHg-2K-78x"/>
                             <constraint firstItem="Iee-YG-Len" firstAttribute="trailing" secondItem="TI4-JT-Y4w" secondAttribute="trailing" constant="16" id="s0J-F0-lq3"/>
                         </constraints>
                     </view>
@@ -167,13 +170,13 @@
                         <outlet property="playForwardButton" destination="F2S-lW-VA6" id="JSZ-ae-C4a"/>
                         <outlet property="recordButton" destination="gBD-le-cBS" id="Rya-2X-Ztq"/>
                         <outlet property="recordTimeLabel" destination="gRT-WD-I6Z" id="CDW-mk-D5I"/>
-                        <outlet property="scrollView" destination="zsW-IH-c6x" id="U0m-IZ-7DB"/>
-                        <outlet property="waveformView" destination="Y2Y-sm-uNB" id="aBi-Vs-b0b"/>
+                        <outlet property="scrollView" destination="PZq-Do-z5f" id="a1o-1N-lpx"/>
+                        <outlet property="waveformView" destination="Fsp-D0-bGO" id="idp-sq-7tk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="c3y-ap-Y7R" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1396" y="-132"/>
+            <point key="canvasLocation" x="1395.6521739130435" y="-132.58928571428572"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Wal-TQ-9eF">
