@@ -11,14 +11,6 @@ import FirebaseStorage
 
 class RecordDetailViewController: UIViewController {
     
-    // MARK: - Enums
-    
-    enum RecordFileString {
-        static var fileName = "recording"
-        static let fileExtension = ".m4a"
-        static var fileFullName = "recording\(fileName)\(fileExtension)"
-    }
-    
     // MARK: - IBOutlet
     
     @IBOutlet weak var recordWaveView: UIView!
@@ -43,9 +35,7 @@ class RecordDetailViewController: UIViewController {
         super.viewDidLoad()
         
     }
-    
 
-    
     // MARK: - Methods
     
     func setupAudioRecorder() {
@@ -70,16 +60,17 @@ class RecordDetailViewController: UIViewController {
     }
     
     func loadRecordingUI() {
-        
+
     }
         
     func startRecording() {
         let fileName = DataFormatter.makeFileName()
-        RecordFileString.fileName += fileName
+        FireStorageManager.RecordFileString.Path.fileName += fileName
         // 파일 생성
         guard let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {return}
-        audioFileURL = fileURL.appendingPathComponent(RecordFileString.fileFullName)
-        let audioFileURL = fileURL.appendingPathComponent(RecordFileString.fileFullName)
+        audioFileURL = fileURL.appendingPathComponent(FireStorageManager.RecordFileString.fileFullName)
+        print(FireStorageManager.RecordFileString.fileFullName)
+        let audioFileURL = fileURL.appendingPathComponent(FireStorageManager.RecordFileString.fileFullName)
         let settings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
             AVSampleRateKey: 12000,
@@ -103,13 +94,7 @@ class RecordDetailViewController: UIViewController {
     }
     
     func uploadRecordDataToFirebase(_ url: URL?) {
-        guard let url = url else {
-            return
-        }
-        let storage = Storage.storage()
-        let storageRef = storage.reference()
-        let riversRef = storageRef.child("recording/\(RecordFileString.fileName)")
-        riversRef.putFile(from: url)
+        FireStorageManager.shared.uploadRecordDataToFirebase(url)
     }
     
     func showSettingViewController() {

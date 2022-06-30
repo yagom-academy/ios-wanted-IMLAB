@@ -12,10 +12,17 @@ class FireStorageManager {
     static var shared = FireStorageManager()
     
     enum RecordFileString {
-        static var fileName = ""
-        static let fileExtension = ".m4a"
-        static var fileFullName = "recording\(fileName)\(fileExtension)"
-        static let recordingDirectory: String = "recording/"
+        enum Ref {
+            static let recordDir: String = "recording/"
+        }
+        enum Path {
+            static var fileName = ""
+        }
+        enum contentType {
+            static let audio: String = ".m4a"
+        }
+        static let fileFullName: String = "recording\(Path.fileName)"
+        
     }
     
     var items: [StorageReference] = []
@@ -26,13 +33,13 @@ class FireStorageManager {
             return
         }
         let storageRef = storage.reference()
-        let riversRef = storageRef.child("\(RecordFileString.recordingDirectory)\(RecordFileString.fileName)")
-        riversRef.putFile(from: url)
+        let fileRef = storageRef.child("\(RecordFileString.Ref.recordDir)\(RecordFileString.fileFullName)")
+        fileRef.putFile(from: url)
     }
     
     func getDataFromFirebase(completion: @escaping ([StorageReference]) -> Void )  {
         let storageRef = storage.reference()
-        let fileRef = storageRef.child(RecordFileString.recordingDirectory)
+        let fileRef = storageRef.child(RecordFileString.Ref.recordDir)
         fileRef.listAll() { (result, error) in
             if let error = error {
                 print(error)
