@@ -7,6 +7,7 @@
 
 import UIKit
 import AVFoundation
+import AVKit
 
 class RecordCheckViewController: UIViewController {
     
@@ -24,6 +25,9 @@ class RecordCheckViewController: UIViewController {
         button.backgroundColor = .blue
         return button
     }()
+    
+    private let engine = AVAudioEngine()
+    private let node = AVAudioPlayerNode()
     
     private var audioRecorder: AVAudioRecorder?
     private var audioPlayer: AVAudioPlayer?
@@ -207,3 +211,8 @@ extension RecordCheckViewController: AVAudioPlayerDelegate {
         }
     }
 }
+
+class AVAudioUnitEQ : AVAudioUnitEffect {
+    let eqnode = AVAudioUnitEQ.init()
+}
+
