@@ -66,7 +66,7 @@ class DrawWaveFormManager{
             traitLength = maxTraitLength
         }
         
-//        print("input: \(input), traitLength: \(traitLength!)")
+        print("input: \(input)")
         
         pencil.move(to: start)
         pencil.addLine(to: CGPoint(x: start.x, y: start.y + traitLength))
