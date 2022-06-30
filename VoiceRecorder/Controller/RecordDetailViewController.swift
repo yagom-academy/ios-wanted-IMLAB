@@ -36,6 +36,25 @@ class RecordDetailViewController: UIViewController {
         
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        if audioRecorder != nil {
+            // 오디오 중지
+            audioRecorder?.stop()
+            audioRecorder = nil
+            // 로컬에 생성된 파일 삭제
+            if let audioFileURL = audioFileURL {
+                do {
+                    print(audioFileURL)
+                    try FileManager.default.removeItem(at: audioFileURL)
+                } catch {
+                    print(error)
+                }
+            }
+        } else {
+            print("close")
+        }
+    }
+    
     // MARK: - Methods
     
     func setupAudioRecorder() {
@@ -43,7 +62,6 @@ class RecordDetailViewController: UIViewController {
         do {
             try recordingSession?.setCategory(.playAndRecord, mode: .default)
             try recordingSession?.setActive(true)
-            
             recordingSession?.requestRecordPermission({ [unowned self] allowed in
                 DispatchQueue.main.async {
                     if allowed {
@@ -65,11 +83,10 @@ class RecordDetailViewController: UIViewController {
         
     func startRecording() {
         let fileName = DataFormatter.makeFileName()
-        FireStorageManager.RecordFileString.Path.fileName += fileName
+        FireStorageManager.RecordFileString.Path.fileName = fileName
         // 파일 생성
         guard let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {return}
         audioFileURL = fileURL.appendingPathComponent(FireStorageManager.RecordFileString.fileFullName)
-        print(FireStorageManager.RecordFileString.fileFullName)
         let audioFileURL = fileURL.appendingPathComponent(FireStorageManager.RecordFileString.fileFullName)
         let settings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
