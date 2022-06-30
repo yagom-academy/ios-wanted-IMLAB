@@ -28,6 +28,13 @@ class PlayerManager {
 
         self.playerItem = playerItem
         audioPlayer.replaceCurrentItem(with: playerItem)
+        
+//        audioFile = AVAudioFile(
+    }
+    
+    func setPlayerToZero() {
+        pausePlayer()
+        audioPlayer.seek(to: CMTime(value: 0, timescale: TIMESCALE))
     }
 
     // 재생
@@ -47,5 +54,9 @@ class PlayerManager {
         let currentTime = audioPlayer.currentTime()
         let newTime = calc(currentTime.value, SEEK_TIME)
         audioPlayer.seek(to: CMTime(value: newTime, timescale: TIMESCALE))
+    }
+    
+    func setVolume(_ value: Float) {
+        audioPlayer.volume = value
     }
 }

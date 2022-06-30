@@ -12,9 +12,6 @@ class PlayerViewModel {
     private let model = PlayerModel()
     private var audioPlayer = PlayerManager()
 
-    init() {
-    }
-
     func update(_ filename: String, _ completion: @escaping () -> Void) {
         model.update(filename, completion)
     }
@@ -25,6 +22,7 @@ class PlayerViewModel {
 
     func setPlayerItem() {
         audioPlayer.setPlayerItem(model.getAVPlayerItem())
+        audioPlayer.setVolume(0.5)
     }
 
     func onTappedPlayPauseButton() -> Bool {
@@ -46,4 +44,14 @@ class PlayerViewModel {
     func onTappedForwardButton() {
         audioPlayer.seek(+)
     }
+    
+    func setPlayerToZero() {
+        audioPlayer.setPlayerToZero()
+    }
+    
+    func changedVolumeSlider(_ value: Float) {
+        audioPlayer.setVolume(value)
+    }
+    
+    
 }

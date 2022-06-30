@@ -35,10 +35,7 @@ class PlayerViewController: UIViewController {
         layout()
 
         // 버튼 핸들러 추가
-        configureButtonHandler()
-
-        // 임시 플레이어
-//        audioPlayer = PlayerManager(url: sampleURL!)
+        configureHandler()
     }
 
     required init?(coder: NSCoder) {
@@ -80,6 +77,11 @@ extension PlayerViewController {
         pitchControl.selectedSegmentIndex = 0
 
         sliderTitleLabel.text = "Volume"
+
+        volumeSlider.isContinuous = false
+        volumeSlider.maximumValue = 1
+        volumeSlider.minimumValue = 0
+        volumeSlider.value = 0.5
 
         buttonStackView.axis = .horizontal
         buttonStackView.distribution = .equalSpacing
@@ -150,7 +152,7 @@ extension PlayerViewController {
     }
 }
 
-// MARK: - Button (Actions, States)
+// MARK: - Actions, States
 
 extension PlayerViewController {
     // 버튼 이미지 관리
@@ -162,11 +164,21 @@ extension PlayerViewController {
         }
     }
 
-    // 버튼 핸들러 추가
-    private func configureButtonHandler() {
+    // 핸들러 추가
+    private func configureHandler() {
+        volumeSlider.addTarget(self, action: #selector(handleVolumeSlider), for: .valueChanged)
         playPauseButton.addTarget(self, action: #selector(handlePlayPauseButton), for: .touchUpInside)
         backwardButton.addTarget(self, action: #selector(handleBackwardButton), for: .touchUpInside)
         forwardButton.addTarget(self, action: #selector(handleForwardButton), for: .touchUpInside)
+    }
+
+    @objc private func handleVolumeSlider(_ sender: UISlider!) {
+        print("Slider value changed")
+
+        let roundedStepValue = round(sender.value / 0.1) * 0.1
+        sender.value = roundedStepValue
+
+        viewModel.changedVolumeSlider(roundedStepValue)
     }
 
     // 재생, 일시정지 버튼
@@ -187,7 +199,7 @@ extension PlayerViewController {
 
     // 재생상태 초기화
     @objc private func audioDidEnd(notification: NSNotification) {
-//        viewModel.setPlayerItem() // TODO: - 0초로 돌리기 (메소드 따로 만들어서)
+        viewModel.setPlayerToZero()
         isPlaying.toggle()
         setPlayPauseButtonState()
     }
@@ -196,13 +208,15 @@ extension PlayerViewController {
 extension PlayerViewController {
     func setData(_ filename: String) {
         viewModel.update(filename) {
-            let fileData = self.viewModel.getFileData()
-
-            self.title = fileData?.fileName ?? "no filename"
-
-            self.viewModel.setPlayerItem()
-
-            self.playPauseButton.isEnabled = true
+            self.configurePlayer()
         }
+    }
+
+    func configurePlayer() {
+        let fileData = viewModel.getFileData()
+        title = fileData?.fileName ?? "No File Found"
+
+        viewModel.setPlayerItem()
+        playPauseButton.isEnabled = true
     }
 }
