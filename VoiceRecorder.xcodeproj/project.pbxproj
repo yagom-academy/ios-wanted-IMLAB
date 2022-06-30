@@ -13,6 +13,8 @@
 		DE15E66528604279003DD2F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66428604279003DD2F5 /* Assets.xcassets */; };
 		DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */; };
 		DF6408D1286C23DA00567DAC /* AudioInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6408D0286C23DA00567DAC /* AudioInformation.swift */; };
+		DF6408E6286D63F300567DAC /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = DF6408E5286D63F300567DAC /* FirebaseStorage */; };
+		DF6408E8286D63F300567DAC /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = DF6408E7286D63F300567DAC /* FirebaseStorageCombine-Community */; };
 		EC4C064A286D3BC200F311FC /* AudioURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4C0649286D3BC200F311FC /* AudioURL.swift */; };
 		EC4C064E286D42EE00F311FC /* FirebaseRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4C064D286D42EE00F311FC /* FirebaseRepository.swift */; };
 		EC4C0651286D433300F311FC /* FirebaseUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4C0650286D433300F311FC /* FirebaseUseCase.swift */; };
@@ -53,6 +55,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DF6408E8286D63F300567DAC /* FirebaseStorageCombine-Community in Frameworks */,
+				DF6408E6286D63F300567DAC /* FirebaseStorage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -229,6 +233,8 @@
 			);
 			name = VoiceRecorder;
 			packageProductDependencies = (
+				DF6408E5286D63F300567DAC /* FirebaseStorage */,
+				DF6408E7286D63F300567DAC /* FirebaseStorageCombine-Community */,
 			);
 			productName = SNPLab;
 			productReference = DE15E65828604278003DD2F5 /* VoiceRecorder.app */;
@@ -260,6 +266,7 @@
 			mainGroup = DE15E64F28604278003DD2F5;
 			packageReferences = (
 				968E686A286C0DDF000DE0DB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				DF6408E4286D63F300567DAC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = DE15E65928604278003DD2F5 /* Products */;
 			projectDirPath = "";
@@ -519,7 +526,28 @@
 				minimumVersion = 9.0.0;
 			};
 		};
+		DF6408E4286D63F300567DAC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		DF6408E5286D63F300567DAC /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 968E686A286C0DDF000DE0DB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+		DF6408E7286D63F300567DAC /* FirebaseStorageCombine-Community */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 968E686A286C0DDF000DE0DB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseStorageCombine-Community";
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = DE15E65028604278003DD2F5 /* Project object */;
 }
