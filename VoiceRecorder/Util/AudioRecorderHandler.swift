@@ -63,7 +63,7 @@ class AudioRecoderHandler {
             
             enableBuiltInMic()
             
-            fileName = "voiceRecords_\(localFileHandler.localFileName).m4a"
+            fileName = "voiceRecords_\(localFileHandler.localFileName)"
             guard let fileName = fileName else { return }
 
             let recordFileURL = localFileHandler.localFileURL.appendingPathComponent(fileName)
