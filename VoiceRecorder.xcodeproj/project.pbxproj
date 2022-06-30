@@ -13,6 +13,7 @@
 		651BD9EE286C327C0075C402 /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651BD9ED286C327C0075C402 /* Audio.swift */; };
 		651BD9F0286C367F0075C402 /* Til I Hear'em Say (Instrumental) - NEFFEX.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 651BD9EF286C367F0075C402 /* Til I Hear'em Say (Instrumental) - NEFFEX.mp3 */; };
 		651BD9F2286C42160075C402 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651BD9F1286C42160075C402 /* Observable.swift */; };
+		7CFE8EAB286C8920001D41CB /* CreateAudioViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFE8EAA286C8920001D41CB /* CreateAudioViewController.swift */; };
 		B7A56DB12869A4D300EA639D /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = B7A56DB02869A4D300EA639D /* FirebaseStorage */; };
 		B7A56DCA286B2D0300EA639D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B7A56DC9286B2D0300EA639D /* GoogleService-Info.plist */; };
 		B7A56DCD286C1ABF00EA639D /* EndPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7A56DCC286C1ABE00EA639D /* EndPoint.swift */; };
@@ -31,6 +32,7 @@
 		651BD9ED286C327C0075C402 /* Audio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio.swift; sourceTree = "<group>"; };
 		651BD9EF286C367F0075C402 /* Til I Hear'em Say (Instrumental) - NEFFEX.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Til I Hear'em Say (Instrumental) - NEFFEX.mp3"; sourceTree = "<group>"; };
 		651BD9F1286C42160075C402 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
+		7CFE8EAA286C8920001D41CB /* CreateAudioViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CreateAudioViewController.swift; path = VoiceRecorder/Scenes/CreateAudio/CreateAudioViewController.swift; sourceTree = SOURCE_ROOT; };
 		B7A56DC9286B2D0300EA639D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B7A56DCC286C1ABE00EA639D /* EndPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndPoint.swift; sourceTree = "<group>"; };
 		B7A56DCE286C1C6400EA639D /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
@@ -64,11 +66,19 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		7CFE8EA9286C88FB001D41CB /* CreateAudio */ = {
+			isa = PBXGroup;
+			children = (
+				7CFE8EAA286C8920001D41CB /* CreateAudioViewController.swift */,
+			);
+			path = CreateAudio;
+			sourceTree = "<group>";
+		};
 		B7A56DB22869A4F600EA639D /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
 				B7A56DB52869A51400EA639D /* Play */,
-				B7A56DB42869A50A00EA639D /* CreateAudio */,
+				7CFE8EA9286C88FB001D41CB /* CreateAudio */,
 				B7A56DB32869A50500EA639D /* Home */,
 			);
 			path = Scenes;
@@ -80,13 +90,6 @@
 				DE15E65F28604278003DD2F5 /* HomeViewController.swift */,
 			);
 			path = Home;
-			sourceTree = "<group>";
-		};
-		B7A56DB42869A50A00EA639D /* CreateAudio */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = CreateAudio;
 			sourceTree = "<group>";
 		};
 		B7A56DB52869A51400EA639D /* Play */ = {
@@ -227,19 +230,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-
 				651BD9F2286C42160075C402 /* Observable.swift in Sources */,
 				651BD9E7286C24350075C402 /* PlayButtonView.swift in Sources */,
-				DE15E66028604278003DD2F5 /* ViewController.swift in Sources */,
+				DE15E66028604278003DD2F5 /* HomeViewController.swift in Sources */,
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
 				651BD9EA286C25A80075C402 /* PlayView.swift in Sources */,
 				651BD9EC286C2D6B0075C402 /* PlayViewController.swift in Sources */,
-
 				B7A56DCF286C1C6400EA639D /* FirebaseService.swift in Sources */,
 				DE15E66028604278003DD2F5 /* HomeViewController.swift in Sources */,
+				7CFE8EAB286C8920001D41CB /* CreateAudioViewController.swift in Sources */,
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
 				B7A56DCD286C1ABF00EA639D /* EndPoint.swift in Sources */,
-
 				DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */,
 				651BD9EE286C327C0075C402 /* Audio.swift in Sources */,
 			);
