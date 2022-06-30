@@ -9,7 +9,8 @@ import UIKit
 
 class RecordVoiceViewController: UIViewController {
 
-    var recorderViewModel = RecorderViewModel()
+//    var recorderViewModel = RecorderViewModel()
+    var recordVoiceManager = RecordVoiceManager()
         
     let waveGraphImageView : UIImageView = {
         let waveGraphImageView = UIImageView()
@@ -47,13 +48,13 @@ class RecordVoiceViewController: UIViewController {
     }()
     
     @objc func tab_record_start_stop_Button() {
-        if recorderViewModel.isRecording() {
-            recorderViewModel.stopRecording()
+        if recordVoiceManager.isRecording() {
+            recordVoiceManager.stopRecording()
             record_start_stop_button.setImage(UIImage(systemName: "circle.fill"), for: .normal)
             record_start_stop_button.tintColor = .red
             print("recording stop")
         } else {
-            recorderViewModel.startRecording()
+            recordVoiceManager.startRecording()
             record_start_stop_button.setImage(UIImage(systemName: "stop.fill"), for: .normal)
             record_start_stop_button.tintColor = .black
             print("recording start")
