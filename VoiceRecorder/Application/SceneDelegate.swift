@@ -8,6 +8,7 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    var appCoordinator: Coordinator!
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -15,11 +16,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = (scene as? UIWindowScene) else { return }
-        window = UIWindow(windowScene: windowScene)
-        let rootVC = VoiceMemoListViewController()
-        let navVC = UINavigationController(rootViewController: rootVC)
-        self.window?.rootViewController = navVC
-        self.window?.makeKeyAndVisible()
+        let appWindow = UIWindow(frame:  windowScene.coordinateSpace.bounds)
+        appWindow.windowScene = windowScene
+        
+        let navController = UINavigationController()
+        appCoordinator = AppCoordinator(navigationController: navController)
+        appCoordinator.start()
+        
+        appWindow.rootViewController = navController
+        appWindow.makeKeyAndVisible()
+        
+        window = appWindow
+
     }
 
 

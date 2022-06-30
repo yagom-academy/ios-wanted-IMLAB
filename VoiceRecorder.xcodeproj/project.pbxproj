@@ -19,6 +19,8 @@
 		DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */; };
 		FF76356C286AE23200147127 /* VoiceMemoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF76356B286AE23200147127 /* VoiceMemoCell.swift */; };
 		FF76356E286AE60C00147127 /* VoiceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF76356D286AE60C00147127 /* VoiceData.swift */; };
+		FF763574286D8E2100147127 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF763573286D8E2100147127 /* Coordinator.swift */; };
+		FF763576286D8E8700147127 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF763575286D8E8700147127 /* AppCoordinator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +40,8 @@
 		DE15E66928604279003DD2F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FF76356B286AE23200147127 /* VoiceMemoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceMemoCell.swift; sourceTree = "<group>"; };
 		FF76356D286AE60C00147127 /* VoiceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceData.swift; sourceTree = "<group>"; };
+		FF763573286D8E2100147127 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		FF763575286D8E8700147127 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -176,6 +180,7 @@
 		DE15E65A28604278003DD2F5 /* VoiceRecorder */ = {
 			isa = PBXGroup;
 			children = (
+				FF763572286D8AB800147127 /* Coordinator */,
 				0EEFBFE62869C7B000AD8075 /* Manager */,
 				B096C04428698E3B00077FC4 /* Presentation */,
 				B096C04328698E2200077FC4 /* Resource */,
@@ -192,6 +197,15 @@
 				FF76356D286AE60C00147127 /* VoiceData.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		FF763572286D8AB800147127 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				FF763573286D8E2100147127 /* Coordinator.swift */,
+				FF763575286D8E8700147127 /* AppCoordinator.swift */,
+			);
+			path = Coordinator;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -309,6 +323,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF763576286D8E8700147127 /* AppCoordinator.swift in Sources */,
 				0EAD22D9286AD8160093E2D0 /* VoiceMemoPlayViewController.swift in Sources */,
 				FF76356E286AE60C00147127 /* VoiceData.swift in Sources */,
 				B0C058DC286AD73F008426B2 /* VoiceMemoRecordViewController.swift in Sources */,
@@ -317,6 +332,7 @@
 				FF76356C286AE23200147127 /* VoiceMemoCell.swift in Sources */,
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
 				DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */,
+				FF763574286D8E2100147127 /* Coordinator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

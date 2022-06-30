@@ -10,6 +10,8 @@ class VoiceMemoListViewController: UIViewController {
 
     // MARK: - Properties
     
+    weak var coordinator: AppCoordinator?
+    
     var voiceMemoData: [VoiceData] = [
         VoiceData(title: "2022. 05. 08 12:33:44", time: "01:33"),
         VoiceData(title: "2022. 05. 08 12:38:44", time: "02:11"),
@@ -60,8 +62,9 @@ extension VoiceMemoListViewController {
     
     // MARK: - Action Method
     @objc private func buttonPressed() {
-        let recordVC = VoiceMemoRecordViewController()
-        self.present(recordVC, animated: true, completion: nil)
+//        let recordVC = VoiceMemoRecordViewController()
+//        self.present(recordVC, animated: true, completion: nil)
+        self.coordinator?.presentRecordView()
     }
 }
 
@@ -79,8 +82,9 @@ extension VoiceMemoListViewController: UITableViewDelegate, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //세번째 화면으로 이동
-        let playVC = VoiceMemoPlayViewController()
-        self.present(playVC, animated: true, completion: nil)
+//        let playVC = VoiceMemoPlayViewController()
+//        self.present(playVC, animated: true, completion: nil)
+        self.coordinator?.presentPlayView()
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
