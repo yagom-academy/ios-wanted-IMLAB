@@ -15,7 +15,7 @@ class ListViewController: UIViewController {
         super.viewDidLoad()
         
         setupRecordListTableView()
-        StorageManager().get { result in
+        StorageManager.shared.get { result in
             switch result {
             case .success(let recordFile):
                 self.recordList.append(recordFile)
@@ -59,7 +59,7 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            StorageManager().delete(fileName: recordList[indexPath.row].name) { result in
+            StorageManager.shared.delete(fileName: recordList[indexPath.row].name) { result in
                 switch result {
                 case .success(_ ):
                     self.recordList.remove(at: indexPath.row)
@@ -86,7 +86,7 @@ private extension ListViewController {
 extension ListViewController: RecordViewControllerDelegate {
     func didFinishRecord() {
         recordList = []
-        StorageManager().get { result in
+        StorageManager.shared.get { result in
             switch result {
             case .success(let recordFile):
                 self.recordList.append(recordFile)

@@ -15,6 +15,8 @@
 		6B47CD74286975BE00C0912F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6B47CD73286975BE00C0912F /* GoogleService-Info.plist */; };
 		6B47CD772869763B00C0912F /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 6B47CD762869763B00C0912F /* FirebaseStorage */; };
 		6B52A49F2869955E006B74D2 /* RecordModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B52A49E2869955E006B74D2 /* RecordModel.swift */; };
+		6B78B231286D8F9E0086F7B4 /* RecordViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B78B230286D8F9E0086F7B4 /* RecordViewControllerDelegate.swift */; };
+		6B78B234286D92710086F7B4 /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B78B233286D92710086F7B4 /* AudioPlayer.swift */; };
 		6B8DC36D286AC7A000DF230B /* Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8DC36C286AC7A000DF230B /* Icon.swift */; };
 		6B8DC370286ACE4F00DF230B /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8DC36F286ACE4F00DF230B /* Date+.swift */; };
 		6B8DC373286AD8C400DF230B /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8DC372286AD8C400DF230B /* StorageManager.swift */; };
@@ -35,6 +37,8 @@
 		6B31B0FF286C046D00B2E606 /* StoragePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoragePath.swift; sourceTree = "<group>"; };
 		6B47CD73286975BE00C0912F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6B52A49E2869955E006B74D2 /* RecordModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordModel.swift; sourceTree = "<group>"; };
+		6B78B230286D8F9E0086F7B4 /* RecordViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewControllerDelegate.swift; sourceTree = "<group>"; };
+		6B78B233286D92710086F7B4 /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
 		6B8DC36C286AC7A000DF230B /* Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Icon.swift; sourceTree = "<group>"; };
 		6B8DC36F286ACE4F00DF230B /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		6B8DC372286AD8C400DF230B /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
@@ -92,9 +96,18 @@
 		6B52A49C2869954E006B74D2 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				6B78B233286D92710086F7B4 /* AudioPlayer.swift */,
 				6B52A49E2869955E006B74D2 /* RecordModel.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		6B78B232286D8FB00086F7B4 /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				6B78B230286D8F9E0086F7B4 /* RecordViewControllerDelegate.swift */,
+			);
+			path = Protocol;
 			sourceTree = "<group>";
 		};
 		6B8DC36E286AC7AE00DF230B /* Configuration */ = {
@@ -148,6 +161,7 @@
 				DE15E66428604279003DD2F5 /* Assets.xcassets */,
 				6B47CD73286975BE00C0912F /* GoogleService-Info.plist */,
 				DE15E66928604279003DD2F5 /* Info.plist */,
+				6B78B232286D8FB00086F7B4 /* Protocol */,
 				6B8DC36E286AC7AE00DF230B /* Configuration */,
 				6B8DC371286ACE5E00DF230B /* Extension */,
 				6B8DC374286ADA0900DF230B /* Manager */,
@@ -243,12 +257,14 @@
 				362737AD286987F200592181 /* RecordViewController.swift in Sources */,
 				362737A9286986E900592181 /* RecordListTableViewCell.swift in Sources */,
 				362737AF2869880000592181 /* PlayViewController.swift in Sources */,
+				6B78B231286D8F9E0086F7B4 /* RecordViewControllerDelegate.swift in Sources */,
 				6B8DC36D286AC7A000DF230B /* Icon.swift in Sources */,
 				6B8DC373286AD8C400DF230B /* StorageManager.swift in Sources */,
 				6B8DC370286ACE4F00DF230B /* Date+.swift in Sources */,
 				6BA75693286B1964003A2A40 /* Double+.swift in Sources */,
 				6B31B100286C046D00B2E606 /* StoragePath.swift in Sources */,
 				DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */,
+				6B78B234286D92710086F7B4 /* AudioPlayer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

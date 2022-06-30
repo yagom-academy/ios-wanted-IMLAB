@@ -7,20 +7,17 @@ import UIKit
 import AVFoundation
 import FirebaseStorage
 
-protocol RecordViewControllerDelegate: AnyObject {
-    func didFinishRecord()
-}
-
 class RecordViewController: UIViewController {
-        
+    
+    // MARK: - @IBOutlet
     @IBOutlet weak var cutOffSlider: UISlider!
     @IBOutlet weak var recordTimeLabel: UILabel!
-    
     @IBOutlet weak var recordButton: UIButton!
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var playBackwardButton: UIButton!
     @IBOutlet weak var playForwardButton: UIButton!
     
+    // MARK: - Properties
     weak var delegate: RecordViewControllerDelegate?
     private let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
     private var fileName: URL?
@@ -35,42 +32,43 @@ class RecordViewController: UIViewController {
     private var audioRecorder: AVAudioRecorder?
     private var recordingSession = AVAudioSession.sharedInstance()
     private var audioPlayer: AVAudioPlayer?
+    private var isRecord = false
+    private var isPlay = false
+    private var progressTimer: Timer?
+    private var counter = 0.0
+    private var currentPlayTime = 0.0
     
-    var isRecord = false
-    var isPlay = false
-    var progressTimer: Timer?
-    var counter = 0.0
-    var currentPlayTime = 0.0
+    private let player = AudioPlayer()
     
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         requestRecord()
         setupButton(isHidden: true)
+        player.didFinish = {
+            self.isPlay = false
+            self.currentPlayTime = 0.0
+            self.counter = 0.0
+            self.progressTimer?.invalidate()
+            self.playButton.setImage(Icon.play.image, for: .normal)
+        }
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         cancelRecording()
     }
     
+    // MARK: - @IBAction
     @IBAction func didTapRecordButton(_ sender: UIButton) {
         if isRecord {
-            progressTimer?.invalidate()
-            setupButton(isHidden: false)
-            counter = 0.0
             sender.setImage(Icon.circleFill.image, for: .normal)
-            audioRecorder?.stop()
+            setupButton(isHidden: false)
+            endRecord()
             guard let url = audioRecorder?.url,
                   let data = try? Data(contentsOf: url) else { return }
             
-            StorageManager().upload(data: data, fileName: recordDate ?? "") { result in
-                switch result {
-                case .success(_):
-                    print("저장 성공🎉")
-                    self.delegate?.didFinishRecord()
-                case .failure(let error):
-                    print("ERROR \(error.localizedDescription)🌡🌡")
-                }
-            }
+            uploadFile(data, fileName: recordDate ?? "")
+            
         } else {
             sender.setImage(Icon.circle.image, for: .normal)
             setupAudioRecorder()
@@ -87,35 +85,32 @@ class RecordViewController: UIViewController {
         isRecord = !isRecord
     }
     
-    @objc func update() {
-        counter += 0.01
-        if let audioPlayer = audioPlayer {
-            if counter > audioPlayer.duration {
-                counter = audioPlayer.duration
-            }
-        }
-        recordTimeLabel.text = "\(counter.toString)"
-    }
-    
     @IBAction func didTapPlayBack5Button(_ sender: UIButton) {
-        audioPlayer?.currentTime = (audioPlayer?.currentTime ?? 0.0) - 5.0
-        counter = audioPlayer?.currentTime ?? 0.0
-        currentPlayTime = audioPlayer?.currentTime ?? 0.0
+        player.seek(-5)
+        counter = player.currentTime
+        currentPlayTime = player.currentTime
     }
     
     @IBAction func didTapPlayForward5Button(_ sender: UIButton) {
-        audioPlayer?.currentTime = (audioPlayer?.currentTime ?? 0.0) + 5.0
-        counter = audioPlayer?.currentTime ?? 0.0
-        currentPlayTime = audioPlayer?.currentTime ?? 0.0
+        player.seek(5)
+        counter = player.currentTime
+        currentPlayTime = player.currentTime
     }
     
     @IBAction func didTapPlayPauseButton(_ sender: UIButton) {
         if isPlay {
-            progressTimer?.invalidate()
             sender.setImage(Icon.play.image, for: .normal)
-            currentPlayTime = audioPlayer?.currentTime ?? 0.0
-            audioPlayer?.stop()
+            progressTimer?.invalidate()
+            currentPlayTime = player.currentTime
+            player.stop()
         } else {
+            guard let fileName = fileName else { return }
+            
+            player.url = fileName
+            player.setupPlayer()
+            player.currentTime = currentPlayTime
+            player.play()
+            
             progressTimer = Timer.scheduledTimer(
                 timeInterval: 0.01,
                 target: self,
@@ -124,43 +119,31 @@ class RecordViewController: UIViewController {
                 repeats: true
             )
             sender.setImage(Icon.pauseFill.image, for: .normal)
-            playAudio()
-            if currentPlayTime >= audioPlayer?.duration ?? 0.0 {
+            if currentPlayTime >= player.duration {
                 currentPlayTime = 0.0
                 counter = 0
             }
-            setupAudioPlayer()
         }
         isPlay = !isPlay
     }
 }
 
-extension RecordViewController: AVAudioPlayerDelegate {
-    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        isPlay = false
-        currentPlayTime = 0.0
-        counter = 0.0
-        progressTimer?.invalidate()
-        playButton.setImage(Icon.play.image, for: .normal)
+// MARK: - @objc Methods
+private extension RecordViewController {
+    @objc func update() {
+        counter += 0.01
+        print(player.currentTime, player.isPlaying, currentPlayTime)
+        if let audioPlayer = audioPlayer {
+            if counter > audioPlayer.duration {
+                counter = audioPlayer.duration
+            }
+        }
+        recordTimeLabel.text = "\(counter.toString)"
     }
 }
 
+// MARK: - Methods
 private extension RecordViewController {
-    func setupAudioPlayer() {
-        audioPlayer?.delegate = self
-    }
-    func playAudio() {
-        do {
-            guard let fileName = fileName else { return }
-            audioPlayer = try AVAudioPlayer(contentsOf: fileName)
-            audioPlayer?.volume = 1.0
-            audioPlayer?.currentTime = currentPlayTime
-            audioPlayer?.prepareToPlay()
-            audioPlayer?.play()
-        } catch {
-            recordTimeLabel.text = "The recording file doesn't exist. Press the record button"
-        }
-    }
     func setupAudioRecorder() {
         do {
             recordDate = Date.now.dateToString
@@ -202,4 +185,23 @@ private extension RecordViewController {
         audioRecorder?.stop()
         audioRecorder?.deleteRecording()
     }
+    
+    func endRecord() {
+        audioRecorder?.stop()
+        progressTimer?.invalidate()
+        counter = 0.0
+    }
+    
+    func uploadFile(_ data: Data, fileName: String) {
+        StorageManager.shared.upload(data: data, fileName: fileName) { result in
+            switch result {
+            case .success(_):
+                print("저장 성공🎉")
+                self.delegate?.didFinishRecord()
+            case .failure(let error):
+                print("ERROR \(error.localizedDescription)🌡🌡")
+            }
+        }
+    }
+    
 }
