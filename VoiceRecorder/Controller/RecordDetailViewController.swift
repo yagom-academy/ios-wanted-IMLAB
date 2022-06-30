@@ -158,7 +158,3 @@ class RecordDetailViewController: UIViewController {
 extension RecordDetailViewController: AVAudioRecorderDelegate {
     
 }
-
-extension RecordDetailViewController: UIAdaptivePresentationControllerDelegate {
-    
-}
