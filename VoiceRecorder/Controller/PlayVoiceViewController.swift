@@ -48,6 +48,7 @@ class PlayVoiceViewController: UIViewController {
     let volumeSlider : UISlider = {
         let volumeSlider = UISlider()
         volumeSlider.translatesAutoresizingMaskIntoConstraints = false
+        volumeSlider.addTarget(self, action: #selector(slideVolumeButton(_:)), for: .allTouchEvents)
         volumeSlider.minimumValue = 0
         volumeSlider.maximumValue = 1
         return volumeSlider
@@ -94,6 +95,7 @@ class PlayVoiceViewController: UIViewController {
     
     func setUIText(){
         fileNameLabel.text = voiceRecordViewModel.fileName
+        volumeSlider.setValue(playVoiceManager.getVolume(), animated: true)
     }
     
     @objc func tapButton(){
@@ -104,5 +106,9 @@ class PlayVoiceViewController: UIViewController {
             playVoiceManager.playAudio()
             playAndPauseButton.setImage(UIImage(systemName: "pause"), for: .normal)
         }
+    }
+    
+    @objc func slideVolumeButton(_ sender : UISlider){
+        playVoiceManager.setVolume(volume: sender.value)
     }
 }

@@ -37,7 +37,11 @@ class PlayVoiceManager{
         return isPlay
     }
     
-    func setVolume(){
-        print(player.volume)
+    func setVolume(volume : Float){
+        player.volume = volume
+    }
+    
+    func getVolume()->Float{
+        return player.volume
     }
 }
