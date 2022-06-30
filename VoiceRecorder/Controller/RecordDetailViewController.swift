@@ -29,6 +29,12 @@ class RecordDetailViewController: UIViewController {
     let readyToRecordButtonImage = UIImage(systemName: "record.circle")
     let recordingButtonImage = UIImage(systemName: "record.circle.fill")
     
+    let playButtonImage = UIImage(systemName: "play.fill")
+    let pauseButtonImage = UIImage(systemName: "pause.fill")
+    
+    // about play
+    var player : AVAudioPlayer?
+    
     // MARK: - LifeCycle
     
     override func viewDidLoad() {
@@ -36,6 +42,25 @@ class RecordDetailViewController: UIViewController {
         
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        if audioRecorder != nil {
+            // 오디오 중지
+            audioRecorder?.stop()
+            audioRecorder = nil
+            // 로컬에 생성된 파일 삭제
+            if let audioFileURL = audioFileURL {
+                do {
+                    print(audioFileURL)
+                    try FileManager.default.removeItem(at: audioFileURL)
+                } catch {
+                    print(error)
+                }
+            }
+        } else {
+            print("close")
+        }
+    }
+    
     // MARK: - Methods
     
     func setupAudioRecorder() {
@@ -43,7 +68,6 @@ class RecordDetailViewController: UIViewController {
         do {
             try recordingSession?.setCategory(.playAndRecord, mode: .default)
             try recordingSession?.setActive(true)
-            
             recordingSession?.requestRecordPermission({ [unowned self] allowed in
                 DispatchQueue.main.async {
                     if allowed {
@@ -65,12 +89,11 @@ class RecordDetailViewController: UIViewController {
         
     func startRecording() {
         let fileName = DataFormatter.makeFileName()
-        FireStorageManager.RecordFileString.Path.fileName += fileName
+        FireStorageManager.RecordFileString.Path.fileName = fileName
         // 파일 생성
-        guard let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {return}
-        audioFileURL = fileURL.appendingPathComponent(FireStorageManager.RecordFileString.fileFullName)
-        print(FireStorageManager.RecordFileString.fileFullName)
-        let audioFileURL = fileURL.appendingPathComponent(FireStorageManager.RecordFileString.fileFullName)
+        guard let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+        audioFileURL = fileURL.appendingPathComponent("\(FireStorageManager.RecordFileString.fileFullName)\(FireStorageManager.RecordFileString.contentType.audio)")
+        let audioFileURL = fileURL.appendingPathComponent("\(FireStorageManager.RecordFileString.fileFullName)\(FireStorageManager.RecordFileString.contentType.audio)")
         let settings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
             AVSampleRateKey: 12000,
@@ -111,6 +134,31 @@ class RecordDetailViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
 
+    // about play
+    func initPlay() {
+        if let findUrl = audioFileURL {
+            do {
+                player = try AVAudioPlayer(contentsOf: findUrl)
+                player?.delegate = self
+                player?.prepareToPlay() // 실제 호출과 기기의 플레이 간의 딜레이를 줄여줌
+            }
+            catch {
+                print(error)
+            }
+        }
+    }
+    
+    func playSound() {
+        if player?.isPlaying == false {
+            player?.play()
+            playButton.setImage(pauseButtonImage, for: .normal)
+        }
+        else {
+            player?.pause()
+            player?.prepareToPlay()
+            playButton.setImage(playButtonImage, for: .normal)
+        }
+    }
     
     // MARK: - IBActions
     
@@ -129,15 +177,21 @@ class RecordDetailViewController: UIViewController {
     }
     
     @IBAction func controlPlayButton(_ sender: UIButton) {
+        if player != nil {
+            playSound()
+        } else {
+            initPlay()
+        }
     }
     
     @IBAction func controlNextButton(_ sender: UIButton) {
     }
     
-    
 }
 // MARK: - Extensions
 
-extension RecordDetailViewController: AVAudioRecorderDelegate {
-    
+extension RecordDetailViewController: AVAudioPlayerDelegate {
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        playButton.setImage(playButtonImage, for: .normal)
+    }
 }

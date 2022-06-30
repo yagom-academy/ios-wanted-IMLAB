@@ -44,10 +44,13 @@ class VoiceMemoViewController: UIViewController {
     func fetchRecordingData() {
         FireStorageManager.shared.fetchData { results in
             self.items = results
+            let uris = self.items
+            FireStorageManager.shared.downloadData(uris: uris)
             DispatchQueue.main.async {
                 self.voiceMemoTableView.reloadData()
             }
         }
+        
     }
 
     func configureTableView() {

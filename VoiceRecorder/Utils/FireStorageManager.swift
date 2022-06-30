@@ -21,7 +21,9 @@ class FireStorageManager {
         enum contentType {
             static let audio: String = ".m4a"
         }
-        static let fileFullName: String = "recording\(Path.fileName)"
+        static var fileFullName: String {
+            return ("recording\(Path.fileName)")
+        }
     }
     
     var items: [StorageReference] = []
@@ -32,8 +34,10 @@ class FireStorageManager {
             return
         }
         let storageRef = storage.reference()
+        let metadata = StorageMetadata()
+        metadata.contentType = "audio/x-m4a"
         let fileRef = storageRef.child("\(RecordFileString.Ref.recordDir)\(RecordFileString.fileFullName)")
-        fileRef.putFile(from: url)
+        fileRef.putFile(from: url, metadata: metadata)
     }
     
     func fetchData(completion: @escaping ([StorageReference]) -> Void )  {
@@ -49,6 +53,25 @@ class FireStorageManager {
             completion(self.items)
             
         }
+    }
+    // escaping 클로저로 data 넘기기
+    func downloadData(uris: [StorageReference]) {
+        
+        let stringUri: [String] = uris.map { "\($0)" }
+        for uri in stringUri {
+            let storageRef = storage.reference(forURL: uri)
+            let maxSize = Int64(1 * 1024 * 1024)
+            storageRef.getData(maxSize: maxSize) { data, error in
+                if let error = error {
+                    print("Error: FireStorageManager - downloadFile \(error.localizedDescription)")
+                } else if let data = data {
+                    // escaping 클로저로 data 넘기기
+                    print("data:\(data)")
+                }
+            }
+            print("storageRef:\(storageRef)")
+        }
+
     }
     
     func deleteItem(_ name : String) {
