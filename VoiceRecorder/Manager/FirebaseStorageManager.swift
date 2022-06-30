@@ -17,7 +17,7 @@ class FirebaseStorageManager {
     
     static let shared = FirebaseStorageManager()
     private let storage = Storage.storage()
-    private let storageReferenceStr = "VoiceMemo/"
+    private let storageReferenceStr = "VoiceRecoder/"
     
     private init() { }
     
@@ -59,7 +59,7 @@ class FirebaseStorageManager {
     
     func removeVoiceMemoInFirebase(with fileName: String, completion: @escaping ((Result<Bool, NetworkError>) -> Void)) {
         print(#function)
-        let reference = storage.reference().child("\(fileName)")
+        let reference = storage.reference().child("\(storageReferenceStr)\(fileName)")
         
         reference.delete { error in
             guard error != nil else {
@@ -70,27 +70,17 @@ class FirebaseStorageManager {
         }
     }
     
-    func listAll() {
-        storageReference.listAll {
+    func listAll(completion: @escaping ((Result<[String], NetworkError>) -> Void)) {
+        let reference = storage.reference().child(storageReferenceStr)
+        reference.listAll {
             (result, error) in
-            
-            if let error = error {
-                print(error)
+            guard let result = result,
+                  error == nil else {
+                completion(.failure(.error))
                 return
             }
-            
-            guard let result = result else {
-                print("no result")
-                return
-            }
-            
-            for pre in result.prefixes {
-                print("pre:", pre)
-            }
-            
-            for item in result.items {
-                print("item:", item)
-                print(item.fullPath)
-            }
+            let items = result.items.map { $0.fullPath }
+            completion(.success(items))
         }
+    }
 }
