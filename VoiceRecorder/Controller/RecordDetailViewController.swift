@@ -94,7 +94,7 @@ class RecordDetailViewController: UIViewController {
     }
     
     func uploadRecordDataToFirebase(_ url: URL?) {
-        FireStorageManager.shared.uploadRecordDataToFirebase(url)
+        FireStorageManager.shared.uploadData(url)
     }
     
     func showSettingViewController() {

@@ -28,7 +28,7 @@ class FireStorageManager {
     var items: [StorageReference] = []
     let storage = Storage.storage()
     
-    func uploadRecordDataToFirebase(_ url: URL?) {
+    func uploadData(_ url: URL?) {
         guard let url = url else {
             return
         }
@@ -37,7 +37,7 @@ class FireStorageManager {
         fileRef.putFile(from: url)
     }
     
-    func getDataFromFirebase(completion: @escaping ([StorageReference]) -> Void )  {
+    func fetchData(completion: @escaping ([StorageReference]) -> Void )  {
         let storageRef = storage.reference()
         let fileRef = storageRef.child(RecordFileString.Ref.recordDir)
         fileRef.listAll() { (result, error) in
@@ -50,6 +50,19 @@ class FireStorageManager {
             completion(self.items)
             
         }
-        
+    }
+    
+    func deleteItem(_ name : String) {
+        let storageRef = storage.reference()
+        let fileRef = storageRef.child("\(RecordFileString.Ref.recordDir)\(name)")
+
+        // Delete the file
+        fileRef.delete { error in
+          if let error = error {
+            print(error)
+          } else {
+            // File deleted successfully
+          }
+        }
     }
 }
