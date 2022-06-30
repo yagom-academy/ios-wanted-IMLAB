@@ -8,21 +8,29 @@
 
 /* Begin PBXBuildFile section */
 		0E9A9D1B2869A723006201BE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E9A9D1A2869A723006201BE /* GoogleService-Info.plist */; };
+		0EAD22D9286AD8160093E2D0 /* VoiceMemoPlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EAD22D8286AD8160093E2D0 /* VoiceMemoPlayViewController.swift */; };
 		0EEFBFE82869C7D700AD8075 /* FirebaseStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEFBFE72869C7D700AD8075 /* FirebaseStorageManager.swift */; };
 		5A0231B2EB486B3F62CF4659 /* Pods_VoiceRecorder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2163F30A9B1B9D86A1CE8B04 /* Pods_VoiceRecorder.framework */; };
+		B0540017286D5DD600BB5A34 /* PathFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0540016286D5DD600BB5A34 /* PathFinder.swift */; };
+		B0C058DC286AD73F008426B2 /* VoiceMemoRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C058DB286AD73F008426B2 /* VoiceMemoRecordViewController.swift */; };
 		DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65B28604278003DD2F5 /* AppDelegate.swift */; };
 		DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65D28604278003DD2F5 /* SceneDelegate.swift */; };
 		DE15E66028604278003DD2F5 /* VoiceMemoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65F28604278003DD2F5 /* VoiceMemoListViewController.swift */; };
 		DE15E66528604279003DD2F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66428604279003DD2F5 /* Assets.xcassets */; };
 		DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */; };
+		FF76356C286AE23200147127 /* VoiceMemoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF76356B286AE23200147127 /* VoiceMemoCell.swift */; };
+		FF76356E286AE60C00147127 /* VoiceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF76356D286AE60C00147127 /* VoiceData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0E9A9D1A2869A723006201BE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		0EAD22D8286AD8160093E2D0 /* VoiceMemoPlayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceMemoPlayViewController.swift; sourceTree = "<group>"; };
 		0EEFBFE72869C7D700AD8075 /* FirebaseStorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorageManager.swift; sourceTree = "<group>"; };
 		2163F30A9B1B9D86A1CE8B04 /* Pods_VoiceRecorder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VoiceRecorder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DF64A10A912BF4D1D132F98 /* Pods-VoiceRecorder.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VoiceRecorder.release.xcconfig"; path = "Target Support Files/Pods-VoiceRecorder/Pods-VoiceRecorder.release.xcconfig"; sourceTree = "<group>"; };
 		94C8CB0AF00BF4C86F3AC7FA /* Pods-VoiceRecorder.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VoiceRecorder.debug.xcconfig"; path = "Target Support Files/Pods-VoiceRecorder/Pods-VoiceRecorder.debug.xcconfig"; sourceTree = "<group>"; };
+		B0540016286D5DD600BB5A34 /* PathFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathFinder.swift; sourceTree = "<group>"; };
+		B0C058DB286AD73F008426B2 /* VoiceMemoRecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceMemoRecordViewController.swift; sourceTree = "<group>"; };
 		DE15E65828604278003DD2F5 /* VoiceRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE15E65B28604278003DD2F5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DE15E65D28604278003DD2F5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -30,6 +38,8 @@
 		DE15E66428604279003DD2F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DE15E66728604279003DD2F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DE15E66928604279003DD2F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FF76356B286AE23200147127 /* VoiceMemoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceMemoCell.swift; sourceTree = "<group>"; };
+		FF76356D286AE60C00147127 /* VoiceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,10 +54,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0EAD22D4286AD7AA0093E2D0 /* VoiceMemoPlayView */ = {
+			isa = PBXGroup;
+			children = (
+				0EAD22D7286AD7C60093E2D0 /* Controller */,
+			);
+			path = VoiceMemoPlayView;
+			sourceTree = "<group>";
+		};
+		0EAD22D7286AD7C60093E2D0 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				0EAD22D8286AD8160093E2D0 /* VoiceMemoPlayViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
 		0EEFBFE62869C7B000AD8075 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
 				0EEFBFE72869C7D700AD8075 /* FirebaseStorageManager.swift */,
+				B0540016286D5DD600BB5A34 /* PathFinder.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -91,6 +118,8 @@
 		B096C04428698E3B00077FC4 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				0EAD22D4286AD7AA0093E2D0 /* VoiceMemoPlayView */,
+				B0C058D9286AD709008426B2 /* VoiceMemoRecordView */,
 				B096C04528698E4400077FC4 /* VoiceMemoListView */,
 			);
 			path = Presentation;
@@ -99,6 +128,7 @@
 		B096C04528698E4400077FC4 /* VoiceMemoListView */ = {
 			isa = PBXGroup;
 			children = (
+				FF76356A286AE20000147127 /* View */,
 				B096C04728698E7600077FC4 /* Controller */,
 			);
 			path = VoiceMemoListView;
@@ -108,6 +138,22 @@
 			isa = PBXGroup;
 			children = (
 				DE15E65F28604278003DD2F5 /* VoiceMemoListViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		B0C058D9286AD709008426B2 /* VoiceMemoRecordView */ = {
+			isa = PBXGroup;
+			children = (
+				B0C058DA286AD72A008426B2 /* Controller */,
+			);
+			path = VoiceMemoRecordView;
+			sourceTree = "<group>";
+		};
+		B0C058DA286AD72A008426B2 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				B0C058DB286AD73F008426B2 /* VoiceMemoRecordViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -140,6 +186,15 @@
 				DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */,
 			);
 			path = VoiceRecorder;
+			sourceTree = "<group>";
+		};
+		FF76356A286AE20000147127 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				FF76356B286AE23200147127 /* VoiceMemoCell.swift */,
+				FF76356D286AE60C00147127 /* VoiceData.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -257,8 +312,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0EAD22D9286AD8160093E2D0 /* VoiceMemoPlayViewController.swift in Sources */,
+				FF76356E286AE60C00147127 /* VoiceData.swift in Sources */,
+				B0540017286D5DD600BB5A34 /* PathFinder.swift in Sources */,
+				B0C058DC286AD73F008426B2 /* VoiceMemoRecordViewController.swift in Sources */,
 				0EEFBFE82869C7D700AD8075 /* FirebaseStorageManager.swift in Sources */,
 				DE15E66028604278003DD2F5 /* VoiceMemoListViewController.swift in Sources */,
+				FF76356C286AE23200147127 /* VoiceMemoCell.swift in Sources */,
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
 				DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */,
 			);
@@ -400,7 +460,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8PRV428ULN;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VoiceRecorder/Resource/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -428,7 +488,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8PRV428ULN;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VoiceRecorder/Resource/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
