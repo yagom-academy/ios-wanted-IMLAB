@@ -27,8 +27,10 @@ class VoiceMemoViewController: UIViewController {
         super.viewDidLoad()
         
         configureTableView()
-        getDataFromFirebase()
+        fetchRecordingData()
+        
     }
+    
     
     // MARK: - IBActions
     
@@ -38,19 +40,12 @@ class VoiceMemoViewController: UIViewController {
     
     // MARK: - Methods
     
-    func getDataFromFirebase() {
-        let storage = Storage.storage()
-        let storageRef = storage.reference()
-        let fileRef = storageRef.child(RefString.recording)
-        
-        fileRef.listAll() { (result, error) in
-            if let error = error {
-                print(error)
+    func fetchRecordingData() {
+        FireStorageManager.shared.getDataFromFirebase { results in
+            self.items = results
+            DispatchQueue.main.async {
+                self.voiceMemoTableView.reloadData()
             }
-            for item in result.items {
-                self.items.append(item)
-            }
-            self.voiceMemoTableView.reloadData()
         }
     }
 

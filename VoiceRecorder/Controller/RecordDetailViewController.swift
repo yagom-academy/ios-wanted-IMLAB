@@ -44,6 +44,8 @@ class RecordDetailViewController: UIViewController {
         
     }
     
+
+    
     // MARK: - Methods
     
     func setupAudioRecorder() {
