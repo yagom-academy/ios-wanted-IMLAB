@@ -38,7 +38,7 @@ class PathFinder {
         return pathToReturn
     }
     
-    func getPathWithTime() -> URL {
+    func getTimeNow() -> String {
         let timeNow = Date.now.formatted(
             Date.FormatStyle()
                 .year(.defaultDigits)
@@ -47,8 +47,10 @@ class PathFinder {
                 .hour(.twoDigits(amPM: .abbreviated))
                 .minute(.twoDigits)
                 .second(.twoDigits))
-        
-        let converted = timeNow.components(separatedBy: "/").joined(separator: "_")
+    }
+    
+    func getPathWithTime() -> URL {
+        let converted = getTimeNow().components(separatedBy: "/").joined(separator: "_")
         
         return getPath(fileName: converted)
     }
