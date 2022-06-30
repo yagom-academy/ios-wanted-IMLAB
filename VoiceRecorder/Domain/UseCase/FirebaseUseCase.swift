@@ -27,9 +27,9 @@ protocol FirebaseUseCaseType: Downloadable, Uploadable, Deletable { }
 
 final class FirebaseUseCase: FirebaseUseCaseType {
     
-    let repository: FirebaseRepository
+    let repository: FirebaseRepositoryInterface
     
-    init(repository: FirebaseRepository) {
+    init(repository: FirebaseRepositoryInterface) {
         self.repository = repository
     }
     

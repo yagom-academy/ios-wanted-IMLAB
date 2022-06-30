@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol FirebaseRepository {
+protocol FirebaseRepositoryInterface {
     
     func upload() async throws -> URL
     func downloadURL() async throws -> [AudioURL]
