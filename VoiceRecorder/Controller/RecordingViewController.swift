@@ -28,6 +28,7 @@ class RecordingViewController: UIViewController {
     var inPlayMode = true
     
     let audioRecorderHandler = AudioRecoderHandler(handler: LocalFileHandler(), updateTimeInterval: UpdateTimeInterval())
+    let audioPlayerHandler = AudioPlayerHandler(handler: LocalFileHandler())
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -84,6 +85,13 @@ class RecordingViewController: UIViewController {
         self.recordTimeLabel.text = audioRecorderHandler.updateTimer(audioRecorderHandler.audioRecorder.currentTime)
     }
     
+    @IBAction func playButtonTapped(_ sender: UIButton) {
+        audioPlayerHandler.prepareToPlay()
+        audioPlayerHandler.audioPlayer.delegate = self
+        audioPlayerHandler.startPlay()
+        sender.setImage(UIImage(systemName: "pause"), for: .normal)
+        setButton(recording: false, goBack: true, goForward: true)
+    }
     func writeWaves(_ input: Float) {
         
         if startPoint.x >= waveformView.frame.maxX {
@@ -153,5 +161,13 @@ extension UIScrollView {
         
         // 최종 계산 영역의 크기를 반환
         return totalRect.union(view.frame)
+    }
+}
+
+extension RecordingViewController: AVAudioPlayerDelegate {
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        player.stop()
+        self.playButton.setImage(UIImage(systemName: "play"), for: .normal)
+        setButton(recording: true, goBack: false, goForward: false)
     }
 }

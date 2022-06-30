@@ -12,6 +12,7 @@
 		12BCEDBA286D36D7006C1783 /* LocalFileHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12BCEDB9286D36D7006C1783 /* LocalFileHandler.swift */; };
 		12BCEDC0286D3AB3006C1783 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12BCEDBF286D3AB3006C1783 /* UIViewExtension.swift */; };
 		12BCEDC2286D3BEF006C1783 /* AudioRecorderHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12BCEDC1286D3BEF006C1783 /* AudioRecorderHandler.swift */; };
+		12BCEDD8286DC9E3006C1783 /* AudioPlayerHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12BCEDD7286DC9E3006C1783 /* AudioPlayerHandler.swift */; };
 		12E1549028697D4400F7EA19 /* RecordModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E1548F28697D4400F7EA19 /* RecordModel.swift */; };
 		B7202645286BEB2400466FBA /* GetFileList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7202644286BEB2400466FBA /* GetFileList.swift */; };
 		B7545781286AC79800EFCDA2 /* FirebaseProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7545780286AC79800EFCDA2 /* FirebaseProtocol.swift */; };
@@ -39,6 +40,7 @@
 		12BCEDB9286D36D7006C1783 /* LocalFileHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFileHandler.swift; sourceTree = "<group>"; };
 		12BCEDBF286D3AB3006C1783 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		12BCEDC1286D3BEF006C1783 /* AudioRecorderHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorderHandler.swift; sourceTree = "<group>"; };
+		12BCEDD7286DC9E3006C1783 /* AudioPlayerHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerHandler.swift; sourceTree = "<group>"; };
 		12E1548F28697D4400F7EA19 /* RecordModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordModel.swift; sourceTree = "<group>"; };
 		73E59906131CF5BC431F5250 /* Pods-VoiceRecorder.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VoiceRecorder.debug.xcconfig"; path = "Target Support Files/Pods-VoiceRecorder/Pods-VoiceRecorder.debug.xcconfig"; sourceTree = "<group>"; };
 		B1A3C0E2C0AF20E02F5B9AD9 /* Pods-VoiceRecorder.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VoiceRecorder.release.xcconfig"; path = "Target Support Files/Pods-VoiceRecorder/Pods-VoiceRecorder.release.xcconfig"; sourceTree = "<group>"; };
@@ -145,6 +147,7 @@
 			children = (
 				B7E274962869BA0300FBB977 /* FirebaseStorage.swift */,
 				12BCEDC1286D3BEF006C1783 /* AudioRecorderHandler.swift */,
+				12BCEDD7286DC9E3006C1783 /* AudioPlayerHandler.swift */,
 				B78E6BEE286D53EE005AC140 /* UpdateTimeInterval.swift */,
 				12BCEDBF286D3AB3006C1783 /* UIViewExtension.swift */,
 				B78E6BEA286D506C005AC140 /* FirebaseUtil */,
@@ -334,6 +337,7 @@
 				B7202645286BEB2400466FBA /* GetFileList.swift in Sources */,
 				B7545781286AC79800EFCDA2 /* FirebaseProtocol.swift in Sources */,
 				12E1549028697D4400F7EA19 /* RecordModel.swift in Sources */,
+				12BCEDD8286DC9E3006C1783 /* AudioPlayerHandler.swift in Sources */,
 				B7545787286AE34B00EFCDA2 /* DownloadRecordfile.swift in Sources */,
 				B7545785286AE33D00EFCDA2 /* UploadRecordfile.swift in Sources */,
 				B7E274972869BA0300FBB977 /* FirebaseStorage.swift in Sources */,
