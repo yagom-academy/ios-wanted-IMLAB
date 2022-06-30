@@ -12,10 +12,10 @@ class FireStorageManager {
     static var shared = FireStorageManager()
     
     enum RecordFileString {
-        static var fileName = "recording"
+        static var fileName = ""
         static let fileExtension = ".m4a"
         static var fileFullName = "recording\(fileName)\(fileExtension)"
-        static let recording: String = "recording/"
+        static let recordingDirectory: String = "recording/"
     }
     
     var items: [StorageReference] = []
@@ -26,13 +26,13 @@ class FireStorageManager {
             return
         }
         let storageRef = storage.reference()
-        let riversRef = storageRef.child("recording/\(RecordFileString.fileName)")
+        let riversRef = storageRef.child("\(RecordFileString.recordingDirectory)\(RecordFileString.fileName)")
         riversRef.putFile(from: url)
     }
     
-    func getDataFromFirebase() -> [StorageReference] {
+    func getDataFromFirebase(completion: @escaping ([StorageReference]) -> Void )  {
         let storageRef = storage.reference()
-        let fileRef = storageRef.child(RecordFileString.recording)
+        let fileRef = storageRef.child(RecordFileString.recordingDirectory)
         fileRef.listAll() { (result, error) in
             if let error = error {
                 print(error)
@@ -40,8 +40,9 @@ class FireStorageManager {
             for item in result.items {
                 self.items.append(item)
             }
+            completion(self.items)
+            
         }
-        print(items)
-        return items
+        
     }
 }
