@@ -8,6 +8,7 @@
 import Foundation
 
 protocol LocalFileProtocol {
-    var localFileURL : URL { get set}
-    var localFileName : String { get }
+    var localFileURL : URL { get set }
+    func getFileCreatedDate(file: URL) -> Date
+    func getFileName() -> String
 }

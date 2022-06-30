@@ -13,8 +13,6 @@ class AudioRecoderHandler {
     var audioRecorder = AVAudioRecorder()
     var localFileHandler : LocalFileProtocol
     var updateTimeInterval : UpdateTimer
-    var fileName : String?
-    
     
     init(handler : LocalFileProtocol, updateTimeInterval : UpdateTimer ){
         self.localFileHandler = handler
@@ -62,16 +60,12 @@ class AudioRecoderHandler {
             }
             
             enableBuiltInMic()
-            
-            fileName = "voiceRecords_\(localFileHandler.localFileName)"
-            guard let fileName = fileName else { return }
-
-            let recordFileURL = localFileHandler.localFileURL.appendingPathComponent(fileName)
+            let recordFileName = localFileHandler.getFileName()
+            let recordFileURL = localFileHandler.localFileURL.appendingPathComponent(recordFileName)
             let audioRecorder = try AVAudioRecorder(url: recordFileURL, settings: recordSettings)
             self.audioRecorder = audioRecorder
             audioRecorder.isMeteringEnabled = true
             self.audioRecorder.prepareToRecord()
-            print(recordFileURL)
         } catch let error {
             print("Error : setUpRecord - \(error)")
         }
@@ -84,11 +78,9 @@ class AudioRecoderHandler {
     
     func stopRecord() {
         self.audioRecorder.stop()
-        guard let fileName = fileName else {
-            return
-        }
-        let recordFileURL = localFileHandler.localFileURL.appendingPathComponent(fileName)
-        UploadRecordfile().uploadToFirebase(fileUrl: recordFileURL, fileName: fileName)
+        let recordFileName = localFileHandler.getFileName()
+        let recordFileURL = localFileHandler.localFileURL.appendingPathComponent(recordFileName)
+        UploadRecordfile().uploadToFirebase(fileUrl: recordFileURL, fileName: recordFileName)
     }
     
     func updateTimer(_ time: TimeInterval) -> String {
