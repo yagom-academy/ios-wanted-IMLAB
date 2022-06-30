@@ -9,7 +9,7 @@ import Foundation
 
 
 protocol FirebaseStoreUpload {
-    func uploadToFirebase(fileUrl:URL,fileName:String)
+    func uploadToFirebase(fileUrl:URL,fileName:String,totalTime: String)
 }
 
 protocol FirebaseStoreDownload {

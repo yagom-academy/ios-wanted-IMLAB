@@ -76,11 +76,12 @@ class AudioRecoderHandler {
         self.audioRecorder.record()
     }
     
-    func stopRecord() {
+    func stopRecord(totalTime : TimeInterval) {
         self.audioRecorder.stop()
         let recordFileName = localFileHandler.getFileName()
         let recordFileURL = localFileHandler.localFileURL.appendingPathComponent(recordFileName)
-        UploadRecordfile().uploadToFirebase(fileUrl: recordFileURL, fileName: recordFileName)
+        let totalTimeToString = updateTimer(totalTime)
+        FirebaseStorage.shared.uploadFile(fileUrl: recordFileURL, fileName: recordFileName, totalTime: totalTimeToString)
     }
     
     func updateTimer(_ time: TimeInterval) -> String {

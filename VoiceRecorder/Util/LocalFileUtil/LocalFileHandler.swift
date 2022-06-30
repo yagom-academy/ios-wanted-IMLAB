@@ -28,7 +28,7 @@ struct LocalFileHandler : LocalFileProtocol {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy_MM_dd_HH:mm:ss"
         let fileName = formatter.string(from: date as Date)
-        return "voiceRecords_\(fileName).m4a"
+        return "voiceRecords_\(fileName)"
     }
 
 }

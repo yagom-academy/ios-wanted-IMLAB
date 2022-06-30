@@ -26,8 +26,8 @@ class FirebaseStorage {
         self.getFileMetatData = GetfirebaseStoreMetaData
     }
     
-    func uploadFile(fileUrl:URL,fileName:String) {
-        uploadHandler.uploadToFirebase(fileUrl: fileUrl, fileName: fileName)
+    func uploadFile(fileUrl: URL,fileName: String,totalTime: String) {
+        uploadHandler.uploadToFirebase(fileUrl: fileUrl, fileName: fileName,totalTime: totalTime)
     }
     
     func downloadFile(fileName:String, hander : @escaping (Result<String, Error>) -> ()) {
@@ -52,6 +52,17 @@ class FirebaseStorage {
                 handler(.success(filePaths))
             case .failure(let error) :
                 print(error)
+            }
+        }
+    }
+    
+    func getFileMetaData(fileName: String, handler : @escaping (Result<String, Error>) -> ()) {
+        getFileMetatData.getFirebaseStoreFileMetaData(fileName: fileName) { result in
+            switch result {
+            case .success(let totalTime) :
+                handler(.success(totalTime))
+            case .failure(let error) :
+                print(error.localizedDescription)
             }
         }
     }

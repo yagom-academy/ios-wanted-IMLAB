@@ -72,7 +72,7 @@ class RecordingViewController: UIViewController {
             self.playButton.isEnabled = true
             print(waveformView.frame.size.width)
             print(waveformView.frame.size.width)
-            audioRecorderHandler.stopRecord()
+            audioRecorderHandler.stopRecord(totalTime: audioRecorderHandler.audioRecorder.currentTime)
             progressTimer.invalidate()
             inRecordMode = !inRecordMode
         }
