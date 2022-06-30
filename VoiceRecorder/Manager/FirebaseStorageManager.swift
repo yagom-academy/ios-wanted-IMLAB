@@ -5,7 +5,28 @@ class FirebaseStorageManager{
     let storage = Storage.storage()
     
     func uploadRecord(){
+        print("upload file")
+        //파일 위치
+        let localFile = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("myRecoding.m4a")
+        print(localFile)
+        let meta = StorageMetadata.init()
+        meta.contentType = "m4a"
+        //현재 날짜, 시간 기준으로 파일 이름
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy_MM_dd_HH:mm:ss"
+        let nowDate = dateFormatter.string(from: Date())
+        let fileName = "voiceRecords_\(nowDate).m4a"
         
+        //현재 날짜 시간으로 저장
+        let firebaseRef = storage.reference().child("record").child("\(fileName)")
+        
+        firebaseRef.putFile(from: localFile, metadata: meta) { meta, error in
+            if let error = error{
+                print("upload file error \(error.localizedDescription)")
+                return
+            }
+            print("complete upload file \(meta)")
+        }
     }
     
     func fetchRecordList(completion : @escaping([RecordFile]?)->()){
