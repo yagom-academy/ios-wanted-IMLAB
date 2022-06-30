@@ -148,11 +148,35 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wBO-IG-LvN">
+                                <rect key="frame" x="57" y="130" width="300" height="100"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eg2-m4-YQx">
+                                        <rect key="frame" x="0.0" y="0.0" width="300" height="100"/>
+                                        <color key="backgroundColor" red="0.94101941590000004" green="0.93623608349999998" blue="0.95626169439999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" red="0.94101941590000004" green="0.93623608349999998" blue="0.95626169439999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="eg2-m4-YQx" firstAttribute="trailing" secondItem="v22-jl-BN4" secondAttribute="trailing" constant="240" id="7RK-lp-Rb5"/>
+                                    <constraint firstItem="eg2-m4-YQx" firstAttribute="bottom" secondItem="v22-jl-BN4" secondAttribute="bottom" constant="100" id="IOb-to-yWe"/>
+                                    <constraint firstAttribute="width" constant="300" id="UF8-5H-Mhf"/>
+                                    <constraint firstItem="eg2-m4-YQx" firstAttribute="height" secondItem="eIB-xi-vOM" secondAttribute="height" id="eDe-nZ-ugo"/>
+                                    <constraint firstAttribute="height" constant="100" id="eRc-an-DMw"/>
+                                    <constraint firstItem="eg2-m4-YQx" firstAttribute="top" secondItem="v22-jl-BN4" secondAttribute="top" id="kN9-1V-fg3"/>
+                                    <constraint firstItem="eg2-m4-YQx" firstAttribute="width" secondItem="wBO-IG-LvN" secondAttribute="width" id="rjr-Aw-bDB"/>
+                                    <constraint firstItem="eg2-m4-YQx" firstAttribute="leading" secondItem="v22-jl-BN4" secondAttribute="leading" id="uiv-NP-d9g"/>
+                                </constraints>
+                                <viewLayoutGuide key="contentLayoutGuide" id="v22-jl-BN4"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="eIB-xi-vOM"/>
+                            </scrollView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="PUG-oi-1ft"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="Y8P-W7-Nca" firstAttribute="centerX" secondItem="4qw-ly-4FW" secondAttribute="centerX" id="0IJ-0R-deB"/>
+                            <constraint firstItem="wBO-IG-LvN" firstAttribute="centerX" secondItem="PUG-oi-1ft" secondAttribute="centerX" id="FYY-1e-aHk"/>
+                            <constraint firstItem="wBO-IG-LvN" firstAttribute="top" secondItem="PUG-oi-1ft" secondAttribute="top" constant="86" id="Kca-XJ-QAG"/>
                             <constraint firstItem="jca-CU-g96" firstAttribute="centerY" secondItem="4qw-ly-4FW" secondAttribute="centerY" id="PWX-HT-ddC"/>
                             <constraint firstItem="jca-CU-g96" firstAttribute="top" secondItem="Y8P-W7-Nca" secondAttribute="bottom" constant="100" id="xLQ-Hv-LvH"/>
                             <constraint firstItem="jca-CU-g96" firstAttribute="centerX" secondItem="4qw-ly-4FW" secondAttribute="centerX" id="zAd-4Y-Ne6"/>
@@ -164,6 +188,8 @@
                         <outlet property="playButton" destination="WJj-Hx-Tya" id="P91-gm-3qH"/>
                         <outlet property="recordTimeLabel" destination="Y8P-W7-Nca" id="EBE-iG-18Q"/>
                         <outlet property="recordingButton" destination="8jP-wJ-9ig" id="KmF-wy-kNF"/>
+                        <outlet property="scrollView" destination="wBO-IG-LvN" id="u7L-Ij-ThM"/>
+                        <outlet property="waveformView" destination="eg2-m4-YQx" id="7g9-zf-b5J"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3Bz-rK-kMK" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
