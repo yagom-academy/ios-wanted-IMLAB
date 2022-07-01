@@ -17,7 +17,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let audioSession = AVAudioSession.sharedInstance()
         do {
             // Set the audio session category, mode, and options.
-            try audioSession.setCategory(.playAndRecord, mode: .default, options: [])
+            try audioSession.setCategory(.record, mode: .default, options: [])
+            try audioSession.setCategory(.playback, mode: .default, options: [])
             try audioSession.setActive(true)
         } catch {
             print("Failed to set audio session category.")
