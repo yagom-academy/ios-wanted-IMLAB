@@ -2,7 +2,6 @@
 //  ViewController.swift
 //  VoiceRecorder
 //
-
 import UIKit
 import AVKit
 import AVFoundation
@@ -67,4 +66,3 @@ class ViewController: UIViewController {
         //self.present(recordCheckVC, animated: true)
     }
 }
-
