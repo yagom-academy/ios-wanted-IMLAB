@@ -274,6 +274,7 @@
                     </view>
                     <connections>
                         <outlet property="dateTitleLabel" destination="756-8S-E39" id="reP-vl-nGU"/>
+                        <outlet property="playButton" destination="ZXT-xL-ecs" id="NV0-d4-U2S"/>
                         <outlet property="voiceChangeSegment" destination="qY9-Ow-Yxv" id="j2l-9F-4io"/>
                         <outlet property="volumeSlider" destination="PhE-fU-8gb" id="QR5-MO-02f"/>
                     </connections>
