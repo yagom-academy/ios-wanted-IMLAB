@@ -4,9 +4,13 @@
 //
 
 import UIKit
+import AVKit
+import AVFoundation
 
 class ViewController: UIViewController {
-
+    
+    var player: AVAudioPlayer?
+    
     lazy var plusButton: UIButton = {
         var button = UIButton()
         button.setTitle("plus", for: .normal)
@@ -20,10 +24,17 @@ class ViewController: UIViewController {
         
         plusButton.addTarget(self, action: #selector(plusButtonClicked), for: .touchUpInside)
         
-        FirebaseStorageManager.download()
+        FirebaseStorageManager.download(urlString: FirebaseStorageManager.url) { data in
+            self.player(data: data!)
+        }
+        
+        
     }
     
     func setLayout() {
+        
+        view.backgroundColor = .white
+        
         plusButton.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(plusButton)
@@ -36,9 +47,24 @@ class ViewController: UIViewController {
         ])
     }
     
+    func player(data: Data) {
+        
+        do {
+            player = try AVAudioPlayer(data: data)
+            
+            print(player!.isPlaying)
+            
+        } catch {
+            print("error")
+        }
+        
+    }
+    
+    
     @objc func plusButtonClicked() {
-        let recordCheckVC = RecordCheckViewController()
-        self.present(recordCheckVC, animated: true)
+        player!.play()
+        //let recordCheckVC = RecordCheckViewController()
+        //self.present(recordCheckVC, animated: true)
     }
 }
 
