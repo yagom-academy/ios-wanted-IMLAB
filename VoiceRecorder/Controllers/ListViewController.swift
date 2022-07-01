@@ -7,10 +7,13 @@ import UIKit
 
 class ListViewController: UIViewController {
     
+    // MARK: - @IBOutlet
     @IBOutlet weak var recordListTableView: UITableView!
     
+    // MARK: - Properties
     var recordList = [RecordModel]()
     
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -26,6 +29,7 @@ class ListViewController: UIViewController {
         }
     }
     
+    // MARK: - @IBAction
     @IBAction func didTapShowRecordView(_ sender: UIBarButtonItem) {
         guard let recordVC = storyboard?.instantiateViewController(withIdentifier: "RecordViewController")
                 as? RecordViewController else { return }
@@ -35,20 +39,8 @@ class ListViewController: UIViewController {
     }
 }
 
-extension ListViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return recordList.count
-    }
-    
-    func tableView(
-        _ tableView: UITableView,
-        cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: "RecordListTableViewCell", for: indexPath) as? RecordListTableViewCell else { return UITableViewCell() }
-            cell.setUpView(recordFile: recordList[indexPath.row])
-            return cell
-        }
-    
+// MARK: - UITableViewDelegate
+extension ListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
@@ -73,17 +65,23 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-private extension ListViewController {
-    func setupRecordListTableView() {
-        recordListTableView.delegate = self
-        recordListTableView.dataSource = self
-        recordListTableView.register(
-            UINib(nibName: "RecordListTableViewCell", bundle: nil),
-            forCellReuseIdentifier: "RecordListTableViewCell"
-        )
+// MARK: - UITableViewDataSource
+extension ListViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return recordList.count
     }
+    
+    func tableView(
+        _ tableView: UITableView,
+        cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: "RecordListTableViewCell", for: indexPath) as? RecordListTableViewCell else { return UITableViewCell() }
+            cell.setUpView(recordFile: recordList[indexPath.row])
+            return cell
+        }
 }
 
+// MARK: - RecordViewControllerDelegate
 extension ListViewController: RecordViewControllerDelegate {
     func didFinishRecord() {
         recordList = []
@@ -98,3 +96,16 @@ extension ListViewController: RecordViewControllerDelegate {
         }
     }
 }
+
+// MARK: - UI Methods
+private extension ListViewController {
+    func setupRecordListTableView() {
+        recordListTableView.delegate = self
+        recordListTableView.dataSource = self
+        recordListTableView.register(
+            UINib(nibName: "RecordListTableViewCell", bundle: nil),
+            forCellReuseIdentifier: "RecordListTableViewCell"
+        )
+    }
+}
+
