@@ -112,4 +112,19 @@ class AudioManager {
             return (abs(minDB) - abs(power)) / abs(minDB)
         }
     }
+    
+    func startRecord() {
+        audioEngine.reset()
+        configureAudioEngine()
+        do {
+            try audioEngine.start()
+        } catch {
+            fatalError()
+        }
+    }
+    
+    /// 레코딩 완료
+    func stopRecord() {
+        audioEngine.stop()
+    }
 }
