@@ -62,6 +62,9 @@ class VoicePlayingViewController: UIViewController {
         configureLayoutOfVoicePlayVC()
         addViewsActionsToVC()
     }
+    override func viewWillDisappear(_ animated: Bool) {
+        soundManager.stopPlayer()
+    }
     
     private func configureLayoutOfVoicePlayVC() {
         
@@ -119,7 +122,7 @@ class VoicePlayingViewController: UIViewController {
     // Model 만들어서 들어와야 함. 06/29 레이아웃만 확인중 ~ 업데이트 예정
     func fetchRecordedDataFromMainVC(data: Data?) {
         
-        setSoundManager()
+        setSoundManager() // soundManager 초기화
         
         let sampleData = ["Sample Title", 300] as [Any]
         
@@ -131,7 +134,8 @@ class VoicePlayingViewController: UIViewController {
         
         let filePath = Bundle.main.path(forResource: "sound", ofType: ".mp3")
         let fileUrl = URL(fileURLWithPath: filePath!)
-        soundManager.initializedPlayer(url: fileUrl)
+        
+        soundManager.initializedEngine(url: fileUrl)
         
     }
     
@@ -178,11 +182,11 @@ extension VoicePlayingViewController: SoundButtonActionDelegate {
     func backwardButtonTouchUpinside(sender: UIButton) {
         print("backwardButton Clicked")
         
-        //soundManager.player.currentTime -= TimeInterval(5)
+        soundManager.seek(to: true)
     }
     
     func forwardTouchUpinside(sender: UIButton) {
-        //soundManager.player.currentTime += TimeInterval(5)
+        soundManager.seek(to: false)
     }
 }
 
@@ -198,7 +202,8 @@ extension VoicePlayingViewController: ReceiveSoundManagerStatus {
             // 임시 초기화 다시 함수와 data형식에 맞춰서 프로퍼티 만들어야함 06.30 이후 업데이트 예정
             let filePath = Bundle.main.path(forResource: "sound", ofType: ".mp3")
             let fileUrl = URL(fileURLWithPath: filePath!)
-            self.soundManager.initializedPlayer(url: fileUrl)
+            self.soundManager.stopPlayer()
+            //self.soundManager.initializedEngine(url: fileUrl)
         }
         
     }
