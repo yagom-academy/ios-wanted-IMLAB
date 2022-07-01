@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0E927B77286EBCB2006E82E2 /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E927B76286EBCB2006E82E2 /* AudioManager.swift */; };
 		0E9A9D1B2869A723006201BE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E9A9D1A2869A723006201BE /* GoogleService-Info.plist */; };
 		0EAD22D9286AD8160093E2D0 /* VoiceMemoPlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EAD22D8286AD8160093E2D0 /* VoiceMemoPlayViewController.swift */; };
 		0EEFBFE82869C7D700AD8075 /* FirebaseStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEFBFE72869C7D700AD8075 /* FirebaseStorageManager.swift */; };
@@ -23,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0E927B76286EBCB2006E82E2 /* AudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
 		0E9A9D1A2869A723006201BE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		0EAD22D8286AD8160093E2D0 /* VoiceMemoPlayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceMemoPlayViewController.swift; sourceTree = "<group>"; };
 		0EEFBFE72869C7D700AD8075 /* FirebaseStorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorageManager.swift; sourceTree = "<group>"; };
@@ -75,6 +77,7 @@
 			children = (
 				0EEFBFE72869C7D700AD8075 /* FirebaseStorageManager.swift */,
 				B0540016286D5DD600BB5A34 /* PathFinder.swift */,
+				0E927B76286EBCB2006E82E2 /* AudioManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -320,6 +323,7 @@
 				DE15E66028604278003DD2F5 /* VoiceMemoListViewController.swift in Sources */,
 				FF76356C286AE23200147127 /* VoiceMemoCell.swift in Sources */,
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
+				0E927B77286EBCB2006E82E2 /* AudioManager.swift in Sources */,
 				DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
