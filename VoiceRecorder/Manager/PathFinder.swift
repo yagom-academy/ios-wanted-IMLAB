@@ -31,7 +31,7 @@ class PathFinder {
     }
     
     func getPath(fileName: String) -> URL {
-        let fileNameToAppend = "\(fileName)"
+        let fileNameToAppend = "\(fileName).caf"
         var pathToReturn = basePath
         pathToReturn.appendPathComponent(fileNameToAppend)
         
