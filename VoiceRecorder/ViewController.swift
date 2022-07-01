@@ -19,6 +19,8 @@ class ViewController: UIViewController {
         setLayout()
         
         plusButton.addTarget(self, action: #selector(plusButtonClicked), for: .touchUpInside)
+        
+        FirebaseStorageManager.download()
     }
     
     func setLayout() {
