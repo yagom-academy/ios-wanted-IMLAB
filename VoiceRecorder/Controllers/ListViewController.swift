@@ -54,6 +54,7 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
         
         guard let playVC = storyboard?.instantiateViewController(withIdentifier: "PlayViewController")
                 as? PlayViewController else { return }
+        playVC.recordFile = recordList[indexPath.row]
         self.present(playVC, animated: true, completion: nil)
     }
     
