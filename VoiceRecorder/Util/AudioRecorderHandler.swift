@@ -13,6 +13,7 @@ class AudioRecoderHandler {
     var audioRecorder = AVAudioRecorder()
     var localFileHandler : LocalFileProtocol
     var updateTimeInterval : UpdateTimer
+    var fileName: String?
     
     init(handler : LocalFileProtocol, updateTimeInterval : UpdateTimer ){
         self.localFileHandler = handler
@@ -63,6 +64,7 @@ class AudioRecoderHandler {
             let recordFileName = localFileHandler.getFileName()
             let recordFileURL = localFileHandler.localFileURL.appendingPathComponent(recordFileName)
             let audioRecorder = try AVAudioRecorder(url: recordFileURL, settings: recordSettings)
+            self.fileName = recordFileName
             self.audioRecorder = audioRecorder
             audioRecorder.isMeteringEnabled = true
             self.audioRecorder.prepareToRecord()
@@ -78,7 +80,7 @@ class AudioRecoderHandler {
     
     func stopRecord(totalTime : TimeInterval) {
         self.audioRecorder.stop()
-        let recordFileName = localFileHandler.getFileName()
+        guard let recordFileName = self.fileName else { return }
         let recordFileURL = localFileHandler.localFileURL.appendingPathComponent(recordFileName)
         let totalTimeToString = updateTimer(totalTime)
         FirebaseStorage.shared.uploadFile(fileUrl: recordFileURL, fileName: recordFileName, totalTime: totalTimeToString)
