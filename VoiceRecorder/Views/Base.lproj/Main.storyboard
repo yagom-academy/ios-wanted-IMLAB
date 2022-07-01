@@ -244,6 +244,9 @@
                                     <segment title="아기 목소리"/>
                                     <segment title="할아버지 목소리"/>
                                 </segments>
+                                <connections>
+                                    <action selector="selectVoice:" destination="lmi-ig-c4Q" eventType="valueChanged" id="1hs-e8-spu"/>
+                                </connections>
                             </segmentedControl>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="H8j-VG-WSz">
                                 <rect key="frame" x="16" y="732" width="382" height="50"/>

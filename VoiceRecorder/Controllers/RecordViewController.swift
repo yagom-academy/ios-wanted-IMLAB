@@ -67,7 +67,7 @@ class RecordViewController: UIViewController {
             endRecord()
             guard let data = recorder.data else { return }
             uploadFile(data, fileName: recordDate ?? "")
-            
+            print(fileName)
         } else {
             sender.setImage(Icon.circle.image, for: .normal)
             recorder.record()
@@ -174,9 +174,11 @@ private extension RecordViewController {
     }
     
     func cancelRecording() {
+        if isRecord {
         recorder.stop()
         recorder.deleteRecording()
         player.stop()
+        }
     }
     
     func endRecord() {

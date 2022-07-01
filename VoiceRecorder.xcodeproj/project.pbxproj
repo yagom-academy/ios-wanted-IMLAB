@@ -11,6 +11,7 @@
 		362737AA286986E900592181 /* RecordListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 362737A8286986E900592181 /* RecordListTableViewCell.xib */; };
 		362737AD286987F200592181 /* RecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362737AC286987F200592181 /* RecordViewController.swift */; };
 		362737AF2869880000592181 /* PlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362737AE2869880000592181 /* PlayViewController.swift */; };
+		36B4B2B8286EF3DA0025714C /* 1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 36B4B2B7286EF3DA0025714C /* 1.mp3 */; };
 		6B31B100286C046D00B2E606 /* StoragePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B31B0FF286C046D00B2E606 /* StoragePath.swift */; };
 		6B47CD74286975BE00C0912F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6B47CD73286975BE00C0912F /* GoogleService-Info.plist */; };
 		6B47CD772869763B00C0912F /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 6B47CD762869763B00C0912F /* FirebaseStorage */; };
@@ -35,6 +36,7 @@
 		362737A8286986E900592181 /* RecordListTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RecordListTableViewCell.xib; sourceTree = "<group>"; };
 		362737AC286987F200592181 /* RecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewController.swift; sourceTree = "<group>"; };
 		362737AE2869880000592181 /* PlayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayViewController.swift; sourceTree = "<group>"; };
+		36B4B2B7286EF3DA0025714C /* 1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 1.mp3; sourceTree = "<group>"; };
 		6B31B0FF286C046D00B2E606 /* StoragePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoragePath.swift; sourceTree = "<group>"; };
 		6B47CD73286975BE00C0912F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6B52A49E2869955E006B74D2 /* RecordModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordModel.swift; sourceTree = "<group>"; };
@@ -158,6 +160,7 @@
 		DE15E65A28604278003DD2F5 /* VoiceRecorder */ = {
 			isa = PBXGroup;
 			children = (
+				36B4B2B7286EF3DA0025714C /* 1.mp3 */,
 				DE15E65B28604278003DD2F5 /* AppDelegate.swift */,
 				DE15E65D28604278003DD2F5 /* SceneDelegate.swift */,
 				DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */,
@@ -241,6 +244,7 @@
 			files = (
 				DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */,
 				6B47CD74286975BE00C0912F /* GoogleService-Info.plist in Resources */,
+				36B4B2B8286EF3DA0025714C /* 1.mp3 in Resources */,
 				362737AA286986E900592181 /* RecordListTableViewCell.xib in Resources */,
 				DE15E66528604279003DD2F5 /* Assets.xcassets in Resources */,
 				DE15E66328604278003DD2F5 /* Main.storyboard in Resources */,
