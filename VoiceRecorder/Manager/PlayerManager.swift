@@ -10,8 +10,14 @@ import Foundation
 
 class PlayerManager {
     var url: URL!
-    var playerItem: AVPlayerItem?
-    var audioPlayer = AVPlayer()
+//    var playerItem: AVPlayerItem?
+//    var audioPlayer = AVPlayer()
+    var audioFile: AVAudioFile?
+    var audioPlayer = AVAudioPlayerNode()
+
+    let audioEngine = AVAudioEngine()
+    let speedControl = AVAudioUnitVarispeed()
+    let pitchControl = AVAudioUnitTimePitch()
 
     let TIMESCALE: CMTimeScale = 1000000000
     let SEEK_TIME: Int64 = 5000000000
@@ -20,21 +26,38 @@ class PlayerManager {
         return audioPlayer.isPlaying
     }
 
-    // player 초기화
-    func setPlayerItem(_ playerItem: AVPlayerItem?) {
-        guard let playerItem = playerItem else {
+    func setAudioFile(_ audioFile: AVAudioFile?) {
+        guard let audioFile = audioFile else {
             return
         }
+        self.audioFile = audioFile
 
-        self.playerItem = playerItem
-        audioPlayer.replaceCurrentItem(with: playerItem)
-        
-//        audioFile = AVAudioFile(
+        configureAudioEngine()
     }
-    
+
+    func configureAudioEngine() {
+        audioEngine.attach(audioPlayer)
+        audioEngine.attach(speedControl)
+        audioEngine.attach(pitchControl)
+
+        audioEngine.connect(audioPlayer, to: speedControl, format: nil)
+        audioEngine.connect(speedControl, to: pitchControl, format: nil)
+        audioEngine.connect(pitchControl, to: audioEngine.mainMixerNode, format: nil)
+
+        guard let audioFile = audioFile else {
+            return
+        }
+        do {
+            audioPlayer.scheduleFile(audioFile, at: nil)
+            try audioEngine.start()
+        } catch {
+            print("error")
+        }
+    }
+
     func setPlayerToZero() {
-        pausePlayer()
-        audioPlayer.seek(to: CMTime(value: 0, timescale: TIMESCALE))
+//        audioPlayer.stop()
+//        audioPlayer.seek(to: CMTime(value: 0, timescale: TIMESCALE))
     }
 
     // 재생
@@ -51,11 +74,21 @@ class PlayerManager {
     // 5초 앞,뒤로 건너뛰기
     // escaping closure (-, +) 각각 빼기 더하기
     func seek(_ calc: @escaping (Int64, Int64) -> Int64) {
-        let currentTime = audioPlayer.currentTime()
-        let newTime = calc(currentTime.value, SEEK_TIME)
-        audioPlayer.seek(to: CMTime(value: newTime, timescale: TIMESCALE))
+//        let currentTime = audioPlayer.currentTime()
+//        let newTime = calc(currentTime.value, SEEK_TIME)
+//        audioPlayer.seek(to: CMTime(value: newTime, timescale: TIMESCALE))
+
+        guard let nodeTime = audioPlayer.lastRenderTime else { return }
+        guard let playerTime = audioPlayer.playerTime(forNodeTime: nodeTime) else { return }
+        var sampleRate = playerTime.sampleRate
+        
+        var newSampleTime = AVAudioFramePosition(sampleRate * 5.0)
+        
+        print(nodeTime)
+        print(playerTime)
+        print(sampleRate)
     }
-    
+
     func setVolume(_ value: Float) {
         audioPlayer.volume = value
     }

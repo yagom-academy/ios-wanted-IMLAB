@@ -9,15 +9,15 @@ import Foundation
 import AVFoundation
 
 extension Data {
-    func getAVPlayerItem() -> AVPlayerItem {
+    func getAVAudioFile() -> AVAudioFile {
         let directory = NSTemporaryDirectory()
         let fileName = "\(NSUUID().uuidString).m4a"
         let fullURL = NSURL.fileURL(withPathComponents: [directory, fileName])
         try! write(to: fullURL!)
         let asset = AVAsset(url: fullURL!)
         
-        let playerItem = AVPlayerItem(asset: asset)
+        let audioFile = try! AVAudioFile(forReading: fullURL!)
         
-        return playerItem
+        return audioFile
     }
 }

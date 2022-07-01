@@ -9,7 +9,7 @@ import AVFoundation
 import Foundation
 
 class PlayerModel {
-    private var data: AVPlayerItem?
+    private var data: AVAudioFile?
     private var fileData: FileData?
 
     func update(_ filename: String, _ completion: @escaping () -> Void) {
@@ -22,7 +22,7 @@ class PlayerModel {
             guard let data = data else {
                 return
             }
-            self.data = data.getAVPlayerItem()
+            self.data = data.getAVAudioFile()
             completion()
         }
     }
@@ -39,7 +39,7 @@ class PlayerModel {
         return fileData
     }
 
-    func getAVPlayerItem() -> AVPlayerItem? {
+    func getAVAudioFile() -> AVAudioFile? {
         return data
     }
 }
