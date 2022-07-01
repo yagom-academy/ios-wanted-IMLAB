@@ -122,6 +122,10 @@ class PlayVoiceViewController: UIViewController {
     @objc func slideVolumeButton(_ sender : UISlider){
         playVoiceManager.setVolume(volume: sender.value)
     }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        playVoiceManager.stopAudio()
+    }
 }
 
 extension PlayVoiceViewController : PlayVoiceDelegate{
