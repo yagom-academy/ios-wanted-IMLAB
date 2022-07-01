@@ -64,6 +64,65 @@ class RecordViewController:UIViewController{
         return stackView
     }()
     
+<<<<<<< Updated upstream
+=======
+    lazy var volumeBar:UISlider = {
+        let slider = UISlider()
+        slider.setThumbImage(UIImage(systemName: "circle.fill"), for: .normal)
+        slider.maximumValue = 100
+        slider.minimumValue = 0
+        slider.setValue(50, animated: false)
+        return slider
+    }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .systemBackground
+        
+        configureEngineAndSetup()
+        checkPermission()
+        configure()
+    }
+}
+
+//MARK: - View Configure
+private extension RecordViewController{
+    func configure(){
+        addSubViews()
+        makeConstrains()
+        configureButton()
+    }
+    
+    func addSubViews(){
+        
+        [controlStackView,volumeBar].forEach{
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview($0)
+        }
+    }
+    
+    func makeConstrains(){
+        NSLayoutConstraint.activate([
+            controlStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            controlStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            controlStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            controlStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: -50),
+            
+            volumeBar.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 30),
+            volumeBar.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -30),
+            volumeBar.bottomAnchor.constraint(equalTo: controlStackView.topAnchor,constant: -50),
+        ])
+    }
+    
+    func configureButton(){
+        self.recordButton.addTarget(self, action: #selector(didTapRecord(_:)), for: .touchUpInside)
+        self.prevButton.addTarget(self, action: #selector(previusSec), for: .touchUpInside)
+        self.nextButton.addTarget(self, action: #selector(nextSec), for: .touchUpInside)
+        self.playButton.addTarget(self, action: #selector(playPause(_:)), for: .touchUpInside)
+        self.volumeBar.addTarget(self, action: #selector(touchSlider(_:)), for: .valueChanged)
+    }
+    
+>>>>>>> Stashed changes
     @objc func didTapRecord(_ sender:UIButton){
         if isPermissionGrant{
             audioEngine.checkEngineRunning()
@@ -141,7 +200,42 @@ private extension RecordViewController{
         makeConstrains()
     }
     
+<<<<<<< Updated upstream
     func addSubViews(){
+=======
+    func setup() {
+        guard let audioEngine = audioEngine else {
+            return
+        }
+        
+        audioEngine.engine.attach(audioEngine.player)
+        let input = audioEngine.engine.inputNode
+        
+        do{
+            try input.setVoiceProcessingEnabled(true)
+        } catch {
+            print("Could not enable voice processing \(error)")
+            return
+        }
+        
+        let output = audioEngine.engine.outputNode
+        let mainMixer = audioEngine.engine.mainMixerNode
+        
+        audioEngine.engine.connect(audioEngine.player, to: mainMixer, format: audioEngine.voiceIOFormat)
+        audioEngine.engine.connect(mainMixer, to: output, format: audioEngine.voiceIOFormat)
+        
+        input.installTap(onBus: 0, bufferSize: 256, format: audioEngine.voiceIOFormat) { buffer, when in
+            if audioEngine.isRecording{
+                do{
+                    try audioEngine.recordFile?.write(from: buffer)
+                } catch {
+                    print("Could not write buffer \(error)")
+                }
+                
+                audioEngine.convertData(buffer: buffer)
+            }
+        }
+>>>>>>> Stashed changes
         
         [controlStackView,volumeBar].forEach{
             $0.translatesAutoresizingMaskIntoConstraints = false
