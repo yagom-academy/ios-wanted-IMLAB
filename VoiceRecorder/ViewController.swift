@@ -38,7 +38,7 @@ class ViewController: UIViewController {
         
         let sheetViewController = VoicePlayingViewController()
         if let sheetController = sheetViewController.sheetPresentationController {
-          sheetController.detents = [.medium(), .large()]
+          sheetController.detents = [.medium()]
           sheetController.preferredCornerRadius = 4
           sheetController.prefersGrabberVisible = true
         }
