@@ -11,14 +11,49 @@ class PlayVoiceViewController: UIViewController {
     
     var playVoiceManager : PlayVoiceManager!
     var voiceRecordViewModel : VoiceRecordViewModel!
+    
+    var timeControlButtonStackView : UIStackView = {
+        let timeControlButtonStackView = UIStackView()
+        timeControlButtonStackView.translatesAutoresizingMaskIntoConstraints = false
+        timeControlButtonStackView.axis = .horizontal
+        timeControlButtonStackView.spacing = 20
+        return timeControlButtonStackView
+    }()
 
     var playAndPauseButton: UIButton = {
-        let playAndPauseButton = UIButton(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+        let playAndPauseButton = UIButton(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
         playAndPauseButton.translatesAutoresizingMaskIntoConstraints = false
+        playAndPauseButton.setPreferredSymbolConfiguration(.init(pointSize: 30), forImageIn: .normal)
         playAndPauseButton.setImage(UIImage(systemName: "play"), for: .normal)
-        playAndPauseButton.setPreferredSymbolConfiguration(.init(pointSize: 50), forImageIn: .normal)
         playAndPauseButton.addTarget(self, action: #selector(tapButton), for: .touchUpInside)
         return playAndPauseButton
+    }()
+    
+    var forwardFive: UIButton = {
+        let forwardFive = UIButton(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
+        forwardFive.translatesAutoresizingMaskIntoConstraints = false
+        forwardFive.setPreferredSymbolConfiguration(.init(pointSize: 30), forImageIn: .normal)
+        forwardFive.setImage(UIImage(systemName: "goforward.5"), for: .normal)
+        forwardFive.addTarget(self, action: #selector(tabForward), for: .touchUpInside)
+        return forwardFive
+    }()
+    
+    var backwardFive: UIButton = {
+        let backwardFive = UIButton(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+        backwardFive.translatesAutoresizingMaskIntoConstraints = false
+        backwardFive.setPreferredSymbolConfiguration(.init(pointSize: 30), forImageIn: .normal)
+        backwardFive.setImage(UIImage(systemName: "gobackward.5"), for: .normal)
+        backwardFive.addTarget(self, action: #selector(tabBackward), for: .touchUpInside)
+        return backwardFive
+    }()
+    
+    let volumeSlider : UISlider = {
+        let volumeSlider = UISlider()
+        volumeSlider.translatesAutoresizingMaskIntoConstraints = false
+        volumeSlider.addTarget(self, action: #selector(slideVolumeButton(_:)), for: .allTouchEvents)
+        volumeSlider.minimumValue = 0
+        volumeSlider.maximumValue = 1
+        return volumeSlider
     }()
     
     var fileNameLabel : UILabel = {
@@ -33,28 +68,64 @@ class PlayVoiceViewController: UIViewController {
         setView()
         autolayOut()
         setUIText()
+        playVoiceManager.delegate = self
     }
     
     func setView(){
-        self.view.addSubview(playAndPauseButton)
         self.view.addSubview(fileNameLabel)
+        self.view.addSubview(volumeSlider)
+        self.view.addSubview(timeControlButtonStackView)
+        for item in [ backwardFive, playAndPauseButton, forwardFive ]{
+            timeControlButtonStackView.addArrangedSubview(item)
+        }
     }
     
     func autolayOut(){
         NSLayoutConstraint.activate([
-            playAndPauseButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            playAndPauseButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             
             fileNameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             fileNameLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 30),
+            
+            volumeSlider.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            volumeSlider.topAnchor.constraint(equalTo: view.centerYAnchor),
+            volumeSlider.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.8),
+            //progressSlider.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.5),
+            
+            playAndPauseButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            playAndPauseButton.centerYAnchor.constraint(equalTo: volumeSlider.bottomAnchor, constant: 30),
         ])
     }
     
     func setUIText(){
         fileNameLabel.text = voiceRecordViewModel.fileName
+        volumeSlider.setValue(playVoiceManager.getVolume(), animated: true)
     }
     
     @objc func tapButton(){
-        playVoiceManager.playAudio()
+        if playVoiceManager.isPlay{
+            playVoiceManager.stopAudio()
+            playAndPauseButton.setImage(UIImage(systemName: "play"), for: .normal)
+        }else{
+            playVoiceManager.playAudio()
+            playAndPauseButton.setImage(UIImage(systemName: "pause"), for: .normal)
+        }
+    }
+    
+    @objc func tabForward(){
+        playVoiceManager.forwardFiveSecond()
+    }
+    
+    @objc func tabBackward(){
+        playVoiceManager.backwardFiveSecond()
+    }
+    
+    @objc func slideVolumeButton(_ sender : UISlider){
+        playVoiceManager.setVolume(volume: sender.value)
+    }
+}
+
+extension PlayVoiceViewController : PlayVoiceDelegate{
+    func playEndTime() {
+        tapButton()
     }
 }

@@ -64,5 +64,16 @@ class FirebaseStorageManager{
         }
     }
     
+    func deleteRecord(fileName : String, completion : @escaping()->Void){
+        let storageRef = storage.reference().child("record/\(fileName).m4a")
+        storageRef.delete { error in
+            if let error = error{
+                error.localizedDescription
+            }else{
+                print("Delete Success")
+                completion()
+            }
+        }
+    }
     
 }
