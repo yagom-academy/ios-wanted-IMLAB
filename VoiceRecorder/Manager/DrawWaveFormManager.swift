@@ -61,17 +61,18 @@ class DrawWaveFormManager{
 
         let viewHeight = view.bounds.height
         let maxTraitLength = (viewHeight/2) - 10
-        let minTraitLength = 1/viewHeight
+        let minTraitLength = viewHeight/100
+        let newTraitLength = ((CGFloat(input + 55) * (maxTraitLength - minTraitLength))/55) + minTraitLength
         
         switch input {
         case ..<(-55):
             traitLength = minTraitLength
         case (-55)..<(-40):
-            traitLength = (maxTraitLength + minTraitLength) * (7/10) * CGFloat(input) / -65
+            traitLength = max(minTraitLength, newTraitLength * (7/10))
         case (-40)..<(-20):
-            traitLength = (maxTraitLength + minTraitLength) * (8/10) * CGFloat(input) / -65
+            traitLength = max(minTraitLength, newTraitLength * (8/10))
         case (-20)..<(-1):
-            traitLength = (maxTraitLength + minTraitLength) * CGFloat(input) / -65
+            traitLength = newTraitLength
         default:
             traitLength = maxTraitLength
         }
