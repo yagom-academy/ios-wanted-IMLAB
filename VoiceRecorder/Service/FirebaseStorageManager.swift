@@ -54,7 +54,7 @@ class FirebaseStorageManager {
 //                            }
 //                        }
                     }
-                case .failure(let err):
+                case let .failure(err):
                     print("Error in fetch FirebaseManager \(err.localizedDescription)")
                 }
             }

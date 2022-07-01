@@ -55,12 +55,23 @@ class RecordViewController:UIViewController{
         return slider
     }()
     
+    lazy var progressView:UIProgressView = {
+        let progressView = UIProgressView()
+        return progressView
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         configureEngineAndSetup()
         checkPermission()
         configure()
+        
+        audioEngine?.progressValue.observe(on: self){ [weak self] progress in
+            DispatchQueue.main.async {
+                self?.progressView.progress = progress
+            }
+        }
     }
 }
 
@@ -74,7 +85,7 @@ private extension RecordViewController{
     
     func addSubViews(){
         
-        [controlStackView,volumeBar].forEach{
+        [controlStackView,volumeBar,progressView].forEach{
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
@@ -90,6 +101,10 @@ private extension RecordViewController{
             volumeBar.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 30),
             volumeBar.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -30),
             volumeBar.bottomAnchor.constraint(equalTo: controlStackView.topAnchor,constant: -50),
+            
+            progressView.leadingAnchor.constraint(equalTo: volumeBar.leadingAnchor),
+            progressView.trailingAnchor.constraint(equalTo: volumeBar.trailingAnchor),
+            progressView.bottomAnchor.constraint(equalTo: volumeBar.topAnchor,constant: -30)
         ])
     }
     
@@ -174,7 +189,7 @@ private extension RecordViewController{
 }
 
 extension RecordViewController:Recordable{
-    
+
     func configureEngineAndSetup(){
         configureEngine()
         setup()

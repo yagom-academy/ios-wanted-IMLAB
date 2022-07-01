@@ -7,12 +7,14 @@
 
 import Foundation
 import AVFAudio
+import AVFoundation
+import Accelerate
 
-protocol Playable{
+protocol Playable {
     func setup()
 }
 
-protocol Recordable{
+protocol Recordable {
     func setup()
     func toggleRecording()
 }
@@ -20,27 +22,30 @@ protocol Recordable{
 class Engine{
     var fileURL:URL
     var player = AVAudioPlayerNode()
-    var recordFile:AVAudioFile?
+    var recordFile: AVAudioFile?
     var engine = AVAudioEngine()
     var isRecording = false
     private var isNewRecordingAvailable = false
-    var voiceIOFormat:AVAudioFormat
-    private var displayLink: CADisplayLink?
-    
+    var voiceIOFormat: AVAudioFormat
+
     //Audio Second Change Properties
     private var seekFrame: AVAudioFramePosition = 0
     private var currentPosition: AVAudioFramePosition = 0
     private var audioLengthSamples: AVAudioFramePosition = 0
     
-    private var audioSampleRate:Double = 0
+    private var audioSampleRate: Double = 0
     private var audioLengthSeconds: Double = 0
-    private var currentFrame:AVAudioFramePosition {
+    private var currentFrame: AVAudioFramePosition {
         guard let lastRenderTime = player.lastRenderTime,
               let playerTime = player.playerTime(forNodeTime: lastRenderTime) else{
             return 0
         }
         return playerTime.sampleTime
     }
+    
+    private var displayLink: CADisplayLink?
+    var progressValue: Observable<Float> = Observable(0)
+    
     
     enum engineError:Error{
         case initError
@@ -111,6 +116,7 @@ class Engine{
         if player.isPlaying{
             print("player stop")
             player.pause()
+            self.displayLink?.isPaused = true
         } else {
             print("player play")
             do {
@@ -121,6 +127,7 @@ class Engine{
                     audioLengthSeconds = Double(audioLengthSamples) / audioSampleRate
                 }
             } catch {
+                //TODO: - 에러 처리 하기
                 print("Error reading the audio file \(error.localizedDescription)")
             }
             guard let recordedBuffer = Engine.getBuffer(fileURL: fileURL) else{return}
@@ -130,18 +137,19 @@ class Engine{
             }
             
             player.play()
+            self.displayLink?.isPaused = false
         }
     }
     
     func skip(forwards:Bool){
         let timeToSeek:Double
         
+        
         if forwards{
             timeToSeek = 5
         }else{
             timeToSeek = -5
         }
-        
         seek(to: timeToSeek)
     }
     
@@ -175,7 +183,7 @@ class Engine{
     
     func setupDisplayLink(){
         displayLink = CADisplayLink(target: self, selector: #selector(updateDisplay))
-        displayLink?.add(to: .current, forMode: .default)
+        displayLink?.add(to: .main, forMode: .default)
         displayLink?.isPaused = true
     }
     
@@ -192,9 +200,8 @@ class Engine{
             currentPosition = 0
         }
         
-        let time = Double(currentPosition) / audioSampleRate
-        print("All second \(audioLengthSeconds)")
-        print("Remain time \(audioLengthSeconds - time)")
+        let time = Double(currentPosition) / Double(audioLengthSamples)
+        progressValue.value = Float(time)
     }
     
     var isPlaying:Bool{

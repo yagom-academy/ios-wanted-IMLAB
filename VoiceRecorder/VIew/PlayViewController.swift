@@ -57,17 +57,17 @@ class PlayViewController: UIViewController {
     }()
     
     private lazy var playPauseButton: UIButton = {
-        return UIButton().playControlButton("play.fill","pause.fill", state: .normal,.selected)
-//        let button = UIButton().playControlButton("play.fill", state: .normal)
-//        button.setImage(UIImage(systemName: "pause.fill"), for: .selected)
-//        return button
-//
-//        let button = UIButton(type: .custom)
-//        button.setImage(UIImage(systemName: "play.fill"), for: .normal)
-//        button.setImage(UIImage(systemName: "pause.fill"), for: .selected)
-//        button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: 32.0), forImageIn: .normal)
-//        button.addTarget(self, action: #selector(touchPlayPauseButton), for: .touchUpInside)
-//        return button
+//        return UIButton().playControlButton("play.fill","pause.fill", state: .normal,.selected)
+////        let button = UIButton().playControlButton("play.fill", state: .normal)
+////        button.setImage(UIImage(systemName: "pause.fill"), for: .selected)
+////        return button
+////
+        let button = UIButton(type: .custom)
+        button.setImage(UIImage(systemName: "play.fill"), for: .normal)
+        button.setImage(UIImage(systemName: "pause.fill"), for: .selected)
+        button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: 32.0), forImageIn: .normal)
+        button.addTarget(self, action: #selector(touchPlayPauseButton), for: .touchUpInside)
+        return button
     }()
     
     private lazy var buttonStackView: UIStackView = {
@@ -203,10 +203,10 @@ private extension PlayViewController {
     }
     
     // MARK: - Configure AVAudioEngine
-    
     func setAudio(_ url: URL) {
         // 파일에 항상 같은 이름으로 저장
         let documentURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        //first ,safe 찾기
         let fileURL = documentURL.appendingPathComponent("Record.m4a")
         
         URLSession.shared.downloadTask(with: url) { localUrl, response, error in
