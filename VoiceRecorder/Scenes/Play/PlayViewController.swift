@@ -37,19 +37,23 @@ class PlayViewController: UIViewController {
     ])
   }
 
-  // MARK: - Test를 위한 Sample Data 추가 상태
+  // MARK: - Test를 위해서 네트워크 통신 결과 URL 값을 바로 넣어주는 상태
   func setupAudio() {
-    guard
-      let fileURL = Bundle.main.url(
-        forResource: "Til I Hear'em Say (Instrumental) - NEFFEX",
-        withExtension: "mp3"
-      )
-    else {
-      print("음원없음")
-      return
-    }
+//    guard
+//      let fileURL = Bundle.main.url(
+//        forResource: "Til I Hear'em Say (Instrumental) - NEFFEX",
+//        withExtension: "mp3"
+//      )
+//    else {
+//      print("음원없음")
+//      return
+//    }
 
-    audio = Audio(fileURL)
+    let testURL = URL(string: "https://firebasestorage.googleapis.com:443/v0/b/voicerecorder-7fa55.appspot.com/o/testAudio.mp3?alt=media&token=6e64aacd-7b5f-457f-8ca3-6859cc6891d9")!
+    let fileManager = RecordFileManager()
+    fileManager.saveRecordFile(recordName: "test", file: testURL)
+    guard let file = fileManager.loadRecordFile("test") else { return }
+    audio = Audio(file)
   }
 
   func bind() {
