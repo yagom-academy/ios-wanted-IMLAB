@@ -14,6 +14,8 @@ class VoiceRecorderListTableViewController: UITableViewController {
         return addButton
     }()
     
+    
+    
     let firebaseStorageManger = FirebaseStorageManager()
     var voiceRecordListViewModel : VoiceRecordListViewModel = VoiceRecordListViewModel(voiceRecordList: [])
     var selectRecord : VoiceRecordViewModel?
@@ -78,7 +80,9 @@ class VoiceRecorderListTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            
+            self.firebaseStorageManger.deleteRecord(fileName : voiceRecordListViewModel.ListAtIndex(index: indexPath.row).fileName) {
+                self.updateTableViewList()
+            }
         }
     }
     
