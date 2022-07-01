@@ -27,8 +27,6 @@ class RecordCheckViewController: UIViewController {
     }()
     
     let recorder = Recorder()
-    //private let engine = AVAudioEngine()
-    //private let node = AVAudioPlayerNode()
     
     private var audioRecorder: AVAudioRecorder?
     private var audioPlayer: AVAudioPlayer?
@@ -127,10 +125,10 @@ extension RecordCheckViewController {
         
         if isStartRecording { // 녹음 시작일 때
             record()
-            //try? recorder.recording()
+            //recorder.startRecord()
         } else { // 녹음 끝일 때
             stop()
-            //recorder.stopRecording()
+            //recorder.stopRecord()
         }
     }
     
