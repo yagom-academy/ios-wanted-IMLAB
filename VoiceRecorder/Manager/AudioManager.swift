@@ -7,15 +7,19 @@
 
 import Foundation
 import AVFoundation
+import Accelerate
 
 class AudioManager {
-    var filePath: URL
-    let audioEngine = AVAudioEngine()
-    let audioEQ = AVAudioUnitEQ(numberOfBands: 1)
-    lazy var audioEQFilterParameters = audioEQ.bands[0]
-    var inputNode: AVAudioInputNode!
-    var mixerNode = AVAudioMixerNode()
+    private var filePath: URL
+    private let audioEngine = AVAudioEngine()
+    private let audioEQ = AVAudioUnitEQ(numberOfBands: 1)
+    private lazy var audioEQFilterParameters = audioEQ.bands[0]
+    private lazy var inputNode = audioEngine.inputNode
+    private lazy var mixerNode = audioEngine.mainMixerNode
+    private let audioPlayerNode = AVAudioPlayerNode()
     var cutOffFrequency: Float = 0
+    
+    private var audioFile: AVAudioFile!
     
     init(filePath: URL) {
         self.filePath = filePath
@@ -33,19 +37,17 @@ class AudioManager {
     }
     
     // 노드생성
-    private func createNode() {
-        inputNode = audioEngine.inputNode
+    private func configureNode() {
         mixerNode.outputVolume = 1
     }
     
     // eq
-    private func createEqFilter() {
+    private func configureEqFilter() {
         audioEQFilterParameters.filterType = .lowPass
         audioEQFilterParameters.frequency = cutOffFrequency
     }
     
     private func attachNodes() {
-        audioEngine.attach(mixerNode)
         audioEngine.attach(audioEQ)
     }
     
@@ -62,8 +64,8 @@ class AudioManager {
     }
     
     private func configureAudioEngine() {
-        createNode()
-        createEqFilter()
+        configureNode()
+        configureEqFilter()
         attachNodes()
         connectNodes()
         
@@ -126,5 +128,15 @@ class AudioManager {
     /// 레코딩 완료
     func stopRecord() {
         audioEngine.stop()
+    }
+    
+    /// 현재 재생중인 audioFile의 전체 길이. float을 Int로 변환하고, string으로 반환
+    func getPlayTime() -> String {
+        
+        let audioLengthSamples = audioFile.length
+        let sampleRate = audioFile.processingFormat.sampleRate
+        let audioPlayTime = Double(audioLengthSamples) / sampleRate
+        
+        return "\(Int(audioPlayTime))"
     }
 }
