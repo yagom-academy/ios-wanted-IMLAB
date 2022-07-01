@@ -30,19 +30,21 @@ class PlayVoiceViewController: UIViewController {
     }()
     
     var forwardFive: UIButton = {
-        let playAndPauseButton = UIButton(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
-        playAndPauseButton.translatesAutoresizingMaskIntoConstraints = false
-        playAndPauseButton.setPreferredSymbolConfiguration(.init(pointSize: 30), forImageIn: .normal)
-        playAndPauseButton.setImage(UIImage(systemName: "goforward.5"), for: .normal)
-        return playAndPauseButton
+        let forwardFive = UIButton(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
+        forwardFive.translatesAutoresizingMaskIntoConstraints = false
+        forwardFive.setPreferredSymbolConfiguration(.init(pointSize: 30), forImageIn: .normal)
+        forwardFive.setImage(UIImage(systemName: "goforward.5"), for: .normal)
+        forwardFive.addTarget(self, action: #selector(tabForward), for: .touchUpInside)
+        return forwardFive
     }()
     
     var backwardFive: UIButton = {
-        let playAndPauseButton = UIButton(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
-        playAndPauseButton.translatesAutoresizingMaskIntoConstraints = false
-        playAndPauseButton.setPreferredSymbolConfiguration(.init(pointSize: 30), forImageIn: .normal)
-        playAndPauseButton.setImage(UIImage(systemName: "gobackward.5"), for: .normal)
-        return playAndPauseButton
+        let backwardFive = UIButton(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+        backwardFive.translatesAutoresizingMaskIntoConstraints = false
+        backwardFive.setPreferredSymbolConfiguration(.init(pointSize: 30), forImageIn: .normal)
+        backwardFive.setImage(UIImage(systemName: "gobackward.5"), for: .normal)
+        backwardFive.addTarget(self, action: #selector(tabBackward), for: .touchUpInside)
+        return backwardFive
     }()
     
     let volumeSlider : UISlider = {
@@ -107,6 +109,14 @@ class PlayVoiceViewController: UIViewController {
             playVoiceManager.playAudio()
             playAndPauseButton.setImage(UIImage(systemName: "pause"), for: .normal)
         }
+    }
+    
+    @objc func tabForward(){
+        playVoiceManager.forwardFiveSecond()
+    }
+    
+    @objc func tabBackward(){
+        playVoiceManager.backwardFiveSecond()
     }
     
     @objc func slideVolumeButton(_ sender : UISlider){

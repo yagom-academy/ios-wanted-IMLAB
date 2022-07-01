@@ -56,4 +56,17 @@ class PlayVoiceManager{
         delegate?.playEndTime()
         self.player.seek(to: CMTimeMakeWithSeconds(0, preferredTimescale: Int32(NSEC_PER_SEC)))
     }
+    
+    func forwardFiveSecond(){
+        //seek는 x초로 이동. 현재 시간 기준 아님
+        var currentTime = player.currentTime()
+        var interval = CMTime(seconds: 5, preferredTimescale: Int32(NSEC_PER_SEC))
+        self.player.seek(to: currentTime+interval)
+    }
+    
+    func backwardFiveSecond(){
+        var currentTime = player.currentTime()
+        var interval = CMTime(seconds: 5, preferredTimescale: Int32(NSEC_PER_SEC))
+        self.player.seek(to: currentTime-interval)
+    }
 }
