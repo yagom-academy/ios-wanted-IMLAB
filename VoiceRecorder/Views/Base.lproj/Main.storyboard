@@ -190,11 +190,8 @@
                                     <constraint firstAttribute="height" constant="100" id="iuu-gn-MgD"/>
                                 </constraints>
                             </imageView>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="PhE-fU-8gb">
-                                <rect key="frame" x="14" y="744.5" width="386" height="31"/>
-                            </slider>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="volume" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hsn-s0-kUN">
-                                <rect key="frame" x="16" y="708" width="382" height="20.5"/>
+                                <rect key="frame" x="16" y="693" width="382" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -241,47 +238,54 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="qY9-Ow-Yxv">
-                                <rect key="frame" x="16" y="645" width="382" height="32"/>
+                                <rect key="frame" x="16" y="630" width="382" height="32"/>
                                 <segments>
                                     <segment title="일반 목소리"/>
                                     <segment title="아기 목소리"/>
                                     <segment title="할아버지 목소리"/>
                                 </segments>
                             </segmentedControl>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="H8j-VG-WSz">
+                                <rect key="frame" x="16" y="732" width="382" height="50"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="qqC-EW-C7Z"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="ebo-OJ-92j"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="ebo-OJ-92j" firstAttribute="trailing" secondItem="hsn-s0-kUN" secondAttribute="trailing" constant="16" id="4WT-8L-4uM"/>
-                            <constraint firstItem="qY9-Ow-Yxv" firstAttribute="leading" secondItem="ebo-OJ-92j" secondAttribute="leading" constant="16" id="6EN-Hq-IRI"/>
+                            <constraint firstItem="hsn-s0-kUN" firstAttribute="leading" secondItem="ebo-OJ-92j" secondAttribute="leading" constant="16" id="4XI-kW-7Tz"/>
                             <constraint firstItem="ebo-OJ-92j" firstAttribute="trailing" secondItem="lEy-fP-y8j" secondAttribute="trailing" constant="16" id="7A5-NI-krv"/>
+                            <constraint firstItem="ebo-OJ-92j" firstAttribute="bottom" secondItem="nl7-I1-MpL" secondAttribute="bottom" constant="16" id="EEN-ZS-edD"/>
+                            <constraint firstItem="qY9-Ow-Yxv" firstAttribute="leading" secondItem="ebo-OJ-92j" secondAttribute="leading" constant="16" id="Egv-D3-E0F"/>
                             <constraint firstItem="ebo-OJ-92j" firstAttribute="trailing" secondItem="756-8S-E39" secondAttribute="trailing" constant="16" id="GGT-Jf-Fxp"/>
-                            <constraint firstItem="PhE-fU-8gb" firstAttribute="top" secondItem="hsn-s0-kUN" secondAttribute="bottom" constant="16" id="H8z-zb-dA3"/>
-                            <constraint firstItem="PhE-fU-8gb" firstAttribute="leading" secondItem="ebo-OJ-92j" secondAttribute="leading" constant="16" id="JM6-yE-nrZ"/>
+                            <constraint firstItem="H8j-VG-WSz" firstAttribute="top" secondItem="hsn-s0-kUN" secondAttribute="bottom" constant="18.5" id="JI1-nV-j5A"/>
+                            <constraint firstItem="ebo-OJ-92j" firstAttribute="trailing" secondItem="hsn-s0-kUN" secondAttribute="trailing" constant="16" id="JsR-Ag-P87"/>
                             <constraint firstItem="756-8S-E39" firstAttribute="top" secondItem="ebo-OJ-92j" secondAttribute="top" constant="16" id="K1s-vs-3D9"/>
-                            <constraint firstItem="nl7-I1-MpL" firstAttribute="centerX" secondItem="837-TX-AJD" secondAttribute="centerX" id="L6p-re-wUx"/>
-                            <constraint firstItem="ebo-OJ-92j" firstAttribute="bottom" secondItem="nl7-I1-MpL" secondAttribute="bottom" constant="16" id="PZ4-QG-5MX"/>
-                            <constraint firstItem="hsn-s0-kUN" firstAttribute="top" secondItem="qY9-Ow-Yxv" secondAttribute="bottom" constant="32" id="QGD-Uw-pM1"/>
-                            <constraint firstItem="hsn-s0-kUN" firstAttribute="leading" secondItem="ebo-OJ-92j" secondAttribute="leading" constant="16" id="Rx1-bm-6fK"/>
+                            <constraint firstItem="ebo-OJ-92j" firstAttribute="trailing" secondItem="qY9-Ow-Yxv" secondAttribute="trailing" constant="16" id="LkF-Ig-rSn"/>
                             <constraint firstItem="lEy-fP-y8j" firstAttribute="centerY" secondItem="837-TX-AJD" secondAttribute="centerY" multiplier="0.7" id="TBD-w4-9ij"/>
+                            <constraint firstItem="nl7-I1-MpL" firstAttribute="top" secondItem="H8j-VG-WSz" secondAttribute="bottom" constant="24.5" id="WYO-E9-Hxo"/>
+                            <constraint firstItem="H8j-VG-WSz" firstAttribute="leading" secondItem="ebo-OJ-92j" secondAttribute="leading" constant="16" id="b5j-oe-MpI"/>
                             <constraint firstItem="756-8S-E39" firstAttribute="leading" secondItem="ebo-OJ-92j" secondAttribute="leading" constant="16" id="bDD-1w-y8n"/>
-                            <constraint firstItem="ebo-OJ-92j" firstAttribute="trailing" secondItem="qY9-Ow-Yxv" secondAttribute="trailing" constant="16" id="fip-7x-6cf"/>
                             <constraint firstItem="lEy-fP-y8j" firstAttribute="centerX" secondItem="837-TX-AJD" secondAttribute="centerX" id="hE7-Cv-zWE"/>
                             <constraint firstItem="lEy-fP-y8j" firstAttribute="leading" secondItem="ebo-OJ-92j" secondAttribute="leading" constant="16" id="hZI-uN-dEh"/>
-                            <constraint firstItem="ebo-OJ-92j" firstAttribute="trailing" secondItem="PhE-fU-8gb" secondAttribute="trailing" constant="16" id="nRA-zb-TFL"/>
-                            <constraint firstItem="nl7-I1-MpL" firstAttribute="top" secondItem="PhE-fU-8gb" secondAttribute="bottom" constant="32" id="rTf-bt-Cn9"/>
+                            <constraint firstItem="ebo-OJ-92j" firstAttribute="trailing" secondItem="H8j-VG-WSz" secondAttribute="trailing" constant="16" id="iVF-aN-Rct"/>
+                            <constraint firstItem="hsn-s0-kUN" firstAttribute="top" secondItem="qY9-Ow-Yxv" secondAttribute="bottom" constant="32" id="j2t-g2-Qek"/>
+                            <constraint firstItem="nl7-I1-MpL" firstAttribute="centerX" secondItem="837-TX-AJD" secondAttribute="centerX" id="zaI-AR-rm4"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="dateTitleLabel" destination="756-8S-E39" id="reP-vl-nGU"/>
                         <outlet property="playButton" destination="ZXT-xL-ecs" id="NV0-d4-U2S"/>
                         <outlet property="voiceChangeSegment" destination="qY9-Ow-Yxv" id="j2l-9F-4io"/>
-                        <outlet property="volumeSlider" destination="PhE-fU-8gb" id="QR5-MO-02f"/>
+                        <outlet property="volumeView" destination="H8j-VG-WSz" id="udx-Im-4JA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cw3-jC-kAq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1396" y="503"/>
+            <point key="canvasLocation" x="1394.2028985507247" y="502.90178571428567"/>
         </scene>
     </scenes>
     <resources>
