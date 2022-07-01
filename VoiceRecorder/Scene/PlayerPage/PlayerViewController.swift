@@ -166,15 +166,18 @@ extension PlayerViewController {
 
     // 핸들러 추가
     private func configureHandler() {
+        pitchControl.addTarget(self, action: #selector(handlePitchControl), for: .valueChanged)
         volumeSlider.addTarget(self, action: #selector(handleVolumeSlider), for: .valueChanged)
         playPauseButton.addTarget(self, action: #selector(handlePlayPauseButton), for: .touchUpInside)
         backwardButton.addTarget(self, action: #selector(handleBackwardButton), for: .touchUpInside)
         forwardButton.addTarget(self, action: #selector(handleForwardButton), for: .touchUpInside)
     }
 
-    @objc private func handleVolumeSlider(_ sender: UISlider!) {
-        print("Slider value changed")
+    @objc private func handlePitchControl(_ sender: UISegmentedControl!) {
+        viewModel.changedPitchControl(sender.selectedSegmentIndex)
+    }
 
+    @objc private func handleVolumeSlider(_ sender: UISlider!) {
         let roundedStepValue = round(sender.value / 0.1) * 0.1
         sender.value = roundedStepValue
 

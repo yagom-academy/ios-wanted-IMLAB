@@ -10,8 +10,7 @@ import Foundation
 
 class PlayerManager {
     var url: URL!
-//    var playerItem: AVPlayerItem?
-//    var audioPlayer = AVPlayer()
+
     var audioFile: AVAudioFile?
     var audioPlayer = AVAudioPlayerNode()
 
@@ -19,8 +18,19 @@ class PlayerManager {
     let speedControl = AVAudioUnitVarispeed()
     let pitchControl = AVAudioUnitTimePitch()
 
-    let TIMESCALE: CMTimeScale = 1000000000
-    let SEEK_TIME: Int64 = 5000000000
+    var seekFrame: AVAudioFramePosition = 0
+    var currentPosition: AVAudioFramePosition = 0
+    var audioLengthSamples: AVAudioFramePosition = 0
+
+    var audioSampleRate: Double = 0
+    var audioLengthSeconds: Double = 0
+    var currentFrame: AVAudioFramePosition {
+        guard let lastRenderTime = audioPlayer.lastRenderTime,
+              let playerTime = audioPlayer.playerTime(forNodeTime: lastRenderTime) else {
+            return 0
+        }
+        return playerTime.sampleTime
+    }
 
     var isPlaying: Bool {
         return audioPlayer.isPlaying
@@ -49,6 +59,12 @@ class PlayerManager {
         }
         do {
             audioPlayer.scheduleFile(audioFile, at: nil)
+            setVolume(0.5)
+
+            audioLengthSamples = audioFile.length
+            audioSampleRate = audioFile.processingFormat.sampleRate
+            audioLengthSeconds = Double(audioLengthSamples) / audioSampleRate
+
             try audioEngine.start()
         } catch {
             print("error")
@@ -56,13 +72,11 @@ class PlayerManager {
     }
 
     func setPlayerToZero() {
-//        audioPlayer.stop()
-//        audioPlayer.seek(to: CMTime(value: 0, timescale: TIMESCALE))
+        // 재생 끝났을때 처음으로
     }
 
     // 재생
     func startPlayer() {
-        print("play")
         audioPlayer.play()
     }
 
@@ -73,23 +87,71 @@ class PlayerManager {
 
     // 5초 앞,뒤로 건너뛰기
     // escaping closure (-, +) 각각 빼기 더하기
-    func seek(_ calc: @escaping (Int64, Int64) -> Int64) {
-//        let currentTime = audioPlayer.currentTime()
-//        let newTime = calc(currentTime.value, SEEK_TIME)
-//        audioPlayer.seek(to: CMTime(value: newTime, timescale: TIMESCALE))
+    func skip(_ calc: @escaping (Int64, Int64) -> Int64) {
+        seek(to: Double(calc(0, 5)))
+    }
 
-        guard let nodeTime = audioPlayer.lastRenderTime else { return }
-        guard let playerTime = audioPlayer.playerTime(forNodeTime: nodeTime) else { return }
-        var sampleRate = playerTime.sampleRate
-        
-        var newSampleTime = AVAudioFramePosition(sampleRate * 5.0)
-        
-        print(nodeTime)
-        print(playerTime)
-        print(sampleRate)
+    func seek(to time: Double) {
+        guard let audioFile = audioFile else {
+            return
+        }
+
+        audioSampleRate += time * audioSampleRate
+        let offset = AVAudioFramePosition(audioSampleRate)
+
+        seekFrame = currentPosition + offset
+        seekFrame = max(seekFrame, 0)
+        seekFrame = min(seekFrame, audioLengthSamples)
+        currentPosition = seekFrame
+
+        let wasPlaying = audioPlayer.isPlaying
+        audioPlayer.stop()
+
+        if currentPosition < audioLengthSamples {
+            updateTime()
+
+            let frameCount = AVAudioFrameCount(audioLengthSamples - seekFrame)
+
+            audioPlayer.scheduleSegment(
+                audioFile,
+                startingFrame: seekFrame,
+                frameCount: frameCount,
+                at: nil
+            ) {
+            }
+
+            if wasPlaying {
+                audioPlayer.play()
+            }
+        }
+    }
+
+    func updateTime() {
+        currentPosition = currentFrame + seekFrame
+        currentPosition = max(currentPosition, 0)
+        currentPosition = min(currentPosition, audioLengthSamples)
+
+        if currentPosition >= audioLengthSamples {
+            audioPlayer.stop()
+
+            seekFrame = 0
+            currentPosition = 0
+        }
     }
 
     func setVolume(_ value: Float) {
         audioPlayer.volume = value
+    }
+
+    func setPitch(_ value: Int) {
+        var audioPitch: Float = 0
+
+        if value == 1 {
+            audioPitch = 1000
+        } else if value == 2 {
+            audioPitch = -500
+        }
+
+        pitchControl.pitch = audioPitch
     }
 }

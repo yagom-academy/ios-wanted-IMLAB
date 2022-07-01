@@ -23,7 +23,6 @@ class PlayerViewModel {
     func setPlayerItem() {
 //        audioPlayer.setPlayerItem(model.getAVPlayerItem())
         audioPlayer.setAudioFile(model.getAVAudioFile())
-        audioPlayer.setVolume(0.5)
     }
 
     func onTappedPlayPauseButton() -> Bool {
@@ -39,12 +38,11 @@ class PlayerViewModel {
     }
 
     func onTappedBackwardButton() {
-        print("test")
-        audioPlayer.seek(-)
+        audioPlayer.skip(-)
     }
 
     func onTappedForwardButton() {
-        audioPlayer.seek(+)
+        audioPlayer.skip(+)
     }
 
     func setPlayerToZero() {
@@ -53,5 +51,9 @@ class PlayerViewModel {
 
     func changedVolumeSlider(_ value: Float) {
         audioPlayer.setVolume(value)
+    }
+
+    func changedPitchControl(_ value: Int) {
+        audioPlayer.setPitch(value)
     }
 }
