@@ -18,19 +18,21 @@ class PlayViewController: UIViewController {
         }
     }
     
-    private let volumeSize: Float = 0.5
+    private var viewModel: PlayViewModel?
     
-    private let audioEngine = AVAudioEngine()
-    private let playerNode = AVAudioPlayerNode()
-    private let pitchControl = AVAudioUnitTimePitch()
-    private var audioFile: AVAudioFile?
+//    init(viewModel: PlayViewModel) {
+//        self.viewModel = viewModel
+//        super.init(nibName: nil, bundle: nil)
+//    }
+//
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
     
-    private var audioSampleRate: Double = 0
-    private var audioLengthSeconds: Double = 0
-
-    private var seekFrame: AVAudioFramePosition = 0
-    private var currentPosition: AVAudioFramePosition = 0
-    private var audioLengthSamples: AVAudioFramePosition = 0
+    private let progressView: UIProgressView = {
+        let progressView = UIProgressView()
+        return progressView
+    }()
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -70,21 +72,29 @@ class PlayViewController: UIViewController {
         return stackView
     }()
     
-    private let volumeLabel: UILabel = {
-        let label = UILabel()
-        label.text = "볼륨 조절"
-        return label
+    private let minVolumeImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(systemName: "speaker.fill")
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+    
+    private let maxVolumeImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(systemName: "speaker.3.fill")
+        imageView.contentMode = .scaleAspectFit
+        return imageView
     }()
     
     private lazy var volumeSlider: UISlider = {
         let slider = UISlider()
         slider.addTarget(self, action: #selector(volumeSliderValueChanged(_:)), for: .valueChanged)
-        slider.setValue(self.volumeSize, animated: false)
+        slider.setValue(1.0, animated: false)
         return slider
     }()
     
     private lazy var volumeStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [self.volumeLabel, self.volumeSlider])
+        let stackView = UIStackView(arrangedSubviews: [self.minVolumeImageView, self.volumeSlider, self.maxVolumeImageView])
         stackView.axis = .horizontal
         stackView.spacing = 10
         return stackView
@@ -102,6 +112,12 @@ class PlayViewController: UIViewController {
         
         self.configure()
     }
+    
+//    override func viewDidDisappear(_ animated: Bool) {
+//        super.viewDidDisappear(animated)
+//
+//        self.audioEngine = nil
+//    }
 }
 
 private extension PlayViewController {
@@ -119,14 +135,14 @@ private extension PlayViewController {
     }
     
     func addSubViews() {
-        [self.titleLabel, self.buttonStackView,
+        [self.titleLabel, self.buttonStackView, self.progressView,
          self.volumeStackView, self.pitchSegmentedControl].forEach {
             self.view.addSubview($0)
         }
     }
     
     func makeConstraints() {
-        [self.titleLabel, self.buttonStackView,
+        [self.titleLabel, self.buttonStackView, self.progressView,
          self.volumeStackView, self.pitchSegmentedControl].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -135,7 +151,11 @@ private extension PlayViewController {
             self.titleLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 32.0),
             self.titleLabel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -32.0),
             
-            self.buttonStackView.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor, constant: 32.0),
+            self.progressView.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor, constant: 32.0),
+            self.progressView.leadingAnchor.constraint(equalTo: self.titleLabel.leadingAnchor),
+            self.progressView.trailingAnchor.constraint(equalTo: self.titleLabel.trailingAnchor),
+            
+            self.buttonStackView.topAnchor.constraint(equalTo: self.progressView.bottomAnchor, constant: 32.0),
             self.buttonStackView.leadingAnchor.constraint(equalTo: self.titleLabel.leadingAnchor),
             self.buttonStackView.trailingAnchor.constraint(equalTo: self.titleLabel.trailingAnchor),
             
@@ -152,36 +172,29 @@ private extension PlayViewController {
     // MARK: - objc func
     
     @objc func touchPlayPauseButton() {
-        if self.playerNode.isPlaying == false {
-            self.playerNode.play()
-        } else {
-            self.playerNode.pause()
+        self.viewModel?.togglePlaying { success in
+            if success {
+                self.playPauseButton.isSelected.toggle()
+            }
         }
-        self.playPauseButton.isSelected.toggle()
     }
     
     @objc func touchBackwardButton() {
-        skip(forwards: false)
-//        let currentTime = self.avPlayer.currentTime()
-//        let time = CMTime(value: 5, timescale: 1)
-//        self.avPlayer.seek(to: currentTime - time)
+        self.viewModel?.skip(forwards: false)
     }
     
     @objc func touchForwardButton() {
-        skip(forwards: true)
-//        let currentTime = self.avPlayer.currentTime()
-//        let time = CMTime(value: 5, timescale: 1)
-//        self.avPlayer.seek(to: currentTime + time)
+        self.viewModel?.skip(forwards: true)
     }
     
     @objc func volumeSliderValueChanged(_ sender: UISlider) {
-        self.playerNode.volume = sender.value
+        self.viewModel?.volumeChanged(sender.value)
     }
     
     @objc func pitchSegmentedControlValueChanged(_ sender: UISegmentedControl) {
         let pitches: [Double] = [0, 0.5, -0.5]
         let value = pitches[sender.selectedSegmentIndex]
-        self.pitchControl.pitch = 1200 * Float(value)
+        self.viewModel?.pitchControlValueChanged(Float(value))
     }
     
     // MARK: - Configure AVAudioEngine
@@ -189,7 +202,7 @@ private extension PlayViewController {
     func setAudio(_ url: URL) {
         // 파일에 항상 같은 이름으로 저장
         let documentURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let fileURL = documentURL.appendingPathComponent("Record.mp3")
+        let fileURL = documentURL.appendingPathComponent("Record.m4a")
         
         URLSession.shared.downloadTask(with: url) { localUrl, response, error in
             guard let localUrl = localUrl, error == nil else { return }
@@ -198,102 +211,20 @@ private extension PlayViewController {
                     try FileManager.default.removeItem(at: fileURL)
                 }
                 try FileManager.default.moveItem(at: localUrl, to: fileURL)
-                self.configureAudioFile(fileURL)
+                
+                self.viewModel = PlayViewModel(url: fileURL)
+                self.bind()
             } catch {
                 print("FileManager Error: \(error.localizedDescription)")
             }
         }.resume()
     }
     
-    func configureAudioFile(_ url: URL) {
-        // local에 저장된 file의 url을 사용하여 AVAudioFile을 생성한 후 할당
-        do {
-            let file = try AVAudioFile(forReading: url)
-            self.audioFile = file
-            
-            let format = file.processingFormat
-
-            audioLengthSamples = file.length
-            audioSampleRate = format.sampleRate
-            audioLengthSeconds = Double(audioLengthSamples) / audioSampleRate
-
-            
-            self.configureAudioEngine()
-        } catch {
-            print("AVAudioFile Error: \(error.localizedDescription)")
+    func bind() {
+        viewModel?.playerProgress.observe(on: self) { [weak self] playerProgress in
+            DispatchQueue.main.async {
+                self?.progressView.progress = playerProgress
+            }
         }
-    }
-    
-    func configureAudioEngine() {
-        // 2: connect the components to our playback engine
-        // 컴포넌트를 재생 엔진에 연결
-        self.audioEngine.attach(self.playerNode)
-        self.audioEngine.attach(self.pitchControl)
-
-        // 3: arrange the parts so that output from one is input to another
-        // 한 쪽의 출력이 다른쪽에 입력되도록 연결하여 정렬
-        self.audioEngine.connect(self.playerNode, to: self.pitchControl, format: nil)
-        self.audioEngine.connect(self.pitchControl, to: self.audioEngine.mainMixerNode, format: nil)
-
-        // 4: prepare the player to play its file from the beginning
-        // 플레이어가 파일을 재생하도록 준비
-        guard let audioFile = self.audioFile else { return }
-        self.playerNode.scheduleFile(audioFile, at: nil)
-        self.playerNode.volume = self.volumeSize
-
-        self.audioEngine.prepare()
-        
-        // 5: start the engine
-        do {
-            try self.audioEngine.start()
-        } catch {
-            print("AudioEngine Error: \(error.localizedDescription)")
-        }
-    }
-    
-    func skip(forwards: Bool) {
-      let timeToSeek: Double
-
-      if forwards {
-        timeToSeek = 5
-      } else {
-        timeToSeek = -5
-      }
-
-      seek(to: timeToSeek)
-    }
-    
-    func seek(to time: Double) {
-      guard let audioFile = audioFile else {
-        return
-      }
-
-      let offset = AVAudioFramePosition(time * audioSampleRate)
-      seekFrame = currentPosition + offset
-      seekFrame = max(seekFrame, 0)
-      seekFrame = min(seekFrame, audioLengthSamples)
-      currentPosition = seekFrame
-
-      let wasPlaying = playerNode.isPlaying
-        playerNode.stop()
-
-      if currentPosition < audioLengthSamples {
-//        updateDisplay()
-//        needsFileScheduled = false
-
-        let frameCount = AVAudioFrameCount(audioLengthSamples - seekFrame)
-        playerNode.scheduleSegment(
-          audioFile,
-          startingFrame: seekFrame,
-          frameCount: frameCount,
-          at: nil
-        ) {
-//          self.needsFileScheduled = true
-        }
-
-        if wasPlaying {
-          playerNode.play()
-        }
-      }
     }
 }

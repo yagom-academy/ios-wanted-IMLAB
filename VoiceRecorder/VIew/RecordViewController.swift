@@ -21,7 +21,6 @@ class RecordViewController:UIViewController{
     
     public private(set) var isRecording = false
     private var audioEngine: AudioEngine!
-    var engine:AudioEngine?
     
     lazy var recordButton:UIButton = {
         let button = UIButton()
@@ -148,10 +147,14 @@ private extension RecordViewController{
         
     }
     @objc func previusSec(){
-        print("pre Tapped")
+        print("Tapped prev")
+        audioEngine.checkEngineRunning()
+        audioEngine.skip(forwards: false)
     }
     @objc func nextSec(){
-        print("next Tapped")
+        print("Tapped next")
+        audioEngine.checkEngineRunning()
+        audioEngine.skip(forwards: true)
     }
     @objc func playPause(_ sender:UIButton){
         audioEngine.checkEngineRunning()
