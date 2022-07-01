@@ -31,18 +31,18 @@ class DrawWaveFormManager{
             removeWaveForm()
         }
         pencil = UIBezierPath()
-        firstPoint = CGPoint(x: 0, y: (view.bounds.midY))
+        firstPoint = CGPoint(x: (view.bounds.width), y: (view.bounds.midY))
         jump = view.bounds.width/112
         waveLayer = CAShapeLayer()
         start = firstPoint
-        step = jump
+        step = 0
     }
     
-    func startDrawing(of recorder : AVAudioRecorder, in view : UIView, centerX: CGFloat){
+    func startDrawing(of recorder : AVAudioRecorder, in view : UIView){
         prepareDrawing(in: view)
         timer = Timer.scheduledTimer(withTimeInterval: 1/14, repeats: true, block: { timer in
             recorder.updateMeters()
-            self.drawWaveForm(recorder.averagePower(forChannel: 0), in: view, centerX: centerX)
+            self.drawWaveForm(recorder.averagePower(forChannel: 0), in: view)
         })
     }
     
@@ -57,7 +57,7 @@ class DrawWaveFormManager{
         delegate?.resetWaveFormView()
     }
     
-    func drawWaveForm(_ input : Float, in view : UIView, centerX: CGFloat) {
+    func drawWaveForm(_ input : Float, in view : UIView) {
 
         let viewHeight = view.bounds.height
         let maxTraitLength = (viewHeight/2) - 10
@@ -78,11 +78,6 @@ class DrawWaveFormManager{
         
 //        print("input: \(input)")
         
-        if start.x >= centerX {
-            delegate?.moveWaveFormView(step)
-            step += jump
-        }
-        
         pencil.move(to: start)
         pencil.addLine(to: CGPoint(x: start.x, y: start.y + traitLength))
 
@@ -102,5 +97,7 @@ class DrawWaveFormManager{
         view.setNeedsDisplay()
         
         start = CGPoint(x: start.x + jump, y: start.y)
+        delegate?.moveWaveFormView(step)
+        step -= jump
     }
 }

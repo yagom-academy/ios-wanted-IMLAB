@@ -63,7 +63,7 @@ class RecordVoiceViewController: UIViewController {
             print("recording stop")
         } else {
             recordVoiceManager.startRecording()
-            drawWaveFormManager.startDrawing(of: recordVoiceManager.recorder!, in: waveFormView, centerX: self.view.bounds.width/2)
+            drawWaveFormManager.startDrawing(of: recordVoiceManager.recorder!, in: waveFormView)
             record_start_stop_button.setImage(UIImage(systemName: "stop.fill"), for: .normal)
             record_start_stop_button.tintColor = .black
             print("recording start")
@@ -136,7 +136,7 @@ extension RecordVoiceViewController : DrawWaveFormDelegate {
     func moveWaveFormView(_ step: CGFloat) {
         
         UIView.animate(withDuration: 1/14, animations: {
-            self.waveFormView.transform = CGAffineTransform(translationX: -step, y: 0)
+            self.waveFormView.transform = CGAffineTransform(translationX: step, y: 0)
         })
     }
     
