@@ -20,6 +20,8 @@ class AudioManager {
     var cutOffFrequency: Float = 0
     
     private var audioFile: AVAudioFile!
+    private var seekFrame: AVAudioFramePosition = 0
+    private var currentPosition: AVAudioFramePosition = 0
     
     init(filePath: URL) {
         self.filePath = filePath
@@ -138,5 +140,46 @@ class AudioManager {
         let audioPlayTime = Double(audioLengthSamples) / sampleRate
         
         return "\(Int(audioPlayTime))"
+    }
+    
+    /// second는 이동할 시간, 음수도 가능.
+    func skip(for second: Double) {
+        guard let audioFile = audioFile else {
+            return
+        }
+        
+        let offset = AVAudioFramePosition(second * audioFile.processingFormat.sampleRate)
+        let audioLengthSamples = audioFile.length
+        
+        
+        guard let lastRenderTime = audioPlayerNode.lastRenderTime,
+              let playerTime = audioPlayerNode.playerTime(forNodeTime: lastRenderTime) else {
+            return
+        }
+        
+        
+        currentPosition = playerTime.sampleTime + seekFrame
+        currentPosition = max(currentPosition, 0)
+        currentPosition = min(currentPosition, audioLengthSamples)
+        
+        
+        seekFrame = currentPosition + offset
+        seekFrame = max(seekFrame, 0)
+        seekFrame = min(seekFrame, audioLengthSamples)
+        currentPosition = seekFrame
+        
+        audioPlayerNode.stop()
+        if currentPosition < audioLengthSamples {
+            let frameCount = AVAudioFrameCount( audioLengthSamples - seekFrame)
+            
+            audioPlayerNode
+                .scheduleSegment(audioFile,
+                                 startingFrame: currentPosition,
+                                 frameCount: frameCount,
+                                 at: nil
+                )
+        }
+        
+        audioPlayerNode.play()
     }
 }
