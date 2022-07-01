@@ -176,6 +176,7 @@ private extension RecordViewController {
     func cancelRecording() {
         recorder.stop()
         recorder.deleteRecording()
+        player.stop()
     }
     
     func endRecord() {

@@ -22,6 +22,10 @@ class PlayViewController: UIViewController {
         configureUI()
         setUpPlayer()
     }
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        cancelPlaying()
+    }
     
     @IBAction func didTapPlayBack5Button(_ sender: UIButton) {
         player?.seek(-5)
@@ -56,5 +60,7 @@ class PlayViewController: UIViewController {
             self.isPlay = false
         }
     }
-
+    func cancelPlaying() {
+        player = nil
+    }
 }
