@@ -5,16 +5,18 @@
 
 import UIKit
 
-class HomeViewController: UIViewController {
+final class HomeViewController: UIViewController {
     
     
     var homeTableView: UITableView?
+    var homeViewModel = HomeViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setNavigationBar()
         setTableView()
         setConstraints()
+        setDataBinding()
     }
 
 }
@@ -52,6 +54,20 @@ private extension HomeViewController {
         ])
     }
     
+    func setDataBinding(){
+        let group = DispatchGroup()
+        DispatchQueue.global().async {
+            group.enter()
+            self.homeViewModel.fetchAudioTitles {
+                group.leave()
+            }
+            group.wait()
+            self.homeViewModel.fetchMetaData()
+            self.homeViewModel.audioURLs.values.forEach({ $0.bind { metadata in
+                print(metadata)
+            }})
+        }
+    }
 }
 
 extension HomeViewController: UITableViewDataSource, UITableViewDelegate {

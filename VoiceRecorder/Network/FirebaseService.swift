@@ -11,7 +11,7 @@ import FirebaseStorage
 
 enum FirebaseService {
     
-    static func fetchAll(completion: @escaping (Result <[StorageReference], Error>) -> Void) {
+    static func fetchAll(completion: @escaping (Result <StorageListResult, Error>) -> Void) {
         
         EndPoint.reference.listAll { result, error in
             if let error = error as? NSError {
@@ -19,7 +19,7 @@ enum FirebaseService {
                 return
             }
             guard let result = result else {return}
-            completion(.success(result.items))
+            completion(.success(result))
             return
         }
         
@@ -38,6 +38,18 @@ enum FirebaseService {
         }
     }
     
+    
+    static func featchMetaData(endPoint: EndPoint, completion: @escaping (Result <StorageMetadata, Error>) -> Void) {
+        endPoint.path.getMetadata { result in
+            switch result {
+            case .success(let metaData):
+                completion(.success(metaData))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+        
+    }
     
     static func uploadAudio(audio: AudioInfo, completion: @escaping (Result <StorageMetadata, Error>) -> Void) {
         
