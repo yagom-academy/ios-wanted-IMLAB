@@ -15,7 +15,7 @@ class AudioManager {
     private let audioEQ = AVAudioUnitEQ(numberOfBands: 1)
     private lazy var audioEQFilterParameters = audioEQ.bands[0]
     private lazy var inputNode = audioEngine.inputNode
-    private lazy var mixerNode = audioEngine.mainMixerNode
+    private lazy var mixerNode = AVAudioMixerNode()
     private let audioPlayerNode = AVAudioPlayerNode()
     var cutOffFrequency: Float = 0
     
@@ -51,6 +51,7 @@ class AudioManager {
     
     private func attachNodes() {
         audioEngine.attach(audioEQ)
+        audioEngine.attach(mixerNode)
     }
     
     private func connectNodes() {
@@ -132,6 +133,11 @@ class AudioManager {
         audioEngine.stop()
     }
     
+}
+
+// Play 부분을 분리한 extension
+extension AudioManager {
+    
     /// 현재 재생중인 audioFile의 전체 길이. float을 Int로 변환하고, string으로 반환
     func getPlayTime() -> String {
         
@@ -182,4 +188,49 @@ class AudioManager {
         
         audioPlayerNode.play()
     }
+    
+    /// audiofile을 읽어 한번에 data를 가져오는 method. width는 waveView의 width이다.
+    func calculatorBufferGraphData(width: CGFloat) -> [Float]? {
+        let capacity = AVAudioFrameCount(audioFile.length)
+        guard let audioBuffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: capacity) else {
+            return nil
+        }
+        
+        do {
+            try audioFile.read(into: audioBuffer)
+        } catch {
+            print(error)
+            return nil
+        }
+        guard let channelData = audioBuffer.floatChannelData else {
+            return nil
+        }
+        
+        let channels = Int(audioBuffer.format.channelCount)
+        let renderSamples = 0..<Int(capacity)
+        let samplePerPoint = renderSamples.count / Int(width)
+        
+        var arr = [Float]()
+        
+        for point in 0..<Int(width) {
+            for channel in 0..<channels {
+                let pointer = channelData[channel].advanced(by: renderSamples.lowerBound + Int((point * samplePerPoint)))
+                let stride = vDSP_Stride(audioBuffer.stride)
+                let length = vDSP_Length(samplePerPoint)
+                
+                var minValue: Float = 0
+                var maxValue: Float = 0
+                vDSP_minv(pointer, stride, &minValue, length)
+                vDSP_maxv(pointer, stride, &maxValue, length)
+                
+                let rms = (sqrt(minValue * minValue) + sqrt(maxValue * maxValue)) / 2
+                let avgPower = 20 * log10(rms)
+                let meterLevel = self.scalePower(power: avgPower)
+                arr.append(meterLevel)
+            }
+        }
+        
+        return arr
+    }
+    
 }
