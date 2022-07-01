@@ -2,11 +2,14 @@
 //  ViewController.swift
 //  VoiceRecorder
 //
-
 import UIKit
+import AVKit
+import AVFoundation
 
 class ViewController: UIViewController {
-
+    
+    var player: AVAudioPlayer?
+    
     lazy var plusButton: UIButton = {
         var button = UIButton()
         button.setTitle("plus", for: .normal)
@@ -19,9 +22,18 @@ class ViewController: UIViewController {
         setLayout()
         
         plusButton.addTarget(self, action: #selector(plusButtonClicked), for: .touchUpInside)
+        
+        FirebaseStorageManager.download(urlString: FirebaseStorageManager.url) { data in
+            self.player(data: data!)
+        }
+        
+        
     }
     
     func setLayout() {
+        
+        view.backgroundColor = .white
+        
         plusButton.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(plusButton)
@@ -34,17 +46,23 @@ class ViewController: UIViewController {
         ])
     }
     
-    @objc func plusButtonClicked() {
+    func player(data: Data) {
         
-        let sheetViewController = VoicePlayingViewController()
-        if let sheetController = sheetViewController.sheetPresentationController {
-          sheetController.detents = [.medium(), .large()]
-          sheetController.preferredCornerRadius = 4
-          sheetController.prefersGrabberVisible = true
+        do {
+            player = try AVAudioPlayer(data: data)
+            
+            print(player!.isPlaying)
+            
+        } catch {
+            print("error")
         }
-        sheetViewController.fetchRecordedDataFromMainVC(data: nil)
-        present(sheetViewController, animated: true, completion: nil)
         
     }
+    
+    
+    @objc func plusButtonClicked() {
+        player!.play()
+        //let recordCheckVC = RecordCheckViewController()
+        //self.present(recordCheckVC, animated: true)
+    }
 }
-
