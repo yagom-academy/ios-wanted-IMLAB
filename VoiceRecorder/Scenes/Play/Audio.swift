@@ -86,6 +86,11 @@ class Audio {
     setupDisplayLink()
   }
 
+  init(_ file: AVAudioFile) {
+    setupAudio(file)
+    setupDisplayLink()
+  }
+
   private func setupAudio(_ url: URL) {
     do {
       let file = try AVAudioFile(forReading: url)
@@ -101,6 +106,18 @@ class Audio {
     } catch {
       print("Error reading the audio file: \(error.localizedDescription)")
     }
+  }
+
+  private func setupAudio(_ file: AVAudioFile) {
+    let format = file.processingFormat
+
+    audioLengthSamples = file.length
+    audioSampleRate = format.sampleRate
+    audioLengthSeconds = Double(audioLengthSamples) / audioSampleRate
+
+    audioFile = file
+
+    configureEngine(with: format)
   }
 
   private func configureEngine(with format: AVAudioFormat) {
