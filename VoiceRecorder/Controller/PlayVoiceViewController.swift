@@ -68,6 +68,7 @@ class PlayVoiceViewController: UIViewController {
         setView()
         autolayOut()
         setUIText()
+        //순환참조 발생 주의
         playVoiceManager.delegate = self
     }
     
@@ -89,7 +90,6 @@ class PlayVoiceViewController: UIViewController {
             volumeSlider.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             volumeSlider.topAnchor.constraint(equalTo: view.centerYAnchor),
             volumeSlider.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.8),
-            //progressSlider.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.5),
             
             playAndPauseButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             playAndPauseButton.centerYAnchor.constraint(equalTo: volumeSlider.bottomAnchor, constant: 30),
@@ -98,6 +98,7 @@ class PlayVoiceViewController: UIViewController {
     
     func setUIText(){
         fileNameLabel.text = voiceRecordViewModel.fileName
+        fileNameLabel.font = .boldSystemFont(ofSize: self.view.bounds.width / 25)
         volumeSlider.setValue(playVoiceManager.getVolume(), animated: true)
     }
     
@@ -124,6 +125,7 @@ class PlayVoiceViewController: UIViewController {
     }
     
     override func viewDidDisappear(_ animated: Bool) {
+        
         playVoiceManager.stopAudio()
     }
 }

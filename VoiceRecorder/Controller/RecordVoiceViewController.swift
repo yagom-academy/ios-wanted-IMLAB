@@ -5,14 +5,14 @@
 //  Created by hayeon on 2022/06/27.
 //
 
-protocol RecordVoiceDelegate{
+protocol RecordVoiceDelegate : AnyObject{
     func updateList()
 }
 
 import UIKit
 class RecordVoiceViewController: UIViewController {
 
-    var delegate : RecordVoiceDelegate?
+    weak var delegate : RecordVoiceDelegate?
     var recordVoiceManager = RecordVoiceManager()
     var drawWaveFormManager = DrawWaveFormManager()
         
