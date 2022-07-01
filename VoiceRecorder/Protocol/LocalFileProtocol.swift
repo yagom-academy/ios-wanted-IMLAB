@@ -9,5 +9,5 @@ import Foundation
 
 protocol LocalFileProtocol {
     var localFileURL : URL { get set }
-    func getFileName() -> String
+    func makeFileName() -> String
 }
