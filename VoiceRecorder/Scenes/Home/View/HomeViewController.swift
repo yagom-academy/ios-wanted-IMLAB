@@ -31,7 +31,8 @@ private extension HomeViewController {
     
     @objc func didTapAddButton() {
         //TODO: Push AudioCreation VC
-        print("clicked!")
+        let audioCreationViewController = CreateAudioViewController()
+        navigationController?.pushViewController(audioCreationViewController, animated: true)
     }
     
     func setTableView(){
