@@ -26,7 +26,7 @@ class RecordingViewController: UIViewController {
     var progressTimer: Timer!
     var inRecordMode = true
     var inPlayMode = true
-    
+
     let audioRecorderHandler = AudioRecoderHandler(handler: LocalFileHandler(), updateTimeInterval: UpdateTimeInterval())
     let audioPlayerHandler = AudioPlayerHandler(handler: LocalFileHandler())
     
@@ -44,6 +44,10 @@ class RecordingViewController: UIViewController {
         self.recordingButton.isEnabled = recording
         self.goBackwardButton.isEnabled = goBack
         self.goForwardButton.isEnabled = goForward
+    }
+    
+    func test() {
+        
     }
     
     @IBAction func recordingButtonTapped(_ sender: UIButton) {
