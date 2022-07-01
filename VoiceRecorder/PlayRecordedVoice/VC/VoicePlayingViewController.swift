@@ -7,6 +7,7 @@
 
 import UIKit
 import AVFoundation
+import AVKit
 
 class VoicePlayingViewController: UIViewController {
     
@@ -37,6 +38,7 @@ class VoicePlayingViewController: UIViewController {
     // segment and volume View
     private lazy var pitchSegmentController: UISegmentedControl = {
         var segment = UISegmentedControl(items: ["일반 목소리", "아기 목소리", "할아버지 목소리"])
+        segment.selectedSegmentIndex = 0
         return segment
     }()
     
@@ -127,10 +129,9 @@ class VoicePlayingViewController: UIViewController {
             recordedVoiceTitle.text = "Title"
         }
         
-        if let mp3Data = NSDataAsset(name: "sound")?.data {
-            soundManager.initializedPlayer(soundData: mp3Data)
-        }
-        
+        let filePath = Bundle.main.path(forResource: "sound", ofType: ".mp3")
+        let fileUrl = URL(fileURLWithPath: filePath!)
+        soundManager.initializedPlayer(url: fileUrl)
         
     }
     
@@ -141,32 +142,47 @@ class VoicePlayingViewController: UIViewController {
     
     func addViewsActionsToVC() {
         volumeSlider.addTarget(self, action: #selector(changeVolumeValue), for: .valueChanged)
+        pitchSegmentController.addTarget(self, action: #selector(changePitchValue), for: .valueChanged)
     }
     
+    
     @objc func changeVolumeValue() {
-        soundManager.player.volume = volumeSlider.value
+        
+        soundManager.changeVolume(value: volumeSlider.value)
+    }
+    
+    @objc func changePitchValue() {
+        if pitchSegmentController.selectedSegmentIndex == 0 {
+            soundManager.changePitchValue(value: 0)
+        } else if pitchSegmentController.selectedSegmentIndex == 1 {
+            soundManager.changePitchValue(value: 50)
+        } else {
+            soundManager.changePitchValue(value: -50)
+        }
+        
     }
 }
 
 // MARK: - Sound Control Button Delegate
 
 extension VoicePlayingViewController: SoundButtonActionDelegate {
+    
     func playButtonTouchUpinside(sender: UIButton) {
         if sender.isSelected {
-            soundManager.player.pause()
+            soundManager.pause()
         } else {
-            soundManager.player.play()
+            soundManager.play()
         }
-        
     }
     
     func backwardButtonTouchUpinside(sender: UIButton) {
         print("backwardButton Clicked")
-        soundManager.player.currentTime -= TimeInterval(5)
+        
+        //soundManager.player.currentTime -= TimeInterval(5)
     }
     
     func forwardTouchUpinside(sender: UIButton) {
-        soundManager.player.currentTime += TimeInterval(5)
+        //soundManager.player.currentTime += TimeInterval(5)
     }
 }
 
@@ -174,7 +190,18 @@ extension VoicePlayingViewController: SoundButtonActionDelegate {
 // MARK: - SoundeManager Delegate
 
 extension VoicePlayingViewController: ReceiveSoundManagerStatus {
-    func observeAudioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        playControlView.playButton.isSelected = false // 멘토님께 질문 - 접근 방식이 맞는지
+    func observeAudioPlayerDidFinishPlaying(_ player: AVAudioPlayerNode) {
+        
+        DispatchQueue.main.async {
+            self.playControlView.playButton.isSelected = false // 멘토님께 질문 - 접근 방식이
+            
+            // 임시 초기화 다시 함수와 data형식에 맞춰서 프로퍼티 만들어야함 06.30 이후 업데이트 예정
+            let filePath = Bundle.main.path(forResource: "sound", ofType: ".mp3")
+            let fileUrl = URL(fileURLWithPath: filePath!)
+            self.soundManager.initializedPlayer(url: fileUrl)
+        }
+        
     }
 }
+
+
