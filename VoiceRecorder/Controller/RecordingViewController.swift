@@ -47,17 +47,15 @@ class RecordingViewController: UIViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        
+        if !inRecordMode {
+            finishedRecord()
+        }
     }
     
     func setButton(recording: Bool, goBack: Bool, goForward: Bool) {
         self.recordingButton.isEnabled = recording
         self.goBackwardButton.isEnabled = goBack
         self.goForwardButton.isEnabled = goForward
-    }
-    
-    func test() {
-        
     }
     
     @IBAction func recordingButtonTapped(_ sender: UIButton) {
@@ -91,7 +89,7 @@ class RecordingViewController: UIViewController {
     }
     
     func finishedRecord() {
-        let fileName = audioRecorderHandler.localFileHandler.getFileName()
+        guard let fileName = audioRecorderHandler.fileName else { return }
         let recordTotalTime = audioRecorderHandler.updateTimer(audioRecorderHandler.audioRecorder.currentTime)
         audioRecorderHandler.stopRecord(totalTime: recordTotalTime)
         delegate?.finsihRecord(fileName: fileName, totalTime: recordTotalTime)
