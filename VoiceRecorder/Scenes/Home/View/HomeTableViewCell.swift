@@ -52,5 +52,11 @@ final class HomeTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
+    func configure(model: AudioRepresentation?) {
+        guard let model = model else {return}
+        title.text = model.createdDate ?? ""
+        length.text = model.length ?? "xx"
+    }
+    
 }

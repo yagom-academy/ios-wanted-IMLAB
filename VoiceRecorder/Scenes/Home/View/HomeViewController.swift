@@ -63,10 +63,15 @@ private extension HomeViewController {
                 group.leave()
             }
             group.wait()
-            self.homeViewModel.fetchMetaData()
-            self.homeViewModel.audioURLs.values.forEach({ $0.bind { metadata in
-                print(metadata)
+            self.homeViewModel.audioData.values.forEach({ $0.bind { [weak self] metadata in
+                DispatchQueue.main.async {
+                    guard let title = metadata.filename else {return}
+                    guard let index = self?.homeViewModel.audioTitles.firstIndex(of: title) else {return}
+//                    self?.homeTableView?.reloadRows(at: [IndexPath(item: index, section: 0)], with: .automatic)
+                    self?.homeTableView?.reloadData()
+                }
             }})
+            self.homeViewModel.fetchMetaData()
         }
     }
 }
@@ -76,14 +81,13 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.id) as? HomeTableViewCell else {return UITableViewCell()}
+        let model = homeViewModel[indexPath]
+        cell.configure(model: model)
         return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        2
+        homeViewModel.audioData.count
     }
-    
-//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//        return CGFloat(50)
-//    }
+
 }
