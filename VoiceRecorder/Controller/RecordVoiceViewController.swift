@@ -118,5 +118,14 @@ class RecordVoiceViewController: UIViewController {
         record_start_stop_button.setImage(UIImage(systemName: "circle.fill"), for: .normal)
         record_start_stop_button.tintColor = .red
     }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        if recordVoiceManager.isRecording(){
+            recordVoiceManager.stopRecording {
+                self.drawWaveFormManager.stopDrawing()
+                self.delegate?.updateList()
+            }
+        }
+    }
 
 }
