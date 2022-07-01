@@ -73,6 +73,7 @@ class RecordVoiceViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         drawWaveFormManager.delegate = self
+        recordVoiceManager.delegate = self
         setView()
         autoLayout()
         setUI()
@@ -131,7 +132,7 @@ class RecordVoiceViewController: UIViewController {
 
 }
 
-extension RecordVoiceViewController : DrawWaveFormDelegate {
+extension RecordVoiceViewController : DrawWaveFormManagerDelegate {
     
     func moveWaveFormView(_ step: CGFloat) {
         
@@ -143,6 +144,11 @@ extension RecordVoiceViewController : DrawWaveFormDelegate {
     func resetWaveFormView() {
         self.waveFormView.transform = CGAffineTransform(translationX: 0, y: 0)
     }
-    
+}
 
+extension RecordVoiceViewController : RecordVoiceManagerDelegate {
+    
+    func updateCurrentTime(_ currentTime : TimeInterval) {
+        self.progressTimeLabel.text = "\(currentTime)"
+    }
 }
