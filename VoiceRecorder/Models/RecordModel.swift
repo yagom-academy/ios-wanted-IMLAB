@@ -12,4 +12,11 @@ struct RecordModel: Equatable {
     
     let name: String
     let url: URL
+    
+    var audioPlayer: AudioPlayer {
+        let player = AudioPlayer()
+        player.url = url
+        player.setupPlayer()
+        return player
+    }
 }
