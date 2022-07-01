@@ -149,6 +149,22 @@ extension RecordVoiceViewController : DrawWaveFormManagerDelegate {
 extension RecordVoiceViewController : RecordVoiceManagerDelegate {
     
     func updateCurrentTime(_ currentTime : TimeInterval) {
-        self.progressTimeLabel.text = "\(currentTime)"
+        self.progressTimeLabel.text = currentTime.getStringTimeInterval()
     }
 }
+
+extension TimeInterval{
+
+    func getStringTimeInterval() -> String {
+
+        let seconds = self
+        let min = Int(seconds) / 60
+        let sec = Int(seconds) % 60
+        let cen = Int(seconds * 100) % 100
+        // centisecond : 10 밀리초
+
+        let formatString = "%0.2d:%0.2d:%0.2d"
+        return String(format: formatString, min, sec, cen)
+    }
+}
+

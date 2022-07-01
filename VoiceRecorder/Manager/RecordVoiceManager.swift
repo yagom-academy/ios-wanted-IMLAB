@@ -47,6 +47,7 @@ class RecordVoiceManager{
     
     func stopRecording(completion : @escaping ()->Void) {
         self.recorder?.stop()
+        timer?.invalidate()
         // 파일 업로드
 //        FirebaseStorageManager().uploadRecord {
 //            completion()
