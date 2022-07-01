@@ -1,5 +1,5 @@
 //
-//  HomeView.swift
+//  AudioListView.swift
 //  VoiceRecorder
 //
 //  Created by 김승찬 on 2022/06/29.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class HomeView: UIView {
+final class AudioListView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)

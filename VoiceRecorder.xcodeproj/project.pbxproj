@@ -16,17 +16,18 @@
 		DF6408E6286D63F300567DAC /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = DF6408E5286D63F300567DAC /* FirebaseStorage */; };
 		DF6408E8286D63F300567DAC /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = DF6408E7286D63F300567DAC /* FirebaseStorageCombine-Community */; };
 		DF6408EC286D651400567DAC /* FirebaseRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6408EB286D651400567DAC /* FirebaseRepository.swift */; };
+		DFDF5198286EC0D0000E55EC /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFDF5197286EC0D0000E55EC /* Observable.swift */; };
 		EC4C064A286D3BC200F311FC /* AudioURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4C0649286D3BC200F311FC /* AudioURL.swift */; };
 		EC4C064E286D42EE00F311FC /* FirebaseRepositoryInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4C064D286D42EE00F311FC /* FirebaseRepositoryInterface.swift */; };
 		EC4C0651286D433300F311FC /* FirebaseUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4C0650286D433300F311FC /* FirebaseUseCase.swift */; };
 		ECB8A5DE286BECF200B1D363 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB8A5DD286BECF200B1D363 /* BaseViewController.swift */; };
 		ECB8A5E0286BED1B00B1D363 /* ViewPresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB8A5DF286BED1B00B1D363 /* ViewPresentable.swift */; };
-		ECB8A5E7286BED7A00B1D363 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB8A5E6286BED7A00B1D363 /* HomeViewController.swift */; };
+		ECB8A5E7286BED7A00B1D363 /* AudioListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB8A5E6286BED7A00B1D363 /* AudioListViewController.swift */; };
 		ECB8A5E9286BED8200B1D363 /* RecordingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB8A5E8286BED8200B1D363 /* RecordingViewController.swift */; };
 		ECB8A5EB286BED8900B1D363 /* PlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB8A5EA286BED8900B1D363 /* PlayViewController.swift */; };
 		ECB8A5ED286BED8F00B1D363 /* PlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB8A5EC286BED8F00B1D363 /* PlayView.swift */; };
 		ECB8A5EF286BED9800B1D363 /* RecordingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB8A5EE286BED9800B1D363 /* RecordingView.swift */; };
-		ECB8A5F1286BED9D00B1D363 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB8A5F0286BED9D00B1D363 /* HomeView.swift */; };
+		ECB8A5F1286BED9D00B1D363 /* AudioListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB8A5F0286BED9D00B1D363 /* AudioListView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,17 +40,18 @@
 		DE15E66928604279003DD2F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DF6408D0286C23DA00567DAC /* AudioInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioInformation.swift; sourceTree = "<group>"; };
 		DF6408EB286D651400567DAC /* FirebaseRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseRepository.swift; sourceTree = "<group>"; };
+		DFDF5197286EC0D0000E55EC /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		EC4C0649286D3BC200F311FC /* AudioURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioURL.swift; sourceTree = "<group>"; };
 		EC4C064D286D42EE00F311FC /* FirebaseRepositoryInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseRepositoryInterface.swift; sourceTree = "<group>"; };
 		EC4C0650286D433300F311FC /* FirebaseUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseUseCase.swift; sourceTree = "<group>"; };
 		ECB8A5DD286BECF200B1D363 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		ECB8A5DF286BED1B00B1D363 /* ViewPresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewPresentable.swift; sourceTree = "<group>"; };
-		ECB8A5E6286BED7A00B1D363 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		ECB8A5E6286BED7A00B1D363 /* AudioListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioListViewController.swift; sourceTree = "<group>"; };
 		ECB8A5E8286BED8200B1D363 /* RecordingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingViewController.swift; sourceTree = "<group>"; };
 		ECB8A5EA286BED8900B1D363 /* PlayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayViewController.swift; sourceTree = "<group>"; };
 		ECB8A5EC286BED8F00B1D363 /* PlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayView.swift; sourceTree = "<group>"; };
 		ECB8A5EE286BED9800B1D363 /* RecordingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingView.swift; sourceTree = "<group>"; };
-		ECB8A5F0286BED9D00B1D363 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		ECB8A5F0286BED9D00B1D363 /* AudioListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +133,21 @@
 			path = Repository;
 			sourceTree = "<group>";
 		};
+		DF6408ED286D7A0F00567DAC /* AudioListTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = AudioListTableViewCell;
+			sourceTree = "<group>";
+		};
+		DFDF5196286EC0B2000E55EC /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				DFDF5197286EC0D0000E55EC /* Observable.swift */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
 		EC4C064B286D426100F311FC /* Inteface */ = {
 			isa = PBXGroup;
 			children = (
@@ -176,6 +193,7 @@
 		ECB8A5DA286BECDD00B1D363 /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				DFDF5196286EC0B2000E55EC /* Helper */,
 				ECB8A5DC286BECE700B1D363 /* Base */,
 				ECB8A5DB286BECE100B1D363 /* Protocol */,
 			);
@@ -201,20 +219,21 @@
 		ECB8A5E1286BED5700B1D363 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
-				ECB8A5E2286BED5E00B1D363 /* Home */,
+				ECB8A5E2286BED5E00B1D363 /* AudioList */,
 				ECB8A5E3286BED6200B1D363 /* Recording */,
 				ECB8A5E5286BED7100B1D363 /* Play */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
 		};
-		ECB8A5E2286BED5E00B1D363 /* Home */ = {
+		ECB8A5E2286BED5E00B1D363 /* AudioList */ = {
 			isa = PBXGroup;
 			children = (
-				ECB8A5F0286BED9D00B1D363 /* HomeView.swift */,
-				ECB8A5E6286BED7A00B1D363 /* HomeViewController.swift */,
+				ECB8A5F0286BED9D00B1D363 /* AudioListView.swift */,
+				ECB8A5E6286BED7A00B1D363 /* AudioListViewController.swift */,
+				DF6408ED286D7A0F00567DAC /* AudioListTableViewCell */,
 			);
-			path = Home;
+			path = AudioList;
 			sourceTree = "<group>";
 		};
 		ECB8A5E3286BED6200B1D363 /* Recording */ = {
@@ -314,12 +333,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DFDF5198286EC0D0000E55EC /* Observable.swift in Sources */,
 				ECB8A5EB286BED8900B1D363 /* PlayViewController.swift in Sources */,
 				ECB8A5E0286BED1B00B1D363 /* ViewPresentable.swift in Sources */,
 				ECB8A5DE286BECF200B1D363 /* BaseViewController.swift in Sources */,
 				EC4C064E286D42EE00F311FC /* FirebaseRepositoryInterface.swift in Sources */,
 				ECB8A5E9286BED8200B1D363 /* RecordingViewController.swift in Sources */,
-				ECB8A5F1286BED9D00B1D363 /* HomeView.swift in Sources */,
+				ECB8A5F1286BED9D00B1D363 /* AudioListView.swift in Sources */,
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
 				EC4C064A286D3BC200F311FC /* AudioURL.swift in Sources */,
 				DF6408EC286D651400567DAC /* FirebaseRepository.swift in Sources */,
@@ -328,7 +348,7 @@
 				ECB8A5ED286BED8F00B1D363 /* PlayView.swift in Sources */,
 				DF6408D1286C23DA00567DAC /* AudioInformation.swift in Sources */,
 				DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */,
-				ECB8A5E7286BED7A00B1D363 /* HomeViewController.swift in Sources */,
+				ECB8A5E7286BED7A00B1D363 /* AudioListViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -469,6 +489,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LHNXD357QL;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VoiceRecorder/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -480,7 +501,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = net.yagom.VoiceRecorder;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nala.VoiceRecorder;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -495,6 +516,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LHNXD357QL;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VoiceRecorder/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -506,7 +528,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = net.yagom.VoiceRecorder;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nala.VoiceRecorder;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
