@@ -8,6 +8,10 @@
 import UIKit
 import AVFoundation
 
+protocol FinishRecord : AnyObject {
+    func finsihRecord(fileName : String, totalTime : String)
+}
+
 class RecordingViewController: UIViewController {
     
     @IBOutlet weak var recordTimeLabel: UILabel!
@@ -17,6 +21,8 @@ class RecordingViewController: UIViewController {
     @IBOutlet weak var goForwardButton: UIButton!
     @IBOutlet weak var waveformView: UIView!
     @IBOutlet weak var scrollView: UIScrollView!
+    
+    weak var delegate : FinishRecord?
     
     lazy var pencil = UIBezierPath(rect: waveformView.bounds)
     var waveLayer = CAShapeLayer()
@@ -40,6 +46,10 @@ class RecordingViewController: UIViewController {
         self.playButton.isEnabled = false
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        
+    }
+    
     func setButton(recording: Bool, goBack: Bool, goForward: Bool) {
         self.recordingButton.isEnabled = recording
         self.goBackwardButton.isEnabled = goBack
@@ -55,10 +65,10 @@ class RecordingViewController: UIViewController {
             
             pencil.removeAllPoints()
             waveLayer.removeFromSuperlayer()
-            waveformView.frame.size.width = 300
             
             if progressTimer != nil {
                 progressTimer.invalidate()
+                scrollView.setContentOffset(CGPoint(x: waveformView.frame.minX, y: 0.0), animated:false)
                 startPoint = CGPoint(x: 6, y: waveformView.bounds.midY)
             }
             
@@ -75,12 +85,17 @@ class RecordingViewController: UIViewController {
         } else {
             sender.controlFlashAnimate(recordingMode: false)
             self.playButton.isEnabled = true
-            print(waveformView.frame.size.width)
-            print(waveformView.frame.size.width)
-            audioRecorderHandler.stopRecord(totalTime: audioRecorderHandler.audioRecorder.currentTime)
-            progressTimer.invalidate()
+            finishedRecord()
             inRecordMode = !inRecordMode
         }
+    }
+    
+    func finishedRecord() {
+        let fileName = audioRecorderHandler.localFileHandler.getFileName()
+        let recordTotalTime = audioRecorderHandler.updateTimer(audioRecorderHandler.audioRecorder.currentTime)
+        audioRecorderHandler.stopRecord(totalTime: recordTotalTime)
+        delegate?.finsihRecord(fileName: fileName, totalTime: recordTotalTime)
+        progressTimer.invalidate()
     }
     
     @objc func updateRecordTime() {
@@ -96,6 +111,7 @@ class RecordingViewController: UIViewController {
         sender.setImage(UIImage(systemName: "pause"), for: .normal)
         setButton(recording: false, goBack: true, goForward: true)
     }
+    
     func writeWaves(_ input: Float) {
         
         if startPoint.x >= waveformView.frame.maxX {

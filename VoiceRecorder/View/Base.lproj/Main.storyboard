@@ -44,7 +44,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="49t-1h-JvT">
-                                                    <rect key="frame" x="10" y="11.5" width="42" height="21"/>
+                                                    <rect key="frame" x="30" y="11.5" width="42" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -60,7 +60,7 @@
                                                 <constraint firstItem="49t-1h-JvT" firstAttribute="centerY" secondItem="Pmk-Gz-Itb" secondAttribute="centerY" id="EzJ-JQ-uOL"/>
                                                 <constraint firstItem="HCl-7T-Xmi" firstAttribute="leading" relation="lessThanOrEqual" secondItem="49t-1h-JvT" secondAttribute="trailing" constant="300" id="F7f-AD-wo3"/>
                                                 <constraint firstItem="HCl-7T-Xmi" firstAttribute="centerY" secondItem="Pmk-Gz-Itb" secondAttribute="centerY" id="Wvm-ve-ytY"/>
-                                                <constraint firstItem="49t-1h-JvT" firstAttribute="leading" secondItem="Pmk-Gz-Itb" secondAttribute="leading" constant="10" id="c1m-YI-W5J"/>
+                                                <constraint firstItem="49t-1h-JvT" firstAttribute="leading" secondItem="Pmk-Gz-Itb" secondAttribute="leading" constant="30" id="c1m-YI-W5J"/>
                                                 <constraint firstAttribute="trailing" secondItem="HCl-7T-Xmi" secondAttribute="trailing" constant="20" symbolic="YES" id="yzL-An-Rrc"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -84,7 +84,7 @@
                     <navigationItem key="navigationItem" title="Voice Memos" id="ber-JV-38N">
                         <barButtonItem key="rightBarButtonItem" title="Item" image="plus" catalog="system" id="9sS-TR-QHu">
                             <connections>
-                                <segue destination="X5L-vM-0v8" kind="presentation" id="Grh-6c-QtY"/>
+                                <action selector="addRecordMemo:" destination="BYZ-38-t0r" id="zfL-Lv-J6a"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -101,11 +101,11 @@
             <objects>
                 <viewController storyboardIdentifier="RecordingViewController" id="X5L-vM-0v8" customClass="RecordingViewController" customModule="VoiceRecorder" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4qw-ly-4FW">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="jca-CU-g96">
-                                <rect key="frame" x="102" y="405.5" width="210.5" height="31"/>
+                                <rect key="frame" x="102" y="432.5" width="210.5" height="31"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8jP-wJ-9ig">
                                         <rect key="frame" x="0.0" y="0.0" width="20" height="31"/>
@@ -143,7 +143,7 @@
                                 </subviews>
                             </stackView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y8P-W7-Nca">
-                                <rect key="frame" x="186.5" y="285" width="41.5" height="20.5"/>
+                                <rect key="frame" x="186.5" y="312" width="41.5" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>

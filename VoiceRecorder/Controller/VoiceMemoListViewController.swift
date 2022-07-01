@@ -5,31 +5,42 @@
 
 import UIKit
 
-class VoiceMemoListViewController: UIViewController {
-
+class VoiceMemoListViewController: UIViewController, FinishRecord {
+    
     @IBOutlet weak var recordFileListTableView: UITableView!
     
     var voiceMemoList: [RecordModel] = [RecordModel]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        getFirebaseStorageFileList()
+        recordFileListTableView.delegate = self
+        recordFileListTableView.dataSource = self
+    }
+    func finsihRecord(fileName: String, totalTime: String) {
+        let fileName = subStringFileName(filePath:fileName)
+        let recordModel = RecordModel(recordFileName: fileName, recordTime: totalTime)
+        
+        DispatchQueue.main.async {
+            self.voiceMemoList.append(recordModel)
+            self.recordFileListTableView.reloadData()
+        }
+    }
+    
+    func getFirebaseStorageFileList() {
         FirebaseStorage.shared.getFileList { result in
             switch result {
             case .success(let fileList) :
                 var count = 0
                 if fileList.count == 0 { return }
-                
                 for fileName in fileList {
                     FirebaseStorage.shared.getFileMetaData(fileName: fileName) { result in
                         switch result {
                         case .success(let totalTime) :
-                            
                             count += 1
-                            let index = fileName.firstIndex(of: "/") ?? fileName.startIndex
-                            let range = fileName.index(after: index)..<fileName.endIndex
-                            let filePath = String(fileName[range])
+                            let subFileName = self.subStringFileName(filePath: fileName, true)
                             
-                            self.voiceMemoList.append(RecordModel(recordFileName: String(filePath), recordTime: totalTime))
+                            self.voiceMemoList.append(RecordModel(recordFileName: subFileName, recordTime: totalTime))
                             if count == fileList.count {
                                 DispatchQueue.main.async {
                                     self.recordFileListTableView.reloadData()
@@ -39,16 +50,35 @@ class VoiceMemoListViewController: UIViewController {
                             print(error.localizedDescription)
                         }
                     }
-                    
-                    
-                    
                 }
             case .failure(let error) :
                 print(error.localizedDescription)
             }
         }
-        recordFileListTableView.delegate = self
-        recordFileListTableView.dataSource = self
+    }
+    
+    func subStringFileName(filePath: String,_ isFirabse : Bool = false) -> String {
+        var fileName = ""
+        
+        if isFirabse{
+            fileName = subString(subString(filePath, "/"),"_")
+        } else {
+            fileName = subString(filePath, "_")
+        }
+        
+        return fileName
+    }
+    
+    func subString(_ fileName: String, _ character: Character) -> String{
+        let index = fileName.firstIndex(of: character) ?? fileName.startIndex
+        let range = fileName.index(after: index)..<fileName.endIndex
+        return String(fileName[range])
+    }
+    
+    @IBAction func addRecordMemo(_ sender: Any) {
+        guard let vc = self.storyboard?.instantiateViewController(withIdentifier: "RecordingViewController") as? RecordingViewController else { return }
+        vc.delegate = self
+        present(vc, animated: true)
     }
 }
 
