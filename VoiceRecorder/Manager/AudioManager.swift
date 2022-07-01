@@ -243,6 +243,16 @@ extension AudioManager {
         
     }
     
+    func controlVolume(newValue: Float) {
+        if newValue >= 1 {
+            audioPlayerNode.volume = 1
+        } else if newValue <= 0 {
+            audioPlayerNode.volume = 0
+        } else {
+            audioPlayerNode.volume = newValue
+        }
+    }
+    
     /** test용으로 사용할 method
      func downNplay(pitch: Float) throws {
          do {
