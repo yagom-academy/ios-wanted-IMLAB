@@ -26,8 +26,9 @@ class RecordCheckViewController: UIViewController {
         return button
     }()
     
-    private let engine = AVAudioEngine()
-    private let node = AVAudioPlayerNode()
+    let recorder = Recorder()
+    //private let engine = AVAudioEngine()
+    //private let node = AVAudioPlayerNode()
     
     private var audioRecorder: AVAudioRecorder?
     private var audioPlayer: AVAudioPlayer?
@@ -59,6 +60,8 @@ class RecordCheckViewController: UIViewController {
             if allowed {
                 // 녹음 권한 허용
                 self?.configure()
+                //self?.recorder.setupSession()
+                //self?.recorder.setupEngine()
             } else {
                 // 녹음 권한 거부
             }
@@ -120,11 +123,14 @@ extension RecordCheckViewController {
     /// 녹음 시작 & 정지 컨트롤
     @objc private func control() {
         isStartRecording = !isStartRecording
+        recordButtonToggle()
         
         if isStartRecording { // 녹음 시작일 때
             record()
+            //try? recorder.recording()
         } else { // 녹음 끝일 때
             stop()
+            //recorder.stopRecording()
         }
     }
     
@@ -147,7 +153,6 @@ extension RecordCheckViewController {
                     }
 
                     recorder.record()
-                    self.recordButtonToggle()
                 }
             }
         }
@@ -158,7 +163,6 @@ extension RecordCheckViewController {
         if let recorder = self.audioRecorder {
             if recorder.isRecording {
                 self.audioRecorder?.stop()
-                self.recordButtonToggle()
                 let audioSession = AVAudioSession.sharedInstance()
                 do {
                     try audioSession.setActive(false)

@@ -23,6 +23,7 @@ class Recorder {
     
     private var engine: AVAudioEngine!
     private var mixerNode: AVAudioMixerNode!
+    private var playerNode: AVAudioPlayerNode!
     //private var EQNode: AVAudioUnitEQ!
     private var state: RecordingState = .stop
     
@@ -35,7 +36,7 @@ class Recorder {
 extension Recorder {
     
     /// 오디오세션 셋업
-    fileprivate func setupSession() {
+    func setupSession() {
         let session = AVAudioSession.sharedInstance()
         
         do {
@@ -47,7 +48,7 @@ extension Recorder {
     }
     
     /// 오디오 엔진 셋업
-    fileprivate func setupEngine() {
+    func setupEngine() {
         engine = AVAudioEngine()
         mixerNode = AVAudioMixerNode()
         
@@ -66,7 +67,7 @@ extension Recorder {
         
         engine.connect(inputNode, to: mixerNode, format: inputFormat)
         
-        let mixerFormat = AVAudioFormat(commonFormat: .pcmFormatInt32, sampleRate: inputFormat.sampleRate, channels: 1, interleaved: false)
+        let mixerFormat = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: inputFormat.sampleRate, channels: 1, interleaved: false)
         
         engine.connect(mixerNode, to: engine.mainMixerNode, format: mixerFormat)
     }
@@ -82,7 +83,7 @@ extension Recorder {
     }
     
     /// 녹음을 실행
-    fileprivate func startRecording() throws {
+    @objc func recording() throws {
         let tapNode: AVAudioNode = mixerNode
         let format = tapNode.outputFormat(forBus: 0)
         
@@ -97,6 +98,24 @@ extension Recorder {
         try engine.start()
         
         state = .record
+    }
+    
+    /// 재생
+    @objc func playing() throws {
+        if let engine = engine {
+            if !engine.isRunning {
+                let documentURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+                let file = try! AVAudioFile(forReading: documentURL)
+                let buffer = AVAudioPCMBuffer(pcmFormat: file.processingFormat, frameCapacity: AVAudioFrameCount(file.length))
+                
+                try! file.read(into: buffer!)
+                
+                // 엔진을 실행
+                try engine.start()
+                
+                playerNode.play()
+            }
+        }
     }
 }
 
