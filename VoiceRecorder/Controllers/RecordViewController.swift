@@ -29,7 +29,6 @@ class RecordViewController: UIViewController {
         AVNumberOfChannelsKey: 2,
         AVSampleRateKey: 44_100.0
     ]
-    private var audioRecorder: AVAudioRecorder?
     private var recordingSession = AVAudioSession.sharedInstance()
     private var audioPlayer: AVAudioPlayer?
     private var isRecord = false
@@ -39,12 +38,14 @@ class RecordViewController: UIViewController {
     private var currentPlayTime = 0.0
     
     private let player = AudioPlayer()
+    private let recorder = AudioRecorder()
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         requestRecord()
         setupButton(isHidden: true)
+        setupAudioRecorder()
         player.didFinish = {
             self.isPlay = false
             self.currentPlayTime = 0.0
@@ -64,16 +65,12 @@ class RecordViewController: UIViewController {
             sender.setImage(Icon.circleFill.image, for: .normal)
             setupButton(isHidden: false)
             endRecord()
-            guard let url = audioRecorder?.url,
-                  let data = try? Data(contentsOf: url) else { return }
-            
+            guard let data = recorder.data else { return }
             uploadFile(data, fileName: recordDate ?? "")
             
         } else {
             sender.setImage(Icon.circle.image, for: .normal)
-            setupAudioRecorder()
-            audioRecorder?.prepareToRecord()
-            audioRecorder?.record()
+            recorder.record()
             progressTimer = Timer.scheduledTimer(
                 timeInterval: 0.01,
                 target: self,
@@ -104,8 +101,6 @@ class RecordViewController: UIViewController {
             currentPlayTime = player.currentTime
             player.stop()
         } else {
-            guard let fileName = fileName else { return }
-            
             player.url = fileName
             player.setupPlayer()
             player.currentTime = currentPlayTime
@@ -132,7 +127,6 @@ class RecordViewController: UIViewController {
 private extension RecordViewController {
     @objc func update() {
         counter += 0.01
-        print(player.currentTime, player.isPlaying, currentPlayTime)
         if let audioPlayer = audioPlayer {
             if counter > audioPlayer.duration {
                 counter = audioPlayer.duration
@@ -145,14 +139,12 @@ private extension RecordViewController {
 // MARK: - Methods
 private extension RecordViewController {
     func setupAudioRecorder() {
-        do {
-            recordDate = Date.now.dateToString
-            fileName = fileURL.appendingPathComponent("\(recordDate ?? "").m4a")
-            guard let fileName = fileName else { return }
-            audioRecorder = try AVAudioRecorder(url: fileName, settings: recorderSetting)
-        } catch {
-            print("ERROR \(error.localizedDescription)")
-        }
+        recordDate = Date.now.dateToString
+        fileName = fileURL.appendingPathComponent("\(recordDate ?? "").m4a")
+        guard let fileName = fileName else { return }
+        recorder.path = fileName
+        recorder.settings = recorderSetting
+        recorder.setupAudioRecorder()
     }
     
     func requestRecord() {
@@ -182,12 +174,12 @@ private extension RecordViewController {
     }
     
     func cancelRecording() {
-        audioRecorder?.stop()
-        audioRecorder?.deleteRecording()
+        recorder.stop()
+        recorder.deleteRecording()
     }
     
     func endRecord() {
-        audioRecorder?.stop()
+        recorder.stop()
         progressTimer?.invalidate()
         counter = 0.0
     }
