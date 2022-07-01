@@ -8,6 +8,11 @@
 import UIKit
 import AVFoundation
 
+protocol DrawWaveFormDelegate {
+    func moveWaveFormView(_ step: CGFloat)
+    func resetWaveFormView()
+}
+
 class DrawWaveFormManager{
     
     private var timer : Timer!
@@ -17,37 +22,42 @@ class DrawWaveFormManager{
     private var waveLayer : CAShapeLayer!
     private var traitLength : CGFloat!
     private var start : CGPoint!
+    private var step : CGFloat!
+    
+    var delegate : DrawWaveFormDelegate?
     
     func prepareDrawing(in view : UIView){
         if pencil != nil && waveLayer != nil {
-            pencil.removeAllPoints()
-            waveLayer.removeFromSuperlayer()
+            removeWaveForm()
         }
         pencil = UIBezierPath()
         firstPoint = CGPoint(x: 0, y: (view.bounds.midY))
         jump = view.bounds.width/112
         waveLayer = CAShapeLayer()
         start = firstPoint
+        step = jump
     }
     
-    func startDrawing(of recorder : AVAudioRecorder, in view : UIView){
+    func startDrawing(of recorder : AVAudioRecorder, in view : UIView, centerX: CGFloat){
         prepareDrawing(in: view)
         timer = Timer.scheduledTimer(withTimeInterval: 1/14, repeats: true, block: { timer in
-            recorder.updateMeters() // 마이크 평균 및 최대 전력값을 업데이트
-            self.drawWaveForm(recorder.averagePower(forChannel: 0), in: view)
+            recorder.updateMeters()
+            self.drawWaveForm(recorder.averagePower(forChannel: 0), in: view, centerX: centerX)
         })
     }
     
     func stopDrawing(){
         timer.invalidate()
-        // view도 깨끗하게 만들고
+        
     }
     
-    func removeWaveForm(in view : UIView) {
-        // 다 초기화하면 되겄지..
+    func removeWaveForm() {
+        pencil.removeAllPoints()
+        waveLayer.removeFromSuperlayer()
+        delegate?.resetWaveFormView()
     }
     
-    func drawWaveForm(_ input : Float, in view : UIView) {
+    func drawWaveForm(_ input : Float, in view : UIView, centerX: CGFloat) {
 
         let viewHeight = view.bounds.height
         let maxTraitLength = (viewHeight/2) - 10
@@ -66,7 +76,12 @@ class DrawWaveFormManager{
             traitLength = maxTraitLength
         }
         
-        print("input: \(input)")
+//        print("input: \(input)")
+        
+        if start.x >= centerX {
+            delegate?.moveWaveFormView(step)
+            step += jump
+        }
         
         pencil.move(to: start)
         pencil.addLine(to: CGPoint(x: start.x, y: start.y + traitLength))

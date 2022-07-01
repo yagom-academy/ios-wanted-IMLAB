@@ -19,6 +19,7 @@ class RecordVoiceViewController: UIViewController {
     let waveFormView : UIView = {
         let waveFormView = UIView()
         waveFormView.translatesAutoresizingMaskIntoConstraints = false
+        waveFormView.frame.size.width = CGFloat(FP_INFINITE)
         return waveFormView
     }()
     
@@ -62,7 +63,7 @@ class RecordVoiceViewController: UIViewController {
             print("recording stop")
         } else {
             recordVoiceManager.startRecording()
-            drawWaveFormManager.startDrawing(of: recordVoiceManager.recorder!, in: waveFormView)
+            drawWaveFormManager.startDrawing(of: recordVoiceManager.recorder!, in: waveFormView, centerX: self.view.bounds.width/2)
             record_start_stop_button.setImage(UIImage(systemName: "stop.fill"), for: .normal)
             record_start_stop_button.tintColor = .black
             print("recording start")
@@ -71,6 +72,7 @@ class RecordVoiceViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        drawWaveFormManager.delegate = self
         setView()
         autoLayout()
         setUI()
@@ -89,9 +91,8 @@ class RecordVoiceViewController: UIViewController {
     func autoLayout() {
         NSLayoutConstraint.activate([
             waveFormView.topAnchor.constraint(equalToSystemSpacingBelow: self.view.topAnchor, multiplier: 10),
-            waveFormView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.9),
+            waveFormView.widthAnchor.constraint(equalTo: self.view.widthAnchor),
             waveFormView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.15),
-            waveFormView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             
             progressSlider.topAnchor.constraint(equalToSystemSpacingBelow: waveFormView.bottomAnchor, multiplier: 2),
             progressSlider.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.8),
@@ -127,5 +128,21 @@ class RecordVoiceViewController: UIViewController {
             }
         }
     }
+
+}
+
+extension RecordVoiceViewController : DrawWaveFormDelegate {
+    
+    func moveWaveFormView(_ step: CGFloat) {
+        
+        UIView.animate(withDuration: 1/14, animations: {
+            self.waveFormView.transform = CGAffineTransform(translationX: -step, y: 0)
+        })
+    }
+    
+    func resetWaveFormView() {
+        self.waveFormView.transform = CGAffineTransform(translationX: 0, y: 0)
+    }
+    
 
 }
