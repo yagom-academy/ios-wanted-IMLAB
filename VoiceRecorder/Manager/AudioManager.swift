@@ -233,4 +233,36 @@ extension AudioManager {
         return arr
     }
     
+    func setPitch(pitch: Float) {
+        let changePitchNode = AVAudioUnitTimePitch()
+        changePitchNode.pitch = pitch
+        audioEngine.attach(changePitchNode)
+        
+        audioEngine.connect(audioPlayerNode, to: changePitchNode, format: audioFile.processingFormat)
+        audioEngine.connect(changePitchNode, to: mixerNode, format: audioFile.processingFormat)
+        
+    }
+    
+    /** test용으로 사용할 method
+     func downNplay(pitch: Float) throws {
+         do {
+             let localPath = try! PathFinder().getPath(fileName: "1123.m4a")
+             FirebaseStorageManager.shared
+                 .fetchVoiceMemoAtFirebase(with: "1234.m4a",
+                                           localPath: localPath,
+                                           completion: {
+                     result in
+                     switch result {
+                     case.failure(_):
+                         break
+                     case.success(_):
+                         self.play(pitch: 0, target: localPath)
+                     }
+                 })
+             
+             
+         } catch {
+            print(error)
+        }
+     }       */
 }
