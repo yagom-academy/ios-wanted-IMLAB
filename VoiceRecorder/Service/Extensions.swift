@@ -6,8 +6,19 @@
 //
 
 import Foundation
-
+import UIKit
 //UI
+
+//Button
+extension UIButton{
+    func playControlButton(_ imageName:String...,state:UIControl.State...)->UIButton{
+        let button = UIButton()
+        for index in state.indices{
+            button.setImage(UIImage(systemName: imageName[index]), for: state[index])
+        }
+        return button
+    }
+}
 
 //UTILS
 extension Date{

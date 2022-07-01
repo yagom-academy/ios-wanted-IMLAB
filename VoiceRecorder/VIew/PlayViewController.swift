@@ -57,12 +57,17 @@ class PlayViewController: UIViewController {
     }()
     
     private lazy var playPauseButton: UIButton = {
-        let button = UIButton(type: .custom)
-        button.setImage(UIImage(systemName: "play.fill"), for: .normal)
-        button.setImage(UIImage(systemName: "pause.fill"), for: .selected)
-        button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: 32.0), forImageIn: .normal)
-        button.addTarget(self, action: #selector(touchPlayPauseButton), for: .touchUpInside)
-        return button
+        return UIButton().playControlButton("play.fill","pause.fill", state: .normal,.selected)
+//        let button = UIButton().playControlButton("play.fill", state: .normal)
+//        button.setImage(UIImage(systemName: "pause.fill"), for: .selected)
+//        return button
+//
+//        let button = UIButton(type: .custom)
+//        button.setImage(UIImage(systemName: "play.fill"), for: .normal)
+//        button.setImage(UIImage(systemName: "pause.fill"), for: .selected)
+//        button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: 32.0), forImageIn: .normal)
+//        button.addTarget(self, action: #selector(touchPlayPauseButton), for: .touchUpInside)
+//        return button
     }()
     
     private lazy var buttonStackView: UIStackView = {

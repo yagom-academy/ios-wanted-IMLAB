@@ -20,6 +20,7 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.backgroundColor = .systemBackground
         
         self.configure()
         
@@ -58,7 +59,7 @@ private extension HomeViewController {
     func makeConstraints() {
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor),
+            self.tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
             self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
             self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
@@ -94,5 +95,13 @@ extension HomeViewController: UITableViewDelegate {
         playViewController.audio = audio
         self.present(playViewController, animated: true)
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    //TODO: - 삭제 메소드 추가
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete{
+            viewModel.deleteAudio(indexPath)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
     }
 }

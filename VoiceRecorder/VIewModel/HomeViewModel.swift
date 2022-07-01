@@ -8,7 +8,7 @@
 import Foundation
 
 class HomeViewModel {
-    private(set) var audios: [Audio]
+    var audios: [Audio]
     var loadingEnded: () -> Void = { }
     
     init() {
@@ -33,5 +33,12 @@ class HomeViewModel {
                 print(error.localizedDescription)
             }
         }
+    }
+    
+    func deleteAudio(_ indexPath:IndexPath){
+        let deleteItemName = audios[indexPath.row].fileName
+        FirebaseStorageManager.shared.deleteData(title: deleteItemName)
+        self.audios.remove(at: indexPath.row)
+        
     }
 }

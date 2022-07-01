@@ -7,8 +7,6 @@
 
 import Foundation
 import AVFAudio
-import Accelerate
-import AVFoundation
 
 protocol Playable{
     func setup()
@@ -41,7 +39,6 @@ class Engine{
               let playerTime = player.playerTime(forNodeTime: lastRenderTime) else{
             return 0
         }
-        print(lastRenderTime)
         return playerTime.sampleTime
     }
     
@@ -187,7 +184,7 @@ class Engine{
         currentPosition = max(currentFrame, 0)
         currentPosition = min(currentPosition, audioLengthSamples)
         
-        
+
         if currentPosition >= audioLengthSamples{
             player.stop()
             
@@ -204,7 +201,6 @@ class Engine{
         return player.isPlaying
     }
 }
-
 extension Engine{
     //buffer를 float으로 변환하는 함수
     //float으로 변환하여 파형으로 전달?
