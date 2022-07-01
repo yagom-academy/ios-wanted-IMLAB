@@ -17,8 +17,3 @@ struct AudioInfo {
 
 
 
-struct AudioRepresentation {
-    let filename: String
-    let createdDate: Date
-    let length: String
-}
