@@ -73,12 +73,43 @@ class AudioManager {
         }
         
         audioEQ.removeTap(onBus: 0)
-        audioEQ.installTap(onBus: 0, bufferSize: 1024, format: format) { buffer, time in
+        audioEQ.installTap(onBus: 0, bufferSize: 1024, format: format) { [weak self] buffer, time in
+            guard let self = self else { return }
+            let bufferData = self.calculatorBufferGraphData(buffer: buffer)
             do {
                 try audioFile.write(from: buffer)
             } catch {
                 fatalError()
             }
+        }
+    }
+    
+    private func calculatorBufferGraphData(buffer: AVAudioPCMBuffer) -> Float {
+        guard let channelData = buffer.floatChannelData else { return 0 }
+        let channelDataValue = channelData.pointee
+        let channelDataArrayValue = stride(from: 0,
+                                           to: Int(buffer.stride),
+                                           by: buffer.stride)
+            .map { channelDataValue[$0] }
+        
+        let rms = sqrt(channelDataArrayValue.map { return $0 * $0 }.reduce(0, +) / Float(buffer.frameLength))
+        let avgPower = 20 * log10(rms)
+        
+        let meterLevel = scalePower(power: avgPower)
+        
+        return meterLevel
+    }
+    
+    private func scalePower(power: Float) -> Float {
+        guard power.isFinite else { return 0 }
+        let minDB: Float = -80
+        
+        if power < minDB {
+            return 0
+        } else if power >= 1 {
+            return 1
+        } else {
+            return (abs(minDB) - abs(power)) / abs(minDB)
         }
     }
 }
