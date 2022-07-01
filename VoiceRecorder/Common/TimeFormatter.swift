@@ -15,8 +15,7 @@ class MyDateFormatter {
 
     private let calendarDateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale.current
-        dateFormatter.dateFormat = "EEEE, MMM d, yyyy"
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
         return dateFormatter
     }()
 

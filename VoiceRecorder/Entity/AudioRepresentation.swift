@@ -8,7 +8,7 @@
 import Foundation
 
 struct AudioRepresentation {
-    let filename: String
-    let createdDate: String
-    let length: String
+    let filename: String?
+    let createdDate: String?
+    let length: String?
 }

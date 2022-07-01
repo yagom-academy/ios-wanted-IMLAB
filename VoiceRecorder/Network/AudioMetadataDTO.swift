@@ -14,9 +14,9 @@ enum CustomMetadata: String {
 
 extension StorageMetadata {
     func toDomain() -> AudioRepresentation  {
-        return AudioRepresentation(filename: self.name ?? "",
-                                   createdDate: MyDateFormatter.shared.calendarDateString(from: self.timeCreated!),
-                                   length: self.customMetadata?[CustomMetadata.FullLength.rawValue] ?? "0:0")
+        return AudioRepresentation(filename: self.name,
+                                   createdDate: MyDateFormatter.shared.calendarDateString(from: self.timeCreated ?? Date()),
+                                   length: self.customMetadata?[CustomMetadata.FullLength.rawValue])
     }
 }
 

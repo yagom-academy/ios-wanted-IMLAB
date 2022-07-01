@@ -6,12 +6,11 @@
 //
 
 import Foundation
-import FirebaseStorage
 
 final class HomeViewModel {
     
-    var audioTitles: [String] = []
-    var audioURLs: [String: Observable<StorageMetadata>] = [:]
+    private var audioTitles: [String] = []
+    var audioURLs: [String: Observable<AudioRepresentation>] = [:]
         
     func fetchAudioTitles(completion: @escaping () -> Void) {
         var tempList: [String] = []
@@ -20,7 +19,7 @@ final class HomeViewModel {
             case .success(let data):
                 data.items.forEach({
                     tempList.append($0.name)
-                    self?.audioURLs.updateValue(Observable<StorageMetadata>(StorageMetadata()), forKey: $0.name)
+                    self?.audioURLs.updateValue(Observable<AudioRepresentation>(AudioRepresentation(filename: nil, createdDate: nil, length: nil)), forKey: $0.name)
                 })
                 completion()
                 self?.audioTitles = tempList
@@ -36,7 +35,7 @@ final class HomeViewModel {
             FirebaseService.featchMetaData(endPoint: endPoint) {[weak self] result in
                 switch result {
                 case .success(let metadata):
-                    self?.audioURLs[endPoint.fileName]?.value = metadata
+                    self?.audioURLs[endPoint.fileName]?.value = metadata.toDomain()
                 case .failure(let error):
                     print(error)
                 }
