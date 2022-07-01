@@ -13,33 +13,37 @@ import MediaPlayer
 class RecordViewController:UIViewController{
     let firebaseManger = FirebaseStorageManager.shared
     let step:Float = 10
-    var isPermissionGrant:Bool = false
+    var isPermissionGrant: Bool = false
     private var audioEngine: Engine?
     
-    lazy var recordButton:UIButton = {
-        let button = UIButton().playControlButton("circle.fill", state: .normal)
+    lazy var recordButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "circle.fill"), for: .normal)
         return button
     }()
     
-    lazy var prevButton:UIButton = {
-        let button = UIButton().playControlButton("gobackward.5", state: .normal)
+    lazy var prevButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "gobackward.5"), for: .normal)
         button.isEnabled = false
         return button
     }()
     
-    lazy var nextButton:UIButton = {
-        let button = UIButton().playControlButton("goforward.5", state: .normal)
+    lazy var nextButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "goforward.5"), for: .normal)
         button.isEnabled = false
         return button
     }()
     
-    lazy var playButton:UIButton = {
-        let button = UIButton().playControlButton("play.fill", state: .normal)
+    lazy var playButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "play.fill"), for: .normal)
         button.isEnabled = false
         return button
     }()
     
-    lazy var controlStackView:UIStackView = {
+    lazy var controlStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [recordButton,prevButton,playButton,nextButton])
         stackView.distribution = .fillEqually
         

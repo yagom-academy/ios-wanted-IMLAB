@@ -19,6 +19,7 @@ protocol Recordable {
     func toggleRecording()
 }
 
+
 class Engine{
     var fileURL:URL
     var player = AVAudioPlayerNode()
@@ -242,16 +243,16 @@ extension Engine{
     }
 
     //buffer의 데이터의 상한선과 하한선을 결정한다.
-    private func calculatePowers(data:UnsafePointer<Float>,strideFrames:Int,length:vDSP_Length){
-        var max:Float = 0.0
+    private func calculatePowers(data: UnsafePointer<Float>, strideFrames: Int, length: vDSP_Length) {
+        var max: Float = 0.0
         vDSP_maxv(data, strideFrames, &max, length)
-        if max < 0.000_000_01{
+        if max < 0.000_000_01 {
             max = 0.000_000_01
         }
 
         var rms:Float = 0.0
         vDSP_rmsqv(data, strideFrames, &rms, length)
-        if rms < 0.000_000_01{
+        if rms < 0.000_000_01 {
             rms = 0.000_000_01
         }
 
