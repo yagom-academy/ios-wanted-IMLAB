@@ -7,44 +7,77 @@
 
 import Foundation
 import AVFoundation
+import AVKit
 
 protocol ReceiveSoundManagerStatus {
-    func observeAudioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool)
+    func observeAudioPlayerDidFinishPlaying(_ playerNode: AVAudioPlayerNode)
 }
 
 class SoundManager: NSObject {
     
-    var player: AVAudioPlayer!
-    
     var delegate: ReceiveSoundManagerStatus?
     
+    private let playerNode = AVAudioPlayerNode()
+    private let engine = AVAudioEngine()
+    private let pitchControl = AVAudioUnitTimePitch()
+    
     override init() {
-        try? AVAudioSession.sharedInstance().setCategory(.playback)
+        try? AVAudioSession.sharedInstance().setCategory(.playAndRecord)
         try? AVAudioSession.sharedInstance().setActive(true)
     }
     
-    func initializedPlayer(soundData: Data?) {
+    func initializedPlayer(url: URL) {
         
-        guard let data = soundData else { fatalError("Invalid soundData") }
         do {
-            try self.player = AVAudioPlayer(data: data)
-            self.player.delegate = self
+            
+            
+            let file = try AVAudioFile(forReading: url)
+            let fileFormat = file.processingFormat
+            let customFormat = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: 44100.0, channels: 2, interleaved: false)
+            let tapNode = AVAudioNode()
+            tapNode.installTap(onBus: <#T##AVAudioNodeBus#>, bufferSize: <#T##AVAudioFrameCount#>, format: <#T##AVAudioFormat?#>, block: <#T##AVAudioNodeTapBlock##AVAudioNodeTapBlock##(AVAudioPCMBuffer, AVAudioTime) -> Void#>)
+            print(file.length)
+            print(fileFormat.sampleRate)
+            print(Double(file.length)/fileFormat.sampleRate)
+            
+            guard let buffer = AVAudioPCMBuffer(pcmFormat: customFormat!, frameCapacity: AVAudioFrameCount(file.length)) else { return }
+            try file.read(into: buffer)
+            
+            print("시작전",engine.attachedNodes)
+            engine.attach(playerNode)
+            engine.attach(pitchControl)
+            
+            engine.connect(playerNode, to: pitchControl, format: nil)
+            engine.connect(pitchControl, to: engine.mainMixerNode, format: nil)
+            
+            playerNode.scheduleBuffer(buffer) { [self] in
+                delegate?.observeAudioPlayerDidFinishPlaying(playerNode)
+            }
+            
+        
+            engine.prepare()
+            print("초기화 후",engine.attachedNodes)
         } catch let error as NSError {
             print("플레이어 초기화 실패")
             print("코드 : \(error.code), 메세지 : \(error.localizedDescription)")
         }
     }
-}
-
-extension SoundManager: AVAudioPlayerDelegate {
-    func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
-        guard let error: Error = error else {
-            return
-        }
-        print("오디오 플레이어 디코드 오류발생\(error)")
-        // delegate 오류 메세지 보냄
+    
+    func play() {
+        try! engine.start()
+        playerNode.play()
+        
     }
-    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        delegate?.observeAudioPlayerDidFinishPlaying(player, successfully: flag)
+    
+    func pause() {
+        playerNode.pause()
     }
+    
+    func changePitchValue(value: Float) {
+        self.pitchControl.pitch = value
+    }
+    func changeVolume(value: Float) {
+        self.playerNode.volume = value
+    }
+    
 }
