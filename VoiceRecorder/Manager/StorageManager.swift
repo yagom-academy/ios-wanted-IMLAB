@@ -37,17 +37,18 @@ class StorageManager {
             }
             
             if let result = result {
-                result.items.forEach { item in item.getData(maxSize: .max) { data, _ in
-                    if let error = error {
-                        completion(.failure(error))
-                        return
+                result.items.forEach { item in
+                    item.downloadURL { url, error in
+                        if let error = error {
+                            completion(.failure(error))
+                            return
+                        }
+                        if let url = url {
+                            let recordModel = RecordModel(name: item.name, url: url)
+                            completion(.success(recordModel))
+                            return
+                        }
                     }
-                    if let data = data {
-                        let model = RecordModel(name: item.name, data: data)
-                        completion(.success(model))
-                        return
-                    }
-                }
                 }
             }
         }

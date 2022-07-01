@@ -11,8 +11,18 @@ import UIKit
 class AudioPlayer: NSObject {
     
     private var player: AVAudioPlayer?
-    var data: Data?
+    
     var url: URL?
+    var data: Data? {
+        if let url = url {
+            do {
+                return try Data(contentsOf: url)
+            } catch {
+                return nil
+            }
+        }
+        return nil
+    }
     
     var didFinish: (() -> ())?
     
@@ -27,17 +37,16 @@ class AudioPlayer: NSObject {
     var isPlaying: Bool { player?.isPlaying ?? false }
     
     func setupPlayer() {
-        guard let url = url else { return }
+        guard let data = data else { return }
         do {
-            player = try AVAudioPlayer(contentsOf: url)
+            player = try AVAudioPlayer(data: data)
             player?.delegate = self
             player?.volume = 1.0
             player?.prepareToPlay()
         } catch {
-            print("ERROR")
+            print("ERROR 🎒🎒 \(error.localizedDescription)")
         }
     }
-    
     func play() {
         guard let player = player else { return }
         player.play()
