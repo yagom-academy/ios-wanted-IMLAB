@@ -54,22 +54,23 @@ class FireStorageManager {
             
         }
     }
+    
     // escaping 클로저로 data 넘기기
     func downloadData(uris: [StorageReference]) {
-        
         let stringUri: [String] = uris.map { "\($0)" }
         for uri in stringUri {
             let storageRef = storage.reference(forURL: uri)
-            let maxSize = Int64(1 * 1024 * 1024)
-            storageRef.getData(maxSize: maxSize) { data, error in
+            // 긴 uri 에서 "recording_2022_06_30_20:12:51" 끝 부분만 가져오기 위함
+            let findIndex = uri.index(uri.endIndex, offsetBy: -29)
+            let fileName = "\(uri[findIndex...]).m4a"
+            guard let localURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent(fileName) else { return }
+            let downloadTask = storageRef.write(toFile: localURL) { url, error in
                 if let error = error {
-                    print("Error: FireStorageManager - downloadFile \(error.localizedDescription)")
-                } else if let data = data {
-                    // escaping 클로저로 data 넘기기
-                    print("data:\(data)")
+                    print("downloadData Error \(error.localizedDescription)")
+                } else if let url = url {
+                    print("url: \(url)")
                 }
             }
-            print("storageRef:\(storageRef)")
         }
 
     }
