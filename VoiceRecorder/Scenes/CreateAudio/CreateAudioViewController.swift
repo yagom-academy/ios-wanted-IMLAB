@@ -24,6 +24,11 @@ class CreateAudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudi
         config()
         setButtons()
     }
+    private lazy var totalLenLabel: UILabel = {
+        let label = UILabel()
+        label.text = ""
+        return label
+    }()
     private lazy var recordingButton: UIButton = {
         let button = UIButton()
         button.addTarget(self, action: #selector(tapRecordingButton), for: .touchDown)
@@ -36,6 +41,7 @@ class CreateAudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudi
     private lazy var doneButton: UIButton = {
         let button = UIButton()
         button.addTarget(self, action: #selector(tapDoneButton), for: .touchDown)
+        button.setTitleColor(.systemBlue, for: .normal)
         button.setTitle("Done", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -49,11 +55,16 @@ class CreateAudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudi
     func config(){
         view.addSubview(recordingButton)
         view.addSubview(buttons)
+        view.addSubview(doneButton)
         NSLayoutConstraint.activate([
             recordingButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 300),
             recordingButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             recordingButton.heightAnchor.constraint(equalToConstant: 50),
-            recordingButton.widthAnchor.constraint(equalToConstant: 200),
+            recordingButton.widthAnchor.constraint(equalToConstant: 50),
+            doneButton.topAnchor.constraint(equalTo: recordingButton.bottomAnchor, constant: 100),
+            doneButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            doneButton.heightAnchor.constraint(equalToConstant: 50),
+            doneButton.widthAnchor.constraint(equalToConstant: 50),
             buttons.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -25),
             buttons.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             buttons.widthAnchor.constraint(equalToConstant: 200),
@@ -79,16 +90,6 @@ class CreateAudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudi
     }
     @objc
     private func tapPlayPauseButton() {
-//        guard !(audioRecorder?.isRecording)! else { return }
-//        do {
-//            if let audioRecorder = audioRecorder{
-//                try audioPlayer = AVAudioPlayer(contentsOf: audioRecorder.url)
-//                audioPlayer?.delegate = self
-//                audioPlayer?.play()
-//            }
-//        } catch {
-//            print("error: \(error.localizedDescription)")
-//        }
         audio?.playOrPause()
     }
     @objc
@@ -103,7 +104,19 @@ class CreateAudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudi
     }
     @objc
     func tapDoneButton() {
-
+        guard let audioRecorder = audioRecorder else { return }
+        do {
+            let data = try Data(contentsOf: audioRecorder.url)
+            let storageMetadata = StorageMetadata()
+            storageMetadata.contentType = "audio/mpeg"
+            let audioInfo = AudioInfo(id: UUID(), data: data, metadata: storageMetadata)
+            FirebaseService.uploadAudio(audio: audioInfo) { err in
+                print("firebase err: \(err)")
+            }
+        } catch {
+            print("error: \(error.localizedDescription)")
+        }
+        self.navigationController?.popViewController(animated: true)
     }
     func record() {
       let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
