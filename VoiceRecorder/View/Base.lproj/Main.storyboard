@@ -199,6 +199,9 @@
                                         <rect key="frame" x="0.0" y="0.0" width="45" height="31"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="gobackward.5" catalog="system"/>
+                                        <connections>
+                                            <action selector="PressPrevButton:" destination="v7J-f4-A7r" eventType="touchUpInside" id="tDS-6E-hr5"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xhf-LS-GKS">
                                         <rect key="frame" x="45" y="0.0" width="45" height="31"/>
@@ -212,14 +215,20 @@
                                         <rect key="frame" x="90" y="0.0" width="45" height="31"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="goforward.5" catalog="system"/>
+                                        <connections>
+                                            <action selector="PressBackwardButton:" destination="v7J-f4-A7r" eventType="touchUpInside" id="q5D-kk-0dc"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                             </stackView>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="haY-Q9-0tn">
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="50" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="haY-Q9-0tn">
                                 <rect key="frame" x="48" y="686" width="318" height="31"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="W21-HG-Of8"/>
                                 </constraints>
+                                <connections>
+                                    <action selector="ControlVolumeSlider:" destination="v7J-f4-A7r" eventType="valueChanged" id="9Aw-wc-BEV"/>
+                                </connections>
                             </slider>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Volume" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MNs-qs-JV0">
                                 <rect key="frame" x="50" y="630.5" width="57" height="20.5"/>
