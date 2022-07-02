@@ -89,8 +89,9 @@ extension VoiceMemoListViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "RecordFileCell", for: indexPath) as? RecordFileCell else { return UITableViewCell() }
-        cell.fileNameLable.text = self.voiceMemoList[indexPath.row].recordFileName
-        cell.recordPlayTimeLabel.text = self.voiceMemoList[indexPath.row].recordTime
+        let sortedVoiceMemoList = self.voiceMemoList.sorted { $0.recordFileName > $1.recordFileName }
+        cell.fileNameLable.text = sortedVoiceMemoList[indexPath.row].recordFileName
+        cell.recordPlayTimeLabel.text = sortedVoiceMemoList[indexPath.row].recordTime
         return cell
     }
 }

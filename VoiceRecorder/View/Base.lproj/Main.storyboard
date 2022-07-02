@@ -359,9 +359,13 @@
                     <connections>
                         <outlet property="currentPlayTimeLabel" destination="afS-5W-Cf3" id="F4m-Ud-pMe"/>
                         <outlet property="fileNameLabel" destination="Fr1-YX-kWG" id="HWk-q3-hVl"/>
+                        <outlet property="goBackwardButton" destination="hSO-br-dYr" id="rc8-oy-pee"/>
+                        <outlet property="goForwardButton" destination="MOa-KV-VDJ" id="MCN-Vq-5Wm"/>
+                        <outlet property="playButton" destination="cpy-m0-jJ9" id="fYI-aL-N1u"/>
                         <outlet property="playProgressBar" destination="4KN-1J-mU2" id="2Q1-Mt-tAw"/>
                         <outlet property="soundPitchControl" destination="VjU-pj-Gei" id="3qh-ok-tcD"/>
                         <outlet property="totalPlayTimeLabel" destination="5MX-UE-EBA" id="Cfm-33-vcS"/>
+                        <outlet property="volumeSlider" destination="d53-Ct-M5i" id="5x6-uD-Lpt"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="t3i-Uo-ISH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
