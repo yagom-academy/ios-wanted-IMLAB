@@ -19,10 +19,22 @@ class AudioPlayerHandler {
         self.updateTimeInterval = updateTimeInterval
     }
     
-    func prepareToPlay() {
+    func selectPlayFile(_ fileName: String?) {
+        var recordFileURL = localFileHandler.localFileURL
+        if fileName == nil {
+            let latestRecordFileName = localFileHandler.getLatestFileName()
+            let latestRecordFileURL = localFileHandler.localFileURL.appendingPathComponent(latestRecordFileName)
+            recordFileURL = latestRecordFileURL
+        } else {
+            guard let playFileName = fileName else { return }
+            let selectedFileURL = localFileHandler.localFileURL.appendingPathComponent("voiceRecords_\(playFileName)")
+            recordFileURL = selectedFileURL
+        }
+        prepareToPlay(recordFileURL)
+    }
+    
+    func prepareToPlay(_ recordFileURL: URL) {
         do {
-            let recordFileName = localFileHandler.makeFileName()
-            let recordFileURL = localFileHandler.localFileURL.appendingPathComponent(recordFileName)
             let audioPlayer = try AVAudioPlayer(contentsOf: recordFileURL)
             self.audioPlayer = audioPlayer
             self.audioPlayer.prepareToPlay()
@@ -31,12 +43,14 @@ class AudioPlayerHandler {
         }
     }
     
-    func startPlay() {
-        self.audioPlayer.play()
-    }
-    
-    func pausePlay() {
-        self.audioPlayer.pause()
+    func startPlay(isSelectedFile: Bool, fileName: String? = nil) {
+        if fileName != nil {
+            selectPlayFile(fileName)
+            self.audioPlayer.play()
+        } else {
+            selectPlayFile(nil)
+            self.audioPlayer.play()
+        }
     }
     
     func updateTimer(_ time: TimeInterval) -> String {

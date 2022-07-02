@@ -18,4 +18,17 @@ struct LocalFileHandler : LocalFileProtocol {
         let fileName = formatter.string(from: Date())
         return "voiceRecords_\(fileName)"
     }
+    
+    func getLatestFileName() -> String {
+        let path = localFileURL.path
+        var latestFileName = ""
+        do {
+            let list = try FileManager.default.contentsOfDirectory(atPath: path).sorted(by: <)
+            let latestFile = list.last ?? "파일이 존재하지 않습니다"
+            latestFileName = latestFile
+        } catch let error {
+            print(error.localizedDescription)
+        }
+        return latestFileName
+    }
 }
