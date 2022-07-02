@@ -17,12 +17,13 @@ class VoiceMemoListViewController: UIViewController, FinishRecord {
         recordFileListTableView.delegate = self
         recordFileListTableView.dataSource = self
     }
+    
     func finsihRecord(fileName: String, totalTime: String) {
         let fileName = subStringFileName(filePath:fileName)
         let recordModel = RecordModel(recordFileName: fileName, recordTime: totalTime)
         
         DispatchQueue.main.async {
-            self.voiceMemoList.append(recordModel)
+            self.voiceMemoList.insert(recordModel, at: 0)
             self.recordFileListTableView.reloadData()
         }
     }
@@ -41,6 +42,8 @@ class VoiceMemoListViewController: UIViewController, FinishRecord {
                             let subFileName = self.subStringFileName(filePath: fileName, true)
                             
                             self.voiceMemoList.append(RecordModel(recordFileName: subFileName, recordTime: totalTime))
+                            let sortedVoiceMemoList = self.voiceMemoList.sorted { $0.recordFileName > $1.recordFileName }
+                            self.voiceMemoList = sortedVoiceMemoList
                             if count == fileList.count {
                                 DispatchQueue.main.async {
                                     self.recordFileListTableView.reloadData()
@@ -89,9 +92,8 @@ extension VoiceMemoListViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "RecordFileCell", for: indexPath) as? RecordFileCell else { return UITableViewCell() }
-        let sortedVoiceMemoList = self.voiceMemoList.sorted { $0.recordFileName > $1.recordFileName }
-        cell.fileNameLable.text = sortedVoiceMemoList[indexPath.row].recordFileName
-        cell.recordPlayTimeLabel.text = sortedVoiceMemoList[indexPath.row].recordTime
+        cell.fileNameLable.text = voiceMemoList[indexPath.row].recordFileName
+        cell.recordPlayTimeLabel.text = voiceMemoList[indexPath.row].recordTime
         return cell
     }
 }
