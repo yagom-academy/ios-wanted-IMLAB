@@ -56,7 +56,7 @@ class AudioManager {
     private func configureAudioSession() {
         let session = AVAudioSession.sharedInstance()
         do {
-            try session.setCategory(.playAndRecord, mode: .default)
+            try session.setCategory(.playAndRecord)
             try session.setActive(true)
         } catch {
             fatalError(error.localizedDescription)
@@ -84,14 +84,15 @@ class AudioManager {
     }
     
     private func connectRecordNodes() {
+        let format = inputNode.outputFormat(forBus: 0)
         recordEngine.connect(mixerNode, to: audioEQ,
-                            format: recordEngine.mainMixerNode.outputFormat(forBus: 0))
+                            format: format)
         recordEngine.connect(inputNode, to: mixerNode,
-                            format: recordEngine.mainMixerNode.outputFormat(forBus: 0))
+                            format: format)
     }
     
     private func createAudioFile(filePath: URL) throws -> AVAudioFile {
-        let inputformat = audioEQ.outputFormat(forBus: 0)
+        let inputformat = inputNode.outputFormat(forBus: 0)
         return try AVAudioFile(forWriting: filePath, settings: inputformat.settings)
     }
     
@@ -101,7 +102,7 @@ class AudioManager {
         attachRecordNodes()
         connectRecordNodes()
         
-        let format = audioEQ.outputFormat(forBus: 0)
+        let format = inputNode.outputFormat(forBus: 0)
         guard let audioFile = try? createAudioFile(filePath: filePath) else {
             fatalError()
         }
@@ -113,7 +114,7 @@ class AudioManager {
             do {
                 try audioFile.write(from: buffer)
             } catch {
-                fatalError()
+                fatalError(error.localizedDescription)
             }
         }
     }
