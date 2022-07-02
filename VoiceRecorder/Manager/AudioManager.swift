@@ -10,18 +10,21 @@ import AVFoundation
 import Accelerate
 
 class AudioManager {
+    // recording properties
     private var filePath: URL
-    private let audioEngine = AVAudioEngine()
-    private let audioEQ = AVAudioUnitEQ(numberOfBands: 1)
+    private lazy var audioEngine: AVAudioEngine? = AVAudioEngine()
+    private lazy var audioEQ = AVAudioUnitEQ(numberOfBands: 1)
     private lazy var audioEQFilterParameters = audioEQ.bands[0]
-    private lazy var inputNode = audioEngine.inputNode
+    private lazy var inputNode = audioEngine?.inputNode
     private lazy var mixerNode = AVAudioMixerNode()
-    private let audioPlayerNode = AVAudioPlayerNode()
-    var cutOffFrequency: Float = 0
+    lazy var cutOffFrequency: Float = 0
     
+    // play properties
     private var audioFile: AVAudioFile!
-    private var seekFrame: AVAudioFramePosition = 0
-    private var currentPosition: AVAudioFramePosition = 0
+    private lazy var seekFrame: AVAudioFramePosition = 0
+    private lazy var currentPosition: AVAudioFramePosition = 0
+    private lazy var audioPlayerNode = AVAudioPlayerNode()
+    private lazy var changePitchNode = AVAudioUnitTimePitch()
     
     init(filePath: URL) {
         self.filePath = filePath
@@ -47,30 +50,35 @@ class AudioManager {
     private func configureEqFilter() {
         audioEQFilterParameters.filterType = .lowPass
         audioEQFilterParameters.frequency = cutOffFrequency
+        audioEQFilterParameters.bandwidth = 5.0
+        audioEQFilterParameters.gain = 15
+        audioEQFilterParameters.bypass = false
+        audioEQ.bypass = false
     }
     
-    private func attachNodes() {
-        audioEngine.attach(audioEQ)
-        audioEngine.attach(mixerNode)
+    private func attachRecordNodes() {
+        audioEngine?.attach(audioEQ)
+        audioEngine?.attach(mixerNode)
     }
     
-    private func connectNodes() {
-        audioEngine.connect(mixerNode, to: audioEQ,
-                            format: audioEngine.mainMixerNode.outputFormat(forBus: 0))
-        audioEngine.connect(inputNode, to: mixerNode,
-                            format: audioEngine.mainMixerNode.outputFormat(forBus: 0))
+    private func connectRecordNodes() {
+        guard let inputNode = inputNode else { return }
+        audioEngine?.connect(mixerNode, to: audioEQ,
+                            format: audioEngine?.mainMixerNode.outputFormat(forBus: 0))
+        audioEngine?.connect(inputNode, to: mixerNode,
+                            format: audioEngine?.mainMixerNode.outputFormat(forBus: 0))
     }
     
-    private func createAudioFile(filePath: URL) throws -> AVAudioFile {
-        let inputformat = inputNode.inputFormat(forBus: 0)
+    private func createAudioFile(filePath: URL) throws -> AVAudioFile? {
+        guard let inputformat = inputNode?.inputFormat(forBus: 0) else { return nil }
         return try AVAudioFile(forWriting: filePath, settings: inputformat.settings, commonFormat: .pcmFormatInt32, interleaved: true)
     }
     
-    private func configureAudioEngine() {
+    private func configureAudioEngineForRecord() {
         configureNode()
         configureEqFilter()
-        attachNodes()
-        connectNodes()
+        attachRecordNodes()
+        connectRecordNodes()
         
         let format = audioEQ.outputFormat(forBus: 0)
         guard let audioFile = try? createAudioFile(filePath: filePath) else {
@@ -119,10 +127,10 @@ class AudioManager {
     }
     
     func startRecord() {
-        audioEngine.reset()
-        configureAudioEngine()
+        audioEngine?.reset()
+        configureAudioEngineForRecord()
         do {
-            try audioEngine.start()
+            try audioEngine?.start()
         } catch {
             fatalError()
         }
@@ -130,13 +138,60 @@ class AudioManager {
     
     /// 레코딩 완료
     func stopRecord() {
-        audioEngine.stop()
+        audioEngine?.stop()
+        audioEngine = nil
     }
     
 }
 
 // Play 부분을 분리한 extension
 extension AudioManager {
+    
+    func startPlay() {
+        configureAudioEngineForPlay()
+        do {
+            try audioEngine?.start()
+        } catch {
+            fatalError(error.localizedDescription)
+        }
+        audioPlayerNode.play()
+    }
+    
+    func stopPlay() {
+        audioPlayerNode.stop()
+        audioEngine?.stop()
+        audioEngine = nil
+    }
+    
+    private func getAudioFile(filePath: URL) throws -> AVAudioFile {
+        return try AVAudioFile(forReading: filePath)
+    }
+    
+    private func attachPlayNodes() {
+        audioEngine?.attach(audioPlayerNode)
+        audioEngine?.attach(changePitchNode)
+    }
+    
+    private func connectPlayNodes() {
+        audioEngine?.connect(audioPlayerNode, to: changePitchNode, format: audioFile.fileFormat)
+        audioEngine?.connect(changePitchNode, to: mixerNode, format: audioFile.fileFormat)
+    }
+    
+    private func configureAudioEngineForPlay() {
+        audioEngine = AVAudioEngine()
+        do {
+            audioFile = try getAudioFile(filePath: filePath)
+        } catch {
+            fatalError()
+        }
+        
+        attachPlayNodes()
+        connectPlayNodes()
+        
+        audioPlayerNode.scheduleFile(audioFile, at: nil)
+        
+        audioEngine?.prepare()
+    }
     
     /// 현재 재생중인 audioFile의 전체 길이. float을 Int로 변환하고, string으로 반환
     func getPlayTime() -> String {
@@ -157,12 +212,10 @@ extension AudioManager {
         let offset = AVAudioFramePosition(second * audioFile.processingFormat.sampleRate)
         let audioLengthSamples = audioFile.length
         
-        
         guard let lastRenderTime = audioPlayerNode.lastRenderTime,
               let playerTime = audioPlayerNode.playerTime(forNodeTime: lastRenderTime) else {
             return
         }
-        
         
         currentPosition = playerTime.sampleTime + seekFrame
         currentPosition = max(currentPosition, 0)
@@ -233,15 +286,15 @@ extension AudioManager {
         return arr
     }
     
-    func setPitch(pitch: Float) {
-        let changePitchNode = AVAudioUnitTimePitch()
-        changePitchNode.pitch = pitch
-        audioEngine.attach(changePitchNode)
-        
-        audioEngine.connect(audioPlayerNode, to: changePitchNode, format: audioFile.processingFormat)
-        audioEngine.connect(changePitchNode, to: mixerNode, format: audioFile.processingFormat)
-        
-    }
+//    func setPitch(pitch: Float) {
+//        let changePitchNode = AVAudioUnitTimePitch()
+//        changePitchNode.pitch = pitch
+//        audioEngine?.attach(changePitchNode)
+//
+//        audioEngine?.connect(audioPlayerNode, to: changePitchNode, format: audioFile.processingFormat)
+//        audioEngine?.connect(changePitchNode, to: mixerNode, format: audioFile.processingFormat)
+//
+//    }
     
     func controlVolume(newValue: Float) {
         if newValue >= 1 {
@@ -255,24 +308,24 @@ extension AudioManager {
     
     /** test용으로 사용할 method
      func downNplay(pitch: Float) throws {
-         do {
-             let localPath = try! PathFinder().getPath(fileName: "1123.m4a")
-             FirebaseStorageManager.shared
-                 .fetchVoiceMemoAtFirebase(with: "1234.m4a",
-                                           localPath: localPath,
-                                           completion: {
-                     result in
-                     switch result {
-                     case.failure(_):
-                         break
-                     case.success(_):
-                         self.play(pitch: 0, target: localPath)
-                     }
-                 })
-             
-             
-         } catch {
-            print(error)
-        }
+     do {
+     let localPath = try! PathFinder().getPath(fileName: "1123.m4a")
+     FirebaseStorageManager.shared
+     .fetchVoiceMemoAtFirebase(with: "1234.m4a",
+     localPath: localPath,
+     completion: {
+     result in
+     switch result {
+     case.failure(_):
+     break
+     case.success(_):
+     self.play(pitch: 0, target: localPath)
+     }
+     })
+     
+     
+     } catch {
+     print(error)
+     }
      }       */
 }
