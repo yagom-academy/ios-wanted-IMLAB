@@ -26,7 +26,8 @@ class CreateAudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudi
     }
     private lazy var totalLenLabel: UILabel = {
         let label = UILabel()
-        label.text = ""
+        label.text = "00:00"
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     private lazy var recordingButton: UIButton = {
@@ -59,15 +60,23 @@ class CreateAudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudi
         view.addSubview(recordingButton)
         view.addSubview(buttons)
         view.addSubview(doneButton)
+        view.addSubview(totalLenLabel)
         NSLayoutConstraint.activate([
+            totalLenLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 100),
+            totalLenLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            totalLenLabel.heightAnchor.constraint(equalToConstant: 50),
+            totalLenLabel.widthAnchor.constraint(equalToConstant: 200),
+            
             recordingButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 300),
             recordingButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             recordingButton.heightAnchor.constraint(equalToConstant: 50),
             recordingButton.widthAnchor.constraint(equalToConstant: 50),
+            
             doneButton.topAnchor.constraint(equalTo: recordingButton.bottomAnchor, constant: 100),
             doneButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             doneButton.heightAnchor.constraint(equalToConstant: 50),
             doneButton.widthAnchor.constraint(equalToConstant: 50),
+            
             buttons.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -25),
             buttons.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             buttons.widthAnchor.constraint(equalToConstant: 200),
@@ -78,10 +87,14 @@ class CreateAudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudi
         if recordingButton.isSelected{
             recordingButton.isSelected = false
             audioRecorder?.stop()
-            audio = Audio(audioRecorder!.url)
             buttons.playButton.isEnabled = true
             buttons.backButton.isEnabled = true
             buttons.forwordButton.isEnabled = true
+            audio = Audio(audioRecorder!.url)
+            if let audio = audio{
+                let audioLenSec = Int(audio.audioLengthSeconds)
+                totalLenLabel.text = "\(audioLenSec / 60):\(audioLenSec % 60)"
+            }
         }else{
             recordingButton.isSelected = true
             buttons.playButton.isEnabled = false
