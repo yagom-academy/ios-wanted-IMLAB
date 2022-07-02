@@ -25,6 +25,9 @@ enum AudioPitchMode {
 }
 
 class AudioManager {
+    
+    // - MARK: Property
+    
     // recording properties
     private lazy var recordEngine = AVAudioEngine()
     private lazy var audioEQ = AVAudioUnitEQ(numberOfBands: 1)
@@ -45,6 +48,8 @@ class AudioManager {
         }
     }
     
+    // - MARK: LifeCycle
+    
     init() {
         configureAudioSession()
     }
@@ -59,13 +64,28 @@ class AudioManager {
         }
     }
     
-    // 노드생성
-    private func configureNode() {
-        mixerNode.outputVolume = 1
+    private func createAudioFile(filePath: URL) throws -> AVAudioFile {
+        let inputformat = inputNode.outputFormat(forBus: 0)
+        return try AVAudioFile(forWriting: filePath, settings: inputformat.settings)
     }
     
-    // eq
-    private func configureEqFilter() {
+    private func getAudioFile(filePath: URL) throws -> AVAudioFile {
+        return try AVAudioFile(forReading: filePath)
+    }
+    
+    // - MARK: Audio Record Methods
+    
+    private func prepareRecordEngine(format: AVAudioFormat) {
+        recordEngine.attach(audioEQ)
+        recordEngine.attach(mixerNode)
+        
+        recordEngine.connect(mixerNode, to: audioEQ,
+                             format: format)
+        recordEngine.connect(inputNode, to: mixerNode,
+                             format: format)
+    }
+    
+    private func prepareAudioEQNode() {
         audioEQFilterParameters.filterType = .lowPass
         audioEQFilterParameters.frequency = cutOffFrequency
         audioEQFilterParameters.bandwidth = 5.0
@@ -74,32 +94,17 @@ class AudioManager {
         audioEQ.bypass = false
     }
     
-    private func attachRecordNodes() {
-        recordEngine.attach(audioEQ)
-        recordEngine.attach(mixerNode)
-    }
-    
-    private func connectRecordNodes() {
+    private func configureAudioEngineForRecord() {
         let format = inputNode.outputFormat(forBus: 0)
-        recordEngine.connect(mixerNode, to: audioEQ,
-                            format: format)
-        recordEngine.connect(inputNode, to: mixerNode,
-                            format: format)
+        prepareRecordEngine(format: format)
+        prepareAudioEQNode()
+        
     }
     
-    private func createAudioFile(filePath: URL) throws -> AVAudioFile {
-        let inputformat = inputNode.outputFormat(forBus: 0)
-        return try AVAudioFile(forWriting: filePath, settings: inputformat.settings)
-    }
-    
-    private func configureAudioEngineForRecord(filePath: URL) {
-
-        configureNode()
-        configureEqFilter()
-        attachRecordNodes()
-        connectRecordNodes()
+    private func record(filePath: URL) {
+        let format = inputNode.outputFormat(forBus: 0)
+        
         let audioFile: AVAudioFile!
-        let format = inputNode.outputFormat(forBus: 0)
         do {
             audioFile = try createAudioFile(filePath: filePath)
         } catch {
@@ -118,38 +123,10 @@ class AudioManager {
         }
     }
     
-    private func calculatorBufferGraphData(buffer: AVAudioPCMBuffer) -> Float {
-        guard let channelData = buffer.floatChannelData else { return 0 }
-        let channelDataValue = channelData.pointee
-        let channelDataArrayValue = stride(from: 0,
-                                           to: Int(buffer.stride),
-                                           by: buffer.stride)
-            .map { channelDataValue[$0] }
-        
-        let rms = sqrt(channelDataArrayValue.map { return $0 * $0 }.reduce(0, +) / Float(buffer.frameLength))
-        let avgPower = 20 * log10(rms)
-        
-        let meterLevel = scalePower(power: avgPower)
-        
-        return meterLevel
-    }
-    
-    private func scalePower(power: Float) -> Float {
-        guard power.isFinite else { return 0 }
-        let minDB: Float = -80
-        
-        if power < minDB {
-            return 0
-        } else if power >= 1 {
-            return 1
-        } else {
-            return (abs(minDB) - abs(power)) / abs(minDB)
-        }
-    }
-    
     func startRecord(filePath: URL) {
         recordEngine.reset()
-        configureAudioEngineForRecord(filePath: filePath)
+        configureAudioEngineForRecord()
+        record(filePath: filePath)
         do {
             try recordEngine.start()
         } catch {
@@ -160,63 +137,13 @@ class AudioManager {
     /// 레코딩 완료
     func stopRecord() {
         recordEngine.stop()
-//        audioEngine = nil
-        print(recordEngine)
     }
     
 }
 
-// Play 부분을 분리한 extension
 extension AudioManager {
     
-    func startPlay(fileURL: URL) {
-        if !playEngine.isRunning {
-            playEngine.reset()
-            configureAudioEngineForPlay(filePath: fileURL)
-            do {
-                try playEngine.start()
-            } catch {
-                fatalError(error.localizedDescription)
-            }
-        }
-        audioPlayerNode.play()
-    }
-    
-    func stopPlay() {
-        audioPlayerNode.stop()
-        playEngine.stop()
-    }
-    
-    private func getAudioFile(filePath: URL) throws -> AVAudioFile {
-        return try AVAudioFile(forReading: filePath)
-    }
-    
-    private func attachPlayNodes() {
-        playEngine.attach(audioPlayerNode)
-        playEngine.attach(changePitchNode)
-    }
-    
-    private func connectPlayNodes() {
-        playEngine.connect(audioPlayerNode, to: changePitchNode, format: nil)
-        playEngine.connect(changePitchNode, to: playEngine.mainMixerNode, format: nil)
-    }
-    
-    private func configureAudioEngineForPlay(filePath: URL) {
-        let audioFile: AVAudioFile
-        
-        do {
-            audioFile = try getAudioFile(filePath: filePath)
-        } catch {
-            fatalError()
-        }
-        
-        attachPlayNodes()
-        connectPlayNodes()
-        
-        audioPlayerNode.scheduleFile(audioFile, at: nil)
-        
-        playEngine.prepare()
-    }
+    // - MARK: Audio Info Methods
     
     /// 현재 재생중인 audioFile의 전체 길이. float을 Int로 변환하고, string으로 반환
     func getPlayTime(filePath: URL) -> String {
@@ -234,48 +161,20 @@ extension AudioManager {
         return "\(Int(audioPlayTime))"
     }
     
-    /// second는 이동할 시간, 음수도 가능.
-    func skip(for second: Double, filePath: URL) {
-        let audioFile: AVAudioFile
+    private func calculatorBufferGraphData(buffer: AVAudioPCMBuffer) -> Float {
+        guard let channelData = buffer.floatChannelData else { return 0 }
+        let channelDataValue = channelData.pointee
+        let channelDataArrayValue = stride(from: 0,
+                                           to: Int(buffer.stride),
+                                           by: buffer.stride)
+            .map { channelDataValue[$0] }
         
-        do {
-            audioFile = try getAudioFile(filePath: filePath)
-        } catch {
-            fatalError()
-        }
+        let rms = sqrt(channelDataArrayValue.map { return $0 * $0 }.reduce(0, +) / Float(buffer.frameLength))
+        let avgPower = 20 * log10(rms)
         
+        let meterLevel = scalePower(power: avgPower)
         
-        let offset = AVAudioFramePosition(second * audioFile.processingFormat.sampleRate)
-        let audioLengthSamples = audioFile.length
-        
-        guard let lastRenderTime = audioPlayerNode.lastRenderTime,
-              let playerTime = audioPlayerNode.playerTime(forNodeTime: lastRenderTime) else {
-            return
-        }
-        
-        currentPosition = playerTime.sampleTime + seekFrame
-        currentPosition = max(currentPosition, 0)
-        currentPosition = min(currentPosition, audioLengthSamples)
-        
-        
-        seekFrame = currentPosition + offset
-        seekFrame = max(seekFrame, 0)
-        seekFrame = min(seekFrame, audioLengthSamples)
-        currentPosition = seekFrame
-        
-        audioPlayerNode.stop()
-        if currentPosition < audioLengthSamples {
-            let frameCount = AVAudioFrameCount( audioLengthSamples - seekFrame)
-            
-            audioPlayerNode
-                .scheduleSegment(audioFile,
-                                 startingFrame: currentPosition,
-                                 frameCount: frameCount,
-                                 at: nil
-                )
-        }
-        
-        audioPlayerNode.play()
+        return meterLevel
     }
     
     /// audiofile을 읽어 한번에 data를 가져오는 method. width는 waveView의 width이다. nil 값이 나온 것은 bufferData를 읽어오는데 실패한 것
@@ -326,6 +225,112 @@ extension AudioManager {
         }
         
         return arr
+    }
+    
+    private func scalePower(power: Float) -> Float {
+        guard power.isFinite else { return 0 }
+        let minDB: Float = -80
+        
+        if power < minDB {
+            return 0
+        } else if power >= 1 {
+            return 1
+        } else {
+            return (abs(minDB) - abs(power)) / abs(minDB)
+        }
+    }
+}
+
+extension AudioManager {
+    
+    // - MARK: Audio Play Method
+    
+    func startPlay(fileURL: URL) {
+        if !playEngine.isRunning {
+            playEngine.reset()
+            configureAudioEngineForPlay(filePath: fileURL)
+            do {
+                try playEngine.start()
+            } catch {
+                fatalError(error.localizedDescription)
+            }
+        }
+        audioPlayerNode.play()
+    }
+    
+    func stopPlay() {
+        playEngine.stop()
+    }
+    
+    private func attachPlayNodes() {
+        playEngine.attach(audioPlayerNode)
+        playEngine.attach(changePitchNode)
+    }
+    
+    private func connectPlayNodes() {
+        playEngine.connect(audioPlayerNode, to: changePitchNode, format: nil)
+        playEngine.connect(changePitchNode, to: playEngine.mainMixerNode, format: nil)
+    }
+    
+    private func configureAudioEngineForPlay(filePath: URL) {
+        let audioFile: AVAudioFile
+        
+        do {
+            audioFile = try getAudioFile(filePath: filePath)
+        } catch {
+            fatalError()
+        }
+        
+        attachPlayNodes()
+        connectPlayNodes()
+        
+        audioPlayerNode.scheduleFile(audioFile, at: nil)
+        
+        playEngine.prepare()
+    }
+    
+    /// second는 이동할 시간, 음수도 가능.
+    func skip(for second: Double, filePath: URL) {
+        let audioFile: AVAudioFile
+        
+        do {
+            audioFile = try getAudioFile(filePath: filePath)
+        } catch {
+            fatalError()
+        }
+        
+        
+        let offset = AVAudioFramePosition(second * audioFile.processingFormat.sampleRate)
+        let audioLengthSamples = audioFile.length
+        
+        guard let lastRenderTime = audioPlayerNode.lastRenderTime,
+              let playerTime = audioPlayerNode.playerTime(forNodeTime: lastRenderTime) else {
+            return
+        }
+        
+        currentPosition = playerTime.sampleTime + seekFrame
+        currentPosition = max(currentPosition, 0)
+        currentPosition = min(currentPosition, audioLengthSamples)
+        
+        
+        seekFrame = currentPosition + offset
+        seekFrame = max(seekFrame, 0)
+        seekFrame = min(seekFrame, audioLengthSamples)
+        currentPosition = seekFrame
+        
+        audioPlayerNode.stop()
+        if currentPosition < audioLengthSamples {
+            let frameCount = AVAudioFrameCount( audioLengthSamples - seekFrame)
+            
+            audioPlayerNode
+                .scheduleSegment(audioFile,
+                                 startingFrame: currentPosition,
+                                 frameCount: frameCount,
+                                 at: nil
+                )
+        }
+        
+        audioPlayerNode.play()
     }
     
     func controlVolume(newValue: Float) {
