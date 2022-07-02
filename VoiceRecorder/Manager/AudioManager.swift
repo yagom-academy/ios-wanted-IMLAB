@@ -15,11 +15,11 @@ enum AudioPitchMode {
     var pitchValue: Float {
         switch self {
         case .baby:
-            return 100
+            return 1200
         case .basic:
             return 0
         case .grandFather:
-            return -100
+            return -1200
         }
     }
 }
@@ -34,7 +34,6 @@ class AudioManager {
     lazy var cutOffFrequency: Float = 0
     
     // play properties
-    private var audioFile: AVAudioFile!
     private lazy var seekFrame: AVAudioFramePosition = 0
     private lazy var currentPosition: AVAudioFramePosition = 0
     private lazy var audioPlayerNode = AVAudioPlayerNode()
@@ -99,7 +98,7 @@ class AudioManager {
         configureEqFilter()
         attachRecordNodes()
         connectRecordNodes()
-        
+        let audioFile: AVAudioFile!
         let format = inputNode.outputFormat(forBus: 0)
         do {
             audioFile = try createAudioFile(filePath: filePath)
@@ -112,7 +111,7 @@ class AudioManager {
             guard let self = self else { return }
             let bufferData = self.calculatorBufferGraphData(buffer: buffer)
             do {
-                try self.audioFile.write(from: buffer)
+                try audioFile.write(from: buffer)
             } catch {
                 fatalError(error.localizedDescription)
             }
@@ -181,12 +180,11 @@ extension AudioManager {
             }
         }
         audioPlayerNode.play()
-        print(playEngine.isRunning)
     }
     
     func stopPlay() {
-        audioPlayerNode.pause()
-//        playEngine.stop()
+        audioPlayerNode.stop()
+        playEngine.stop()
     }
     
     private func getAudioFile(filePath: URL) throws -> AVAudioFile {
@@ -204,6 +202,8 @@ extension AudioManager {
     }
     
     private func configureAudioEngineForPlay(filePath: URL) {
+        let audioFile: AVAudioFile
+        
         do {
             audioFile = try getAudioFile(filePath: filePath)
         } catch {
@@ -219,7 +219,13 @@ extension AudioManager {
     }
     
     /// 현재 재생중인 audioFile의 전체 길이. float을 Int로 변환하고, string으로 반환
-    func getPlayTime() -> String {
+    func getPlayTime(filePath: URL) -> String {
+        let audioFile: AVAudioFile
+        do {
+            audioFile = try getAudioFile(filePath: filePath)
+        } catch {
+            fatalError()
+        }
         
         let audioLengthSamples = audioFile.length
         let sampleRate = audioFile.processingFormat.sampleRate
@@ -229,10 +235,15 @@ extension AudioManager {
     }
     
     /// second는 이동할 시간, 음수도 가능.
-    func skip(for second: Double) {
-        guard let audioFile = audioFile else {
-            return
+    func skip(for second: Double, filePath: URL) {
+        let audioFile: AVAudioFile
+        
+        do {
+            audioFile = try getAudioFile(filePath: filePath)
+        } catch {
+            fatalError()
         }
+        
         
         let offset = AVAudioFramePosition(second * audioFile.processingFormat.sampleRate)
         let audioLengthSamples = audioFile.length
@@ -267,8 +278,15 @@ extension AudioManager {
         audioPlayerNode.play()
     }
     
-    /// audiofile을 읽어 한번에 data를 가져오는 method. width는 waveView의 width이다.
-    func calculatorBufferGraphData(width: CGFloat) -> [Float]? {
+    /// audiofile을 읽어 한번에 data를 가져오는 method. width는 waveView의 width이다. nil 값이 나온 것은 bufferData를 읽어오는데 실패한 것
+    func calculatorBufferGraphData(width: CGFloat, filePath: URL) -> [Float]? {
+        let audioFile: AVAudioFile
+        do {
+            audioFile = try getAudioFile(filePath: filePath)
+        } catch {
+            fatalError()
+        }
+        
         let capacity = AVAudioFrameCount(audioFile.length)
         guard let audioBuffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: capacity) else {
             return nil
@@ -277,7 +295,6 @@ extension AudioManager {
         do {
             try audioFile.read(into: audioBuffer)
         } catch {
-            print(error)
             return nil
         }
         guard let channelData = audioBuffer.floatChannelData else {
@@ -311,16 +328,6 @@ extension AudioManager {
         return arr
     }
     
-//    func setPitch(pitch: Float) {
-//        let changePitchNode = AVAudioUnitTimePitch()
-//        changePitchNode.pitch = pitch
-//        audioEngine?.attach(changePitchNode)
-//
-//        audioEngine?.connect(audioPlayerNode, to: changePitchNode, format: audioFile.processingFormat)
-//        audioEngine?.connect(changePitchNode, to: mixerNode, format: audioFile.processingFormat)
-//
-//    }
-    
     func controlVolume(newValue: Float) {
         if newValue >= 1 {
             audioPlayerNode.volume = 1
@@ -331,26 +338,4 @@ extension AudioManager {
         }
     }
     
-    /** test용으로 사용할 method
-     func downNplay(pitch: Float) throws {
-     do {
-     let localPath = try! PathFinder().getPath(fileName: "1123.m4a")
-     FirebaseStorageManager.shared
-     .fetchVoiceMemoAtFirebase(with: "1234.m4a",
-     localPath: localPath,
-     completion: {
-     result in
-     switch result {
-     case.failure(_):
-     break
-     case.success(_):
-     self.play(pitch: 0, target: localPath)
-     }
-     })
-     
-     
-     } catch {
-     print(error)
-     }
-     }       */
 }
