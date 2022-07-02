@@ -59,6 +59,23 @@ class PlayingViewController: UIViewController {
         playSound()
     }
     
+    @IBAction func ControlVolumeSlider(_ sender: UISlider) {
+        player?.volume = volumeControlSlider.value
+    }
+    
+    @IBAction func PressPrevButton(_ sender: UIButton) {
+        if player?.isPlaying == true {
+            player?.currentTime -= 5
+            print(player?.currentTime)
+        }
+    }
+    
+    @IBAction func PressBackwardButton(_ sender: UIButton) {
+        if player?.isPlaying == true {
+            player?.currentTime += 5
+            print(player?.currentTime)
+        }
+    }
 }
 
 extension PlayingViewController: AVAudioPlayerDelegate {
