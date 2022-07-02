@@ -31,6 +31,7 @@ class PlayViewController: UIViewController {
         configureUI()
         setupMPVolumeView()
         setUpPlayer()
+        download(url: recordFile!.url, name: recordFile!.name)
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
@@ -51,7 +52,7 @@ class PlayViewController: UIViewController {
             engine.pause()
         } else {
             sender.setImage(Icon.pauseFill.image, for: .normal)
-            engine.url = Bundle.main.url(forResource: "1", withExtension: "mp3")
+            engine.url = getAudioFilePath(name: recordFile!.name)
             try! engine.setupEngine()
             engine.play()
         }
@@ -105,5 +106,23 @@ private extension PlayViewController {
         
         mpVolumeView.setRouteButtonImage(UIImage(), for: .normal)
         mpVolumeView.showsVolumeSlider = true
+    }
+    func download(url: URL, name: String) {
+        let fileManager = FileManager.default
+        let filePath = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]        
+        let audioPath = filePath.appendingPathComponent(name)
+        do {
+            let data = try Data(contentsOf: url)
+            try data.write(to: audioPath)
+        } catch {
+            print("다운로드 에러")
+        }
+    }
+    func getAudioFilePath(name: String) -> URL {
+        let fileManager = FileManager.default
+        let filePath = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let audioPath = filePath.appendingPathComponent(name)
+        
+        return audioPath
     }
 }
