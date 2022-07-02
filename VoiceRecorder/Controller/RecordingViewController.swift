@@ -44,10 +44,11 @@ class RecordingViewController: UIViewController {
         self.scrollView.updateContentSize()
         self.scrollView.isScrollEnabled = false
         self.totalRecordTimeLabel.text = "00:00"
+        self.currentPlayTimeLabel.text = "00:00"
+        self.endPlayTimeLabel.text = "00:00"
         self.goBackwardButton.isEnabled = false
         self.goForwardButton.isEnabled = false
         self.playButton.isEnabled = false
-        playUIAppear(true)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -107,8 +108,6 @@ class RecordingViewController: UIViewController {
     }
     
     @IBAction func playButtonTapped(_ sender: UIButton) {
-        inPlayMode.toggle()
-        playUIAppear(false)
         if inPlayMode {
             audioPlayerHandler.audioPlayer.delegate = self
             sender.setImage(UIImage(systemName: "pause"), for: .normal)
@@ -121,12 +120,7 @@ class RecordingViewController: UIViewController {
             setButton(recording: true, goBack: false, goForward: false)
             audioPlayerHandler.audioPlayer.pause()
         }
-    }
-    
-    func playUIAppear(_ bool: Bool) {
-        currentPlayTimeLabel.isHidden = bool
-        endPlayTimeLabel.isHidden = bool
-        playProgressBar.isHidden = bool
+        inPlayMode.toggle()
     }
     
     @objc func updatePlayTime() {
