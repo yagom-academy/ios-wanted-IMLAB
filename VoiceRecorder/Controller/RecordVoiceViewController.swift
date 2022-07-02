@@ -24,6 +24,12 @@ class RecordVoiceViewController: UIViewController {
         return waveFormView
     }()
     
+    let frequencyLabel : UILabel = {
+        let frequencyLabel = UILabel()
+        frequencyLabel.translatesAutoresizingMaskIntoConstraints = false
+        return frequencyLabel
+    }()
+    
     let frequencySlider : UISlider = {
         let frequencySlider = UISlider()
         frequencySlider.translatesAutoresizingMaskIntoConstraints = false
@@ -128,6 +134,7 @@ class RecordVoiceViewController: UIViewController {
     func setView() {
         self.view.addSubview(waveFormView)
         
+        self.view.addSubview(frequencyLabel)
         self.view.addSubview(frequencySlider)
         self.view.addSubview(progressTimeLabel)
         
@@ -148,7 +155,11 @@ class RecordVoiceViewController: UIViewController {
             waveFormView.widthAnchor.constraint(equalTo: self.view.widthAnchor),
             waveFormView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.15),
             
-            frequencySlider.topAnchor.constraint(equalToSystemSpacingBelow: waveFormView.bottomAnchor, multiplier: 2),
+            frequencyLabel.topAnchor.constraint(equalToSystemSpacingBelow: waveFormView.bottomAnchor, multiplier: 2),
+            frequencyLabel.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.8),
+            frequencyLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            
+            frequencySlider.topAnchor.constraint(equalTo: frequencyLabel.bottomAnchor),
             frequencySlider.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.8),
             frequencySlider.heightAnchor.constraint(equalTo: waveFormView.heightAnchor, multiplier: 0.5),
             frequencySlider.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
@@ -169,6 +180,7 @@ class RecordVoiceViewController: UIViewController {
     }
     
     func setUI() {
+        frequencyLabel.text = "cutoff frequency"
         frequencySlider.tintColor = .blue
         frequencySlider.value = 44100
         progressTimeLabel.text = "00:00:00"
