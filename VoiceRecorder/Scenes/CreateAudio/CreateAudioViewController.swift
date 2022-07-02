@@ -47,6 +47,9 @@ class CreateAudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudi
         return button
     }()
     func setButtons(){
+        buttons.playButton.isEnabled = false
+        buttons.backButton.isEnabled = false
+        buttons.forwordButton.isEnabled = false
         buttons.translatesAutoresizingMaskIntoConstraints = false
         buttons.playButton.addTarget(self, action: #selector(tapPlayPauseButton), for: .touchUpInside)
         buttons.backButton.addTarget(self, action: #selector(tapBackButton), for: .touchUpInside)
@@ -76,7 +79,6 @@ class CreateAudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudi
             recordingButton.isSelected = false
             audioRecorder?.stop()
             audio = Audio(audioRecorder!.url)
-        
             buttons.playButton.isEnabled = true
             buttons.backButton.isEnabled = true
             buttons.forwordButton.isEnabled = true
