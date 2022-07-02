@@ -34,6 +34,9 @@ class RecordDetailViewController: UIViewController {
     let playButtonImage = UIImage(systemName: "play.fill")
     let pauseButtonImage = UIImage(systemName: "pause.fill")
     
+    // test
+    var currentFileName : String?
+    
     
     
     // MARK: - LifeCycle
@@ -56,6 +59,7 @@ class RecordDetailViewController: UIViewController {
                     print(error)
                 }
             }
+            currentFileName = nil
         }
     }
     
@@ -86,8 +90,19 @@ class RecordDetailViewController: UIViewController {
     }
         
     func startRecording() {
+        if let audioFileURL = audioFileURL {
+            do {
+                try FileManager.default.removeItem(at: audioFileURL)
+                if let currentFileName = currentFileName {
+                    FireStorageManager.shared.deleteItem(currentFileName)
+                }
+            } catch {
+                print(error)
+            }
+        }
         let fileName = DataFormatter.makeFileName()
         FireStorageManager.RecordFileString.Path.fileName = fileName
+        currentFileName = FireStorageManager.RecordFileString.fileFullName
         // 파일 생성
         guard let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
         audioFileURL = fileURL.appendingPathComponent("\(FireStorageManager.RecordFileString.fileFullName)\(FireStorageManager.RecordFileString.contentType.audio)")

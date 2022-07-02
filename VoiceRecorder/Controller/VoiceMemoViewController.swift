@@ -105,7 +105,13 @@ extension VoiceMemoViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
+            print(localUrls[indexPath.row])
             FireStorageManager.shared.deleteItem(fileNames[indexPath.row])
+            do {
+                try FileManager.default.removeItem(at: localUrls[indexPath.row])
+            } catch {
+                print(error)
+            }
             localUrls.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
