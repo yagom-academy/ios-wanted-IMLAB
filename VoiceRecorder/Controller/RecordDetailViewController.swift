@@ -21,8 +21,10 @@ class RecordDetailViewController: UIViewController {
     @IBOutlet weak var playButton: UIButton!
     
     // MARK: - Properties
+    
     var recordingSession: AVAudioSession?
     var audioRecorder: AVAudioRecorder?
+    var player : AVAudioPlayer?
         
     var audioFileURL : URL?
             
@@ -32,8 +34,7 @@ class RecordDetailViewController: UIViewController {
     let playButtonImage = UIImage(systemName: "play.fill")
     let pauseButtonImage = UIImage(systemName: "pause.fill")
     
-    // about play
-    var player : AVAudioPlayer?
+    
     
     // MARK: - LifeCycle
     
@@ -50,14 +51,11 @@ class RecordDetailViewController: UIViewController {
             // 로컬에 생성된 파일 삭제
             if let audioFileURL = audioFileURL {
                 do {
-                    print(audioFileURL)
                     try FileManager.default.removeItem(at: audioFileURL)
                 } catch {
                     print(error)
                 }
             }
-        } else {
-            print("close")
         }
     }
     
@@ -103,6 +101,7 @@ class RecordDetailViewController: UIViewController {
         do {
             audioRecorder = try AVAudioRecorder(url: audioFileURL, settings: settings)
             audioRecorder?.record() // 이것의 상태를 조건으로 다른 것 control하는 듯
+            durationLabel.text = "녹음중 .."
             recordButton.setImage(recordingButtonImage, for: .normal)
         } catch {
             finishRecording(success: false, audioFileURL)
@@ -113,7 +112,23 @@ class RecordDetailViewController: UIViewController {
         audioRecorder?.stop()
         audioRecorder = nil
         recordButton.setImage(readyToRecordButtonImage, for: .normal)
+        showDuration(url)
         uploadRecordDataToFirebase(url)
+    }
+    
+    func showDuration(_ url: URL?) {
+        var durationTime: String = ""
+        guard let url = url else { return }
+        
+        do {
+            player = try AVAudioPlayer(contentsOf: url)
+            if let duration = player?.duration {
+                durationTime = duration.minuteSecondMS
+                durationLabel.text = durationTime
+            }
+        } catch {
+            print("<finishRecording Error> -\(error.localizedDescription)")
+        }
     }
     
     func uploadRecordDataToFirebase(_ url: URL?) {
