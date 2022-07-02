@@ -14,8 +14,7 @@ class DownloadRecordfile : FirebaseStoreDownload {
         let islandRef = storageRef.child("voiceRecords").child(fileName)
         
         let fileMnager = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let directoryURL = fileMnager.appendingPathComponent("voiceRecords")
-        let fileUrl = directoryURL.appendingPathComponent(fileName)
+        let fileUrl = fileMnager.appendingPathComponent(fileName)
         
         let downloadTask = islandRef.write(toFile: fileUrl) { url, error in
             if let error = error {
@@ -23,7 +22,7 @@ class DownloadRecordfile : FirebaseStoreDownload {
                 return
             }
             if let url = url {
-                handler(.success(url.path))
+                handler(.success(url.lastPathComponent))
             }
         }
         
