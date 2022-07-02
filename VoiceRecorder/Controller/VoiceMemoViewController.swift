@@ -9,11 +9,6 @@ import AVFAudio
 
 class VoiceMemoViewController: UIViewController {
     
-    // 지워도 될거같아요 확인한번 해주세요~~
-//    private enum RefString {
-//        static let recording: String = "recording/"
-//    }
-    
     // MARK: - IBOutlet
     
     @IBOutlet weak var voiceMemoTableView: UITableView!
@@ -120,6 +115,8 @@ extension VoiceMemoViewController: UITableViewDataSource {
 extension VoiceMemoViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let playingVC = self.storyboard?.instantiateViewController(withIdentifier: PlayingViewController.identifier) as? PlayingViewController else {return}
+        playingVC.fileName = fileNames[indexPath.row]
+        playingVC.fileURL = localUrls[indexPath.row]
         present(playingVC, animated: true)
     }
 }

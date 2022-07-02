@@ -257,6 +257,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="playButton" destination="xhf-LS-GKS" id="OBV-km-CZl"/>
                         <outlet property="playerControlView" destination="FkC-sQ-Oeq" id="T9t-Vy-0gv"/>
                         <outlet property="titleLabel" destination="vKV-AA-4Ck" id="iho-wJ-JgN"/>
                         <outlet property="voiceChangeSegmentedControl" destination="epG-fG-rh2" id="eQ9-zR-RQM"/>

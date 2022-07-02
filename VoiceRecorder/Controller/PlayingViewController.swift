@@ -17,21 +17,24 @@ class PlayingViewController: UIViewController {
     @IBOutlet weak var playerControlView: UIStackView!
     @IBOutlet weak var volumeControlSlider: UISlider!
     @IBOutlet weak var voiceChangeSegmentedControl: UISegmentedControl!
+    @IBOutlet weak var playButton: UIButton!
     
     
     var player : AVAudioPlayer?
+    var fileName : String?
+    var fileURL : URL?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         initialPlay()
+        titleLabel.text = fileName
     }
     func initialPlay() {
-        let url = Bundle.main.url(forResource: "마음을 드려요(MR) - IU", withExtension: "mp3")
-        // local url 가져와야함
-        if let findUrl = url {
+        if let url = fileURL {
             do {
-                player = try AVAudioPlayer(contentsOf: findUrl)
+                player = try AVAudioPlayer(contentsOf: url)
+                player?.delegate = self
                 player?.prepareToPlay() // 실제 호출과 기기의 플레이 간의 딜레이를 줄여줌
             }
             catch {
@@ -41,12 +44,14 @@ class PlayingViewController: UIViewController {
     }
     
     func playSound() {
-        if !(player?.isPlaying ?? false) {
+        if player?.isPlaying == false {
             player?.play()
+            playButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
         }
         else {
             player?.pause()
             player?.prepareToPlay()
+            playButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
         }
     }
     
@@ -54,4 +59,10 @@ class PlayingViewController: UIViewController {
         playSound()
     }
     
+}
+
+extension PlayingViewController: AVAudioPlayerDelegate {
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        playButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+    }
 }
