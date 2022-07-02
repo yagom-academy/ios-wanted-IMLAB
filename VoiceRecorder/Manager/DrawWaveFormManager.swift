@@ -23,6 +23,7 @@ class DrawWaveFormManager{
     private var traitLength : CGFloat!
     private var start : CGPoint!
     private var step : CGFloat!
+    private var totalStep : CGFloat!
     
     weak var delegate : DrawWaveFormManagerDelegate?
     
@@ -36,6 +37,7 @@ class DrawWaveFormManager{
         waveLayer = CAShapeLayer()
         start = firstPoint
         step = 0
+        totalStep = 0
     }
     
     func startDrawing(of recorder : AVAudioRecorder, in view : UIView){
@@ -46,9 +48,10 @@ class DrawWaveFormManager{
         })
     }
     
-    func stopDrawing(){
+    func stopDrawing(in view : UIView){
         timer.invalidate()
-        
+//        saveImageInLocal(getUIImage(from: view))
+        // 파일 업로드
     }
     
     func removeWaveForm() {
@@ -98,7 +101,23 @@ class DrawWaveFormManager{
         view.setNeedsDisplay()
         
         start = CGPoint(x: start.x + jump, y: start.y)
+        step += jump
+        totalStep += step
         delegate?.moveWaveFormView(step)
-        step -= jump
+        
     }
+    
+    func getUIImage(from view: UIView) -> UIImage {
+        let resizedBounds = CGRect(x: view.bounds.minX - totalStep, y: view.bounds.minY, width: view.bounds.width + totalStep, height: view.bounds.height)
+        
+        let renderer = UIGraphicsImageRenderer(bounds: resizedBounds)
+        return renderer.image { rendererContext in
+            view.layer.render(in: rendererContext.cgContext)
+        }
+    }
+    
+    
+//    func saveImageInLocal(_ imageUI: UIImage) {
+//        // 이미지를 로컬에 저장
+//    }
 }

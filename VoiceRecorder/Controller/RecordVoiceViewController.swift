@@ -93,7 +93,7 @@ class RecordVoiceViewController: UIViewController {
             recordVoiceManager.stopRecording {
                 self.delegate?.updateList()
             }
-            drawWaveFormManager.stopDrawing()
+            drawWaveFormManager.stopDrawing(in: waveFormView)
             record_start_stop_button.setImage(UIImage(systemName: "circle.fill"), for: .normal)
             record_start_stop_button.tintColor = .red
             setUIAfterRecording()
@@ -172,7 +172,7 @@ class RecordVoiceViewController: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         if recordVoiceManager.isRecording(){
             recordVoiceManager.stopRecording {
-                self.drawWaveFormManager.stopDrawing()
+                self.drawWaveFormManager.stopDrawing(in: self.waveFormView)
                 self.delegate?.updateList()
             }
         }
@@ -188,12 +188,14 @@ class RecordVoiceViewController: UIViewController {
 
 }
 
+// MARK: DrawWaveFormManagerDelegate
+
 extension RecordVoiceViewController : DrawWaveFormManagerDelegate {
     
     func moveWaveFormView(_ step: CGFloat) {
         
         UIView.animate(withDuration: 1/14, animations: {
-            self.waveFormView.transform = CGAffineTransform(translationX: step, y: 0)
+            self.waveFormView.transform = CGAffineTransform(translationX: -step, y: 0)
         })
     }
     
@@ -201,6 +203,8 @@ extension RecordVoiceViewController : DrawWaveFormManagerDelegate {
         self.waveFormView.transform = CGAffineTransform(translationX: 0, y: 0)
     }
 }
+
+// MARK: RecordVoiceManagerDelegate
 
 extension RecordVoiceViewController : RecordVoiceManagerDelegate {
     
