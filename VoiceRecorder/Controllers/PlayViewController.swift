@@ -23,10 +23,7 @@ class PlayViewController: UIViewController {
     var player: AudioPlayer?
     var isPlay = false
     
-    let engine = AVAudioEngine()
-    let audioPlayer = AVAudioPlayerNode()
-    let speedControl = AVAudioUnitVarispeed()
-    let pitchControl = AVAudioUnitTimePitch()
+    let engine = AudioEngine()
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -51,11 +48,12 @@ class PlayViewController: UIViewController {
     @IBAction func didTapPlayPauseButton(_ sender: UIButton) {
         if isPlay {
             sender.setImage(Icon.play.image, for: .normal)
-            engine.stop()
-            audioPlayer.pause()
+            engine.pause()
         } else {
             sender.setImage(Icon.pauseFill.image, for: .normal)
-            try! play()
+            engine.url = Bundle.main.url(forResource: "1", withExtension: "mp3")
+            try! engine.setupEngine()
+            engine.play()
         }
         isPlay = !isPlay
     }
@@ -63,15 +61,13 @@ class PlayViewController: UIViewController {
         switch sender.selectedSegmentIndex {
         case 0:
             print(sender.selectedSegmentIndex)
-            pitchControl.pitch = 0.0
+            engine.setPitch(0.0)
         case 1:
             print(sender.selectedSegmentIndex)
-            pitchControl.pitch = 0.0
-            pitchControl.pitch += 800
+            engine.setPitch(800.0)
         case 2:
             print(sender.selectedSegmentIndex)
-            pitchControl.pitch = 0.0
-            pitchControl.pitch -= 800
+            engine.setPitch(-800.0)
         default:
             break
         }
@@ -109,18 +105,5 @@ private extension PlayViewController {
         
         mpVolumeView.setRouteButtonImage(UIImage(), for: .normal)
         mpVolumeView.showsVolumeSlider = true
-    }
-        
-    func play() throws {
-        let audioFile = try AVAudioFile(forReading: Bundle.main.url(forResource: "1", withExtension: "mp3")!)
-        engine.attach(audioPlayer)
-        engine.attach(pitchControl)
-        engine.attach(speedControl)
-        engine.connect(audioPlayer, to: speedControl, format: nil)
-        engine.connect(speedControl, to: pitchControl, format: nil)
-        engine.connect(pitchControl, to: engine.mainMixerNode, format: nil)
-        audioPlayer.scheduleFile(audioFile, at: nil)
-        try engine.start()
-        audioPlayer.play()
     }
 }
