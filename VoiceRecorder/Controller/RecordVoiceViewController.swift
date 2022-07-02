@@ -15,6 +15,7 @@ class RecordVoiceViewController: UIViewController {
     weak var delegate : RecordVoiceDelegate?
     var recordVoiceManager = RecordVoiceManager()
     var drawWaveFormManager = DrawWaveFormManager()
+    var audioSessionManager = AudioSessionManager()
         
     let waveFormView : UIView = {
         let waveFormView = UIView()
@@ -23,12 +24,20 @@ class RecordVoiceViewController: UIViewController {
         return waveFormView
     }()
     
-    let progressSlider : UISlider = {
-        let progressSlider = UISlider()
-        progressSlider.translatesAutoresizingMaskIntoConstraints = false
-        progressSlider.minimumValue = 0
-        progressSlider.maximumValue = 1
-        return progressSlider
+    let frequencyLabel : UILabel = {
+        let frequencyLabel = UILabel()
+        frequencyLabel.translatesAutoresizingMaskIntoConstraints = false
+        return frequencyLabel
+    }()
+    
+    let frequencySlider : UISlider = {
+        let frequencySlider = UISlider()
+        frequencySlider.translatesAutoresizingMaskIntoConstraints = false
+        frequencySlider.isContinuous = false
+        frequencySlider.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
+        frequencySlider.minimumValue = 8000
+        frequencySlider.maximumValue = 44100
+        return frequencySlider
     }()
     
     let progressTimeLabel : UILabel = {
@@ -108,10 +117,15 @@ class RecordVoiceViewController: UIViewController {
         }
     }
     
+    @objc func sliderValueChanged() {
+        audioSessionManager.setSampleRate(Double(frequencySlider.value))
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         drawWaveFormManager.delegate = self
         recordVoiceManager.delegate = self
+        audioSessionManager.setSampleRate(44100)
         setView()
         autoLayout()
         setUI()
@@ -120,7 +134,8 @@ class RecordVoiceViewController: UIViewController {
     func setView() {
         self.view.addSubview(waveFormView)
         
-        self.view.addSubview(progressSlider)
+        self.view.addSubview(frequencyLabel)
+        self.view.addSubview(frequencySlider)
         self.view.addSubview(progressTimeLabel)
         
         self.view.addSubview(buttonStackView)
@@ -140,12 +155,16 @@ class RecordVoiceViewController: UIViewController {
             waveFormView.widthAnchor.constraint(equalTo: self.view.widthAnchor),
             waveFormView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.15),
             
-            progressSlider.topAnchor.constraint(equalToSystemSpacingBelow: waveFormView.bottomAnchor, multiplier: 2),
-            progressSlider.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.8),
-            progressSlider.heightAnchor.constraint(equalTo: waveFormView.heightAnchor, multiplier: 0.5),
-            progressSlider.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            frequencyLabel.topAnchor.constraint(equalToSystemSpacingBelow: waveFormView.bottomAnchor, multiplier: 2),
+            frequencyLabel.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.8),
+            frequencyLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             
-            progressTimeLabel.topAnchor.constraint(equalTo: progressSlider.bottomAnchor),
+            frequencySlider.topAnchor.constraint(equalTo: frequencyLabel.bottomAnchor),
+            frequencySlider.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.8),
+            frequencySlider.heightAnchor.constraint(equalTo: waveFormView.heightAnchor, multiplier: 0.5),
+            frequencySlider.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            
+            progressTimeLabel.topAnchor.constraint(equalTo: frequencySlider.bottomAnchor),
             progressTimeLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             
             buttonStackView.topAnchor.constraint(equalTo: progressTimeLabel.bottomAnchor, constant: 30),
@@ -161,8 +180,9 @@ class RecordVoiceViewController: UIViewController {
     }
     
     func setUI() {
-        progressSlider.tintColor = .blue
-        progressSlider.value = 0.5
+        frequencyLabel.text = "cutoff frequency"
+        frequencySlider.tintColor = .blue
+        frequencySlider.value = 44100
         progressTimeLabel.text = "00:00:00"
         record_start_stop_button.setImage(UIImage(systemName: "circle.fill"), for: .normal)
         record_start_stop_button.tintColor = .red

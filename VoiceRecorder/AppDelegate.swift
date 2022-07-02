@@ -5,7 +5,6 @@
 
 import UIKit
 import FirebaseCore
-import AVFoundation
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -13,18 +12,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        let audioSessionManager = AudioSessionManager()
+        
         FirebaseApp.configure()
-        let audioSession = AVAudioSession.sharedInstance()
-        do {
-            try audioSession.setCategory(.playAndRecord)
-            audioSession.requestRecordPermission{ accepted in
-                if accepted {
-                    print("permission granted")
-                }
-            }
-        } catch {
-            print("audioSession error: \(error.localizedDescription)")
-        }
+        audioSessionManager.setAudioSession()
 
         return true
     }
