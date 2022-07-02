@@ -15,6 +15,7 @@ class RecordVoiceViewController: UIViewController {
     weak var delegate : RecordVoiceDelegate?
     var recordVoiceManager = RecordVoiceManager()
     var drawWaveFormManager = DrawWaveFormManager()
+    var audioSessionManager = AudioSessionManager()
         
     let waveFormView : UIView = {
         let waveFormView = UIView()

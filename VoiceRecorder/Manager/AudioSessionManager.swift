@@ -24,5 +24,13 @@ class AudioSessionManager{
             print("audioSession error: \(error.localizedDescription)")
         }
     }
+    
+    func setSampleRate(_ sampleRate : Double) {
+        do {
+            try audioSession.setPreferredSampleRate(sampleRate)
+        } catch {
+            print("audioSession error: \(error.localizedDescription)")
+        }
+    }
 }
 
