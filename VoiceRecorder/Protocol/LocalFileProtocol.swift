@@ -10,4 +10,5 @@ import Foundation
 protocol LocalFileProtocol {
     var localFileURL : URL { get set }
     func makeFileName() -> String
+    func getLatestFileName() -> String
 }
