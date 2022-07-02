@@ -96,5 +96,12 @@ extension VoiceMemoListViewController : UITableViewDataSource {
 }
 
 extension VoiceMemoListViewController : UITableViewDelegate {
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let playingVC = storyboard?.instantiateViewController(withIdentifier: "PlayingViewController") as? PlayingViewController else { return }
+        let name = voiceMemoList[indexPath.row].recordFileName
+        let time = voiceMemoList[indexPath.row].recordTime
+        let selectedFileInfo = RecordModel(recordFileName: name, recordTime: time)
+        playingVC.selectedFileInfo = selectedFileInfo
+        present(playingVC, animated: true)
+    }
 }
