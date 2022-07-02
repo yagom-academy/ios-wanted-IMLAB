@@ -8,12 +8,22 @@ import AVFoundation
 
 class ViewController: UIViewController {
     
-    var player: AVAudioPlayer?
+    var filemanager = AudioFileManager()
     
-    lazy var plusButton: UIButton = {
+    var firebaseManager = FirebaseStorageManager(FireStorageService.baseUrl)
+    
+    
+    lazy var createFileButton: UIButton = {
         var button = UIButton()
-        button.setTitle("plus", for: .normal)
-        button.backgroundColor = .blue
+        button.setTitle("create", for: .normal)
+        button.setTitleColor(UIColor.black, for: .normal)
+        return button
+    }()
+    
+    lazy var getFileButton: UIButton = {
+        var button = UIButton()
+        button.setTitle("get", for: .normal)
+        button.setTitleColor(UIColor.black, for: .normal)
         return button
     }()
     
@@ -21,12 +31,11 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         setLayout()
         
-        plusButton.addTarget(self, action: #selector(plusButtonClicked), for: .touchUpInside)
+        createFileButton.addTarget(self, action: #selector(plusButtonClicked), for: .touchUpInside)
         
-        FirebaseStorageManager.download(urlString: FirebaseStorageManager.url) { data in
-            self.player(data: data!)
-        }
+        getFileButton.addTarget(self, action: #selector(getFile), for: .touchUpInside)
         
+       
         
     }
     
@@ -34,35 +43,29 @@ class ViewController: UIViewController {
         
         view.backgroundColor = .white
         
-        plusButton.translatesAutoresizingMaskIntoConstraints = false
+        createFileButton.translatesAutoresizingMaskIntoConstraints = false
+        getFileButton.translatesAutoresizingMaskIntoConstraints = false
         
-        view.addSubview(plusButton)
+        view.addSubview(createFileButton)
+        view.addSubview(getFileButton)
         
         NSLayoutConstraint.activate([
-            plusButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            plusButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 30),
-            plusButton.widthAnchor.constraint(equalToConstant: 80),
-            plusButton.heightAnchor.constraint(equalToConstant: 50)
+            createFileButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            createFileButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).constraintWithMultiplier(0.5),
+            createFileButton.widthAnchor.constraint(equalToConstant: 100),
+            
+            getFileButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            getFileButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).constraintWithMultiplier(1.5),
+            getFileButton.widthAnchor.constraint(equalToConstant: 100),
         ])
     }
     
-    func player(data: Data) {
-        
-        do {
-            player = try AVAudioPlayer(data: data)
-            
-            print(player!.isPlaying)
-            
-        } catch {
-            print("error")
-        }
-        
-    }
     
     
     @objc func plusButtonClicked() {
-        player!.play()
-        //let recordCheckVC = RecordCheckViewController()
-        //self.present(recordCheckVC, animated: true)
+        filemanager.createVoiceFile(fileName: "test_file.txt")
+        
+    }
+    @objc func getFile() {
     }
 }
