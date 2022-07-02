@@ -5,7 +5,7 @@
 //  Created by JunHwan Kim on 2022/06/29.
 //
 
-protocol PlayVoiceDelegate{
+protocol PlayVoiceDelegate : AnyObject{
     func playEndTime()
 }
 
@@ -16,7 +16,7 @@ import NotificationCenter
 class PlayVoiceManager{
     var player : AVPlayer!
     var isPlay = false
-    var delegate : PlayVoiceDelegate?
+    weak var delegate : PlayVoiceDelegate?
     
     init(url : URL){
         player = {

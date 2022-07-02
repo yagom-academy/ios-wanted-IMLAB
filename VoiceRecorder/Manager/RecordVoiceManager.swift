@@ -8,8 +8,14 @@
 import Foundation
 import AVFoundation
 
+protocol RecordVoiceManagerDelegate{
+    func updateCurrentTime(_ currentTime : TimeInterval)
+}
+
 class RecordVoiceManager{
+    var timer : Timer?
     var recorder : AVAudioRecorder?
+    var delegate : RecordVoiceManagerDelegate?
     
     init(){
         self.recorder = nil // 초기화
@@ -32,11 +38,16 @@ class RecordVoiceManager{
     }
     
     func startRecording() {
+        timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true, block: { timer in
+            self.delegate?.updateCurrentTime(self.recorder?.currentTime ?? 0)
+        })
         self.recorder?.record()
+        
     }
     
     func stopRecording(completion : @escaping ()->Void) {
         self.recorder?.stop()
+        timer?.invalidate()
         // 파일 업로드
 //        FirebaseStorageManager().uploadRecord {
 //            completion()

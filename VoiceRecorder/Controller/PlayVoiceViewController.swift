@@ -21,7 +21,7 @@ class PlayVoiceViewController: UIViewController {
     }()
 
     var playAndPauseButton: UIButton = {
-        let playAndPauseButton = UIButton(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
+        let playAndPauseButton = UIButton()
         playAndPauseButton.translatesAutoresizingMaskIntoConstraints = false
         playAndPauseButton.setPreferredSymbolConfiguration(.init(pointSize: 30), forImageIn: .normal)
         playAndPauseButton.setImage(UIImage(systemName: "play"), for: .normal)
@@ -30,7 +30,7 @@ class PlayVoiceViewController: UIViewController {
     }()
     
     var forwardFive: UIButton = {
-        let forwardFive = UIButton(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
+        let forwardFive = UIButton()
         forwardFive.translatesAutoresizingMaskIntoConstraints = false
         forwardFive.setPreferredSymbolConfiguration(.init(pointSize: 30), forImageIn: .normal)
         forwardFive.setImage(UIImage(systemName: "goforward.5"), for: .normal)
@@ -39,7 +39,7 @@ class PlayVoiceViewController: UIViewController {
     }()
     
     var backwardFive: UIButton = {
-        let backwardFive = UIButton(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+        let backwardFive = UIButton()
         backwardFive.translatesAutoresizingMaskIntoConstraints = false
         backwardFive.setPreferredSymbolConfiguration(.init(pointSize: 30), forImageIn: .normal)
         backwardFive.setImage(UIImage(systemName: "gobackward.5"), for: .normal)
@@ -68,6 +68,7 @@ class PlayVoiceViewController: UIViewController {
         setView()
         autolayOut()
         setUIText()
+        //순환참조 발생 주의
         playVoiceManager.delegate = self
     }
     
@@ -89,7 +90,6 @@ class PlayVoiceViewController: UIViewController {
             volumeSlider.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             volumeSlider.topAnchor.constraint(equalTo: view.centerYAnchor),
             volumeSlider.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.8),
-            //progressSlider.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.5),
             
             playAndPauseButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             playAndPauseButton.centerYAnchor.constraint(equalTo: volumeSlider.bottomAnchor, constant: 30),
@@ -98,6 +98,7 @@ class PlayVoiceViewController: UIViewController {
     
     func setUIText(){
         fileNameLabel.text = voiceRecordViewModel.fileName
+        fileNameLabel.font = .boldSystemFont(ofSize: self.view.bounds.width / 25)
         volumeSlider.setValue(playVoiceManager.getVolume(), animated: true)
     }
     
@@ -121,6 +122,11 @@ class PlayVoiceViewController: UIViewController {
     
     @objc func slideVolumeButton(_ sender : UISlider){
         playVoiceManager.setVolume(volume: sender.value)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        
+        playVoiceManager.stopAudio()
     }
 }
 

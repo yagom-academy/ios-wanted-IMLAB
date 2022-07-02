@@ -8,7 +8,7 @@
 import UIKit
 import AVFoundation
 
-protocol DrawWaveFormDelegate {
+protocol DrawWaveFormManagerDelegate : AnyObject {
     func moveWaveFormView(_ step: CGFloat)
     func resetWaveFormView()
 }
@@ -24,7 +24,7 @@ class DrawWaveFormManager{
     private var start : CGPoint!
     private var step : CGFloat!
     
-    var delegate : DrawWaveFormDelegate?
+    weak var delegate : DrawWaveFormManagerDelegate?
     
     func prepareDrawing(in view : UIView){
         if pencil != nil && waveLayer != nil {
@@ -46,9 +46,10 @@ class DrawWaveFormManager{
         })
     }
     
-    func stopDrawing(){
+    func stopDrawing(in view : UIView){
         timer.invalidate()
-        
+        saveImageInLocal(getUIImage(from: view))
+        // 파일 업로드
     }
     
     func removeWaveForm() {
@@ -77,8 +78,6 @@ class DrawWaveFormManager{
             traitLength = maxTraitLength
         }
         
-//        print("input: \(input)")
-        
         pencil.move(to: start)
         pencil.addLine(to: CGPoint(x: start.x, y: start.y + traitLength))
 
@@ -98,7 +97,29 @@ class DrawWaveFormManager{
         view.setNeedsDisplay()
         
         start = CGPoint(x: start.x + jump, y: start.y)
+        step += jump
         delegate?.moveWaveFormView(step)
-        step -= jump
+        
+    }
+    
+    func getUIImage(from view: UIView) -> UIImage {
+        let resizedBounds = CGRect(x: view.bounds.maxX, y: view.bounds.minY, width: step, height: view.bounds.height)
+        let renderer = UIGraphicsImageRenderer(bounds: resizedBounds)
+        return renderer.image { rendererContext in
+            view.layer.render(in: rendererContext.cgContext)
+        }
+    }
+    
+    
+    func saveImageInLocal(_ imageUI: UIImage) {
+        let imageFileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("myWaveForm.png")
+        let imageData = imageUI.pngData()
+        do {
+            try imageData?.write(to: imageFileURL)
+        }
+        catch {
+            print("error - saveImageInLocal")
+        }
     }
 }

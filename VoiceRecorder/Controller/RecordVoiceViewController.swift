@@ -5,14 +5,14 @@
 //  Created by hayeon on 2022/06/27.
 //
 
-protocol RecordVoiceDelegate{
+protocol RecordVoiceDelegate : AnyObject{
     func updateList()
 }
 
 import UIKit
 class RecordVoiceViewController: UIViewController {
 
-    var delegate : RecordVoiceDelegate?
+    weak var delegate : RecordVoiceDelegate?
     var recordVoiceManager = RecordVoiceManager()
     var drawWaveFormManager = DrawWaveFormManager()
         
@@ -41,7 +41,7 @@ class RecordVoiceViewController: UIViewController {
         let buttonStackView = UIStackView()
         buttonStackView.translatesAutoresizingMaskIntoConstraints = false
         buttonStackView.axis = .horizontal
-//        buttonStackView.spacing = 5 // 아직 해당 스택뷰에 하위 뷰가 하나뿐이므로
+        buttonStackView.spacing = 30
         return buttonStackView
     }()
     
@@ -49,7 +49,43 @@ class RecordVoiceViewController: UIViewController {
         let record_start_stop_button = UIButton()
         record_start_stop_button.translatesAutoresizingMaskIntoConstraints = false
         record_start_stop_button.addTarget(self, action: #selector(tab_record_start_stop_Button), for: .touchUpInside)
+        record_start_stop_button.setPreferredSymbolConfiguration(.init(pointSize: 40), forImageIn: .normal)
         return record_start_stop_button
+    }()
+    
+    var recordFile_ButtonStackView : UIStackView = {
+        let recordFile_ButtonStackView = UIStackView()
+        recordFile_ButtonStackView.translatesAutoresizingMaskIntoConstraints = false
+        recordFile_ButtonStackView.axis = .horizontal
+        recordFile_ButtonStackView.spacing = 20
+        return recordFile_ButtonStackView
+    }()
+    
+    var recordFile_play_PauseButton: UIButton = {
+        let recordFile_play_PauseButton = UIButton()
+        recordFile_play_PauseButton.translatesAutoresizingMaskIntoConstraints = false
+        recordFile_play_PauseButton.setPreferredSymbolConfiguration(.init(pointSize: 30), forImageIn: .normal)
+        recordFile_play_PauseButton.setImage(UIImage(systemName: "play"), for: .normal)
+        //recordFile_play_PauseButton.addTarget(self, action: #selector(), for: .touchUpInside)
+        return recordFile_play_PauseButton
+    }()
+    
+    var forwardFive: UIButton = {
+        let forwardFive = UIButton()
+        forwardFive.translatesAutoresizingMaskIntoConstraints = false
+        forwardFive.setPreferredSymbolConfiguration(.init(pointSize: 30), forImageIn: .normal)
+        forwardFive.setImage(UIImage(systemName: "goforward.5"), for: .normal)
+        //forwardFive.addTarget(self, action: #selector(tabForward), for: .touchUpInside)
+        return forwardFive
+    }()
+    
+    var backwardFive: UIButton = {
+        let backwardFive = UIButton()
+        backwardFive.translatesAutoresizingMaskIntoConstraints = false
+        backwardFive.setPreferredSymbolConfiguration(.init(pointSize: 30), forImageIn: .normal)
+        backwardFive.setImage(UIImage(systemName: "gobackward.5"), for: .normal)
+        //backwardFive.addTarget(self, action: #selector(tabBackward), for: .touchUpInside)
+        return backwardFive
     }()
     
     @objc func tab_record_start_stop_Button() {
@@ -57,15 +93,17 @@ class RecordVoiceViewController: UIViewController {
             recordVoiceManager.stopRecording {
                 self.delegate?.updateList()
             }
-            drawWaveFormManager.stopDrawing()
+            drawWaveFormManager.stopDrawing(in: waveFormView)
             record_start_stop_button.setImage(UIImage(systemName: "circle.fill"), for: .normal)
             record_start_stop_button.tintColor = .red
+            setUIAfterRecording()
             print("recording stop")
         } else {
             recordVoiceManager.startRecording()
             drawWaveFormManager.startDrawing(of: recordVoiceManager.recorder!, in: waveFormView)
             record_start_stop_button.setImage(UIImage(systemName: "stop.fill"), for: .normal)
             record_start_stop_button.tintColor = .black
+            setUIBeforeRecording()
             print("recording start")
         }
     }
@@ -73,6 +111,7 @@ class RecordVoiceViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         drawWaveFormManager.delegate = self
+        recordVoiceManager.delegate = self
         setView()
         autoLayout()
         setUI()
@@ -85,7 +124,14 @@ class RecordVoiceViewController: UIViewController {
         self.view.addSubview(progressTimeLabel)
         
         self.view.addSubview(buttonStackView)
+        self.view.addSubview(recordFile_ButtonStackView)
+        for item in [ backwardFive, recordFile_play_PauseButton, forwardFive ]{
+            recordFile_ButtonStackView.addArrangedSubview(item)
+        }
+        
         self.buttonStackView.addArrangedSubview(record_start_stop_button)
+        self.buttonStackView.addArrangedSubview(recordFile_ButtonStackView)
+        
     }
     
     func autoLayout() {
@@ -102,13 +148,15 @@ class RecordVoiceViewController: UIViewController {
             progressTimeLabel.topAnchor.constraint(equalTo: progressSlider.bottomAnchor),
             progressTimeLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             
-            buttonStackView.topAnchor.constraint(equalTo: progressTimeLabel.bottomAnchor),
-            buttonStackView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.8),
-            buttonStackView.heightAnchor.constraint(equalTo: waveFormView.heightAnchor, multiplier: 0.9),
+            buttonStackView.topAnchor.constraint(equalTo: progressTimeLabel.bottomAnchor, constant: 30),
+//            buttonStackView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.8),
+//            buttonStackView.heightAnchor.constraint(equalTo: waveFormView.heightAnchor, multiplier: 0.9),
             buttonStackView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             
-            record_start_stop_button.heightAnchor.constraint(equalTo: buttonStackView.heightAnchor),
-            record_start_stop_button.widthAnchor.constraint(equalTo: record_start_stop_button.heightAnchor)
+//            record_start_stop_button.heightAnchor.constraint(equalTo: buttonStackView.heightAnchor),
+//            record_start_stop_button.widthAnchor.constraint(equalTo: record_start_stop_button.heightAnchor),
+            
+//            recordFile_ButtonStackView.centerYAnchor.constraint(equalTo: record_start_stop_button.centerYAnchor),
         ])
     }
     
@@ -118,31 +166,65 @@ class RecordVoiceViewController: UIViewController {
         progressTimeLabel.text = "00:00:00"
         record_start_stop_button.setImage(UIImage(systemName: "circle.fill"), for: .normal)
         record_start_stop_button.tintColor = .red
+        recordFile_ButtonStackView.isHidden = true
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         if recordVoiceManager.isRecording(){
             recordVoiceManager.stopRecording {
-                self.drawWaveFormManager.stopDrawing()
+                self.drawWaveFormManager.stopDrawing(in: self.waveFormView)
                 self.delegate?.updateList()
             }
         }
     }
+    
+    func setUIAfterRecording(){
+        recordFile_ButtonStackView.isHidden = false
+    }
+    
+    func setUIBeforeRecording(){
+        recordFile_ButtonStackView.isHidden = true
+    }
 
 }
 
-extension RecordVoiceViewController : DrawWaveFormDelegate {
+// MARK: DrawWaveFormManagerDelegate
+
+extension RecordVoiceViewController : DrawWaveFormManagerDelegate {
     
     func moveWaveFormView(_ step: CGFloat) {
         
         UIView.animate(withDuration: 1/14, animations: {
-            self.waveFormView.transform = CGAffineTransform(translationX: step, y: 0)
+            self.waveFormView.transform = CGAffineTransform(translationX: -step, y: 0)
         })
     }
     
     func resetWaveFormView() {
         self.waveFormView.transform = CGAffineTransform(translationX: 0, y: 0)
     }
-    
-
 }
+
+// MARK: RecordVoiceManagerDelegate
+
+extension RecordVoiceViewController : RecordVoiceManagerDelegate {
+    
+    func updateCurrentTime(_ currentTime : TimeInterval) {
+        self.progressTimeLabel.text = currentTime.getStringTimeInterval()
+    }
+}
+
+extension TimeInterval{
+
+    func getStringTimeInterval() -> String {
+
+        let seconds = self
+        let min = Int(seconds) / 60
+        let sec = Int(seconds) % 60
+        let cen = Int(seconds * 100) % 100
+        // centisecond : 10 밀리초
+
+        let formatString = "%0.2d:%0.2d:%0.2d"
+        return String(format: formatString, min, sec, cen)
+    }
+}
+
