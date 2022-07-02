@@ -54,7 +54,6 @@ class FireStorageManager {
         }
     }
     
-    // escaping 클로저로 data 넘기기
     func downloadToLocal(uris: [StorageReference]
                          ,completion: @escaping ([URL]) -> Void
     ) {
