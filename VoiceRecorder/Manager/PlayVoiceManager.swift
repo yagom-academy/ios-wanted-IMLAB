@@ -17,7 +17,7 @@ class PlayVoiceManager{
     
     let audioEngine = AVAudioEngine()
     let playerNode = AVAudioPlayerNode()
-    
+    weak var delegate : PlayVoiceDelegate!
     var isPlay = false
     
     init(){
@@ -25,18 +25,30 @@ class PlayVoiceManager{
         guard let audioFile = try? AVAudioFile(forReading: fileURL) else {return}
         audioEngine.attach(playerNode)
         audioEngine.connect(playerNode, to: audioEngine.outputNode, format: audioFile.processingFormat)
-        playerNode.scheduleFile(audioFile, at: nil, completionCallbackType: .dataPlayedBack){_ in
-            //앱 재생 완료 후 구현
+        self.audioEngine.prepare()
+        do{
+            try audioEngine.start()
+        }catch{
+            print("AUDIO ENGINE START ERROR")
         }
+        setScheduleFile(audioFile: audioFile)
     }
     
     func playAudio(){
-            isPlay = true
-        do{
-            try audioEngine.start()
-            playerNode.play()
-        }catch{
-            print("Play Audio Error")
+        isPlay = true
+        playerNode.play()
+    }
+    
+    func stopAudio(){
+        isPlay = false
+        playerNode.pause()
+        }
+    
+    func setScheduleFile(audioFile : AVAudioFile){
+        playerNode.pause()
+        playerNode.scheduleFile(audioFile, at: nil, completionCallbackType: .dataPlayedBack) { _ in
+            self.delegate.playEndTime()
+            self.setScheduleFile(audioFile: audioFile)
         }
     }
     
@@ -58,10 +70,7 @@ class PlayVoiceManager{
 //
 //
 //
-//    func stopAudio(){
-//        isPlay = false
-//        player.pause()
-//    }
+//
 //
 //    func isPlaying()->Bool{
 //        return isPlay

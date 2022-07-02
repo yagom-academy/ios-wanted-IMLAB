@@ -69,6 +69,7 @@ class PlayVoiceViewController: UIViewController {
         autolayOut()
         setUIText()
         //순환참조 발생 주의
+        playVoiceManager.delegate = self
     }
     
     func setView(){
@@ -103,7 +104,7 @@ class PlayVoiceViewController: UIViewController {
     
     @objc func tapButton(){
         if playVoiceManager.isPlay{
-            //playVoiceManager.stopAudio()
+            playVoiceManager.stopAudio()
             playAndPauseButton.setImage(UIImage(systemName: "play"), for: .normal)
         }else{
             playVoiceManager.playAudio()
@@ -131,6 +132,10 @@ class PlayVoiceViewController: UIViewController {
 
 extension PlayVoiceViewController : PlayVoiceDelegate{
     func playEndTime() {
-        tapButton()
+        playVoiceManager.isPlay = false
+        DispatchQueue.main.async {
+            self.playAndPauseButton.setImage(UIImage(systemName: "play"), for: .normal)
+        }
+        
     }
 }
