@@ -7,7 +7,10 @@
 
 import Foundation
 
-class PlayVoiceViewModel{
+struct PlayVoiceViewModel{
     
+    var selectedPitch : SoundPitch 
+    
+    var voiceRecordViewModel : VoiceRecordViewModel
     
 }

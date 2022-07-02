@@ -14,59 +14,81 @@ import AVFoundation
 import NotificationCenter
 
 class PlayVoiceManager{
-    var player : AVPlayer!
+    
+    let audioEngine = AVAudioEngine()
+    let playerNode = AVAudioPlayerNode()
+    var pitchControl = AVAudioUnitTimePitch()
+    
+    weak var delegate : PlayVoiceDelegate!
     var isPlay = false
-    weak var delegate : PlayVoiceDelegate?
     
-    init(url : URL){
-        player = {
-            let player = AVPlayer()
-            let playerItem = AVPlayerItem(url: url)
-            player.replaceCurrentItem(with: playerItem)
-            player.volume = 0.5
-            return player
-        }()
-        NotificationCenter.default.addObserver(self, selector: #selector(playerDidFinishPlaying), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: player.currentItem)
+    
+    
+    init(){
+        let fileURL = URL(fileURLWithPath: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("myRecoding.m4a").path)
+        guard let audioFile = try? AVAudioFile(forReading: fileURL) else {return}
+        
+        playerNode.volume = 0.5
+        
+        audioEngine.attach(playerNode)
+        audioEngine.attach(pitchControl)
+        
+        audioEngine.connect(playerNode, to: pitchControl, format: nil)
+        audioEngine.connect(pitchControl, to: audioEngine.mainMixerNode, format: nil)
+//        audioEngine.connect(audioEngine.mainMixerNode, to: audioEngine.outputNode, format: audioFile.processingFormat)
+        
+        self.audioEngine.prepare()
+        do{
+            try audioEngine.start()
+            print(audioEngine.mainMixerNode.outputVolume)
+        }catch{
+            print("AUDIO ENGINE START ERROR")
+        }
+        setScheduleFile(audioFile: audioFile)
     }
-    
     
     func playAudio(){
         isPlay = true
-        player.play()
+        playerNode.play()
     }
     
     func stopAudio(){
         isPlay = false
-        player.pause()
-    }
+        playerNode.pause()
+        }
     
-    func isPlaying()->Bool{
-        return isPlay
-    }
-    
-    func setVolume(volume : Float){
-        player.volume = volume
-    }
-    
-    func getVolume()->Float{
-        return player.volume
-    }
-    
-    @objc func playerDidFinishPlaying(){
-        delegate?.playEndTime()
-        self.player.seek(to: CMTimeMakeWithSeconds(0, preferredTimescale: Int32(NSEC_PER_SEC)))
+    func setScheduleFile(audioFile : AVAudioFile){
+        playerNode.pause()
+        playerNode.scheduleFile(audioFile, at: nil, completionCallbackType: .dataPlayedBack) { _ in
+            self.delegate.playEndTime()
+            self.setScheduleFile(audioFile: audioFile)
+        }
     }
     
     func forwardFiveSecond(){
-        //seek는 x초로 이동. 현재 시간 기준 아님
-        var currentTime = player.currentTime()
-        var interval = CMTime(seconds: 5, preferredTimescale: Int32(NSEC_PER_SEC))
-        self.player.seek(to: currentTime+interval)
+
+    }
+        
+    func seek(time : Double){
+        
     }
     
-    func backwardFiveSecond(){
-        var currentTime = player.currentTime()
-        var interval = CMTime(seconds: 5, preferredTimescale: Int32(NSEC_PER_SEC))
-        self.player.seek(to: currentTime-interval)
+    func setVolume(volume : Float){
+        playerNode.volume = volume
+    }
+    
+    func getVolume()->Float{
+        return playerNode.volume
+    }
+    
+    func setPitch(pitch : SoundPitch){
+        switch pitch {
+        case .normal:
+            pitchControl.pitch = 0
+        case .young:
+            pitchControl.pitch = 500
+        case .old:
+            pitchControl.pitch = -500
+        }
     }
 }

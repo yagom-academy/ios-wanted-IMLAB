@@ -10,7 +10,15 @@ import UIKit
 class PlayVoiceViewController: UIViewController {
     
     var playVoiceManager : PlayVoiceManager!
-    var voiceRecordViewModel : VoiceRecordViewModel!
+    var playVoiceViewModel : PlayVoiceViewModel!
+    
+    var selectedPitchSegment : UISegmentedControl = {
+        let selectedPitchSegment = UISegmentedControl(items: ["일반 목소리","아기목소리","할아버지목소리"])
+        selectedPitchSegment.translatesAutoresizingMaskIntoConstraints = false
+        selectedPitchSegment.selectedSegmentIndex = 0
+        selectedPitchSegment.addTarget(self, action: #selector(selectPitch(_:)), for: .valueChanged)
+        return selectedPitchSegment
+    }()
     
     var timeControlButtonStackView : UIStackView = {
         let timeControlButtonStackView = UIStackView()
@@ -74,6 +82,7 @@ class PlayVoiceViewController: UIViewController {
     
     func setView(){
         self.view.addSubview(fileNameLabel)
+        self.view.addSubview(selectedPitchSegment)
         self.view.addSubview(volumeSlider)
         self.view.addSubview(timeControlButtonStackView)
         for item in [ backwardFive, playAndPauseButton, forwardFive ]{
@@ -87,8 +96,11 @@ class PlayVoiceViewController: UIViewController {
             fileNameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             fileNameLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 30),
             
+            selectedPitchSegment.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            selectedPitchSegment.topAnchor.constraint(equalTo: fileNameLabel.bottomAnchor, constant: 30),
+            
             volumeSlider.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            volumeSlider.topAnchor.constraint(equalTo: view.centerYAnchor),
+            volumeSlider.topAnchor.constraint(equalTo: selectedPitchSegment.bottomAnchor, constant: 30),
             volumeSlider.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.8),
             
             playAndPauseButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -97,9 +109,13 @@ class PlayVoiceViewController: UIViewController {
     }
     
     func setUIText(){
-        fileNameLabel.text = voiceRecordViewModel.fileName
+        fileNameLabel.text = playVoiceViewModel.voiceRecordViewModel.fileName
         fileNameLabel.font = .boldSystemFont(ofSize: self.view.bounds.width / 25)
         volumeSlider.setValue(playVoiceManager.getVolume(), animated: true)
+    }
+    
+    @objc func selectPitch(_ sender : UISegmentedControl){
+        playVoiceManager.setPitch(pitch: SoundPitch(rawValue: sender.selectedSegmentIndex)!)
     }
     
     @objc func tapButton(){
@@ -113,25 +129,30 @@ class PlayVoiceViewController: UIViewController {
     }
     
     @objc func tabForward(){
-        playVoiceManager.forwardFiveSecond()
+        //playVoiceManager.forwardFiveSecond()
     }
     
     @objc func tabBackward(){
-        playVoiceManager.backwardFiveSecond()
+        //playVoiceManager.backwardFiveSecond()
     }
     
     @objc func slideVolumeButton(_ sender : UISlider){
+        print(sender.value)
         playVoiceManager.setVolume(volume: sender.value)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         
-        playVoiceManager.stopAudio()
+        //playVoiceManager.stopAudio()
     }
 }
 
 extension PlayVoiceViewController : PlayVoiceDelegate{
     func playEndTime() {
-        tapButton()
+        playVoiceManager.isPlay = false
+        DispatchQueue.main.async {
+            self.playAndPauseButton.setImage(UIImage(systemName: "play"), for: .normal)
+        }
+        
     }
 }
