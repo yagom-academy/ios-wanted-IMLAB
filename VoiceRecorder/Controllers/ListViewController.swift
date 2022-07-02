@@ -52,6 +52,7 @@ extension ListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
+            LocalFileManager(recordModel: recordList[indexPath.row]).deleteToLocal()
             StorageManager.shared.delete(fileName: recordList[indexPath.row].name) { result in
                 switch result {
                 case .success(_ ):
