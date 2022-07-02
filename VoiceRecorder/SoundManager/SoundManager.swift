@@ -42,7 +42,9 @@ class SoundManager: NSObject {
         do {
             let file = try AVAudioFile(forReading: url)
             let fileFormat = file.processingFormat
-            let audioFrameCount = UInt32(audioFile.length)
+            let audioFrameCount = UInt32(file.length)
+            
+            
             let buffer = AVAudioPCMBuffer(pcmFormat: fileFormat, frameCapacity: audioFrameCount)
             //
             audioFile = file
@@ -73,7 +75,7 @@ class SoundManager: NSObject {
         
         engine.connect(playerNode, to: pitchControl, format: format)
         engine.connect(pitchControl, to: engine.mainMixerNode, format: format)
-        engine.connect(engine.mainMixerNode, to: engine.outputNode, format: format)
+        //engine.connect(engine.mainMixerNode, to: engine.outputNode, format: format)
         
         // mainMixerNode로 가면 바로 끝내고 prepare로 돌아가는듯함
         // ouptNode로 연결하면 무한루프 됨
