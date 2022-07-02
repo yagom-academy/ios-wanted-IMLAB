@@ -99,7 +99,7 @@ class PlayVoiceViewController: UIViewController {
     func setUIText(){
         fileNameLabel.text = voiceRecordViewModel.fileName
         fileNameLabel.font = .boldSystemFont(ofSize: self.view.bounds.width / 25)
-        //volumeSlider.setValue(playVoiceManager.getVolume(), animated: true)
+        volumeSlider.setValue(playVoiceManager.getVolume(), animated: true)
     }
     
     @objc func tapButton(){
@@ -121,7 +121,8 @@ class PlayVoiceViewController: UIViewController {
     }
     
     @objc func slideVolumeButton(_ sender : UISlider){
-        //playVoiceManager.setVolume(volume: sender.value)
+        print(sender.value)
+        playVoiceManager.setVolume(volume: sender.value)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
