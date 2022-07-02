@@ -76,4 +76,17 @@ class FirebaseStorageManager{
         }
     }
     
+    func downloadRecordFile(fileName : String){
+        let downloadRef = storage.reference().child("record/\(fileName).m4a")
+        let localFile = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("myRecoding.m4a")
+        print(localFile.path)
+        downloadRef.write(toFile: localFile) { url, error in
+            if let error = error{
+                print("DOWNLOAD FILE ERROR")
+            }else{
+                print("SUCCESS DOWNLOAD FILE")
+            }
+        }
+    }
+    
 }

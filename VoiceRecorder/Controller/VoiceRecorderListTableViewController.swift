@@ -97,6 +97,7 @@ class VoiceRecorderListTableViewController: UITableViewController {
             if let selectRecord = selectRecord {
                 vc.voiceRecordViewModel = selectRecord
                 vc.playVoiceManager = PlayVoiceManager(url: selectRecord.url)
+                firebaseStorageManger.downloadRecordFile(fileName: selectRecord.fileName)
             }
         }
         else if segue.identifier == "RecordVoice"{
