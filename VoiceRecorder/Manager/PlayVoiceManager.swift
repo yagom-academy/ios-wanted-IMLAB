@@ -80,4 +80,15 @@ class PlayVoiceManager{
     func getVolume()->Float{
         return playerNode.volume
     }
+    
+    func setPitch(pitch : SoundPitch){
+        switch pitch {
+        case .normal:
+            pitchControl.pitch = 0
+        case .young:
+            pitchControl.pitch = 500
+        case .old:
+            pitchControl.pitch = -500
+        }
+    }
 }
