@@ -10,6 +10,7 @@ class VoiceMemoListViewController: UIViewController, FinishRecord {
     @IBOutlet weak var recordFileListTableView: UITableView!
     
     var voiceMemoList: [RecordModel] = [RecordModel]()
+    var localFileHandlder = LocalFileHandler()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,7 +20,7 @@ class VoiceMemoListViewController: UIViewController, FinishRecord {
     }
     
     func finsihRecord(fileName: String, totalTime: String) {
-        let fileName = subStringFileName(filePath:fileName)
+        let fileName = subStringFileName(fileName:fileName)
         let recordModel = RecordModel(recordFileName: fileName, recordTime: totalTime)
         
         DispatchQueue.main.async {
@@ -39,7 +40,7 @@ class VoiceMemoListViewController: UIViewController, FinishRecord {
                         switch result {
                         case .success(let totalTime) :
                             count += 1
-                            let subFileName = self.subStringFileName(filePath: fileName, true)
+                            let subFileName = self.subStringFileName(fileName: fileName, true)
                             
                             self.voiceMemoList.append(RecordModel(recordFileName: subFileName, recordTime: totalTime))
                             let sortedVoiceMemoList = self.voiceMemoList.sorted { $0.recordFileName > $1.recordFileName }
@@ -60,16 +61,12 @@ class VoiceMemoListViewController: UIViewController, FinishRecord {
         }
     }
     
-    func subStringFileName(filePath: String,_ isFirabse : Bool = false) -> String {
-        var fileName = ""
-        
+    func subStringFileName(fileName: String,_ isFirabse : Bool = false) -> String {
         if isFirabse{
-            fileName = subString(subString(filePath, "/"),"_")
+            return subString(subString(fileName, "/"),"_")
         } else {
-            fileName = subString(filePath, "_")
+            return subString(fileName, "_")
         }
-        
-        return fileName
     }
     
     func subString(_ fileName: String, _ character: Character) -> String{
@@ -105,6 +102,26 @@ extension VoiceMemoListViewController : UITableViewDelegate {
         let time = voiceMemoList[indexPath.row].recordTime
         let selectedFileInfo = RecordModel(recordFileName: name, recordTime: time)
         playingVC.selectedFileInfo = selectedFileInfo
-        present(playingVC, animated: true)
+        let isFileExist = localFileHandlder.checkFileExists(fileName: name)
+        if isFileExist {
+            present(playingVC, animated: true)
+        } else {
+            FirebaseStorage.shared.downloadFile(fileName: "voiceRecords_\(name)") { result in
+                switch result {
+                case .success(let fileName) :
+                    let subFileName = self.subStringFileName(fileName: fileName)
+                    let isDownloadFileExist = self.localFileHandlder.checkFileExists(fileName: subFileName)
+                    if isDownloadFileExist {
+                        print("DOWNLOAD FILE AVAILABLE")
+                        self.present(playingVC, animated: true)
+                    } else {
+                        print("DOWNLOAD FILE NOT AVAILABLE")
+                    }
+                case .failure(let error) :
+                    print(error.localizedDescription)
+                }
+            }
+        }
+        
     }
 }

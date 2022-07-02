@@ -31,4 +31,17 @@ struct LocalFileHandler : LocalFileProtocol {
         }
         return latestFileName
     }
+    
+    func checkFileExists(fileName : String) -> Bool {
+        let filePath = localFileURL.appendingPathComponent("voiceRecords_\(fileName)").path
+        let fileManger  = FileManager.default
+        
+        if fileManger.fileExists(atPath: "\(filePath)") {
+            print("FILE AVAILABLE")
+            return true
+        } else {
+            print("FILE PATH NOT AVAILABLE")
+            return false
+        }
+    }
 }
