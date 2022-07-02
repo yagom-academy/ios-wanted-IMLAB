@@ -61,7 +61,7 @@ class AudioRecoderHandler {
             }
             
             enableBuiltInMic()
-            let recordFileName = localFileHandler.getFileName()
+            let recordFileName = localFileHandler.makeFileName()
             let recordFileURL = localFileHandler.localFileURL.appendingPathComponent(recordFileName)
             let audioRecorder = try AVAudioRecorder(url: recordFileURL, settings: recordSettings)
             self.fileName = recordFileName

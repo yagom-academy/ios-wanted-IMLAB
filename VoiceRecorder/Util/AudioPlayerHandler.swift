@@ -12,14 +12,16 @@ class AudioPlayerHandler {
     
     var audioPlayer = AVAudioPlayer()
     var localFileHandler: LocalFileProtocol
+    var updateTimeInterval: UpdateTimer
     
-    init(handler: LocalFileProtocol) {
+    init(handler: LocalFileProtocol, updateTimeInterval: UpdateTimer) {
         self.localFileHandler = handler
+        self.updateTimeInterval = updateTimeInterval
     }
     
     func prepareToPlay() {
         do {
-            let recordFileName = localFileHandler.getFileName()
+            let recordFileName = localFileHandler.makeFileName()
             let recordFileURL = localFileHandler.localFileURL.appendingPathComponent(recordFileName)
             let audioPlayer = try AVAudioPlayer(contentsOf: recordFileURL)
             self.audioPlayer = audioPlayer
@@ -35,5 +37,9 @@ class AudioPlayerHandler {
     
     func pausePlay() {
         self.audioPlayer.pause()
+    }
+    
+    func updateTimer(_ time: TimeInterval) -> String {
+        return updateTimeInterval.updateTimer(time)
     }
 }

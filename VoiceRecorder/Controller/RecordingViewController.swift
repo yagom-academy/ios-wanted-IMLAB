@@ -14,7 +14,10 @@ protocol FinishRecord : AnyObject {
 
 class RecordingViewController: UIViewController {
     
-    @IBOutlet weak var recordTimeLabel: UILabel!
+    @IBOutlet weak var totalRecordTimeLabel: UILabel!
+    @IBOutlet weak var playProgressBar: UIProgressView!
+    @IBOutlet weak var currentPlayTimeLabel: UILabel!
+    @IBOutlet weak var endPlayTimeLabel: UILabel!
     @IBOutlet weak var recordingButton: UIButton!
     @IBOutlet weak var goBackwardButton: UIButton!
     @IBOutlet weak var playButton: UIButton!
@@ -34,16 +37,17 @@ class RecordingViewController: UIViewController {
     var inPlayMode = true
 
     let audioRecorderHandler = AudioRecoderHandler(handler: LocalFileHandler(), updateTimeInterval: UpdateTimeInterval())
-    let audioPlayerHandler = AudioPlayerHandler(handler: LocalFileHandler())
+    let audioPlayerHandler = AudioPlayerHandler(handler: LocalFileHandler(), updateTimeInterval: UpdateTimeInterval())
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.scrollView.updateContentSize()
         self.scrollView.isScrollEnabled = false
-        self.recordTimeLabel.text = "00:00"
+        self.totalRecordTimeLabel.text = "00:00"
         self.goBackwardButton.isEnabled = false
         self.goForwardButton.isEnabled = false
         self.playButton.isEnabled = false
+        playUIAppear(true)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -99,15 +103,49 @@ class RecordingViewController: UIViewController {
     @objc func updateRecordTime() {
         audioRecorderHandler.audioRecorder.updateMeters()
         self.writeWaves(audioRecorderHandler.audioRecorder.averagePower(forChannel: 0))
-        self.recordTimeLabel.text = audioRecorderHandler.updateTimer(audioRecorderHandler.audioRecorder.currentTime)
+        self.totalRecordTimeLabel.text = audioRecorderHandler.updateTimer(audioRecorderHandler.audioRecorder.currentTime)
     }
     
     @IBAction func playButtonTapped(_ sender: UIButton) {
         audioPlayerHandler.prepareToPlay()
         audioPlayerHandler.audioPlayer.delegate = self
-        audioPlayerHandler.startPlay()
-        sender.setImage(UIImage(systemName: "pause"), for: .normal)
-        setButton(recording: false, goBack: true, goForward: true)
+        playUIAppear(true)
+        if audioPlayerHandler.audioPlayer.isPlaying {
+            audioPlayerHandler.startPlay()
+            sender.setImage(UIImage(systemName: "pause"), for: .normal)
+            setButton(recording: false, goBack: true, goForward: true)
+            endPlayTimeLabel.text = audioPlayerHandler.updateTimer(audioPlayerHandler.audioPlayer.duration)
+            progressTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updatePlayTime), userInfo: nil, repeats: true)
+        } else {
+            audioPlayerHandler.pausePlay()
+            self.playButton.setImage(UIImage(systemName: "play"), for: .normal)
+            setButton(recording: true, goBack: false, goForward: false)
+        }
+        
+    }
+    
+    func playUIAppear(_ bool: Bool) {
+        currentPlayTimeLabel.isHidden = bool
+        endPlayTimeLabel.isHidden = bool
+        playProgressBar.isHidden = bool
+    }
+    
+    @objc func updatePlayTime() {
+        let player = audioPlayerHandler.audioPlayer
+        currentPlayTimeLabel.text = audioPlayerHandler.updateTimer(player.currentTime)
+        playProgressBar.progress = Float(player.currentTime/player.duration)
+    }
+    
+    @IBAction func goBackwardButtonTapped(_ sender: UIButton) {
+        let player = audioPlayerHandler.audioPlayer
+        player.stop()
+        player.play(atTime: player.currentTime - 5.0)
+    }
+    
+    @IBAction func goForwardButtonTapped(_ sender: UIButton) {
+        let player = audioPlayerHandler.audioPlayer
+        player.stop()
+        player.play(atTime: player.currentTime + 5.0)
     }
     
     func writeWaves(_ input: Float) {
