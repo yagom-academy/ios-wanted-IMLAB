@@ -69,7 +69,6 @@ class PlayVoiceViewController: UIViewController {
         autolayOut()
         setUIText()
         //순환참조 발생 주의
-        playVoiceManager.delegate = self
     }
     
     func setView(){
@@ -99,12 +98,12 @@ class PlayVoiceViewController: UIViewController {
     func setUIText(){
         fileNameLabel.text = voiceRecordViewModel.fileName
         fileNameLabel.font = .boldSystemFont(ofSize: self.view.bounds.width / 25)
-        volumeSlider.setValue(playVoiceManager.getVolume(), animated: true)
+        //volumeSlider.setValue(playVoiceManager.getVolume(), animated: true)
     }
     
     @objc func tapButton(){
         if playVoiceManager.isPlay{
-            playVoiceManager.stopAudio()
+            //playVoiceManager.stopAudio()
             playAndPauseButton.setImage(UIImage(systemName: "play"), for: .normal)
         }else{
             playVoiceManager.playAudio()
@@ -113,20 +112,20 @@ class PlayVoiceViewController: UIViewController {
     }
     
     @objc func tabForward(){
-        playVoiceManager.forwardFiveSecond()
+        //playVoiceManager.forwardFiveSecond()
     }
     
     @objc func tabBackward(){
-        playVoiceManager.backwardFiveSecond()
+        //playVoiceManager.backwardFiveSecond()
     }
     
     @objc func slideVolumeButton(_ sender : UISlider){
-        playVoiceManager.setVolume(volume: sender.value)
+        //playVoiceManager.setVolume(volume: sender.value)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         
-        playVoiceManager.stopAudio()
+        //playVoiceManager.stopAudio()
     }
 }
 
