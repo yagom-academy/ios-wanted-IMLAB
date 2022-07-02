@@ -11,9 +11,24 @@ class VoiceMemoListViewController: UIViewController, FinishRecord {
     
     var voiceMemoList: [RecordModel] = [RecordModel]()
     var localFileHandlder = LocalFileHandler()
+    private let loadingView: LoadingView = {
+        let view = LoadingView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.isHidden = true
+        self.loadingView.isLoading = true
+        self.view.addSubview(self.loadingView)
+        
+        NSLayoutConstraint.activate([
+            self.loadingView.leftAnchor.constraint(equalTo: self.view.leftAnchor),
+            self.loadingView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
+            self.loadingView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            self.loadingView.topAnchor.constraint(equalTo: self.view.topAnchor),
+        ])
         getFirebaseStorageFileList()
         recordFileListTableView.delegate = self
         recordFileListTableView.dataSource = self
@@ -47,6 +62,8 @@ class VoiceMemoListViewController: UIViewController, FinishRecord {
                             self.voiceMemoList = sortedVoiceMemoList
                             if count == fileList.count {
                                 DispatchQueue.main.async {
+                                    self.loadingView.isLoading = false
+                                    self.navigationController?.navigationBar.isHidden = false
                                     self.recordFileListTableView.reloadData()
                                 }
                             }
@@ -106,17 +123,22 @@ extension VoiceMemoListViewController : UITableViewDelegate {
         if isFileExist {
             present(playingVC, animated: true)
         } else {
+            navigationController?.navigationBar.isHidden = true
+            self.loadingView.isLoading = true
             FirebaseStorage.shared.downloadFile(fileName: "voiceRecords_\(name)") { result in
                 switch result {
                 case .success(let fileName) :
                     let subFileName = self.subStringFileName(fileName: fileName)
                     let isDownloadFileExist = self.localFileHandlder.checkFileExists(fileName: subFileName)
+                    self.navigationController?.navigationBar.isHidden = false
+                    self.loadingView.isLoading = false
                     if isDownloadFileExist {
                         print("DOWNLOAD FILE AVAILABLE")
                         self.present(playingVC, animated: true)
                     } else {
                         print("DOWNLOAD FILE NOT AVAILABLE")
                     }
+                    
                 case .failure(let error) :
                     print(error.localizedDescription)
                 }
