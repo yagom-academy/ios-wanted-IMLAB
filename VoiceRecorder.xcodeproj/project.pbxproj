@@ -12,6 +12,7 @@
 		9F25234328699DB4008A9819 /* RecordVoiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F25234228699DB4008A9819 /* RecordVoiceViewController.swift */; };
 		9F99812B286C6D84004AE695 /* DrawWaveFormManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F99812A286C6D84004AE695 /* DrawWaveFormManager.swift */; };
 		9F9DA2ED286C1D84004AE2EA /* RecorderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9DA2EC286C1D84004AE2EA /* RecorderViewModel.swift */; };
+		9FA3152428703D280080E484 /* AudioSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA3152328703D280080E484 /* AudioSessionManager.swift */; };
 		BA6EAE60623159BD72E525BB /* Pods_VoiceRecorder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFBFADDAE47812F2F622743D /* Pods_VoiceRecorder.framework */; };
 		C730AA93286BDFA70004D11C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C730AA92286BDFA70004D11C /* GoogleService-Info.plist */; };
 		C730AA97286BEAE80004D11C /* FirebaseStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C730AA96286BEAE80004D11C /* FirebaseStorageManager.swift */; };
@@ -37,6 +38,7 @@
 		9F25234228699DB4008A9819 /* RecordVoiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordVoiceViewController.swift; sourceTree = "<group>"; };
 		9F99812A286C6D84004AE695 /* DrawWaveFormManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawWaveFormManager.swift; sourceTree = "<group>"; };
 		9F9DA2EC286C1D84004AE2EA /* RecorderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecorderViewModel.swift; sourceTree = "<group>"; };
+		9FA3152328703D280080E484 /* AudioSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSessionManager.swift; sourceTree = "<group>"; };
 		C730AA92286BDFA70004D11C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C730AA96286BEAE80004D11C /* FirebaseStorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorageManager.swift; sourceTree = "<group>"; tabWidth = 5; };
 		C730AA99286BEB9C0004D11C /* RecordFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordFile.swift; sourceTree = "<group>"; };
@@ -94,6 +96,7 @@
 				9F99812A286C6D84004AE695 /* DrawWaveFormManager.swift */,
 				C730AAA7286C702B0004D11C /* PlayVoiceManager.swift */,
 				9F02BE6B286D220C007F715D /* RecordVoiceManager.swift */,
+				9FA3152328703D280080E484 /* AudioSessionManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -291,6 +294,7 @@
 				9F9DA2ED286C1D84004AE2EA /* RecorderViewModel.swift in Sources */,
 				9F25234328699DB4008A9819 /* RecordVoiceViewController.swift in Sources */,
 				C730AA9A286BEB9C0004D11C /* RecordFile.swift in Sources */,
+				9FA3152428703D280080E484 /* AudioSessionManager.swift in Sources */,
 				C77F4C2D2869925900B2646E /* VoiceRecordTableViewCell.swift in Sources */,
 				C730AAA0286BF5400004D11C /* VoiceRecordViewModel.swift in Sources */,
 				C77F4C2F2869A56500B2646E /* PlayVoiceViewController.swift in Sources */,
