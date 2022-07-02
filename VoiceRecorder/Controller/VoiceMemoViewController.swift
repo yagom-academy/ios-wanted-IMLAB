@@ -44,7 +44,7 @@ class VoiceMemoViewController: UIViewController {
         FireStorageManager.shared.fetchData { results in
             self.localUrls = results
             self.createFileName(urls: results)
-            self.getFileDuration()
+            self.getFileDuration(urls: results)
             DispatchQueue.main.async {
                 self.voiceMemoTableView.reloadData()
             }
@@ -61,9 +61,9 @@ class VoiceMemoViewController: UIViewController {
         }
     }
     
-    func getFileDuration() {
+    func getFileDuration(urls: [URL]) {
         
-        fileDurations = localUrls.map { url -> String in
+        fileDurations = urls.map { url -> String in
             var durationTime: String = ""
             
             do {
