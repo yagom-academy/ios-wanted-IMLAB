@@ -6,28 +6,18 @@
 //
 
 import UIKit
-import AVFoundation
 
 class PlayViewController: UIViewController {
     
     var audio: Audio? {
         didSet {
-            self.titleLabel.text = audio?.title
+            titleLabel.text = audio?.title
             guard let url = audio?.url else { return }
-            self.setAudio(url)
+            removeAndMoveAudio(url)
         }
     }
     
     private var viewModel: PlayViewModel?
-    
-//    init(viewModel: PlayViewModel) {
-//        self.viewModel = viewModel
-//        super.init(nibName: nil, bundle: nil)
-//    }
-//
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
     
     private let progressView: UIProgressView = {
         let progressView = UIProgressView()
@@ -57,21 +47,16 @@ class PlayViewController: UIViewController {
     }()
     
     private lazy var playPauseButton: UIButton = {
-//        return UIButton().playControlButton("play.fill","pause.fill", state: .normal,.selected)
-////        let button = UIButton().playControlButton("play.fill", state: .normal)
-////        button.setImage(UIImage(systemName: "pause.fill"), for: .selected)
-////        return button
-////
         let button = UIButton(type: .custom)
         button.setImage(UIImage(systemName: "play.fill"), for: .normal)
-        button.setImage(UIImage(systemName: "pause.fill"), for: .selected)
+//        button.setImage(UIImage(systemName: "pause.fill"), for: .selected)
         button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: 32.0), forImageIn: .normal)
         button.addTarget(self, action: #selector(touchPlayPauseButton), for: .touchUpInside)
         return button
     }()
     
     private lazy var buttonStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [self.backwardButton, self.playPauseButton, self.forwardButton])
+        let stackView = UIStackView(arrangedSubviews: [backwardButton, playPauseButton, forwardButton])
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
         return stackView
@@ -99,7 +84,7 @@ class PlayViewController: UIViewController {
     }()
     
     private lazy var volumeStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [self.minVolumeImageView, self.volumeSlider, self.maxVolumeImageView])
+        let stackView = UIStackView(arrangedSubviews: [minVolumeImageView, volumeSlider, maxVolumeImageView])
         stackView.axis = .horizontal
         stackView.spacing = 10
         return stackView
@@ -115,14 +100,17 @@ class PlayViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.configure()
+        configure()
     }
     
-//    override func viewDidDisappear(_ animated: Bool) {
-//        super.viewDidDisappear(animated)
-//
-//        self.audioEngine = nil
-//    }
+    // 화면 사라질 때 종료
+    override func viewDidDisappear(_ animated: Bool) {
+        print(#function)
+        super.viewDidDisappear(animated)
+
+        // viewModel deinit해주고 싶엉
+        viewModel = nil
+    }
 }
 
 private extension PlayViewController {
@@ -130,86 +118,82 @@ private extension PlayViewController {
     // MARK: - Configure UI
     
     func configure() {
-        self.configureView()
-        self.addSubViews()
-        self.makeConstraints()
+        configureView()
+        addSubViews()
+        makeConstraints()
     }
     
     func configureView() {
-        self.view.backgroundColor = .white
+        view.backgroundColor = .white
     }
     
     func addSubViews() {
-        [self.titleLabel, self.buttonStackView, self.progressView,
-         self.volumeStackView, self.pitchSegmentedControl].forEach {
-            self.view.addSubview($0)
+        [titleLabel, buttonStackView, progressView, volumeStackView, pitchSegmentedControl].forEach {
+            view.addSubview($0)
         }
     }
     
     func makeConstraints() {
-        [self.titleLabel, self.buttonStackView, self.progressView,
-         self.volumeStackView, self.pitchSegmentedControl].forEach {
+        [titleLabel, buttonStackView, progressView, volumeStackView, pitchSegmentedControl].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         NSLayoutConstraint.activate([
-            self.titleLabel.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 32.0),
-            self.titleLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 32.0),
-            self.titleLabel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -32.0),
+            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 32.0),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32.0),
+            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32.0),
             
-            self.progressView.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor, constant: 32.0),
-            self.progressView.leadingAnchor.constraint(equalTo: self.titleLabel.leadingAnchor),
-            self.progressView.trailingAnchor.constraint(equalTo: self.titleLabel.trailingAnchor),
+            progressView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 32.0),
+            progressView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            progressView.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
             
-            self.buttonStackView.topAnchor.constraint(equalTo: self.progressView.bottomAnchor, constant: 32.0),
-            self.buttonStackView.leadingAnchor.constraint(equalTo: self.titleLabel.leadingAnchor),
-            self.buttonStackView.trailingAnchor.constraint(equalTo: self.titleLabel.trailingAnchor),
+            buttonStackView.topAnchor.constraint(equalTo: progressView.bottomAnchor, constant: 32.0),
+            buttonStackView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            buttonStackView.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
             
-            self.volumeStackView.topAnchor.constraint(equalTo: self.buttonStackView.bottomAnchor, constant: 32.0),
-            self.volumeStackView.leadingAnchor.constraint(equalTo: self.titleLabel.leadingAnchor),
-            self.volumeStackView.trailingAnchor.constraint(equalTo: self.titleLabel.trailingAnchor),
+            volumeStackView.topAnchor.constraint(equalTo: buttonStackView.bottomAnchor, constant: 32.0),
+            volumeStackView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            volumeStackView.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
             
-            self.pitchSegmentedControl.topAnchor.constraint(equalTo: self.volumeStackView.bottomAnchor, constant: 32.0),
-            self.pitchSegmentedControl.leadingAnchor.constraint(equalTo: self.titleLabel.leadingAnchor),
-            self.pitchSegmentedControl.trailingAnchor.constraint(equalTo: self.titleLabel.trailingAnchor),
+            pitchSegmentedControl.topAnchor.constraint(equalTo: volumeStackView.bottomAnchor, constant: 32.0),
+            pitchSegmentedControl.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            pitchSegmentedControl.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
         ])
     }
     
     // MARK: - objc func
     
     @objc func touchPlayPauseButton() {
-        self.viewModel?.togglePlaying { success in
-            if success {
-                self.playPauseButton.isSelected.toggle()
-            }
-        }
+        viewModel?.togglePlaying()
     }
     
     @objc func touchBackwardButton() {
-        self.viewModel?.skip(forwards: false)
+        viewModel?.skip(forwards: false)
     }
     
     @objc func touchForwardButton() {
-        self.viewModel?.skip(forwards: true)
+        viewModel?.skip(forwards: true)
     }
     
     @objc func volumeSliderValueChanged(_ sender: UISlider) {
-        self.viewModel?.volumeChanged(sender.value)
+        viewModel?.volumeChanged(sender.value)
     }
     
     @objc func pitchSegmentedControlValueChanged(_ sender: UISegmentedControl) {
         let pitches: [Double] = [0, 0.5, -0.5]
         let value = pitches[sender.selectedSegmentIndex]
-        self.viewModel?.pitchControlValueChanged(Float(value))
+        viewModel?.pitchControlValueChanged(Float(value))
     }
     
-    // MARK: - Configure AVAudioEngine
-    func setAudio(_ url: URL) {
-        // 파일에 항상 같은 이름으로 저장
-        let documentURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        //first ,safe 찾기
+    // MARK: - Configure Fuc
+    
+    func removeAndMoveAudio(_ url: URL) {
+        guard let documentURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return
+        }
+        // safe 찾기
         let fileURL = documentURL.appendingPathComponent("Record.m4a")
         
-        URLSession.shared.downloadTask(with: url) { localUrl, response, error in
+        URLSession.shared.downloadTask(with: url) { [weak self] localUrl, response, error in
             guard let localUrl = localUrl, error == nil else { return }
             do {
                 if FileManager.default.fileExists(atPath: fileURL.path) {
@@ -217,8 +201,8 @@ private extension PlayViewController {
                 }
                 try FileManager.default.moveItem(at: localUrl, to: fileURL)
                 
-                self.viewModel = PlayViewModel(url: fileURL)
-                self.bind()
+                self?.viewModel = PlayViewModel(url: fileURL)
+                self?.bind()
             } catch {
                 print("FileManager Error: \(error.localizedDescription)")
             }
@@ -229,6 +213,16 @@ private extension PlayViewController {
         viewModel?.playerProgress.observe(on: self) { [weak self] playerProgress in
             DispatchQueue.main.async {
                 self?.progressView.progress = playerProgress
+            }
+        }
+        
+        viewModel?.playerIsPlaying.observe(on: self) { [weak self] isPlaying in
+            DispatchQueue.main.async {
+                if isPlaying {
+                    self?.playPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+                } else {
+                    self?.playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+                }
             }
         }
     }

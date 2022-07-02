@@ -1,5 +1,5 @@
 //
-//  PlayAudioEngine.swift
+//  PlayViewModel.swift
 //  VoiceRecorder
 //
 //  Created by rae on 2022/06/30.
@@ -14,6 +14,7 @@ class PlayViewModel {
     
     private var audioPlayer = AVAudioPlayerNode()
     private var audioFile: AVAudioFile?
+    private var audioFormat = AVAudioFormat()
     private var engine = AVAudioEngine()
     private var pitchControl = AVAudioUnitTimePitch()
     
@@ -25,103 +26,106 @@ class PlayViewModel {
     private var audioLengthSeconds: Double = 0
     private var currentFrame: AVAudioFramePosition {
         guard let lastRenderTime = audioPlayer.lastRenderTime,
-              let playerTime = audioPlayer.playerTime(forNodeTime: lastRenderTime) else{
+              let playerTime = audioPlayer.playerTime(forNodeTime: lastRenderTime) else {
             return 0
         }
         return playerTime.sampleTime
     }
     
+    private var displayLink: CADisplayLink?
+    
     var playerProgress: Observable<Float> = Observable(0)
-    
-    var displayLink: CADisplayLink?
-    
-    var isPlaying: Bool {
-        return audioPlayer.isPlaying
-    }
-    
-    var format = AVAudioFormat()
+    var playerIsPlaying: Observable<Bool> = Observable(false)
+    private var needsFileScheduled = true
     
     init(url: URL) {
         self.url = url
-        self.setup()
-        self.setupDisplayLink()
+        setupAudioFile()
+        setupDisplayLink()
     }
     
-    //    deinit {
-    //        print(#function)
-    //        self.displayLink?.invalidate()
-    //    }
+    deinit {
+        print(#function)
+        displayLink?.invalidate()
+    }
     
-    private func setup() {
+    private func setupAudioFile() {
         do {
             let file = try AVAudioFile(forReading: url)
             
-            format = file.processingFormat
+            audioFormat = file.processingFormat
             
-            self.audioLengthSamples = file.length
-            self.audioSampleRate = format.sampleRate
-            self.audioLengthSeconds = Double(self.audioLengthSamples) / self.audioSampleRate
+            audioLengthSamples = file.length
+            audioSampleRate = audioFormat.sampleRate
+            audioLengthSeconds = Double(audioLengthSamples) / audioSampleRate
             
-            self.audioFile = file
+            audioFile = file
             
-            self.setupAudioEngine()
+            setupAudioEngine()
         } catch {
             print("AudioFile Error: \(error.localizedDescription)")
         }
     }
     
     private func setupAudioEngine() {
-        self.engine.attach(self.audioPlayer)
-        self.engine.attach(self.pitchControl)
+        engine.attach(audioPlayer)
+        engine.attach(pitchControl)
         
-        self.engine.connect(self.audioPlayer, to: self.pitchControl, format: format)
-        self.engine.connect(self.pitchControl, to: self.engine.mainMixerNode, format: format)
+        engine.connect(audioPlayer, to: pitchControl, format: audioFormat)
+        engine.connect(pitchControl, to: engine.mainMixerNode, format: audioFormat)
         
         do {
-            try self.engine.start()
+            try engine.start()
             
-            guard let audioFile = self.audioFile else { return }
-            self.audioPlayer.scheduleFile(audioFile, at: nil)
-            
+            scheduleAudioFile()
         } catch {
             print("AudioEngine Error: \(error.localizedDescription)")
         }
     }
     
-    func togglePlaying(completion: @escaping(Bool) -> Void) {
-        if self.audioPlayer.isPlaying {
-            self.audioPlayer.pause()
-            self.displayLink?.isPaused = true
-        } else {
-            self.audioPlayer.play()
-            self.displayLink?.isPaused = false
+    private func scheduleAudioFile() {
+        guard let audioFile = audioFile, needsFileScheduled else {
+            return
         }
-        completion(true)
+        
+        needsFileScheduled = false
+        seekFrame = 0
+        
+        audioPlayer.scheduleFile(audioFile, at: nil) {
+            self.needsFileScheduled = true
+        }
+    }
+    
+    func togglePlaying() {
+        if playerIsPlaying.value {
+            playerIsPlaying.value = false
+            displayLink?.isPaused = true
+            audioPlayer.pause()
+        } else {
+            playerIsPlaying.value = true
+            displayLink?.isPaused = false
+            
+            if needsFileScheduled {
+                scheduleAudioFile()
+            }
+            audioPlayer.play()
+        }
     }
     
     func volumeChanged(_ value: Float) {
-        self.audioPlayer.volume = value
+        audioPlayer.volume = value
     }
     
     func pitchControlValueChanged(_ value: Float) {
-        self.pitchControl.pitch = 1200 * value
+        pitchControl.pitch = 1200 * value
     }
     
-    //Skip
-    func skip(forwards:Bool){
-        let timeToSeek:Double
-        
-        if forwards{
-            timeToSeek = 5
-        } else {
-            timeToSeek = -5
-        }
-        
+    func skip(forwards: Bool) {
+        let timeToSeek: Double = forwards ? 5 : -5
         seek(to: timeToSeek)
     }
     
-    //현재 위치 + 시간 위치로 이동후 실행 메소드
-    func seek(to time:Double){
+    private func seek(to time:Double){
         guard let audioFile = audioFile else {
             return
         }
@@ -136,22 +140,22 @@ class PlayViewModel {
         let wasPlaying = audioPlayer.isPlaying
         audioPlayer.stop()
         
-        if currentPosition < audioLengthSamples{
+        if currentPosition < audioLengthSamples {
             updateDisplay()
+            needsFileScheduled = false
             
             let frameCount = AVAudioFrameCount(audioLengthSamples - seekFrame)
             audioPlayer.scheduleSegment(audioFile, startingFrame: seekFrame, frameCount: frameCount, at: nil) {
+                self.needsFileScheduled = true
             }
             
-            if wasPlaying{
+            if wasPlaying {
                 audioPlayer.play()
             }
         }
     }
     
-    // 현재 시간 + 5초 계산 메소드
     @objc private func updateDisplay() {
-        print(currentFrame)
         currentPosition = currentFrame + seekFrame
         currentPosition = max(currentPosition, 0)
         currentPosition = min(currentPosition, audioLengthSamples)
@@ -163,26 +167,18 @@ class PlayViewModel {
             currentPosition = 0
             
             displayLink?.isPaused = true
+            playerIsPlaying.value = false
         }
         
-//        let time = Double(currentPosition) / audioSampleRate
-//        let remainTime = audioLengthSeconds - time
-//        print("All second \(audioLengthSeconds)")
-//        print("Remain time \(audioLengthSeconds - time)")
-        
+        // 시간 설정
+        //        let time = Double(currentPosition) / audioSampleRate
+        //        let remainTime = audioLengthSeconds - time
+        //        print("All second \(audioLengthSeconds)")
+        //        print("Remain time \(audioLengthSeconds - time)")
         playerProgress.value = Float(currentPosition) / Float(audioLengthSamples)
-//        print(currentPosition, currentFrame, audioLengthSamples)
-//        playerProgress.value = Float(time) / Float(audioLengthSeconds)
-//        print(playerProgress.value)
     }
     
-    // 5초 오류 발생
-    // 시간이 흐르면서 변하지가 않고 원래 초가 고정되어 있음
-    
-    func setupDisplayLink() {
-//        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
-//            <#code#>
-//        }
+    private func setupDisplayLink() {
         displayLink = CADisplayLink(target: self, selector: #selector(updateDisplay))
         displayLink?.add(to: .main, forMode: .default)
         displayLink?.isPaused = true
