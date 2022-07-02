@@ -8,7 +8,7 @@
 import UIKit
 import AVFoundation
 
-protocol DrawWaveFormDelegate : AnyObject{
+protocol DrawWaveFormManagerDelegate : AnyObject {
     func moveWaveFormView(_ step: CGFloat)
     func resetWaveFormView()
 }
@@ -24,7 +24,7 @@ class DrawWaveFormManager{
     private var start : CGPoint!
     private var step : CGFloat!
     
-    weak var delegate : DrawWaveFormDelegate?
+    weak var delegate : DrawWaveFormManagerDelegate?
     
     func prepareDrawing(in view : UIView){
         if pencil != nil && waveLayer != nil {
