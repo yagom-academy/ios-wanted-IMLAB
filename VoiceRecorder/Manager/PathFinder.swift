@@ -16,6 +16,8 @@ class PathFinder {
     private let manager = FileManager.default
     private let baseAppDirPath = URL.init(fileURLWithPath: "/VoiceRecoder")
     
+    var lastUsedUrl: URL!
+    
     var basePath: URL
     
     init() throws {
@@ -35,6 +37,7 @@ class PathFinder {
         var pathToReturn = basePath
         pathToReturn.appendPathComponent(fileNameToAppend)
         
+        lastUsedUrl = pathToReturn
         return pathToReturn
     }
     
@@ -53,7 +56,10 @@ class PathFinder {
     func getPathWithTime() -> URL {
         let converted = getTimeNow().components(separatedBy: "/").joined(separator: "_")
         
-        return getPath(fileName: converted)
+        let path = getPath(fileName: converted)
+        
+        lastUsedUrl = path
+        return path
     }
     
 }

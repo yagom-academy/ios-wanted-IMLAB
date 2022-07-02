@@ -26,7 +26,6 @@ enum AudioPitchMode {
 
 class AudioManager {
     // recording properties
-    private var filePath: URL
     private lazy var recordEngine = AVAudioEngine()
     private lazy var audioEQ = AVAudioUnitEQ(numberOfBands: 1)
     private lazy var audioEQFilterParameters = audioEQ.bands[0]
@@ -47,9 +46,7 @@ class AudioManager {
         }
     }
     
-    init(filePath: URL) {
-        self.filePath = filePath
-        print(filePath)
+    init() {
         configureAudioSession()
     }
     
@@ -96,7 +93,8 @@ class AudioManager {
         return try AVAudioFile(forWriting: filePath, settings: inputformat.settings)
     }
     
-    private func configureAudioEngineForRecord() {
+    private func configureAudioEngineForRecord(filePath: URL) {
+
         configureNode()
         configureEqFilter()
         attachRecordNodes()
@@ -150,9 +148,9 @@ class AudioManager {
         }
     }
     
-    func startRecord() {
+    func startRecord(filePath: URL) {
         recordEngine.reset()
-        configureAudioEngineForRecord()
+        configureAudioEngineForRecord(filePath: filePath)
         do {
             try recordEngine.start()
         } catch {
@@ -172,10 +170,10 @@ class AudioManager {
 // Play 부분을 분리한 extension
 extension AudioManager {
     
-    func startPlay() {
+    func startPlay(fileURL: URL) {
         if !playEngine.isRunning {
             playEngine.reset()
-            configureAudioEngineForPlay()
+            configureAudioEngineForPlay(filePath: fileURL)
             do {
                 try playEngine.start()
             } catch {
@@ -205,7 +203,7 @@ extension AudioManager {
         playEngine.connect(changePitchNode, to: playEngine.mainMixerNode, format: nil)
     }
     
-    private func configureAudioEngineForPlay() {
+    private func configureAudioEngineForPlay(filePath: URL) {
         do {
             audioFile = try getAudioFile(filePath: filePath)
         } catch {
