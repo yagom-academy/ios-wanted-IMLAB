@@ -21,9 +21,6 @@ class PlayViewModel {
     private var seekFrame: AVAudioFramePosition = 0
     private var currentPosition: AVAudioFramePosition = 0
     private var audioLengthSamples: AVAudioFramePosition = 0
-    
-    private var audioSampleRate:Double = 0
-    private var audioLengthSeconds: Double = 0
     private var currentFrame: AVAudioFramePosition {
         guard let lastRenderTime = audioPlayer.lastRenderTime,
               let playerTime = audioPlayer.playerTime(forNodeTime: lastRenderTime) else {
@@ -32,21 +29,20 @@ class PlayViewModel {
         return playerTime.sampleTime
     }
     
+    private var audioSampleRate:Double = 0
+    private var audioLengthSeconds: Double = 0
+    
     private var displayLink: CADisplayLink?
     
     var playerProgress: Observable<Float> = Observable(0)
     var playerIsPlaying: Observable<Bool> = Observable(false)
+    var playerTime: Observable<PlayerTime> = Observable(.zero)
     private var needsFileScheduled = true
     
     init(url: URL) {
         self.url = url
         setupAudioFile()
         setupDisplayLink()
-    }
-    
-    deinit {
-        print(#function)
-        displayLink?.invalidate()
     }
     
     private func setupAudioFile() {
@@ -61,6 +57,7 @@ class PlayViewModel {
             
             audioFile = file
             
+            setTime()
             setupAudioEngine()
         } catch {
             print("AudioFile Error: \(error.localizedDescription)")
@@ -170,17 +167,27 @@ class PlayViewModel {
             playerIsPlaying.value = false
         }
         
-        // 시간 설정
-        //        let time = Double(currentPosition) / audioSampleRate
-        //        let remainTime = audioLengthSeconds - time
-        //        print("All second \(audioLengthSeconds)")
-        //        print("Remain time \(audioLengthSeconds - time)")
+        setTime()
         playerProgress.value = Float(currentPosition) / Float(audioLengthSamples)
+    }
+    
+    private func setTime() {
+        let time = Double(currentPosition) / audioSampleRate
+        playerTime.value = PlayerTime(elapsedTime: time, remainingTime: audioLengthSeconds - time)
     }
     
     private func setupDisplayLink() {
         displayLink = CADisplayLink(target: self, selector: #selector(updateDisplay))
         displayLink?.add(to: .main, forMode: .default)
+        displayLink?.isPaused = true
+    }
+}
+
+// MARK: - PlayViewControllerDelegate
+
+extension PlayViewModel: PlayViewControllerDelegate {
+    func viewDidDisappear() {
+        audioPlayer.pause()
         displayLink?.isPaused = true
     }
 }

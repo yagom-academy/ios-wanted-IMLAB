@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol PlayViewControllerDelegate: AnyObject {
+    func viewDidDisappear()
+}
+
 class PlayViewController: UIViewController {
     
     var audio: Audio? {
@@ -19,15 +23,35 @@ class PlayViewController: UIViewController {
     
     private var viewModel: PlayViewModel?
     
-    private let progressView: UIProgressView = {
-        let progressView = UIProgressView()
-        return progressView
-    }()
+    weak var delegate: PlayViewControllerDelegate?
     
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
         return label
+    }()
+    
+    private let progressView: UIProgressView = {
+        let progressView = UIProgressView()
+        return progressView
+    }()
+    
+    private let playTimeLabel: UILabel = {
+        let label = UILabel()
+        label.text = "00:00"
+        return label
+    }()
+    
+    private let playTimeRemainLabel: UILabel = {
+        let label = UILabel()
+        label.text = "00:00"
+        return label
+    }()
+    
+    private lazy var playTimeStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [playTimeLabel, playTimeRemainLabel])
+        stackView.axis = .horizontal
+        return stackView
     }()
     
     private lazy var backwardButton: UIButton = {
@@ -49,7 +73,6 @@ class PlayViewController: UIViewController {
     private lazy var playPauseButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setImage(UIImage(systemName: "play.fill"), for: .normal)
-//        button.setImage(UIImage(systemName: "pause.fill"), for: .selected)
         button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: 32.0), forImageIn: .normal)
         button.addTarget(self, action: #selector(touchPlayPauseButton), for: .touchUpInside)
         return button
@@ -103,12 +126,10 @@ class PlayViewController: UIViewController {
         configure()
     }
     
-    // 화면 사라질 때 종료
     override func viewDidDisappear(_ animated: Bool) {
-        print(#function)
         super.viewDidDisappear(animated)
 
-        // viewModel deinit해주고 싶엉
+        delegate?.viewDidDisappear()
         viewModel = nil
     }
 }
@@ -128,13 +149,13 @@ private extension PlayViewController {
     }
     
     func addSubViews() {
-        [titleLabel, buttonStackView, progressView, volumeStackView, pitchSegmentedControl].forEach {
+        [titleLabel, progressView, playTimeStackView, buttonStackView, volumeStackView, pitchSegmentedControl].forEach {
             view.addSubview($0)
         }
     }
     
     func makeConstraints() {
-        [titleLabel, buttonStackView, progressView, volumeStackView, pitchSegmentedControl].forEach {
+        [titleLabel, progressView, playTimeStackView, buttonStackView, volumeStackView, pitchSegmentedControl].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         NSLayoutConstraint.activate([
@@ -146,7 +167,11 @@ private extension PlayViewController {
             progressView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             progressView.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
             
-            buttonStackView.topAnchor.constraint(equalTo: progressView.bottomAnchor, constant: 32.0),
+            playTimeStackView.topAnchor.constraint(equalTo: progressView.bottomAnchor, constant: 8.0),
+            playTimeStackView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            playTimeStackView.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            
+            buttonStackView.topAnchor.constraint(equalTo: playTimeStackView.bottomAnchor, constant: 32.0),
             buttonStackView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             buttonStackView.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
             
@@ -202,6 +227,7 @@ private extension PlayViewController {
                 try FileManager.default.moveItem(at: localUrl, to: fileURL)
                 
                 self?.viewModel = PlayViewModel(url: fileURL)
+                self?.delegate = self?.viewModel
                 self?.bind()
             } catch {
                 print("FileManager Error: \(error.localizedDescription)")
@@ -223,6 +249,13 @@ private extension PlayViewController {
                 } else {
                     self?.playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
                 }
+            }
+        }
+        
+        viewModel?.playerTime.observe(on: self) { [weak self] playerTime in
+            DispatchQueue.main.async {
+                self?.playTimeLabel.text = playerTime.elapsedText
+                self?.playTimeRemainLabel.text = playerTime.remainingText
             }
         }
     }
