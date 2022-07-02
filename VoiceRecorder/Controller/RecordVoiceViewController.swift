@@ -27,6 +27,8 @@ class RecordVoiceViewController: UIViewController {
     let progressSlider : UISlider = {
         let progressSlider = UISlider()
         progressSlider.translatesAutoresizingMaskIntoConstraints = false
+        progressSlider.isContinuous = false
+        progressSlider.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
         progressSlider.minimumValue = 0
         progressSlider.maximumValue = 1
         return progressSlider
@@ -109,10 +111,33 @@ class RecordVoiceViewController: UIViewController {
         }
     }
     
+    @objc func sliderValueChanged() {
+        var sampleRate : Double
+        
+        switch progressSlider.value {
+        case 0:
+            sampleRate = 8000
+        case ..<(0.2):
+            sampleRate = 12000
+        case ..<(0.4):
+            sampleRate = 16000
+        case ..<(0.6):
+            sampleRate = 22050
+        case ..<(0.8):
+            sampleRate = 24000
+        case ..<(1.0):
+            sampleRate = 32000
+        default:
+            sampleRate = 44100
+        }
+        audioSessionManager.setSampleRate(sampleRate)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         drawWaveFormManager.delegate = self
         recordVoiceManager.delegate = self
+        audioSessionManager.setSampleRate(44100)
         setView()
         autoLayout()
         setUI()
@@ -163,7 +188,7 @@ class RecordVoiceViewController: UIViewController {
     
     func setUI() {
         progressSlider.tintColor = .blue
-        progressSlider.value = 0.5
+        progressSlider.value = 1.0
         progressTimeLabel.text = "00:00:00"
         record_start_stop_button.setImage(UIImage(systemName: "circle.fill"), for: .normal)
         record_start_stop_button.tintColor = .red
