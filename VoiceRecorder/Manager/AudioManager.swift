@@ -9,13 +9,28 @@ import Foundation
 import AVFoundation
 import Accelerate
 
+enum AudioPitchMode {
+    case baby, basic, grandFather
+    
+    var pitchValue: Float {
+        switch self {
+        case .baby:
+            return 100
+        case .basic:
+            return 0
+        case .grandFather:
+            return -100
+        }
+    }
+}
+
 class AudioManager {
     // recording properties
     private var filePath: URL
-    private lazy var audioEngine: AVAudioEngine? = AVAudioEngine()
+    private lazy var recordEngine = AVAudioEngine()
     private lazy var audioEQ = AVAudioUnitEQ(numberOfBands: 1)
     private lazy var audioEQFilterParameters = audioEQ.bands[0]
-    private lazy var inputNode = audioEngine?.inputNode
+    private lazy var inputNode = recordEngine.inputNode
     private lazy var mixerNode = AVAudioMixerNode()
     lazy var cutOffFrequency: Float = 0
     
@@ -25,9 +40,16 @@ class AudioManager {
     private lazy var currentPosition: AVAudioFramePosition = 0
     private lazy var audioPlayerNode = AVAudioPlayerNode()
     private lazy var changePitchNode = AVAudioUnitTimePitch()
+    private lazy var playEngine = AVAudioEngine()
+    lazy var pitchMode: AudioPitchMode = .basic {
+        didSet {
+            changePitchNode.pitch = pitchMode.pitchValue
+        }
+    }
     
     init(filePath: URL) {
         self.filePath = filePath
+        print(filePath)
         configureAudioSession()
     }
     
@@ -57,21 +79,20 @@ class AudioManager {
     }
     
     private func attachRecordNodes() {
-        audioEngine?.attach(audioEQ)
-        audioEngine?.attach(mixerNode)
+        recordEngine.attach(audioEQ)
+        recordEngine.attach(mixerNode)
     }
     
     private func connectRecordNodes() {
-        guard let inputNode = inputNode else { return }
-        audioEngine?.connect(mixerNode, to: audioEQ,
-                            format: audioEngine?.mainMixerNode.outputFormat(forBus: 0))
-        audioEngine?.connect(inputNode, to: mixerNode,
-                            format: audioEngine?.mainMixerNode.outputFormat(forBus: 0))
+        recordEngine.connect(mixerNode, to: audioEQ,
+                            format: recordEngine.mainMixerNode.outputFormat(forBus: 0))
+        recordEngine.connect(inputNode, to: mixerNode,
+                            format: recordEngine.mainMixerNode.outputFormat(forBus: 0))
     }
     
-    private func createAudioFile(filePath: URL) throws -> AVAudioFile? {
-        guard let inputformat = inputNode?.inputFormat(forBus: 0) else { return nil }
-        return try AVAudioFile(forWriting: filePath, settings: inputformat.settings, commonFormat: .pcmFormatInt32, interleaved: true)
+    private func createAudioFile(filePath: URL) throws -> AVAudioFile {
+        let inputformat = audioEQ.outputFormat(forBus: 0)
+        return try AVAudioFile(forWriting: filePath, settings: inputformat.settings)
     }
     
     private func configureAudioEngineForRecord() {
@@ -127,10 +148,10 @@ class AudioManager {
     }
     
     func startRecord() {
-        audioEngine?.reset()
+        recordEngine.reset()
         configureAudioEngineForRecord()
         do {
-            try audioEngine?.start()
+            try recordEngine.start()
         } catch {
             fatalError()
         }
@@ -138,8 +159,9 @@ class AudioManager {
     
     /// 레코딩 완료
     func stopRecord() {
-        audioEngine?.stop()
-        audioEngine = nil
+        recordEngine.stop()
+//        audioEngine = nil
+        print(recordEngine)
     }
     
 }
@@ -148,19 +170,22 @@ class AudioManager {
 extension AudioManager {
     
     func startPlay() {
-        configureAudioEngineForPlay()
-        do {
-            try audioEngine?.start()
-        } catch {
-            fatalError(error.localizedDescription)
+        if !playEngine.isRunning {
+            playEngine.reset()
+            configureAudioEngineForPlay()
+            do {
+                try playEngine.start()
+            } catch {
+                fatalError(error.localizedDescription)
+            }
         }
         audioPlayerNode.play()
+        print(playEngine.isRunning)
     }
     
     func stopPlay() {
-        audioPlayerNode.stop()
-        audioEngine?.stop()
-        audioEngine = nil
+        audioPlayerNode.pause()
+//        playEngine.stop()
     }
     
     private func getAudioFile(filePath: URL) throws -> AVAudioFile {
@@ -168,17 +193,16 @@ extension AudioManager {
     }
     
     private func attachPlayNodes() {
-        audioEngine?.attach(audioPlayerNode)
-        audioEngine?.attach(changePitchNode)
+        playEngine.attach(audioPlayerNode)
+        playEngine.attach(changePitchNode)
     }
     
     private func connectPlayNodes() {
-        audioEngine?.connect(audioPlayerNode, to: changePitchNode, format: audioFile.fileFormat)
-        audioEngine?.connect(changePitchNode, to: mixerNode, format: audioFile.fileFormat)
+        playEngine.connect(audioPlayerNode, to: changePitchNode, format: nil)
+        playEngine.connect(changePitchNode, to: playEngine.mainMixerNode, format: nil)
     }
     
     private func configureAudioEngineForPlay() {
-        audioEngine = AVAudioEngine()
         do {
             audioFile = try getAudioFile(filePath: filePath)
         } catch {
@@ -190,7 +214,7 @@ extension AudioManager {
         
         audioPlayerNode.scheduleFile(audioFile, at: nil)
         
-        audioEngine?.prepare()
+        playEngine.prepare()
     }
     
     /// 현재 재생중인 audioFile의 전체 길이. float을 Int로 변환하고, string으로 반환
