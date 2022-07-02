@@ -9,8 +9,11 @@ import UIKit
 
 class RecordListCell: UITableViewCell {
     static let identifier = "RecordListCell"
+    private var isSetGesture: Bool = false
+    private var action: ((UILongPressGestureRecognizer) -> ())?
     
     private let titleLabel = UILabel()
+    private let swipeTapView = UIImageView(image: UIImage(systemName: "text.justify"))
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -33,6 +36,25 @@ class RecordListCell: UITableViewCell {
         self.titleLabel.text = filename
     }
     
+    func addTapGesture(action: @escaping (UILongPressGestureRecognizer) -> ()) {
+        if (isSetGesture == false) {
+            isSetGesture = true
+            
+            self.action = action
+            swipeTapView.isUserInteractionEnabled = true
+            let longPressedGesture = UILongPressGestureRecognizer(target: self, action: #selector(connector(with:)))
+            longPressedGesture.minimumPressDuration = 0
+            //        longPressedGesture.delegate = self
+            longPressedGesture.delaysTouchesBegan = true
+            swipeTapView.addGestureRecognizer(longPressedGesture)
+            
+        }
+    }
+    
+    @objc func connector(with sender: UILongPressGestureRecognizer) {
+        self.action?(sender)
+    }
+    
     private func attribute() {
         self.selectionStyle = .none
         //temp
@@ -40,12 +62,15 @@ class RecordListCell: UITableViewCell {
     }
     
     private func layout() {
-        [titleLabel].forEach {
+        [titleLabel, swipeTapView].forEach {
             self.contentView.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         titleLabel.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive = true
         titleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 30).isActive = true
+        
+        swipeTapView.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive = true
+        swipeTapView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20).isActive = true
     }
 }
