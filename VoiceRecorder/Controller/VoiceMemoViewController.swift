@@ -19,7 +19,9 @@ class VoiceMemoViewController: UIViewController {
     
     // MARK: - Properties
     
-    var items: [StorageReference] = []
+    var items: [URL] = []
+    var fileNames: [String] = []
+    
     
     // MARK: - LifeCycles
     
@@ -44,15 +46,24 @@ class VoiceMemoViewController: UIViewController {
     func fetchRecordingData() {
         FireStorageManager.shared.fetchData { results in
             self.items = results
-            let uris = self.items
-            FireStorageManager.shared.downloadData(uris: uris)
+            self.createFileName(urls: results)
             DispatchQueue.main.async {
                 self.voiceMemoTableView.reloadData()
             }
         }
-        
     }
-
+    
+    func createFileName(urls: [URL]) {
+        fileNames = urls.map { url -> String in
+            let urlToString = url.absoluteString
+            let findIndex = urlToString.index(urlToString.endIndex, offsetBy: -33)
+            let endIndex = urlToString.index(urlToString.endIndex, offsetBy: -4)
+            let fileName = String(urlToString[findIndex..<endIndex])
+            return fileName
+        }
+    }
+    
+    
     func configureTableView() {
         
         let cell = UINib(nibName: VoiceMemoTableViewCell.identifier, bundle: nil)
@@ -71,14 +82,15 @@ extension VoiceMemoViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: VoiceMemoTableViewCell.identifier, for: indexPath) as? VoiceMemoTableViewCell else { return UITableViewCell() }
-        cell.timelineLabel.text = items[indexPath.row].name
+
+        cell.timelineLabel.text = fileNames[indexPath.row]
         cell.durationLabel.text = "02:11"
         return cell
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            FireStorageManager.shared.deleteItem(items[indexPath.row].name)
+            FireStorageManager.shared.deleteItem(fileNames[indexPath.row])
             items.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
