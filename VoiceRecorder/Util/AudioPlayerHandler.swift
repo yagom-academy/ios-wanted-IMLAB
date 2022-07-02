@@ -27,7 +27,7 @@ class AudioPlayerHandler {
             recordFileURL = latestRecordFileURL
         } else {
             guard let playFileName = fileName else { return }
-            let selectedFileURL = localFileHandler.localFileURL.appendingPathComponent(playFileName)
+            let selectedFileURL = localFileHandler.localFileURL.appendingPathComponent("voiceRecords_\(playFileName)")
             recordFileURL = selectedFileURL
         }
         prepareToPlay(recordFileURL)
@@ -43,14 +43,12 @@ class AudioPlayerHandler {
         }
     }
     
-    func startPlay(isSelectedFile: Bool, fileName: String = "") {
-        selectPlayFile(nil)
-        self.audioPlayer.play()
-        if isSelectedFile {
-            selectPlayFile(nil)
-            self.audioPlayer.play()
-        } else if isSelectedFile, fileName != "" {
+    func startPlay(isSelectedFile: Bool, fileName: String? = nil) {
+        if fileName != nil {
             selectPlayFile(fileName)
+            self.audioPlayer.play()
+        } else {
+            selectPlayFile(nil)
             self.audioPlayer.play()
         }
     }
