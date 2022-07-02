@@ -66,14 +66,12 @@ class PlayingViewController: UIViewController {
     @IBAction func PressPrevButton(_ sender: UIButton) {
         if player?.isPlaying == true {
             player?.currentTime -= 5
-            print(player?.currentTime)
         }
     }
     
     @IBAction func PressBackwardButton(_ sender: UIButton) {
         if player?.isPlaying == true {
             player?.currentTime += 5
-            print(player?.currentTime)
         }
     }
 }
