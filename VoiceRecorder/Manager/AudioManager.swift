@@ -103,7 +103,9 @@ class AudioManager {
         connectRecordNodes()
         
         let format = inputNode.outputFormat(forBus: 0)
-        guard let audioFile = try? createAudioFile(filePath: filePath) else {
+        do {
+            audioFile = try createAudioFile(filePath: filePath)
+        } catch {
             fatalError()
         }
         
@@ -112,7 +114,7 @@ class AudioManager {
             guard let self = self else { return }
             let bufferData = self.calculatorBufferGraphData(buffer: buffer)
             do {
-                try audioFile.write(from: buffer)
+                try self.audioFile.write(from: buffer)
             } catch {
                 fatalError(error.localizedDescription)
             }
