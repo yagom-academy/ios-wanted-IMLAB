@@ -17,7 +17,7 @@ class RecordListTableViewCell: UITableViewCell {
     
     func setUpView(recordFile: RecordModel) {
         dateTitleLabel.text = "\(StoragePath.voiceRecords.rawValue)_" + recordFile.name.dropLast(4)
-//        recordTimeLabel.text = String(recordFile.audioPlayer.duration.toString.dropLast(3))
+        recordTimeLabel.text = recordFile.duration
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

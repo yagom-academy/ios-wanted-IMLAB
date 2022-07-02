@@ -66,7 +66,9 @@ class RecordViewController: UIViewController {
             setupButton(isHidden: false)
             endRecord()
             guard let data = recorder.data else { return }
-            uploadFile(data, fileName: recordDate ?? "")
+            player.url = fileName
+            player.setupPlayer()
+            uploadFile(data, fileName: recordDate ?? "", duration: player.duration)
             print(fileName)
         } else {
             sender.setImage(Icon.circle.image, for: .normal)
@@ -101,8 +103,6 @@ class RecordViewController: UIViewController {
             currentPlayTime = player.currentTime
             player.stop()
         } else {
-            player.url = fileName
-            player.setupPlayer()
             player.currentTime = currentPlayTime
             player.play()
             
@@ -187,8 +187,12 @@ private extension RecordViewController {
         counter = 0.0
     }
     
-    func uploadFile(_ data: Data, fileName: String) {
-        StorageManager.shared.upload(data: data, fileName: fileName) { result in
+    func uploadFile(_ data: Data, fileName: String, duration: Double) {
+        StorageManager.shared.upload(
+            data: data,
+            fileName: fileName,
+            duration: duration
+        ) { result in
             switch result {
             case .success(_):
                 print("저장 성공🎉")

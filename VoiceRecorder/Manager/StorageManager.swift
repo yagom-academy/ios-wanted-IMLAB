@@ -14,11 +14,19 @@ class StorageManager {
     
     private init() {}
     
-    func upload(data: Data, fileName: String, completion: @escaping (Result<Void, Error>) -> Void) {
+    func upload(
+        data: Data,
+        fileName: String,
+        duration: Double,
+        completion: @escaping (Result<Void, Error>
+        ) -> Void) {
         let storageRef = storage.reference()
         let recordRef = storageRef.child("\(StoragePath.voiceRecords.rawValue)/\(fileName).m4a")
         
-        recordRef.putData(data) { _, error in
+        let metaData = StorageMetadata()
+        metaData.customMetadata = ["duration": duration.toString.dropLast(3).description]
+        
+        recordRef.putData(data, metadata: metaData) { _, error in
             if let error = error {
                 completion(.failure(error))
                 return
@@ -44,8 +52,20 @@ class StorageManager {
                             return
                         }
                         if let url = url {
-                            let recordModel = RecordModel(name: item.name, url: url)
-                            completion(.success(recordModel))
+                            
+                            item.getMetadata { meta, error in
+                                if let error = error {
+                                    completion(.failure(error))
+                                    return
+                                }
+                                if let meta = meta,
+                                   let duration = meta.customMetadata?["duration"] {
+                                    
+                                    let recordModel = RecordModel(name: item.name, url: url, duration: duration)
+                                    completion(.success(recordModel))
+                                    return
+                                }
+                            }
                             return
                         }
                     }

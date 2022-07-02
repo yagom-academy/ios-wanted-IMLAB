@@ -12,6 +12,7 @@ struct RecordModel: Equatable {
     
     let name: String
     let url: URL
+    let duration: String
     
     var audioPlayer: AudioPlayer {
         let player = AudioPlayer()
