@@ -11,7 +11,6 @@
 		362737AA286986E900592181 /* RecordListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 362737A8286986E900592181 /* RecordListTableViewCell.xib */; };
 		362737AD286987F200592181 /* RecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362737AC286987F200592181 /* RecordViewController.swift */; };
 		362737AF2869880000592181 /* PlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362737AE2869880000592181 /* PlayViewController.swift */; };
-		36B4B2B8286EF3DA0025714C /* 1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 36B4B2B7286EF3DA0025714C /* 1.mp3 */; };
 		36D9A788286FE0A7008D5B37 /* LocalFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D9A787286FE0A7008D5B37 /* LocalFileManager.swift */; };
 		6B216C8E286FCD0C000B7244 /* AudioEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B216C8D286FCD0C000B7244 /* AudioEngine.swift */; };
 		6B31B100286C046D00B2E606 /* StoragePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B31B0FF286C046D00B2E606 /* StoragePath.swift */; };
@@ -38,7 +37,6 @@
 		362737A8286986E900592181 /* RecordListTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RecordListTableViewCell.xib; sourceTree = "<group>"; };
 		362737AC286987F200592181 /* RecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewController.swift; sourceTree = "<group>"; };
 		362737AE2869880000592181 /* PlayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayViewController.swift; sourceTree = "<group>"; };
-		36B4B2B7286EF3DA0025714C /* 1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 1.mp3; sourceTree = "<group>"; };
 		36D9A787286FE0A7008D5B37 /* LocalFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFileManager.swift; sourceTree = "<group>"; };
 		6B216C8D286FCD0C000B7244 /* AudioEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioEngine.swift; sourceTree = "<group>"; };
 		6B31B0FF286C046D00B2E606 /* StoragePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoragePath.swift; sourceTree = "<group>"; };
@@ -166,7 +164,6 @@
 		DE15E65A28604278003DD2F5 /* VoiceRecorder */ = {
 			isa = PBXGroup;
 			children = (
-				36B4B2B7286EF3DA0025714C /* 1.mp3 */,
 				DE15E65B28604278003DD2F5 /* AppDelegate.swift */,
 				DE15E65D28604278003DD2F5 /* SceneDelegate.swift */,
 				DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */,
@@ -250,7 +247,6 @@
 			files = (
 				DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */,
 				6B47CD74286975BE00C0912F /* GoogleService-Info.plist in Resources */,
-				36B4B2B8286EF3DA0025714C /* 1.mp3 in Resources */,
 				362737AA286986E900592181 /* RecordListTableViewCell.xib in Resources */,
 				DE15E66528604279003DD2F5 /* Assets.xcassets in Resources */,
 				DE15E66328604278003DD2F5 /* Main.storyboard in Resources */,
@@ -431,7 +427,7 @@
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VoiceRecorder/Info.plist;
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "녹음을 위해 마이크 사용 권한";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "녹음을 위해 마이크 사용 권한을 허용해주세요.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -463,7 +459,7 @@
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VoiceRecorder/Info.plist;
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "녹음을 위해 마이크 사용 권한";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "녹음을 위해 마이크 사용 권한을 허용해주세요.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
