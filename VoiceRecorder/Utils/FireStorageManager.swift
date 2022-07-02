@@ -24,10 +24,9 @@ class FireStorageManager {
         static var fileFullName: String {
             return ("recording\(Path.fileName)")
         }
-        
     }
     
-    var items: [StorageReference] = []
+    var items: [URL] = []
     let storage = Storage.storage()
     
     func uploadData(_ url: URL?) {
@@ -41,32 +40,42 @@ class FireStorageManager {
         fileRef.putFile(from: url, metadata: metadata)
     }
     
-    func fetchData(completion: @escaping ([StorageReference]) -> Void )  {
+    func fetchData(completion: @escaping ([URL]) -> Void )  {
         let storageRef = storage.reference()
         let fileRef = storageRef.child(RecordFileString.Ref.recordDir)
         fileRef.listAll() { (result, error) in
             if let error = error {
                 print(error)
             }
-            for item in result.items {
-                self.items.append(item)
+            self.downloadToLocal(uris: result.items) { localUrls in
+                completion(localUrls)
             }
-            completion(self.items)
             
         }
+    }
+    
+    // escaping 클로저로 data 넘기기
+    func downloadToLocal(uris: [StorageReference]
+                         ,completion: @escaping ([URL]) -> Void
+    ) {
+        let stringUri: [String] = uris.map { "\($0)" }
+            for uri in stringUri {
+                let storageRef = storage.reference(forURL: uri)
+                // 긴 uri 에서 "recording_2022_06_30_20:12:51" 끝 부분만 가져오기 위함
+                let findIndex = uri.index(uri.endIndex, offsetBy: -29)
+                let fileName = "\(uri[findIndex...]).m4a"
+                guard let localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent(fileName) else { return }
+                storageRef.write(toFile: localPath)
+                items.append(localPath)
+            }
+        completion(items)
+        
     }
     
     func deleteItem(_ name : String) {
         let storageRef = storage.reference()
         let fileRef = storageRef.child("\(RecordFileString.Ref.recordDir)\(name)")
-
-        // Delete the file
-        fileRef.delete { error in
-          if let error = error {
-            print(error)
-          } else {
-            // File deleted successfully
-          }
-        }
+        
+        fileRef.delete()
     }
 }

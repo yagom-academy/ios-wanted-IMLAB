@@ -91,7 +91,7 @@ class RecordDetailViewController: UIViewController {
         let fileName = DataFormatter.makeFileName()
         FireStorageManager.RecordFileString.Path.fileName = fileName
         // 파일 생성
-        guard let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {return}
+        guard let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
         audioFileURL = fileURL.appendingPathComponent("\(FireStorageManager.RecordFileString.fileFullName)\(FireStorageManager.RecordFileString.contentType.audio)")
         let audioFileURL = fileURL.appendingPathComponent("\(FireStorageManager.RecordFileString.fileFullName)\(FireStorageManager.RecordFileString.contentType.audio)")
         let settings = [

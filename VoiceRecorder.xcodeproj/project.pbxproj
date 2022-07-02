@@ -18,6 +18,8 @@
 		DE15E66328604278003DD2F5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66128604278003DD2F5 /* Main.storyboard */; };
 		DE15E66528604279003DD2F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66428604279003DD2F5 /* Assets.xcassets */; };
 		DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */; };
+		E10020B12870139E007CEA42 /* TimeInterval + extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10020B02870139E007CEA42 /* TimeInterval + extension.swift */; };
+		E10020B3287013C6007CEA42 /* Int + extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10020B2287013C6007CEA42 /* Int + extension.swift */; };
 		E16AC5AC28699D0D003DDD7D /* VoiceMemoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16AC5AA28699D0D003DDD7D /* VoiceMemoTableViewCell.swift */; };
 		E16AC5AD28699D0D003DDD7D /* VoiceMemoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E16AC5AB28699D0D003DDD7D /* VoiceMemoTableViewCell.xib */; };
 		E16AC5AF2869A0B4003DDD7D /* RecordDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16AC5AE2869A0B4003DDD7D /* RecordDetailViewController.swift */; };
@@ -37,6 +39,8 @@
 		DE15E66228604278003DD2F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		DE15E66428604279003DD2F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DE15E66728604279003DD2F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		E10020B02870139E007CEA42 /* TimeInterval + extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval + extension.swift"; sourceTree = "<group>"; };
+		E10020B2287013C6007CEA42 /* Int + extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int + extension.swift"; sourceTree = "<group>"; };
 		E16AC5AA28699D0D003DDD7D /* VoiceMemoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceMemoTableViewCell.swift; sourceTree = "<group>"; };
 		E16AC5AB28699D0D003DDD7D /* VoiceMemoTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VoiceMemoTableViewCell.xib; sourceTree = "<group>"; };
 		E16AC5AE2869A0B4003DDD7D /* RecordDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecordDetailViewController.swift; path = VoiceRecorder/Controller/RecordDetailViewController.swift; sourceTree = SOURCE_ROOT; };
@@ -76,6 +80,7 @@
 		C7C42A9C286C7122000381A8 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				E10020AF28701385007CEA42 /* Extensions */,
 				C7C42A9D286C713D000381A8 /* DataFormatter.swift */,
 				C7C42A9F286C7493000381A8 /* FireStorageManager.swift */,
 			);
@@ -134,6 +139,15 @@
 				C79B753D286985F900C2372A /* GoogleService-Info.plist */,
 			);
 			path = VoiceRecorder;
+			sourceTree = "<group>";
+		};
+		E10020AF28701385007CEA42 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				E10020B02870139E007CEA42 /* TimeInterval + extension.swift */,
+				E10020B2287013C6007CEA42 /* Int + extension.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -256,10 +270,12 @@
 				DE15E66028604278003DD2F5 /* VoiceMemoViewController.swift in Sources */,
 				C7C42AA0286C7493000381A8 /* FireStorageManager.swift in Sources */,
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
+				E10020B3287013C6007CEA42 /* Int + extension.swift in Sources */,
 				E16AC5AF2869A0B4003DDD7D /* RecordDetailViewController.swift in Sources */,
 				763A2A962869BDFA007A6CF4 /* PlayingViewController.swift in Sources */,
 				C7C42A9E286C713D000381A8 /* DataFormatter.swift in Sources */,
 				E16AC5AC28699D0D003DDD7D /* VoiceMemoTableViewCell.swift in Sources */,
+				E10020B12870139E007CEA42 /* TimeInterval + extension.swift in Sources */,
 				DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

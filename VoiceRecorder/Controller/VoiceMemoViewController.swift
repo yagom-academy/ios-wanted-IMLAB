@@ -9,9 +9,10 @@ import AVFAudio
 
 class VoiceMemoViewController: UIViewController {
     
-    private enum RefString {
-        static let recording: String = "recording/"
-    }
+    // 지워도 될거같아요 확인한번 해주세요~~
+//    private enum RefString {
+//        static let recording: String = "recording/"
+//    }
     
     // MARK: - IBOutlet
     
@@ -19,7 +20,11 @@ class VoiceMemoViewController: UIViewController {
     
     // MARK: - Properties
     
-    var items: [StorageReference] = []
+    var localUrls: [URL] = []
+    var fileNames: [String] = []
+    var fileDurations: [String] = []
+    
+    var player: AVAudioPlayer?
     
     // MARK: - LifeCycles
     
@@ -31,10 +36,10 @@ class VoiceMemoViewController: UIViewController {
         
     }
     
-    
     // MARK: - IBActions
     
     @IBAction func moveToRecordDetail(_ sender: UIBarButtonItem) {
+        
         
     }
     
@@ -42,13 +47,43 @@ class VoiceMemoViewController: UIViewController {
     
     func fetchRecordingData() {
         FireStorageManager.shared.fetchData { results in
-            self.items = results
+            self.localUrls = results
+            self.createFileName(urls: results)
+            self.getFileDuration()
             DispatchQueue.main.async {
                 self.voiceMemoTableView.reloadData()
             }
         }
     }
-
+    
+    func createFileName(urls: [URL]) {
+        fileNames = urls.map { url -> String in
+            let urlToString = url.absoluteString
+            let findIndex = urlToString.index(urlToString.endIndex, offsetBy: -33)
+            let endIndex = urlToString.index(urlToString.endIndex, offsetBy: -4)
+            let fileName = String(urlToString[findIndex..<endIndex])
+            return fileName
+        }
+    }
+    
+    func getFileDuration() {
+        
+        fileDurations = localUrls.map { url -> String in
+            var durationTime: String = ""
+            
+            do {
+                player = try AVAudioPlayer.init(contentsOf: url)
+                if let duration = player?.duration {
+                     durationTime = duration.minuteSecond
+                }
+            } catch {
+                print("<getFileDuration Error> - \(error.localizedDescription)")
+            }
+            return durationTime
+        }
+    }
+    
+    
     func configureTableView() {
         
         let cell = UINib(nibName: VoiceMemoTableViewCell.identifier, bundle: nil)
@@ -62,20 +97,21 @@ class VoiceMemoViewController: UIViewController {
 
 extension VoiceMemoViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return items.count
+        return localUrls.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: VoiceMemoTableViewCell.identifier, for: indexPath) as? VoiceMemoTableViewCell else { return UITableViewCell() }
-        cell.timelineLabel.text = items[indexPath.row].name
-        cell.durationLabel.text = "02:11"
+
+        cell.timelineLabel.text = fileNames[indexPath.row]
+        cell.durationLabel.text = fileDurations[indexPath.row]
         return cell
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            FireStorageManager.shared.deleteItem(items[indexPath.row].name)
-            items.remove(at: indexPath.row)
+            FireStorageManager.shared.deleteItem(fileNames[indexPath.row])
+            localUrls.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
