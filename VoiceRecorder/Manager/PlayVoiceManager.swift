@@ -14,20 +14,27 @@ import AVFoundation
 import NotificationCenter
 
 class PlayVoiceManager{
+    //재생할 오디오 파일
+    var audioFile : AVAudioFile?
+    var format : AVAudioFormat?
+    //player 노드
     
+    
+    //오디오 엔진
     let audioEngine = AVAudioEngine()
     let playerNode = AVAudioPlayerNode()
     var pitchControl = AVAudioUnitTimePitch()
-    
     weak var delegate : PlayVoiceDelegate!
     var isPlay = false
     
     
     
     init(){
-        let fileURL = URL(fileURLWithPath: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("myRecoding.m4a").path)
-        guard let audioFile = try? AVAudioFile(forReading: fileURL) else {return}
-        
+        let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("myRecoding.m4a")
+        guard let file = try? AVAudioFile(forReading: fileURL) else {return}
+        audioFile = file
+        format = file.processingFormat
         playerNode.volume = 0.5
         
         audioEngine.attach(playerNode)
@@ -35,16 +42,40 @@ class PlayVoiceManager{
         
         audioEngine.connect(playerNode, to: pitchControl, format: nil)
         audioEngine.connect(pitchControl, to: audioEngine.mainMixerNode, format: nil)
-//        audioEngine.connect(audioEngine.mainMixerNode, to: audioEngine.outputNode, format: audioFile.processingFormat)
+        audioEngine.connect(audioEngine.mainMixerNode, to: audioEngine.outputNode, format: format)
         
         self.audioEngine.prepare()
         do{
             try audioEngine.start()
-            print(audioEngine.mainMixerNode.outputVolume)
         }catch{
             print("AUDIO ENGINE START ERROR")
         }
-        setScheduleFile(audioFile: audioFile)
+        setScheduleFile(audioFile: file)
+    }
+    
+    func setAudio(){
+        let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+                .appendingPathComponent("myRecoding.m4a")
+        guard let audioFile = try? AVAudioFile(forReading: fileURL) else {return}
+        let format = audioFile.processingFormat
+        self.audioFile = audioFile
+        setEngine(format: format)
+    }
+    
+    func setEngine(format : AVAudioFormat){
+        audioEngine.attach(playerNode)
+        audioEngine.attach(pitchControl)
+        
+        audioEngine.connect(playerNode, to: pitchControl, format: nil)
+        audioEngine.connect(pitchControl, to: audioEngine.mainMixerNode, format: nil)
+        audioEngine.connect(audioEngine.mainMixerNode, to: audioEngine.outputNode, format: format)
+        
+        self.audioEngine.prepare()
+        do{
+            try audioEngine.start()
+        }catch{
+            print("AUDIO ENGINE START ERROR")
+        }
     }
     
     func playAudio(){
@@ -58,18 +89,21 @@ class PlayVoiceManager{
         }
     
     func setScheduleFile(audioFile : AVAudioFile){
-        playerNode.pause()
-        playerNode.scheduleFile(audioFile, at: nil, completionCallbackType: .dataPlayedBack) { _ in
+        playerNode.scheduleFile(audioFile, at: AVAudioTime(hostTime: 0), completionCallbackType: .dataPlayedBack) { _ in
             self.delegate.playEndTime()
-            self.setScheduleFile(audioFile: audioFile)
         }
     }
     
     func forwardFiveSecond(){
-
+        //현재까지 재생된 오디오의 프레임 위치
+        playerNode.stop()
+        guard let audioFile = audioFile else {
+            return
+        }
+        playerNode.scheduleFile(audioFile, at: nil, completionCallbackType: .dataPlayedBack)
     }
         
-    func seek(time : Double){
+    func seek(to : Double){
         
     }
     
@@ -90,5 +124,9 @@ class PlayVoiceManager{
         case .old:
             pitchControl.pitch = -500
         }
+    }
+    
+    deinit{
+        print("Close PlayVoice Manager")
     }
 }

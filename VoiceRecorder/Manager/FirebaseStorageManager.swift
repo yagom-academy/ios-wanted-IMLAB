@@ -1,15 +1,19 @@
 import Foundation
 import FirebaseStorage
 
+protocol FirebaseStorageManagerDelegate : AnyObject{
+    func downloadComplete()
+}
+
+
 
 class FirebaseStorageManager{
     let storage = Storage.storage()
+    weak var delegate : FirebaseStorageManagerDelegate!
     
     func uploadRecord(completion : @escaping ()->Void){
-        print("upload file")
         //파일 위치
         let localFile = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("myRecoding.m4a")
-        print(localFile)
         let meta = StorageMetadata.init()
         meta.contentType = "m4a"
         //현재 날짜, 시간 기준으로 파일 이름
@@ -26,7 +30,6 @@ class FirebaseStorageManager{
                 print("upload file error \(error.localizedDescription)")
                 return
             }
-            print("complete upload file \(meta)")
             //스토리지에 저장 완료시 테이블 뷰 업데이트
             completion()
         }
@@ -70,7 +73,6 @@ class FirebaseStorageManager{
             if let error = error{
                 error.localizedDescription
             }else{
-                print("Delete Success")
                 completion()
             }
         }
@@ -79,12 +81,12 @@ class FirebaseStorageManager{
     func downloadRecordFile(fileName : String){
         let downloadRef = storage.reference().child("record/\(fileName).m4a")
         let localFile = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("myRecoding.m4a")
-        print(localFile.path)
         downloadRef.write(toFile: localFile) { url, error in
             if let error = error{
                 print("DOWNLOAD FILE ERROR")
             }else{
                 print("SUCCESS DOWNLOAD FILE")
+                self.delegate.downloadComplete()
             }
         }
     }

@@ -11,6 +11,7 @@ class PlayVoiceViewController: UIViewController {
     
     var playVoiceManager : PlayVoiceManager!
     var playVoiceViewModel : PlayVoiceViewModel!
+    var firebaseStorageManager : FirebaseStorageManager!
     
     var selectedPitchSegment : UISegmentedControl = {
         let selectedPitchSegment = UISegmentedControl(items: ["일반 목소리","아기목소리","할아버지목소리"])
@@ -75,9 +76,10 @@ class PlayVoiceViewController: UIViewController {
         super.viewDidLoad()
         setView()
         autolayOut()
-        setUIText()
         //순환참조 발생 주의
-        playVoiceManager.delegate = self
+        firebaseStorageManager.delegate = self
+        playAndPauseButton.isEnabled = false
+        firebaseStorageManager.downloadRecordFile(fileName: playVoiceViewModel.voiceRecordViewModel.fileName)
     }
     
     func setView(){
@@ -129,7 +131,7 @@ class PlayVoiceViewController: UIViewController {
     }
     
     @objc func tabForward(){
-        //playVoiceManager.forwardFiveSecond()
+        playVoiceManager.forwardFiveSecond()
     }
     
     @objc func tabBackward(){
@@ -137,13 +139,25 @@ class PlayVoiceViewController: UIViewController {
     }
     
     @objc func slideVolumeButton(_ sender : UISlider){
-        print(sender.value)
         playVoiceManager.setVolume(volume: sender.value)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         
         //playVoiceManager.stopAudio()
+    }
+    
+    deinit{
+        print("CLOSE PLAYVOICE")
+    }
+}
+
+extension PlayVoiceViewController : FirebaseStorageManagerDelegate{
+    func downloadComplete() {
+        playVoiceManager = PlayVoiceManager()
+        playVoiceManager.delegate = self
+        setUIText()
+        playAndPauseButton.isEnabled = true
     }
 }
 
