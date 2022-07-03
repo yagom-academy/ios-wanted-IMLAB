@@ -30,11 +30,6 @@ class HomeViewController: UIViewController {
         
         self.viewModel.fetch()
     }
-    
-    
-    func setupLayOut(){
-        
-    }
 }
 
 private extension HomeViewController {

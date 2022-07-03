@@ -9,12 +9,11 @@ import Foundation
 import UIKit
 import AVFoundation
 import MediaPlayer
+import Combine
 
 class RecordViewController:UIViewController{
-    let firebaseManger = FirebaseStorageManager.shared
-    let step:Float = 10
-    var isPermissionGrant: Bool = false
-    private var audioEngine: Engine?
+    private var viewModel:RecordViewModel!
+    private var cancellable = Set<AnyCancellable>()
     
     lazy var recordButton: UIButton = {
         let button = UIButton()
@@ -67,16 +66,28 @@ class RecordViewController:UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        configureEngineAndSetup()
-        checkPermission()
+        
+        setupViewModel()
         configure()
         
-        audioEngine?.progressValue.observe(on: self){ [weak self] progress in
-            DispatchQueue.main.async {
-                self?.progressView.progress = progress
-            }
-        }
+        bindProgress()
+        bindPlayButton()
+        bindRecordButton()
     }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        
+        viewModel.player.stop()
+        viewModel.engine.stop()
+        do{
+            try AVAudioSession.sharedInstance().setActive(false)
+        } catch {
+            print("Could not set active false")
+        }
+        
+        super.viewDidDisappear(animated)
+    }
+    
 }
 
 //MARK: - View Configure
@@ -119,170 +130,106 @@ private extension RecordViewController{
         self.playButton.addTarget(self, action: #selector(playPause(_:)), for: .touchUpInside)
         self.volumeBar.addTarget(self, action: #selector(touchSlider(_:)), for: .valueChanged)
     }
-
+    
     @objc func didTapRecord(_ sender:UIButton){
-        if isPermissionGrant{
-            guard let audioEngine = audioEngine else {
-                return
-            }
-
-            audioEngine.checkEngineRunning()
-            self.toggleRecording()
-            
-            if audioEngine.isRecording{
-                sender.setImage(UIImage(systemName: "stop.fill"), for: .normal)
-                playButton.isEnabled = false
-                prevButton.isEnabled = false
-                nextButton.isEnabled = false
-            }else{
-                sender.setImage(UIImage(systemName: "circle.fill"), for: .normal)
-                playButton.isEnabled = true
-                prevButton.isEnabled = true
-                nextButton.isEnabled = true
-            }
-        }else{
-            sender.isEnabled = false
-        }
         
-        //TODO: - Permission denied
+        viewModel.checkEngineRunning()
+        
+        if viewModel.isRecording {
+            viewModel.stopRecording()
+        } else {
+            viewModel.startRecord()
+            viewModel.progressValue = 0
+            viewModel.isPlaying = false
+        }
         
     }
     @objc func previusSec(){
-        print("Tapped prev")
-        guard let audioEngine = audioEngine else {
-            return
-        }
-
-        audioEngine.checkEngineRunning()
-        audioEngine.skip(forwards: false)
-        self.playButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+        viewModel.checkEngineRunning()
+        viewModel.skip(forwards: false)
     }
     @objc func nextSec(){
-        print("Tapped next")
-        guard let audioEngine = audioEngine else {
-            return
-        }
-        audioEngine.checkEngineRunning()
-        audioEngine.skip(forwards: true)
+        viewModel.checkEngineRunning()
+        viewModel.skip(forwards: true)
     }
     @objc func playPause(_ sender:UIButton){
-        print("tapped play Button")
-        guard let audioEngine = audioEngine else {
-            return
-        }
-        audioEngine.checkEngineRunning()
-        audioEngine.togglePlaying {
-            DispatchQueue.main.async {
-                sender.setImage(UIImage(systemName: "play.fill"), for: .normal)
-            }
-        }
+        viewModel.checkEngineRunning()
         
-        if audioEngine.isPlaying{
-            sender.setImage(UIImage(systemName: "pause.fill"), for: .normal)
-        }else{
-            sender.setImage(UIImage(systemName: "play.fill"), for: .normal)
+        if viewModel.player.isPlaying{
+            viewModel.stopPlaying()
+        } else {
+            viewModel.startPlaying()
         }
     }
     
     @objc func touchSlider(_ sender:UISlider!){
-        guard let audioEngine = audioEngine else {
-            return
+        viewModel.engine.inputNode.volume = sender.value
+        viewModel.engine.mainMixerNode.outputVolume = sender.value
+    }
+    
+    func setupViewModel(){
+        do{
+            self.viewModel = try RecordViewModel()
+            try AVAudioSession.sharedInstance().setCategory(.playAndRecord,mode: .default,options: .defaultToSpeaker)
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch {
+            print("Could not init viewmodel")
         }
-        audioEngine.player.volume = sender.value
     }
 }
 
-extension RecordViewController:Recordable{
-
-    func configureEngineAndSetup(){
-        configureEngine()
-        setup()
-    }
-    func configureEngine(){
-        do{
-            try AVAudioSession.sharedInstance().setCategory(.playAndRecord,mode: .default,options: .defaultToSpeaker)
-            self.audioEngine = try Engine(fileURL: URL(fileURLWithPath: "input.caf",
-                                                       isDirectory: false,
-                                                       relativeTo: URL(fileURLWithPath: NSTemporaryDirectory())))
-        } catch {
-            print("Could not configure Engine")
-        }
-    }
-    
-    func setup() {
-        guard let audioEngine = audioEngine else {
-            return
-        }
-        
-        audioEngine.engine.attach(audioEngine.player)
-        let input = audioEngine.engine.inputNode
-        
-        do{
-            try input.setVoiceProcessingEnabled(true)
-        } catch {
-            print("Could not enable voice processing \(error)")
-            return
-        }
-        
-        let output = audioEngine.engine.outputNode
-        let mainMixer = audioEngine.engine.mainMixerNode
-        
-        audioEngine.engine.connect(audioEngine.player, to: mainMixer, format: audioEngine.voiceIOFormat)
-        audioEngine.engine.connect(mainMixer, to: output, format: audioEngine.voiceIOFormat)
-        
-        input.installTap(onBus: 0, bufferSize: 256, format: audioEngine.voiceIOFormat) { buffer, when in
-            if audioEngine.isRecording{
-                print(buffer)
-                do{
-                    try audioEngine.recordFile?.write(from: buffer)
-                } catch {
-                    print("Could not write buffer \(error)")
+extension RecordViewController {
+    private func bindPlayButton() {
+        viewModel.$isPlaying
+            .receive(on: DispatchQueue.main)
+            .sink { isPlaying in
+                if isPlaying{
+                    self.playButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+                    [self.prevButton,self.nextButton].forEach { button in
+                        button.isEnabled = true
+                    }
+                } else {
+                    self.playButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+                    
+                    if self.viewModel.audioLengthSeconds == 0{
+                        self.playButton.isEnabled = false
+                    }
+                    
+                    [self.prevButton,self.nextButton].forEach { button in
+                        button.isEnabled = false
+                    }
                 }
             }
-        }
-        
-        mainMixer.installTap(onBus: 0, bufferSize: 1024, format: nil) { buffer, when in
-            
-        }
-        
-        audioEngine.engine.prepare()
-        audioEngine.engineStart()
+            .store(in: &cancellable)
     }
     
-    func toggleRecording() {
-        guard let audioEngine = audioEngine else {
-            return
-        }
-        if audioEngine.isRecording{
-            audioEngine.isRecording = false
-            audioEngine.recordFile = nil
-        } else {
-            audioEngine.player.stop()
-            
-            do{
-                audioEngine.recordFile = try AVAudioFile(forWriting: audioEngine.fileURL, settings: audioEngine.voiceIOFormat.settings)
-                
-                audioEngine.isRecording = true
-            } catch {
-                print("Could not create file for recording \(error)")
+    private func bindRecordButton(){
+        viewModel.$isRecording
+            .receive(on: DispatchQueue.main)
+            .sink { isRecording in
+                if isRecording {
+                    self.recordButton.setImage(UIImage(systemName: "stop.fill"), for: .normal)
+                    
+                    [self.prevButton,self.playButton,self.nextButton].forEach { button in
+                        button.isEnabled = false
+                    }
+                } else {
+                    self.recordButton.setImage(UIImage(systemName: "circle.fill"), for: .normal)
+                    
+                    [self.prevButton,self.playButton,self.nextButton].forEach { button in
+                        button.isEnabled = true
+                    }
+                }
             }
-        }
+            .store(in: &cancellable)
     }
-}
-
-extension RecordViewController{
-    private func checkPermission(){
-        switch AVAudioSession.sharedInstance().recordPermission{
-        case .granted:
-            isPermissionGrant = true
-        case .denied:
-            isPermissionGrant = false
-        case .undetermined:
-            AVAudioSession.sharedInstance().requestRecordPermission { allowed in
-                self.isPermissionGrant = allowed
+    
+    private func bindProgress(){
+        viewModel.$progressValue
+            .receive(on: DispatchQueue.main)
+            .sink { value in
+                self.progressView.progress = value
             }
-        @unknown default:
-            fatalError("Error in permission")
-        }
+            .store(in: &cancellable)
     }
 }
