@@ -13,8 +13,9 @@ import UIKit
 class RecordVoiceViewController: UIViewController {
 
     weak var delegate : RecordVoiceDelegate?
-    var recordVoiceManager = RecordVoiceManager()
-    var drawWaveFormManager = DrawWaveFormManager()
+    var recordVoiceManager : RecordVoiceManager!
+    var drawWaveFormManager : DrawWaveFormManager!
+    var playVoiceManager : PlayVoiceManager!
         
     let waveFormView : UIView = {
         let waveFormView = UIView()
@@ -66,7 +67,7 @@ class RecordVoiceViewController: UIViewController {
         recordFile_play_PauseButton.translatesAutoresizingMaskIntoConstraints = false
         recordFile_play_PauseButton.setPreferredSymbolConfiguration(.init(pointSize: 30), forImageIn: .normal)
         recordFile_play_PauseButton.setImage(UIImage(systemName: "play"), for: .normal)
-        //recordFile_play_PauseButton.addTarget(self, action: #selector(), for: .touchUpInside)
+        recordFile_play_PauseButton.addTarget(self, action: #selector(tapButton), for: .touchUpInside)
         return recordFile_play_PauseButton
     }()
     
@@ -92,6 +93,7 @@ class RecordVoiceViewController: UIViewController {
         if recordVoiceManager.isRecording() {
             recordVoiceManager.stopRecording {
                 self.delegate?.updateList()
+                self.playVoiceManager.setNewScheduleFile()
             }
             drawWaveFormManager.stopDrawing(in: waveFormView)
             record_start_stop_button.setImage(UIImage(systemName: "circle.fill"), for: .normal)
@@ -112,6 +114,7 @@ class RecordVoiceViewController: UIViewController {
         super.viewDidLoad()
         drawWaveFormManager.delegate = self
         recordVoiceManager.delegate = self
+        playVoiceManager.delegate = self
         setView()
         autoLayout()
         setUI()
@@ -185,6 +188,16 @@ class RecordVoiceViewController: UIViewController {
     func setUIBeforeRecording(){
         recordFile_ButtonStackView.isHidden = true
     }
+    
+    @objc func tapButton(){
+        if playVoiceManager.isPlay{
+            playVoiceManager.stopAudio()
+            recordFile_play_PauseButton.setImage(UIImage(systemName: "play"), for: .normal)
+        }else{
+            playVoiceManager.playAudio()
+            recordFile_play_PauseButton.setImage(UIImage(systemName: "pause"), for: .normal)
+        }
+    }
 
 }
 
@@ -210,6 +223,15 @@ extension RecordVoiceViewController : RecordVoiceManagerDelegate {
     
     func updateCurrentTime(_ currentTime : TimeInterval) {
         self.progressTimeLabel.text = currentTime.getStringTimeInterval()
+    }
+}
+
+extension RecordVoiceViewController : PlayVoiceDelegate{
+    func playEndTime() {
+        playVoiceManager.isPlay = false
+        DispatchQueue.main.async {
+            self.recordFile_play_PauseButton.setImage(UIImage(systemName: "play"), for: .normal)
+        }
     }
 }
 

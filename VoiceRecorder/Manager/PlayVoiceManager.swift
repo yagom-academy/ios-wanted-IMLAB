@@ -32,9 +32,14 @@ class PlayVoiceManager{
     init(){
         let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("myRecoding.m4a")
-        guard let file = try? AVAudioFile(forReading: fileURL) else {return}
-        audioFile = file
-        format = file.processingFormat
+        do{
+            let file = try AVAudioFile(forReading: fileURL)
+            audioFile = file
+            format = file.processingFormat
+        }catch{
+            print(error.localizedDescription)
+        }
+        
         playerNode.volume = 0.5
         
         audioEngine.attach(playerNode)
@@ -50,7 +55,7 @@ class PlayVoiceManager{
         }catch{
             print("AUDIO ENGINE START ERROR")
         }
-        setScheduleFile(audioFile: file)
+        setScheduleFile()
     }
     
     func setAudio(){
@@ -88,10 +93,29 @@ class PlayVoiceManager{
         playerNode.pause()
         }
     
-    func setScheduleFile(audioFile : AVAudioFile){
-        playerNode.scheduleFile(audioFile, at: AVAudioTime(hostTime: 0), completionCallbackType: .dataPlayedBack) { _ in
+    func setScheduleFile(){
+        guard let file = audioFile else {return}
+        playerNode.scheduleFile(file, at: nil, completionCallbackType: .dataPlayedBack) { _ in
             self.delegate.playEndTime()
         }
+    }
+    
+    func setNewScheduleFile(){
+        playerNode.stop()
+        let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+                .appendingPathComponent("myRecoding.m4a")
+        do{
+            let file = try AVAudioFile(forReading: fileURL)
+            audioFile = file
+        }catch{
+            error.localizedDescription
+        }
+        
+        guard let file = audioFile else {return}
+        playerNode.scheduleFile(file, at: nil, completionCallbackType: .dataPlayedBack) { _ in
+            self.delegate.playEndTime()
+        }
+        print("NEW SCHEDULEFILE")
     }
     
     func forwardFiveSecond(){
