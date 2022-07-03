@@ -7,6 +7,7 @@
 
 import UIKit
 import AVFoundation
+import Accelerate
 
 class RecordManager: NSObject, AVAudioPlayerDelegate {
     var recorder: AVAudioRecorder?
@@ -71,13 +72,12 @@ class RecordManager: NSObject, AVAudioPlayerDelegate {
         recorder = nil
     }
 
-    private func dateToFileName(_ date: Date) -> String {
-        var FileName = "voiceRecords_"
+    func dateToFileName(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ko")
         formatter.dateFormat = "yyyy_MM_dd_HH:mm:ss"
-        FileName += formatter.string(from: Date())
-        return FileName
+        let fileName = formatter.string(from: Date())
+        return fileName
     }
 }
 
@@ -92,9 +92,5 @@ extension RecordManager {
     
     func pausePlay() {
         audioPlayer.pause()
-    }
-    
-    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        
     }
 }
