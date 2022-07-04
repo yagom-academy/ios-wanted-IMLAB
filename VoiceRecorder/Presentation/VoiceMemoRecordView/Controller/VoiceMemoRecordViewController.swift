@@ -77,12 +77,22 @@ class VoiceMemoRecordViewController: UIViewController {
     }()
     
     // MARK: - Properties
-    let pathFinder = try! PathFinder()
-    let audioManager = AudioManager()
-    private var timer: Timer?
-    private var playTime = 0
+    let pathFinder: PathFinder!
+    let audioManager: AudioManager!
+    let firebaseManager: FirebaseStorageManager!
     
     // - MARK: LifeCycle
+    
+    init(pathFinder: PathFinder, audioManager: AudioManager, firebaseManager: FirebaseStorageManager) {
+        self.pathFinder = pathFinder
+        self.audioManager = audioManager
+        self.firebaseManager = firebaseManager
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -91,6 +101,7 @@ class VoiceMemoRecordViewController: UIViewController {
         playRelatedButtonsHiddenAnimation(.record)
         configureTargetMethod()
         presentationController?.delegate = self
+        NotificationCenter.default.addObserver(self, selector: #selector(audioPlaybackTimeIsOver(_:)), name: .audioPlaybackTimeIsOver, object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -200,12 +211,6 @@ class VoiceMemoRecordViewController: UIViewController {
         }
     }
     
-    private func removeTimer() {
-        self.playOrPauseButton.isSelected = false
-        timer?.invalidate()
-        timer = nil
-    }
-    
     private func createCustomMetaData() -> [String: String] {
         let time = audioManager.getPlayTime(filePath: pathFinder.lastUsedUrl)
         
@@ -219,8 +224,6 @@ extension VoiceMemoRecordViewController {
         sender.isSelected.toggle()
         
         if sender.isSelected {
-            removeTimer()
-            playTime = 0
             playTimeLabel.text = ""
             playRelatedButtonsHiddenAnimation(.record)
             audioManager.startRecord(filePath: pathFinder.getPathWithTime())
@@ -245,9 +248,7 @@ extension VoiceMemoRecordViewController {
         
         if sender.isSelected {
             audioManager.startPlay(fileURL: pathFinder.lastUsedUrl)
-            timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(compareVoiceMemoTime), userInfo: nil, repeats: true)
         } else {
-            removeTimer()
             audioManager.pausePlay()
         }
     }
@@ -265,13 +266,11 @@ extension VoiceMemoRecordViewController {
         audioManager.cutOffFrequency = value
     }
     
-    @objc private func compareVoiceMemoTime() {
-        playTime += 1
-        if String(playTime) >= audioManager.getPlayTime(filePath: pathFinder.lastUsedUrl) {
-            playTime = 0
-            playOrPauseButton.isSelected = false
-            audioManager.stopPlay()
-            removeTimer()
+    @objc private func audioPlaybackTimeIsOver(_ sender: Notification) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.playOrPauseButton.isSelected = false
+            self.audioManager.stopPlay()
         }
     }
 }

@@ -31,7 +31,7 @@ class AppCoordinator: NSObject, Coordinator {
     }
     
     func presentRecordView() {
-        let vc = VoiceMemoRecordViewController()
+        let vc = VoiceMemoRecordViewController(pathFinder: pathFinder, audioManager: audioManager, firebaseManager: firebaseManager)
         vc.isModalInPresentation = true
         navigationController.present(vc, animated: true)
     }

@@ -84,7 +84,7 @@ extension VoiceMemoListViewController: UITableViewDelegate, UITableViewDataSourc
         //세번째 화면으로 이동
 //        let playVC = VoiceMemoPlayViewController()
 //        self.present(playVC, animated: true, completion: nil)
-        self.coordinator?.presentPlayView()
+        self.coordinator?.presentPlayView(selectedFile: "")
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
