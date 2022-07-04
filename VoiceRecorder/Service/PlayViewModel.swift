@@ -187,7 +187,7 @@ class PlayViewModel {
 
 extension PlayViewModel: PlayViewControllerDelegate {
     func viewDidDisappear() {
-        audioPlayer.pause()
-        displayLink?.isPaused = true
+        audioPlayer.stop()
+        displayLink?.invalidate()
     }
 }
