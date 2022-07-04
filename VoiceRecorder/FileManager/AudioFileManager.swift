@@ -32,7 +32,7 @@ class AudioFileManager {
         }
     }
     
-    func createVoiceFile(fileName: String) { // fileName date로 들어옴
+    func createVoiceFile(fileName: String, with data: AudioData) { // fileName date로 들어옴
         let textPath: URL = docPath.appendingPathComponent("Recorded_Voice").appendingPathComponent(fileName)
         
         if let data: Data = "TEST txt.".data(using:String.Encoding.utf8) {
