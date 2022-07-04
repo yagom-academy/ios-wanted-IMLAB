@@ -11,6 +11,7 @@ import UIKit
 class PlayViewController: UIViewController {
 
   let playView = PlayView()
+  var url: URL? = URL(string: "https://firebasestorage.googleapis.com:443/v0/b/voicerecorder-7fa55.appspot.com/o/testAudio.mp3?alt=media&token=6e64aacd-7b5f-457f-8ca3-6859cc6891d9")!
   var audio: Audio?
 
   override func viewDidLoad() {
@@ -19,6 +20,7 @@ class PlayViewController: UIViewController {
     setupConstraints()
     setupAudio()
     bind()
+    setupWaveform()
     setupAction()
   }
 
@@ -39,21 +41,17 @@ class PlayViewController: UIViewController {
 
   // MARK: - Test를 위해서 네트워크 통신 결과 URL 값을 바로 넣어주는 상태
   func setupAudio() {
-//    guard
-//      let fileURL = Bundle.main.url(
-//        forResource: "Til I Hear'em Say (Instrumental) - NEFFEX",
-//        withExtension: "mp3"
-//      )
-//    else {
-//      print("음원없음")
-//      return
-//    }
-
-    let testURL = URL(string: "https://firebasestorage.googleapis.com:443/v0/b/voicerecorder-7fa55.appspot.com/o/testAudio.mp3?alt=media&token=6e64aacd-7b5f-457f-8ca3-6859cc6891d9")!
+    guard let url = url else { return }
     let fileManager = RecordFileManager()
-    fileManager.saveRecordFile(recordName: "test", file: testURL)
+    fileManager.saveRecordFile(recordName: "test", file: url)
     guard let file = fileManager.loadRecordFile("test") else { return }
     audio = Audio(file)
+  }
+
+  func setupWaveform() {
+    let fileManager = RecordFileManager()
+    guard let file = fileManager.loadRecordFile("test") else { return }
+    playView.waveformView.generateWaveImage(from: file)
   }
 
   func bind() {

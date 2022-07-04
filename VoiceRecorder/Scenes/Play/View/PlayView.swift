@@ -11,6 +11,7 @@ import MediaPlayer
 class PlayView: UIView {
   let playButton = PlayButtonView()
   let volumeView = MPVolumeView() // MARK: - Volume 조절, Simulator 동작x
+  let waveformView = UIImageView()
   let volumeLabel = UILabel()
 
   let segmentControl = UISegmentedControl(items: ["일반 목소리", "아기 목소리", "할아버지 목소리"])
@@ -31,7 +32,7 @@ class PlayView: UIView {
   }
 
   func setupView() {
-    [playButton, volumeView, volumeLabel, segmentControl, recorderSlider, spendTimeLabel, totalTimeLabel].forEach {
+    [playButton, volumeView, volumeLabel, segmentControl, recorderSlider, spendTimeLabel, totalTimeLabel, waveformView].forEach {
       $0.translatesAutoresizingMaskIntoConstraints = false
       $0.backgroundColor = .white
       self.addSubview($0)
@@ -46,6 +47,13 @@ class PlayView: UIView {
       recorderSlider.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: -25), // MARK: -
       recorderSlider.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 18),
       recorderSlider.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -18),
+    ])
+
+    NSLayoutConstraint.activate([
+      waveformView.bottomAnchor.constraint(equalTo: recorderSlider.topAnchor, constant: -25),
+      waveformView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 18),
+      waveformView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -18),
+      waveformView.heightAnchor.constraint(equalToConstant: 100),
     ])
 
     NSLayoutConstraint.activate([
