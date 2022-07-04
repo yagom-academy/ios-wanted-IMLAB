@@ -9,6 +9,10 @@ import Foundation
 import AVFoundation
 import Accelerate
 
+protocol AudioManagerDelegate: AnyObject {
+    func communicationBufferData(bufferData: Float)
+}
+
 enum AudioPitchMode {
     case baby, basic, grandFather
     
@@ -27,6 +31,8 @@ enum AudioPitchMode {
 class AudioManager {
     
     // - MARK: Property
+    
+    weak var delegate: AudioManagerDelegate?
     
     // recording properties
     lazy var audioEngine = AVAudioEngine()
@@ -121,6 +127,8 @@ class AudioManager {
         audioEQ.installTap(onBus: 0, bufferSize: 1024, format: format) { [weak self] buffer, time in
             guard let self = self else { return }
             let bufferData = self.calculatorBufferGraphData(buffer: buffer)
+            self.delegate?.communicationBufferData(bufferData: bufferData)
+            
             do {
                 try audioFile.write(from: buffer)
             } catch {
