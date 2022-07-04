@@ -25,7 +25,7 @@ class VoiceMemoPlayViewController: UIViewController {
     
     private let waveFormView: UIView = {
         let view = UIView()
-        view.backgroundColor = .systemGray4
+        view.backgroundColor = .systemGray
         
         return view
     }()
@@ -117,13 +117,17 @@ class VoiceMemoPlayViewController: UIViewController {
 
         let path = pathFinder.getPath(fileName: audioFileName)
         
-        sender.isSelected.toggle()
-        
-        if sender.isSelected {
-            audioManager.startPlay(fileURL: path)
-        } else {
-            audioManager.stopPlay()
+        DispatchQueue.main.async { [unowned self] in
+            
+            sender.isSelected.toggle()
+            
+            if sender.isSelected {
+                audioManager.startPlay(fileURL: path)
+            } else {
+                audioManager.stopPlay()
+            }
         }
+        
         
     }
     
@@ -151,6 +155,10 @@ class VoiceMemoPlayViewController: UIViewController {
     
     @objc func sliderValueDidChange(_ sender: UISlider) {
         audioManager.controlVolume(newValue: sender.value)
+    }
+    
+    @objc func audioPlaybackTimeIsOver(_ sender: NSNotification) {
+        playOrStopButtonTouched(playOrStopButon)
     }
     
     // - MARK: Life Cycle
@@ -181,6 +189,8 @@ class VoiceMemoPlayViewController: UIViewController {
         configureConstraints()
         
         self.voiceMemoTitleLabel.text = audioFileName ?? "PlayView"
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(audioPlaybackTimeIsOver(_:)), name: .audioPlaybackTimeIsOver, object: nil)
     }
     
 }

@@ -291,7 +291,10 @@ extension AudioManager {
             fatalError()
         }
         
-        audioPlayerNode.scheduleFile(audioFile, at: nil)
+        audioPlayerNode.scheduleFile(audioFile, at: nil) {
+            NotificationCenter.default.post(name: .audioPlaybackTimeIsOver, object: nil, userInfo: nil)
+        }
+        
         audioEngine.prepare()
     }
     
