@@ -13,6 +13,13 @@ class PlayVoiceViewController: UIViewController {
     var playVoiceViewModel : PlayVoiceViewModel!
     var firebaseStorageManager : FirebaseStorageManager!
     
+    var soundWaveImageView : UIImageView = {
+        let soundWaveImageView = UIImageView()
+        soundWaveImageView.translatesAutoresizingMaskIntoConstraints = false
+        soundWaveImageView.contentMode = .scaleAspectFit
+        return soundWaveImageView
+    }()
+    
     var selectedPitchSegment : UISegmentedControl = {
         let selectedPitchSegment = UISegmentedControl(items: ["일반 목소리","아기목소리","할아버지목소리"])
         selectedPitchSegment.translatesAutoresizingMaskIntoConstraints = false
@@ -84,6 +91,7 @@ class PlayVoiceViewController: UIViewController {
     
     func setView(){
         self.view.addSubview(fileNameLabel)
+        self.view.addSubview(soundWaveImageView)
         self.view.addSubview(selectedPitchSegment)
         self.view.addSubview(volumeSlider)
         self.view.addSubview(timeControlButtonStackView)
@@ -98,8 +106,12 @@ class PlayVoiceViewController: UIViewController {
             fileNameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             fileNameLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 30),
             
+            soundWaveImageView.leadingAnchor.constraint(equalTo: view.centerXAnchor),
+            soundWaveImageView.topAnchor.constraint(equalTo: fileNameLabel.bottomAnchor, constant: 30),
+            soundWaveImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.15),
+            
             selectedPitchSegment.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            selectedPitchSegment.topAnchor.constraint(equalTo: fileNameLabel.bottomAnchor, constant: 30),
+            selectedPitchSegment.topAnchor.constraint(equalTo: soundWaveImageView.bottomAnchor, constant: 30),
             
             volumeSlider.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             volumeSlider.topAnchor.constraint(equalTo: selectedPitchSegment.bottomAnchor, constant: 30),
@@ -153,7 +165,8 @@ class PlayVoiceViewController: UIViewController {
 }
 
 extension PlayVoiceViewController : FirebaseStorageManagerDelegate{
-    func downloadComplete() {
+    func downloadComplete(url : URL) {
+        soundWaveImageView.load(url: url)
         playVoiceManager = PlayVoiceManager()
         playVoiceManager.delegate = self
         setUIText()
@@ -168,5 +181,19 @@ extension PlayVoiceViewController : PlayVoiceDelegate{
             self.playAndPauseButton.setImage(UIImage(systemName: "play"), for: .normal)
         }
         
+    }
+}
+
+extension UIImageView{
+    func load(url : URL){
+        DispatchQueue.global().async { [weak self] in
+            if let data = try? Data(contentsOf: url){
+                if let image = UIImage(data: data){
+                    DispatchQueue.main.async {
+                        self?.image = image
+                    }
+                }
+            }
+        }
     }
 }

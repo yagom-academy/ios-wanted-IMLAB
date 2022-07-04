@@ -2,7 +2,7 @@ import Foundation
 import FirebaseStorage
 
 protocol FirebaseStorageManagerDelegate : AnyObject{
-    func downloadComplete()
+    func downloadComplete(url : URL)
 }
 
 
@@ -100,14 +100,29 @@ class FirebaseStorageManager{
     }
     
     func downloadRecordFile(fileName : String){
+        //녹음파일
         let downloadRef = storage.reference().child("record/\(fileName).m4a")
         let localFile = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("myRecoding.m4a")
+        
+        //이미지파일
+        let imageRef = storage.reference().child("waveForm/\(fileName)WaveForm.png")
+        let imageFile = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("myWaveForm.png")
+        
         downloadRef.write(toFile: localFile) { url, error in
             if let error = error{
                 print("DOWNLOAD FILE ERROR")
             }else{
-                print("SUCCESS DOWNLOAD FILE")
-                self.delegate.downloadComplete()
+                print("SUCCESS DOWNLOAD Record FILE")
+                
+                imageRef.downloadURL{url, error in
+                    if let error = error{
+                        print("DOWNLOAD IMAGE ERROR")
+                    }else{
+                        print("SUCCESS DOWNLOAD IMAGE FILE")
+                        print("IMAGE URL \(url)")
+                        self.delegate.downloadComplete(url: url!)
+                    }
+                }
             }
         }
     }
