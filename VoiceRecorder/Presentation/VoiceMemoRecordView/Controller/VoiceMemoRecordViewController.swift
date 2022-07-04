@@ -198,6 +198,12 @@ class VoiceMemoRecordViewController: UIViewController {
         timer?.invalidate()
         timer = nil
     }
+    
+    private func createCustomMetaData() -> [String: String] {
+        let time = audioManager.getPlayTime(filePath: pathFinder.lastUsedUrl)
+        
+        return ["playTime": time]
+    }
 }
 
 // MARK: - TargetMethod
@@ -215,6 +221,15 @@ extension VoiceMemoRecordViewController {
             playRelatedButtonsHiddenAnimation(.play)
             audioManager.stopRecord()
             playTimeLabel.text = showVoiceMemoDuration()
+            print(pathFinder.lastUsedFileName)
+            FirebaseStorageManager.shared.uploadVoiceMemoToFirebase(with: pathFinder.lastUsedUrl, fileName: pathFinder.lastUsedFileName) { result in
+                switch result {
+                case .success(_):
+                    print("성공")
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
         }
     }
     
