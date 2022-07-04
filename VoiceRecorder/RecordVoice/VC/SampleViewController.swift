@@ -164,10 +164,7 @@ class SampleViewController: UIViewController {
         //self.audioFile = try! AVAudioFile(forReading: Bundle.main.url(forResource: "1K", withExtension: "mp3")!)
         
         // MARK: 5 - Configure Recording format
-        let format = AVAudioFormat(commonFormat: AVAudioCommonFormat.pcmFormatFloat32,
-                                   sampleRate: 44100.0,
-                                   channels: 1,
-                                   interleaved: true)
+        let format = audioEngine.inputNode.outputFormat(forBus: 0)
         
         //Connect Microphone to mixer
         self.audioEngine.connect(self.audioEngine.inputNode, to: self.mixer, format: format)
@@ -188,24 +185,6 @@ class SampleViewController: UIViewController {
         //Set up directory for saving recording
         let dir = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first! as String
         self.filePath =  dir.appending("/temp.wav")
-        
-        //Create file to save recording
-        _ = ExtAudioFileCreateWithURL(URL(fileURLWithPath: self.filePath!) as CFURL,
-                                      kAudioFileWAVEType,
-                                      (format?.streamDescription)!,
-                                      nil,
-                                      AudioFileFlags.eraseFile.rawValue,
-                                      &outref)
-        
-        //Tap on the mixer output (MIXER HAS BOTH MICROPHONE AND 1K.mp3)
-        self.mixer.installTap(onBus: 0, bufferSize: AVAudioFrameCount((format?.sampleRate)! * 0.4), format: format, block: { (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
-            
-            //Audio Recording Buffer
-            let audioBuffer : AVAudioBuffer = buffer
-            
-            //Write Buffer to File
-            _ = ExtAudioFileWrite(self.outref!, buffer.frameLength, audioBuffer.audioBufferList)
-        })
         
         //Start Engine
         try! self.audioEngine.start()
