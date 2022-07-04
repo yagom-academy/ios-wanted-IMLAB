@@ -21,6 +21,9 @@ class PlayingViewController: UIViewController {
     @IBOutlet weak var positionProgressView: UIProgressView!
     
     var player : AVAudioPlayer?
+    let engine = AVAudioEngine()
+    let speedControl = AVAudioUnitVarispeed()
+    let pitchControl = AVAudioUnitTimePitch()
     var fileName : String?
     var fileURL : URL?
     var timer : Timer?
@@ -28,11 +31,40 @@ class PlayingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        initialPlay()
         titleLabel.text = fileName
         
     }
     
+    func play(_ url: URL) {
+        do {
+            let file = try AVAudioFile(forReading: url)
+            let audioPlayer = AVAudioPlayerNode()
+            
+            engine.attach(audioPlayer)
+            engine.attach(pitchControl)
+            engine.attach(speedControl)
+            
+            engine.connect(audioPlayer,
+                           to: speedControl,
+                           format: nil)
+            engine.connect(speedControl,
+                           to: pitchControl,
+                           format: nil)
+            engine.connect(pitchControl,
+                           to: engine.mainMixerNode,
+                           format: nil)
+            
+            audioPlayer.scheduleFile(file, at: nil)
+            
+            try engine.start()
+            audioPlayer.play()
+        } catch {
+            print("error catch")
+        }
+        
+    }
+    
+
     func initialPlay() {
         if let url = fileURL {
             do {
@@ -81,8 +113,24 @@ class PlayingViewController: UIViewController {
         }
     }
     
+    @IBAction func pressVoiceChangeButton(_ sender: UISegmentedControl) {
+        let selectedVoiceValue = sender.selectedSegmentIndex
+
+        switch selectedVoiceValue {
+        case 0:
+            pitchControl.pitch = 0
+        case 1:
+            pitchControl.pitch = 2400 * 0.5
+        case 2:
+            pitchControl.pitch = 500 * -0.5
+        default:
+            pitchControl.pitch = 0
+        }
+    }
+    
     @IBAction func PressPlayButton(_ sender: UIButton) {
-        playSound()
+//        playSound()
+        play(fileURL!)
     }
     
     @IBAction func ControlVolumeSlider(_ sender: UISlider) {
