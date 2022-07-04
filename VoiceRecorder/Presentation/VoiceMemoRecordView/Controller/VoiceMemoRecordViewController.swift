@@ -15,8 +15,8 @@ class VoiceMemoRecordViewController: UIViewController {
     }
     
     // - MARK: UI init
-    let waveView: UIView = {
-        let view = UIView.init(frame: CGRect.init(origin: CGPoint.init(), size: CGSize.init(width: 100, height: 100)))
+    let waveFormView: WaveFormView = {
+        let view = WaveFormView(frame: .zero)
         view.backgroundColor = .systemGray2
         return view
     }()
@@ -125,23 +125,23 @@ class VoiceMemoRecordViewController: UIViewController {
     }
     
     private func designateWaveView() {
-        self.view.addSubview(waveView)
-        waveView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            waveView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: view.frame.height * 0.1),
-            waveView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            waveView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            waveView.heightAnchor.constraint(equalToConstant: 100)
-        ])
+        self.view.addSubview(waveFormView)
+        waveFormView.translatesAutoresizingMaskIntoConstraints = false
+             NSLayoutConstraint.activate([
+                 waveFormView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: view.frame.height * 0.1),
+                 waveFormView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+                 waveFormView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+                 waveFormView.heightAnchor.constraint(equalToConstant: 100)
+             ])
     }
     
     private func designateCutOffLabel() {
         self.view.addSubview(cutoffLabel)
         cutoffLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            cutoffLabel.topAnchor.constraint(equalTo: waveView.safeAreaLayoutGuide.bottomAnchor, constant: 30),
-            cutoffLabel.leadingAnchor.constraint(equalTo: waveView.safeAreaLayoutGuide.leadingAnchor),
-            cutoffLabel.trailingAnchor.constraint(equalTo: waveView.safeAreaLayoutGuide.trailingAnchor),
+            cutoffLabel.topAnchor.constraint(equalTo: waveFormView.safeAreaLayoutGuide.bottomAnchor, constant: 30),
+            cutoffLabel.leadingAnchor.constraint(equalTo: waveFormView.safeAreaLayoutGuide.leadingAnchor),
+            cutoffLabel.trailingAnchor.constraint(equalTo: waveFormView.safeAreaLayoutGuide.trailingAnchor),
             
             cutoffLabel.heightAnchor.constraint(equalToConstant: 20)
         ])
