@@ -22,6 +22,7 @@
 		F06B925A2872A68400A704AF /* AudioFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06B92592872A68400A704AF /* AudioFileManager.swift */; };
 		F06B925D2872BA6B00A704AF /* AudioData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06B925C2872BA6B00A704AF /* AudioData.swift */; };
 		F06B925F2872BB7B00A704AF /* DateUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06B925E2872BB7B00A704AF /* DateUtil.swift */; };
+		F06B92612872BF7800A704AF /* Data+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06B92602872BF7800A704AF /* Data+extension.swift */; };
 		F0D559DC286C1AEB0078BCF3 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D559DB286C1AEB0078BCF3 /* SoundManager.swift */; };
 		F0D559DE286C3A2A0078BCF3 /* sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F0D559DD286C3A2A0078BCF3 /* sound.mp3 */; };
 		F0D766F3286C4A38008A469F /* AVAudioPlayerNode+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D766F2286C4A38008A469F /* AVAudioPlayerNode+extension.swift */; };
@@ -46,6 +47,7 @@
 		F06B92592872A68400A704AF /* AudioFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioFileManager.swift; sourceTree = "<group>"; };
 		F06B925C2872BA6B00A704AF /* AudioData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioData.swift; sourceTree = "<group>"; };
 		F06B925E2872BB7B00A704AF /* DateUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateUtil.swift; sourceTree = "<group>"; };
+		F06B92602872BF7800A704AF /* Data+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+extension.swift"; sourceTree = "<group>"; };
 		F0D559DB286C1AEB0078BCF3 /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
 		F0D559DD286C3A2A0078BCF3 /* sound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = sound.mp3; path = Assets.xcassets/sound.dataset/sound.mp3; sourceTree = "<group>"; };
 		F0D766F2286C4A38008A469F /* AVAudioPlayerNode+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVAudioPlayerNode+extension.swift"; sourceTree = "<group>"; };
@@ -134,6 +136,7 @@
 				F00A2C93286BE8E400ED57A8 /* NSLayoutConstraint+extension.swift */,
 				F0D766F2286C4A38008A469F /* AVAudioPlayerNode+extension.swift */,
 				F06B925E2872BB7B00A704AF /* DateUtil.swift */,
+				F06B92602872BF7800A704AF /* Data+extension.swift */,
 			);
 			path = MISC;
 			sourceTree = "<group>";
@@ -283,6 +286,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F00A2C91286BE36800ED57A8 /* VoicePlayingViewController.swift in Sources */,
+				F06B92612872BF7800A704AF /* Data+extension.swift in Sources */,
 				F0D559DC286C1AEB0078BCF3 /* SoundManager.swift in Sources */,
 				F06B925D2872BA6B00A704AF /* AudioData.swift in Sources */,
 				68BF991228703C0500BE55CF /* SampleViewController.swift in Sources */,
