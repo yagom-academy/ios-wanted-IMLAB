@@ -13,7 +13,7 @@ import FirebaseStorage
 
 class CreateAudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
 
-    let buttons = PlayButtonView()
+    let createAudioView = CreateAudioView()
     var audio: Audio?
     
     var audioRecorder: AVAudioRecorder?
@@ -21,99 +21,73 @@ class CreateAudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudi
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        config()
-        setButtons()
-    }
-    private lazy var totalLenLabel: UILabel = {
-        let label = UILabel()
-        label.text = "00:00"
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    private lazy var recordingButton: UIButton = {
-        let button = UIButton()
-        button.addTarget(self, action: #selector(tapRecordingButton), for: .touchDown)
-        button.setTitleColor(.systemBlue, for: .normal)
-        button.setTitle("시작", for: .normal)
-        button.setTitle("중지", for: .selected)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    private lazy var doneButton: UIButton = {
-        let button = UIButton()
-        button.addTarget(self, action: #selector(tapDoneButton), for: .touchDown)
-        button.setTitleColor(.systemBlue, for: .normal)
-        button.setTitle("Done", for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    func setButtons(){
-        buttons.playButton.isEnabled = false
-        buttons.backButton.isEnabled = false
-        buttons.forwordButton.isEnabled = false
-        buttons.translatesAutoresizingMaskIntoConstraints = false
-        buttons.playButton.addTarget(self, action: #selector(tapPlayPauseButton), for: .touchUpInside)
-        buttons.backButton.addTarget(self, action: #selector(tapBackButton), for: .touchUpInside)
-        buttons.forwordButton.addTarget(self, action: #selector(tapForwordButton), for: .touchUpInside)
-    }
-    func config(){
-        view.addSubview(recordingButton)
-        view.addSubview(buttons)
-        view.addSubview(doneButton)
-        view.addSubview(totalLenLabel)
+        createAudioView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(createAudioView)
         NSLayoutConstraint.activate([
-            totalLenLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 100),
-            totalLenLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            totalLenLabel.heightAnchor.constraint(equalToConstant: 50),
-            totalLenLabel.widthAnchor.constraint(equalToConstant: 200),
-            
-            recordingButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 300),
-            recordingButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            recordingButton.heightAnchor.constraint(equalToConstant: 50),
-            recordingButton.widthAnchor.constraint(equalToConstant: 50),
-            
-            doneButton.topAnchor.constraint(equalTo: recordingButton.bottomAnchor, constant: 100),
-            doneButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            doneButton.heightAnchor.constraint(equalToConstant: 50),
-            doneButton.widthAnchor.constraint(equalToConstant: 50),
-            
-            buttons.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -25),
-            buttons.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            buttons.widthAnchor.constraint(equalToConstant: 200),
+        createAudioView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+        createAudioView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+        createAudioView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+        createAudioView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
+        
+        createAudioView.buttons.backButton.addTarget(
+          self,
+          action: #selector(backButtonclicked),
+          for: .touchUpInside
+        )
+        createAudioView.buttons.playButton.addTarget(
+          self,
+          action: #selector(playButtonClicked),
+          for: .touchUpInside
+        )
+        createAudioView.buttons.forwordButton.addTarget(
+          self,
+          action: #selector(forwardButtonClicked),
+          for: .touchUpInside
+        )
     }
     
+    
     @objc private func tapRecordingButton() {
-        if recordingButton.isSelected{
-            recordingButton.isSelected = false
+//        AVFAudio.AVAudioEngine.audioUnit.AVAudioUnit.AVAudioUnitEQFilterParameters.frequency
+//        let a = AVAudioEngine()
+//        let eq = AVAudioUnitEQ(numberOfBands: 1)
+//        let filterParams = eq.bands[0] as AVAudioUnitEQFilterParameters
+//        filterParams.filterType = .lowPass
+//        filterParams.frequency = 100.0
+//        filterParams.bypass = false
+//        a.attach(eq)
+        
+        if createAudioView.recordingButton.isSelected{
+            createAudioView.recordingButton.isSelected = false
             audioRecorder?.stop()
-            buttons.playButton.isEnabled = true
-            buttons.backButton.isEnabled = true
-            buttons.forwordButton.isEnabled = true
+            createAudioView.buttons.playButton.isEnabled = true
+            createAudioView.buttons.backButton.isEnabled = true
+            createAudioView.buttons.forwordButton.isEnabled = true
             audio = Audio(audioRecorder!.url)
             if let audio = audio{
                 let audioLenSec = Int(audio.audioLengthSeconds)
-                totalLenLabel.text = "\(audioLenSec / 60):\(audioLenSec % 60)"
+                createAudioView.totalLenLabel.text = "\(audioLenSec / 60):\(audioLenSec % 60)"
             }
         }else{
-            recordingButton.isSelected = true
-            buttons.playButton.isEnabled = false
-            buttons.backButton.isEnabled = false
-            buttons.forwordButton.isEnabled = false
+            createAudioView.recordingButton.isSelected = true
+            createAudioView.buttons.playButton.isEnabled = false
+            createAudioView.buttons.backButton.isEnabled = false
+            createAudioView.buttons.forwordButton.isEnabled = false
             self.record()
         }
     }
     @objc
-    private func tapPlayPauseButton() {
+    private func playButtonClicked() {
         audio?.playOrPause()
     }
     @objc
-    func tapBackButton() {
+    func backButtonclicked() {
         guard audio != nil else { return }
         audio?.skip(forwards: false)
     }
     @objc
-    func tapForwordButton() {
+    func forwardButtonClicked() {
       guard audio != nil else { return }
       audio?.skip(forwards: true)
     }
