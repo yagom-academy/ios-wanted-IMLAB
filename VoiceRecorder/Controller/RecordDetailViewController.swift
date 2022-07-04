@@ -41,6 +41,8 @@ class RecordDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        playButton.isHidden = true
+        
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -102,6 +104,7 @@ class RecordDetailViewController: UIViewController {
             audioRecorder = try AVAudioRecorder(url: audioFileURL, settings: settings)
             audioRecorder?.record() // 이것의 상태를 조건으로 다른 것 control하는 듯
             durationLabel.text = "녹음중 .."
+            playButton.isHidden = true
             recordButton.setImage(recordingButtonImage, for: .normal)
         } catch {
             finishRecording(success: false, audioFileURL)
@@ -111,9 +114,10 @@ class RecordDetailViewController: UIViewController {
     func finishRecording(success: Bool, _ url: URL?) {
         audioRecorder?.stop()
         audioRecorder = nil
-        recordButton.setImage(readyToRecordButtonImage, for: .normal)
         showDuration(url)
         uploadRecordDataToFirebase(url)
+        recordButton.setImage(readyToRecordButtonImage, for: .normal)
+        playButton.isHidden = false
     }
     
     func showDuration(_ url: URL?) {
@@ -122,6 +126,7 @@ class RecordDetailViewController: UIViewController {
         
         do {
             player = try AVAudioPlayer(contentsOf: url)
+            player?.delegate = self
             if let duration = player?.duration {
                 durationTime = duration.minuteSecondMS
                 durationLabel.text = durationTime
@@ -149,26 +154,13 @@ class RecordDetailViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
 
-    // about play
-    func initPlay() {
-        if let findUrl = audioFileURL {
-            do {
-                player = try AVAudioPlayer(contentsOf: findUrl)
-                player?.delegate = self
-                player?.prepareToPlay() // 실제 호출과 기기의 플레이 간의 딜레이를 줄여줌
-            }
-            catch {
-                print(error)
-            }
-        }
-    }
     
     func playSound() {
         if player?.isPlaying == false {
             player?.play()
             playButton.setImage(pauseButtonImage, for: .normal)
-        }
-        else {
+            recordButton.isHidden = true
+        } else {
             player?.pause()
             player?.prepareToPlay()
             playButton.setImage(playButtonImage, for: .normal)
@@ -192,11 +184,7 @@ class RecordDetailViewController: UIViewController {
     }
     
     @IBAction func controlPlayButton(_ sender: UIButton) {
-        if player != nil {
             playSound()
-        } else {
-            initPlay()
-        }
     }
     
     @IBAction func controlNextButton(_ sender: UIButton) {
@@ -208,5 +196,6 @@ class RecordDetailViewController: UIViewController {
 extension RecordDetailViewController: AVAudioPlayerDelegate {
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         playButton.setImage(playButtonImage, for: .normal)
+        recordButton.isHidden = false
     }
 }

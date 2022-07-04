@@ -216,7 +216,7 @@
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="goforward.5" catalog="system"/>
                                         <connections>
-                                            <action selector="PressBackwardButton:" destination="v7J-f4-A7r" eventType="touchUpInside" id="q5D-kk-0dc"/>
+                                            <action selector="PressNextButton:" destination="v7J-f4-A7r" eventType="touchUpInside" id="yCE-CY-yhP"/>
                                         </connections>
                                     </button>
                                 </subviews>
