@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct AudioLevels{
-    let level:Float
-    let peekLevel:Float
+struct AudioLevels {
+    let level: Float
+    let peekLevel: Float
 }

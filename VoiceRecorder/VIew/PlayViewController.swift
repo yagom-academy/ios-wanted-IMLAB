@@ -7,10 +7,6 @@
 
 import UIKit
 
-protocol PlayViewControllerDelegate: AnyObject {
-    func viewDidDisappear()
-}
-
 class PlayViewController: UIViewController {
     
     var audio: Audio? {
@@ -22,8 +18,6 @@ class PlayViewController: UIViewController {
     }
     
     private var viewModel: PlayViewModel?
-    
-    weak var delegate: PlayViewControllerDelegate?
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -129,7 +123,7 @@ class PlayViewController: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
 
-        delegate?.viewDidDisappear()
+        viewModel?.allStop()
         viewModel = nil
     }
 }
@@ -227,7 +221,6 @@ private extension PlayViewController {
                 try FileManager.default.moveItem(at: localUrl, to: fileURL)
                 
                 self?.viewModel = PlayViewModel(url: fileURL)
-                self?.delegate = self?.viewModel
                 self?.bind()
             } catch {
                 print("FileManager Error: \(error.localizedDescription)")

@@ -61,13 +61,13 @@ class FirebaseStorageManager {
         }
     }
     
-    func uploadData(url:URL,fileName:String){
+    func uploadData(url: URL,fileName: String) {
         if let deviceId = deviceId {
             storage.child("\(deviceId)/\(fileName)").putFile(from: url)
         }
     }
     
-    func deleteData(title:String){
+    func deleteData(title: String) {
         if let deviceId = deviceId {
             storage.child("\(deviceId)/\(title)").delete { err in
                 if err != nil{

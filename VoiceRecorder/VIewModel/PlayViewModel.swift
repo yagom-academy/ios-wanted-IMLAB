@@ -181,13 +181,10 @@ class PlayViewModel {
         displayLink?.add(to: .main, forMode: .default)
         displayLink?.isPaused = true
     }
-}
-
-// MARK: - PlayViewControllerDelegate
-
-extension PlayViewModel: PlayViewControllerDelegate {
-    func viewDidDisappear() {
+    
+    func allStop() {
         audioPlayer.stop()
+        engine.stop()
         displayLink?.invalidate()
     }
 }

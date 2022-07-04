@@ -92,9 +92,8 @@ extension HomeViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    //TODO: - 삭제 메소드 추가
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete{
+        if editingStyle == .delete {
             viewModel.deleteAudio(indexPath)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }

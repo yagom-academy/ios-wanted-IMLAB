@@ -91,6 +91,7 @@
 			children = (
 				0169615E286ACF4B0020AAAC /* HomeViewModel.swift */,
 				18D4A0CD28708EA000839E73 /* RecordViewModel.swift */,
+				18CE51F3286EEA8E004AAF7C /* PlayViewModel.swift */,
 			);
 			path = VIewModel;
 			sourceTree = "<group>";
@@ -114,7 +115,6 @@
 				182C8731286AD69700F3C24D /* DateExtensions.swift */,
 				0169615A286ACF3E0020AAAC /* FirebaseStorageManager.swift */,
 				18CE51F1286EEA5E004AAF7C /* Observable.swift */,
-				18CE51F3286EEA8E004AAF7C /* PlayViewModel.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";

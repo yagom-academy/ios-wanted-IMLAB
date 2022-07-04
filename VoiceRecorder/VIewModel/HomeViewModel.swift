@@ -35,10 +35,9 @@ class HomeViewModel {
         }
     }
     
-    func deleteAudio(_ indexPath:IndexPath){
+    func deleteAudio(_ indexPath: IndexPath) {
         let deleteItemName = audios[indexPath.row].fileName
         FirebaseStorageManager.shared.deleteData(title: deleteItemName)
         self.audios.remove(at: indexPath.row)
-        
     }
 }
