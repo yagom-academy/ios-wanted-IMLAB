@@ -15,11 +15,14 @@ class VoiceMemoRecordViewController: UIViewController {
     }
     
     // - MARK: UI init
-    let waveFormView: WaveFormView = {
+    var waveFormView: WaveFormView = {
         let view = WaveFormView(frame: .zero)
         view.backgroundColor = .systemGray2
         return view
     }()
+    
+    var layer: CAShapeLayer?
+    var waveform = [Float]()
     
     let cutoffLabel: UILabel = {
         let label = UILabel()
@@ -101,6 +104,7 @@ class VoiceMemoRecordViewController: UIViewController {
         playRelatedButtonsHiddenAnimation(.record)
         configureTargetMethod()
         presentationController?.delegate = self
+        audioManager.delegate = self
         NotificationCenter.default.addObserver(self, selector: #selector(audioPlaybackTimeIsOver(_:)), name: .audioPlaybackTimeIsOver, object: nil)
     }
     
@@ -129,8 +133,8 @@ class VoiceMemoRecordViewController: UIViewController {
         waveFormView.translatesAutoresizingMaskIntoConstraints = false
              NSLayoutConstraint.activate([
                  waveFormView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: view.frame.height * 0.1),
-                 waveFormView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-                 waveFormView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+                 waveFormView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+                 waveFormView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
                  waveFormView.heightAnchor.constraint(equalToConstant: 100)
              ])
     }
@@ -140,8 +144,8 @@ class VoiceMemoRecordViewController: UIViewController {
         cutoffLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             cutoffLabel.topAnchor.constraint(equalTo: waveFormView.safeAreaLayoutGuide.bottomAnchor, constant: 30),
-            cutoffLabel.leadingAnchor.constraint(equalTo: waveFormView.safeAreaLayoutGuide.leadingAnchor),
-            cutoffLabel.trailingAnchor.constraint(equalTo: waveFormView.safeAreaLayoutGuide.trailingAnchor),
+            cutoffLabel.leadingAnchor.constraint(equalTo: waveFormView.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            cutoffLabel.trailingAnchor.constraint(equalTo: waveFormView.safeAreaLayoutGuide.trailingAnchor,  constant: -16),
             
             cutoffLabel.heightAnchor.constraint(equalToConstant: 20)
         ])
@@ -288,6 +292,16 @@ extension VoiceMemoRecordViewController: UIAdaptivePresentationControllerDelegat
             self.present(alert, animated: true)
         } else {
             self.dismiss(animated: true)
+        }
+    }
+}
+
+extension VoiceMemoRecordViewController: AudioManagerDelegate {
+    func communicationBufferData(bufferData: Float) {
+        print(bufferData)
+        waveFormView.waveforms.append(bufferData)
+        DispatchQueue.main.async {
+            self.waveFormView.setNeedsDisplay()
         }
     }
 }
