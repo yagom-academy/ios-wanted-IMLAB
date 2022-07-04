@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 class PlayViewController: UIViewController {
     
@@ -18,6 +19,7 @@ class PlayViewController: UIViewController {
     }
     
     private var viewModel: PlayViewModel?
+    private var cancellable = Set<AnyCancellable>()
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -229,27 +231,30 @@ private extension PlayViewController {
     }
     
     func bind() {
-        viewModel?.playerProgress.observe(on: self) { [weak self] playerProgress in
-            DispatchQueue.main.async {
-                self?.progressView.progress = playerProgress
+        viewModel?.$playerProgress
+            .receive(on: DispatchQueue.main)
+            .sink { value in
+                self.progressView.progress = value
             }
-        }
+            .store(in: &cancellable)
         
-        viewModel?.playerIsPlaying.observe(on: self) { [weak self] isPlaying in
-            DispatchQueue.main.async {
+        viewModel?.$playerIsPlaying
+            .receive(on: DispatchQueue.main)
+            .sink { isPlaying in
                 if isPlaying {
-                    self?.playPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+                    self.playPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
                 } else {
-                    self?.playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+                    self.playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
                 }
             }
-        }
+            .store(in: &cancellable)
         
-        viewModel?.playerTime.observe(on: self) { [weak self] playerTime in
-            DispatchQueue.main.async {
-                self?.playTimeLabel.text = playerTime.elapsedText
-                self?.playTimeRemainLabel.text = playerTime.remainingText
+        viewModel?.$playerTime
+            .receive(on: DispatchQueue.main)
+            .sink { playerTime in
+                self.playTimeLabel.text = playerTime.elapsedText
+                self.playTimeRemainLabel.text = playerTime.remainingText
             }
-        }
+            .store(in: &cancellable)
     }
 }

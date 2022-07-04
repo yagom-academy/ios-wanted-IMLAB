@@ -8,6 +8,7 @@
 import Foundation
 import AVFAudio
 import QuartzCore
+import Combine
 
 class PlayViewModel {
     var url: URL
@@ -32,12 +33,13 @@ class PlayViewModel {
     private var audioSampleRate:Double = 0
     private var audioLengthSeconds: Double = 0
     
+    private var needsFileScheduled = true
+    
     private var displayLink: CADisplayLink?
     
-    var playerProgress: Observable<Float> = Observable(0)
-    var playerIsPlaying: Observable<Bool> = Observable(false)
-    var playerTime: Observable<PlayerTime> = Observable(.zero)
-    private var needsFileScheduled = true
+    @Published var playerProgress: Float = 0
+    @Published var playerIsPlaying: Bool = false
+    @Published var playerTime: PlayerTime = .zero
     
     init(url: URL) {
         self.url = url
@@ -94,12 +96,12 @@ class PlayViewModel {
     }
     
     func togglePlaying() {
-        if playerIsPlaying.value {
-            playerIsPlaying.value = false
+        if playerIsPlaying {
+            playerIsPlaying = false
             displayLink?.isPaused = true
             audioPlayer.pause()
         } else {
-            playerIsPlaying.value = true
+            playerIsPlaying = true
             displayLink?.isPaused = false
             
             if needsFileScheduled {
@@ -164,16 +166,16 @@ class PlayViewModel {
             currentPosition = 0
             
             displayLink?.isPaused = true
-            playerIsPlaying.value = false
+            playerIsPlaying = false
         }
         
         setTime()
-        playerProgress.value = Float(currentPosition) / Float(audioLengthSamples)
+        playerProgress = Float(currentPosition) / Float(audioLengthSamples)
     }
     
     private func setTime() {
         let time = Double(currentPosition) / audioSampleRate
-        playerTime.value = PlayerTime(elapsedTime: time, remainingTime: audioLengthSeconds - time)
+        playerTime = PlayerTime(elapsedTime: time, remainingTime: audioLengthSeconds - time)
     }
     
     private func setupDisplayLink() {
