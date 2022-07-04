@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         do {
             // Set the audio session category, mode, and options.
             try audioSession.setCategory(.playAndRecord, mode: .default, options: [])
+            try AVAudioSession.sharedInstance().overrideOutputAudioPort(AVAudioSession.PortOverride.speaker) // 외부 스피커 사용
             try audioSession.setActive(true)
         } catch {
             print("Failed to set audio session category.")
