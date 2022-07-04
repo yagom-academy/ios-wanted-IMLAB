@@ -25,9 +25,9 @@ class RecordViewController: UIViewController {
     private let recorderSetting: [String: Any] = [
         AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
         AVEncoderAudioQualityKey: AVAudioQuality.max.rawValue,
-//        AVEncoderBitRateKey: 320_000,
+        AVEncoderBitRateKey: 320_000,
         AVNumberOfChannelsKey: 2,
-//        AVSampleRateKey: 44_100.0
+        AVSampleRateKey: 44_100.0
     ]
     private var recordingSession = AVAudioSession.sharedInstance()
     private var audioPlayer: AVAudioPlayer?
@@ -63,11 +63,11 @@ class RecordViewController: UIViewController {
     
     // MARK: - @IBAction
     
-    @IBAction func changeCutOffFrequency(_ sender: UISlider) {
-        
-        try! audioSession.setPreferredSampleRate(Double(sender.value))
-        print(Double(sender.value))
-    }
+//    @IBAction func changeCutOffFrequency(_ sender: UISlider) {
+//        
+//        try! audioSession.setPreferredSampleRate(Double(sender.value))
+//        print(Double(sender.value))
+//    }
     
     @IBAction func didTapRecordButton(_ sender: UIButton) {
         if isRecord {

@@ -12,7 +12,8 @@ class AudioEngine {
     private let audioPlayer = AVAudioPlayerNode()
     private let speedControl = AVAudioUnitVarispeed()
     private let pitchControl = AVAudioUnitTimePitch()
-    
+    private var equalizer: AVAudioUnitEQ?
+
     // 주파수 * 초 = 프레임
     private var audioSampleRate = 0.0 // 현재 주파수
     private var audioLengthSeconds = 0.0 // 총 길이 (초)
@@ -29,17 +30,39 @@ class AudioEngine {
         let file = try AVAudioFile(forReading: url)
         let format = file.processingFormat
         audioFile = file
+        let equalizer = AVAudioUnitEQ(numberOfBands: 5)
+        let bands = equalizer.bands
+        let freqs = [60, 230, 910, 4000, 14000]
+
+        bands[0].gain = -20.0
+        bands[0].filterType = .lowShelf
+        bands[1].gain = -20.0
+        bands[1].filterType = .lowShelf
+        bands[2].gain = -20.0
+        bands[2].filterType = .lowShelf
+        bands[3].gain = 20.0
+        bands[3].filterType = .highShelf
+        bands[4].gain = 20.0
+        bands[4].filterType = .highShelf
         
+        for i in 0...(bands.count - 1) {
+            bands[i].frequency  = Float(freqs[i])
+            bands[i].bypass     = false
+//            bands[i].filterType = .parametric
+        }
+
         audioLengthSamples = file.length
         audioSampleRate = format.sampleRate
         audioLengthSeconds = Double(audioLengthSamples) / audioSampleRate
         
         engine.attach(audioPlayer)
+        engine.attach(equalizer)
         engine.attach(pitchControl)
         engine.attach(speedControl)
         engine.connect(audioPlayer, to: speedControl, format: nil)
         engine.connect(speedControl, to: pitchControl, format: nil)
-        engine.connect(pitchControl, to: engine.mainMixerNode, format: nil)
+        engine.connect(pitchControl, to: equalizer, format: nil)
+        engine.connect(equalizer, to: engine.outputNode, format: nil)
         audioPlayer.scheduleFile(file, at: nil)
         try engine.start()
     }
