@@ -274,6 +274,10 @@ extension AudioManager {
         currentPosition = 0
     }
     
+    func pausePlay() {
+        audioPlayerNode.pause()
+    }
+    
     private func preparePlayEngine() {
         audioEngine.attach(audioPlayerNode)
         audioEngine.attach(changePitchNode)

@@ -95,10 +95,6 @@ class VoiceMemoRecordViewController: UIViewController {
         designateButtons()
     }
     
-    private func configureTargetMethod() {
-        recordButton.addTarget(self, action: #selector(recordButtonTapped(_:)), for: .touchUpInside)
-    }
-    
     private func designateWaveView() {
         self.view.addSubview(waveView)
         waveView.translatesAutoresizingMaskIntoConstraints = false
@@ -159,9 +155,22 @@ class VoiceMemoRecordViewController: UIViewController {
             stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
+    
+    // MARK: - Method
+    private func configureTargetMethod() {
+        recordButton.addTarget(self, action: #selector(recordButtonTapped(_:)), for: .touchUpInside)
+        playOrPauseButton.addTarget(self, action: #selector(playOrPauseButtonTapped(_:)), for: .touchUpInside)
+    }
+    
+    /// 녹음완료후 음성파일의 시간
+    private func showVoiceMemoDuration() -> String {
+        return audioManager.getPlayTime(filePath: pathFinder.lastUsedUrl)
+    }
+    
+    /// 플레이관련 버튼들의 hidden animation
     private func playRelatedButtonsHiddenAnimation(_ isHidden: Bool) {
         let playRelatedButtons = [playOrPauseButton, goBackward5SecButton, goForward5SecButton]
-        UIView.animate(withDuration: 0.15) {
+        UIView.animate(withDuration: 0.05) {
             if isHidden {
                 playRelatedButtons.forEach { $0.isHidden = true }
             } else {
@@ -179,13 +188,21 @@ extension VoiceMemoRecordViewController {
         if sender.isSelected {
             playRelatedButtonsHiddenAnimation(true)
             audioManager.startRecord(filePath: pathFinder.getPathWithTime())
-            print(pathFinder.lastUsedUrl)
         } else {
             playRelatedButtonsHiddenAnimation(false)
             audioManager.stopRecord()
+            playTimeLabel.text = showVoiceMemoDuration()
         }
     }
     
-    
+    @objc func playOrPauseButtonTapped(_ sender: UIButton) {
+        sender.isSelected.toggle()
+        
+        if sender.isSelected {
+            audioManager.startPlay(fileURL: pathFinder.lastUsedUrl)
+        } else {
+            audioManager.pausePlay()
+        }
+    }
 }
 
