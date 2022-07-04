@@ -9,10 +9,16 @@ import UIKit
 
 class VoiceMemoPlayViewController: UIViewController {
     
+    // - MARK: Properties
+    
+    private var audioFileName: String?
+    var audioManager: AudioManager!
+    var pathFinder: PathFinder!
+    var firebaseManager: FirebaseStorageManager!
+    
     // MARK: - ViewProperties
     private let voiceMemoTitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "2022.05.08 12:34:56"
         
         return label
     }()
@@ -28,6 +34,8 @@ class VoiceMemoPlayViewController: UIViewController {
         let segmentItems = ["일반 목소리", "아기 목소리", " 할아버지 목소리"]
         let segment = UISegmentedControl(items: segmentItems)
         segment.selectedSegmentIndex = 0
+        
+        segment.addTarget(nil, action: #selector(pitchChangeSegmentedControllerTouched(_:)), for: .valueChanged)
         
         return segment
     }()
@@ -46,34 +54,48 @@ class VoiceMemoPlayViewController: UIViewController {
         return slider
     }()
     
-    private let playAndStopButon: UIButton = {
-        let image = UIImage(systemName: "play")
+    private let playOrStopButon: UIButton = {
+        let playIcon = UIImage(systemName: "play")
+        let pauseIcon = UIImage.init(systemName: "pause.fill")
+        
+        let symbolConfigure: UIImage.SymbolConfiguration = .init(pointSize: 35, weight: .regular, scale: .default)
+        
         let button = UIButton()
-        button.setImage(image, for: .normal)
-        button.setPreferredSymbolConfiguration(.init(pointSize: 35, weight: .regular, scale: .default), forImageIn: .normal)
+        
+        button.setImage(playIcon, for: .normal)
+        button.setImage(pauseIcon, for: .selected)
+        
+        button.setPreferredSymbolConfiguration(symbolConfigure, forImageIn: .normal)
+        button.setPreferredSymbolConfiguration(symbolConfigure, forImageIn: .selected)
+        
+        button.addTarget(nil, action: #selector(playOrStopButtonTouched(_:)), for: .touchUpInside)
         
         return button
     }()
     
-    private let goBackwardFiveSecondButton: UIButton = {
+    private let skipBackward5SecondButton: UIButton = {
         let image = UIImage(systemName: "gobackward.5")
         let button = UIButton()
         button.setImage(image, for: .normal)
         button.setPreferredSymbolConfiguration(.init(pointSize: 35, weight: .regular, scale: .default), forImageIn: .normal)
         
+        button.addTarget(nil, action: #selector(skipForward5SecButtonTouched(_:)), for: .touchUpInside)
+        
         return button
     }()
     
-    private let goForwardFiveSecondButton: UIButton = {
+    private let skipForward5SecondButton: UIButton = {
         let image = UIImage(systemName: "goforward.5")
         let button = UIButton()
         button.setImage(image, for: .normal)
         button.setPreferredSymbolConfiguration(.init(pointSize: 35, weight: .regular, scale: .default), forImageIn: .normal)
         
+        button.addTarget(nil, action: #selector(skipForward5SecButtonTouched(_:)), for: .touchUpInside)
+        
         return button
     }()
     
-    let playButtonStackView: UIStackView = {
+    private let playButtonStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
         stack.spacing = 30
@@ -81,21 +103,90 @@ class VoiceMemoPlayViewController: UIViewController {
         return stack
     }()
     
+    // - MARK: Objc Selector Event Method
+    
+    @objc func playOrStopButtonTouched(_ sender: UIButton) {
+        guard let audioFileName = audioFileName else {
+            return
+        }
+
+        let path = pathFinder.getPath(fileName: audioFileName)
+        
+        sender.isSelected.toggle()
+        
+        if sender.isSelected {
+            audioManager.startPlay(fileURL: path)
+        } else {
+            audioManager.stopPlay()
+        }
+        
+    }
+    
+    @objc func skipForward5SecButtonTouched(_ sender: UIButton) {
+        audioManager.skip(for: 5, filePath: pathFinder.lastUsedUrl)
+    }
+    
+    @objc func skipBackward5SecButtonTouched(_ sender: UIButton) {
+        audioManager.skip(for: 5, filePath: pathFinder.lastUsedUrl)
+    }
+    
+    @objc func pitchChangeSegmentedControllerTouched(_ sender: UISegmentedControl) {
+        
+        switch sender.selectedSegmentIndex {
+        case 0:
+            audioManager.pitchMode = .basic
+        case 1:
+            audioManager.pitchMode = .baby
+        case 2:
+            audioManager.pitchMode = .grandFather
+        default:
+            audioManager.pitchMode = .basic
+        }
+    }
+    
+    // - MARK: Life Cycle
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+    
+    init(audioFileName: String,
+         audioManager: AudioManager,
+         pathFinder: PathFinder,
+         firebaseManager: FirebaseStorageManager) {
+        self.audioFileName = audioFileName
+        self.audioManager = audioManager
+        self.pathFinder = pathFinder
+        self.firebaseManager = firebaseManager
+        super.init(nibName: nil, bundle: nil)
+    }
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         configureSubViews()
         configureConstraints()
+        
+        self.voiceMemoTitleLabel.text = audioFileName ?? "PlayView"
     }
     
-    // MARK: - Method
+}
+
+// MARK: - UI Design
+
+extension VoiceMemoPlayViewController {
+    
     private func configureSubViews() {
         [voiceMemoTitleLabel, waveFormView, voiceSegment,
          volumeLabel, volumeSlider, playButtonStackView].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
-        [goBackwardFiveSecondButton, playAndStopButon, goForwardFiveSecondButton].forEach {
+        [skipBackward5SecondButton, playOrStopButon, skipForward5SecondButton].forEach {
             playButtonStackView.addArrangedSubview($0)
         }
     }
@@ -138,18 +229,18 @@ class VoiceMemoPlayViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
-            playAndStopButon.widthAnchor.constraint(equalToConstant: 40),
-            playAndStopButon.heightAnchor.constraint(equalToConstant: 40)
+            playOrStopButon.widthAnchor.constraint(equalToConstant: 40),
+            playOrStopButon.heightAnchor.constraint(equalToConstant: 40)
         ])
         
         NSLayoutConstraint.activate([
-            goForwardFiveSecondButton.widthAnchor.constraint(equalTo: playAndStopButon.widthAnchor),
-            goForwardFiveSecondButton.heightAnchor.constraint(equalTo: playAndStopButon.heightAnchor)
+            skipForward5SecondButton.widthAnchor.constraint(equalTo: playOrStopButon.widthAnchor),
+            skipForward5SecondButton.heightAnchor.constraint(equalTo: playOrStopButon.heightAnchor)
         ])
         
         NSLayoutConstraint.activate([
-            goBackwardFiveSecondButton.widthAnchor.constraint(equalTo: playAndStopButon.widthAnchor),
-            goBackwardFiveSecondButton.heightAnchor.constraint(equalTo: playAndStopButon.heightAnchor)
+            skipBackward5SecondButton.widthAnchor.constraint(equalTo: playOrStopButon.widthAnchor),
+            skipBackward5SecondButton.heightAnchor.constraint(equalTo: playOrStopButon.heightAnchor)
         ])
     }
 }
