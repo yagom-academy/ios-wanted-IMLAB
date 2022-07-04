@@ -13,19 +13,20 @@ class HomeTableViewCell: UITableViewCell {
     
     var audio: Audio? {
         didSet {
-            self.titleLabel.text = audio?.title
+            titleLabel.text = audio?.title
         }
     }
     
     private let titleLabel: UILabel = {
         let label = UILabel()
+        label.numberOfLines = 0
         return label
     }()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        self.configure()
+        configure()
     }
     
     required init?(coder: NSCoder) {
@@ -36,21 +37,21 @@ class HomeTableViewCell: UITableViewCell {
 
 private extension HomeTableViewCell {
     func configure() {
-        self.addSubViews()
-        self.makeConstraints()
+        addSubViews()
+        makeConstraints()
     }
     
     func addSubViews() {
-        self.contentView.addSubview(self.titleLabel)
+        contentView.addSubview(titleLabel)
     }
     
     func makeConstraints() {
-        self.titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.titleLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 16.0),
-            self.titleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 16.0),
-            self.titleLabel.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -16.0),
-            self.titleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16.0),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16.0),
+            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16.0),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
         ])
     }
 }

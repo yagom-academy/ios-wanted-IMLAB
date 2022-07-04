@@ -14,7 +14,7 @@ class PlayViewController: UIViewController {
         didSet {
             titleLabel.text = audio?.title
             guard let url = audio?.url else { return }
-            removeAndMoveAudio(url)
+            downloadAudioAndRemoveAndMoveFile(url)
         }
     }
     
@@ -124,7 +124,7 @@ class PlayViewController: UIViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-
+        
         viewModel?.allStop()
         viewModel = nil
     }
@@ -205,13 +205,12 @@ private extension PlayViewController {
         viewModel?.pitchControlValueChanged(Float(value))
     }
     
-    // MARK: - Configure Fuc
+    // MARK: - 기능 구현
     
-    func removeAndMoveAudio(_ url: URL) {
+    private func downloadAudioAndRemoveAndMoveFile(_ url: URL) {
         guard let documentURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
             return
         }
-        // safe 찾기
         let fileURL = documentURL.appendingPathComponent("Record.m4a")
         
         URLSession.shared.downloadTask(with: url) { [weak self] localUrl, response, error in
@@ -230,7 +229,7 @@ private extension PlayViewController {
         }.resume()
     }
     
-    func bind() {
+    private func bind() {
         viewModel?.$playerProgress
             .receive(on: DispatchQueue.main)
             .sink { value in

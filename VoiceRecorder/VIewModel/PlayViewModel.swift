@@ -11,7 +11,7 @@ import QuartzCore
 import Combine
 
 class PlayViewModel {
-    var url: URL
+    private var url: URL
     
     private var audioPlayer = AVAudioPlayerNode()
     private var audioFile: AVAudioFile?
@@ -59,7 +59,7 @@ class PlayViewModel {
             
             audioFile = file
             
-            setTime()
+            setupPlayerTime()
             setupAudioEngine()
         } catch {
             print("AudioFile Error: \(error.localizedDescription)")
@@ -169,11 +169,11 @@ class PlayViewModel {
             playerIsPlaying = false
         }
         
-        setTime()
+        setupPlayerTime()
         playerProgress = Float(currentPosition) / Float(audioLengthSamples)
     }
     
-    private func setTime() {
+    private func setupPlayerTime() {
         let time = Double(currentPosition) / audioSampleRate
         playerTime = PlayerTime(elapsedTime: time, remainingTime: audioLengthSeconds - time)
     }
