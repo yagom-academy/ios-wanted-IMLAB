@@ -10,7 +10,7 @@ import Foundation
 class Config {
     static func getRecordFilePath() -> URL {
         let docDirURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-        let filePath = docDirURL.appendingPathComponent("xx.m4a")
+        let filePath = docDirURL.appendingPathComponent("record.m4a")
         return filePath
     }
 }

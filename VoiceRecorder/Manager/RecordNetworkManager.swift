@@ -20,7 +20,7 @@ struct RecordNetworkManager {
             let data = try Data(contentsOf: localRecordFileURL)
             DispatchQueue.global().async {
                 recordRef.putData(data, metadata: nil) { metadata, error in
-                    guard error != nil,
+                    guard error == nil,
                           let metadata = metadata else {
                         print("fail")
                         DispatchQueue.main.async {

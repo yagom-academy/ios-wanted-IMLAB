@@ -30,6 +30,7 @@
 		DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65D28604278003DD2F5 /* SceneDelegate.swift */; };
 		DE15E66528604279003DD2F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66428604279003DD2F5 /* Assets.xcassets */; };
 		DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */; };
+		FE7A188A2872D182003CC843 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7A18892872D182003CC843 /* UIView+.swift */; };
 		FEA53309286C3D18002E1169 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FEA53308286C3D18002E1169 /* GoogleService-Info.plist */; };
 		FEA5330C286C3D48002E1169 /* CustomNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA5330B286C3D48002E1169 /* CustomNavigationController.swift */; };
 		FEA53310286C3DC8002E1169 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA5330F286C3DC8002E1169 /* Config.swift */; };
@@ -38,6 +39,8 @@
 		FEEC6981286C3AEE002E020F /* RecordListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEEC6980286C3AEE002E020F /* RecordListCell.swift */; };
 		FEEC6984286C3B2D002E020F /* RecordNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEEC6983286C3B2D002E020F /* RecordNetworkManager.swift */; };
 		FEEC6987286C3B6F002E020F /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = FEEC6986286C3B6F002E020F /* FirebaseStorage */; };
+		FEFCE08E287050B200200AF1 /* RecordListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEFCE08D287050B200200AF1 /* RecordListModel.swift */; };
+		FEFCE0902870549F00200AF1 /* PlayListUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEFCE08F2870549F00200AF1 /* PlayListUserDefaults.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,6 +69,7 @@
 		DE15E66428604279003DD2F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DE15E66728604279003DD2F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DE15E66928604279003DD2F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FE7A18892872D182003CC843 /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
 		FEA53308286C3D18002E1169 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FEA5330B286C3D48002E1169 /* CustomNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationController.swift; sourceTree = "<group>"; };
 		FEA5330F286C3DC8002E1169 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
@@ -73,6 +77,8 @@
 		FEEC697D286C3ACF002E020F /* RecordListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListViewModel.swift; sourceTree = "<group>"; };
 		FEEC6980286C3AEE002E020F /* RecordListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListCell.swift; sourceTree = "<group>"; };
 		FEEC6983286C3B2D002E020F /* RecordNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordNetworkManager.swift; sourceTree = "<group>"; };
+		FEFCE08D287050B200200AF1 /* RecordListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListModel.swift; sourceTree = "<group>"; };
+		FEFCE08F2870549F00200AF1 /* PlayListUserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayListUserDefaults.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				04FF93A3286C15AA00EB34B6 /* UIButton+.swift */,
+				FE7A18892872D182003CC843 /* UIView+.swift */,
 				0D8172EB286D71430009E8AA /* AVPlayer+.swift */,
 				0D8172ED286D7A950009E8AA /* Data+.swift */,
 			);
@@ -120,9 +127,11 @@
 		0D8172DE286D67A50009E8AA /* RecordListPage */ = {
 			isa = PBXGroup;
 			children = (
-				FEEC697F286C3AD8002E020F /* SubComponents */,
 				FEEC697B286C3AB0002E020F /* RecordListViewController.swift */,
 				FEEC697D286C3ACF002E020F /* RecordListViewModel.swift */,
+				FEFCE08D287050B200200AF1 /* RecordListModel.swift */,
+				FEFCE08F2870549F00200AF1 /* PlayListUserDefaults.swift */,
+				FEEC697F286C3AD8002E020F /* SubComponents */,
 			);
 			path = RecordListPage;
 			sourceTree = "<group>";
@@ -314,6 +323,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FE7A188A2872D182003CC843 /* UIView+.swift in Sources */,
+				FEFCE08E287050B200200AF1 /* RecordListModel.swift in Sources */,
 				0DFCD7342872C1D300F31EBA /* PlayerButtonViewModel.swift in Sources */,
 				04FF93A7286C270600EB34B6 /* RecordManager.swift in Sources */,
 				0D8172EC286D71430009E8AA /* AVPlayer+.swift in Sources */,
@@ -338,6 +349,7 @@
 				0D8172E5286D69140009E8AA /* FileData.swift in Sources */,
 				04FF93A4286C15AA00EB34B6 /* UIButton+.swift in Sources */,
 				FEA5330C286C3D48002E1169 /* CustomNavigationController.swift in Sources */,
+				FEFCE0902870549F00200AF1 /* PlayListUserDefaults.swift in Sources */,
 				DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */,
 				FEEC6984286C3B2D002E020F /* RecordNetworkManager.swift in Sources */,
 				FEEC697C286C3AB0002E020F /* RecordListViewController.swift in Sources */,
