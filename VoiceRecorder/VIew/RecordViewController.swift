@@ -11,9 +11,15 @@ import AVFoundation
 import MediaPlayer
 import Combine
 
+protocol RecordViewControllerDelegate: AnyObject {
+    func recordViewControllerDidDisappear()
+}
+
 class RecordViewController:UIViewController{
     private var viewModel:RecordViewModel!
     private var cancellable = Set<AnyCancellable>()
+    
+    weak var delegate: RecordViewControllerDelegate?
     
     lazy var recordButton: UIButton = {
         let button = UIButton()
@@ -85,6 +91,7 @@ class RecordViewController:UIViewController{
             print("Could not set active false")
         }
         
+        delegate?.recordViewControllerDidDisappear()
         super.viewDidDisappear(animated)
     }
     

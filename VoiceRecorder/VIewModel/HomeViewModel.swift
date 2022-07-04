@@ -12,32 +12,35 @@ class HomeViewModel {
     var loadingEnded: () -> Void = { }
     
     init() {
-        self.audios = []
+        audios = []
     }
     
     func audiosCount() -> Int {
-        return self.audios.count
+        return audios.count
     }
     
     func audio(at index: Int) -> Audio {
-        return self.audios[index]
+        return audios[index]
     }
     
     func fetch() {
+        audios.removeAll()
         FirebaseStorageManager.shared.fetch { result in
             switch result {
             case .success(let audio):
                 self.audios.append(audio)
-                self.loadingEnded()
             case .failure(let error):
                 print(error.localizedDescription)
             }
+            
+            self.audios.sort { $0.title < $1.title }
+            self.loadingEnded()
         }
     }
     
     func deleteAudio(_ indexPath: IndexPath) {
         let deleteItemName = audios[indexPath.row].fileName
         FirebaseStorageManager.shared.deleteData(title: deleteItemName)
-        self.audios.remove(at: indexPath.row)
+        audios.remove(at: indexPath.row)
     }
 }

@@ -62,8 +62,9 @@ private extension HomeViewController {
     }
     
     @objc func touchAddButton() {
-        let controller = RecordViewController()
-        self.present(controller, animated: true)
+        let recordController = RecordViewController()
+        recordController.delegate = self
+        self.present(recordController, animated: true)
     }
 }
 
@@ -83,6 +84,8 @@ extension HomeViewController: UITableViewDataSource {
     }
 }
 
+// MARK: - UITableViewDelegate
+
 extension HomeViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let audio = self.viewModel.audio(at: indexPath.row)
@@ -97,5 +100,13 @@ extension HomeViewController: UITableViewDelegate {
             viewModel.deleteAudio(indexPath)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
+    }
+}
+
+// MARK: - RecordViewControllerDelegate
+
+extension HomeViewController: RecordViewControllerDelegate {
+    func recordViewControllerDidDisappear() {
+        viewModel.fetch()
     }
 }
