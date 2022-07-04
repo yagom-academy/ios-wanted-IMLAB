@@ -11,6 +11,14 @@ class PlayVoiceViewController: UIViewController {
     
     var playVoiceManager : PlayVoiceManager!
     var playVoiceViewModel : PlayVoiceViewModel!
+    var firebaseStorageManager : FirebaseStorageManager!
+    
+    var soundWaveImageView : UIImageView = {
+        let soundWaveImageView = UIImageView()
+        soundWaveImageView.translatesAutoresizingMaskIntoConstraints = false
+        soundWaveImageView.contentMode = .scaleAspectFit
+        return soundWaveImageView
+    }()
     
     var selectedPitchSegment : UISegmentedControl = {
         let selectedPitchSegment = UISegmentedControl(items: ["일반 목소리","아기목소리","할아버지목소리"])
@@ -75,13 +83,15 @@ class PlayVoiceViewController: UIViewController {
         super.viewDidLoad()
         setView()
         autolayOut()
-        setUIText()
         //순환참조 발생 주의
-        playVoiceManager.delegate = self
+        firebaseStorageManager.delegate = self
+        playAndPauseButton.isEnabled = false
+        firebaseStorageManager.downloadRecordFile(fileName: playVoiceViewModel.voiceRecordViewModel.fileName)
     }
     
     func setView(){
         self.view.addSubview(fileNameLabel)
+        self.view.addSubview(soundWaveImageView)
         self.view.addSubview(selectedPitchSegment)
         self.view.addSubview(volumeSlider)
         self.view.addSubview(timeControlButtonStackView)
@@ -96,8 +106,12 @@ class PlayVoiceViewController: UIViewController {
             fileNameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             fileNameLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 30),
             
+            soundWaveImageView.leadingAnchor.constraint(equalTo: view.centerXAnchor),
+            soundWaveImageView.topAnchor.constraint(equalTo: fileNameLabel.bottomAnchor, constant: 30),
+            soundWaveImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.15),
+            
             selectedPitchSegment.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            selectedPitchSegment.topAnchor.constraint(equalTo: fileNameLabel.bottomAnchor, constant: 30),
+            selectedPitchSegment.topAnchor.constraint(equalTo: soundWaveImageView.bottomAnchor, constant: 30),
             
             volumeSlider.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             volumeSlider.topAnchor.constraint(equalTo: selectedPitchSegment.bottomAnchor, constant: 30),
@@ -129,21 +143,34 @@ class PlayVoiceViewController: UIViewController {
     }
     
     @objc func tabForward(){
-        //playVoiceManager.forwardFiveSecond()
+        playVoiceManager.forwardFiveSecond()
     }
     
     @objc func tabBackward(){
-        //playVoiceManager.backwardFiveSecond()
+        playVoiceManager.backwardFiveSecond()
     }
     
     @objc func slideVolumeButton(_ sender : UISlider){
-        print(sender.value)
         playVoiceManager.setVolume(volume: sender.value)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        
-        //playVoiceManager.stopAudio()
+        playVoiceManager.stopAudio()
+    }
+    
+    deinit{
+        print("CLOSE PLAYVOICE")
+    }
+}
+
+extension PlayVoiceViewController : FirebaseStorageManagerDelegate{
+    func downloadComplete(url : URL) {
+        soundWaveImageView.load(url: url) {
+            self.playAndPauseButton.isEnabled = true
+        }
+        playVoiceManager = PlayVoiceManager()
+        playVoiceManager.delegate = self
+        setUIText()
     }
 }
 
@@ -154,5 +181,20 @@ extension PlayVoiceViewController : PlayVoiceDelegate{
             self.playAndPauseButton.setImage(UIImage(systemName: "play"), for: .normal)
         }
         
+    }
+}
+
+extension UIImageView{
+    func load(url : URL , completion : @escaping ()->Void){
+        DispatchQueue.global().async { [weak self] in
+            if let data = try? Data(contentsOf: url){
+                if let image = UIImage(data: data){
+                    DispatchQueue.main.async {
+                        self?.image = image
+                        completion()
+                    }
+                }
+            }
+        }
     }
 }

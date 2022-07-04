@@ -13,9 +13,11 @@ import UIKit
 class RecordVoiceViewController: UIViewController {
 
     weak var delegate : RecordVoiceDelegate?
-    var recordVoiceManager = RecordVoiceManager()
-    var drawWaveFormManager = DrawWaveFormManager()
+    var recordVoiceManager : RecordVoiceManager!
+    var drawWaveFormManager : DrawWaveFormManager!
+    var playVoiceManager : PlayVoiceManager!
     var audioSessionManager = AudioSessionManager()
+
         
     let waveFormView : UIView = {
         let waveFormView = UIView()
@@ -75,7 +77,7 @@ class RecordVoiceViewController: UIViewController {
         recordFile_play_PauseButton.translatesAutoresizingMaskIntoConstraints = false
         recordFile_play_PauseButton.setPreferredSymbolConfiguration(.init(pointSize: 30), forImageIn: .normal)
         recordFile_play_PauseButton.setImage(UIImage(systemName: "play"), for: .normal)
-        //recordFile_play_PauseButton.addTarget(self, action: #selector(), for: .touchUpInside)
+        recordFile_play_PauseButton.addTarget(self, action: #selector(tapButton), for: .touchUpInside)
         return recordFile_play_PauseButton
     }()
     
@@ -84,7 +86,7 @@ class RecordVoiceViewController: UIViewController {
         forwardFive.translatesAutoresizingMaskIntoConstraints = false
         forwardFive.setPreferredSymbolConfiguration(.init(pointSize: 30), forImageIn: .normal)
         forwardFive.setImage(UIImage(systemName: "goforward.5"), for: .normal)
-        //forwardFive.addTarget(self, action: #selector(tabForward), for: .touchUpInside)
+        forwardFive.addTarget(self, action: #selector(tabForward), for: .touchUpInside)
         return forwardFive
     }()
     
@@ -93,16 +95,18 @@ class RecordVoiceViewController: UIViewController {
         backwardFive.translatesAutoresizingMaskIntoConstraints = false
         backwardFive.setPreferredSymbolConfiguration(.init(pointSize: 30), forImageIn: .normal)
         backwardFive.setImage(UIImage(systemName: "gobackward.5"), for: .normal)
-        //backwardFive.addTarget(self, action: #selector(tabBackward), for: .touchUpInside)
+        backwardFive.addTarget(self, action: #selector(tabBackward), for: .touchUpInside)
         return backwardFive
     }()
     
     @objc func tab_record_start_stop_Button() {
         if recordVoiceManager.isRecording() {
+            drawWaveFormManager.stopDrawing(in: waveFormView)
             recordVoiceManager.stopRecording {
                 self.delegate?.updateList()
+                self.playVoiceManager.setNewScheduleFile()
             }
-            drawWaveFormManager.stopDrawing(in: waveFormView)
+            
             record_start_stop_button.setImage(UIImage(systemName: "circle.fill"), for: .normal)
             record_start_stop_button.tintColor = .red
             setUIAfterRecording()
@@ -125,7 +129,9 @@ class RecordVoiceViewController: UIViewController {
         super.viewDidLoad()
         drawWaveFormManager.delegate = self
         recordVoiceManager.delegate = self
+        playVoiceManager.delegate = self
         audioSessionManager.setSampleRate(44100)
+
         setView()
         autoLayout()
         setUI()
@@ -205,6 +211,24 @@ class RecordVoiceViewController: UIViewController {
     func setUIBeforeRecording(){
         recordFile_ButtonStackView.isHidden = true
     }
+    
+    @objc func tabForward(){
+        playVoiceManager.forwardFiveSecond()
+    }
+    
+    @objc func tabBackward(){
+        playVoiceManager.backwardFiveSecond()
+    }
+    
+    @objc func tapButton(){
+        if playVoiceManager.isPlay{
+            playVoiceManager.stopAudio()
+            recordFile_play_PauseButton.setImage(UIImage(systemName: "play"), for: .normal)
+        }else{
+            playVoiceManager.playAudio()
+            recordFile_play_PauseButton.setImage(UIImage(systemName: "pause"), for: .normal)
+        }
+    }
 
 }
 
@@ -230,6 +254,15 @@ extension RecordVoiceViewController : RecordVoiceManagerDelegate {
     
     func updateCurrentTime(_ currentTime : TimeInterval) {
         self.progressTimeLabel.text = currentTime.getStringTimeInterval()
+    }
+}
+
+extension RecordVoiceViewController : PlayVoiceDelegate{
+    func playEndTime() {
+        playVoiceManager.isPlay = false
+        DispatchQueue.main.async {
+            self.recordFile_play_PauseButton.setImage(UIImage(systemName: "play"), for: .normal)
+        }
     }
 }
 

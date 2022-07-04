@@ -33,11 +33,9 @@ class VoiceRecorderListTableViewController: UITableViewController {
     }
     
     func updateTableViewList(){
-        print("Update tableView")
         firebaseStorageManger.fetchRecordList { result in
             if let result = result{
                 self.voiceRecordListViewModel = VoiceRecordListViewModel(voiceRecordList: result)
-                print(self.voiceRecordListViewModel.voiceRecordList)
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
@@ -96,13 +94,15 @@ class VoiceRecorderListTableViewController: UITableViewController {
             let vc = segue.destination as! PlayVoiceViewController
             if let selectRecord = selectRecord {
                 vc.playVoiceViewModel = PlayVoiceViewModel(selectedPitch: .normal, voiceRecordViewModel: selectRecord)
-                vc.playVoiceManager = PlayVoiceManager()
-                firebaseStorageManger.downloadRecordFile(fileName: selectRecord.fileName)
+                vc.firebaseStorageManager = FirebaseStorageManager()
             }
         }
         else if segue.identifier == "RecordVoice"{
             let vc = segue.destination as! RecordVoiceViewController
             vc.delegate = self
+            vc.playVoiceManager = PlayVoiceManager()
+            vc.recordVoiceManager = RecordVoiceManager()
+            vc.drawWaveFormManager = DrawWaveFormManager()
         }
     }
 }
