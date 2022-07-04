@@ -11,10 +11,10 @@ class VoiceMemoPlayViewController: UIViewController {
     
     // - MARK: Properties
     
-    private var audioFileName: String?
-    var audioManager: AudioManager!
-    var pathFinder: PathFinder!
-    var firebaseManager: FirebaseStorageManager!
+    private let audioFileName: String?
+    private let audioManager: AudioManager!
+    private let pathFinder: PathFinder!
+    private let firebaseManager: FirebaseStorageManager!
     
     // MARK: - ViewProperties
     private let voiceMemoTitleLabel: UILabel = {
