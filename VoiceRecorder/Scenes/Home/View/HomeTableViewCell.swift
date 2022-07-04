@@ -56,7 +56,7 @@ final class HomeTableViewCell: UITableViewCell {
     func configure(model: AudioRepresentation?) {
         guard let model = model else {return}
         title.text = model.createdDate ?? ""
-        length.text = model.length ?? "xx"
+        length.text = model.length ?? ""
     }
     
 }

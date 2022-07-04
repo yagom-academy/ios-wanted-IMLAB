@@ -11,7 +11,7 @@ final class HomeViewModel {
     
     var audioTitles: [String] = []
     var audioData: [String: Observable<AudioRepresentation>] = [:]
-        
+    
     
     subscript(_ indexPath: IndexPath) -> AudioRepresentation? {
         let title = audioTitles[indexPath.item]
@@ -35,7 +35,7 @@ final class HomeViewModel {
             }
         }
     }
-
+    
     func fetchMetaData(){
         audioTitles.forEach({
             let endPoint = EndPoint(fileName: $0)
@@ -60,7 +60,7 @@ final class HomeViewModel {
                 switch result {
                 case .success(let url):
                     print(url)
-//                    self?.audioURLs?.updateValue(Observable<URL>(url), forKey: endPoint.fileName)
+                    //                   self?.audioURLs?.updateValue(Observable<URL>(url), forKey: endPoint.fileName)
                 case .failure(let error):
                     print(error)
                 }
@@ -69,7 +69,20 @@ final class HomeViewModel {
         
     }
     
-    
+    func remove(indexPath: IndexPath, completion: @escaping (Bool) -> Void) {
+        let title = audioTitles[indexPath.item]
+        let audioInfo = AudioInfo(id: title, data: nil, metadata: nil)
+        FirebaseService.delete(audio: audioInfo) { [weak self] error in
+            if var error = error as? NSError {
+                print(error)
+                completion(false)
+            }else{
+                self?.audioTitles.remove(at: indexPath.item)
+                self?.audioData.removeValue(forKey: title)
+                completion(true)
+            }
+        }
+
+    }
     
 }
-
