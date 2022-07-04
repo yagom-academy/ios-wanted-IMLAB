@@ -8,7 +8,8 @@
 import UIKit
 
 class RecordAndPlayView: UIView {
-    let manager = RecordManager()
+    private let recordManager = RecordManager()
+    private let networkManager = RecordNetworkManager()
     
     private let buttonStackView: UIStackView = {
         let stackView = UIStackView()
@@ -60,10 +61,10 @@ class RecordAndPlayView: UIView {
     @objc func didTapPlayButton(sender: UIButton) {
         sender.isSelected = !sender.isSelected
         
-        if manager.isPlaying() {
-            manager.pausePlay()
+        if recordManager.isPlaying() {
+            recordManager.pausePlay()
         } else {
-            manager.startPlay()
+            recordManager.startPlay()
         }
     }
     
@@ -85,19 +86,38 @@ class RecordAndPlayView: UIView {
         sender.isSelected = !sender.isSelected
         
         if sender.isSelected {
-            manager.startRecord()
+            recordManager.startRecord()
         } else {
-            manager.endRecord()
-            manager.makePlayer()
+            recordManager.endRecord()
+            recordManager.makePlayer()
             buttonStackView.isHidden = false
         }
+    }
+    
+    private let downloadButton: UIButton = {
+        let button = UIButton()
+        button.setImage(systemName: "arrow.down.circle", state: .normal)
+
+        button.tintColor = .label
+        button.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        
+        button.addTarget(self, action: #selector(didTapDownloadButton), for: .touchUpInside)
+        
+        return button
+    }()
+    
+    @objc func didTapDownloadButton() {
+        let file = recordManager.dateToFileName(Date())
+        // 저장 후 dismiss
+        networkManager.saveRecord(filename: file)
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         layout()
-        manager.initRecordSession()
     }
     
     required init?(coder: NSCoder) {
@@ -109,7 +129,8 @@ extension RecordAndPlayView {
     private func layout() {
         [
             buttonStackView,
-            recordButton
+            recordButton,
+            downloadButton
         ].forEach {
             addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -120,5 +141,8 @@ extension RecordAndPlayView {
         
         recordButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         recordButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -50).isActive = true
+        
+        downloadButton.bottomAnchor.constraint(equalTo: recordButton.bottomAnchor).isActive = true
+        downloadButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -30).isActive = true
     }
 }
