@@ -23,6 +23,7 @@ class AppCoordinator: NSObject, Coordinator {
     
     func presentRecordView() {
         let vc = VoiceMemoRecordViewController()
+        vc.isModalInPresentation = true
         navigationController.present(vc, animated: true)
     }
     

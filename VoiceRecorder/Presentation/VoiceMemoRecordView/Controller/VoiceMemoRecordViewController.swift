@@ -90,6 +90,13 @@ class VoiceMemoRecordViewController: UIViewController {
         designateUIs()
         playRelatedButtonsHiddenAnimation(.record)
         configureTargetMethod()
+        presentationController?.delegate = self
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        audioManager.stopRecord()
+        audioManager.stopPlay()
     }
     
     private func configure() {
@@ -221,7 +228,7 @@ extension VoiceMemoRecordViewController {
             playRelatedButtonsHiddenAnimation(.play)
             audioManager.stopRecord()
             playTimeLabel.text = showVoiceMemoDuration()
-            print(pathFinder.lastUsedFileName)
+
             FirebaseStorageManager.shared.uploadVoiceMemoToFirebase(with: pathFinder.lastUsedUrl, fileName: pathFinder.lastUsedFileName) { result in
                 switch result {
                 case .success(_):
@@ -269,3 +276,19 @@ extension VoiceMemoRecordViewController {
     }
 }
 
+extension VoiceMemoRecordViewController: UIAdaptivePresentationControllerDelegate {
+    func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
+        if recordButton.isSelected {
+            let alert = UIAlertController(title: nil, message: "녹음중인 파일이 저장되지 않습니다.", preferredStyle: .alert)
+            let dismissAction = UIAlertAction(title: "확인", style: .default) { [weak self] _ in
+                self?.dismiss(animated: true)
+            }
+            let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+            alert.addAction(dismissAction)
+            alert.addAction(cancelAction)
+            self.present(alert, animated: true)
+        } else {
+            self.dismiss(animated: true)
+        }
+    }
+}
