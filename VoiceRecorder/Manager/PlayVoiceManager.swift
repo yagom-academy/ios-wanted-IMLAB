@@ -17,9 +17,6 @@ class PlayVoiceManager{
     //재생할 오디오 파일
     var audioFile : AVAudioFile?
     var format : AVAudioFormat?
-    //player 노드
-    
-    
     //오디오 엔진
     let audioEngine = AVAudioEngine()
     let playerNode = AVAudioPlayerNode()
@@ -28,43 +25,21 @@ class PlayVoiceManager{
     var isPlay = false
     
     
-    
     init(){
+        setAudio()
+    }
+    
+    func setAudioFile(){
         let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent("myRecoding.m4a")
-        do{
-            let file = try AVAudioFile(forReading: fileURL)
-            audioFile = file
-            format = file.processingFormat
-        }catch{
-            print(error.localizedDescription)
-        }
-        
-        playerNode.volume = 0.5
-        
-        audioEngine.attach(playerNode)
-        audioEngine.attach(pitchControl)
-        
-        audioEngine.connect(playerNode, to: pitchControl, format: nil)
-        audioEngine.connect(pitchControl, to: audioEngine.mainMixerNode, format: nil)
-        audioEngine.connect(audioEngine.mainMixerNode, to: audioEngine.outputNode, format: format)
-        
-        self.audioEngine.prepare()
-        do{
-            try audioEngine.start()
-        }catch{
-            print("AUDIO ENGINE START ERROR")
-        }
-        setScheduleFile()
+                .appendingPathComponent("myRecoding.m4a")
+        guard let file = try? AVAudioFile(forReading: fileURL) else {return}
+        self.format = file.processingFormat
+        self.audioFile = file
     }
     
     func setAudio(){
-        let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-                .appendingPathComponent("myRecoding.m4a")
-        guard let audioFile = try? AVAudioFile(forReading: fileURL) else {return}
-        let format = audioFile.processingFormat
-        self.audioFile = audioFile
-        setEngine(format: format)
+        setAudioFile()
+        setEngine(format: format!)
     }
     
     func setEngine(format : AVAudioFormat){
@@ -78,8 +53,16 @@ class PlayVoiceManager{
         self.audioEngine.prepare()
         do{
             try audioEngine.start()
+            setScheduleFile()
         }catch{
             print("AUDIO ENGINE START ERROR")
+        }
+    }
+    
+    func setScheduleFile(){
+        guard let file = audioFile else {return}
+        playerNode.scheduleFile(file, at: nil, completionCallbackType: .dataPlayedBack) { _ in
+            self.delegate.playEndTime()
         }
     }
     
@@ -93,38 +76,16 @@ class PlayVoiceManager{
         playerNode.pause()
         }
     
-    func setScheduleFile(){
-        guard let file = audioFile else {return}
-        playerNode.scheduleFile(file, at: nil, completionCallbackType: .dataPlayedBack) { _ in
-            self.delegate.playEndTime()
-        }
-    }
+    
     
     func setNewScheduleFile(){
         playerNode.stop()
-        let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-                .appendingPathComponent("myRecoding.m4a")
-        do{
-            let file = try AVAudioFile(forReading: fileURL)
-            audioFile = file
-        }catch{
-            error.localizedDescription
-        }
-        
-        guard let file = audioFile else {return}
-        playerNode.scheduleFile(file, at: nil, completionCallbackType: .dataPlayedBack) { _ in
-            self.delegate.playEndTime()
-        }
+        setAudioFile()
+        setScheduleFile()
         print("NEW SCHEDULEFILE")
     }
     
     func forwardFiveSecond(){
-        //현재까지 재생된 오디오의 프레임 위치
-        playerNode.stop()
-        guard let audioFile = audioFile else {
-            return
-        }
-        playerNode.scheduleFile(audioFile, at: nil, completionCallbackType: .dataPlayedBack)
     }
         
     func seek(to : Double){
