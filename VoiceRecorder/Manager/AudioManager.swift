@@ -34,7 +34,14 @@ class AudioManager {
     private lazy var audioEQFilterParameters = audioEQ.bands[0]
     private lazy var inputNode = audioEngine.inputNode
     private lazy var mixerNode = AVAudioMixerNode()
-    lazy var cutOffFrequency: Float = 0 // 추후 제거할 property
+    lazy var cutOffFrequency: Float = 1 {
+        didSet {
+            let sampleRate = inputNode.outputFormat(forBus: 0).sampleRate
+            let sampleRateUnit = Float(sampleRate / 2 / 10)
+            
+            audioEQFilterParameters.frequency = sampleRateUnit * cutOffFrequency + 20
+        }
+    } // 추후 제거할 property
     
     // play properties
     private lazy var seekFrame: AVAudioFramePosition = 0
@@ -93,7 +100,7 @@ class AudioManager {
     
     private func prepareAudioEQNode() {
         audioEQFilterParameters.filterType = .lowPass
-        audioEQFilterParameters.frequency = cutOffFrequency
+        cutOffFrequency = cutOffFrequency
         audioEQFilterParameters.bandwidth = 5.0
         audioEQFilterParameters.gain = 15
         audioEQFilterParameters.bypass = false

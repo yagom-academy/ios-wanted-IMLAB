@@ -9,6 +9,11 @@ import UIKit
 
 class VoiceMemoRecordViewController: UIViewController {
     
+    enum RecordViewJobMode {
+        case record
+        case play
+    }
+    
     // - MARK: UI init
     let pathFinder = try! PathFinder()
     let audioManager = AudioManager()
@@ -26,8 +31,11 @@ class VoiceMemoRecordViewController: UIViewController {
     }()
     
     // 뭔지 모르겠네,, 컷오프를 정하는건지 재생시간을 표기한건지
-    let idonknowSilder: UISlider = {
-        return UISlider()
+    let cutOffFrequencySlider: UISlider = {
+        let slider = UISlider()
+        slider.value = 1
+        
+        return slider
     }()
     
     let playTimeLabel: UILabel = {
@@ -77,7 +85,7 @@ class VoiceMemoRecordViewController: UIViewController {
         super.viewDidLoad()
         configure()
         designateUIs()
-        playRelatedButtonsHiddenAnimation(true)
+        playRelatedButtonsHiddenAnimation(.record)
         configureTargetMethod()
     }
     
@@ -119,12 +127,12 @@ class VoiceMemoRecordViewController: UIViewController {
     }
     
     private func designateSlider() {
-        self.view.addSubview(idonknowSilder)
-        idonknowSilder.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(cutOffFrequencySlider)
+        cutOffFrequencySlider.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            idonknowSilder.topAnchor.constraint(equalTo: cutoffLabel.safeAreaLayoutGuide.bottomAnchor, constant: 16),
-            idonknowSilder.leadingAnchor.constraint(equalTo: cutoffLabel.safeAreaLayoutGuide.leadingAnchor),
-            idonknowSilder.trailingAnchor.constraint(equalTo: cutoffLabel.safeAreaLayoutGuide.trailingAnchor)
+            cutOffFrequencySlider.topAnchor.constraint(equalTo: cutoffLabel.safeAreaLayoutGuide.bottomAnchor, constant: 16),
+            cutOffFrequencySlider.leadingAnchor.constraint(equalTo: cutoffLabel.safeAreaLayoutGuide.leadingAnchor),
+            cutOffFrequencySlider.trailingAnchor.constraint(equalTo: cutoffLabel.safeAreaLayoutGuide.trailingAnchor)
         ])
     }
     
@@ -133,7 +141,7 @@ class VoiceMemoRecordViewController: UIViewController {
         playTimeLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             playTimeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            playTimeLabel.topAnchor.constraint(equalTo: idonknowSilder.safeAreaLayoutGuide.bottomAnchor, constant: 8),
+            playTimeLabel.topAnchor.constraint(equalTo: cutOffFrequencySlider.safeAreaLayoutGuide.bottomAnchor, constant: 8),
             
             playTimeLabel.heightAnchor.constraint(equalToConstant: 20)
         ])
@@ -160,6 +168,9 @@ class VoiceMemoRecordViewController: UIViewController {
     private func configureTargetMethod() {
         recordButton.addTarget(self, action: #selector(recordButtonTapped(_:)), for: .touchUpInside)
         playOrPauseButton.addTarget(self, action: #selector(playOrPauseButtonTapped(_:)), for: .touchUpInside)
+        goForward5SecButton.addTarget(self, action: #selector(move5SecondsButtonTapped(_:)), for: .touchUpInside)
+        goBackward5SecButton.addTarget(self, action: #selector(move5SecondsButtonTapped(_:)), for: .touchUpInside)
+        cutOffFrequencySlider.addTarget(self, action: #selector(cutOffFrequencySliderValueChanged(_:)), for: .valueChanged )
     }
     
     /// 녹음완료후 음성파일의 시간
@@ -168,10 +179,10 @@ class VoiceMemoRecordViewController: UIViewController {
     }
     
     /// 플레이관련 버튼들의 hidden animation
-    private func playRelatedButtonsHiddenAnimation(_ isHidden: Bool) {
+    private func playRelatedButtonsHiddenAnimation(_ mode: RecordViewJobMode) {
         let playRelatedButtons = [playOrPauseButton, goBackward5SecButton, goForward5SecButton]
         UIView.animate(withDuration: 0.05) {
-            if isHidden {
+            if mode == .record {
                 playRelatedButtons.forEach { $0.isHidden = true }
             } else {
                 playRelatedButtons.forEach { $0.isHidden = false }
@@ -186,12 +197,13 @@ extension VoiceMemoRecordViewController {
         sender.isSelected.toggle()
         
         if sender.isSelected {
-            playRelatedButtonsHiddenAnimation(true)
+            playRelatedButtonsHiddenAnimation(.record)
             audioManager.startRecord(filePath: pathFinder.getPathWithTime())
         } else {
-            playRelatedButtonsHiddenAnimation(false)
+            playRelatedButtonsHiddenAnimation(.play)
             audioManager.stopRecord()
             playTimeLabel.text = showVoiceMemoDuration()
+            print(audioManager.audioEngine.isRunning)
         }
     }
     
@@ -201,8 +213,21 @@ extension VoiceMemoRecordViewController {
         if sender.isSelected {
             audioManager.startPlay(fileURL: pathFinder.lastUsedUrl)
         } else {
-            audioManager.pausePlay()
+            audioManager.stopPlay()
         }
+    }
+    
+    @objc func move5SecondsButtonTapped(_ sender: UIButton) {
+        if sender === goForward5SecButton {
+            audioManager.skip(for: 5, filePath: pathFinder.lastUsedUrl)
+        } else {
+            audioManager.skip(for: -5, filePath: pathFinder.lastUsedUrl)
+        }
+    }
+    
+    @objc func cutOffFrequencySliderValueChanged(_ sender: UISlider) {
+        let value = round(sender.value * 10) / 10
+        audioManager.cutOffFrequency = value
     }
 }
 
