@@ -40,37 +40,14 @@ class RecordListModel {
         }
     }
     
-    func swapByPress(with sender: UILongPressGestureRecognizer, to tableView: UITableView) {
-        let p = sender.location(in: tableView)
-
-        guard let indexPath = tableView.indexPathForRow(at: p) else {
-            print("fail to find indexPath!")
-            playListUserDefaults.save(playList: cellData)
-            return
-        }
-        
-        struct BeforeIndexPath {
-            static var value: IndexPath?
-        }
-        
-        switch sender.state {
-        case .began:
-            BeforeIndexPath.value = indexPath
-        case .changed:
-            if let beforeIndexPath = BeforeIndexPath.value, beforeIndexPath != indexPath {
-                let beforeValue = cellData[beforeIndexPath.row]
-                let afterValue = cellData[indexPath.row]
-                cellData[beforeIndexPath.row] = afterValue
-                cellData[indexPath.row] = beforeValue
-                tableView.moveRow(at: beforeIndexPath, to: indexPath)
-                
-                BeforeIndexPath.value = indexPath
-            }
-        case .ended:
-            playListUserDefaults.save(playList: cellData)
-        default:
-            // TODO: animation
-            break
-        }
+    func swapCell(_ beforeIndexPathRow: Int, _ indexPathRow: Int) {
+        let beforeValue = cellData[beforeIndexPathRow]
+        let afterValue = cellData[indexPathRow]
+        cellData[beforeIndexPathRow] = afterValue
+        cellData[indexPathRow] = beforeValue
+    }
+    
+    func saveListToUserDefaults() {
+        playListUserDefaults.save(playList: cellData)
     }
 }

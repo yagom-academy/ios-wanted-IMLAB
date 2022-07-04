@@ -1,2 +1,7 @@
-# Firebase Info
+## Firebase Info
 /VoiceRecorder/GoogleService-Info.plist
+
+## User settings
+*.xcuserstate
+xcuserdata/
+

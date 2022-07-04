@@ -10,7 +10,7 @@ import UIKit
 class RecordListCell: UITableViewCell {
     static let identifier = "RecordListCell"
     private var isSetGesture: Bool = false
-    private var action: ((UILongPressGestureRecognizer) -> ())?
+    private var action: ((_ sender: UILongPressGestureRecognizer, _ toCenterPoint: CGPoint) -> ())?
     
     private let titleLabel = UILabel()
     private let swipeTapView = UIImageView(image: UIImage(systemName: "text.justify"))
@@ -36,7 +36,7 @@ class RecordListCell: UITableViewCell {
         self.titleLabel.text = filename
     }
     
-    func addTapGesture(action: @escaping (UILongPressGestureRecognizer) -> ()) {
+    func addTapGesture(action: @escaping (_ sender: UILongPressGestureRecognizer, _ toCenterPoint: CGPoint) -> ()) {
         if (isSetGesture == false) {
             isSetGesture = true
             
@@ -47,12 +47,13 @@ class RecordListCell: UITableViewCell {
             //        longPressedGesture.delegate = self
             longPressedGesture.delaysTouchesBegan = true
             swipeTapView.addGestureRecognizer(longPressedGesture)
-            
         }
     }
     
     @objc func connector(with sender: UILongPressGestureRecognizer) {
-        self.action?(sender)
+        let pointAtCell = sender.location(in: self)
+        let toCenterPoint = CGPoint(x: pointAtCell.x-self.frame.width/2, y: pointAtCell.y-self.frame.height/2)
+        self.action?(sender, toCenterPoint)
     }
     
     private func attribute() {
