@@ -147,7 +147,7 @@ class PlayVoiceViewController: UIViewController {
     }
     
     @objc func tabBackward(){
-        //playVoiceManager.backwardFiveSecond()
+        playVoiceManager.backwardFiveSecond()
     }
     
     @objc func slideVolumeButton(_ sender : UISlider){
@@ -155,8 +155,7 @@ class PlayVoiceViewController: UIViewController {
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        
-        //playVoiceManager.stopAudio()
+        playVoiceManager.stopAudio()
     }
     
     deinit{

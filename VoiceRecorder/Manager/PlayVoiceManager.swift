@@ -80,38 +80,67 @@ class PlayVoiceManager{
     
     func setScheduleFile(){
         guard let file = audioFile else {return}
-        playerNode.scheduleFile(file, at: nil, completionCallbackType: .dataPlayedBack) { _ in
-            self.delegate.playEndTime()
-        }
-        print("END")
+        playerNode.scheduleFile(file, at: nil, completionCallbackType: .dataPlayedBack)
     }
     
     func playAudio(){
         isPlay = true
-        displayLink?.isPaused = false
         playerNode.play()
+        displayLink?.isPaused = false
     }
     
     func stopAudio(){
         isPlay = false
-        displayLink?.isPaused = true
         playerNode.pause()
+        displayLink?.isPaused = true
         }
     
     func setNewScheduleFile(){
         playerNode.stop()
+        isPlay = false
         setAudioFile()
         setScheduleFile()
-        print("NEW SCHEDULEFILE")
     }
     
     func forwardFiveSecond(){
-        print(currentFrame)
-        print(audioLengthSamples)
+        seek(time: 5.0)
+    }
+    
+    func backwardFiveSecond(){
+        seek(time: -5.0)
     }
         
-    func seek(to : Double){
+    func seek(time : Double){
+        guard let audioFile = audioFile else {
+            return
+        }
+        let wasPlaying = playerNode.isPlaying
+        let interval = AVAudioFramePosition(time * audioFileSampleRate)
+        seekFrame = currentPosition + interval
+        seekFrame = max(seekFrame, 0)
+        seekFrame = min(seekFrame, audioLengthSamples)
+        currentPosition = seekFrame
         
+        playerNode.stop()
+        
+        if currentPosition < audioLengthSamples{
+        
+        let frameCount = AVAudioFrameCount(audioLengthSamples - seekFrame)
+        playerNode.scheduleSegment(audioFile, startingFrame: seekFrame, frameCount: frameCount, at: nil) {
+            print("COMPLETE")
+        }
+        if wasPlaying{
+            playerNode.play()
+        }
+        }else{
+            playerNode.stop()
+            seekFrame = 0
+            currentPosition = 0
+            isPlay = false
+            displayLink?.isPaused = true
+            delegate.playEndTime()
+            setScheduleFile()
+        }
     }
     
     func setVolume(volume : Float){
@@ -152,6 +181,7 @@ class PlayVoiceManager{
             delegate.playEndTime()
             setScheduleFile()
         }
+        
     }
     
     deinit{

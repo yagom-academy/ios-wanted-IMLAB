@@ -8,14 +8,14 @@
 import Foundation
 import AVFoundation
 
-protocol RecordVoiceManagerDelegate{
+protocol RecordVoiceManagerDelegate : AnyObject{
     func updateCurrentTime(_ currentTime : TimeInterval)
 }
 
 class RecordVoiceManager{
     var timer : Timer?
     var recorder : AVAudioRecorder?
-    var delegate : RecordVoiceManagerDelegate?
+    weak var delegate : RecordVoiceManagerDelegate?
     
     init(){
         self.recorder = nil // 초기화
@@ -57,5 +57,9 @@ class RecordVoiceManager{
     
     func isRecording() -> Bool {
         return self.recorder?.isRecording ?? false
+    }
+    
+    deinit{
+        print("CLOSE RECORDMANAGER")
     }
 }

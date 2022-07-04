@@ -76,7 +76,7 @@ class RecordVoiceViewController: UIViewController {
         forwardFive.translatesAutoresizingMaskIntoConstraints = false
         forwardFive.setPreferredSymbolConfiguration(.init(pointSize: 30), forImageIn: .normal)
         forwardFive.setImage(UIImage(systemName: "goforward.5"), for: .normal)
-        //forwardFive.addTarget(self, action: #selector(tabForward), for: .touchUpInside)
+        forwardFive.addTarget(self, action: #selector(tabForward), for: .touchUpInside)
         return forwardFive
     }()
     
@@ -85,7 +85,7 @@ class RecordVoiceViewController: UIViewController {
         backwardFive.translatesAutoresizingMaskIntoConstraints = false
         backwardFive.setPreferredSymbolConfiguration(.init(pointSize: 30), forImageIn: .normal)
         backwardFive.setImage(UIImage(systemName: "gobackward.5"), for: .normal)
-        //backwardFive.addTarget(self, action: #selector(tabBackward), for: .touchUpInside)
+        backwardFive.addTarget(self, action: #selector(tabBackward), for: .touchUpInside)
         return backwardFive
     }()
     
@@ -188,6 +188,14 @@ class RecordVoiceViewController: UIViewController {
     
     func setUIBeforeRecording(){
         recordFile_ButtonStackView.isHidden = true
+    }
+    
+    @objc func tabForward(){
+        playVoiceManager.forwardFiveSecond()
+    }
+    
+    @objc func tabBackward(){
+        playVoiceManager.backwardFiveSecond()
     }
     
     @objc func tapButton(){
