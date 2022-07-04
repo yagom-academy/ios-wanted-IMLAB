@@ -79,8 +79,8 @@ class VoiceMemoRecordViewController: UIViewController {
     // MARK: - Properties
     let pathFinder = try! PathFinder()
     let audioManager = AudioManager()
-    var timer: Timer?
-    var playTime = 0
+    private var timer: Timer?
+    private var playTime = 0
     
     // - MARK: LifeCycle
     
