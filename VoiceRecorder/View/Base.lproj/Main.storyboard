@@ -265,6 +265,9 @@
                                             <segment title="아기 목소리"/>
                                             <segment title="할아버지 목소리"/>
                                         </segments>
+                                        <connections>
+                                            <action selector="soundPitchControlChanged:" destination="9DQ-7z-LBd" eventType="valueChanged" id="XbA-gx-cD9"/>
+                                        </connections>
                                     </segmentedControl>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="6py-Qc-iYd">
                                         <rect key="frame" x="0.0" y="78" width="300" height="39.5"/>

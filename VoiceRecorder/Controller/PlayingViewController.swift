@@ -33,6 +33,7 @@ class PlayingViewController: UIViewController {
         volumeSlider.value = 5.0
         playProgressBar.progress = 0.0
         audioPlayerHandler.selectPlayFile(self.fileNameLabel.text)
+        audioPlayerHandler.prepareToPlay()
     }
     
     let audioPlayerHandler = AudioPlayerHandler(handler: LocalFileHandler(), updateTimeInterval: UpdateTimeInterval())
@@ -42,6 +43,18 @@ class PlayingViewController: UIViewController {
         player.currentTime = player.currentTime - 5.0
         player.play()
     }
+    
+    @IBAction func soundPitchControlChanged(_ sender: UISegmentedControl) {
+        switch sender.selectedSegmentIndex {
+        case 1:
+            audioPlayerHandler.playSound(pitch: 1000, fileName: self.fileNameLabel.text!)
+        case 2:
+            audioPlayerHandler.playSound(pitch: -500, fileName: self.fileNameLabel.text!)
+        default:
+            audioPlayerHandler.playSound(pitch: 0, fileName: self.fileNameLabel.text!)
+        }
+    }
+    
     
     func setButton(enable: Bool) {
         goBackwardButton.isEnabled = enable
