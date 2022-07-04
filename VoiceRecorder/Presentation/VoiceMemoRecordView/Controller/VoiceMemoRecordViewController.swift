@@ -39,6 +39,7 @@ class VoiceMemoRecordViewController: UIViewController {
         
         button.setImage(UIImage.init(systemName: "play"), for: .normal)
         button.setImage(UIImage.init(systemName: "pause.fill"), for: .selected)
+        button.setPreferredSymbolConfiguration(.init(pointSize: 35, weight: .regular, scale: .default), forImageIn: .normal)
         return button
     }()
     
@@ -48,6 +49,7 @@ class VoiceMemoRecordViewController: UIViewController {
         button.tintColor = .systemRed
         button.setImage(UIImage.init(systemName: "circle.fill"), for: .normal)
         button.setImage(UIImage.init(systemName: "stop.fill"), for: .selected)
+        button.setPreferredSymbolConfiguration(.init(pointSize: 35, weight: .regular, scale: .default), forImageIn: .normal)
         return button
     }()
     
@@ -55,6 +57,7 @@ class VoiceMemoRecordViewController: UIViewController {
         let button = UIButton.init()
         
         button.setImage(UIImage.init(systemName: "goforward.5"), for: .normal)
+        button.setPreferredSymbolConfiguration(.init(pointSize: 35, weight: .regular, scale: .default), forImageIn: .normal)
         return button
     }()
     
@@ -62,6 +65,7 @@ class VoiceMemoRecordViewController: UIViewController {
         let button = UIButton.init()
         
         button.setImage(UIImage.init(systemName: "gobackward.5"), for: .normal)
+        button.setPreferredSymbolConfiguration(.init(pointSize: 35, weight: .regular, scale: .default), forImageIn: .normal)
         return button
     }()
     
@@ -134,7 +138,7 @@ class VoiceMemoRecordViewController: UIViewController {
     private func designateButtons() {
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        stackView.spacing = 10
+        stackView.spacing = 20
         stackView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(stackView)
         stackView.addArrangedSubview(recordButton)
@@ -143,7 +147,7 @@ class VoiceMemoRecordViewController: UIViewController {
         stackView.addArrangedSubview(goForward5SecButton)
         
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo:playTimeLabel.safeAreaLayoutGuide.bottomAnchor, constant: 20),
+            stackView.topAnchor.constraint(equalTo:playTimeLabel.safeAreaLayoutGuide.bottomAnchor, constant: 35),
             stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
