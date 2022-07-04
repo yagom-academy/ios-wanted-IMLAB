@@ -11,6 +11,7 @@ import AVFoundation
 class RecordViewController: UIViewController {
     
     var soundManager = SoundManager()
+    var firebase = Firebase()
     var engine = AVAudioEngine()
     
     var isStartRecording: Bool = false
@@ -38,6 +39,9 @@ class RecordViewController: UIViewController {
         let url = documentsURL.appendingPathComponent(fileName)
         return url
     }()
+    
+    // 녹음시 녹음 파일 생성 Properties
+    var fileURL = URL(fileURLWithPath: "voice.m4a", isDirectory: false, relativeTo: URL(fileURLWithPath: NSTemporaryDirectory()))
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -93,7 +97,8 @@ class RecordViewController: UIViewController {
         recordButtonToggle()
         
         if isStartRecording { // 녹음 시작일 때
-            soundManager.startRecord(filePath: recordURL)
+            soundManager.startRecord(filePath: fileURL)
+            firebase.upload(url: fileURL)
         } else { // 녹음 끝일 때
             soundManager.stopRecord()
         }
