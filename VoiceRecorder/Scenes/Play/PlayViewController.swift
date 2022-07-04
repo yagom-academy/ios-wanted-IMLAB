@@ -16,12 +16,14 @@ class PlayViewController: UIViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    LoadingIndicator.showLoading()
     setupView()
     setupConstraints()
     setupAudio()
     bind()
     setupWaveform()
     setupAction()
+    LoadingIndicator.hideLoading()
   }
 
   func setupView() {
