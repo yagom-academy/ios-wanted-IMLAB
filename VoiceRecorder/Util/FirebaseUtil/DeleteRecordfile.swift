@@ -11,7 +11,7 @@ import FirebaseStorage
 class DeleteRecordfile : FirebaseStoreDelete {
     func deleteOnTheFirebase(fileName: String) {
         let storageRef = Storage.storage().reference()
-        let desertRef = storageRef.child("voiceRecords").child("\(fileName).m4a")
+        let desertRef = storageRef.child("voiceRecords").child(fileName)
         desertRef.delete { error in
           if let error = error {
               print(error.localizedDescription)
