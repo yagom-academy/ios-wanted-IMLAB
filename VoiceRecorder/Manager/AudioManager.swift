@@ -29,7 +29,7 @@ class AudioManager {
     // - MARK: Property
     
     // recording properties
-    private lazy var audioEngine = AVAudioEngine()
+    lazy var audioEngine = AVAudioEngine()
     private lazy var audioEQ = AVAudioUnitEQ(numberOfBands: 1)
     private lazy var audioEQFilterParameters = audioEQ.bands[0]
     private lazy var inputNode = audioEngine.inputNode
@@ -71,6 +71,12 @@ class AudioManager {
     
     private func getAudioFile(filePath: URL) throws -> AVAudioFile {
         return try AVAudioFile(forReading: filePath)
+    }
+    
+    private func removeEngineNodes() {
+        audioEngine.attachedNodes.forEach {
+            $0.removeTap(onBus: 0)
+        }
     }
     
     // - MARK: Audio Record Methods
@@ -134,6 +140,7 @@ class AudioManager {
     /// 레코딩 완료
     func stopRecord() {
         audioEngine.stop()
+        removeEngineNodes()
     }
     
 }
@@ -255,7 +262,6 @@ extension AudioManager {
     func startPlay(fileURL: URL) {
         if !audioEngine.isRunning {
             audioEngine.reset()
-            
             preparePlayEngine()
             preparePlay(filePath: fileURL)
             
@@ -272,6 +278,7 @@ extension AudioManager {
         audioEngine.stop()
         seekFrame = 0
         currentPosition = 0
+        removeEngineNodes()
     }
     
     func pausePlay() {
@@ -359,5 +366,4 @@ extension AudioManager {
             audioPlayerNode.volume = newValue
         }
     }
-    
 }
