@@ -41,11 +41,10 @@ class PlayViewController: UIViewController {
     
     // MARK: - @IBAction
     @IBAction func didTapPlayBack5Button(_ sender: UIButton) {
-        player?.seek(-5)
-        
+        engine.seek(to: -3)
     }
     @IBAction func didTapPlayForward5Button(_ sender: UIButton) {
-        player?.seek(5)
+        engine.seek(to: 3)
     }
     @IBAction func didTapPlayPauseButton(_ sender: UIButton) {
         if isPlay {

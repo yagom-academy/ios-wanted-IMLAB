@@ -38,6 +38,7 @@ class RecordViewController: UIViewController {
     private var currentPlayTime = 0.0
     
     private let player = AudioPlayer()
+    private let engine = AudioEngine()
     private let recorder = AudioRecorder()
     
     // MARK: - Life Cycle
@@ -68,6 +69,7 @@ class RecordViewController: UIViewController {
             guard let data = recorder.data else { return }
             player.url = fileName
             player.setupPlayer()
+            
             uploadFile(data, fileName: recordDate ?? "", duration: player.duration)
             print(fileName)
         } else {
@@ -85,15 +87,17 @@ class RecordViewController: UIViewController {
     }
     
     @IBAction func didTapPlayBack5Button(_ sender: UIButton) {
-        player.seek(-5)
-        counter = player.currentTime
-        currentPlayTime = player.currentTime
+//        player.seek(-5)
+//        counter = player.currentTime
+//        currentPlayTime = player.currentTime
+        engine.skip(forwards: false)
     }
     
     @IBAction func didTapPlayForward5Button(_ sender: UIButton) {
-        player.seek(5)
-        counter = player.currentTime
-        currentPlayTime = player.currentTime
+//        player.seek(5)
+//        counter = player.currentTime
+//        currentPlayTime = player.currentTime
+        engine.skip(forwards: true)
     }
     
     @IBAction func didTapPlayPauseButton(_ sender: UIButton) {
@@ -101,10 +105,14 @@ class RecordViewController: UIViewController {
             sender.setImage(Icon.play.image, for: .normal)
             progressTimer?.invalidate()
             currentPlayTime = player.currentTime
-            player.stop()
+//            player.stop()
+            engine.pause()
         } else {
+            engine.url = fileName
+            try! engine.setupEngine()
             player.currentTime = currentPlayTime
-            player.play()
+//            player.play()
+            engine.play()
             
             progressTimer = Timer.scheduledTimer(
                 timeInterval: 0.01,
