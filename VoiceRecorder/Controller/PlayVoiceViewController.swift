@@ -16,7 +16,8 @@ class PlayVoiceViewController: UIViewController {
     var soundWaveImageView : UIImageView = {
         let soundWaveImageView = UIImageView()
         soundWaveImageView.translatesAutoresizingMaskIntoConstraints = false
-        soundWaveImageView.contentMode = .scaleAspectFit
+        soundWaveImageView.frame.size.width = CGFloat(FP_INFINITE)
+        soundWaveImageView.contentMode = .left
         return soundWaveImageView
     }()
     
@@ -109,6 +110,7 @@ class PlayVoiceViewController: UIViewController {
             soundWaveImageView.leadingAnchor.constraint(equalTo: view.centerXAnchor),
             soundWaveImageView.topAnchor.constraint(equalTo: fileNameLabel.bottomAnchor, constant: 30),
             soundWaveImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.15),
+            soundWaveImageView.widthAnchor.constraint(equalTo: view.widthAnchor),
             
             selectedPitchSegment.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             selectedPitchSegment.topAnchor.constraint(equalTo: soundWaveImageView.bottomAnchor, constant: 30),
@@ -190,11 +192,30 @@ extension UIImageView{
             if let data = try? Data(contentsOf: url){
                 if let image = UIImage(data: data){
                     DispatchQueue.main.async {
-                        self?.image = image
+                        let resizedImage = image.aspectFitImage(inRect: self?.bounds ?? CGRect(x: 0, y: 0, width: 10, height: 10))
+                        self?.image = resizedImage
                         completion()
                     }
                 }
             }
         }
+    }
+}
+
+
+extension UIImage {
+    func aspectFitImage(inRect rect: CGRect) -> UIImage? {
+        let width = self.size.width
+        let height = self.size.height
+        let scaleFactor = rect.size.height / height
+
+        UIGraphicsBeginImageContext(CGSize(width: width * scaleFactor, height: height * scaleFactor))
+        self.draw(in: CGRect(x: 0.0, y: 0.0, width: width * scaleFactor, height: height * scaleFactor))
+
+        defer {
+            UIGraphicsEndImageContext()
+        }
+
+        return UIGraphicsGetImageFromCurrentImageContext()
     }
 }
