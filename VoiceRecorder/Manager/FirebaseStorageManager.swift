@@ -7,7 +7,7 @@ protocol FirebaseStorageManagerDelegate : AnyObject{
 
 
 
-class FirebaseStorageManager{
+class FirebaseStorageManager {
     let storage = Storage.storage()
     weak var delegate : FirebaseStorageManagerDelegate!
     
@@ -84,7 +84,7 @@ class FirebaseStorageManager{
     
     func deleteRecord(fileName : String, completion : @escaping()->Void){
         let storageRef = storage.reference().child("record/\(fileName).m4a")
-        let imageRef = storage.reference().child("waveForm/\(fileName)WaveForm")
+        let imageRef = storage.reference().child("waveForm/\(fileName)WaveForm.png")
         storageRef.delete { error in
             if let error = error{
                 print(error.localizedDescription)
