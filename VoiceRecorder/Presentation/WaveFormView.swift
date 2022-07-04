@@ -48,5 +48,13 @@ class WaveFormView: UIView {
     
     required init?(coder decoder: NSCoder) {
         super.init(coder: decoder)
-    } 
+    }
+    
+    public func shiftWaveform() {
+        guard let sublayers = self.layer.sublayers else { return }
+        for layer in sublayers {
+            let transform  = CATransform3DTranslate(layer.transform, -5, 0, 0)
+            layer.transform = transform
+        }
+    }
 }
