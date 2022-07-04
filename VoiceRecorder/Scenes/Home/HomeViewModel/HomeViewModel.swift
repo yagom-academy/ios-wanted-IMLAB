@@ -13,14 +13,12 @@ final class HomeViewModel {
     var audioData: [String: Observable<AudioRepresentation>] = [:]
     
     subscript(_ indexPath: IndexPath) -> AudioRepresentation? {
-        
         let title = audioTitles[indexPath.item]
         guard let data = audioData[title]?.value else {return nil}
         return data
     }
     
     func fetchAudioTitles(completion: @escaping () -> Void) {
-        //        var tempList: [String] = []
         FirebaseService.fetchAll { [weak self] result in
             switch result {
             case .success(let data):
@@ -41,6 +39,7 @@ final class HomeViewModel {
             FirebaseService.featchMetaData(endPoint: endPoint) {[weak self] result in
                 switch result {
                 case .success(let metadata):
+//                    self?.sortByDate()
                     self?.audioData[endPoint.fileName]?.value = metadata.toDomain()
                 case .failure(let error):
                     print(error)
@@ -83,9 +82,29 @@ final class HomeViewModel {
         }
     }
     
+    
+    
+    
     func sortByDate() {
         self.audioTitles = audioTitles.sorted(by:{
-            return audioData[$0]?.value.createdDate?.compare(audioData[$1]?.value.createdDate ?? Date()) == .orderedAscending})
+            audioData[$0]?.value.createdDate?.compare(audioData[$1]?.value.createdDate ?? Date()) == .orderedAscending})
+        
+        self.audioTitles.forEach({
+            guard let index = self.audioTitles.firstIndex(of: $0) else {return}
+            guard let previousValue = self.audioData[self.audioTitles[index]] else {return}
+            self.audioData[$0]?.value = previousValue.value
+        })
+        
     }
 
+    
+    
+    
+    
+    
+    func reset(){
+        audioTitles.removeAll()
+        audioData.removeAll()
+    }
+    
 }

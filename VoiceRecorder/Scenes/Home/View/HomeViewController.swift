@@ -13,16 +13,17 @@ final class HomeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setDataBinding()
+        homeViewModel.reset()
+        self.setDataBinding()
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setNavigationBar()
         setTableView()
         setConstraints()
     }
-
+    
 }
 
 private extension HomeViewController {
@@ -59,7 +60,7 @@ private extension HomeViewController {
         ])
     }
     
-    func setDataBinding(){
+    func setDataBinding() {
         let group = DispatchGroup()
         DispatchQueue.global().async {
             group.enter()
@@ -67,11 +68,16 @@ private extension HomeViewController {
                 group.leave()
             }
             group.wait()
+            
+            DispatchQueue.main.async {
+                self.homeTableView?.reloadData()
+            }
+            
             self.homeViewModel.fetchMetaData()
             self.homeViewModel.audioData.values.forEach({ $0.bind { [weak self] metadata in
-                self?.homeViewModel.sortByDate()
                 DispatchQueue.main.async {
-                        self?.homeTableView?.reloadSections(IndexSet(integer: 0), with: .automatic)
+                    guard let filename = metadata.filename, let index = self?.homeViewModel.audioTitles.firstIndex(of: filename) else {return}
+                    self?.homeTableView?.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
                 }
             }})
         }
@@ -83,7 +89,7 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.id) as? HomeTableViewCell else {return UITableViewCell()}
-     
+        
         let model = homeViewModel[indexPath]
         cell.configure(model: model)
         return cell
@@ -98,7 +104,8 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
         if editingStyle == .delete {
             homeViewModel.remove(indexPath: indexPath){ isRemoved in
                 if isRemoved{
-                    tableView.deleteRows(at: [indexPath], with: .fade)
+                    tableView.deleteRows(at: [indexPath], with: .automatic)
+                    tableView.reloadData()
                 }
             }
         }

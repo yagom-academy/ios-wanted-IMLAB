@@ -89,6 +89,20 @@ class CreateAudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudi
             do {
                 if let audioRecorder = audioRecorder{
                     let data = try Data(contentsOf: audioRecorder.url)
+                    let customData = CustomMetadata(length: "1")
+                    let test = StorageMetadata()
+                    test.customMetadata = customData.toDict()
+                    test.contentType = CustomMetadata.fileType
+                    let audioInfo = AudioInfo(id: UUID().uuidString, data: data, metadata: test)
+                    FirebaseService.uploadAudio(audio: audioInfo) { result in
+                        switch result {
+                        case .success(let metadata):
+                            print(metadata)
+                        case .failure(let error):
+                            print(error)
+                        }
+                    }
+                    
 //                    FirebaseService.uploadAudio(fileName: "shinTmp.mp3", data: data) { err in
 //                        print("firebase err: \(String(describing: err?.localizedDescription))")
 //                    }
