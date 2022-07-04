@@ -7,17 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		68BF990E286F14D400BE55CF /* FirebaseStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68BF990D286F14D400BE55CF /* FirebaseStorageManager.swift */; };
 		68F5662C286BD2FC0068A5CE /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 68F5662B286BD2FC0068A5CE /* FirebaseStorage */; };
 		68F5665C286ED6560068A5CE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 68F5665B286ED6560068A5CE /* GoogleService-Info.plist */; };
 		DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65B28604278003DD2F5 /* AppDelegate.swift */; };
 		DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65D28604278003DD2F5 /* SceneDelegate.swift */; };
-		DE15E66028604278003DD2F5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65F28604278003DD2F5 /* ViewController.swift */; };
 		DE15E66528604279003DD2F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66428604279003DD2F5 /* Assets.xcassets */; };
 		DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */; };
 		F00A2C91286BE36800ED57A8 /* VoicePlayingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00A2C90286BE36800ED57A8 /* VoicePlayingViewController.swift */; };
 		F00A2C94286BE8E400ED57A8 /* NSLayoutConstraint+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00A2C93286BE8E400ED57A8 /* NSLayoutConstraint+extension.swift */; };
 		F00A2C98286BEF6C00ED57A8 /* PlayControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00A2C97286BEF6C00ED57A8 /* PlayControlView.swift */; };
+		F06B92492870572400A704AF /* RecordedVoiceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06B92482870572400A704AF /* RecordedVoiceListViewController.swift */; };
+		F06B924D2870575A00A704AF /* RecordedVoiceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06B924C2870575A00A704AF /* RecordedVoiceTableViewCell.swift */; };
 		F0D559DC286C1AEB0078BCF3 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D559DB286C1AEB0078BCF3 /* SoundManager.swift */; };
 		F0D559DE286C3A2A0078BCF3 /* sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F0D559DD286C3A2A0078BCF3 /* sound.mp3 */; };
 		F0D766F3286C4A38008A469F /* AVAudioPlayerNode+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D766F2286C4A38008A469F /* AVAudioPlayerNode+extension.swift */; };
@@ -26,18 +26,18 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		68BF990D286F14D400BE55CF /* FirebaseStorageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseStorageManager.swift; sourceTree = "<group>"; };
 		68F5665B286ED6560068A5CE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		DE15E65828604278003DD2F5 /* VoiceRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE15E65B28604278003DD2F5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DE15E65D28604278003DD2F5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		DE15E65F28604278003DD2F5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		DE15E66428604279003DD2F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DE15E66728604279003DD2F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DE15E66928604279003DD2F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F00A2C90286BE36800ED57A8 /* VoicePlayingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoicePlayingViewController.swift; sourceTree = "<group>"; };
 		F00A2C93286BE8E400ED57A8 /* NSLayoutConstraint+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSLayoutConstraint+extension.swift"; sourceTree = "<group>"; };
 		F00A2C97286BEF6C00ED57A8 /* PlayControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayControlView.swift; sourceTree = "<group>"; };
+		F06B92482870572400A704AF /* RecordedVoiceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordedVoiceListViewController.swift; sourceTree = "<group>"; };
+		F06B924C2870575A00A704AF /* RecordedVoiceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordedVoiceTableViewCell.swift; sourceTree = "<group>"; };
 		F0D559DB286C1AEB0078BCF3 /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
 		F0D559DD286C3A2A0078BCF3 /* sound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = sound.mp3; path = Assets.xcassets/sound.dataset/sound.mp3; sourceTree = "<group>"; };
 		F0D766F2286C4A38008A469F /* AVAudioPlayerNode+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVAudioPlayerNode+extension.swift"; sourceTree = "<group>"; };
@@ -57,14 +57,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		68BF9908286F148400BE55CF /* Network */ = {
-			isa = PBXGroup;
-			children = (
-				68BF990D286F14D400BE55CF /* FirebaseStorageManager.swift */,
-			);
-			path = Network;
-			sourceTree = "<group>";
-		};
 		68BF990F286F1A9B00BE55CF /* RecordVoice */ = {
 			isa = PBXGroup;
 			children = (
@@ -100,14 +92,13 @@
 		DE15E65A28604278003DD2F5 /* VoiceRecorder */ = {
 			isa = PBXGroup;
 			children = (
+				F06B9247287056F500A704AF /* VoiceList */,
 				F0D559DA286C1AD30078BCF3 /* SoundManager */,
 				F00A2C92286BE8D200ED57A8 /* MISC */,
 				68BF990F286F1A9B00BE55CF /* RecordVoice */,
 				F00A2C8F286BE20400ED57A8 /* PlayVoice */,
-				68BF9908286F148400BE55CF /* Network */,
 				DE15E65B28604278003DD2F5 /* AppDelegate.swift */,
 				DE15E65D28604278003DD2F5 /* SceneDelegate.swift */,
-				DE15E65F28604278003DD2F5 /* ViewController.swift */,
 				F0D559DD286C3A2A0078BCF3 /* sound.mp3 */,
 				DE15E66428604279003DD2F5 /* Assets.xcassets */,
 				DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */,
@@ -149,6 +140,31 @@
 				F00A2C90286BE36800ED57A8 /* VoicePlayingViewController.swift */,
 			);
 			path = VC;
+			sourceTree = "<group>";
+		};
+		F06B9247287056F500A704AF /* VoiceList */ = {
+			isa = PBXGroup;
+			children = (
+				F06B924B2870573800A704AF /* View */,
+				F06B924A2870573400A704AF /* VC */,
+			);
+			path = VoiceList;
+			sourceTree = "<group>";
+		};
+		F06B924A2870573400A704AF /* VC */ = {
+			isa = PBXGroup;
+			children = (
+				F06B92482870572400A704AF /* RecordedVoiceListViewController.swift */,
+			);
+			path = VC;
+			sourceTree = "<group>";
+		};
+		F06B924B2870573800A704AF /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F06B924C2870575A00A704AF /* RecordedVoiceTableViewCell.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		F0D559DA286C1AD30078BCF3 /* SoundManager */ = {
@@ -242,13 +258,13 @@
 				F0D559DC286C1AEB0078BCF3 /* SoundManager.swift in Sources */,
 				F00A2C94286BE8E400ED57A8 /* NSLayoutConstraint+extension.swift in Sources */,
 				F0F45B7F286FE8C8006C3F84 /* Recorder.swift in Sources */,
-				DE15E66028604278003DD2F5 /* ViewController.swift in Sources */,
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
-				68BF990E286F14D400BE55CF /* FirebaseStorageManager.swift in Sources */,
 				DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */,
+				F06B924D2870575A00A704AF /* RecordedVoiceTableViewCell.swift in Sources */,
 				F0F45B81286FE8E7006C3F84 /* RecordCheckViewController.swift in Sources */,
 				F0D766F3286C4A38008A469F /* AVAudioPlayerNode+extension.swift in Sources */,
 				F00A2C98286BEF6C00ED57A8 /* PlayControlView.swift in Sources */,
+				F06B92492870572400A704AF /* RecordedVoiceListViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
