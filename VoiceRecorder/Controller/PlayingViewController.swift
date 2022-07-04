@@ -32,6 +32,7 @@ class PlayingViewController: UIViewController {
         volumeSlider.maximumValue = 10.0
         volumeSlider.value = 5.0
         playProgressBar.progress = 0.0
+        audioPlayerHandler.selectPlayFile(self.fileNameLabel.text)
     }
     
     let audioPlayerHandler = AudioPlayerHandler(handler: LocalFileHandler(), updateTimeInterval: UpdateTimeInterval())
@@ -49,11 +50,10 @@ class PlayingViewController: UIViewController {
     
     @IBAction func playButtonTapped(_ sender: UIButton) {
         if inPlayMode {
-            audioPlayerHandler.audioPlayer.volume = volumeSlider.value
-            setButton(enable: true)
-            audioPlayerHandler.audioPlayer.delegate = self
             sender.setImage(UIImage(systemName: "pause"), for: .normal)
-            audioPlayerHandler.startPlay(isSelectedFile: true, fileName: self.fileNameLabel.text!)
+            setButton(enable: true)
+            audioPlayerHandler.audioPlayer.play()
+            audioPlayerHandler.audioPlayer.delegate = self
             totalPlayTimeLabel.text = audioPlayerHandler.updateTimer(audioPlayerHandler.audioPlayer.duration)
             progressTimer = Timer.scheduledTimer(timeInterval: 0.05,
                                                  target: self,
@@ -90,7 +90,9 @@ extension PlayingViewController: AVAudioPlayerDelegate {
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         player.stop()
         self.playButton.setImage(UIImage(systemName: "play"), for: .normal)
-        playProgressBar.progress = 0
         progressTimer.invalidate()
+        playProgressBar.progress = 0
+        setButton(enable: false)
+        inPlayMode.toggle()
     }
 }

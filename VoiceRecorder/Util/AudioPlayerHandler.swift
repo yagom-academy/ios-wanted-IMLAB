@@ -13,6 +13,7 @@ class AudioPlayerHandler {
     var audioPlayer = AVAudioPlayer()
     var localFileHandler: LocalFileProtocol
     var updateTimeInterval: UpdateTimer
+    var recordFileURL: URL!
     
     init(handler: LocalFileProtocol, updateTimeInterval: UpdateTimer) {
         self.localFileHandler = handler
@@ -20,36 +21,26 @@ class AudioPlayerHandler {
     }
     
     func selectPlayFile(_ fileName: String?) {
-        var recordFileURL = localFileHandler.localFileURL
         if fileName == nil {
             let latestRecordFileName = localFileHandler.getLatestFileName()
             let latestRecordFileURL = localFileHandler.localFileURL.appendingPathComponent(latestRecordFileName)
-            recordFileURL = latestRecordFileURL
+            self.recordFileURL = latestRecordFileURL
         } else {
             guard let playFileName = fileName else { return }
             let selectedFileURL = localFileHandler.localFileURL.appendingPathComponent("voiceRecords_\(playFileName)")
-            recordFileURL = selectedFileURL
+            self.recordFileURL = selectedFileURL
         }
-        prepareToPlay(recordFileURL)
+        prepareToPlay(self.recordFileURL)
     }
     
-    func prepareToPlay(_ recordFileURL: URL) {
+    func prepareToPlay(_ audioFileURL: URL) {
         do {
-            let audioPlayer = try AVAudioPlayer(contentsOf: recordFileURL)
+            let audioPlayer = try AVAudioPlayer(contentsOf: audioFileURL)
             self.audioPlayer = audioPlayer
             self.audioPlayer.prepareToPlay()
+            self.audioPlayer.volume = 5.0
         } catch let error {
             print("Error : setUpPlayer - \(error)")
-        }
-    }
-    
-    func startPlay(isSelectedFile: Bool, fileName: String? = nil) {
-        if fileName != nil {
-            selectPlayFile(fileName)
-            self.audioPlayer.play()
-        } else {
-            selectPlayFile(nil)
-            self.audioPlayer.play()
         }
     }
     
