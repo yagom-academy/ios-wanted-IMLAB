@@ -35,9 +35,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		651BD9EB286C2D6B0075C402 /* PlayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayViewController.swift; sourceTree = "<group>"; };
-		651BD9ED286C327C0075C402 /* Audio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio.swift; sourceTree = "<group>"; };
-		651BD9F1286C42160075C402 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		6586D827286EA01B00A8A3B7 /* RecordFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordFileManager.swift; sourceTree = "<group>"; };
 		65D447F12872BC770035775E /* WaveGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveGenerator.swift; sourceTree = "<group>"; };
 		65D447F32872E6440035775E /* LoadingIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingIndicator.swift; sourceTree = "<group>"; };
@@ -106,9 +103,6 @@
 				B7AB7E2F286C88280051095E /* PlayViewController.swift */,
 				65D447F32872E6440035775E /* LoadingIndicator.swift */,
 				B7AB7E31286C88280051095E /* View */,
-				651BD9EB286C2D6B0075C402 /* PlayViewController.swift */,
-				651BD9ED286C327C0075C402 /* Audio.swift */,
-				651BD9F1286C42160075C402 /* Observable.swift */,
 				6586D827286EA01B00A8A3B7 /* RecordFileManager.swift */,
 			);
 			path = Play;
