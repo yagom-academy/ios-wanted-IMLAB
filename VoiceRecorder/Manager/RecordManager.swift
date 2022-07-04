@@ -14,6 +14,10 @@ class RecordManager: NSObject, AVAudioPlayerDelegate {
     var audioPlayer = AVAudioPlayer()
     var audioFile: URL!
     
+    var timer: Timer?
+    var currentSample: Int = 0
+    var soundSamples = [Float](repeating: 0, count: 10)
+    
     func initRecordSession() {
         let audioSession = AVAudioSession.sharedInstance()
         
@@ -61,6 +65,14 @@ class RecordManager: NSObject, AVAudioPlayerDelegate {
         do {
             recorder = try AVAudioRecorder(url: audioFile, settings: recordSettings)
             recorder?.record()
+            
+            recorder?.isMeteringEnabled = true
+            timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { [weak self] (timer) in
+                guard let self = self else { return }
+                self.recorder?.updateMeters()
+                self.soundSamples[self.currentSample] = self.recorder?.averagePower(forChannel: 0) ?? 0
+                self.currentSample = (self.currentSample + 1) % 10
+            })
         } catch {
             print("Record Error: \(error.localizedDescription)")
         }
@@ -68,6 +80,8 @@ class RecordManager: NSObject, AVAudioPlayerDelegate {
     
     func endRecord() {
 //        var fileName = dateToFileName(Date())
+        timer?.invalidate()
+        
         recorder?.stop()
         recorder = nil
     }
