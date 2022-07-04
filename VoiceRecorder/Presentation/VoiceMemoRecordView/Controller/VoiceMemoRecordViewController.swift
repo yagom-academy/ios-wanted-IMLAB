@@ -216,6 +216,13 @@ class VoiceMemoRecordViewController: UIViewController {
         
         return ["playTime": time]
     }
+    
+    private func convertSecToMin() -> String {
+        let time = audioManager.getPlayTime(filePath: pathFinder.lastUsedUrl)
+        let min = String(format: "%02d", Int(time)! / 60)
+        let sec = String(format: "%02d", Int(time)! % 60)
+        return "\(min):\(sec)"
+    }
 }
 
 // MARK: - TargetMethod
@@ -230,7 +237,7 @@ extension VoiceMemoRecordViewController {
         } else {
             playRelatedButtonsHiddenAnimation(.play)
             audioManager.stopRecord()
-            playTimeLabel.text = showVoiceMemoDuration()
+            playTimeLabel.text = convertSecToMin()
 
             FirebaseStorageManager.shared.uploadVoiceMemoToFirebase(with: pathFinder.lastUsedUrl, fileName: pathFinder.lastUsedFileName) { result in
                 switch result {
