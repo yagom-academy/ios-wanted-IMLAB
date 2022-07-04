@@ -87,7 +87,6 @@
 		DE15E64F28604278003DD2F5 = {
 			isa = PBXGroup;
 			children = (
-				F06B925B2872BA4D00A704AF /* Model */,
 				DE15E65A28604278003DD2F5 /* VoiceRecorder */,
 				DE15E65928604278003DD2F5 /* Products */,
 			);
@@ -104,6 +103,7 @@
 		DE15E65A28604278003DD2F5 /* VoiceRecorder */ = {
 			isa = PBXGroup;
 			children = (
+				F06B925B2872BA4D00A704AF /* Model */,
 				F06B92582872A66C00A704AF /* FileManager */,
 				F06B9247287056F500A704AF /* VoiceList */,
 				F0D559DA286C1AD30078BCF3 /* SoundManager */,
