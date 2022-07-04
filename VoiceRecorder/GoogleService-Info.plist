@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>159143996043-9379dplnl9iuerrft4b95u88reo7a0t9.apps.googleusercontent.com</string>
+	<string>592905478150-3nqm0t2sm1jnk8ijskeopvu1f5iemc22.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.159143996043-9379dplnl9iuerrft4b95u88reo7a0t9</string>
+	<string>com.googleusercontent.apps.592905478150-3nqm0t2sm1jnk8ijskeopvu1f5iemc22</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDvU_N7ba5KXCtoM3iVRF4V4Mx40ZImWmQ</string>
+	<string>AIzaSyCv0e0VUu-IsRAOm4Ul5mL1c9O7knhQW_I</string>
 	<key>GCM_SENDER_ID</key>
-	<string>159143996043</string>
+	<string>592905478150</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>net.yagom.VoiceRecorder</string>
 	<key>PROJECT_ID</key>
-	<string>voicerecorder-d6222</string>
+	<string>voicerecorder2-a2d03</string>
 	<key>STORAGE_BUCKET</key>
-	<string>voicerecorder-d6222.appspot.com</string>
+	<string>voicerecorder2-a2d03.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:159143996043:ios:e3b8702e70a17bb8d2028e</string>
+	<string>1:592905478150:ios:dcc37e153249775e892387</string>
 </dict>
 </plist>
