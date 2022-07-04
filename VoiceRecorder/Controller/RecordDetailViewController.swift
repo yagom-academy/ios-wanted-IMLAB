@@ -18,6 +18,7 @@ class RecordDetailViewController: UIViewController {
     @IBOutlet weak var recordProgressBar: UISlider!
     @IBOutlet weak var durationLabel: UILabel!
     @IBOutlet weak var recordButton: UIButton!
+    @IBOutlet weak var buttonsStackView: UIStackView!
     @IBOutlet weak var playButton: UIButton!
     
     // MARK: - Properties
@@ -41,7 +42,7 @@ class RecordDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        playButton.isHidden = true
+        buttonsStackView.isHidden = true
         
     }
 
@@ -82,10 +83,6 @@ class RecordDetailViewController: UIViewController {
             print(error.localizedDescription)
         }
     }
-    
-    func loadRecordingUI() {
-
-    }
         
     func startRecording() {
         let fileName = DataFormatter.makeFileName()
@@ -104,7 +101,7 @@ class RecordDetailViewController: UIViewController {
             audioRecorder = try AVAudioRecorder(url: audioFileURL, settings: settings)
             audioRecorder?.record() // 이것의 상태를 조건으로 다른 것 control하는 듯
             durationLabel.text = "녹음중 .."
-            playButton.isHidden = true
+            buttonsStackView.isHidden = true
             recordButton.setImage(recordingButtonImage, for: .normal)
         } catch {
             finishRecording(success: false, audioFileURL)
@@ -117,7 +114,7 @@ class RecordDetailViewController: UIViewController {
         showDuration(url)
         uploadRecordDataToFirebase(url)
         recordButton.setImage(readyToRecordButtonImage, for: .normal)
-        playButton.isHidden = false
+        buttonsStackView.isHidden = false
     }
     
     func showDuration(_ url: URL?) {
@@ -154,7 +151,6 @@ class RecordDetailViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
 
-    
     func playSound() {
         if player?.isPlaying == false {
             player?.play()
@@ -164,6 +160,7 @@ class RecordDetailViewController: UIViewController {
             player?.pause()
             player?.prepareToPlay()
             playButton.setImage(playButtonImage, for: .normal)
+            recordButton.isHidden = false
         }
     }
     
@@ -180,14 +177,16 @@ class RecordDetailViewController: UIViewController {
         }
     }
     
-    @IBAction func controlBackButton(_ sender: UIButton) {
+    @IBAction func pressPrevButton(_ sender: UIButton) {
+        player?.currentTime -= 5
     }
     
-    @IBAction func controlPlayButton(_ sender: UIButton) {
-            playSound()
+    @IBAction func pressPlayButton(_ sender: UIButton) {
+        playSound()
     }
     
-    @IBAction func controlNextButton(_ sender: UIButton) {
+    @IBAction func pressNextButton(_ sender: UIButton) {
+        player?.currentTime += 5
     }
     
 }
