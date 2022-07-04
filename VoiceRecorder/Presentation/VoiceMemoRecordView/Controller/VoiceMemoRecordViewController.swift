@@ -10,6 +10,8 @@ import UIKit
 class VoiceMemoRecordViewController: UIViewController {
     
     // - MARK: UI init
+    let pathFinder = try! PathFinder()
+    let audioManager = AudioManager()
     
     let waveView: UIView = {
         let view = UIView.init(frame: CGRect.init(origin: CGPoint.init(), size: CGSize.init(width: 100, height: 100)))
@@ -75,6 +77,8 @@ class VoiceMemoRecordViewController: UIViewController {
         super.viewDidLoad()
         configure()
         designateUIs()
+        playRelatedButtonsHiddenAnimation(true)
+        configureTargetMethod()
     }
     
     private func configure() {
@@ -89,6 +93,10 @@ class VoiceMemoRecordViewController: UIViewController {
         designateSlider()
         designatePlayTimeLabel()
         designateButtons()
+    }
+    
+    private func configureTargetMethod() {
+        recordButton.addTarget(self, action: #selector(recordButtonTapped(_:)), for: .touchUpInside)
     }
     
     private func designateWaveView() {
@@ -151,5 +159,33 @@ class VoiceMemoRecordViewController: UIViewController {
             stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
+    private func playRelatedButtonsHiddenAnimation(_ isHidden: Bool) {
+        let playRelatedButtons = [playOrPauseButton, goBackward5SecButton, goForward5SecButton]
+        UIView.animate(withDuration: 0.15) {
+            if isHidden {
+                playRelatedButtons.forEach { $0.isHidden = true }
+            } else {
+                playRelatedButtons.forEach { $0.isHidden = false }
+            }
+        }
+    }
+}
+
+// MARK: - TargetMethod
+extension VoiceMemoRecordViewController {
+    @objc private func recordButtonTapped(_ sender: UIButton) {
+        sender.isSelected.toggle()
+        
+        if sender.isSelected {
+            playRelatedButtonsHiddenAnimation(true)
+            audioManager.startRecord(filePath: pathFinder.getPathWithTime())
+            print(pathFinder.lastUsedUrl)
+        } else {
+            playRelatedButtonsHiddenAnimation(false)
+            audioManager.stopRecord()
+        }
+    }
+    
+    
 }
 
