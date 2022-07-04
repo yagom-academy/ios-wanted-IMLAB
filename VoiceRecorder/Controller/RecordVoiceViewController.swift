@@ -91,11 +91,12 @@ class RecordVoiceViewController: UIViewController {
     
     @objc func tab_record_start_stop_Button() {
         if recordVoiceManager.isRecording() {
+            drawWaveFormManager.stopDrawing(in: waveFormView)
             recordVoiceManager.stopRecording {
                 self.delegate?.updateList()
                 self.playVoiceManager.setNewScheduleFile()
             }
-            drawWaveFormManager.stopDrawing(in: waveFormView)
+            
             record_start_stop_button.setImage(UIImage(systemName: "circle.fill"), for: .normal)
             record_start_stop_button.tintColor = .red
             setUIAfterRecording()
