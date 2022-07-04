@@ -50,6 +50,7 @@ class WaveFormView: UIView {
         super.init(coder: decoder)
     }
     
+    // MARK: - Methods
     public func shiftWaveform() {
         guard let sublayers = self.layer.sublayers else { return }
         for layer in sublayers {
@@ -57,4 +58,37 @@ class WaveFormView: UIView {
             layer.transform = transform
         }
     }
+    
+    override func draw(_ rect: CGRect) {
+        shiftWaveform()
+        count += 1
+        
+        let path: UIBezierPath!
+        
+        if let ppath = caLayer.path {
+            path = UIBezierPath(cgPath: ppath)
+        } else {
+            path = UIBezierPath()
+        }
+    
+        guard var wave = waveforms.last else { return }
+        print("wave값 : \(wave)")
+        if (wave <= 0) {
+            wave = 0.02
+        }
+        
+        if (wave > 1) {
+            wave = 1
+        }
+        
+        let startX = self.bounds.width + 5 * CGFloat(count)
+        let startY = self.bounds.origin.y + self.bounds.height / 2
+        print("startX값: \(startX)")
+        print("startY값: \(startY)")
+        path.move(to: CGPoint(x: startX, y: startY + CGFloat(wave * 100)))
+        path.addLine(to: CGPoint(x: startX, y: startY - CGFloat(wave * 100)))
+      
+        caLayer.path = path.cgPath
+    }
+    
 }
