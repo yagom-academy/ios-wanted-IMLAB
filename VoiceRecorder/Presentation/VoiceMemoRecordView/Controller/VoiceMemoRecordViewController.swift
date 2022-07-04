@@ -15,9 +15,6 @@ class VoiceMemoRecordViewController: UIViewController {
     }
     
     // - MARK: UI init
-    let pathFinder = try! PathFinder()
-    let audioManager = AudioManager()
-    
     let waveView: UIView = {
         let view = UIView.init(frame: CGRect.init(origin: CGPoint.init(), size: CGSize.init(width: 100, height: 100)))
         view.backgroundColor = .systemGray2
@@ -78,6 +75,12 @@ class VoiceMemoRecordViewController: UIViewController {
         button.setPreferredSymbolConfiguration(.init(pointSize: 35, weight: .regular, scale: .default), forImageIn: .normal)
         return button
     }()
+    
+    // MARK: - Properties
+    let pathFinder = try! PathFinder()
+    let audioManager = AudioManager()
+    var timer: Timer?
+    var playTime = 0
     
     // - MARK: LifeCycle
     
@@ -189,6 +192,12 @@ class VoiceMemoRecordViewController: UIViewController {
             }
         }
     }
+    
+    private func removeTimer() {
+        self.playOrPauseButton.isSelected = false
+        timer?.invalidate()
+        timer = nil
+    }
 }
 
 // MARK: - TargetMethod
@@ -197,27 +206,31 @@ extension VoiceMemoRecordViewController {
         sender.isSelected.toggle()
         
         if sender.isSelected {
+            removeTimer()
+            playTime = 0
+            playTimeLabel.text = ""
             playRelatedButtonsHiddenAnimation(.record)
             audioManager.startRecord(filePath: pathFinder.getPathWithTime())
         } else {
             playRelatedButtonsHiddenAnimation(.play)
             audioManager.stopRecord()
             playTimeLabel.text = showVoiceMemoDuration()
-            print(audioManager.audioEngine.isRunning)
         }
     }
     
-    @objc func playOrPauseButtonTapped(_ sender: UIButton) {
+    @objc private func playOrPauseButtonTapped(_ sender: UIButton) {
         sender.isSelected.toggle()
         
         if sender.isSelected {
             audioManager.startPlay(fileURL: pathFinder.lastUsedUrl)
+            timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(compareVoiceMemoTime), userInfo: nil, repeats: true)
         } else {
-            audioManager.stopPlay()
+            removeTimer()
+            audioManager.pausePlay()
         }
     }
     
-    @objc func move5SecondsButtonTapped(_ sender: UIButton) {
+    @objc private func move5SecondsButtonTapped(_ sender: UIButton) {
         if sender === goForward5SecButton {
             audioManager.skip(for: 5, filePath: pathFinder.lastUsedUrl)
         } else {
@@ -225,9 +238,19 @@ extension VoiceMemoRecordViewController {
         }
     }
     
-    @objc func cutOffFrequencySliderValueChanged(_ sender: UISlider) {
+    @objc private func cutOffFrequencySliderValueChanged(_ sender: UISlider) {
         let value = round(sender.value * 10) / 10
         audioManager.cutOffFrequency = value
+    }
+    
+    @objc private func compareVoiceMemoTime() {
+        playTime += 1
+        if String(playTime) >= audioManager.getPlayTime(filePath: pathFinder.lastUsedUrl) {
+            playTime = 0
+            playOrPauseButton.isSelected = false
+            audioManager.stopPlay()
+            removeTimer()
+        }
     }
 }
 

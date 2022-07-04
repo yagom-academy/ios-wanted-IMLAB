@@ -172,6 +172,15 @@ extension AudioManager {
         return "\(Int(audioPlayTime))"
     }
     
+    /// 재생중인 audioFile의 현재 재생구간
+    func getCurrentTime() -> String {
+        if let nodeTime: AVAudioTime = audioPlayerNode.lastRenderTime,
+           let playerTime: AVAudioTime = audioPlayerNode.playerTime(forNodeTime: nodeTime) {
+            return String(Int(nodeTime.sampleTime) / Int(playerTime.sampleRate))
+        }
+        return ""
+    }
+    
     private func calculatorBufferGraphData(buffer: AVAudioPCMBuffer) -> Float {
         guard let channelData = buffer.floatChannelData else { return 0 }
         let channelDataValue = channelData.pointee
