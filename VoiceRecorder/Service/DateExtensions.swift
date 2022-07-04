@@ -5,7 +5,7 @@
 //  Created by 이경민 on 2022/06/28.
 //
 
-import UIKit
+import Foundation
 
 extension Date {
     static let dateFormatter = DateFormatter()

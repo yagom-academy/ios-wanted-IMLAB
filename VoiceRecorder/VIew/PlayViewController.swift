@@ -130,6 +130,8 @@ class PlayViewController: UIViewController {
     }
 }
 
+// MARK: - Private
+
 private extension PlayViewController {
     
     // MARK: - Configure UI
@@ -207,7 +209,7 @@ private extension PlayViewController {
     
     // MARK: - 기능 구현
     
-    private func downloadAudioAndRemoveAndMoveFile(_ url: URL) {
+    func downloadAudioAndRemoveAndMoveFile(_ url: URL) {
         guard let documentURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
             return
         }
@@ -229,7 +231,7 @@ private extension PlayViewController {
         }.resume()
     }
     
-    private func bind() {
+    func bind() {
         viewModel?.$playerProgress
             .receive(on: DispatchQueue.main)
             .sink { value in
