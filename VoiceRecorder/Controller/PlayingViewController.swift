@@ -105,7 +105,7 @@ class PlayingViewController: UIViewController {
 extension PlayingViewController: AVAudioPlayerDelegate {
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         playButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
-        positionProgressView.progress = 0.0 // 다 끝나면 여기서 처리하게해놧는데
+        positionProgressView.progress = 0.0
         timer?.invalidate()
     }
 }
