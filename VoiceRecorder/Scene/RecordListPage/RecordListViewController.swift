@@ -127,13 +127,14 @@ extension RecordListViewController {
         var longPressedPoint = sender.location(in: tableView)
 //        print("long: ", longPressedPoint, "toCenterPoint: ", toCenterPoint)
         
-        longPressedPoint.x = longPressedPoint.x <= 0 ? 0 : longPressedPoint.x
+        longPressedPoint.x = longPressedPoint.x <= 1 ? 1 : longPressedPoint.x
         longPressedPoint.x = longPressedPoint.x >= tableView.frame.width-1 ? tableView.frame.width-1 : longPressedPoint.x
-        longPressedPoint.y = longPressedPoint.y <= 0 ? 0 : longPressedPoint.y
-        longPressedPoint.y = longPressedPoint.y >= tableView.frame.height ? tableView.frame.height : longPressedPoint.y
+        longPressedPoint.y = longPressedPoint.y <= 1 ? 1 : longPressedPoint.y
+        longPressedPoint.y = longPressedPoint.y >= tableView.frame.height-1 ? tableView.frame.height-1 : longPressedPoint.y
         
         guard let indexPath = tableView.indexPathForRow(at: longPressedPoint) else {
-            viewModel.failToFindIndexPath()
+            print("fail to find indexPath!")
+            viewModel.endTapped()
             return
         }
 
@@ -159,7 +160,6 @@ extension RecordListViewController {
             ToCenterPoint.value = CGPoint(x: toCenterPoint.x, y: toCenterPoint.y)
             longPressedPoint.x -= ToCenterPoint.value?.x ?? 0.0
             longPressedPoint.y += ToCenterPoint.value?.y ?? 0.0
-            tableView.isEditing = false
             // snapshot을 tableView에 추가
             guard let cell = tableView.cellForRow(at: indexPath) else { return }
             CellSnapshotView.value = cell.snapshotCellStyle()
@@ -212,7 +212,6 @@ extension RecordListViewController {
                 }
             }
         default:
-            // TODO: animation
             break
         }
     }

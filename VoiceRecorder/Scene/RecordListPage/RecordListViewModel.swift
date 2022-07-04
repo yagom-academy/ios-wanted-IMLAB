@@ -34,11 +34,6 @@ class RecordListViewModel {
         model.swapCell(beforeIndexPathRow, indexPathRow)
     }
     
-    func failToFindIndexPath() {
-        print("fail to find indexPath!")
-        model.saveListToUserDefaults()
-    }
-    
     func endTapped() {
         model.saveListToUserDefaults()
     }
