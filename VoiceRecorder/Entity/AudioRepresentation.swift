@@ -9,6 +9,6 @@ import Foundation
 
 struct AudioRepresentation {
     let filename: String?
-    let createdDate: String?
+    let createdDate: Date?
     let length: String?
 }

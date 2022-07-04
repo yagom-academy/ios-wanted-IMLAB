@@ -12,24 +12,23 @@ final class HomeViewModel {
     var audioTitles: [String] = []
     var audioData: [String: Observable<AudioRepresentation>] = [:]
     
-    
     subscript(_ indexPath: IndexPath) -> AudioRepresentation? {
+        
         let title = audioTitles[indexPath.item]
         guard let data = audioData[title]?.value else {return nil}
         return data
     }
     
     func fetchAudioTitles(completion: @escaping () -> Void) {
-        var tempList: [String] = []
+        //        var tempList: [String] = []
         FirebaseService.fetchAll { [weak self] result in
             switch result {
             case .success(let data):
                 data.items.forEach({
-                    tempList.append($0.name)
+                    self?.audioTitles.append($0.name)
                     self?.audioData.updateValue(Observable<AudioRepresentation>(AudioRepresentation(filename: nil, createdDate: nil, length: nil)), forKey: $0.name)
                 })
                 completion()
-                self?.audioTitles = tempList
             case .failure(let error):
                 print(error)
             }
@@ -82,7 +81,11 @@ final class HomeViewModel {
                 completion(true)
             }
         }
-
     }
     
+    func sortByDate() {
+        self.audioTitles = audioTitles.sorted(by:{
+            return audioData[$0]?.value.createdDate?.compare(audioData[$1]?.value.createdDate ?? Date()) == .orderedAscending})
+    }
+
 }

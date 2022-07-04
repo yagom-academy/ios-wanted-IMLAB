@@ -11,12 +11,16 @@ final class HomeViewController: UIViewController {
     var homeTableView: UITableView?
     var homeViewModel = HomeViewModel()
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setDataBinding()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setNavigationBar()
         setTableView()
         setConstraints()
-        setDataBinding()
     }
 
 }
@@ -65,6 +69,7 @@ private extension HomeViewController {
             group.wait()
             self.homeViewModel.fetchMetaData()
             self.homeViewModel.audioData.values.forEach({ $0.bind { [weak self] metadata in
+                self?.homeViewModel.sortByDate()
                 DispatchQueue.main.async {
                         self?.homeTableView?.reloadSections(IndexSet(integer: 0), with: .automatic)
                 }
@@ -78,6 +83,7 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.id) as? HomeTableViewCell else {return UITableViewCell()}
+     
         let model = homeViewModel[indexPath]
         cell.configure(model: model)
         return cell

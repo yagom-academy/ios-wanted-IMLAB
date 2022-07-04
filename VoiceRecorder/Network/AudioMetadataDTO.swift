@@ -11,7 +11,7 @@ import FirebaseStorage
 extension StorageMetadata {
     func toDomain() -> AudioRepresentation  {
         return AudioRepresentation(filename: self.name,
-                                   createdDate: MyDateFormatter.shared.calendarDateString(from: self.timeCreated ?? Date()),
+                                   createdDate: self.timeCreated ?? Date(),
                                    length: self.customMetadata?[CustomMetadata.fullLength])
     }
 }
