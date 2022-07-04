@@ -29,6 +29,7 @@ class PlayingViewController: UIViewController {
 
         initialPlay()
         titleLabel.text = fileName
+        
     }
     func initialPlay() {
         if let url = fileURL {
@@ -69,7 +70,7 @@ class PlayingViewController: UIViewController {
         }
     }
     
-    @IBAction func PressBackwardButton(_ sender: UIButton) {
+    @IBAction func PressNextButton(_ sender: UIButton) {
         if player?.isPlaying == true {
             player?.currentTime += 5
         }
