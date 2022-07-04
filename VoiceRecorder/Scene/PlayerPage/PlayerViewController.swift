@@ -8,34 +8,35 @@
 import UIKit
 
 class PlayerViewController: UIViewController {
-    private var safearea: UILayoutGuide!
     private let viewModel = PlayerViewModel()
+    private var safearea: UILayoutGuide!
 
-    private let mainStackView = UIStackView()
-    private let buttonStackView = UIStackView()
+    private let fileNameLabel: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .center
 
-    private let fileNameLabel = UILabel()
-    private let soundWaveView = UIView()
-    private let pitchControl = UISegmentedControl(items: ["일반 목소리", "아기 목소리", "할아버지 목소리"])
-    private let sliderTitleLabel = UILabel()
-    private let volumeSlider = UISlider(frame: CGRect(x: 0, y: 0, width: 300, height: 20))
+        return label
+    }()
 
-    private let playPauseButton = UIButton()
-    private let forwardButton = UIButton()
-    private let backwardButton = UIButton()
+    private let mainStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.distribution = .equalSpacing
 
-    private var isPlaying = false
+        return stackView
+    }()
 
-    private let sampleURL = URL(string: "https://firebasestorage.googleapis.com:443/v0/b/sampleapp-9e55d.appspot.com/o/audio%2F2022.06.27_18:05:55%2B11.m4a?alt=media&token=1a9cd60b-95cd-4a39-ad25-7adea9eebd19")
+    private let frequencyView = FrequencyView(frame: .zero)
+    private let pitchControlView = PitchControlView(frame: .zero)
+    private let volumeControlView = VolumeControlView(frame: .zero)
+    private let playerButtonView = PlayerButtonView(frame: .zero)
 
     init() {
         super.init(nibName: nil, bundle: nil)
 
+        bind()
         attribute()
         layout()
-
-        // 버튼 핸들러 추가
-        configureHandler()
     }
 
     required init?(coder: NSCoder) {
@@ -52,49 +53,24 @@ class PlayerViewController: UIViewController {
         super.viewWillDisappear(true)
 
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
+        // TODO: - 화면 나갈때 audioPlayer 해제 (멈추게), 재생 끝날때 다시 처음으로 초기화
     }
 }
 
 // MARK: - Attribute, Layout
 
 extension PlayerViewController {
+    private func bind() {
+        playerButtonView.bind(viewModel.playerButtonViewModel)
+        pitchControlView.bind(viewModel.pitchViewModel)
+        volumeControlView.bind(viewModel.volumeViewModel)
+    }
+
     private func attribute() {
-//        title = "녹음파일 재생"
-
-        safearea = view.safeAreaLayoutGuide
-
+        title = "녹음파일 재생"
         view.backgroundColor = .white
 
-        mainStackView.backgroundColor = .white
-        mainStackView.axis = .vertical
-        mainStackView.distribution = .fill
-
-        fileNameLabel.text = "2022.06.29 11:21:38"
-        fileNameLabel.textAlignment = .center
-
-        soundWaveView.backgroundColor = .lightGray
-
-        pitchControl.selectedSegmentIndex = 0
-
-        sliderTitleLabel.text = "Volume"
-
-        volumeSlider.isContinuous = false
-        volumeSlider.maximumValue = 1
-        volumeSlider.minimumValue = 0
-        volumeSlider.value = 0.5
-
-        buttonStackView.axis = .horizontal
-        buttonStackView.distribution = .equalSpacing
-
-        setPlayPauseButtonState()
-        playPauseButton.isEnabled = false
-        playPauseButton.backgroundColor = .systemBlue.withAlphaComponent(0.3)
-
-        forwardButton.setImage(UIImage(systemName: "goforward.5"), for: .normal)
-        forwardButton.backgroundColor = .systemBlue.withAlphaComponent(0.3)
-
-        backwardButton.setImage(UIImage(systemName: "gobackward.5"), for: .normal)
-        backwardButton.backgroundColor = .systemBlue.withAlphaComponent(0.3)
+        safearea = view.safeAreaLayoutGuide
     }
 
     private func layout() {
@@ -108,7 +84,7 @@ extension PlayerViewController {
             mainStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             mainStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             mainStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            mainStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            mainStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 30),
         ]
 
         NSLayoutConstraint.activate(mainStackViewConstraints)
@@ -116,95 +92,35 @@ extension PlayerViewController {
         // 파일명, 파형, 음성변조, 볼륨, 버튼
         let mainStackViewItems = [
             fileNameLabel,
-            soundWaveView,
-            pitchControl,
-            sliderTitleLabel,
-            volumeSlider,
-            buttonStackView,
+            frequencyView,
+            pitchControlView,
+            playerButtonView,
+            volumeControlView,
         ]
 
         mainStackViewItems.forEach {
             self.mainStackView.addArrangedSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
-
-            let constraints = [
-//                $0.heightAnchor.constraint(equalToConstant: 100),
-                $0.leadingAnchor.constraint(equalTo: safearea.leadingAnchor),
-                $0.trailingAnchor.constraint(equalTo: safearea.trailingAnchor),
-            ]
-            NSLayoutConstraint.activate(constraints)
         }
 
-        // 버튼
-        let buttonStackViewItems = [
-            backwardButton, playPauseButton, forwardButton,
+        let mainStackViewItemsContraints = [
+            fileNameLabel.heightAnchor.constraint(equalTo: safearea.heightAnchor, multiplier: 0.1),
+            frequencyView.heightAnchor.constraint(equalTo: safearea.heightAnchor, multiplier: 0.3),
+            pitchControlView.heightAnchor.constraint(equalTo: safearea.heightAnchor, multiplier: 0.1),
+            volumeControlView.heightAnchor.constraint(equalTo: safearea.heightAnchor, multiplier: 0.1),
+            playerButtonView.heightAnchor.constraint(equalTo: safearea.heightAnchor, multiplier: 0.1),
         ]
 
-        buttonStackViewItems.forEach {
-            buttonStackView.addArrangedSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
-
-            $0.heightAnchor.constraint(equalToConstant: 50).isActive = true
-            $0.widthAnchor.constraint(equalToConstant: 50).isActive = true
-
-            $0.layer.cornerRadius = 25
-        }
+        NSLayoutConstraint.activate(mainStackViewItemsContraints)
     }
 }
 
 // MARK: - Actions, States
 
 extension PlayerViewController {
-    // 버튼 이미지 관리
-    private func setPlayPauseButtonState() {
-        if isPlaying {
-            playPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
-        } else {
-            playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
-        }
-    }
-
-    // 핸들러 추가
-    private func configureHandler() {
-        pitchControl.addTarget(self, action: #selector(handlePitchControl), for: .valueChanged)
-        volumeSlider.addTarget(self, action: #selector(handleVolumeSlider), for: .valueChanged)
-        playPauseButton.addTarget(self, action: #selector(handlePlayPauseButton), for: .touchUpInside)
-        backwardButton.addTarget(self, action: #selector(handleBackwardButton), for: .touchUpInside)
-        forwardButton.addTarget(self, action: #selector(handleForwardButton), for: .touchUpInside)
-    }
-
-    @objc private func handlePitchControl(_ sender: UISegmentedControl!) {
-        viewModel.changedPitchControl(sender.selectedSegmentIndex)
-    }
-
-    @objc private func handleVolumeSlider(_ sender: UISlider!) {
-        let roundedStepValue = round(sender.value / 0.1) * 0.1
-        sender.value = roundedStepValue
-
-        viewModel.changedVolumeSlider(roundedStepValue)
-    }
-
-    // 재생, 일시정지 버튼
-    @objc private func handlePlayPauseButton() {
-        isPlaying = viewModel.onTappedPlayPauseButton()
-        setPlayPauseButtonState()
-    }
-
-    // -5초
-    @objc private func handleBackwardButton() {
-        viewModel.onTappedBackwardButton()
-    }
-
-    // +5초
-    @objc private func handleForwardButton() {
-        viewModel.onTappedForwardButton()
-    }
-
     // 재생상태 초기화
     @objc private func audioDidEnd(notification: NSNotification) {
-        viewModel.setPlayerToZero()
-        isPlaying.toggle()
-        setPlayPauseButtonState()
+//        viewModel.setPlayerToZero()
     }
 }
 
@@ -217,9 +133,19 @@ extension PlayerViewController {
 
     func configurePlayer() {
         let fileData = viewModel.getFileData()
-        title = fileData?.fileName ?? "No File Found"
+
+        fileNameLabel.text = fileData?.fileName
 
         viewModel.setPlayerItem()
-        playPauseButton.isEnabled = true
+        viewModel.setAudioReady()
+    }
+
+    func isInvalidFile() {
+        let alert = UIAlertController(title: "오류", message: "녹음 파일을 여는데 실패했습니다.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "닫기", style: .default, handler: { _ in
+            self.navigationController?.popViewController(animated: true)
+        }))
+
+        present(alert, animated: true)
     }
 }

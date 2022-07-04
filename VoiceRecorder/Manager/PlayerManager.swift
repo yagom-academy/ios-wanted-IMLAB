@@ -9,22 +9,23 @@ import AVFoundation
 import Foundation
 
 class PlayerManager {
-    var url: URL!
+    static let shared = PlayerManager()
+    private init() {}
 
-    var audioFile: AVAudioFile?
-    var audioPlayer = AVAudioPlayerNode()
+    private var audioFile: AVAudioFile?
+    private var audioPlayer = AVAudioPlayerNode()
 
-    let audioEngine = AVAudioEngine()
-    let speedControl = AVAudioUnitVarispeed()
-    let pitchControl = AVAudioUnitTimePitch()
+    private let audioEngine = AVAudioEngine()
+    private let speedControl = AVAudioUnitVarispeed()
+    private let pitchControl = AVAudioUnitTimePitch()
 
-    var seekFrame: AVAudioFramePosition = 0
-    var currentPosition: AVAudioFramePosition = 0
-    var audioLengthSamples: AVAudioFramePosition = 0
+    private var seekFrame: AVAudioFramePosition = 0
+    private var currentPosition: AVAudioFramePosition = 0
+    private var audioLengthSamples: AVAudioFramePosition = 0
 
-    var audioSampleRate: Double = 0
-    var audioLengthSeconds: Double = 0
-    var currentFrame: AVAudioFramePosition {
+    private var audioSampleRate: Double = 0
+    private var audioLengthSeconds: Double = 0
+    private var currentFrame: AVAudioFramePosition {
         guard let lastRenderTime = audioPlayer.lastRenderTime,
               let playerTime = audioPlayer.playerTime(forNodeTime: lastRenderTime) else {
             return 0

@@ -96,17 +96,6 @@ extension RecordListViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //TODO: 데이터를 받고나서 페이지를 열지 or 페이지를 열고 데이터를 받아올지 고민하기
-//        tableView.allowsSelection = false
-//        viewModel.didSelectedCell(indexPath) { [weak self] data in
-//            guard let data = data else {
-//                self?.tableView.allowsSelection = true
-//                return
-//            }
-//            let vc = ViewController()
-//            self?.navigationController?.pushViewController(vc, animated: true)
-//            self?.tableView.allowsSelection = true
-//        }
         
         let data = viewModel.getCellData(indexPath)
         let vc = PlayerViewController()
