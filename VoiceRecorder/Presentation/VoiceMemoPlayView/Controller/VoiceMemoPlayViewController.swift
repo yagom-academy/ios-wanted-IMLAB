@@ -49,7 +49,12 @@ class VoiceMemoPlayViewController: UIViewController {
     
     private let volumeSlider: UISlider = {
         let slider = UISlider()
+        slider.minimumValue = 0.0
+        slider.maximumValue = 1.0
         slider.setValue(0.5, animated: false)
+        slider.isContinuous = true
+        
+        slider.addTarget(nil, action: #selector(sliderValueDidChange(_:)), for: .valueChanged)
         
         return slider
     }()
@@ -142,6 +147,10 @@ class VoiceMemoPlayViewController: UIViewController {
         default:
             audioManager.pitchMode = .basic
         }
+    }
+    
+    @objc func sliderValueDidChange(_ sender: UISlider) {
+        audioManager.controlVolume(newValue: sender.value)
     }
     
     // - MARK: Life Cycle
