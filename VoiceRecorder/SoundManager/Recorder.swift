@@ -45,7 +45,7 @@ extension Recorder {
         
         do {
             try session.setCategory(.playAndRecord)
-            try session.setActive(true, options: .notifyOthersOnDeactivation)
+            try session.setActive(true)
         } catch {
             print("[ERROR]")
         }

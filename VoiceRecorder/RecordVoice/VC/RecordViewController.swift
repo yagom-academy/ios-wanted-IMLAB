@@ -11,6 +11,7 @@ import AVFoundation
 class RecordViewController: UIViewController {
     
     var soundManager = SoundManager()
+    var audioFileManager = AudioFileManager()
     var firebase = Firebase()
     var engine = AVAudioEngine()
     
@@ -40,9 +41,6 @@ class RecordViewController: UIViewController {
         return url
     }()
     
-    // 녹음시 녹음 파일 생성 Properties
-    var fileURL = URL(fileURLWithPath: "voice.m4a", isDirectory: false, relativeTo: URL(fileURLWithPath: NSTemporaryDirectory()))
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -50,6 +48,18 @@ class RecordViewController: UIViewController {
         setAudio()
         recordButton.addTarget(self, action: #selector(control), for: .touchUpInside)
         playButton.addTarget(self, action: #selector(play), for: .touchUpInside)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        requestMicrophoneAccess { [weak self] allowed in
+            if allowed {
+                // 녹음 권한 허용
+            } else {
+                // 녹음 권한 거부
+            }
+        }
     }
     
     func setLayout() {
@@ -96,11 +106,12 @@ class RecordViewController: UIViewController {
         isStartRecording = !isStartRecording
         recordButtonToggle()
         
+        let url = audioFileManager.createVoiceFile(fileName: "fileNAME")
         if isStartRecording { // 녹음 시작일 때
-            soundManager.startRecord(filePath: fileURL)
-            firebase.upload(url: fileURL)
+            soundManager.startRecord(filePath: url)
         } else { // 녹음 끝일 때
             soundManager.stopRecord()
+            firebase.upload(url: url)
         }
     }
     

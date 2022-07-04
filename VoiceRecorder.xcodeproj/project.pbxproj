@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		68795CA32873437A00B4D6A5 /* AudioFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68795CA22873437A00B4D6A5 /* AudioFileManager.swift */; };
 		68BF991228703C0500BE55CF /* SampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68BF991128703C0500BE55CF /* SampleViewController.swift */; };
 		68E116D92872B82B00E962FD /* RecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68E116D82872B82B00E962FD /* RecordViewController.swift */; };
 		68E116DC2872C54800E962FD /* Firebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68E116DB2872C54800E962FD /* Firebase.swift */; };
@@ -31,6 +32,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		68795CA22873437A00B4D6A5 /* AudioFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioFileManager.swift; sourceTree = "<group>"; };
 		68BF991128703C0500BE55CF /* SampleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleViewController.swift; sourceTree = "<group>"; };
 		68E116D82872B82B00E962FD /* RecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewController.swift; sourceTree = "<group>"; };
 		68E116DB2872C54800E962FD /* Firebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Firebase.swift; sourceTree = "<group>"; };
@@ -89,6 +91,7 @@
 			isa = PBXGroup;
 			children = (
 				68E116DB2872C54800E962FD /* Firebase.swift */,
+				68795CA22873437A00B4D6A5 /* AudioFileManager.swift */,
 			);
 			path = SampleNetwork;
 			sourceTree = "<group>";
@@ -300,6 +303,7 @@
 				F0D766F3286C4A38008A469F /* AVAudioPlayerNode+extension.swift in Sources */,
 				68E116D92872B82B00E962FD /* RecordViewController.swift in Sources */,
 				F00A2C98286BEF6C00ED57A8 /* PlayControlView.swift in Sources */,
+				68795CA32873437A00B4D6A5 /* AudioFileManager.swift in Sources */,
 				F06B92492870572400A704AF /* RecordedVoiceListViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

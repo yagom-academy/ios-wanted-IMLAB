@@ -95,6 +95,11 @@ class SoundManager: NSObject {
         
     }
     
+    private func createAudioFile(filePath: URL) throws -> AVAudioFile {
+        let format = inputNode.outputFormat(forBus: 0)
+        return try AVAudioFile(forWriting: filePath, settings: format.settings)
+    }
+    
     func startRecord(filePath: URL) {
         engine.reset()
         
@@ -102,12 +107,13 @@ class SoundManager: NSObject {
         configureRecordEngine(format: format)
         
         do {
-            audioFile = try AVAudioFile(forWriting: filePath, settings: format.settings)
+            audioFile = try createAudioFile(filePath: filePath)
         } catch {
             fatalError()
         }
         
-        mixerNode.installTap(onBus: 0, bufferSize: 1024, format: format) { buffer, time in
+        mixerNode.removeTap(onBus: 0)
+        mixerNode.installTap(onBus: 0, bufferSize: 4096, format: format) { buffer, time in
             do {
                 try self.audioFile.write(from: buffer)
             } catch {

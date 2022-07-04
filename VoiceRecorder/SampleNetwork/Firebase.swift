@@ -13,8 +13,9 @@ class Firebase {
     let storage = Storage.storage()
     
     func upload(url: URL) {
-        let filePath = "recording_my_voice02.m4a"
+        let filePath = "0705_01_04.m4a"
         let data = try! Data(contentsOf: url)
+        print(data, "녹음본")
         let metaData = StorageMetadata()
         metaData.contentType = "audio/x-m4a"
         
