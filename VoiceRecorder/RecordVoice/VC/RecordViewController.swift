@@ -50,18 +50,6 @@ class RecordViewController: UIViewController {
         playButton.addTarget(self, action: #selector(play), for: .touchUpInside)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        requestMicrophoneAccess { [weak self] allowed in
-            if allowed {
-                // 녹음 권한 허용
-            } else {
-                // 녹음 권한 거부
-            }
-        }
-    }
-    
     func setLayout() {
         recordButton.translatesAutoresizingMaskIntoConstraints = false
         playButton.translatesAutoresizingMaskIntoConstraints = false
@@ -101,6 +89,7 @@ class RecordViewController: UIViewController {
             }
         }
     }
+    
     /// 녹음 시작 & 정지 컨트롤
     @objc private func control() {
         isStartRecording = !isStartRecording
