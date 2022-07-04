@@ -236,15 +236,15 @@
                                 </constraints>
                             </imageView>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QbY-Bq-pFQ">
-                                <rect key="frame" x="45" y="446" width="324" height="4"/>
+                                <rect key="frame" x="40" y="446" width="334" height="4"/>
                             </progressView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="jRn-dk-Vfd"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="jRn-dk-Vfd" firstAttribute="trailing" secondItem="epG-fG-rh2" secondAttribute="trailing" constant="50" id="1OQ-Y8-AMf"/>
-                            <constraint firstItem="QbY-Bq-pFQ" firstAttribute="leading" secondItem="jRn-dk-Vfd" secondAttribute="leading" constant="45" id="2o3-n3-Qrt"/>
-                            <constraint firstItem="jRn-dk-Vfd" firstAttribute="trailing" secondItem="QbY-Bq-pFQ" secondAttribute="trailing" constant="45" id="5P9-TO-b60"/>
+                            <constraint firstItem="QbY-Bq-pFQ" firstAttribute="leading" secondItem="jRn-dk-Vfd" secondAttribute="leading" constant="40" id="2o3-n3-Qrt"/>
+                            <constraint firstItem="jRn-dk-Vfd" firstAttribute="trailing" secondItem="QbY-Bq-pFQ" secondAttribute="trailing" constant="40" id="5P9-TO-b60"/>
                             <constraint firstItem="QbY-Bq-pFQ" firstAttribute="top" secondItem="vAx-Kt-MEu" secondAttribute="bottom" constant="21.5" id="6bb-qr-fo2"/>
                             <constraint firstItem="epG-fG-rh2" firstAttribute="leading" secondItem="jRn-dk-Vfd" secondAttribute="leading" constant="50" id="Atd-BO-DGI"/>
                             <constraint firstItem="haY-Q9-0tn" firstAttribute="leading" secondItem="jRn-dk-Vfd" secondAttribute="leading" constant="50" id="EgR-Q9-5mC"/>
