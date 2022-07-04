@@ -17,12 +17,14 @@ class AudioFileManager {
         initalizeFileFolder()
     }
     
-    func initalizeFileFolder() {
+    private func initalizeFileFolder() {
         let directoryPath: URL = docPath.appendingPathComponent("Recorded_Voice")
+        print(directoryPath)
+        guard !fileManager.fileExists(atPath: directoryPath.path) else { return }
         createDic(url: directoryPath)
     }
     
-    func createDic(url: URL) {
+    private func createDic(url: URL) {
         do {
             try fileManager.createDirectory(at: url, withIntermediateDirectories: false)
         } catch let erorr {
@@ -31,7 +33,7 @@ class AudioFileManager {
     }
     
     func createVoiceFile(fileName: String) { // fileName date로 들어옴
-        let textPath: URL = docPath.appendingPathComponent(fileName)
+        let textPath: URL = docPath.appendingPathComponent("Recorded_Voice").appendingPathComponent(fileName)
         
         if let data: Data = "TEST txt.".data(using:String.Encoding.utf8) {
             
@@ -43,9 +45,10 @@ class AudioFileManager {
         }
     }
     
-    func getAudioFile(fileName: String) {
+    func getAudioFile(fileName: String, completion: @escaping (AudioData?) -> Void) {
         
-        let textPath: URL = docPath.appendingPathComponent(fileName)
+        let textPath: URL = docPath.appendingPathComponent("Recorded_Voice").appendingPathComponent(fileName)
+        
         do {
             let dataFromPath: Data = try Data(contentsOf: textPath) // URL을 불러와서 Data타입으로 초기화
             let text: String = String(data: dataFromPath, encoding: .utf8) ?? "문서없음" // Data to String
@@ -56,7 +59,8 @@ class AudioFileManager {
     }
     
     func readDirectory() {
-        let path = docPath.appendingPathComponent("Recorded_Voice").absoluteString
+        let path = docPath.appendingPathComponent("Recorded_Voice").path
+        print(path)
         do {
             let items = try fileManager.contentsOfDirectory(atPath: path)
             
@@ -68,4 +72,5 @@ class AudioFileManager {
         }
             
     }
+    
 }
