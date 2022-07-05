@@ -83,6 +83,13 @@ class PlayVoiceViewController: UIViewController {
         return backwardFive
     }()
     
+    let volumeTextLabel : UILabel = {
+        let volumeTextLabel = UILabel()
+        volumeTextLabel.translatesAutoresizingMaskIntoConstraints = false
+        volumeTextLabel.text = "volume"
+        return volumeTextLabel
+    }()
+    
     let volumeSlider : UISlider = {
         let volumeSlider = UISlider()
         volumeSlider.translatesAutoresizingMaskIntoConstraints = false
@@ -114,6 +121,7 @@ class PlayVoiceViewController: UIViewController {
         self.view.addSubview(currentPositionView)
         self.view.addSubview(soundWaveImageView)
         self.view.addSubview(selectedPitchSegment)
+        self.view.addSubview(volumeTextLabel)
         self.view.addSubview(volumeSlider)
         self.view.addSubview(timeControlButtonStackView)
         for item in [ backwardFive, playAndPauseButton, forwardFive ]{
@@ -140,8 +148,12 @@ class PlayVoiceViewController: UIViewController {
             selectedPitchSegment.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             selectedPitchSegment.topAnchor.constraint(equalTo: soundWaveImageView.bottomAnchor, constant: 30),
             
+            volumeTextLabel.topAnchor.constraint(equalTo: selectedPitchSegment.bottomAnchor, constant: 30),
+            volumeTextLabel.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.8),
+            volumeTextLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            
             volumeSlider.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            volumeSlider.topAnchor.constraint(equalTo: selectedPitchSegment.bottomAnchor, constant: 30),
+            volumeSlider.topAnchor.constraint(equalTo: volumeTextLabel.bottomAnchor),
             volumeSlider.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.8),
             
             playAndPauseButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -212,10 +224,9 @@ extension PlayVoiceViewController : PlayVoiceDelegate{
     }
     
     func displayWaveForm(to currentPosition : AVAudioFramePosition, in audioLengthSamples : AVAudioFramePosition) {
+        print("currentPosition: \(currentPosition), audioLengthSamples: \(audioLengthSamples)")
         let newX = (self.soundWaveImageView.image?.size.width ?? 0) * CGFloat(currentPosition) / CGFloat(audioLengthSamples)
-        UIView.animate(withDuration: 1/14, animations: {
-            self.soundWaveImageView.transform = CGAffineTransform(translationX: -newX, y: 0)
-        })
+        self.soundWaveImageView.transform = CGAffineTransform(translationX: -newX, y: 0)
     }
 }
 
