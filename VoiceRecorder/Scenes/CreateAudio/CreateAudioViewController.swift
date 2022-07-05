@@ -49,6 +49,11 @@ class CreateAudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudi
           action: #selector(forwardButtonClicked),
           for: .touchUpInside
         )
+        createAudioView.doneButton.addTarget(
+          self,
+          action: #selector(tapDoneButton),
+          for: .touchUpInside
+        )
     }
     
     
@@ -105,11 +110,12 @@ class CreateAudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudi
             let audioInfo = AudioInfo(id: UUID().uuidString, data: data, metadata: storageMetadata)
             FirebaseService.uploadAudio(audio: audioInfo) { err in
                 print("firebase err: \(err)")
+                self.navigationController?.popViewController(animated: true)
             }
         } catch {
             print("error: \(error.localizedDescription)")
+            self.navigationController?.popViewController(animated: true)
         }
-        self.navigationController?.popViewController(animated: true)
     }
     func record() {
       let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
