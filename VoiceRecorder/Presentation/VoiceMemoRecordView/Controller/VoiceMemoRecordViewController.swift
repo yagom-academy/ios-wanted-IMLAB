@@ -27,7 +27,6 @@ class VoiceMemoRecordViewController: UIViewController {
         return label
     }()
     
-    // 뭔지 모르겠네,, 컷오프를 정하는건지 재생시간을 표기한건지
     let cutOffFrequencySlider: UISlider = {
         let slider = UISlider()
         slider.value = 1
@@ -232,7 +231,7 @@ extension VoiceMemoRecordViewController {
             audioManager.stopRecord()
             playTimeLabel.text = showVoiceMemoDuration()
 
-            firebaseManager.uploadVoiceMemoToFirebase(with: pathFinder.lastUsedUrl, fileName: pathFinder.lastUsedFileName) { result in
+            firebaseManager.uploadVoiceMemoToFirebase(with: pathFinder.lastUsedUrl, fileName: pathFinder.lastUsedFileName, playTime: audioManager.getPlayTime(filePath: pathFinder.lastUsedUrl)) { result in
                 switch result {
                 case .success(_):
                     print("성공")

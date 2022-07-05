@@ -21,7 +21,7 @@ class FirebaseStorageManager {
     init() { }
     
     // Todo: customError 타입 만들기 ( NetworkError )
-    func uploadVoiceMemoToFirebase(with voiceMemoURL: URL, fileName: String, completion: @escaping ((Result<Bool, NetworkError>) -> Void)) {
+    func uploadVoiceMemoToFirebase(with voiceMemoURL: URL, fileName: String, playTime:String, completion: @escaping ((Result<Bool, NetworkError>) -> Void)) {
         print(#function)
         guard let voiceMemoData = try? Data(contentsOf: voiceMemoURL) else {
             completion(.failure(.error))
@@ -31,6 +31,7 @@ class FirebaseStorageManager {
         let reference = storage.reference().child("\(storageReferenceStr)\(fileName)")
         let metaData = StorageMetadata()
         metaData.contentType = "audio/mpeg"
+        metaData.customMetadata = ["playTime":playTime]
         
         reference.putData(voiceMemoData, metadata: metaData) { result in
             switch result {
@@ -80,6 +81,24 @@ class FirebaseStorageManager {
             }
             let items = result.items.map { $0.fullPath }
             completion(.success(items))
+        }
+    }
+    
+    func getMetaData(completion: @escaping ((Result<String, NetworkError>) -> Void)) {
+        let reference = storage.reference().child(storageReferenceStr)
+        reference.getMetadata {
+            (result, error) in
+            guard error == nil else {
+                completion(.failure(.error))
+                return
+            }
+            guard let result = result,
+                  let metaData = result.customMetadata?["playTime"]
+            else {
+                completion(.failure(.error))
+                return
+            }
+            completion(.success(metaData))
         }
     }
 }
