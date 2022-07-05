@@ -21,7 +21,6 @@ class RecordDetailViewController: UIViewController {
     @IBOutlet weak var buttonsStackView: UIStackView!
     @IBOutlet weak var playButton: UIButton!
     
-    
     // MARK: - Properties
     
     var recordingSession: AVAudioSession?
@@ -40,7 +39,7 @@ class RecordDetailViewController: UIViewController {
     
     var timer : Timer?
     lazy var pencil = UIBezierPath(rect: waveView.bounds)
-    lazy var firstPoint = CGPoint(x: 3, y: (waveView.bounds.midY))
+    lazy var firstPoint = CGPoint(x: waveView.bounds.midX/2, y: (waveView.bounds.midY))
     lazy var jump : CGFloat = (waveView.bounds.width - (firstPoint.x * 2))/200
     let waveLayer = CAShapeLayer()
     var traitLength : CGFloat!
@@ -51,16 +50,14 @@ class RecordDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         buttonsStackView.isHidden = true
         
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
+    override func viewDidDisappear(_ animated: Bool) {
         if audioRecorder != nil {
             // 오디오 중지
-            audioRecorder?.stop()
-            audioRecorder = nil
+            writeWaves(0, false)
             // 로컬에 생성된 파일 삭제
             if let audioFileURL = audioFileURL {
                 do {
@@ -71,17 +68,6 @@ class RecordDetailViewController: UIViewController {
             }
             currentFileName = nil
         }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-                
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        
     }
     
     
@@ -145,16 +131,28 @@ class RecordDetailViewController: UIViewController {
         } catch {
             finishRecording(success: false, audioFileURL)
         }
+        var translationX = 0.0
+
         
         timer = Timer.scheduledTimer(withTimeInterval: 0.02, repeats: true) { timer in
+            UIView.animate(withDuration: 2, delay: 0, options: [.curveLinear]) {
+                self.waveView.transform = CGAffineTransform(translationX: translationX, y: 0)
+                translationX -= 1.02
+            }
             self.audioRecorder?.updateMeters()
             // write waveforms
             let averagePower = self.audioRecorder?.averagePower(forChannel: 0)
             self.writeWaves(averagePower ?? 0.0, true)
-            
         }
     }
     
+    func changeViewToImage() -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: waveView.bounds.size)
+        return renderer.image {context in
+            waveView.layer.render(in: context.cgContext)
+        }
+    }
+
     func finishRecording(success: Bool, _ url: URL?) {
         writeWaves(0, false)
         showDuration(url)
@@ -238,9 +236,6 @@ class RecordDetailViewController: UIViewController {
             
             return
         } else {
-            UIView.animate(withDuration: 1000, delay: 0.001, options: [.curveLinear]) {
-                self.waveView.transform = CGAffineTransform(translationX: -10000, y: 0)
-            }
             if input < -55 {
                 traitLength = 0.2
             } else if input < -40 && input > -55 {

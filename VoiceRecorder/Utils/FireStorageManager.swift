@@ -50,7 +50,6 @@ class FireStorageManager {
             self.downloadToLocal(uris: result.items) { localUrls in
                 completion(localUrls)
             }
-            
         }
     }
     
@@ -58,23 +57,25 @@ class FireStorageManager {
                          ,completion: @escaping ([URL]) -> Void
     ) {
         let stringUri: [String] = uris.map { "\($0)" }
-            for uri in stringUri {
-                let storageRef = storage.reference(forURL: uri)
-                // 긴 uri 에서 "recording_2022_06_30_20:12:51" 끝 부분만 가져오기 위함
-                let findIndex = uri.index(uri.endIndex, offsetBy: -29)
-                let fileName = "\(uri[findIndex...]).m4a"
-                guard let localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent(fileName) else { return }
-                storageRef.write(toFile: localPath)
-                items.append(localPath)
+        for uri in stringUri {
+            let storageRef = storage.reference(forURL: uri)
+            // 긴 uri 에서 "recording_2022_06_30_20:12:51" 끝 부분만 가져오기 위함
+            let findIndex = uri.index(uri.endIndex, offsetBy: -29)
+            let fileName = "\(uri[findIndex...]).m4a"
+            guard let localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent(fileName) else { return }
+            storageRef.write(toFile: localPath) { url, error in
+                if let url = url {
+                    self.items.append(url)
+                }
+                completion(self.items)
             }
-        completion(items)
-        
+        }
     }
     
     func deleteItem(_ name : String) {
         let storageRef = storage.reference()
         let fileRef = storageRef.child("\(RecordFileString.Ref.recordDir)\(name)")
-        
+        print("\(RecordFileString.Ref.recordDir)\(name)")
         fileRef.delete()
     }
 }
