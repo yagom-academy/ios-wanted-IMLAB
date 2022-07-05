@@ -27,7 +27,6 @@ class VoiceMemoRecordViewController: UIViewController {
         return label
     }()
     
-    // 뭔지 모르겠네,, 컷오프를 정하는건지 재생시간을 표기한건지
     let cutOffFrequencySlider: UISlider = {
         let slider = UISlider()
         slider.value = 1
@@ -191,7 +190,7 @@ class VoiceMemoRecordViewController: UIViewController {
         playOrPauseButton.addTarget(self, action: #selector(playOrPauseButtonTapped(_:)), for: .touchUpInside)
         goForward5SecButton.addTarget(self, action: #selector(move5SecondsButtonTapped(_:)), for: .touchUpInside)
         goBackward5SecButton.addTarget(self, action: #selector(move5SecondsButtonTapped(_:)), for: .touchUpInside)
-        cutOffFrequencySlider.addTarget(self, action: #selector(cutOffFrequencySliderValueChanged(_:)), for: .valueChanged )
+        cutOffFrequencySlider.addTarget(self, action: #selector(cutOffFrequencySliderValueChanged(_:)), for: .valueChanged)
     }
     
     /// 녹음완료후 음성파일의 시간
@@ -218,10 +217,23 @@ class VoiceMemoRecordViewController: UIViewController {
     }
     
     private func convertSecToMin() -> String {
-        let time = audioManager.getPlayTime(filePath: pathFinder.lastUsedUrl)
-        let min = String(format: "%02d", Int(time)! / 60)
-        let sec = String(format: "%02d", Int(time)! % 60)
+        guard let time = Int(audioManager.getPlayTime(filePath: pathFinder.lastUsedUrl)) else {
+            return ""
+        }
+        let min = String(format: "%02d", time / 60)
+        let sec = String(format: "%02d", time % 60)
         return "\(min):\(sec)"
+    }
+    
+    private func uploadVoiceMemoToFirebaseStorage() {
+        FirebaseStorageManager.shared.uploadVoiceMemoToFirebase(with: pathFinder.lastUsedUrl, fileName: pathFinder.lastUsedFileName) { result in
+            switch result {
+            case .success(_):
+                print("성공")
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
     }
 }
 
@@ -239,14 +251,7 @@ extension VoiceMemoRecordViewController {
             audioManager.stopRecord()
             playTimeLabel.text = convertSecToMin()
 
-            FirebaseStorageManager.shared.uploadVoiceMemoToFirebase(with: pathFinder.lastUsedUrl, fileName: pathFinder.lastUsedFileName) { result in
-                switch result {
-                case .success(_):
-                    print("성공")
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-            }
+            uploadVoiceMemoToFirebaseStorage()
         }
     }
     

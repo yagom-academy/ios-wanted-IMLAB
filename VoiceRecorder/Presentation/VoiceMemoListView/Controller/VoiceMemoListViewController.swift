@@ -34,6 +34,15 @@ class VoiceMemoListViewController: UIViewController {
         super.viewDidLoad()
         configureTableView()
         configureUI()
+        FirebaseStorageManager.shared.listAll { result in
+            switch result {
+            case .success(let a):
+                print(a)
+            default:
+                break
+            }
+        }
+        
     }
 }
 

@@ -41,7 +41,7 @@ class AudioManager {
             
             audioEQFilterParameters.frequency = sampleRateUnit * cutOffFrequency + 20
         }
-    } // 추후 제거할 property
+    }
     
     // play properties
     private lazy var seekFrame: AVAudioFramePosition = 0
@@ -306,7 +306,6 @@ extension AudioManager {
         audioEngine.attach(changePitchNode)
         audioEngine.connect(audioPlayerNode, to: changePitchNode, format: nil)
         audioEngine.connect(changePitchNode, to: audioEngine.mainMixerNode, format: nil)
-        
     }
     
     private func preparePlay(filePath: URL) {
