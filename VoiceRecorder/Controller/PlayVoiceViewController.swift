@@ -106,7 +106,7 @@ class PlayVoiceViewController: UIViewController {
         //순환참조 발생 주의
         firebaseStorageManager.delegate = self
         playAndPauseButton.isEnabled = false
-        firebaseStorageManager.downloadRecordFile(fileName: playVoiceViewModel.voiceRecordViewModel.fileName)
+        firebaseStorageManager.downloadRecordFile(fileName: "\(playVoiceViewModel.voiceRecordViewModel.fileName)@\(playVoiceViewModel.voiceRecordViewModel.fileLength)", imageFileName: "\(playVoiceViewModel.voiceRecordViewModel.fileName)")
     }
     
     func setView(){
