@@ -16,6 +16,8 @@ class VoiceMemoPlayViewController: UIViewController {
     private weak var pathFinder: PathFinder!
     private weak var firebaseManager: FirebaseStorageManager!
     
+    private var grayTransparentViewWidthConstant: NSLayoutConstraint!
+    
     // MARK: - ViewProperties
     private let voiceMemoTitleLabel: UILabel = {
         let label = UILabel()
@@ -84,7 +86,7 @@ class VoiceMemoPlayViewController: UIViewController {
         button.setImage(image, for: .normal)
         button.setPreferredSymbolConfiguration(.init(pointSize: 35, weight: .regular, scale: .default), forImageIn: .normal)
         
-        button.addTarget(nil, action: #selector(skipForward5SecButtonTouched(_:)), for: .touchUpInside)
+        button.addTarget(nil, action: #selector(skipBackward5SecButtonTouched(_:)), for: .touchUpInside)
         
         return button
     }()
@@ -108,6 +110,14 @@ class VoiceMemoPlayViewController: UIViewController {
         return stack
     }()
     
+    private let grayTransparentView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .systemGray2
+        view.alpha = 0.7
+        
+        return view
+    }()
+    
     // - MARK: Objc Selector Event Method
     
     @objc func playOrStopButtonTouched(_ sender: UIButton) {
@@ -127,8 +137,6 @@ class VoiceMemoPlayViewController: UIViewController {
                 audioManager.stopPlay()
             }
         }
-        
-        
     }
     
     @objc func skipForward5SecButtonTouched(_ sender: UIButton) {
@@ -136,7 +144,7 @@ class VoiceMemoPlayViewController: UIViewController {
     }
     
     @objc func skipBackward5SecButtonTouched(_ sender: UIButton) {
-        audioManager.skip(for: 5, filePath: pathFinder.lastUsedUrl)
+        audioManager.skip(for: -5, filePath: pathFinder.lastUsedUrl)
     }
     
     @objc func pitchChangeSegmentedControllerTouched(_ sender: UISegmentedControl) {
@@ -190,9 +198,28 @@ class VoiceMemoPlayViewController: UIViewController {
         
         self.voiceMemoTitleLabel.text = audioFileName ?? "PlayView"
         
+        audioManager.delegateMethod = modifyGrayParentViewTrailingAnchor
         NotificationCenter.default.addObserver(self, selector: #selector(audioPlaybackTimeIsOver(_:)), name: .audioPlaybackTimeIsOver, object: nil)
     }
     
+}
+
+// MARK: - GrayParentView Delegate
+
+extension VoiceMemoPlayViewController {
+    func modifyGrayParentViewTrailingAnchor(ratio: Float) {
+        DispatchQueue.main.async { [unowned self] in
+            
+            let waveViewWidth = waveFormView.bounds.width
+            
+            let incresingWidth: CGFloat = waveViewWidth * CGFloat(ratio)
+            grayTransparentViewWidthConstant.constant = incresingWidth
+            
+            UIView.animate(withDuration: 0.1) {
+                self.view.layoutIfNeeded()
+            }
+        }
+    }
 }
 
 // MARK: - UI Design
@@ -201,7 +228,7 @@ extension VoiceMemoPlayViewController {
     
     private func configureSubViews() {
         [voiceMemoTitleLabel, waveFormView, voiceSegment,
-         volumeLabel, volumeSlider, playButtonStackView].forEach {
+         volumeLabel, volumeSlider, playButtonStackView, grayTransparentView].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -222,6 +249,15 @@ extension VoiceMemoPlayViewController {
             waveFormView.heightAnchor.constraint(equalToConstant: 80),
             waveFormView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
             waveFormView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40)
+        ])
+        
+        grayTransparentViewWidthConstant = grayTransparentView.widthAnchor.constraint(equalToConstant: 0)
+        NSLayoutConstraint.activate([
+            grayTransparentView.heightAnchor.constraint(equalTo: waveFormView.heightAnchor),
+            grayTransparentView.topAnchor.constraint(equalTo: waveFormView.topAnchor),
+            grayTransparentView.centerYAnchor.constraint(equalTo: waveFormView.centerYAnchor),
+            grayTransparentView.leadingAnchor.constraint(equalTo: waveFormView.leadingAnchor),
+            grayTransparentViewWidthConstant
         ])
         
         NSLayoutConstraint.activate([

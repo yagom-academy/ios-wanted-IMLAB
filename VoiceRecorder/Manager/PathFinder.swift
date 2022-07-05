@@ -47,7 +47,7 @@ class PathFinder {
             Date.FormatStyle()
                 .year(.defaultDigits)
                 .month(.twoDigits)
-                .day(.defaultDigits)
+                .day(.twoDigits)
                 .hour(.twoDigits(amPM: .abbreviated))
                 .minute(.twoDigits)
                 .second(.twoDigits))
