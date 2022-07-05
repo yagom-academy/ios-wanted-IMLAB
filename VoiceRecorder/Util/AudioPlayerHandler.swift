@@ -14,8 +14,11 @@ class AudioPlayerHandler {
     var localFileHandler: LocalFileProtocol
     var updateTimeInterval: UpdateTimer
     var recordFileURL: URL!
-    var buffer: AVAudioPCMBuffer?
-    var audioFile: AVAudioFile?
+    var buffer: AVAudioPCMBuffer!
+    var audioFile: AVAudioFile!
+    var audioEngine = AVAudioEngine()
+    var audioPlayerNode = AVAudioPlayerNode()
+    let audioUnitTimePich = AVAudioUnitTimePitch()
     
     init(handler: LocalFileProtocol, updateTimeInterval: UpdateTimer) {
         self.localFileHandler = handler
@@ -36,6 +39,8 @@ class AudioPlayerHandler {
     
     func prepareToPlay() {
         do {
+            try AVAudioSession.sharedInstance().setCategory(.playAndRecord)
+            try AVAudioSession.sharedInstance().setActive(true)
             let audioPlayer = try AVAudioPlayer(contentsOf: recordFileURL)
             self.audioPlayer = audioPlayer
             self.audioPlayer.prepareToPlay()
@@ -49,78 +54,58 @@ class AudioPlayerHandler {
         return updateTimeInterval.updateTimer(time)
     }
     
-    func playSound(rate: Float? = nil, pitch: Float? = nil, echo: Bool = false, reverb: Bool = false, fileName: String) {
-        
+    func setEngine() {
         do {
-            let selectedFileURL = localFileHandler.localFileURL.appendingPathComponent("voiceRecords_\(fileName)")
-            audioFile = try AVAudioFile(forReading: selectedFileURL)
+            audioFile = try AVAudioFile(forReading: recordFileURL)
             buffer = AVAudioPCMBuffer(pcmFormat: audioFile!.processingFormat, frameCapacity: AVAudioFrameCount(audioFile!.length))
-            try audioFile!.read(into: buffer!)
+            try! audioFile!.read(into: buffer)
         } catch {
             print(error.localizedDescription)
         }
-        // initialize audio engine components
-        let audioEngine = AVAudioEngine()
         
-        // node for playing audio
-        let audioPlayerNode = AVAudioPlayerNode()
         audioEngine.attach(audioPlayerNode)
+        audioEngine.attach(audioUnitTimePich)
         
-        
-        
-        // node for adjusting rate/pitch
-        let changeRatePitchNode = AVAudioUnitTimePitch()
-        if let pitch = pitch {
-            changeRatePitchNode.pitch = pitch
-        }
-        if let rate = rate {
-            changeRatePitchNode.rate = rate
-        }
-        audioEngine.attach(changeRatePitchNode)
-        
-        // node for echo
-        let echoNode = AVAudioUnitDistortion()
-        echoNode.loadFactoryPreset(.multiEcho1)
-        audioEngine.attach(echoNode)
-        
-        // node for reverb
-        let reverbNode = AVAudioUnitReverb()
-        reverbNode.loadFactoryPreset(.cathedral)
-        reverbNode.wetDryMix = 50
-        audioEngine.attach(reverbNode)
-        
-        // connect nodes
-        if echo == true && reverb == true {
-            audioEngine.connect(audioPlayerNode, to: echoNode, format: buffer!.format)
-            audioEngine.connect(audioPlayerNode, to: reverbNode, format: buffer!.format)
-            audioEngine.connect(echoNode, to: audioEngine.mainMixerNode, format: buffer!.format)
-            audioEngine.connect(reverbNode, to: audioEngine.mainMixerNode, format: buffer!.format)
-        } else if echo == true {
-            audioEngine.connect(audioPlayerNode, to: echoNode, format: buffer!.format)
-            audioEngine.connect(echoNode, to: audioEngine.mainMixerNode, format: buffer!.format)
-        } else if reverb == true {
-            audioEngine.connect(audioPlayerNode, to: reverbNode, format: buffer!.format)
-            audioEngine.connect(reverbNode, to: audioEngine.mainMixerNode, format: buffer!.format)
-        } else {
-            audioEngine.connect(audioPlayerNode, to: changeRatePitchNode, format: audioFile!.processingFormat)
-            audioEngine.connect(changeRatePitchNode, to: audioEngine.outputNode, format: audioFile!.processingFormat)
-            audioEngine.connect(changeRatePitchNode, to: audioEngine.mainMixerNode, format: buffer!.format)
-        }
-        
-       // audioPlayerNode.volume = volumeSlider.value / 100
-        
-        // schedule to play and start the engine!
+        audioEngine.connect(audioPlayerNode, to: audioUnitTimePich, format: audioFile.processingFormat)
+        audioEngine.connect(audioUnitTimePich, to: audioEngine.outputNode, format: audioFile.processingFormat)
+
+        audioPlayerNode.volume = 5.0
         audioPlayerNode.stop()
-        audioPlayerNode.scheduleFile(audioFile!, at: nil)
+        audioPlayerNode.scheduleFile(audioFile, at: nil)
         
         do {
             try audioEngine.start()
         } catch {
             print(error.localizedDescription)
         }
-        
-        // play the recording!
-        audioPlayerNode.play()
     }
     
+    func changePitch(to pitch: Float) {
+        audioUnitTimePich.pitch = pitch
+    }
+    
+    func stopEffect() {
+        audioPlayerNode.stop()
+        audioEngine.stop()
+        audioEngine.reset()
+    }
+}
+
+extension AVAudioFile {
+
+    var duration: TimeInterval {
+        let sampleRateSong = Double(processingFormat.sampleRate)
+        let lengthSongSeconds = Double(length) / sampleRateSong
+        return lengthSongSeconds
+    }
+}
+
+extension AVAudioPlayerNode {
+
+    var currentTime: TimeInterval {
+        if let nodeTime = lastRenderTime, let playerTime = playerTime(forNodeTime: nodeTime) {
+            return Double(playerTime.sampleTime) / playerTime.sampleRate
+        }
+        return 0
+    }
 }
