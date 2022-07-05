@@ -7,7 +7,7 @@
 
 import Foundation
 
-class AudioFileManager {
+class SampleFileManager {
 
     private let fileManager = FileManager.default
 
