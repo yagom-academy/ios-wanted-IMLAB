@@ -11,14 +11,19 @@ final class HomeViewController: UIViewController {
     var homeTableView: UITableView?
     var homeViewModel = HomeViewModel()
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        homeViewModel.reset()
+        self.setDataBinding()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setNavigationBar()
         setTableView()
         setConstraints()
-        setDataBinding()
     }
-
+    
 }
 
 private extension HomeViewController {
@@ -55,7 +60,7 @@ private extension HomeViewController {
         ])
     }
     
-    func setDataBinding(){
+    func setDataBinding() {
         let group = DispatchGroup()
         DispatchQueue.global().async {
             group.enter()
@@ -63,15 +68,18 @@ private extension HomeViewController {
                 group.leave()
             }
             group.wait()
+            
+            DispatchQueue.main.async {
+                self.homeTableView?.reloadData()
+            }
+            
+            self.homeViewModel.fetchMetaData()
             self.homeViewModel.audioData.values.forEach({ $0.bind { [weak self] metadata in
                 DispatchQueue.main.async {
-                    guard let title = metadata.filename else {return}
-                    guard let index = self?.homeViewModel.audioTitles.firstIndex(of: title) else {return}
-//                    self?.homeTableView?.reloadRows(at: [IndexPath(item: index, section: 0)], with: .automatic)
-                    self?.homeTableView?.reloadData()
+                    guard let filename = metadata.filename, let index = self?.homeViewModel.audioTitles.firstIndex(of: filename) else {return}
+                    self?.homeTableView?.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
                 }
             }})
-            self.homeViewModel.fetchMetaData()
         }
     }
 }
@@ -81,6 +89,7 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.id) as? HomeTableViewCell else {return UITableViewCell()}
+        
         let model = homeViewModel[indexPath]
         cell.configure(model: model)
         return cell
@@ -89,5 +98,16 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         homeViewModel.audioData.count
     }
-
+    
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            homeViewModel.remove(indexPath: indexPath){ isRemoved in
+                if isRemoved{
+                    tableView.deleteRows(at: [indexPath], with: .automatic)
+                    tableView.reloadData()
+                }
+            }
+        }
+    }
 }

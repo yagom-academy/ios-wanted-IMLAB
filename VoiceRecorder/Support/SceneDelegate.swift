@@ -14,7 +14,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
 
-        let vc = PlayViewController()
+        let vc = HomeViewController()
         let nav = UINavigationController(rootViewController: vc)
 
         window?.backgroundColor = .systemBackground
