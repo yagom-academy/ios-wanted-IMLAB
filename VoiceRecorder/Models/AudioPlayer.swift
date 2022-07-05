@@ -24,7 +24,7 @@ class AudioPlayer: NSObject {
         return nil
     }
     
-    var didFinish: (() -> ())?
+    var didFinish: (() -> Void)?
     
     var currentTime: TimeInterval {
         get {

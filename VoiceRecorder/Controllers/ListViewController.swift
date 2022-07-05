@@ -28,11 +28,13 @@ class ListViewController: UIViewController {
     
     // MARK: - @IBAction
     @IBAction func didTapShowRecordView(_ sender: UIBarButtonItem) {
-        guard let recordVC = storyboard?.instantiateViewController(withIdentifier: "RecordViewController")
-                as? RecordViewController else { return }
+        guard let recordVC = storyboard?.instantiateViewController(
+            withIdentifier: "RecordViewController"
+        ) as? RecordViewController else { return }
+        
         recordVC.modalPresentationStyle = .popover
         recordVC.delegate = self
-        self.present(recordVC, animated: true)
+        present(recordVC, animated: true)
     }
 }
 
@@ -41,13 +43,19 @@ extension ListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        guard let playVC = storyboard?.instantiateViewController(withIdentifier: "PlayViewController")
-                as? PlayViewController else { return }
+        guard let playVC = storyboard?.instantiateViewController(
+            withIdentifier: "PlayViewController"
+        ) as? PlayViewController else { return }
+        
         playVC.recordFile = recordList[indexPath.row]
-        self.present(playVC, animated: true, completion: nil)
+        present(playVC, animated: true, completion: nil)
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(
+        _ tableView: UITableView,
+        commit editingStyle: UITableViewCell.EditingStyle,
+        forRowAt indexPath: IndexPath
+    ) {
         if editingStyle == .delete {
             LocalFileManager(recordModel: recordList[indexPath.row]).deleteToLocal()
             StorageManager.shared.delete(fileName: recordList[indexPath.row].name) { result in
@@ -71,9 +79,12 @@ extension ListViewController: UITableViewDataSource {
     
     func tableView(
         _ tableView: UITableView,
-        cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+       cellForRowAt indexPath: IndexPath
+    ) -> UITableViewCell {
             guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: "RecordListTableViewCell", for: indexPath) as? RecordListTableViewCell else { return UITableViewCell() }
+                withIdentifier: "RecordListTableViewCell", for: indexPath
+            ) as? RecordListTableViewCell else { return UITableViewCell() }
+            
             cell.setUpView(recordFile: recordList[indexPath.row])
             return cell
         }
@@ -81,7 +92,7 @@ extension ListViewController: UITableViewDataSource {
 
 // MARK: - RecordViewControllerDelegate
 extension ListViewController: RecordViewControllerDelegate {
-    func didFinishRecord() {
+    func recordView(didFinishRecord: Bool) {
         fetchRecordFile()
     }
 }

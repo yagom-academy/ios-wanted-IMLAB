@@ -61,7 +61,11 @@ class StorageManager {
                                 if let meta = meta,
                                    let customMetaData = meta.customMetadata {
                                     
-                                    let recordModel = RecordModel(name: item.name, url: url, metaData: customMetaData)
+                                    let recordModel = RecordModel(
+                                        name: item.name,
+                                        url: url,
+                                        metaData: customMetaData
+                                    )
                                     completion(.success(recordModel))
                                     return
                                 }

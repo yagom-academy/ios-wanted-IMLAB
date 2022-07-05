@@ -92,7 +92,13 @@ class AudioEngine {
         if currentPosition < audioLengthSamples {
             let frameCount = AVAudioFrameCount(audioLengthSamples - seekFrame)
             
-            audioPlayer.scheduleSegment(audioFile, startingFrame: seekFrame, frameCount: frameCount, at: nil, completionHandler: nil)
+            audioPlayer.scheduleSegment(
+                audioFile,
+                startingFrame: seekFrame,
+                frameCount: frameCount,
+                at: nil,
+                completionHandler: nil
+            )
         }
         
         if wasPlaying {

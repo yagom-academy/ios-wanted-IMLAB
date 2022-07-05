@@ -10,7 +10,6 @@ import FirebaseStorage
 class RecordViewController: UIViewController {
     
     // MARK: - @IBOutlet
-    
     @IBOutlet weak var eq75HzSlider: UISlider!
     @IBOutlet weak var eq250HzSlider: UISlider!
     @IBOutlet weak var eq1040HzSlider: UISlider!
@@ -45,6 +44,14 @@ class RecordViewController: UIViewController {
     private let engine = AudioEngine()
     private let recorder = AudioRecorder()
     private let audioSession = AVAudioSession.sharedInstance()
+    
+    private lazy var eqSliderValues: [String] = [
+        eq75HzSlider,
+        eq250HzSlider,
+        eq1040HzSlider,
+        eq2500HzSlider,
+        eq7500HzSlider
+    ].map { String($0.value) }
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -93,7 +100,7 @@ class RecordViewController: UIViewController {
             
             let newMetaData = [
                 MetaData.duration.key: "\(engine.audioLengthSeconds.toStringTimeFormat)",
-                MetaData.eq.key: "\(eq75HzSlider.value) \(eq250HzSlider.value) \(eq1040HzSlider.value) \(eq2500HzSlider.value) \(eq7500HzSlider.value)"
+                MetaData.eq.key: eqSliderValues.joined(separator: " ")
             ]
             
             uploadFile(data, fileName: recordDate ?? "", newMetaData: newMetaData)
@@ -223,7 +230,7 @@ private extension RecordViewController {
             switch result {
             case .success(_):
                 print("저장 성공🎉")
-                self.delegate?.didFinishRecord()
+                self.delegate?.recordView(didFinishRecord: true)
             case .failure(let error):
                 print("ERROR \(error.localizedDescription)🌡🌡")
             }
