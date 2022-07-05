@@ -20,13 +20,16 @@ class PlayingViewController: UIViewController {
     @IBOutlet weak var waveImageView: UIImageView!
     @IBOutlet weak var positionProgressView: UIProgressView!
     
-    var player : AVAudioPlayer?
     let engine = AVAudioEngine()
     let speedControl = AVAudioUnitVarispeed()
+    let audioPlayer = AVAudioPlayerNode()
     let pitchControl = AVAudioUnitTimePitch()
+    var player : AVAudioPlayer?
     var fileName : String?
     var fileURL : URL?
     var timer : Timer?
+    var file = AVAudioFile()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,45 +40,40 @@ class PlayingViewController: UIViewController {
     
     func play(_ url: URL) {
         do {
-            let file = try AVAudioFile(forReading: url)
-            let audioPlayer = AVAudioPlayerNode()
+            file = try AVAudioFile(forReading: url)
             
-            engine.attach(audioPlayer)
-            engine.attach(pitchControl)
-            engine.attach(speedControl)
-            
-            engine.connect(audioPlayer,
-                           to: speedControl,
-                           format: nil)
-            engine.connect(speedControl,
-                           to: pitchControl,
-                           format: nil)
-            engine.connect(pitchControl,
-                           to: engine.mainMixerNode,
-                           format: nil)
-            
-            audioPlayer.scheduleFile(file, at: nil)
-            
-            try engine.start()
-            audioPlayer.play()
+            if !(timer?.isValid == true){
+                timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
+            }
+            if audioPlayer.isPlaying == false {
+                engine.attach(audioPlayer)
+                engine.attach(pitchControl)
+                engine.attach(speedControl)
+                
+                
+                engine.connect(audioPlayer,
+                               to: speedControl,
+                               format: nil)
+                engine.connect(speedControl,
+                               to: pitchControl,
+                               format: nil)
+                engine.connect(pitchControl,
+                               to: engine.mainMixerNode,
+                               format: nil)
+                audioPlayer.scheduleFile(file,
+                                         at: nil)
+                
+                try engine.start()
+                audioPlayer.play()
+                playButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+            }
+            else {
+                audioPlayer.pause()
+    //            player?.prepareToPlay()
+                playButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+            }
         } catch {
             print("error catch")
-        }
-        
-    }
-    
-
-    func initialPlay() {
-        if let url = fileURL {
-            do {
-                player = try AVAudioPlayer(contentsOf: url)
-                player?.delegate = self
-                showWaveForm()
-                player?.prepareToPlay() // 실제 호출과 기기의 플레이 간의 딜레이를 줄여줌
-            }
-            catch {
-                print(error)
-            }
         }
     }
     
@@ -88,28 +86,35 @@ class PlayingViewController: UIViewController {
             }
         }
     }
-    
-    func playSound() {
-        if !(timer?.isValid == true){
-            timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
-        }
-        if player?.isPlaying == false {
-            player?.play()
-            playButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
-        }
-        else {
-            player?.pause()
-            player?.prepareToPlay()
-            playButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
-        }
-    }
+ 
+//    func playSound() {
+//        if !(timer?.isValid == true){
+//            timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
+//        }
+//        if audioPlayer.isPlaying == false {
+//            audioPlayer.play()
+//            playButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+//        }
+//        else {
+//            audioPlayer.pause()
+////            player?.prepareToPlay()
+//            playButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+//        }
+//    }
     
     @objc func updateTimer() {
-        if player?.isPlaying == true {
-            let digit : Float = pow(10, 2)
-            let currentTIme = round(Float(player?.currentTime ?? 0.0) * digit) / digit // 소수점 3번째 자리에서 반올림
-            let duration = round(Float(player?.duration ?? 0.0) * digit) / digit
-            positionProgressView.progress = currentTIme / duration
+        
+        positionProgressView.progress = Float(audioPlayer.current) / Float(file.duration)
+        
+        if audioPlayer.isPlaying == true {
+            if audioPlayer.current >= file.duration {
+                audioPlayer.stop()
+                engine.stop()
+                positionProgressView.progress = 0
+                playButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+                return
+            }
+
         }
     }
     
@@ -134,18 +139,19 @@ class PlayingViewController: UIViewController {
     }
     
     @IBAction func ControlVolumeSlider(_ sender: UISlider) {
-        player?.volume = volumeControlSlider.value
+        audioPlayer.volume = volumeControlSlider.value
     }
     
     @IBAction func PressPrevButton(_ sender: UIButton) {
-        if player?.isPlaying == true {
-            player?.currentTime -= 5
+        if audioPlayer.isPlaying == true {
+//            print("audioPlayer.current:\(audioPlayer.current)")
+//            audioPlayer.current -= 5
         }
     }
     
     @IBAction func PressNextButton(_ sender: UIButton) {
-        if player?.isPlaying == true {
-            player?.currentTime += 5
+        if audioPlayer.isPlaying == true {
+//            audioPlayer.current += 5
         }
     }
 }
