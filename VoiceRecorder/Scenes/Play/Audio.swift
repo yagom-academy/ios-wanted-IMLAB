@@ -153,6 +153,11 @@ class Audio {
     }
   }
 
+  func stop() {
+    displayLink?.isPaused = true
+    audioPlayer.pause()
+  }
+
   func playOrPause() {
     isPlaying.value.toggle()
 
