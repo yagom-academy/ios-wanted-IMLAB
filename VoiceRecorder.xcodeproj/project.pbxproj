@@ -19,12 +19,12 @@
 		F00A2C98286BEF6C00ED57A8 /* PlayControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00A2C97286BEF6C00ED57A8 /* PlayControlView.swift */; };
 		F06B92492870572400A704AF /* RecordedVoiceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06B92482870572400A704AF /* RecordedVoiceListViewController.swift */; };
 		F06B924D2870575A00A704AF /* RecordedVoiceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06B924C2870575A00A704AF /* RecordedVoiceTableViewCell.swift */; };
+		F06B92562872A07C00A704AF /* FireStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06B92542872A07C00A704AF /* FireStorageService.swift */; };
+		F06B92572872A07C00A704AF /* FirebaseStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06B92552872A07C00A704AF /* FirebaseStorageManager.swift */; };
 		F06B925A2872A68400A704AF /* AudioFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06B92592872A68400A704AF /* AudioFileManager.swift */; };
 		F06B925D2872BA6B00A704AF /* AudioData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06B925C2872BA6B00A704AF /* AudioData.swift */; };
 		F06B925F2872BB7B00A704AF /* DateUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06B925E2872BB7B00A704AF /* DateUtil.swift */; };
 		F06B92612872BF7800A704AF /* Data+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06B92602872BF7800A704AF /* Data+extension.swift */; };
-		F06B92562872A07C00A704AF /* FireStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06B92542872A07C00A704AF /* FireStorageService.swift */; };
-		F06B92572872A07C00A704AF /* FirebaseStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06B92552872A07C00A704AF /* FirebaseStorageManager.swift */; };
 		F0D559DC286C1AEB0078BCF3 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D559DB286C1AEB0078BCF3 /* SoundManager.swift */; };
 		F0D559DE286C3A2A0078BCF3 /* sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F0D559DD286C3A2A0078BCF3 /* sound.mp3 */; };
 		F0D766F3286C4A38008A469F /* AVAudioPlayerNode+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D766F2286C4A38008A469F /* AVAudioPlayerNode+extension.swift */; };
@@ -46,12 +46,12 @@
 		F00A2C97286BEF6C00ED57A8 /* PlayControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayControlView.swift; sourceTree = "<group>"; };
 		F06B92482870572400A704AF /* RecordedVoiceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordedVoiceListViewController.swift; sourceTree = "<group>"; };
 		F06B924C2870575A00A704AF /* RecordedVoiceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordedVoiceTableViewCell.swift; sourceTree = "<group>"; };
+		F06B92542872A07C00A704AF /* FireStorageService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FireStorageService.swift; sourceTree = "<group>"; };
+		F06B92552872A07C00A704AF /* FirebaseStorageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseStorageManager.swift; sourceTree = "<group>"; };
 		F06B92592872A68400A704AF /* AudioFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioFileManager.swift; sourceTree = "<group>"; };
 		F06B925C2872BA6B00A704AF /* AudioData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioData.swift; sourceTree = "<group>"; };
 		F06B925E2872BB7B00A704AF /* DateUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateUtil.swift; sourceTree = "<group>"; };
 		F06B92602872BF7800A704AF /* Data+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+extension.swift"; sourceTree = "<group>"; };
-		F06B92542872A07C00A704AF /* FireStorageService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FireStorageService.swift; sourceTree = "<group>"; };
-		F06B92552872A07C00A704AF /* FirebaseStorageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseStorageManager.swift; sourceTree = "<group>"; };
 		F0D559DB286C1AEB0078BCF3 /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
 		F0D559DD286C3A2A0078BCF3 /* sound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = sound.mp3; path = Assets.xcassets/sound.dataset/sound.mp3; sourceTree = "<group>"; };
 		F0D766F2286C4A38008A469F /* AVAudioPlayerNode+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVAudioPlayerNode+extension.swift"; sourceTree = "<group>"; };
@@ -187,6 +187,15 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		F06B92532872A06000A704AF /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				F06B92552872A07C00A704AF /* FirebaseStorageManager.swift */,
+				F06B92542872A07C00A704AF /* FireStorageService.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
 		F06B92582872A66C00A704AF /* FileManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -201,15 +210,6 @@
 				F06B925C2872BA6B00A704AF /* AudioData.swift */,
 			);
 			path = Model;
-			sourceTree = "<group>";
-		};
-		F06B92532872A06000A704AF /* Network */ = {
-			isa = PBXGroup;
-			children = (
-				F06B92552872A07C00A704AF /* FirebaseStorageManager.swift */,
-				F06B92542872A07C00A704AF /* FireStorageService.swift */,
-			);
-			path = Network;
 			sourceTree = "<group>";
 		};
 		F0D559DA286C1AD30078BCF3 /* SoundManager */ = {
@@ -384,7 +384,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -438,7 +438,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
