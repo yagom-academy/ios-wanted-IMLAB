@@ -16,7 +16,7 @@ class AudioEngine {
 
     // 주파수 * 초 = 프레임
     private var audioSampleRate = 0.0 // 현재 주파수
-    private var audioLengthSeconds = 0.0 // 총 길이 (초)
+    var audioLengthSeconds = 0.0 // 총 길이 (초)
     private var seekFrame: AVAudioFramePosition = 0 // 이동할 프레임
     private var currentPosition: AVAudioFramePosition = 0 // 현재 프레임
     private var audioLengthSamples: AVAudioFramePosition = 0 // 프레임 총 길이
@@ -61,8 +61,11 @@ class AudioEngine {
         audioPlayer.play()
     }
     func pause() {
-        engine.stop()
         audioPlayer.pause()
+    }
+    func stop() {
+        audioPlayer.stop()
+        engine.stop()
     }
     func setPitch(_ value: Float) {
         pitchControl.pitch = value
@@ -99,9 +102,13 @@ class AudioEngine {
     
     func skip(forwards: Bool) {
         if forwards {
-            seek(to: 5)
+            seek(to: 2)
         } else {
-            seek(to: -5)
+            seek(to: -2)
         }
+    }
+    
+    func isFinish() -> Bool {
+        return getCurrentTime().toStringDecimalPoint2 >= audioLengthSeconds.toStringDecimalPoint2
     }
 }

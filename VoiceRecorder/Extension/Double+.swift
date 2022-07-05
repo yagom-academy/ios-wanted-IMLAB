@@ -8,7 +8,7 @@
 import Foundation
 
 extension Double {
-    var toString: String {
+    var toStringTimeFormat: String {
         let minute = Int(self / 60.0)
         let second = Int(self.truncatingRemainder(dividingBy: 60.0))
         let millisecond = Int(self.truncatingRemainder(dividingBy: 1.0) * 100.0)
@@ -28,5 +28,9 @@ extension Double {
         }
         
         return "\(minuteString):\(secondString):\(millisecondString)"
+    }
+    
+    var toStringDecimalPoint2: String {
+        return String(format: "%.2f", self)
     }
 }

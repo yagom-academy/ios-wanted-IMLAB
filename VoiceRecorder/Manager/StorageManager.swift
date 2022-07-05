@@ -24,7 +24,7 @@ class StorageManager {
         let recordRef = storageRef.child("\(StoragePath.voiceRecords.rawValue)/\(fileName).m4a")
         
         let metaData = StorageMetadata()
-        metaData.customMetadata = ["duration": duration.toString.dropLast(3).description]
+        metaData.customMetadata = ["duration": duration.toStringTimeFormat.dropLast(3).description]
         
         recordRef.putData(data, metadata: metaData) { _, error in
             if let error = error {

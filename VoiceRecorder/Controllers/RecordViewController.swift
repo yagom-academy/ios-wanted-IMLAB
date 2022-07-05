@@ -36,14 +36,12 @@ class RecordViewController: UIViewController {
         AVSampleRateKey: 44_100.0
     ]
     private var recordingSession = AVAudioSession.sharedInstance()
-    private var audioPlayer: AVAudioPlayer?
     private var isRecord = false
     private var isPlay = false
-    private var progressTimer: Timer?
+    private var recorderTimer: Timer?
+    private var playerTimer: Timer?
     private var counter = 0.0
-    private var currentPlayTime = 0.0
     
-    private let player = AudioPlayer()
     private let engine = AudioEngine()
     private let recorder = AudioRecorder()
     private let audioSession = AVAudioSession.sharedInstance()
@@ -54,13 +52,6 @@ class RecordViewController: UIViewController {
         requestRecord()
         setupButton(isHidden: true)
         setupAudioRecorder()
-        player.didFinish = {
-            self.isPlay = false
-            self.currentPlayTime = 0.0
-            self.counter = 0.0
-            self.progressTimer?.invalidate()
-            self.playButton.setImage(Icon.play.image, for: .normal)
-        }
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
@@ -97,15 +88,15 @@ class RecordViewController: UIViewController {
             endRecord()
             blockEQSlider()
             guard let data = recorder.data else { return }
-            player.url = fileName
-            player.setupPlayer()
+            engine.url = fileName
+            try! engine.setupEngine()
             
-            uploadFile(data, fileName: recordDate ?? "", duration: player.duration)
+            uploadFile(data, fileName: recordDate ?? "", duration: engine.audioLengthSeconds)
             print(fileName)
         } else {
             sender.setImage(Icon.circle.image, for: .normal)
             recorder.record()
-            progressTimer = Timer.scheduledTimer(
+            recorderTimer = Timer.scheduledTimer(
                 timeInterval: 0.01,
                 target: self,
                 selector: #selector(update),
@@ -117,45 +108,29 @@ class RecordViewController: UIViewController {
     }
     
     @IBAction func didTapPlayBack5Button(_ sender: UIButton) {
-//        player.seek(-5)
-//        counter = player.currentTime
-//        currentPlayTime = player.currentTime
         engine.skip(forwards: false)
     }
     
     @IBAction func didTapPlayForward5Button(_ sender: UIButton) {
-//        player.seek(5)
-//        counter = player.currentTime
-//        currentPlayTime = player.currentTime
         engine.skip(forwards: true)
     }
     
     @IBAction func didTapPlayPauseButton(_ sender: UIButton) {
         if isPlay {
             sender.setImage(Icon.play.image, for: .normal)
-            progressTimer?.invalidate()
-            currentPlayTime = player.currentTime
-//            player.stop()
+            playerTimer?.invalidate()
             engine.pause()
         } else {
-            engine.url = fileName
-            try! engine.setupEngine()
-            player.currentTime = currentPlayTime
-//            player.play()
             engine.play()
             
-            progressTimer = Timer.scheduledTimer(
+            playerTimer = Timer.scheduledTimer(
                 timeInterval: 0.01,
                 target: self,
-                selector: #selector(update),
+                selector: #selector(update2),
                 userInfo: nil,
                 repeats: true
             )
             sender.setImage(Icon.pauseFill.image, for: .normal)
-            if currentPlayTime >= player.duration {
-                currentPlayTime = 0.0
-                counter = 0
-            }
         }
         isPlay = !isPlay
     }
@@ -165,12 +140,19 @@ class RecordViewController: UIViewController {
 private extension RecordViewController {
     @objc func update() {
         counter += 0.01
-        if let audioPlayer = audioPlayer {
-            if counter > audioPlayer.duration {
-                counter = audioPlayer.duration
-            }
+        recordTimeLabel.text = "\(counter.toStringTimeFormat)"
+    }
+    @objc func update2() {
+        print(engine.getCurrentTime())
+        if engine.isFinish() {
+            playButton.setImage(Icon.play.image, for: .normal)
+            isPlay = false
+            playerTimer?.invalidate()
+            engine.stop()
+            try! engine.setupEngine()
+        } else {
+            recordTimeLabel.text = "\(engine.getCurrentTime().toStringTimeFormat)"
         }
-        recordTimeLabel.text = "\(counter.toString)"
     }
 }
 
@@ -213,15 +195,14 @@ private extension RecordViewController {
     
     func cancelRecording() {
         if isRecord {
-        recorder.stop()
-        recorder.deleteRecording()
-        player.stop()
+            recorder.stop()
+            recorder.deleteRecording()
         }
     }
     
     func endRecord() {
         recorder.stop()
-        progressTimer?.invalidate()
+        recorderTimer?.invalidate()
         counter = 0.0
     }
     
