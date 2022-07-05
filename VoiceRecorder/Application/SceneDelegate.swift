@@ -12,7 +12,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     let audioManager = AudioManager()
     var pathFinder : PathFinder!
-    let firebaseStorageManager = FirebaseStorageManager.shared
+    let firebaseStorageManager = FirebaseStorageManager.init()
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.

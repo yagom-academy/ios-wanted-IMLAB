@@ -15,11 +15,10 @@ enum NetworkError: Error {
 
 class FirebaseStorageManager {
     
-    static let shared = FirebaseStorageManager()
     private let storage = Storage.storage()
     private let storageReferenceStr = "VoiceRecoder/"
     
-    private init() { }
+    init() { }
     
     // Todo: customError 타입 만들기 ( NetworkError )
     func uploadVoiceMemoToFirebase(with voiceMemoURL: URL, fileName: String, completion: @escaping ((Result<Bool, NetworkError>) -> Void)) {
