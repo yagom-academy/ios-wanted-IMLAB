@@ -369,10 +369,8 @@ extension AudioManager {
             fatalError()
         }
         
-        
         let offset = AVAudioFramePosition(second * audioFile.processingFormat.sampleRate)
         let audioLengthSamples = audioFile.length
-        
         
         guard let lastRenderTime = audioPlayerNode.lastRenderTime else {
             return
@@ -393,7 +391,10 @@ extension AudioManager {
                                  frameCount: frameCount,
                                  at: nil
                 ) { [unowned self] in
-                    validateStopPlayBack(isSkip: isSkip)
+                    
+                    if seekFrame >= audioLengthSamples {
+                        validateStopPlayBack(isSkip: isSkip)
+                    }
                 }
         }
         isSkip = false

@@ -16,7 +16,7 @@ class VoiceMemoPlayViewController: UIViewController {
     private weak var pathFinder: PathFinder!
     private weak var firebaseManager: FirebaseStorageManager!
     
-    var grayTransparentViewWidthConstant: NSLayoutConstraint!
+    private var grayTransparentViewWidthConstant: NSLayoutConstraint!
     
     // MARK: - ViewProperties
     private let voiceMemoTitleLabel: UILabel = {
@@ -86,7 +86,7 @@ class VoiceMemoPlayViewController: UIViewController {
         button.setImage(image, for: .normal)
         button.setPreferredSymbolConfiguration(.init(pointSize: 35, weight: .regular, scale: .default), forImageIn: .normal)
         
-        button.addTarget(nil, action: #selector(skipForward5SecButtonTouched(_:)), for: .touchUpInside)
+        button.addTarget(nil, action: #selector(skipBackward5SecButtonTouched(_:)), for: .touchUpInside)
         
         return button
     }()
