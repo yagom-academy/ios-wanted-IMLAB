@@ -120,7 +120,7 @@ class VoicePlayingViewController: UIViewController {
     }
     
     // Model 만들어서 들어와야 함. 06/29 레이아웃만 확인중 ~ 업데이트 예정
-    func fetchRecordedDataFromMainVC(data: Data?) {
+    func fetchRecordedDataFromMainVC(dataUrl: URL) {
         
         setSoundManager() // soundManager 초기화
         
@@ -132,10 +132,7 @@ class VoicePlayingViewController: UIViewController {
             recordedVoiceTitle.text = "Title"
         }
         
-        let filePath = Bundle.main.path(forResource: "sound", ofType: ".mp3")
-        let fileUrl = URL(fileURLWithPath: filePath!)
-        
-        soundManager.initializedEngine(url: fileUrl)
+        soundManager.initializedEngine(url: dataUrl)
         
     }
     
