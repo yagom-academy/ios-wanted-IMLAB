@@ -108,6 +108,14 @@ class VoiceMemoPlayViewController: UIViewController {
         return stack
     }()
     
+    private let grayTransparentView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .systemGray6
+        view.alpha = 0.7
+        
+        return view
+    }()
+    
     // - MARK: Objc Selector Event Method
     
     @objc func playOrStopButtonTouched(_ sender: UIButton) {
@@ -127,8 +135,6 @@ class VoiceMemoPlayViewController: UIViewController {
                 audioManager.stopPlay()
             }
         }
-        
-        
     }
     
     @objc func skipForward5SecButtonTouched(_ sender: UIButton) {
@@ -136,7 +142,7 @@ class VoiceMemoPlayViewController: UIViewController {
     }
     
     @objc func skipBackward5SecButtonTouched(_ sender: UIButton) {
-        audioManager.skip(for: 5, filePath: pathFinder.lastUsedUrl)
+        audioManager.skip(for: -5, filePath: pathFinder.lastUsedUrl)
     }
     
     @objc func pitchChangeSegmentedControllerTouched(_ sender: UISegmentedControl) {
@@ -190,9 +196,27 @@ class VoiceMemoPlayViewController: UIViewController {
         
         self.voiceMemoTitleLabel.text = audioFileName ?? "PlayView"
         
+        audioManager.delegateMethod = modifyGrayParentViewTrailingAnchor
         NotificationCenter.default.addObserver(self, selector: #selector(audioPlaybackTimeIsOver(_:)), name: .audioPlaybackTimeIsOver, object: nil)
     }
     
+}
+
+// MARK: - GrayParentView Delegate
+
+extension VoiceMemoPlayViewController {
+    func modifyGrayParentViewTrailingAnchor(ratio: Float) {
+        DispatchQueue.main.async { [unowned self] in
+            
+            let waveViewWidth = waveFormView.bounds.width
+            
+            let incresingWidth: CGFloat = waveViewWidth * CGFloat(ratio)
+            print(ratio,incresingWidth)
+            grayTransparentView.widthAnchor.constraint(equalToConstant: incresingWidth).isActive = true
+            
+            view.layoutIfNeeded()
+        }
+    }
 }
 
 // MARK: - UI Design
@@ -201,7 +225,7 @@ extension VoiceMemoPlayViewController {
     
     private func configureSubViews() {
         [voiceMemoTitleLabel, waveFormView, voiceSegment,
-         volumeLabel, volumeSlider, playButtonStackView].forEach {
+         volumeLabel, volumeSlider, playButtonStackView, grayTransparentView].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -222,6 +246,13 @@ extension VoiceMemoPlayViewController {
             waveFormView.heightAnchor.constraint(equalToConstant: 80),
             waveFormView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
             waveFormView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40)
+        ])
+        
+        NSLayoutConstraint.activate([
+            grayTransparentView.heightAnchor.constraint(equalTo: waveFormView.heightAnchor),
+            grayTransparentView.topAnchor.constraint(equalTo: waveFormView.topAnchor),
+            grayTransparentView.centerYAnchor.constraint(equalTo: waveFormView.centerYAnchor),
+            grayTransparentView.leadingAnchor.constraint(equalTo: waveFormView.leadingAnchor)
         ])
         
         NSLayoutConstraint.activate([
