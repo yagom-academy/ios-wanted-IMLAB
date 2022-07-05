@@ -105,10 +105,12 @@ class PlayVoiceManager{
     
     func forwardFiveSecond(){
         seek(time: 5.0)
+        delegate.displayWaveForm(to: currentPosition, in: audioLengthSamples)
     }
     
     func backwardFiveSecond(){
         seek(time: -5.0)
+        delegate.displayWaveForm(to: currentPosition, in: audioLengthSamples)
     }
         
     func seek(time : Double){
@@ -141,6 +143,7 @@ class PlayVoiceManager{
             isPlay = false
             displayLink?.isPaused = true
             delegate.playEndTime()
+            delegate.displayWaveForm(to: 0, in: audioLengthSamples)
             setScheduleFile()
         }
     }
@@ -175,6 +178,7 @@ class PlayVoiceManager{
         currentPosition = max(currentPosition, 0)
         currentPosition = min(currentPosition, audioLengthSamples)
         if currentPosition >= audioLengthSamples{
+            delegate.displayWaveForm(to: audioLengthSamples, in: audioLengthSamples) // 이 부분 순서 변경
             playerNode.stop()
             seekFrame = 0
             currentPosition = 0
@@ -182,9 +186,10 @@ class PlayVoiceManager{
             displayLink?.isPaused = true
             delegate.playEndTime()
             setScheduleFile()
-            
+        } else {
+            delegate.displayWaveForm(to: currentPosition, in: audioLengthSamples) // 이 부분 순서 변경
         }
-        delegate.displayWaveForm(to: currentPosition, in: audioLengthSamples)
+        
     }
     
     deinit{

@@ -172,7 +172,6 @@ class RecordVoiceViewController: UIViewController {
             
             frequencySlider.topAnchor.constraint(equalTo: frequencyLabel.bottomAnchor),
             frequencySlider.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.8),
-            frequencySlider.heightAnchor.constraint(equalTo: waveFormView.heightAnchor, multiplier: 0.5),
             frequencySlider.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             
             progressTimeLabel.topAnchor.constraint(equalTo: frequencySlider.bottomAnchor),
