@@ -16,29 +16,20 @@ class RecordViewController: UIViewController {
     var engine = AVAudioEngine()
     
     var isStartRecording: Bool = false
+    
     var recordButton: UIButton = {
         var button = UIButton()
-        button.setImage(UIImage(systemName: "circle.fill"), for: .normal)
+        let largeConfig = UIImage.SymbolConfiguration(pointSize: 50, weight: .regular, scale: .large)
+        let largeRecordImage = UIImage(systemName: "circle.fill", withConfiguration: largeConfig)
+        button.setImage(largeRecordImage, for: .normal)
         button.tintColor = .systemRed
         return button
     }()
-
-    var playButton: UIButton = {
-        var button = UIButton()
-        button.setImage(UIImage(systemName: "play"), for: .normal)
-        button.backgroundColor = .blue
-        return button
-    }()
     
-    private lazy var recordURL: URL = {
-        var documentsURL: URL = {
-            let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-            return paths.first!
-        }()
-
-        let fileName = UUID().uuidString + ".caf"
-        let url = documentsURL.appendingPathComponent(fileName)
-        return url
+    private lazy var playControlView: PlayControlView = {
+        var view = PlayControlView()
+        view.delegate = self
+        return view
     }()
     
     override func viewDidLoad() {
@@ -48,31 +39,36 @@ class RecordViewController: UIViewController {
         setAudio()
         
         recordButton.addTarget(self, action: #selector(control), for: .touchUpInside)
-        playButton.addTarget(self, action: #selector(play), for: .touchUpInside)
     }
     
     func setLayout() {
+        view.backgroundColor = .white
+        
         recordButton.translatesAutoresizingMaskIntoConstraints = false
-        playButton.translatesAutoresizingMaskIntoConstraints = false
+        playControlView.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(recordButton)
-        view.addSubview(playButton)
+        view.addSubview(playControlView)
         
         NSLayoutConstraint.activate([
             recordButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            recordButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -30),
+            recordButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),
             recordButton.widthAnchor.constraint(equalToConstant: 80),
             recordButton.heightAnchor.constraint(equalToConstant: 80),
             
-            playButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            playButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            playButton.widthAnchor.constraint(equalToConstant: 60),
-            playButton.heightAnchor.constraint(equalToConstant: 60)
+            playControlView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            playControlView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            playControlView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.8),
+            playControlView.heightAnchor.constraint(equalToConstant: 100)
         ])
     }
     
     func recordButtonToggle() {
-        let image = self.isStartRecording ? UIImage(systemName: "square.circle") : UIImage(systemName: "circle.fill")
+        let largeConfig = UIImage.SymbolConfiguration(pointSize: 50, weight: .regular, scale: .large)
+        let largeRecordImage = UIImage(systemName: "circle.fill", withConfiguration: largeConfig)
+        let largePauseImage = UIImage(systemName: "square.circle", withConfiguration: largeConfig)
+        
+        let image = self.isStartRecording ? largePauseImage : largeRecordImage
         self.recordButton.setImage(image, for: .normal)
     }
 
@@ -89,7 +85,7 @@ class RecordViewController: UIViewController {
         }
     }
     
-    /// 녹음 시작 & 정지 컨트롤
+    // 녹음 시작 & 정지 컨트롤
     @objc private func control() {
         isStartRecording = !isStartRecording
         recordButtonToggle()
@@ -103,15 +99,11 @@ class RecordViewController: UIViewController {
             soundManager.initializedEngine(url: url)
         }
     }
-    
-    @objc private func play() {
-        soundManager.play()
-    }
 }
 
 extension RecordViewController {
     
-    /// 마이크 접근 권한 요청
+    // 마이크 접근 권한 요청
     private func requestMicrophoneAccess(completion: @escaping (Bool) -> Void) {
         do {
             let recordingSession: AVAudioSession = AVAudioSession.sharedInstance()
@@ -130,5 +122,28 @@ extension RecordViewController {
                 fatalError("[ERROR] Record Permission is Unknown Default.")
             }
         }
+    }
+}
+
+extension RecordViewController: SoundButtonActionDelegate {
+    
+    func playButtonTouchUpinside(sender: UIButton) {
+        if sender.isSelected {
+            soundManager.pause()
+        } else {
+            soundManager.play()
+        }
+    }
+    
+    func backwardButtonTouchUpinside(sender: UIButton) {
+        print("backwardButton Clicked")
+        
+        soundManager.seek(to: true)
+    }
+    
+    func forwardTouchUpinside(sender: UIButton) {
+        print("forwardButton Clicked")
+        
+        soundManager.seek(to: false)
     }
 }

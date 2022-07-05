@@ -27,10 +27,11 @@ class RecordedVoiceListViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setNavgationBarProperties()
         configureRecordedVoiceListLayout()
-        
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         print("view Will Appear")
@@ -76,10 +77,8 @@ class RecordedVoiceListViewController: UIViewController {
     }
     
     @objc func createNewVoiceRecordButtonAction() {
-        
-        let recorderVC = RecordCheckViewController()
+        let recorderVC = RecordViewController()
         self.present(recorderVC, animated: true)
-        
     }
 }
 
