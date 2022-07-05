@@ -10,7 +10,7 @@ import AVFoundation
 
 struct LocalFileHandler : LocalFileProtocol {
     
-    var localFileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+    var localFileURL = URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])
     
     func makeFileName() -> String {
         let formatter = DateFormatter()
