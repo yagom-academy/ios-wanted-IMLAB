@@ -29,7 +29,11 @@ class CreateAudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudi
         createAudioView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
         createAudioView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
-        
+        createAudioView.recordingButton.addTarget(
+          self,
+          action: #selector(tapRecordingButton),
+          for: .touchUpInside
+        )
         createAudioView.buttons.backButton.addTarget(
           self,
           action: #selector(backButtonclicked),
@@ -98,7 +102,7 @@ class CreateAudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudi
             let data = try Data(contentsOf: audioRecorder.url)
             let storageMetadata = StorageMetadata()
             storageMetadata.contentType = "audio/mpeg"
-            let audioInfo = AudioInfo(id: UUID(), data: data, metadata: storageMetadata)
+            let audioInfo = AudioInfo(id: "UUID()", data: data, metadata: storageMetadata)
             FirebaseService.uploadAudio(audio: audioInfo) { err in
                 print("firebase err: \(err)")
             }
