@@ -71,10 +71,8 @@ class RecordViewController: UIViewController {
     }
     
     func recordButtonToggle() {
-        DispatchQueue.main.async {
-            let image = self.isStartRecording ? UIImage(systemName: "square.circle") : UIImage(systemName: "circle.fill")
-            self.recordButton.setImage(image, for: .normal)
-        }
+        let image = self.isStartRecording ? UIImage(systemName: "square.circle") : UIImage(systemName: "circle.fill")
+        self.recordButton.setImage(image, for: .normal)
     }
 
     func setAudio() {
