@@ -24,6 +24,7 @@ class AudioEngine {
     
     var url: URL?
     var audioFile: AVAudioFile?
+    var gains: [Int] = [0, 0, 0, 0, 0]
     
     func setupEngine() throws {
         guard let url = url else { return }
@@ -32,23 +33,13 @@ class AudioEngine {
         audioFile = file
         let equalizer = AVAudioUnitEQ(numberOfBands: 5)
         let bands = equalizer.bands
-        let freqs = [60, 230, 910, 4000, 14000]
-
-        bands[0].gain = -20.0
-        bands[0].filterType = .lowShelf
-        bands[1].gain = -20.0
-        bands[1].filterType = .lowShelf
-        bands[2].gain = -20.0
-        bands[2].filterType = .lowShelf
-        bands[3].gain = 20.0
-        bands[3].filterType = .highShelf
-        bands[4].gain = 20.0
-        bands[4].filterType = .highShelf
+        let freqs = [75, 250, 1040, 2500, 7500]
         
-        for i in 0...(bands.count - 1) {
-            bands[i].frequency  = Float(freqs[i])
-            bands[i].bypass     = false
-//            bands[i].filterType = .parametric
+        for i in 0..<bands.count {
+            bands[i].frequency = Float(freqs[i])
+            bands[i].filterType = i <= 2 ? .lowShelf : .highShelf
+            bands[i].gain = Float(gains[i])
+            bands[i].bypass = false
         }
 
         audioLengthSamples = file.length

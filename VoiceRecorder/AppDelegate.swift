@@ -13,12 +13,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
         
-        // Get the singleton instance.
         let audioSession = AVAudioSession.sharedInstance()
         do {
-            // Set the audio session category, mode, and options.
             try audioSession.setCategory(.playAndRecord, options: .defaultToSpeaker)
-//            try audioSession.setPreferredSampleRate(44100)
             try audioSession.setActive(true)
         } catch {
             print("Failed to set audio session category.")

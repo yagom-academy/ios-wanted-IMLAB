@@ -10,7 +10,13 @@ import FirebaseStorage
 class RecordViewController: UIViewController {
     
     // MARK: - @IBOutlet
-    @IBOutlet weak var cutOffSlider: UISlider!
+    
+    @IBOutlet weak var eq75HzSlider: UISlider!
+    @IBOutlet weak var eq250HzSlider: UISlider!
+    @IBOutlet weak var eq1040HzSlider: UISlider!
+    @IBOutlet weak var eq2500HzSlider: UISlider!
+    @IBOutlet weak var eq7500HzSlider: UISlider!
+    
     @IBOutlet weak var recordTimeLabel: UILabel!
     @IBOutlet weak var recordButton: UIButton!
     @IBOutlet weak var playButton: UIButton!
@@ -63,17 +69,33 @@ class RecordViewController: UIViewController {
     
     // MARK: - @IBAction
     
-//    @IBAction func changeCutOffFrequency(_ sender: UISlider) {
-//        
-//        try! audioSession.setPreferredSampleRate(Double(sender.value))
-//        print(Double(sender.value))
-//    }
+    @IBAction func setCutOffFrequency(_ sender: UISlider) {
+        sender.isContinuous = false
+        let currentValue = Int(sender.value)
+        sender.value = Float(currentValue)
+        
+        switch sender {
+        case eq75HzSlider:
+            engine.gains[0] = currentValue
+        case eq250HzSlider:
+            engine.gains[1] = currentValue
+        case eq1040HzSlider:
+            engine.gains[2] = currentValue
+        case eq2500HzSlider:
+            engine.gains[3] = currentValue
+        case eq7500HzSlider:
+            engine.gains[4] = currentValue
+        default:
+            break
+        }
+    }
     
     @IBAction func didTapRecordButton(_ sender: UIButton) {
         if isRecord {
             sender.setImage(Icon.circleFill.image, for: .normal)
             setupButton(isHidden: false)
             endRecord()
+            blockEQSlider()
             guard let data = recorder.data else { return }
             player.url = fileName
             player.setupPlayer()
@@ -217,6 +239,20 @@ private extension RecordViewController {
                 print("ERROR \(error.localizedDescription)🌡🌡")
             }
         }
+    }
+    
+    func blockEQSlider() {
+        eq75HzSlider.isEnabled = false
+        eq250HzSlider.isEnabled = false
+        eq1040HzSlider.isEnabled = false
+        eq2500HzSlider.isEnabled = false
+        eq7500HzSlider.isEnabled = false
+        
+        eq75HzSlider.thumbTintColor = .clear
+        eq250HzSlider.thumbTintColor = .clear
+        eq1040HzSlider.thumbTintColor = .clear
+        eq2500HzSlider.thumbTintColor = .clear
+        eq7500HzSlider.thumbTintColor = .clear
     }
     
 }
