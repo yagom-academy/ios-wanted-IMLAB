@@ -42,19 +42,20 @@ struct RecordNetworkManager {
 
     func getRecordData(filename: String, completion: ((Result<Data, CustomNetworkError>) -> Void)? = nil) {
         let recordRef = storageRef.child(filename)
+        
         DispatchQueue.global().async {
-            recordRef.getData(maxSize: 1000000) { data, error in
+            recordRef.getData(maxSize: 1500000) { data, error in
                 if let error = error {
                     print("download error: ", error)
                     DispatchQueue.main.async {
                         completion?(.failure(CustomNetworkError.failLoadData))
                     }
                 } else {
-                    print("success download data!")
                     guard let data = data else {
                         completion?(.failure(CustomNetworkError.noData))
                         return
                     }
+                    print("success download data!")
                     DispatchQueue.main.async {
                         completion?(.success(data))
                     }

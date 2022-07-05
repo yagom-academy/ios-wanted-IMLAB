@@ -16,8 +16,14 @@ class PlayerViewModel {
     var volumeViewModel = VolumeViewModel()
     var playerButtonViewModel = PlayerButtonViewModel()
 
-    func update(_ filename: String, _ completion: @escaping () -> Void) {
-        model.update(filename, completion)
+    func update(_ filename: String, _ completion: @escaping (Error?) -> Void) {
+        model.update(filename) { error in
+            if let error = error {
+                completion(error)
+                return
+            }
+            completion(nil)
+        }
     }
 
     func getFileData() -> FileData? {

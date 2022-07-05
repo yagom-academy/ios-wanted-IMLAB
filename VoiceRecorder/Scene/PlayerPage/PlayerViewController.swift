@@ -126,7 +126,12 @@ extension PlayerViewController {
 
 extension PlayerViewController {
     func setData(_ filename: String) {
-        viewModel.update(filename) {
+        viewModel.update(filename) { error in
+            if let error = error {
+                self.isInvalidFile()
+                return
+            }
+
             self.configurePlayer()
         }
     }

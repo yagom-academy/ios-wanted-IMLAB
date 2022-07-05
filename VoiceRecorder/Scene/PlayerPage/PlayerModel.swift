@@ -12,18 +12,20 @@ class PlayerModel {
     private var data: AVAudioFile?
     private var fileData: FileData?
 
-    func update(_ filename: String, _ completion: @escaping () -> Void) {
+    func update(_ filename: String, _ completion: @escaping (Error?) -> Void) {
         let networkManager = RecordNetworkManager()
 
         parsingFileData(filename)
 
-        networkManager.getRecordData(filename: filename) { data in
-            // data 를 item 으로
-            guard let data = data else {
-                return
+        networkManager.getRecordData(filename: filename) { result in
+            switch result {
+            case let .success(data):
+                self.data = data.getAVAudioFile()
+                completion(nil)
+            case let .failure(error):
+                completion(error)
+                break
             }
-            self.data = data.getAVAudioFile()
-            completion()
         }
     }
 
