@@ -15,6 +15,7 @@ class VoiceMemoCell: UITableViewCell {
     lazy var fileNameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 12)
         return label
     }()
     

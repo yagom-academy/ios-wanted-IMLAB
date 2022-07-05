@@ -102,8 +102,8 @@ extension VoiceMemoListViewController: UITableViewDelegate, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: VoiceMemoCell.identifier, for: indexPath) as! VoiceMemoCell
-        
-        cell.fileNameLabel.text = voiceMemoListAllData[indexPath.row].description
+        let nameLabel = voiceMemoListAllData[indexPath.row].description
+        cell.fileNameLabel.text = nameLabel
         return cell
     }
     
