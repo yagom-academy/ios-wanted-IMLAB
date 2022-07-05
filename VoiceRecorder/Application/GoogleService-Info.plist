@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>475636892200-u1avdgg2opmc4lvdbcoj5ed30thml6a5.apps.googleusercontent.com</string>
+	<string>887706385635-sjbjmtv5oue5h17pbqtbfgiiadgvgs59.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.475636892200-u1avdgg2opmc4lvdbcoj5ed30thml6a5</string>
+	<string>com.googleusercontent.apps.887706385635-sjbjmtv5oue5h17pbqtbfgiiadgvgs59</string>
 	<key>API_KEY</key>
-	<string>AIzaSyCENS2hY10jAieE4VvKomQIoBRytaA5frM</string>
+	<string>AIzaSyAkxmNy1Xh5MWuSQzSY4fnzc25HDl2kRHU</string>
 	<key>GCM_SENDER_ID</key>
-	<string>475636892200</string>
+	<string>887706385635</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>net.yagom.VoiceRecorder</string>
 	<key>PROJECT_ID</key>
-	<string>voicerecorder-wanted-ad307</string>
+	<string>voicerecorder-wanted-ba41c</string>
 	<key>STORAGE_BUCKET</key>
-	<string>voicerecorder-wanted-ad307.appspot.com</string>
+	<string>voicerecorder-wanted-ba41c.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:475636892200:ios:08ec91907169d17df4ab1d</string>
+	<string>1:887706385635:ios:87591e01a347947c2099d6</string>
 </dict>
 </plist>

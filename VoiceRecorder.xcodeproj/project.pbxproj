@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0146B7A8286BE34700DD28D2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0146B7A7286BE34700DD28D2 /* AppDelegate.swift */; };
 		0146B7AA286BE35500DD28D2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0146B7A9286BE35500DD28D2 /* Assets.xcassets */; };
-		0146B7AC286BE36300DD28D2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0146B7AB286BE36300DD28D2 /* GoogleService-Info.plist */; };
 		0146B7B0286BE37100DD28D2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0146B7AF286BE37100DD28D2 /* SceneDelegate.swift */; };
 		0146B7B2286BE38F00DD28D2 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0146B7B1286BE38F00DD28D2 /* HomeViewController.swift */; };
 		0146B7B4286BE39400DD28D2 /* RecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0146B7B3286BE39400DD28D2 /* RecordViewController.swift */; };
@@ -20,6 +19,7 @@
 		01696161286ADEFA0020AAAC /* PlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01696160286ADEFA0020AAAC /* PlayViewController.swift */; };
 		181CA6C92872CC2100092A2C /* MeterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181CA6C82872CC2100092A2C /* MeterView.swift */; };
 		182C8732286AD69700F3C24D /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182C8731286AD69700F3C24D /* DateExtensions.swift */; };
+		185AC9742873BE990026E924 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 185AC9732873BE990026E924 /* GoogleService-Info.plist */; };
 		18CE51F4286EEA8E004AAF7C /* PlayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CE51F3286EEA8E004AAF7C /* PlayViewModel.swift */; };
 		18CE51F7286EEEA1004AAF7C /* PlayTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CE51F6286EEEA1004AAF7C /* PlayTime.swift */; };
 		18D1497028697D5700A91B95 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 18D1496F28697D5700A91B95 /* FirebaseAnalytics */; };
@@ -32,7 +32,6 @@
 /* Begin PBXFileReference section */
 		0146B7A7286BE34700DD28D2 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0146B7A9286BE35500DD28D2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		0146B7AB286BE36300DD28D2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		0146B7AD286BE36B00DD28D2 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0146B7AF286BE37100DD28D2 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		0146B7B1286BE38F00DD28D2 /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -44,6 +43,7 @@
 		01696160286ADEFA0020AAAC /* PlayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayViewController.swift; sourceTree = "<group>"; };
 		181CA6C82872CC2100092A2C /* MeterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeterView.swift; sourceTree = "<group>"; };
 		182C8731286AD69700F3C24D /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
+		185AC9732873BE990026E924 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		18CE51F3286EEA8E004AAF7C /* PlayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayViewModel.swift; sourceTree = "<group>"; };
 		18CE51F6286EEEA1004AAF7C /* PlayTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayTime.swift; sourceTree = "<group>"; };
 		18D4A0CD28708EA000839E73 /* RecordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewModel.swift; sourceTree = "<group>"; };
@@ -100,11 +100,11 @@
 		182C8737286AD79000F3C24D /* Application */ = {
 			isa = PBXGroup;
 			children = (
+				185AC9732873BE990026E924 /* GoogleService-Info.plist */,
 				0146B7A7286BE34700DD28D2 /* AppDelegate.swift */,
 				0146B7AF286BE37100DD28D2 /* SceneDelegate.swift */,
 				0146B7A9286BE35500DD28D2 /* Assets.xcassets */,
 				DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */,
-				0146B7AB286BE36300DD28D2 /* GoogleService-Info.plist */,
 				0146B7AD286BE36B00DD28D2 /* Info.plist */,
 			);
 			path = Application;
@@ -213,7 +213,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */,
-				0146B7AC286BE36300DD28D2 /* GoogleService-Info.plist in Resources */,
+				185AC9742873BE990026E924 /* GoogleService-Info.plist in Resources */,
 				0146B7AA286BE35500DD28D2 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -228,7 +228,6 @@
 				18CE51F4286EEA8E004AAF7C /* PlayViewModel.swift in Sources */,
 				0146B7B0286BE37100DD28D2 /* SceneDelegate.swift in Sources */,
 				181CA6C92872CC2100092A2C /* MeterView.swift in Sources */,
-				18CE51F2286EEA5E004AAF7C /* Observable.swift in Sources */,
 				182C8732286AD69700F3C24D /* DateExtensions.swift in Sources */,
 				18F41487286C2AA100BB9911 /* AudioLevels.swift in Sources */,
 				0146B7B2286BE38F00DD28D2 /* HomeViewController.swift in Sources */,
