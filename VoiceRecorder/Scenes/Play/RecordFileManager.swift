@@ -10,10 +10,11 @@ import UIKit
 
 class RecordFileManager {
 
+  static let shared = RecordFileManager()
   private let fileManager = FileManager.default
   private var documentDirectory: URL? = nil
 
-  init() {
+  private init() {
     setup()
   }
 

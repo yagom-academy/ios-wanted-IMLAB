@@ -7,14 +7,19 @@ import UIKit
 
 final class HomeViewController: UIViewController {
     
-    
     var homeTableView: UITableView?
     var homeViewModel = HomeViewModel()
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        LoadingIndicator.showLoading()
         homeViewModel.reset()
-        self.setDataBinding()
+        setDataBinding()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        LoadingIndicator.hideLoading()
     }
     
     override func viewDidLoad() {
@@ -35,7 +40,6 @@ private extension HomeViewController {
     }
     
     @objc func didTapAddButton() {
-        //TODO: Push AudioCreation VC
         let audioCreationViewController = CreateAudioViewController()
         navigationController?.pushViewController(audioCreationViewController, animated: true)
     }
@@ -101,19 +105,17 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let data = homeViewModel[indexPath], let fileName = data.filename else {return}
-        let endPoint = EndPoint(fileName: fileName)
-        FirebaseService.makeURL(endPoint: endPoint) { result in
-            switch result {
-            case .success(let url):
+        guard let data = homeViewModel[indexPath] else {return}
+        LoadingIndicator.showLoading()
+        homeViewModel.enquireForURL(data) { url in
+            if let url = url {
                 let playScene = PlayViewController()
                 playScene.url = url
                 self.navigationController?.pushViewController(playScene, animated: true)
-            case .failure(let error):
-                print(error)
             }
         }
     }
+        
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
