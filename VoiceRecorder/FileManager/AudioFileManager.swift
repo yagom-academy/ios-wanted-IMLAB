@@ -11,7 +11,7 @@ class AudioFileManager {
     
     private let fileManager = FileManager.default
     
-    let directoryPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("Recorded_Voice")
+    let directoryPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("Recorded_Voice") // 메인 폴더
     
     init() {
         initalizeFileFolder()
@@ -31,21 +31,17 @@ class AudioFileManager {
         }
     }
     
-    func createVoiceFile(fileName: String) -> URL {
-        return directoryPath.appendingPathComponent(fileName)
-        
-    }
-    
     func createVoiceFile(withDownLoad data: AudioData) {
         
     }
     
-//    func getAudioFileDirection(fileName: String, completion: @escaping (AudioData?) -> Void) {
-//        return directoryPath.appendingPathComponent(fileName)
-//    }
+    func getAudioData(fileName: String, completion: @escaping (AudioData?) -> Void) {
+        let data = AudioData(title: fileName, created_Data: Date(), playTime: "")
+        completion(data)
+    }
     
     func getAudioFilePath(fileName: String) -> URL {
-        return directoryPath.appendingPathComponent(fileName)
+        return directoryPath.appendingPathComponent(fileName) // fileName으로 파일경로 설정 ex) document/Recorded_Voice/2022_06_12_16:00:00
     }
     
     func readDirectory() {
