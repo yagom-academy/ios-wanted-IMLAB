@@ -29,7 +29,11 @@ class CreateAudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudi
         createAudioView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
         createAudioView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
-        
+        createAudioView.recordingButton.addTarget(
+          self,
+          action: #selector(tapRecordingButton),
+          for: .touchUpInside
+        )
         createAudioView.buttons.backButton.addTarget(
           self,
           action: #selector(backButtonclicked),
@@ -43,6 +47,11 @@ class CreateAudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudi
         createAudioView.buttons.forwordButton.addTarget(
           self,
           action: #selector(forwardButtonClicked),
+          for: .touchUpInside
+        )
+        createAudioView.doneButton.addTarget(
+          self,
+          action: #selector(tapDoneButton),
           for: .touchUpInside
         )
     }
@@ -101,11 +110,12 @@ class CreateAudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudi
             let audioInfo = AudioInfo(id: UUID().uuidString, data: data, metadata: storageMetadata)
             FirebaseService.uploadAudio(audio: audioInfo) { err in
                 print("firebase err: \(err)")
+                self.navigationController?.popViewController(animated: true)
             }
         } catch {
             print("error: \(error.localizedDescription)")
+            self.navigationController?.popViewController(animated: true)
         }
-        self.navigationController?.popViewController(animated: true)
     }
     func record() {
       let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
