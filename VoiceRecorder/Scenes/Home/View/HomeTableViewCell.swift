@@ -19,14 +19,12 @@ final class HomeTableViewCell: UITableViewCell {
     private var title: UILabel = {
         let label = UILabel()
         label.font = .mediumRegular
-        label.text = "2022.04.22:20:22:11"
         return label
     }()
     
     private var length: UILabel = {
         let label = UILabel()
         label.font = .mediumRegular
-        label.text = "12:33"
         return label
     }()
     
@@ -54,9 +52,9 @@ final class HomeTableViewCell: UITableViewCell {
     }
     
     func configure(model: AudioRepresentation?) {
-        guard let model = model else {return}
-        title.text = model.createdDate ?? ""
-        length.text = model.length ?? "xx"
+        guard let model = model, let date = model.createdDate else{return}
+        title.text = MyDateFormatter.shared.calendarDateString(from: date)
+        self.length.text = model.length ?? ""
     }
     
 }
