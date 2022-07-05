@@ -24,7 +24,7 @@ class AudioEngine {
     
     var url: URL?
     var audioFile: AVAudioFile?
-    var gains: [Int] = [0, 0, 0, 0, 0]
+    var gains: [Float] = [0, 0, 0, 0, 0]
     
     func setupEngine() throws {
         guard let url = url else { return }

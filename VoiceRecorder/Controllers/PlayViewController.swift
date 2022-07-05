@@ -20,7 +20,6 @@ class PlayViewController: UIViewController {
     
     // MARK: - Properties
     var recordFile: RecordModel?
-    var player: AudioPlayer?
     var isPlay = false
     var localFileManager: LocalFileManager?
     
@@ -32,7 +31,6 @@ class PlayViewController: UIViewController {
         configureUI()
         setUpLocalFileManger()
         setupMPVolumeView()
-        setUpPlayer()
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
@@ -52,8 +50,7 @@ class PlayViewController: UIViewController {
             engine.pause()
         } else {
             sender.setImage(Icon.pauseFill.image, for: .normal)
-            engine.url = localFileManager?.audioPath
-            try! engine.setupEngine()
+            setupEngine()
             engine.play()
         }
         isPlay = !isPlay
@@ -73,27 +70,25 @@ class PlayViewController: UIViewController {
             break
         }
     }
-    
 }
 
 // MARK: - Methods
 private extension PlayViewController {
     func cancelPlaying() {
-        player = nil
+        engine.stop()
     }
     func configureUI() {
         guard let recordFile = recordFile else { return }
         dateTitleLabel.text = String(recordFile.name.dropLast(4))
     }
-    
-    func setUpPlayer() {
-        guard let recordFile = recordFile else { return }
-        player = recordFile.audioPlayer
-        player?.didFinish = {
-            self.player?.stop()
-            self.playButton.setImage(Icon.play.image, for: .normal)
-            self.isPlay = false
-        }
+    func setupEngine() {
+        guard let recordFile = recordFile,
+              let eqString = recordFile.metaData[MetaData.eq.key] else { return }
+        let gains = eqString.split(separator: " ").map { String($0) }.map { Float($0) ?? 0.0 }
+                
+        engine.url = localFileManager?.audioPath
+        engine.gains = gains
+        try! engine.setupEngine()
     }
     func setupMPVolumeView() {
         volumeView.addSubview(mpVolumeView)

@@ -62,8 +62,8 @@ class RecordViewController: UIViewController {
     
     @IBAction func setCutOffFrequency(_ sender: UISlider) {
         sender.isContinuous = false
-        let currentValue = Int(sender.value)
-        sender.value = Float(currentValue)
+        let currentValue = Float(Int(sender.value))
+        sender.value = currentValue
         
         switch sender {
         case eq75HzSlider:
@@ -91,7 +91,12 @@ class RecordViewController: UIViewController {
             engine.url = fileName
             try! engine.setupEngine()
             
-            uploadFile(data, fileName: recordDate ?? "", duration: engine.audioLengthSeconds)
+            let newMetaData = [
+                MetaData.duration.key: "\(engine.audioLengthSeconds.toStringTimeFormat)",
+                MetaData.eq.key: "\(eq75HzSlider.value) \(eq250HzSlider.value) \(eq1040HzSlider.value) \(eq2500HzSlider.value) \(eq7500HzSlider.value)"
+            ]
+            
+            uploadFile(data, fileName: recordDate ?? "", newMetaData: newMetaData)
             print(fileName)
         } else {
             sender.setImage(Icon.circle.image, for: .normal)
@@ -197,7 +202,10 @@ private extension RecordViewController {
         if isRecord {
             recorder.stop()
             recorder.deleteRecording()
+            recorderTimer?.invalidate()
         }
+        engine.stop()
+        playerTimer?.invalidate()
     }
     
     func endRecord() {
@@ -206,11 +214,11 @@ private extension RecordViewController {
         counter = 0.0
     }
     
-    func uploadFile(_ data: Data, fileName: String, duration: Double) {
+    func uploadFile(_ data: Data, fileName: String, newMetaData: [String: String]) {
         StorageManager.shared.upload(
             data: data,
             fileName: fileName,
-            duration: duration
+            newMetaData: newMetaData
         ) { result in
             switch result {
             case .success(_):

@@ -17,14 +17,14 @@ class StorageManager {
     func upload(
         data: Data,
         fileName: String,
-        duration: Double,
+        newMetaData: [String: String],
         completion: @escaping (Result<Void, Error>
         ) -> Void) {
         let storageRef = storage.reference()
         let recordRef = storageRef.child("\(StoragePath.voiceRecords.rawValue)/\(fileName).m4a")
         
         let metaData = StorageMetadata()
-        metaData.customMetadata = ["duration": duration.toStringTimeFormat.dropLast(3).description]
+        metaData.customMetadata = newMetaData
         
         recordRef.putData(data, metadata: metaData) { _, error in
             if let error = error {
@@ -59,9 +59,9 @@ class StorageManager {
                                     return
                                 }
                                 if let meta = meta,
-                                   let duration = meta.customMetadata?["duration"] {
+                                   let customMetaData = meta.customMetadata {
                                     
-                                    let recordModel = RecordModel(name: item.name, url: url, duration: duration)
+                                    let recordModel = RecordModel(name: item.name, url: url, metaData: customMetaData)
                                     completion(.success(recordModel))
                                     return
                                 }
