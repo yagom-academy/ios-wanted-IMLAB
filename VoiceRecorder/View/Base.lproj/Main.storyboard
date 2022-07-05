@@ -184,7 +184,7 @@
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="gobackward.5" catalog="system"/>
                                         <connections>
-                                            <action selector="PressPrevButton:" destination="v7J-f4-A7r" eventType="touchUpInside" id="tDS-6E-hr5"/>
+                                            <action selector="pressPrevButton:" destination="v7J-f4-A7r" eventType="touchUpInside" id="0FF-Em-8pb"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xhf-LS-GKS">
@@ -192,7 +192,7 @@
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="play.fill" catalog="system"/>
                                         <connections>
-                                            <action selector="PressPlayButton:" destination="v7J-f4-A7r" eventType="touchUpInside" id="f4r-at-yKv"/>
+                                            <action selector="pressPlayButton:" destination="v7J-f4-A7r" eventType="touchUpInside" id="1na-yU-p0w"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cBt-TS-Bt9">
@@ -200,7 +200,7 @@
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="goforward.5" catalog="system"/>
                                         <connections>
-                                            <action selector="PressNextButton:" destination="v7J-f4-A7r" eventType="touchUpInside" id="yCE-CY-yhP"/>
+                                            <action selector="pressNextButton:" destination="v7J-f4-A7r" eventType="touchUpInside" id="DmX-hd-LdO"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -211,7 +211,7 @@
                                     <constraint firstAttribute="height" constant="30" id="W21-HG-Of8"/>
                                 </constraints>
                                 <connections>
-                                    <action selector="ControlVolumeSlider:" destination="v7J-f4-A7r" eventType="valueChanged" id="9Aw-wc-BEV"/>
+                                    <action selector="controlVolumeSlider:" destination="v7J-f4-A7r" eventType="valueChanged" id="Acm-kU-Cci"/>
                                 </connections>
                             </slider>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Volume" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MNs-qs-JV0">
@@ -271,6 +271,7 @@
                         <outlet property="titleLabel" destination="vKV-AA-4Ck" id="iho-wJ-JgN"/>
                         <outlet property="voiceChangeSegmentedControl" destination="epG-fG-rh2" id="eQ9-zR-RQM"/>
                         <outlet property="volumeControlSlider" destination="haY-Q9-0tn" id="pNk-Ge-leG"/>
+                        <outlet property="volumeLabel" destination="MNs-qs-JV0" id="pFJ-vT-o83"/>
                         <outlet property="waveImageView" destination="vAx-Kt-MEu" id="eer-HW-j12"/>
                     </connections>
                 </viewController>

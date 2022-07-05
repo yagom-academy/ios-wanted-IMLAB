@@ -23,15 +23,15 @@ struct PlayerTime {
     var hours = 0
     var mins = 0
 
-//    if seconds > TimeConstant.secsPerHour {
-//      hours = seconds / TimeConstant.secsPerHour
-//      seconds -= hours * TimeConstant.secsPerHour
-//    }
-//
-//    if seconds > TimeConstant.secsPerMin {
-//      mins = seconds / TimeConstant.secsPerMin
-//      seconds -= mins * TimeConstant.secsPerMin
-//    }
+    if seconds > TimeConstant.secsPerHour {
+      hours = seconds / TimeConstant.secsPerHour
+      seconds -= hours * TimeConstant.secsPerHour
+    }
+
+    if seconds > TimeConstant.secsPerMin {
+      mins = seconds / TimeConstant.secsPerMin
+      seconds -= mins * TimeConstant.secsPerMin
+    }
 
     var formattedString = ""
     if hours > 0 {
