@@ -7,12 +7,18 @@
 
 import Foundation
 
-struct AudioData {
-    
-    static var Sample = AudioData(title: "2020_07_02_16:12:03", created_Date: Date(), playTime: "03:12", data: nil)
+class AudioData: Codable {
     
     var title: String
     var created_Date: Date
     var playTime: String
     var data: Data?
+    
+    init(title: String, created_Data: Date, playTime: String) {
+        self.title = title
+        self.created_Date = created_Data
+        self.playTime = playTime
+    }
+    
 }
+
