@@ -39,7 +39,6 @@ final class HomeViewModel {
             FirebaseService.featchMetaData(endPoint: endPoint) {[weak self] result in
                 switch result {
                 case .success(let metadata):
-//                    self?.sortByDate()
                     self?.audioData[endPoint.fileName]?.value = metadata.toDomain()
                 case .failure(let error):
                     print(error)
@@ -49,21 +48,18 @@ final class HomeViewModel {
     }
     
     
-    
-    
-    func enquireForURL() {
-        audioTitles.forEach({
-            let endPoint = EndPoint(fileName: $0)
-            FirebaseService.makeURL(endPoint: endPoint) {[weak self] result in
-                switch result {
-                case .success(let url):
-                    print(url)
-                    //                   self?.audioURLs?.updateValue(Observable<URL>(url), forKey: endPoint.fileName)
-                case .failure(let error):
-                    print(error)
-                }
+    func enquireForURL(_ audioRepresentation: AudioRepresentation, completion: @escaping (URL?) -> Void) {
+        guard let fileName = audioRepresentation.filename else {return}
+        let endPoint = EndPoint(fileName: fileName)
+        FirebaseService.makeURL(endPoint: endPoint) { result in
+            switch result {
+            case .success(let url):
+                completion(url)
+            case .failure(let error):
+                print(error)
             }
-        })
+        }
+        
         
     }
     
@@ -71,7 +67,7 @@ final class HomeViewModel {
         let title = audioTitles[indexPath.item]
         let audioInfo = AudioInfo(id: title, data: nil, metadata: nil)
         FirebaseService.delete(audio: audioInfo) { [weak self] error in
-            if var error = error as? NSError {
+            if let error = error as? NSError {
                 print(error)
                 completion(false)
             }else{
@@ -81,26 +77,6 @@ final class HomeViewModel {
             }
         }
     }
-    
-    
-    
-    
-    func sortByDate() {
-        self.audioTitles = audioTitles.sorted(by:{
-            audioData[$0]?.value.createdDate?.compare(audioData[$1]?.value.createdDate ?? Date()) == .orderedAscending})
-        
-        self.audioTitles.forEach({
-            guard let index = self.audioTitles.firstIndex(of: $0) else {return}
-            guard let previousValue = self.audioData[self.audioTitles[index]] else {return}
-            self.audioData[$0]?.value = previousValue.value
-        })
-        
-    }
-
-    
-    
-    
-    
     
     func reset(){
         audioTitles.removeAll()
