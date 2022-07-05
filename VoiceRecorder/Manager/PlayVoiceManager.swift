@@ -7,6 +7,7 @@
 
 protocol PlayVoiceDelegate : AnyObject{
     func playEndTime()
+    func displayWaveForm(to currentPosition : AVAudioFramePosition, in audioLengthSamples : AVAudioFramePosition)
 }
 
 import Foundation
@@ -181,7 +182,7 @@ class PlayVoiceManager{
             delegate.playEndTime()
             setScheduleFile()
         }
-        
+        delegate.displayWaveForm(to: currentPosition, in: audioLengthSamples)
     }
     
     deinit{

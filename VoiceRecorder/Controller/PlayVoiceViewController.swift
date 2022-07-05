@@ -6,12 +6,31 @@
 //
 
 import UIKit
+import AVFoundation
 
 class PlayVoiceViewController: UIViewController {
     
     var playVoiceManager : PlayVoiceManager!
     var playVoiceViewModel : PlayVoiceViewModel!
     var firebaseStorageManager : FirebaseStorageManager!
+    
+    var currentPositionView : UIView = {
+        let currentPositionView = UIView()
+        currentPositionView.translatesAutoresizingMaskIntoConstraints = false
+        let screenRect = UIScreen.main.bounds
+        currentPositionView.frame.size.width = screenRect.size.width
+        currentPositionView.frame.size.height = screenRect.size.height * (0.15)
+        let path = UIBezierPath()
+        path.move(to: CGPoint(x: 0, y: 0))
+        path.addLine(to: CGPoint(x: 0, y: currentPositionView.frame.height))
+        let shape = CAShapeLayer()
+        shape.path = path.cgPath
+        shape.strokeColor = UIColor.black.cgColor
+        shape.fillColor = UIColor.clear.cgColor
+        shape.lineWidth = screenRect.size.width/112/10
+        currentPositionView.layer.addSublayer(shape)
+        return currentPositionView
+    }()
     
     var soundWaveImageView : UIImageView = {
         let soundWaveImageView = UIImageView()
@@ -92,6 +111,7 @@ class PlayVoiceViewController: UIViewController {
     
     func setView(){
         self.view.addSubview(fileNameLabel)
+        self.view.addSubview(currentPositionView)
         self.view.addSubview(soundWaveImageView)
         self.view.addSubview(selectedPitchSegment)
         self.view.addSubview(volumeSlider)
@@ -112,6 +132,11 @@ class PlayVoiceViewController: UIViewController {
             soundWaveImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.15),
             soundWaveImageView.widthAnchor.constraint(equalTo: view.widthAnchor),
             
+            currentPositionView.leadingAnchor.constraint(equalTo: view.centerXAnchor),
+            currentPositionView.topAnchor.constraint(equalTo: fileNameLabel.bottomAnchor, constant: 30),
+            currentPositionView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.15),
+            currentPositionView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            
             selectedPitchSegment.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             selectedPitchSegment.topAnchor.constraint(equalTo: soundWaveImageView.bottomAnchor, constant: 30),
             
@@ -121,7 +146,9 @@ class PlayVoiceViewController: UIViewController {
             
             playAndPauseButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             playAndPauseButton.centerYAnchor.constraint(equalTo: volumeSlider.bottomAnchor, constant: 30),
+                        
         ])
+        view.bringSubviewToFront(currentPositionView)
     }
     
     func setUIText(){
@@ -182,7 +209,13 @@ extension PlayVoiceViewController : PlayVoiceDelegate{
         DispatchQueue.main.async {
             self.playAndPauseButton.setImage(UIImage(systemName: "play"), for: .normal)
         }
-        
+    }
+    
+    func displayWaveForm(to currentPosition : AVAudioFramePosition, in audioLengthSamples : AVAudioFramePosition) {
+        let newX = (self.soundWaveImageView.image?.size.width ?? 0) * CGFloat(currentPosition) / CGFloat(audioLengthSamples)
+        UIView.animate(withDuration: 1/14, animations: {
+            self.soundWaveImageView.transform = CGAffineTransform(translationX: -newX, y: 0)
+        })
     }
 }
 
