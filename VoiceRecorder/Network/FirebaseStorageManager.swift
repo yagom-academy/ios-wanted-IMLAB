@@ -12,15 +12,34 @@ import UIKit
 class FirebaseStorageManager {
     
     private var baseReference: StorageReference!
-    private var baseURL: String!
     
-    init(_ url: String) {
-        baseURL = url
-        baseReference = Storage.storage().reference(forURL: baseURL)
+    init() {
+        baseReference = Storage.storage().reference()
+    }
+    
+    func uploadAudio(url: URL) {
+        let filePath = "0705_11_29.caf"
+        let data = try! Data(contentsOf: url)
+        let metaData = StorageMetadata()
+        metaData.contentType = "audio/x-caf"
+        
+        baseReference.child(filePath).putData(data, metadata: metaData) { metaData, error in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            } else {
+                print("성공")
+            }
+        }
+    }
+    
+    func downloadAudio(from urlString: String, to localUrl: URL, completion: @escaping (URL?) -> Void) {
+        baseReference.child(urlString).write(toFile: localUrl) { url, error in
+            completion(url)
+        }
     }
     
     func downloadAll() {
-        
         baseReference.listAll { (result, error) in
             
             if let error = error {
@@ -39,32 +58,6 @@ class FirebaseStorageManager {
                     print("item", item)
                 }
             }
-        }
-        
-    }
-    
-    func download(from urlString: String, to localUrl: URL, completion: @escaping (URL?) -> Void) {
-      
-        baseReference.child(urlString).write(toFile: localUrl) { url, error in
-            completion(url)
-        }
-        
-    }
-    
-    
-    func uploadAudioFile(file: URL) {
-        
-        let localFile = URL(string: "path/to/image")!
-        
-        // Upload the file to the path "images/rivers.jpg"
-        let uploadTask = baseReference.putFile(from: localFile, metadata: nil) { metadata, error in
-            guard let metadata = metadata else {
-                // Uh-oh, an error occurred!
-                return
-            }
-            // Metadata contains file metadata such as size, content-type.
-            let size = metadata.size
- 
         }
     }
     
