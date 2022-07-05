@@ -44,15 +44,13 @@ class PlayViewController: UIViewController {
   // MARK: - Test를 위해서 네트워크 통신 결과 URL 값을 바로 넣어주는 상태
   func setupAudio() {
     guard let url = url else { return }
-    let fileManager = RecordFileManager()
-    fileManager.saveRecordFile(recordName: "test", file: url)
-    guard let file = fileManager.loadRecordFile("test") else { return }
+    RecordFileManager.shared.saveRecordFile(recordName: "test", file: url)
+    guard let file = RecordFileManager.shared.loadRecordFile("test") else { return }
     audio = Audio(file)
   }
 
   func setupWaveform() {
-    let fileManager = RecordFileManager()
-    guard let file = fileManager.loadRecordFile("test") else { return }
+    guard let file = RecordFileManager.shared.loadRecordFile("test") else { return }
     playView.waveformView.generateWaveImage(from: file)
   }
 
@@ -107,6 +105,19 @@ class PlayViewController: UIViewController {
       action: #selector(sliderValueChanged(_:)),
       for: .valueChanged
     )
+    self.navigationItem.leftBarButtonItem = UIBarButtonItem(
+      image: UIImage(systemName: "chevron.backward"),
+      style: .plain,
+      target: self,
+      action: #selector(navigationBackButtonClicked)
+    )
+  }
+
+  @objc
+  func navigationBackButtonClicked() {
+    audio?.stop()
+    RecordFileManager.shared.deleteRecordFile("test")
+    self.navigationController?.popViewController(animated: true)
   }
 
   @objc

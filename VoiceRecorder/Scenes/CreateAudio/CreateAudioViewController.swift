@@ -98,7 +98,7 @@ class CreateAudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudi
             let data = try Data(contentsOf: audioRecorder.url)
             let storageMetadata = StorageMetadata()
             storageMetadata.contentType = "audio/mpeg"
-            let audioInfo = AudioInfo(id: UUID(), data: data, metadata: storageMetadata)
+            let audioInfo = AudioInfo(id: UUID().uuidString, data: data, metadata: storageMetadata)
             FirebaseService.uploadAudio(audio: audioInfo) { err in
                 print("firebase err: \(err)")
             }
