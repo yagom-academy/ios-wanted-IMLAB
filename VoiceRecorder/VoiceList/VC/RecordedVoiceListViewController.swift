@@ -8,6 +8,10 @@ import AVFoundation
 
 class RecordedVoiceListViewController: UIViewController {
     
+    var firestorageManager = FirebaseStorageManager(FireStorageService.baseUrl)
+    
+    let audioList = [AudioData(title: "2022_07_02_20_48.m4a", created_Data: Date(), playTime: "03:02"), AudioData(title: "2022_07_02_20_52.m4a", created_Data: Date(), playTime: "02:34")]
+    
     lazy var navigationBar: UINavigationBar = {
         var navigationBar = UINavigationBar()
         return navigationBar
@@ -35,7 +39,7 @@ class RecordedVoiceListViewController: UIViewController {
     func setNavgationBarProperties() {
 
         let navItem = UINavigationItem(title: "Voice Recorder")
-        let doneItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(getFile))
+        let doneItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createNewVoiceRecordButtonAction))
         
         navItem.rightBarButtonItem = doneItem
 
@@ -67,44 +71,37 @@ class RecordedVoiceListViewController: UIViewController {
         
     }
     
-    
-    @objc func getFile() {
-        let recorderVC = VoicePlayingViewController() // bar button 확인용 임시 vc
-        self.present(recorderVC, animated: true)
+    func initalizeFirebaseAudioFiles() {
+        firestorageManager.downLoadMetaData()
     }
     
-    
-    
-    
+    @objc func createNewVoiceRecordButtonAction() {
+        
+        let recorderVC = RecordCheckViewController()
+        self.present(recorderVC, animated: true)
+        
+    }
 }
 
 extension RecordedVoiceListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        //return audioDataList.count
-        return 0
+        return audioList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = recordedVoiceTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! RecordedVoiceTableViewCell
         
         cell.setTableViewCellLayout()
-        //cell.fetchAudioLabelData(data: audioDataList[indexPath.row])
+        cell.fetchAudioLabelData(data: audioList[indexPath.row])
         
         return cell
-        
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let voicePlayVC = VoicePlayingViewController()
-        if let sheet = voicePlayVC.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
-            sheet.largestUndimmedDetentIdentifier = .medium
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.prefersEdgeAttachedInCompactHeight = true
-            sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
-        }
-        //voicePlayVC.fetchRecordedDataFromMainVC(data: audioDataList[indexPath.row])
+        let url = AudioFileManager().directoryPath.appendingPathComponent(audioList[indexPath.item].title)
+        voicePlayVC.fetchRecordedDataFromMainVC(dataUrl: url)
         self.present(voicePlayVC, animated: true)
     }
 
