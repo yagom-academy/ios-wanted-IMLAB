@@ -47,7 +47,7 @@ class PathFinder {
             Date.FormatStyle()
                 .year(.defaultDigits)
                 .month(.twoDigits)
-                .day(.defaultDigits)
+                .day(.twoDigits)
                 .hour(.twoDigits(amPM: .abbreviated))
                 .minute(.twoDigits)
                 .second(.twoDigits))
@@ -61,6 +61,16 @@ class PathFinder {
         
         lastUsedUrl = path
         return path
+    }
+    
+    func checkLocalIsExist(fileName: String) -> Bool {
+        var tempPath = basePath
+        let fileNameToAppend = "\(fileName).caf"
+        tempPath.appendPathComponent(fileNameToAppend)
+        print(tempPath)
+        
+        return manager.fileExists(atPath: tempPath.absoluteString)
+        
     }
     
 }

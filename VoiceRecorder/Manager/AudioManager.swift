@@ -47,11 +47,10 @@ class AudioManager {
             
             audioEQFilterParameters.frequency = sampleRateUnit * cutOffFrequency + 20
         }
-    } // 추후 제거할 property
+    }
     
     // play properties
     private lazy var seekFrame: AVAudioFramePosition = 0
-    private lazy var currentPosition: AVAudioFramePosition = 0
     private lazy var audioPlayerNode = AVAudioPlayerNode()
     private lazy var changePitchNode = AVAudioUnitTimePitch()
 
@@ -60,6 +59,8 @@ class AudioManager {
             changePitchNode.pitch = pitchMode.pitchValue
         }
     }
+    var delegateMethod: ((Float) -> Void)!
+    private var isSkip = false
     
     // - MARK: LifeCycle
     
@@ -166,6 +167,10 @@ extension AudioManager {
     
     /// 현재 재생중인 audioFile의 전체 길이. float을 Int로 변환하고, string으로 반환
     func getPlayTime(filePath: URL) -> String {
+        return "\(Int(getPlayTime(filePath: filePath)))"
+    }
+    
+    func getPlayTime(filePath: URL) -> Double {
         let audioFile: AVAudioFile
         do {
             audioFile = try getAudioFile(filePath: filePath)
@@ -177,16 +182,21 @@ extension AudioManager {
         let sampleRate = audioFile.processingFormat.sampleRate
         let audioPlayTime = Double(audioLengthSamples) / sampleRate
         
-        return "\(Int(audioPlayTime))"
+        return audioPlayTime
     }
-    
-    /// 재생중인 audioFile의 현재 재생구간
-    func getCurrentTime() -> String {
-        if let nodeTime: AVAudioTime = audioPlayerNode.lastRenderTime,
-           let playerTime: AVAudioTime = audioPlayerNode.playerTime(forNodeTime: nodeTime) {
-            return String(Int(nodeTime.sampleTime) / Int(playerTime.sampleRate))
+    /// 재생중인 audioFile의 현재 PlayerTime의 FramePosition을 반환
+    func getCurrentFramePosition(nodeTime: AVAudioTime, audioFile: AVAudioFile, moveOffset: AVAudioFramePosition) -> AVAudioFramePosition? {
+        guard let playerTime = audioPlayerNode.playerTime(forNodeTime: nodeTime) else  {
+            return nil
         }
-        return ""
+        
+        let audioLengthSamples = audioFile.length
+        var currentFrame = playerTime.sampleTime + seekFrame
+        currentFrame = validateFrameEdge(with: currentFrame,
+                                            limit: audioLengthSamples)
+        
+        return validateFrameEdge(with: currentFrame + moveOffset,
+                                 limit: audioLengthSamples)
     }
     
     private func calculatorBufferGraphData(buffer: AVAudioPCMBuffer) -> Float {
@@ -301,7 +311,6 @@ extension AudioManager {
     func stopPlay() {
         audioEngine.stop()
         seekFrame = 0
-        currentPosition = 0
         removeEngineNodes()
     }
     
@@ -314,7 +323,6 @@ extension AudioManager {
         audioEngine.attach(changePitchNode)
         audioEngine.connect(audioPlayerNode, to: changePitchNode, format: nil)
         audioEngine.connect(changePitchNode, to: audioEngine.mainMixerNode, format: nil)
-        
     }
     
     private func preparePlay(filePath: URL) {
@@ -326,8 +334,25 @@ extension AudioManager {
             fatalError()
         }
         
-        audioPlayerNode.scheduleFile(audioFile, at: nil) {
-            NotificationCenter.default.post(name: .audioPlaybackTimeIsOver, object: nil, userInfo: nil)
+        audioPlayerNode.scheduleFile(audioFile, at: nil)
+        
+        audioPlayerNode.installTap(onBus: 0, bufferSize: 1024, format: audioPlayerNode.outputFormat(forBus: 0)) { [unowned self] buffer, time in
+            
+            guard let framePosition = getCurrentFramePosition(nodeTime: time, audioFile: audioFile, moveOffset: 0) else {
+                return
+            }
+            
+            let currentTime = Double(framePosition) / Double(audioFile.processingFormat.sampleRate)
+            
+            let wholeTime: Double = getPlayTime(filePath: filePath)
+            
+            let ratio = Float(currentTime / wholeTime)
+            
+            delegateMethod(ratio)
+            
+            if ratio >= 1 {
+                validateStopPlayBack(isSkip: isSkip)
+            }
         }
         
         audioEngine.prepare()
@@ -351,36 +376,35 @@ extension AudioManager {
             fatalError()
         }
         
-        
         let offset = AVAudioFramePosition(second * audioFile.processingFormat.sampleRate)
         let audioLengthSamples = audioFile.length
         
-        guard let lastRenderTime = audioPlayerNode.lastRenderTime,
-              let playerTime = audioPlayerNode.playerTime(forNodeTime: lastRenderTime) else {
+        guard let lastRenderTime = audioPlayerNode.lastRenderTime else {
             return
         }
         
-        currentPosition = playerTime.sampleTime + seekFrame
-        currentPosition = validateFrameEdge(with: currentPosition,
-                                            limit: audioLengthSamples)
+        seekFrame = getCurrentFramePosition(nodeTime: lastRenderTime,
+                                audioFile: audioFile,
+                                            moveOffset: offset)!
         
-        seekFrame = validateFrameEdge(with: currentPosition + offset,
-                                      limit: audioLengthSamples)
-        
-        currentPosition = seekFrame
-        
+        isSkip = true
         audioPlayerNode.stop()
-        if currentPosition < audioLengthSamples {
+        if seekFrame < audioLengthSamples {
             let frameCount = AVAudioFrameCount( audioLengthSamples - seekFrame)
             
             audioPlayerNode
                 .scheduleSegment(audioFile,
-                                 startingFrame: currentPosition,
+                                 startingFrame: seekFrame,
                                  frameCount: frameCount,
                                  at: nil
-                )
+                ) { [unowned self] in
+                    
+                    if seekFrame >= audioLengthSamples {
+                        validateStopPlayBack(isSkip: isSkip)
+                    }
+                }
         }
-        
+        isSkip = false
         audioPlayerNode.play()
     }
     
@@ -393,4 +417,11 @@ extension AudioManager {
             audioPlayerNode.volume = newValue
         }
     }
+    
+    private func validateStopPlayBack(isSkip: Bool) {
+        if !isSkip {
+            NotificationCenter.default.post(name: .audioPlaybackTimeIsOver, object: nil, userInfo: nil)
+        }
+    }
+    
 }
