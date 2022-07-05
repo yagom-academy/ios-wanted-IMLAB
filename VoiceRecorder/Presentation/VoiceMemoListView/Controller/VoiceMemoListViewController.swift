@@ -89,6 +89,16 @@ extension VoiceMemoListViewController {
         
     }
     
+    private func convertSecToMin(time: String) ->
+    String {
+        guard let time = Int(time) else { return ""}
+        
+        let min = String(format: "%02d", time / 60)
+        let sec = String(format: "%02d", time % 60)
+        return "\(min):\(sec)"
+    }
+    
+    
     // MARK: - Action Method
     @objc private func buttonPressed() {
         self.coordinator?.presentRecordView()
@@ -108,7 +118,8 @@ extension VoiceMemoListViewController: UITableViewDelegate, UITableViewDataSourc
             DispatchQueue.main.async {
                 switch result {
                 case .success(let time):
-                    cell.fileTimeLabel.text = time
+                    let convertTime  = self.convertSecToMin(time: time)
+                    cell.fileTimeLabel.text = convertTime
                 case .failure(let error):
                     print(error.localizedDescription)
                 }
