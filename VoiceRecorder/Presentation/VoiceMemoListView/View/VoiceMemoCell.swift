@@ -22,6 +22,7 @@ class VoiceMemoCell: UITableViewCell {
     lazy var fileTimeLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 12)
         return label
     }()
     
