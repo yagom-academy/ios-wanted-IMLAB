@@ -95,7 +95,7 @@ class RecordViewController: UIViewController {
         isStartRecording = !isStartRecording
         recordButtonToggle()
         
-        let url = audioFileManager.createVoiceFile(fileName: "fileNAME")
+        let url = audioFileManager.getAudioFilePath(fileName: "fileNAME")
         if isStartRecording { // 녹음 시작일 때
             soundManager.startRecord(filePath: url)
         } else { // 녹음 끝일 때
