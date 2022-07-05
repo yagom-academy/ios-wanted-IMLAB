@@ -10,6 +10,10 @@ import AVFAudio
 import QuartzCore
 import Combine
 
+protocol RecordDrawable: AnyObject{
+    func updateValue(_ value:CGFloat)
+}
+
 enum RecorderError:Error{
     case permissionError
     case initError
@@ -51,16 +55,19 @@ class RecordViewModel{
 
     // 파이어 관련 Properties
     let firebaseManger = FirebaseStorageManager.shared
+    
+    weak var delegate:RecordDrawable?
 
     init() throws {
         checkPermission()
         
         if audioPermission{
             self.recordFile = try AVAudioFile(forReading: fileURL)
-            guard let format = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: 8000, channels: 1, interleaved: true) else {
+            guard let format = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: 44100.0, channels: 1, interleaved: true) else {
                 throw RecorderError.initError
             }
             self.recordFormat = format
+            
             
             self.setupEngine()
             self.setUpDisplayLink()
@@ -90,28 +97,41 @@ class RecordViewModel{
         let input = engine.inputNode
         let output = engine.outputNode
         let mainMixer = engine.mainMixerNode
+        let EQNode = AVAudioUnitEQ(numberOfBands: 1)
+        
+        var filterParams = EQNode.bands[0] as AVAudioUnitEQFilterParameters
+        
+        filterParams.filterType = .highPass
+        filterParams.frequency = 100.0
+        filterParams.bypass = true
+        filterParams.filterType = .lowPass
+        filterParams.frequency = 10
+        engine.attach(EQNode)
         
         do{
             try input.setVoiceProcessingEnabled(true)
         } catch {
             print("Could not enable voice Processing --- \(error.localizedDescription)")
         }
+        engine.connect(player, to: EQNode, format: recordFormat)
+        engine.connect(EQNode, to: mainMixer, format: recordFormat)
         
-        engine.connect(player, to: mainMixer, format: recordFormat)
-        engine.connect(mainMixer, to: output, format: recordFormat)
-        
-        input.installTap(onBus: 0, bufferSize: 256, format: recordFormat) { [weak self] buffer, when in
+        input.installTap(onBus: 0, bufferSize: 1024, format: recordFormat) { [weak self] buffer, when in
             guard let self = self else { return }
             if self.isRecording{
                 do{
                     try self.recordFile?.write(from: buffer)
+                    self.delegate?.updateValue(CGFloat(self.calculateBuffer(buffer: buffer)))
+                    
                 } catch {
                     print("Could not write buffer --- \(error)")
                 }
             }
         }
         
-        mainMixer.installTap(onBus: 0, bufferSize: 1024, format: nil) { buffer, when in }
+        mainMixer.installTap(onBus: 0, bufferSize: 1024, format: nil) { buffer, when in
+//            print(self.calculateBuffer(buffer: buffer))
+        }
         
         engine.prepare()
         engineStart()
@@ -148,7 +168,7 @@ class RecordViewModel{
             recordFile = nil
         }
         
-        firebaseManger.uploadData(url: fileURL, fileName: Date().toString("yyyy_MM_dd_HH_mm_ss") + ".m4a")
+//        firebaseManger.uploadData(url: fileURL, fileName: Date().toString("yyyy_MM_dd_HH_mm_ss") + ".m4a")
     }
     
     func startPlaying(){
@@ -241,5 +261,42 @@ class RecordViewModel{
         
         let time = Float(currentPosition) / Float(audioLengthSamples)
         progressValue = time
+    }
+    
+    func calculateBuffer(buffer: AVAudioPCMBuffer) -> Float {
+        guard let channelData = buffer.floatChannelData else {
+            return 0.0
+        }
+        
+        let channelDataValue = channelData.pointee
+        
+        let valueArray = stride(from: 0, to: Int(buffer.frameLength), by: buffer.stride).map{
+            channelDataValue[$0]
+        }
+        
+        let rms = sqrt(valueArray.map{
+            return $0 * $0
+        }.reduce(0, +) / Float(buffer.frameLength))
+        
+        let avgPower = 20 * log10(rms)
+        
+        let meterLevel = self.scaledPower(power: avgPower)
+        return meterLevel
+    }
+    
+    func scaledPower(power:Float) -> Float {
+        guard power.isFinite else {
+            return 0.0
+        }
+        
+        let minDb: Float = -80
+        
+        if power < minDb {
+            return 0.0
+        } else if power >= 1.0 {
+            return 1.0
+        } else {
+            return (abs(minDb) - abs(power)) / abs(minDb)
+        }
     }
 }

@@ -16,6 +16,8 @@ protocol RecordViewControllerDelegate: AnyObject {
 }
 
 class RecordViewController:UIViewController{
+
+    
     private var viewModel:RecordViewModel!
     private var cancellable = Set<AnyCancellable>()
     
@@ -69,9 +71,16 @@ class RecordViewController:UIViewController{
         return progressView
     }()
     
+    lazy var meterView: RecordMeterView = {
+        let view = RecordMeterView(frame: .zero)
+        view.backgroundColor = .secondarySystemBackground
+        view.layer.cornerRadius = 10
+        return view
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .secondarySystemGroupedBackground
         
         setupViewModel()
         configure()
@@ -94,7 +103,6 @@ class RecordViewController:UIViewController{
         delegate?.recordViewControllerDidDisappear()
         super.viewDidDisappear(animated)
     }
-    
 }
 
 //MARK: - View Configure
@@ -107,7 +115,7 @@ private extension RecordViewController{
     
     func addSubViews(){
         
-        [controlStackView,volumeBar,progressView].forEach{
+        [controlStackView,volumeBar,progressView,meterView].forEach{
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
@@ -126,7 +134,12 @@ private extension RecordViewController{
             
             progressView.leadingAnchor.constraint(equalTo: volumeBar.leadingAnchor),
             progressView.trailingAnchor.constraint(equalTo: volumeBar.trailingAnchor),
-            progressView.bottomAnchor.constraint(equalTo: volumeBar.topAnchor,constant: -30)
+            progressView.bottomAnchor.constraint(equalTo: volumeBar.topAnchor,constant: -30),
+            
+            meterView.leadingAnchor.constraint(equalTo: progressView.leadingAnchor),
+            meterView.trailingAnchor.constraint(equalTo: progressView.trailingAnchor),
+            meterView.bottomAnchor.constraint(equalTo: progressView.topAnchor,constant: -30),
+            meterView.heightAnchor.constraint(equalToConstant: 80),
         ])
     }
     
@@ -177,6 +190,7 @@ private extension RecordViewController{
     func setupViewModel(){
         do{
             self.viewModel = try RecordViewModel()
+            self.viewModel.delegate = self
             try AVAudioSession.sharedInstance().setCategory(.playAndRecord,mode: .default,options: .defaultToSpeaker)
             try AVAudioSession.sharedInstance().setActive(true)
         } catch {
@@ -220,6 +234,7 @@ extension RecordViewController {
                     [self.prevButton,self.playButton,self.nextButton].forEach { button in
                         button.isEnabled = false
                     }
+                    self.meterView.disPlayLink?.isPaused = false
                 } else {
                     self.recordButton.setImage(UIImage(systemName: "circle.fill"), for: .normal)
                     
@@ -240,3 +255,11 @@ extension RecordViewController {
             .store(in: &cancellable)
     }
 }
+
+extension RecordViewController: RecordDrawable {
+    func updateValue(_ value:CGFloat) {
+        self.meterView.value = value
+    }
+}
+
+extension RecordViewController: UIScrollViewDelegate {}
