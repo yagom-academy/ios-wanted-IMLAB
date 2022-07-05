@@ -13,11 +13,11 @@ class Firebase {
     let storage = Storage.storage()
     
     func upload(url: URL) {
-        let filePath = "0705_01_04.m4a"
+        let filePath = "0705_09_18.caf"
         let data = try! Data(contentsOf: url)
         print(data, "녹음본")
         let metaData = StorageMetadata()
-        metaData.contentType = "audio/x-m4a"
+        metaData.contentType = "audio/x-caf"
         
         storage.reference().child(filePath).putData(data, metadata: metaData) { metaData, error in
             if let error = error {

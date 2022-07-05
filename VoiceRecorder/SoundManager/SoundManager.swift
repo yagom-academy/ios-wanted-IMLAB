@@ -88,7 +88,6 @@ class SoundManager: NSObject {
         // 아마 mainMixerNode쪽에 종료 메소드가 포함 되어 있는듯
         
         engine.prepare()
-        
     }
     
     func configurePlayerNode() {

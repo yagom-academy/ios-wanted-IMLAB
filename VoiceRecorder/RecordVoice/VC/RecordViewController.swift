@@ -36,7 +36,7 @@ class RecordViewController: UIViewController {
             return paths.first!
         }()
 
-        let fileName = UUID().uuidString + ".m4a"
+        let fileName = UUID().uuidString + ".caf"
         let url = documentsURL.appendingPathComponent(fileName)
         return url
     }()
