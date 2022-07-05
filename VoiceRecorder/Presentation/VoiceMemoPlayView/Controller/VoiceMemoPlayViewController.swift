@@ -16,6 +16,8 @@ class VoiceMemoPlayViewController: UIViewController {
     private weak var pathFinder: PathFinder!
     private weak var firebaseManager: FirebaseStorageManager!
     
+    var grayTransparentViewWidthConstant: NSLayoutConstraint!
+    
     // MARK: - ViewProperties
     private let voiceMemoTitleLabel: UILabel = {
         let label = UILabel()
@@ -110,7 +112,7 @@ class VoiceMemoPlayViewController: UIViewController {
     
     private let grayTransparentView: UIView = {
         let view = UIView()
-        view.backgroundColor = .systemGray6
+        view.backgroundColor = .systemGray2
         view.alpha = 0.7
         
         return view
@@ -211,10 +213,11 @@ extension VoiceMemoPlayViewController {
             let waveViewWidth = waveFormView.bounds.width
             
             let incresingWidth: CGFloat = waveViewWidth * CGFloat(ratio)
-            print(ratio,incresingWidth)
-            grayTransparentView.widthAnchor.constraint(equalToConstant: incresingWidth).isActive = true
+            grayTransparentViewWidthConstant.constant = incresingWidth
             
-            view.layoutIfNeeded()
+            UIView.animate(withDuration: 0.1) {
+                self.view.layoutIfNeeded()
+            }
         }
     }
 }
@@ -248,11 +251,13 @@ extension VoiceMemoPlayViewController {
             waveFormView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40)
         ])
         
+        grayTransparentViewWidthConstant = grayTransparentView.widthAnchor.constraint(equalToConstant: 0)
         NSLayoutConstraint.activate([
             grayTransparentView.heightAnchor.constraint(equalTo: waveFormView.heightAnchor),
             grayTransparentView.topAnchor.constraint(equalTo: waveFormView.topAnchor),
             grayTransparentView.centerYAnchor.constraint(equalTo: waveFormView.centerYAnchor),
-            grayTransparentView.leadingAnchor.constraint(equalTo: waveFormView.leadingAnchor)
+            grayTransparentView.leadingAnchor.constraint(equalTo: waveFormView.leadingAnchor),
+            grayTransparentViewWidthConstant
         ])
         
         NSLayoutConstraint.activate([
