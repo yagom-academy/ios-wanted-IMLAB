@@ -10,6 +10,8 @@ protocol RecordVoiceDelegate : AnyObject{
 }
 
 import UIKit
+import AVFoundation
+
 class RecordVoiceViewController: UIViewController {
 
     weak var delegate : RecordVoiceDelegate?
@@ -261,6 +263,10 @@ extension RecordVoiceViewController : RecordVoiceManagerDelegate {
 }
 
 extension RecordVoiceViewController : PlayVoiceDelegate{
+    func displayWaveForm(to currentPosition: AVAudioFramePosition, in audioLengthSamples: AVAudioFramePosition) {
+        //
+    }
+    
     func playEndTime() {
         playVoiceManager.isPlay = false
         DispatchQueue.main.async {
