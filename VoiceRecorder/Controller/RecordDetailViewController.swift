@@ -13,7 +13,7 @@ class RecordDetailViewController: UIViewController {
     
     // MARK: - IBOutlet
     
-    @IBOutlet weak var recordWaveView: UIView!
+    @IBOutlet weak var waveView: UIView!
     @IBOutlet weak var cutoffLabel: UILabel!
     @IBOutlet weak var recordProgressBar: UISlider!
     @IBOutlet weak var durationLabel: UILabel!
@@ -26,34 +26,38 @@ class RecordDetailViewController: UIViewController {
     var recordingSession: AVAudioSession?
     var audioRecorder: AVAudioRecorder?
     var player : AVAudioPlayer?
-        
+    
     var audioFileURL : URL?
-            
+    
     let readyToRecordButtonImage = UIImage(systemName: "record.circle")
     let recordingButtonImage = UIImage(systemName: "record.circle.fill")
     
     let playButtonImage = UIImage(systemName: "play.fill")
     let pauseButtonImage = UIImage(systemName: "pause.fill")
     
-    // test
     var currentFileName : String?
     
+    var timer : Timer?
+    lazy var pencil = UIBezierPath(rect: waveView.bounds)
+    lazy var firstPoint = CGPoint(x: waveView.bounds.midX/2, y: (waveView.bounds.midY))
+    lazy var jump : CGFloat = (waveView.bounds.width - (firstPoint.x * 2))/200
+    let waveLayer = CAShapeLayer()
+    var traitLength : CGFloat!
+    var start : CGPoint!
     
     
     // MARK: - LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         buttonsStackView.isHidden = true
         
     }
-
-    override func viewWillDisappear(_ animated: Bool) {
+    
+    override func viewDidDisappear(_ animated: Bool) {
         if audioRecorder != nil {
             // 오디오 중지
-            audioRecorder?.stop()
-            audioRecorder = nil
+            writeWaves(0, false)
             // 로컬에 생성된 파일 삭제
             if let audioFileURL = audioFileURL {
                 do {
@@ -66,6 +70,7 @@ class RecordDetailViewController: UIViewController {
         }
     }
     
+    
     // MARK: - Methods
     
     func setupAudioRecorder() {
@@ -73,6 +78,7 @@ class RecordDetailViewController: UIViewController {
         do {
             try recordingSession?.setCategory(.playAndRecord, mode: .default)
             try recordingSession?.setActive(true)
+//            enableBuiltInMic()
             recordingSession?.requestRecordPermission({ [unowned self] allowed in
                 DispatchQueue.main.async {
                     if allowed {
@@ -87,7 +93,7 @@ class RecordDetailViewController: UIViewController {
             print(error.localizedDescription)
         }
     }
-        
+    
     func startRecording() {
         if let audioFileURL = audioFileURL {
             do {
@@ -112,20 +118,43 @@ class RecordDetailViewController: UIViewController {
             AVNumberOfChannelsKey: 1,
             AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
         ]
+        pencil.removeAllPoints()
+        waveLayer.removeFromSuperlayer()
+        writeWaves(0, false)
         do {
             audioRecorder = try AVAudioRecorder(url: audioFileURL, settings: settings)
             audioRecorder?.record() // 이것의 상태를 조건으로 다른 것 control하는 듯
+            audioRecorder?.isMeteringEnabled = true
             durationLabel.text = "녹음중 .."
             buttonsStackView.isHidden = true
             recordButton.setImage(recordingButtonImage, for: .normal)
         } catch {
             finishRecording(success: false, audioFileURL)
         }
+        var translationX = 0.0
+
+        
+        timer = Timer.scheduledTimer(withTimeInterval: 0.02, repeats: true) { timer in
+            UIView.animate(withDuration: 2, delay: 0, options: [.curveLinear]) {
+                self.waveView.transform = CGAffineTransform(translationX: translationX, y: 0)
+                translationX -= 1.02
+            }
+            self.audioRecorder?.updateMeters()
+            // write waveforms
+            let averagePower = self.audioRecorder?.averagePower(forChannel: 0)
+            self.writeWaves(averagePower ?? 0.0, true)
+        }
     }
     
+    func changeViewToImage() -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: waveView.bounds.size)
+        return renderer.image {context in
+            waveView.layer.render(in: context.cgContext)
+        }
+    }
+
     func finishRecording(success: Bool, _ url: URL?) {
-        audioRecorder?.stop()
-        audioRecorder = nil
+        writeWaves(0, false)
         showDuration(url)
         uploadRecordDataToFirebase(url)
         recordButton.setImage(readyToRecordButtonImage, for: .normal)
@@ -139,6 +168,7 @@ class RecordDetailViewController: UIViewController {
         do {
             player = try AVAudioPlayer(contentsOf: url)
             player?.delegate = self
+            // 여기서 그림이랑 재생시간 계속 리로드
             if let duration = player?.duration {
                 durationTime = duration.minuteSecondMS
                 durationLabel.text = durationTime
@@ -157,15 +187,15 @@ class RecordDetailViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { _ in
             guard let settingsUrl = URL(string: UIApplication.openSettingsURLString),
                   UIApplication.shared.canOpenURL(settingsUrl) else {
-                      return
-                  }
+                return
+            }
             UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
                 print("Settings opened: \(success)")
             })
         }))
         present(alert, animated: true, completion: nil)
     }
-
+    
     func playSound() {
         if player?.isPlaying == false {
             player?.play()
@@ -176,6 +206,69 @@ class RecordDetailViewController: UIViewController {
             player?.prepareToPlay()
             playButton.setImage(playButtonImage, for: .normal)
             recordButton.isHidden = false
+        }
+    }
+    
+    private func enableBuiltInMic() {
+        // Get the shared audio session.
+        let session = AVAudioSession.sharedInstance()
+        // Find the built-in microphone input.
+        guard let availableInputs = session.availableInputs,
+              let builtInMicInput = availableInputs.first(where: { $0.portType == .builtInMic }) else {
+            print("The device must have a built-in microphone.")
+            return
+        }
+        // Make the built-in microphone input the preferred input.
+        do {
+            try session.setPreferredInput(builtInMicInput)
+        } catch {
+            print("Unable to set the built-in mic as the preferred input.")
+        }
+    }
+    
+    func writeWaves(_ input: Float, _ bool : Bool) {
+        if !bool {
+            start = firstPoint
+            if timer != nil || audioRecorder != nil {
+                timer?.invalidate()
+                audioRecorder?.stop()
+            }
+            
+            return
+        } else {
+            if input < -55 {
+                traitLength = 0.2
+            } else if input < -40 && input > -55 {
+                traitLength = (CGFloat(input) + 56) / 3
+            } else if input < -20 && input > -40 {
+                traitLength = (CGFloat(input) + 41) / 2
+            } else if input < -10 && input > -20 {
+                traitLength = (CGFloat(input) + 21) * 5
+            } else {
+                traitLength = (CGFloat(input) + 20) * 3
+            }
+            
+            pencil.lineWidth = jump
+            
+            pencil.move(to: start)
+            pencil.addLine(to: CGPoint(x: start.x, y: start.y + traitLength))
+            
+            pencil.move(to: start)
+            pencil.addLine(to: CGPoint(x: start.x, y: start.y - traitLength))
+            
+            waveLayer.strokeColor = UIColor.gray.cgColor
+            
+            waveLayer.path = pencil.cgPath
+            waveLayer.fillColor = UIColor.clear.cgColor
+            
+            waveLayer.lineWidth = jump
+            
+            waveView.layer.addSublayer(waveLayer)
+            waveLayer.contentsCenter = waveView.frame
+            
+            waveView.setNeedsDisplay()
+            
+            start = CGPoint(x: start.x + jump, y: start.y)
         }
     }
     

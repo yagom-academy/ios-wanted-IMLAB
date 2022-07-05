@@ -9,10 +9,10 @@
 /* Begin PBXBuildFile section */
 		763A2A962869BDFA007A6CF4 /* PlayingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763A2A952869BDFA007A6CF4 /* PlayingViewController.swift */; };
 		9B0C3F0F4F6E0452809B26A0 /* Pods_VoiceRecorder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C586B39F26D646B373DD637 /* Pods_VoiceRecorder.framework */; };
+		C73AF72428747D9900EE00C1 /* WaveGenerate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73AF72328747D9900EE00C1 /* WaveGenerate.swift */; };
 		C79B753E286985F900C2372A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C79B753D286985F900C2372A /* GoogleService-Info.plist */; };
 		C7C42A9E286C713D000381A8 /* DataFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C42A9D286C713D000381A8 /* DataFormatter.swift */; };
 		C7C42AA0286C7493000381A8 /* FireStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C42A9F286C7493000381A8 /* FireStorageManager.swift */; };
-		C7C42BEA2872BD6A000381A8 /* WaveGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C42BE92872BD6A000381A8 /* WaveGenerator.swift */; };
 		DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65B28604278003DD2F5 /* AppDelegate.swift */; };
 		DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65D28604278003DD2F5 /* SceneDelegate.swift */; };
 		DE15E66028604278003DD2F5 /* VoiceMemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65F28604278003DD2F5 /* VoiceMemoViewController.swift */; };
@@ -31,10 +31,10 @@
 /* Begin PBXFileReference section */
 		4C586B39F26D646B373DD637 /* Pods_VoiceRecorder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VoiceRecorder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		763A2A952869BDFA007A6CF4 /* PlayingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayingViewController.swift; sourceTree = "<group>"; };
+		C73AF72328747D9900EE00C1 /* WaveGenerate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveGenerate.swift; sourceTree = "<group>"; };
 		C79B753D286985F900C2372A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C7C42A9D286C713D000381A8 /* DataFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataFormatter.swift; sourceTree = "<group>"; };
 		C7C42A9F286C7493000381A8 /* FireStorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireStorageManager.swift; sourceTree = "<group>"; };
-		C7C42BE92872BD6A000381A8 /* WaveGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveGenerator.swift; sourceTree = "<group>"; };
 		C7E554D5286983A900A0A2A0 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DE15E65828604278003DD2F5 /* VoiceRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE15E65B28604278003DD2F5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -89,7 +89,7 @@
 				E10020AF28701385007CEA42 /* Extensions */,
 				C7C42A9D286C713D000381A8 /* DataFormatter.swift */,
 				C7C42A9F286C7493000381A8 /* FireStorageManager.swift */,
-				C7C42BE92872BD6A000381A8 /* WaveGenerator.swift */,
+				C73AF72328747D9900EE00C1 /* WaveGenerate.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -285,12 +285,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				DE15E66028604278003DD2F5 /* VoiceMemoViewController.swift in Sources */,
-				C7C42BEA2872BD6A000381A8 /* WaveGenerator.swift in Sources */,
 				C7C42AA0286C7493000381A8 /* FireStorageManager.swift in Sources */,
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
 				E10020B3287013C6007CEA42 /* Int + extension.swift in Sources */,
 				E1400D21287330E0008D8E89 /* PlayerTime.swift in Sources */,
 				E16AC5AF2869A0B4003DDD7D /* RecordDetailViewController.swift in Sources */,
+				C73AF72428747D9900EE00C1 /* WaveGenerate.swift in Sources */,
 				763A2A962869BDFA007A6CF4 /* PlayingViewController.swift in Sources */,
 				C7C42A9E286C713D000381A8 /* DataFormatter.swift in Sources */,
 				E16AC5AC28699D0D003DDD7D /* VoiceMemoTableViewCell.swift in Sources */,

@@ -8,7 +8,7 @@
 import UIKit
 import AVFoundation
 
-class PlayingViewController: UIViewController, ObservableObject {
+class PlayingViewController: UIViewController, ObservableObject, AVAudioPlayerDelegate {
     
     // MARK: - IBOutlets
     
@@ -73,12 +73,23 @@ class PlayingViewController: UIViewController, ObservableObject {
         
         setupAudio()
         setupDisplayLink()
-        showWaveForm()
         titleLabel.text = fileName
-        
+        drawWaveForm()
     }
     
     // MARK: - Methods
+    
+    func drawWaveForm() {
+        let scale = UIScreen.main.scale;
+        let imageSizeInPixel =  CGSize(width:waveImageView.bounds.width * scale,height:waveImageView.bounds.height * scale);
+        generateWaveformImage(audioURL: fileURL!, imageSizeInPixel: imageSizeInPixel, waveColor: UIColor.gray) {[weak self] (waveFormImage) in
+            if let waveFormImage = waveFormImage {
+                self?.waveImageView.image = waveFormImage;
+            } else {
+                // error
+            }
+        }
+    }
     
     private func setupAudio() {
         guard let fileURL = fileURL else {
@@ -139,7 +150,6 @@ class PlayingViewController: UIViewController, ObservableObject {
         }
     }
     
-    
     private func playOrPause() {
         if audioPlayer.isPlaying {
             displayLink?.isPaused = true
@@ -147,22 +157,12 @@ class PlayingViewController: UIViewController, ObservableObject {
             playButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
         } else {
             displayLink?.isPaused = false
-            
+
             if needsFileScheduled {
                 scheduleAudioFile()
             }
             audioPlayer.play()
             playButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
-        }
-    }
-    
-    private func showWaveForm() {
-        let scale = UIScreen.main.scale;
-        let imageSizeInPixel =  CGSize(width:waveImageView.bounds.width * scale,height:waveImageView.bounds.height * scale);
-        generateWaveformImage(audioURL: fileURL!, imageSizeInPixel: imageSizeInPixel, waveColor: UIColor.gray) {[weak self] (waveFormImage) in
-            if let waveFormImage = waveFormImage {
-                self?.waveImageView.image = waveFormImage;
-            }
         }
     }
     
@@ -215,7 +215,6 @@ class PlayingViewController: UIViewController, ObservableObject {
         currentPosition = currentFrame + seekFrame
         currentPosition = max(currentPosition, 0)
         currentPosition = min(currentPosition, audioLengthSamples)
-        
         if currentPosition >= audioLengthSamples {
             audioPlayer.stop()
             
@@ -224,7 +223,6 @@ class PlayingViewController: UIViewController, ObservableObject {
             
             displayLink?.isPaused = true
             playButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
-            
         }
         
         positionProgressView.progress = Float(currentPosition) / Float(audioLengthSamples)

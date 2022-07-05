@@ -110,20 +110,23 @@
                                     <action selector="controlRecordButton:" destination="ozQ-a5-b4X" eventType="touchUpInside" id="owA-WP-8Nk"/>
                                 </connections>
                             </button>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bwx-vC-Ydj">
-                                <rect key="frame" x="87" y="157" width="240" height="128"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Cy0-ML-w6z">
+                                <rect key="frame" x="0.0" y="152" width="414" height="128"/>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="JKT-6g-hs8"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="SRg-j9-lGu" firstAttribute="top" secondItem="apc-b5-Hp1" secondAttribute="bottom" constant="40" id="1dd-mj-3RS"/>
                             <constraint firstItem="SRg-j9-lGu" firstAttribute="leading" secondItem="JKT-6g-hs8" secondAttribute="leading" constant="130" id="5tl-xX-Nds"/>
+                            <constraint firstItem="Cy0-ML-w6z" firstAttribute="top" secondItem="JKT-6g-hs8" secondAttribute="top" constant="108" id="DVn-YI-1ND"/>
                             <constraint firstItem="SRg-j9-lGu" firstAttribute="trailing" secondItem="2IU-Om-2nW" secondAttribute="trailing" id="FXL-Ta-xrM"/>
                             <constraint firstItem="QZr-Sv-d2j" firstAttribute="leading" secondItem="2IU-Om-2nW" secondAttribute="leading" id="Gde-nB-qGD"/>
+                            <constraint firstItem="Cy0-ML-w6z" firstAttribute="leading" secondItem="JKT-6g-hs8" secondAttribute="leading" id="KFr-l0-T5a"/>
+                            <constraint firstItem="Cy0-ML-w6z" firstAttribute="height" secondItem="yIh-Nd-Erh" secondAttribute="height" multiplier="0.152019" id="Knz-Cl-xxz"/>
                             <constraint firstItem="2IU-Om-2nW" firstAttribute="leading" secondItem="Uwp-S3-BQB" secondAttribute="leading" id="aSx-j7-zHS"/>
                             <constraint firstItem="apc-b5-Hp1" firstAttribute="leading" secondItem="2IU-Om-2nW" secondAttribute="trailing" constant="-188" id="cEG-bK-Uqc"/>
+                            <constraint firstItem="JKT-6g-hs8" firstAttribute="trailing" secondItem="Cy0-ML-w6z" secondAttribute="trailing" id="ctZ-sO-whh"/>
                             <constraint firstItem="apc-b5-Hp1" firstAttribute="top" secondItem="2IU-Om-2nW" secondAttribute="bottom" constant="27" id="eYd-PV-cjT"/>
                             <constraint firstItem="2IU-Om-2nW" firstAttribute="top" secondItem="Uwp-S3-BQB" secondAttribute="bottom" constant="32" id="lcL-Ld-2WD"/>
                             <constraint firstItem="QZr-Sv-d2j" firstAttribute="top" secondItem="SRg-j9-lGu" secondAttribute="top" id="oPo-04-Djr"/>
@@ -138,6 +141,7 @@
                         <outlet property="playButton" destination="6Go-Dt-yoo" id="2Af-Pw-YgZ"/>
                         <outlet property="recordButton" destination="QZr-Sv-d2j" id="8Yh-2T-vd8"/>
                         <outlet property="recordProgressBar" destination="2IU-Om-2nW" id="dq6-n5-TtK"/>
+                        <outlet property="waveView" destination="Cy0-ML-w6z" id="V0y-KS-MCf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kSc-Yg-5fQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
