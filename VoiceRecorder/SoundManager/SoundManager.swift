@@ -69,8 +69,9 @@ class SoundManager: NSObject {
     }
     
     func configureRecordEngine(format: AVAudioFormat) {
-        engine.attach(mixerNode)
+        mixerNode.volume = 0
         
+        engine.attach(mixerNode)
         engine.connect(inputNode, to: mixerNode, format: format)
     }
     

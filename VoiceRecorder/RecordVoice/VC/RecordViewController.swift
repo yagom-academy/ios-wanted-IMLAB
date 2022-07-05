@@ -12,7 +12,7 @@ class RecordViewController: UIViewController {
     
     var soundManager = SoundManager()
     var audioFileManager = AudioFileManager()
-    var firebase = Firebase()
+    var firebaseStorageManager = FirebaseStorageManager()
     var engine = AVAudioEngine()
     
     var isStartRecording: Bool = false
@@ -100,7 +100,8 @@ class RecordViewController: UIViewController {
             soundManager.startRecord(filePath: url)
         } else { // 녹음 끝일 때
             soundManager.stopRecord()
-            firebase.upload(url: url)
+            firebaseStorageManager.uploadAudio(url: url)
+            soundManager.initializedEngine(url: url)
         }
     }
     
