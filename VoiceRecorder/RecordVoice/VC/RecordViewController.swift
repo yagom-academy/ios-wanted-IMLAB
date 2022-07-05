@@ -12,7 +12,7 @@ class RecordViewController: UIViewController {
     
     var soundManager = SoundManager()
     var audioFileManager = AudioFileManager()
-    var firebase = Firebase()
+    var firebaseStorageManager = FirebaseStorageManager()
     var engine = AVAudioEngine()
     
     var isStartRecording: Bool = false
@@ -46,6 +46,7 @@ class RecordViewController: UIViewController {
         
         setLayout()
         setAudio()
+        
         recordButton.addTarget(self, action: #selector(control), for: .touchUpInside)
         playButton.addTarget(self, action: #selector(play), for: .touchUpInside)
     }
@@ -71,10 +72,8 @@ class RecordViewController: UIViewController {
     }
     
     func recordButtonToggle() {
-        DispatchQueue.main.async {
-            let image = self.isStartRecording ? UIImage(systemName: "square.circle") : UIImage(systemName: "circle.fill")
-            self.recordButton.setImage(image, for: .normal)
-        }
+        let image = self.isStartRecording ? UIImage(systemName: "square.circle") : UIImage(systemName: "circle.fill")
+        self.recordButton.setImage(image, for: .normal)
     }
 
     func setAudio() {
@@ -100,7 +99,8 @@ class RecordViewController: UIViewController {
             soundManager.startRecord(filePath: url)
         } else { // 녹음 끝일 때
             soundManager.stopRecord()
-            firebase.upload(url: url)
+            firebaseStorageManager.uploadAudio(url: url)
+            soundManager.initializedEngine(url: url)
         }
     }
     

@@ -8,7 +8,7 @@ import AVFoundation
 
 class RecordedVoiceListViewController: UIViewController {
     
-    var firestorageManager = FirebaseStorageManager(FireStorageService.baseUrl)
+    var firestorageManager = FirebaseStorageManager()
     
     let audioList = [AudioData(title: "2022_07_02_20_48.m4a", created_Data: Date(), playTime: "03:02"), AudioData(title: "2022_07_02_20_52.m4a", created_Data: Date(), playTime: "02:34")]
     

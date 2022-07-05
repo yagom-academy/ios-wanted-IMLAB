@@ -69,8 +69,9 @@ class SoundManager: NSObject {
     }
     
     func configureRecordEngine(format: AVAudioFormat) {
-        engine.attach(mixerNode)
+        mixerNode.volume = 0
         
+        engine.attach(mixerNode)
         engine.connect(inputNode, to: mixerNode, format: format)
     }
     
@@ -111,12 +112,11 @@ class SoundManager: NSObject {
             fatalError()
         }
         
-        mixerNode.removeTap(onBus: 0)
         mixerNode.installTap(onBus: 0, bufferSize: 4096, format: format) { buffer, time in
             do {
                 try self.audioFile.write(from: buffer)
             } catch {
-                fatalError()
+                print("[error] : startRecord")
             }
         }
         
@@ -128,13 +128,14 @@ class SoundManager: NSObject {
     }
     
     func stopRecord() {
+        mixerNode.removeTap(onBus: 0)
+        
         engine.stop()
     }
     
     func play() {
         try! engine.start()
         playerNode.play()
-        
     }
     
     func pause() {
@@ -167,7 +168,6 @@ class SoundManager: NSObject {
         playerNode.play(at: AVAudioTime(hostTime: 5))
         
     }
-    
     
     func changePitchValue(value: Float) {
         self.pitchControl.pitch = value
