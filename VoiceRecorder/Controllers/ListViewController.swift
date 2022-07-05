@@ -11,22 +11,19 @@ class ListViewController: UIViewController {
     @IBOutlet weak var recordListTableView: UITableView!
     
     // MARK: - Properties
-    var recordList = [RecordModel]()
+    var recordList = [RecordModel]() {
+        didSet {
+            recordList = Array(Set(recordList))
+            recordList.sort { $0.name > $1.name }
+        }
+    }
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupRecordListTableView()
-        StorageManager.shared.get { result in
-            switch result {
-            case .success(let recordFile):
-                self.recordList.append(recordFile)
-                self.recordListTableView.reloadData()
-            case .failure(let error):
-                print("ERROR \(error.localizedDescription)🐸")
-            }
-        }
+        fetchRecordFile()
     }
     
     // MARK: - @IBAction
@@ -85,7 +82,13 @@ extension ListViewController: UITableViewDataSource {
 // MARK: - RecordViewControllerDelegate
 extension ListViewController: RecordViewControllerDelegate {
     func didFinishRecord() {
-        recordList = []
+        fetchRecordFile()
+    }
+}
+
+// MARK: - Methods
+private extension ListViewController {
+    func fetchRecordFile() {
         StorageManager.shared.get { result in
             switch result {
             case .success(let recordFile):

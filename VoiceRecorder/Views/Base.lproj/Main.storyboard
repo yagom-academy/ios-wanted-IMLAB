@@ -53,7 +53,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="22050" minValue="20" maxValue="22050" translatesAutoresizingMaskIntoConstraints="NO" id="upv-Mu-e34">
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="44100" minValue="8000" maxValue="48000" translatesAutoresizingMaskIntoConstraints="NO" id="upv-Mu-e34">
                                 <rect key="frame" x="14" y="270.5" width="386" height="31"/>
                                 <connections>
                                     <action selector="changeCutOffFrequency:" destination="hfC-T6-rVw" eventType="valueChanged" id="Bxs-OE-bok"/>

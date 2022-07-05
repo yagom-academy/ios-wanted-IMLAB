@@ -8,7 +8,7 @@
 import Foundation
 import AVFoundation
 
-struct RecordModel: Equatable {
+struct RecordModel: Equatable, Hashable {
     
     let name: String
     let url: URL
