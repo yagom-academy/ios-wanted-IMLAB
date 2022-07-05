@@ -132,7 +132,25 @@ extension VoiceMemoListViewController: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.coordinator?.presentPlayView(selectedFile: "")
+        let target = voiceMemoListAllData[indexPath.row]
+        let isExist = pathFinder.checkLocalIsExist(fileName: target)
+        
+        var targetSliced = target.components(separatedBy: "/")
+        targetSliced.removeFirst()
+        let  joinTarget = targetSliced.joined(separator: "/")
+        
+        if !isExist {
+            firebaseManager.fetchVoiceMemoAtFirebase(with: joinTarget, localPath: pathFinder.getPath(fileName: joinTarget)) { result in
+                switch result {
+                case .success(let isSuccess):
+                    print(isSuccess)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+        }
+        
+        self.coordinator?.presentPlayView(selectedFile: joinTarget)
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
