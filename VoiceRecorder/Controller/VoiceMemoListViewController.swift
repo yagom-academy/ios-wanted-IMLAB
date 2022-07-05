@@ -110,6 +110,14 @@ extension VoiceMemoListViewController : UITableViewDataSource {
         cell.recordPlayTimeLabel.text = voiceMemoList[indexPath.row].recordTime
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        let fileNameToDelete = self.voiceMemoList[indexPath.row].recordFileName
+        FirebaseStorage.shared.deleteFile(fileName: "voiceRecords_\(fileNameToDelete)")
+        self.voiceMemoList.remove(at: indexPath.row)
+        tableView.reloadData()
+        
+    }
 }
 
 extension VoiceMemoListViewController : UITableViewDelegate {

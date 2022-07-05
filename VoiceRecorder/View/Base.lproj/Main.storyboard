@@ -116,7 +116,7 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="4Ku-cP-yII">
                                         <rect key="frame" x="0.0" y="53.5" width="300" height="30"/>
                                         <subviews>
-                                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="oDW-xa-E0F">
+                                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oDW-xa-E0F">
                                                 <rect key="frame" x="0.0" y="0.0" width="300" height="4"/>
                                             </progressView>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="100" translatesAutoresizingMaskIntoConstraints="NO" id="ndD-Iw-L5v">
@@ -265,11 +265,14 @@
                                             <segment title="아기 목소리"/>
                                             <segment title="할아버지 목소리"/>
                                         </segments>
+                                        <connections>
+                                            <action selector="soundPitchControlChanged:" destination="9DQ-7z-LBd" eventType="valueChanged" id="XbA-gx-cD9"/>
+                                        </connections>
                                     </segmentedControl>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="6py-Qc-iYd">
                                         <rect key="frame" x="0.0" y="78" width="300" height="39.5"/>
                                         <subviews>
-                                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="4KN-1J-mU2">
+                                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4KN-1J-mU2">
                                                 <rect key="frame" x="0.0" y="0.0" width="300" height="4"/>
                                             </progressView>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="66" translatesAutoresizingMaskIntoConstraints="NO" id="M9g-55-nB9">
