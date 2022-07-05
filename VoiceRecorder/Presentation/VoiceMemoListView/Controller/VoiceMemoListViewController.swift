@@ -7,15 +7,14 @@ import UIKit
 
 class VoiceMemoListViewController: UIViewController {
     
-
     // MARK: - Properties
+    let pathFinder: PathFinder!
+    let audioManager: AudioManager!
+    let firebaseManager: FirebaseStorageManager!
     
     weak var coordinator: AppCoordinator?
     
-    var voiceMemoData: [VoiceData] = [
-        VoiceData(title: "2022. 05. 08 12:33:44", time: "01:33"),
-        VoiceData(title: "2022. 05. 08 12:38:44", time: "02:11"),
-    ]
+    private var voiceMemoListAllData: [String] = []
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -30,16 +29,29 @@ class VoiceMemoListViewController: UIViewController {
     }()
     
     // MARK: - Life Cycle
+    
+    init(pathFinder: PathFinder, audioManager: AudioManager, firebaseManager: FirebaseStorageManager) {
+        self.pathFinder = pathFinder
+        self.audioManager = audioManager
+        self.firebaseManager = firebaseManager
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureTableView()
         configureUI()
+        fetchFirebaseListAll()
     }
 }
 
-
 extension VoiceMemoListViewController {
     // MARK: - Method
+    
     private func configureUI() {
         view.backgroundColor = .white
         self.navigationItem.title = "Voice Memos"
@@ -50,7 +62,7 @@ extension VoiceMemoListViewController {
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            ])
+        ])
         
     }
     
@@ -60,36 +72,48 @@ extension VoiceMemoListViewController {
         tableView.dataSource = self
     }
     
+    private func fetchFirebaseListAll() {
+        firebaseManager.listAll { result in
+            switch result {
+            case .success(let voiceMemoList):
+                
+                self.voiceMemoListAllData = voiceMemoList
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+                
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+        
+    }
+    
     // MARK: - Action Method
     @objc private func buttonPressed() {
-//        let recordVC = VoiceMemoRecordViewController()
-//        self.present(recordVC, animated: true, completion: nil)
         self.coordinator?.presentRecordView()
     }
 }
 
 extension VoiceMemoListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return voiceMemoData.count
+        return voiceMemoListAllData.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: VoiceMemoCell.identifier, for: indexPath) as! VoiceMemoCell
-        cell.fileNameLabel.text = voiceMemoData[indexPath.row].title
-        cell.fileTimeLabel.text = voiceMemoData[indexPath.row].time
+        
+        cell.fileNameLabel.text = voiceMemoListAllData[indexPath.row].description
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //세번째 화면으로 이동
-//        let playVC = VoiceMemoPlayViewController()
-//        self.present(playVC, animated: true, completion: nil)
         self.coordinator?.presentPlayView(selectedFile: "")
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            voiceMemoData.remove(at: indexPath.row)
+            voiceMemoListAllData.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
             

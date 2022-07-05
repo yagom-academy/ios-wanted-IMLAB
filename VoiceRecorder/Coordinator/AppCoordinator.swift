@@ -25,7 +25,7 @@ class AppCoordinator: NSObject, Coordinator {
     }
     
     func start() {
-        let vc = VoiceMemoListViewController()
+        let vc = VoiceMemoListViewController(pathFinder: pathFinder, audioManager: audioManager, firebaseManager: firebaseManager)
         vc.coordinator = self
         navigationController.pushViewController(vc, animated: false)
     }

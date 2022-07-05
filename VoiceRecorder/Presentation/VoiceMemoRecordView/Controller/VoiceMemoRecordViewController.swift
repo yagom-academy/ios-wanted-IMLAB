@@ -232,7 +232,7 @@ extension VoiceMemoRecordViewController {
             audioManager.stopRecord()
             playTimeLabel.text = showVoiceMemoDuration()
 
-            FirebaseStorageManager.shared.uploadVoiceMemoToFirebase(with: pathFinder.lastUsedUrl, fileName: pathFinder.lastUsedFileName) { result in
+            firebaseManager.uploadVoiceMemoToFirebase(with: pathFinder.lastUsedUrl, fileName: pathFinder.lastUsedFileName) { result in
                 switch result {
                 case .success(_):
                     print("성공")
