@@ -17,6 +17,8 @@
 		0169615D286ACF460020AAAC /* HomeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0169615C286ACF460020AAAC /* HomeTableViewCell.swift */; };
 		0169615F286ACF4B0020AAAC /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0169615E286ACF4B0020AAAC /* HomeViewModel.swift */; };
 		01696161286ADEFA0020AAAC /* PlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01696160286ADEFA0020AAAC /* PlayViewController.swift */; };
+		01E1AB0428747085004ADBAE /* PlaySeekStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E1AB0328747085004ADBAE /* PlaySeekStackView.swift */; };
+		01E1AB0628747841004ADBAE /* ProgressTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E1AB0528747841004ADBAE /* ProgressTimeView.swift */; };
 		181CA6C92872CC2100092A2C /* MeterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181CA6C82872CC2100092A2C /* MeterView.swift */; };
 		182C8732286AD69700F3C24D /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182C8731286AD69700F3C24D /* DateExtensions.swift */; };
 		185AC9742873BE990026E924 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 185AC9732873BE990026E924 /* GoogleService-Info.plist */; };
@@ -41,6 +43,8 @@
 		0169615C286ACF460020AAAC /* HomeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeTableViewCell.swift; sourceTree = "<group>"; };
 		0169615E286ACF4B0020AAAC /* HomeViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		01696160286ADEFA0020AAAC /* PlayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayViewController.swift; sourceTree = "<group>"; };
+		01E1AB0328747085004ADBAE /* PlaySeekStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaySeekStackView.swift; sourceTree = "<group>"; };
+		01E1AB0528747841004ADBAE /* ProgressTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressTimeView.swift; sourceTree = "<group>"; };
 		181CA6C82872CC2100092A2C /* MeterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeterView.swift; sourceTree = "<group>"; };
 		182C8731286AD69700F3C24D /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
 		185AC9732873BE990026E924 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -73,6 +77,8 @@
 				0146B7B3286BE39400DD28D2 /* RecordViewController.swift */,
 				01696160286ADEFA0020AAAC /* PlayViewController.swift */,
 				181CA6C82872CC2100092A2C /* MeterView.swift */,
+				01E1AB0328747085004ADBAE /* PlaySeekStackView.swift */,
+				01E1AB0528747841004ADBAE /* ProgressTimeView.swift */,
 			);
 			path = VIew;
 			sourceTree = "<group>";
@@ -229,12 +235,14 @@
 				0146B7B0286BE37100DD28D2 /* SceneDelegate.swift in Sources */,
 				181CA6C92872CC2100092A2C /* MeterView.swift in Sources */,
 				182C8732286AD69700F3C24D /* DateExtensions.swift in Sources */,
+				01E1AB0628747841004ADBAE /* ProgressTimeView.swift in Sources */,
 				18F41487286C2AA100BB9911 /* AudioLevels.swift in Sources */,
 				0146B7B2286BE38F00DD28D2 /* HomeViewController.swift in Sources */,
 				0146B7A8286BE34700DD28D2 /* AppDelegate.swift in Sources */,
 				0169615D286ACF460020AAAC /* HomeTableViewCell.swift in Sources */,
 				0169615F286ACF4B0020AAAC /* HomeViewModel.swift in Sources */,
 				01696161286ADEFA0020AAAC /* PlayViewController.swift in Sources */,
+				01E1AB0428747085004ADBAE /* PlaySeekStackView.swift in Sources */,
 				18D4A0CE28708EA000839E73 /* RecordViewModel.swift in Sources */,
 				18CE51F7286EEEA1004AAF7C /* PlayTime.swift in Sources */,
 				0146B7B4286BE39400DD28D2 /* RecordViewController.swift in Sources */,
