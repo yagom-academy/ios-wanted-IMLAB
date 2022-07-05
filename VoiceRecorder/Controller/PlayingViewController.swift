@@ -159,11 +159,7 @@ class PlayingViewController: UIViewController, ObservableObject {
     private func showWaveForm() {
         let scale = UIScreen.main.scale;
         let imageSizeInPixel =  CGSize(width:waveImageView.bounds.width * scale,height:waveImageView.bounds.height * scale);
-        generateWaveformImage(audioURL: fileURL!, imageSizeInPixel: imageSizeInPixel, waveColor: UIColor.gray) {[weak self] (waveFormImage) in
-            if let waveFormImage = waveFormImage {
-                self?.waveImageView.image = waveFormImage;
-            }
-        }
+        
     }
     
     private func seek(to time: Double) {
