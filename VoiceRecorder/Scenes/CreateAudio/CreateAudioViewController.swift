@@ -8,138 +8,104 @@
 import UIKit
 
 import AVFoundation
+
 import FirebaseStorage
 
 class CreateAudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
 
+    let createAudioView = CreateAudioView()
+    var audio: Audio?
+    
     var audioRecorder: AVAudioRecorder?
     var audioPlayer: AVAudioPlayer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        config()
-    }
-    private lazy var playButtonStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [recordingButton, rewindButton, playPauseButton, forwardButton])
-        stackView.axis = .horizontal
-        stackView.alignment = .fill
-        stackView.distribution = .equalSpacing
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        return stackView
-    }()
-    private lazy var recordingButton: UIButton = {
-        let button = UIButton()
-        button.addTarget(self, action: #selector(tapRecordingButton), for: .touchDown)
-        button.setTitleColor(.systemBlue, for: .normal)
-        button.setTitle("시작", for: .normal)
-        button.setTitle("중지", for: .selected)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    private lazy var rewindButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(systemName: "gobackward.5"), for: .normal)
-        button.setTitleColor(.systemBlue, for: .normal)
-        button.isEnabled = false
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    private lazy var playPauseButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(systemName: "play.circle.fill"), for: .normal)
-        button.setTitleColor(.systemBlue, for: .normal)
-        button.addTarget(self, action: #selector(tapPlayPauseButton), for: .touchDown)
-        button.isEnabled = false
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    private lazy var forwardButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(systemName: "goforward.5"), for: .normal)
-        button.setTitleColor(.systemBlue, for: .normal)
-        button.isEnabled = false
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
-    func config(){
-        view.addSubview(playButtonStackView)
-        playButtonStackView.addSubview(recordingButton)
-        playButtonStackView.addSubview(rewindButton)
-        playButtonStackView.addSubview(playPauseButton)
-        playButtonStackView.addSubview(forwardButton)
-        
+        createAudioView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(createAudioView)
         NSLayoutConstraint.activate([
-            playButtonStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: view.frame.height * 0.3),
-            playButtonStackView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            playButtonStackView.heightAnchor.constraint(equalToConstant: 50),
-            playButtonStackView.widthAnchor.constraint(equalToConstant: 200),
-            
-            recordingButton.centerYAnchor.constraint(equalTo: playButtonStackView.centerYAnchor),
-            rewindButton.centerYAnchor.constraint(equalTo: playButtonStackView.centerYAnchor),
-            playPauseButton.centerYAnchor.constraint(equalTo: playButtonStackView.centerYAnchor),
-            forwardButton.centerYAnchor.constraint(equalTo: playButtonStackView.centerYAnchor),
+        createAudioView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+        createAudioView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+        createAudioView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+        createAudioView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
+        
+        createAudioView.buttons.backButton.addTarget(
+          self,
+          action: #selector(backButtonclicked),
+          for: .touchUpInside
+        )
+        createAudioView.buttons.playButton.addTarget(
+          self,
+          action: #selector(playButtonClicked),
+          for: .touchUpInside
+        )
+        createAudioView.buttons.forwordButton.addTarget(
+          self,
+          action: #selector(forwardButtonClicked),
+          for: .touchUpInside
+        )
     }
+    
     
     @objc private func tapRecordingButton() {
-        if recordingButton.isSelected{
-            recordingButton.isSelected = false
+//        AVFAudio.AVAudioEngine.audioUnit.AVAudioUnit.AVAudioUnitEQFilterParameters.frequency
+//        let a = AVAudioEngine()
+//        let eq = AVAudioUnitEQ(numberOfBands: 1)
+//        let filterParams = eq.bands[0] as AVAudioUnitEQFilterParameters
+//        filterParams.filterType = .lowPass
+//        filterParams.frequency = 100.0
+//        filterParams.bypass = false
+//        a.attach(eq)
+        
+        if createAudioView.recordingButton.isSelected{
+            createAudioView.recordingButton.isSelected = false
             audioRecorder?.stop()
-            do {
-                if let audioRecorder = audioRecorder{
-                    let data = try Data(contentsOf: audioRecorder.url)
-                    let customData = CustomMetadata(length: "1")
-                    let test = StorageMetadata()
-                    test.customMetadata = customData.toDict()
-                    test.contentType = CustomMetadata.fileType
-                    let audioInfo = AudioInfo(id: UUID().uuidString, data: data, metadata: test)
-                    FirebaseService.uploadAudio(audio: audioInfo) { result in
-                        switch result {
-                        case .success(let metadata):
-                            print(metadata)
-                        case .failure(let error):
-                            print(error)
-                        }
-                    }
-                    
-//                    FirebaseService.uploadAudio(fileName: "shinTmp.mp3", data: data) { err in
-//                        print("firebase err: \(String(describing: err?.localizedDescription))")
-//                    }
-                    // Data로 변환됐는지 확인하기 위한 부분
-//                    do {
-//                        try audioPlayer = AVAudioPlayer(data: data)
-//                        audioPlayer?.delegate = self
-//                        audioPlayer?.play()
-//                    } catch {
-//                        print("error: \(error.localizedDescription)")
-//                    }
-                }
-            } catch {
-                print("error: \(error.localizedDescription)")
+            createAudioView.buttons.playButton.isEnabled = true
+            createAudioView.buttons.backButton.isEnabled = true
+            createAudioView.buttons.forwordButton.isEnabled = true
+            audio = Audio(audioRecorder!.url)
+            if let audio = audio{
+                let audioLenSec = Int(audio.audioLengthSeconds)
+                createAudioView.totalLenLabel.text = "\(audioLenSec / 60):\(audioLenSec % 60)"
             }
-            playPauseButton.isEnabled = true
-            rewindButton.isEnabled = true
-            forwardButton.isEnabled = true
         }else{
-            recordingButton.isSelected = true
-            playPauseButton.isEnabled = false
-            rewindButton.isEnabled = false
-            forwardButton.isEnabled = false
+            createAudioView.recordingButton.isSelected = true
+            createAudioView.buttons.playButton.isEnabled = false
+            createAudioView.buttons.backButton.isEnabled = false
+            createAudioView.buttons.forwordButton.isEnabled = false
             self.record()
         }
     }
-    @objc private func tapPlayPauseButton() {
-        guard !(audioRecorder?.isRecording)! else { return }
+    @objc
+    private func playButtonClicked() {
+        audio?.playOrPause()
+    }
+    @objc
+    func backButtonclicked() {
+        guard audio != nil else { return }
+        audio?.skip(forwards: false)
+    }
+    @objc
+    func forwardButtonClicked() {
+      guard audio != nil else { return }
+      audio?.skip(forwards: true)
+    }
+    @objc
+    func tapDoneButton() {
+        guard let audioRecorder = audioRecorder else { return }
         do {
-            if let audioRecorder = audioRecorder{
-                try audioPlayer = AVAudioPlayer(contentsOf: audioRecorder.url)
-                audioPlayer?.delegate = self
-                audioPlayer?.play()
+            let data = try Data(contentsOf: audioRecorder.url)
+            let storageMetadata = StorageMetadata()
+            storageMetadata.contentType = "audio/mpeg"
+            let audioInfo = AudioInfo(id: UUID(), data: data, metadata: storageMetadata)
+            FirebaseService.uploadAudio(audio: audioInfo) { err in
+                print("firebase err: \(err)")
             }
         } catch {
             print("error: \(error.localizedDescription)")
         }
+        self.navigationController?.popViewController(animated: true)
     }
     func record() {
       let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -167,3 +133,6 @@ class CreateAudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudi
       }
     }
 }
+
+
+
