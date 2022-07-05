@@ -100,6 +100,21 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let data = homeViewModel[indexPath], let fileName = data.filename else {return}
+        let endPoint = EndPoint(fileName: fileName)
+        FirebaseService.makeURL(endPoint: endPoint) { result in
+            switch result {
+            case .success(let url):
+                let playScene = PlayViewController()
+                playScene.url = url
+                self.navigationController?.pushViewController(playScene, animated: true)
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             homeViewModel.remove(indexPath: indexPath){ isRemoved in
