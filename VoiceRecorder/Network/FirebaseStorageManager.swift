@@ -12,10 +12,11 @@ import UIKit
 class FirebaseStorageManager {
     
     private var baseReference: StorageReference!
-    
+    private var baseURL: String!
     
     init(_ url: String) {
-        baseReference = Storage.storage().reference(forURL: url)
+        baseURL = url
+        baseReference = Storage.storage().reference(forURL: baseURL)
     }
     
     func downloadAll() {
@@ -42,19 +43,17 @@ class FirebaseStorageManager {
         
     }
     
-    func download(urlString: String, completion: @escaping (Data?) -> Void) { // 싱글톤 유무
-        baseReference.downloadURL { url, error in
-            
-            let data = try! Data(contentsOf: url!)
-            completion(data)
+    func download(from urlString: String, to localUrl: URL, completion: @escaping (URL?) -> Void) {
+      
+        baseReference.child(urlString).write(toFile: localUrl) { url, error in
+            completion(url)
         }
         
     }
     
     
-    func uploadAudioFile() {
+    func uploadAudioFile(file: URL) {
         
-         
         let localFile = URL(string: "path/to/image")!
         
         // Upload the file to the path "images/rivers.jpg"
