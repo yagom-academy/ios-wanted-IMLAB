@@ -21,7 +21,7 @@ class VoiceRecordTableViewCell: UITableViewCell {
     let voiceRecordLengthLabel : UILabel = {
         let voiceRecordLengthLabel = UILabel()
         voiceRecordLengthLabel.translatesAutoresizingMaskIntoConstraints = false
-        voiceRecordLengthLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        voiceRecordLengthLabel.font = UIFont.boldSystemFont(ofSize: 15)
         return voiceRecordLengthLabel
     }()
     

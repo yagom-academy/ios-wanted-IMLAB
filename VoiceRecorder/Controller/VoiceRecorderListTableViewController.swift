@@ -73,6 +73,7 @@ class VoiceRecorderListTableViewController: UITableViewController {
             fatalError()
         }
         cell.createVoiceRecordDateLable.text = voiceRecodeFile.fileName
+        cell.voiceRecordLengthLabel.text = voiceRecodeFile.fileLength
         return cell
     }
     

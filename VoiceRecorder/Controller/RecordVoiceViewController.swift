@@ -17,7 +17,7 @@ class RecordVoiceViewController: UIViewController {
     var drawWaveFormManager : DrawWaveFormManager!
     var playVoiceManager : PlayVoiceManager!
     var audioSessionManager = AudioSessionManager()
-
+    var isHour = false
         
     let waveFormView : UIView = {
         let waveFormView = UIView()
@@ -101,12 +101,15 @@ class RecordVoiceViewController: UIViewController {
     
     @objc func tab_record_start_stop_Button() {
         if recordVoiceManager.isRecording() {
+            var time = progressTimeLabel.text!
+            if !isHour{
+                time = time[0..<5]
+            }
             drawWaveFormManager.stopDrawing(in: waveFormView)
-            recordVoiceManager.stopRecording {
+            recordVoiceManager.stopRecording(time: time) {
                 self.delegate?.updateList()
                 self.playVoiceManager.setNewScheduleFile()
             }
-            
             record_start_stop_button.setImage(UIImage(systemName: "circle.fill"), for: .normal)
             record_start_stop_button.tintColor = .red
             setUIAfterRecording()
@@ -197,7 +200,7 @@ class RecordVoiceViewController: UIViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         if recordVoiceManager.isRecording(){
-            recordVoiceManager.stopRecording {
+            recordVoiceManager.stopRecording(time: progressTimeLabel.text!) {
                 self.drawWaveFormManager.stopDrawing(in: self.waveFormView)
                 self.delegate?.updateList()
             }
@@ -271,13 +274,29 @@ extension TimeInterval{
     func getStringTimeInterval() -> String {
 
         let seconds = self
+        let hour = Int(seconds) / (60 * 60)
         let min = Int(seconds) / 60
         let sec = Int(seconds) % 60
         let cen = Int(seconds * 100) % 100
         // centisecond : 10 밀리초
-
-        let formatString = "%0.2d:%0.2d:%0.2d"
-        return String(format: formatString, min, sec, cen)
+        print(hour)
+        print(min)
+        print(seconds)
+        if hour == 0{
+            let formatString = "%0.2d:%0.2d:%0.2d"
+            return String(format: formatString, min, sec, cen)
+        }else{
+            let formatString = "%0.2d:%0.2d:%0.2d"
+            return String(format: formatString, hour, min, sec)
+        }
+        
     }
 }
 
+extension String {
+    subscript(_ range: Range<Int>) -> String {
+        let fromIndex = self.index(self.startIndex, offsetBy: range.startIndex)
+        let toIndex = self.index(self.startIndex,offsetBy: range.endIndex)
+        return String(self[fromIndex..<toIndex])
+    }
+}

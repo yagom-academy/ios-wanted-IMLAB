@@ -11,7 +11,7 @@ class FirebaseStorageManager {
     let storage = Storage.storage()
     weak var delegate : FirebaseStorageManagerDelegate!
     
-    func uploadRecord(completion : @escaping ()->Void){
+    func uploadRecord(time : String, completion : @escaping ()->Void){
         //파일 위치
         let localFile = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("myRecoding.m4a")
         let imageFile = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -28,7 +28,7 @@ class FirebaseStorageManager {
         let fileName = "voiceRecords_\(nowDate)"
         
         //현재 날짜 시간으로 저장
-        let firebaseRef = storage.reference().child("record").child("\(fileName).m4a")
+        let firebaseRef = storage.reference().child("record").child("\(fileName)@\(time).m4a")
         //이미지 파일 저장 위치
         let imageRef = storage.reference().child("waveForm").child("\(fileName)WaveForm.png")
         
@@ -99,13 +99,13 @@ class FirebaseStorageManager {
         }
     }
     
-    func downloadRecordFile(fileName : String){
+    func downloadRecordFile(fileName : String, imageFileName : String){
         //녹음파일
         let downloadRef = storage.reference().child("record/\(fileName).m4a")
         let localFile = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("myRecoding.m4a")
         
         //이미지파일
-        let imageRef = storage.reference().child("waveForm/\(fileName)WaveForm.png")
+        let imageRef = storage.reference().child("waveForm/\(imageFileName)WaveForm.png")
         let imageFile = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("myWaveForm.png")
         
         downloadRef.write(toFile: localFile) { url, error in
