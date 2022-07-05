@@ -40,19 +40,23 @@ struct RecordNetworkManager {
         }
     }
 
-    func getRecordData(filename: String, completion: ((Data?) -> Void)? = nil) {
+    func getRecordData(filename: String, completion: ((Result<Data, CustomNetworkError>) -> Void)? = nil) {
         let recordRef = storageRef.child(filename)
         DispatchQueue.global().async {
             recordRef.getData(maxSize: 1000000) { data, error in
                 if let error = error {
                     print("download error: ", error)
                     DispatchQueue.main.async {
-                        completion?(nil)
+                        completion?(.failure(CustomNetworkError.failLoadData))
                     }
                 } else {
                     print("success download data!")
+                    guard let data = data else {
+                        completion?(.failure(CustomNetworkError.noData))
+                        return
+                    }
                     DispatchQueue.main.async {
-                        completion?(data)
+                        completion?(.success(data))
                     }
                 }
             }
@@ -79,20 +83,20 @@ struct RecordNetworkManager {
         }
     }
 
-    func getRecordList(completion: (([String]?) -> Void)? = nil) {
+    func getRecordList(completion: ((Result<[String], CustomNetworkError>) -> Void)? = nil) {
         DispatchQueue.global().async {
             storageRef.listAll { data, error in
                 if let error = error {
                     print("load list error!", error)
                     DispatchQueue.main.async {
-                        completion?(nil)
+                        completion?(.failure(CustomNetworkError.failLoadData))
                     }
                     return
                 }
                 guard let data = data else {
                     print("no data!")
                     DispatchQueue.main.async {
-                        completion?([])
+                        completion?(.failure(CustomNetworkError.noData))
                     }
                     return
                 }
@@ -105,7 +109,7 @@ struct RecordNetworkManager {
 
                 let result = data.items.map { $0.name }
                 DispatchQueue.main.async {
-                    completion?(result)
+                    completion?(.success(result))
                 }
             }
         }

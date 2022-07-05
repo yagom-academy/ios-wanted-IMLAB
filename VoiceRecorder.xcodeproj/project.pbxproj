@@ -31,14 +31,15 @@
 		DE15E66528604279003DD2F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66428604279003DD2F5 /* Assets.xcassets */; };
 		DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */; };
 		FE7A188A2872D182003CC843 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7A18892872D182003CC843 /* UIView+.swift */; };
-		FEA53309286C3D18002E1169 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FEA53308286C3D18002E1169 /* GoogleService-Info.plist */; };
+		FE7A188F28731234003CC843 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FE7A188E28731234003CC843 /* GoogleService-Info.plist */; };
+		FE7A18952873139B003CC843 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = FE7A18942873139B003CC843 /* FirebaseStorage */; };
+		FE7A18972873319F003CC843 /* CustomNetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7A18962873319F003CC843 /* CustomNetworkError.swift */; };
 		FEA5330C286C3D48002E1169 /* CustomNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA5330B286C3D48002E1169 /* CustomNavigationController.swift */; };
 		FEA53310286C3DC8002E1169 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA5330F286C3DC8002E1169 /* Config.swift */; };
 		FEEC697C286C3AB0002E020F /* RecordListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEEC697B286C3AB0002E020F /* RecordListViewController.swift */; };
 		FEEC697E286C3ACF002E020F /* RecordListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEEC697D286C3ACF002E020F /* RecordListViewModel.swift */; };
 		FEEC6981286C3AEE002E020F /* RecordListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEEC6980286C3AEE002E020F /* RecordListCell.swift */; };
 		FEEC6984286C3B2D002E020F /* RecordNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEEC6983286C3B2D002E020F /* RecordNetworkManager.swift */; };
-		FEEC6987286C3B6F002E020F /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = FEEC6986286C3B6F002E020F /* FirebaseStorage */; };
 		FEFCE08E287050B200200AF1 /* RecordListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEFCE08D287050B200200AF1 /* RecordListModel.swift */; };
 		FEFCE0902870549F00200AF1 /* PlayListUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEFCE08F2870549F00200AF1 /* PlayListUserDefaults.swift */; };
 /* End PBXBuildFile section */
@@ -70,7 +71,8 @@
 		DE15E66728604279003DD2F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DE15E66928604279003DD2F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FE7A18892872D182003CC843 /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
-		FEA53308286C3D18002E1169 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		FE7A188E28731234003CC843 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		FE7A18962873319F003CC843 /* CustomNetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNetworkError.swift; sourceTree = "<group>"; };
 		FEA5330B286C3D48002E1169 /* CustomNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationController.swift; sourceTree = "<group>"; };
 		FEA5330F286C3DC8002E1169 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		FEEC697B286C3AB0002E020F /* RecordListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListViewController.swift; sourceTree = "<group>"; };
@@ -86,7 +88,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FEEC6987286C3B6F002E020F /* FirebaseStorage in Frameworks */,
+				FE7A18952873139B003CC843 /* FirebaseStorage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -162,6 +164,7 @@
 			isa = PBXGroup;
 			children = (
 				0D8172E4286D69140009E8AA /* FileData.swift */,
+				FE7A18962873319F003CC843 /* CustomNetworkError.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -225,7 +228,7 @@
 				DE15E66428604279003DD2F5 /* Assets.xcassets */,
 				DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */,
 				DE15E66928604279003DD2F5 /* Info.plist */,
-				FEA53308286C3D18002E1169 /* GoogleService-Info.plist */,
+				FE7A188E28731234003CC843 /* GoogleService-Info.plist */,
 			);
 			path = VoiceRecorder;
 			sourceTree = "<group>";
@@ -263,7 +266,7 @@
 			);
 			name = VoiceRecorder;
 			packageProductDependencies = (
-				FEEC6986286C3B6F002E020F /* FirebaseStorage */,
+				FE7A18942873139B003CC843 /* FirebaseStorage */,
 			);
 			productName = SNPLab;
 			productReference = DE15E65828604278003DD2F5 /* VoiceRecorder.app */;
@@ -294,7 +297,7 @@
 			);
 			mainGroup = DE15E64F28604278003DD2F5;
 			packageReferences = (
-				FEEC6985286C3B6F002E020F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				FE7A18932873139B003CC843 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = DE15E65928604278003DD2F5 /* Products */;
 			projectDirPath = "";
@@ -312,7 +315,7 @@
 			files = (
 				DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */,
 				DE15E66528604279003DD2F5 /* Assets.xcassets in Resources */,
-				FEA53309286C3D18002E1169 /* GoogleService-Info.plist in Resources */,
+				FE7A188F28731234003CC843 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,6 +332,7 @@
 				04FF93A7286C270600EB34B6 /* RecordManager.swift in Sources */,
 				0D8172EC286D71430009E8AA /* AVPlayer+.swift in Sources */,
 				0D2E6BB4286C21B3003D2EE1 /* PlayerManager.swift in Sources */,
+				FE7A18972873319F003CC843 /* CustomNetworkError.swift in Sources */,
 				FEEC6981286C3AEE002E020F /* RecordListCell.swift in Sources */,
 				0DFCD72F2872C13900F31EBA /* PitchViewModel.swift in Sources */,
 				FEEC697E286C3ACF002E020F /* RecordListViewModel.swift in Sources */,
@@ -562,7 +566,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		FEEC6985286C3B6F002E020F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+		FE7A18932873139B003CC843 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
 			requirement = {
@@ -573,9 +577,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		FEEC6986286C3B6F002E020F /* FirebaseStorage */ = {
+		FE7A18942873139B003CC843 /* FirebaseStorage */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = FEEC6985286C3B6F002E020F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = FE7A18932873139B003CC843 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
 		};
 /* End XCSwiftPackageProductDependency section */

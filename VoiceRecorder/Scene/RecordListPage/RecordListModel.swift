@@ -21,10 +21,15 @@ class RecordListModel {
     }
     
     func update(completion: (() -> ())? = nil) {
-        networkManager.getRecordList { [weak self] data in
-            guard let data = data else { return }
-            self?.cellData = self?.playListUserDefaults.update(networkData: data) ?? []
-            completion?()
+        networkManager.getRecordList { [weak self] result in
+            switch result {
+            case .success(let data):
+                self?.cellData = self?.playListUserDefaults.update(networkData: data) ?? []
+                completion?()
+            case .failure(let error):
+                //TODO: 에러처리
+                break;
+            }
         }
     }
     
