@@ -46,6 +46,7 @@ class RecordViewController: UIViewController {
         
         setLayout()
         setAudio()
+        
         recordButton.addTarget(self, action: #selector(control), for: .touchUpInside)
         playButton.addTarget(self, action: #selector(play), for: .touchUpInside)
     }
