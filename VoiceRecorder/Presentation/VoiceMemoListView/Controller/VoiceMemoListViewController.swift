@@ -112,7 +112,7 @@ extension VoiceMemoListViewController {
         DispatchQueue.main.async {
             self.fetchFirebaseListAll()
         }
-     }
+    }
 }
 
 extension VoiceMemoListViewController: UITableViewDelegate, UITableViewDataSource {
@@ -124,7 +124,7 @@ extension VoiceMemoListViewController: UITableViewDelegate, UITableViewDataSourc
         let cell = tableView.dequeueReusableCell(withIdentifier: VoiceMemoCell.identifier, for: indexPath) as! VoiceMemoCell
         let name = voiceMemoListAllData[indexPath.row].description
         
-         firebaseManager.getMetaData(fileName: name) { result in
+        firebaseManager.getMetaData(fileName: name) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let time):
@@ -142,17 +142,18 @@ extension VoiceMemoListViewController: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let target = voiceMemoListAllData[indexPath.row]
-        let isExist = pathFinder.checkLocalIsExist(fileName: target)
         
+        let target = voiceMemoListAllData[indexPath.row]
         var targetSliced = target.components(separatedBy: "/")
         targetSliced.removeFirst()
         let  joinTarget = targetSliced.joined(separator: "/")
+        print("join!" ,joinTarget)
+        let isExist = pathFinder.checkLocalIsExist(fileName: joinTarget)
         
         if !isExist {
             firebaseManager.fetchVoiceMemoAtFirebase(with: joinTarget, localPath: pathFinder.getPath(fileName: joinTarget)) { result in
                 switch result {
-                case .success(let isSuccess):
+                case .success(_):
                     self.coordinator?.presentPlayView(selectedFile: joinTarget)
                 case .failure(let error):
                     print(error.localizedDescription)
@@ -166,11 +167,29 @@ extension VoiceMemoListViewController: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        
+        let target = voiceMemoListAllData[indexPath.row]
+        var targetSliced = target.components(separatedBy: "/")
+        targetSliced.removeFirst()
+        let  joinTarget = targetSliced.joined(separator: "/")
+        let isExist = pathFinder.checkLocalIsExist(fileName: joinTarget)
+        
         if editingStyle == .delete {
             voiceMemoListAllData.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            
+            firebaseManager.removeVoiceMemoInFirebase(with: joinTarget) { result in
+                switch result {
+                case .success(_):
+                    if isExist {
+                        self.pathFinder.deleteLocalFile(fileName: joinTarget)
+                    } else {
+                        print("실패")
+                    }
+                case .failure(let error):
+                    print(error.localizedDescription, "삭제실패")
+                    
+                }
+            }
         }
     }
 }
