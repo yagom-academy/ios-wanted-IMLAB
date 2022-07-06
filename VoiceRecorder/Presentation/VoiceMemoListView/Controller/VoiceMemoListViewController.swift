@@ -54,7 +54,7 @@ extension VoiceMemoListViewController {
     // MARK: - Method
     
     private func configureUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         self.navigationItem.title = "Voice Memos"
         navigationController?.navigationBar.topItem?.rightBarButtonItem = rightButton
         view.addSubview(tableView)

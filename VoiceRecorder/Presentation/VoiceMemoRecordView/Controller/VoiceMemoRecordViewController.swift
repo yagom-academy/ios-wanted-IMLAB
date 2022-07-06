@@ -112,7 +112,7 @@ class VoiceMemoRecordViewController: UIViewController {
     }
     
     private func configure() {
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = .systemBackground
     }
     
     // - MARK: UI Design
