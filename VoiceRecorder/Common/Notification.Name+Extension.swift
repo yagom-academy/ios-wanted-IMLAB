@@ -7,12 +7,12 @@
 
 import Foundation
 
-
 extension Notification.Name {
-    static let audioPlaybackTimeIsOver = Notification.Name.init(rawValue: "audioPlaybackTimeIsOver")
     
+    static let audioPlaybackTimeIsOver = Notification.Name.init(rawValue: "audioPlaybackTimeIsOver")
     static let recordViewUploadComplete =
     Notification.Name.init(rawValue: "recordViewUploadComplete")
+    
 }
 
 

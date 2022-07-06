@@ -134,7 +134,7 @@ class AudioManager {
         audioEQ.removeTap(onBus: 0)
         audioEQ.installTap(onBus: 0, bufferSize: 1024, format: format) { [weak self] buffer, time in
             guard let self = self else { return }
-            let bufferData = self.calculatorBufferGraphData(buffer: buffer)
+            let bufferData = self.calculateBufferGraphData(buffer: buffer)
             self.liveBufferDataDelegate?.communicationBufferData(bufferData: bufferData)
             
             do {
@@ -206,7 +206,7 @@ extension AudioManager {
                                  limit: audioLengthSamples)
     }
     
-    private func calculatorBufferGraphData(buffer: AVAudioPCMBuffer) -> Float {
+    private func calculateBufferGraphData(buffer: AVAudioPCMBuffer) -> Float {
         guard let channelData = buffer.floatChannelData else { return 0 }
         let channelDataValue = channelData.pointee
         let channelDataArrayValue = stride(from: 0,
@@ -223,7 +223,7 @@ extension AudioManager {
     }
     
     /// audiofile을 읽어 한번에 data를 가져오는 method. width는 waveView의 width이다. nil 값이 나온 것은 bufferData를 읽어오는데 실패한 것
-    func calculatorBufferGraphData(width: CGFloat, filePath: URL) -> [Float]? {
+    func calculateBufferGraphData(width: CGFloat, filePath: URL) -> [Float]? {
         let audioFile: AVAudioFile
         
         do {
