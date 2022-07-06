@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 // MARK: - 녹음 버튼 깜빡임 효과용
 extension UIView {
@@ -19,6 +20,26 @@ extension UIView {
             self.alpha = 1.0
             self.layer.removeAllAnimations()
         }
+    }
+}
+
+extension AVAudioFile{
+
+    var duration: TimeInterval{
+        let sampleRateSong = Double(processingFormat.sampleRate)
+        let lengthSongSeconds = Double(length) / sampleRateSong
+        return lengthSongSeconds
+    }
+
+}
+
+extension AVAudioPlayerNode{
+
+    var currentTime: TimeInterval{
+        if let nodeTime = lastRenderTime,let playerTime = playerTime(forNodeTime: nodeTime) {
+            return Double(playerTime.sampleTime) / playerTime.sampleRate
+        }
+        return 0
     }
 }
 

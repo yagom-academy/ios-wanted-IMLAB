@@ -139,13 +139,18 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="5000" minValue="10" maxValue="15000" translatesAutoresizingMaskIntoConstraints="NO" id="oJE-4e-1Jz">
+                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="5000" minValue="10" maxValue="15000" translatesAutoresizingMaskIntoConstraints="NO" id="xM2-uk-oVq">
                                                 <rect key="frame" x="-2" y="28.5" width="304" height="31"/>
                                                 <connections>
-                                                    <action selector="cutoffSliderChanged:" destination="X5L-vM-0v8" eventType="valueChanged" id="jGX-d4-oai"/>
+                                                    <action selector="setCutoffFrequency:" destination="X5L-vM-0v8" eventType="valueChanged" id="EAS-Qz-aEu"/>
                                                 </connections>
                                             </slider>
                                         </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="xM2-uk-oVq" secondAttribute="trailing" id="JJp-Oo-QrP"/>
+                                            <constraint firstAttribute="bottom" secondItem="xM2-uk-oVq" secondAttribute="bottom" id="Rb6-Ev-wq8"/>
+                                            <constraint firstItem="xM2-uk-oVq" firstAttribute="leading" secondItem="ASO-Dk-b5S" secondAttribute="leading" id="SEE-88-YCY"/>
+                                        </constraints>
                                     </stackView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TotalRecordingTimeLabel" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y8P-W7-Nca">
                                         <rect key="frame" x="53.5" y="238.5" width="193.5" height="20.5"/>
@@ -253,7 +258,6 @@
                         <outlet property="endPlayTimeLabel" destination="met-fl-fRU" id="JCH-uL-aLU"/>
                         <outlet property="goBackwardButton" destination="FaY-IW-oDw" id="iEO-zl-v0T"/>
                         <outlet property="goForwardButton" destination="1xa-eD-Y9T" id="aFz-tK-jQz"/>
-                        <outlet property="lowPassCutoffSlider" destination="oJE-4e-1Jz" id="Ves-53-XFw"/>
                         <outlet property="playButton" destination="WJj-Hx-Tya" id="P91-gm-3qH"/>
                         <outlet property="playProgressBar" destination="oDW-xa-E0F" id="eB6-NY-VEe"/>
                         <outlet property="recordingButton" destination="8jP-wJ-9ig" id="KmF-wy-kNF"/>
@@ -327,7 +331,7 @@
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="gobackward.5" catalog="system"/>
                                                 <connections>
-                                                    <action selector="goBackwardButtonTapped:" destination="9DQ-7z-LBd" eventType="touchUpInside" id="mPU-Tj-PSt"/>
+                                                    <action selector="goBackwardButtonTapped:" destination="9DQ-7z-LBd" eventType="touchUpInside" id="YAt-Sk-xXJ"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cpy-m0-jJ9">
@@ -335,7 +339,7 @@
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="play" catalog="system"/>
                                                 <connections>
-                                                    <action selector="playButtonTapped:" destination="9DQ-7z-LBd" eventType="touchUpInside" id="rkJ-DL-mRW"/>
+                                                    <action selector="playButtonTapped:" destination="9DQ-7z-LBd" eventType="touchUpInside" id="3AM-AW-pKM"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MOa-KV-VDJ">
@@ -343,7 +347,7 @@
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="goforward.5" catalog="system"/>
                                                 <connections>
-                                                    <action selector="goForwardButtonTapped:" destination="9DQ-7z-LBd" eventType="touchUpInside" id="gj2-qL-5eM"/>
+                                                    <action selector="goForwardButtonTapped:" destination="9DQ-7z-LBd" eventType="touchUpInside" id="F9i-Lt-TtS"/>
                                                 </connections>
                                             </button>
                                         </subviews>
