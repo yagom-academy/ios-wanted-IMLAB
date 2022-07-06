@@ -243,6 +243,8 @@ class RecordVoiceViewController: UIViewController {
         case .afterRecording:
             recordFile_ButtonStackView.isHidden = false
             frequencySlider.isHidden = false
+            waveFormImageView.image = drawWaveFormManager.getWaveFormImage()
+            recordFile_play_PauseButton.setImage(UIImage(systemName: "play"), for: .normal)
         case .beforePlaying:
             waveFormCanvasView.isHidden = true
             waveFormImageView.isHidden = false
@@ -300,7 +302,8 @@ extension RecordVoiceViewController : RecordVoiceManagerDelegate {
 
 extension RecordVoiceViewController : PlayVoiceDelegate{
     func displayWaveForm(to currentPosition: AVAudioFramePosition, in audioLengthSamples: AVAudioFramePosition) {
-        //
+        let newX = (self.waveFormImageView.image?.size.width ?? 0) * CGFloat(currentPosition) / CGFloat(audioLengthSamples)
+        self.waveFormImageView.transform = CGAffineTransform(translationX: -newX, y: 0)
     }
     
     func playEndTime() {
