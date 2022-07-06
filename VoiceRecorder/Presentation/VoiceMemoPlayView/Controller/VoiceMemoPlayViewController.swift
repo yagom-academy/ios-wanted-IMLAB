@@ -204,7 +204,7 @@ class VoiceMemoPlayViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        guard let bufferDatas = audioManager.calculatorBufferGraphData(width: waveFormView.bounds.width, filePath: pathFinder.lastUsedUrl) else {
+        guard let bufferDatas = audioManager.calculatorBufferGraphData(width: waveFormView.bounds.width, filePath: pathFinder.getCurrentFilePath(fileName: audioFileName ?? "")) else {
         return
         }
         
