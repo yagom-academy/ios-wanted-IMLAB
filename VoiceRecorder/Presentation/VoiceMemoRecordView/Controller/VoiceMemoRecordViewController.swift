@@ -224,14 +224,19 @@ class VoiceMemoRecordViewController: UIViewController {
     }
     
     private func uploadVoiceMemoToFirebaseStorage() {
-        firebaseManager.uploadVoiceMemoToFirebase(with: pathFinder.lastUsedUrl, fileName: pathFinder.lastUsedFileName, playTime: audioManager.getPlayTime(filePath:pathFinder.lastUsedUrl)) { result in
+        firebaseManager.uploadVoiceMemoToFirebase(with: pathFinder.lastUsedUrl, fileName: pathFinder.lastUsedFileName, playTime: audioManager.getPlayTime(filePath:pathFinder.lastUsedUrl)) { [weak self] result in
             switch result {
             case .success(_):
                 print("성공")
+                self?.validateUploadFinish()
             case .failure(let error):
                 print(error.localizedDescription)
             }
         }
+    }
+    
+    private func validateUploadFinish() {
+        NotificationCenter.default.post(name: .recordViewUploadComplete, object: nil)
     }
 }
 

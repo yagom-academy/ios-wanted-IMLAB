@@ -46,6 +46,7 @@ class VoiceMemoListViewController: UIViewController {
         configureTableView()
         configureUI()
         fetchFirebaseListAll()
+        createObservers()
     }
 }
 
@@ -98,11 +99,20 @@ extension VoiceMemoListViewController {
         return "\(min):\(sec)"
     }
     
+    private func createObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(recordViewUploadComplete(_:)), name: .recordViewUploadComplete, object: nil)
+    }
     
     // MARK: - Action Method
     @objc private func buttonPressed() {
         self.coordinator?.presentRecordView()
     }
+    
+    @objc func recordViewUploadComplete(_ sender: NSNotification) {
+        DispatchQueue.main.async {
+            self.fetchFirebaseListAll()
+        }
+     }
 }
 
 extension VoiceMemoListViewController: UITableViewDelegate, UITableViewDataSource {
