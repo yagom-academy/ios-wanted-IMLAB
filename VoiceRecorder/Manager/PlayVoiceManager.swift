@@ -41,6 +41,7 @@ class PlayVoiceManager{
     private var displayLink : CADisplayLink?
     
     init(){
+        print("CREATE PLAYVOICEMANAGER")
         setAudio()
         setDisplayLink()
     }
@@ -48,7 +49,6 @@ class PlayVoiceManager{
     func setAudioFile(){
         let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
                 .appendingPathComponent("myRecoding.m4a")
-        print(fileURL)
         guard let file = try? AVAudioFile(forReading: fileURL) else {return}
         self.format = file.processingFormat
         self.audioFile = file
@@ -98,6 +98,7 @@ class PlayVoiceManager{
     func closeAudio(){
         isPlay = false
         displayLink?.isPaused = true
+        displayLink = nil
         playerNode.stop()
         audioEngine.stop()
     }

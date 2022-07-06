@@ -12,7 +12,7 @@ class PlayVoiceViewController: UIViewController {
     
     var playVoiceManager : PlayVoiceManager!
     var playVoiceViewModel : PlayVoiceViewModel!
-    var firebaseStorageManager : FirebaseStorageManager!
+    var firebaseDownloadManager : FirebaseStorageDownloadManager!
     
     var verticalLineView : VerticalLineView = {
         let verticalLineView = VerticalLineView()
@@ -97,9 +97,9 @@ class PlayVoiceViewController: UIViewController {
         setView()
         autolayOut()
         //순환참조 발생 주의
-        firebaseStorageManager.delegate = self
+        firebaseDownloadManager.delegate = self
         playAndPauseButton.isEnabled = false
-        firebaseStorageManager.downloadRecordFile(fileName: "\(playVoiceViewModel.voiceRecordViewModel.fileName)@\(playVoiceViewModel.voiceRecordViewModel.fileLength)", imageFileName: "\(playVoiceViewModel.voiceRecordViewModel.fileName)")
+        firebaseDownloadManager.downloadFile()
     }
     
     func setView(){
@@ -182,7 +182,13 @@ class PlayVoiceViewController: UIViewController {
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        playVoiceManager.closeAudio()
+        if !playVoiceViewModel.isDownloading{
+            print("close audio")
+            playVoiceManager.closeAudio()
+        }else{
+            print("Cancel download")
+            firebaseDownloadManager.cancelDownload()
+        }
     }
     
     deinit{
@@ -190,15 +196,18 @@ class PlayVoiceViewController: UIViewController {
     }
 }
 
-extension PlayVoiceViewController : FirebaseStorageManagerDelegate{
-    func downloadComplete(url : URL) {
-        waveFormImageView.load(url: url) {
-            self.playAndPauseButton.isEnabled = true
+extension PlayVoiceViewController : FirebaseDownloadManagerDelegate{
+    func downloadComplete(url: URL) {
+        waveFormImageView.load(url: url) { [weak self] in
+            self?.playAndPauseButton.isEnabled = true
+            self?.playVoiceViewModel.isDownloading = false
         }
         playVoiceManager = PlayVoiceManager()
         playVoiceManager.delegate = self
         setUIText()
     }
+    
+   
 }
 
 extension PlayVoiceViewController : PlayVoiceDelegate{

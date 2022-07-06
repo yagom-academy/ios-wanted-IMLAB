@@ -9,6 +9,8 @@ import Foundation
 
 struct PlayVoiceViewModel{
     
+    var isDownloading : Bool = true
+    
     var selectedPitch : SoundPitch 
     
     var voiceRecordViewModel : VoiceRecordViewModel

@@ -1,15 +1,8 @@
 import Foundation
 import FirebaseStorage
 
-protocol FirebaseStorageManagerDelegate : AnyObject{
-    func downloadComplete(url : URL)
-}
-
-
-
 class FirebaseStorageManager {
     let storage = Storage.storage()
-    weak var delegate : FirebaseStorageManagerDelegate!
     
     func uploadRecord(time : String, completion : @escaping ()->Void){
         //파일 위치
@@ -82,8 +75,8 @@ class FirebaseStorageManager {
         }
     }
     
-    func deleteRecord(fileName : String, completion : @escaping()->Void){
-        let storageRef = storage.reference().child("record/\(fileName).m4a")
+    func deleteRecord(fileName : String, fileLength : String, completion : @escaping()->Void){
+        let storageRef = storage.reference().child("record/\(fileName)@\(fileLength).m4a")
         let imageRef = storage.reference().child("waveForm/\(fileName)WaveForm.png")
         storageRef.delete { error in
             if let error = error{
@@ -99,32 +92,7 @@ class FirebaseStorageManager {
         }
     }
     
-    func downloadRecordFile(fileName : String, imageFileName : String){
-        //녹음파일
-        let downloadRef = storage.reference().child("record/\(fileName).m4a")
-        let localFile = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("myRecoding.m4a")
-        
-        //이미지파일
-        let imageRef = storage.reference().child("waveForm/\(imageFileName)WaveForm.png")
-        let imageFile = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("myWaveForm.png")
-        
-        downloadRef.write(toFile: localFile) { url, error in
-            if let error = error{
-                print("DOWNLOAD FILE ERROR")
-            }else{
-                print("SUCCESS DOWNLOAD Record FILE")
-                
-                imageRef.downloadURL{url, error in
-                    if let error = error{
-                        print("DOWNLOAD IMAGE ERROR")
-                    }else{
-                        print("SUCCESS DOWNLOAD IMAGE FILE")
-                        print("IMAGE URL \(url)")
-                        self.delegate.downloadComplete(url: url!)
-                    }
-                }
-            }
-        }
+    deinit {
+        print("Close firebase manager")
     }
-    
 }

@@ -78,8 +78,9 @@ class VoiceRecorderListTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        let voiceRecodeFile = voiceRecordListViewModel.ListAtIndex(index: indexPath.row)
         if editingStyle == .delete {
-            self.firebaseStorageManger.deleteRecord(fileName : "\(voiceRecordListViewModel.ListAtIndex(index: indexPath.row).fileName)@\(voiceRecordListViewModel.ListAtIndex(index: indexPath.row).fileLength)") {
+            self.firebaseStorageManger.deleteRecord(fileName : voiceRecodeFile.fileName, fileLength: voiceRecodeFile.fileLength) {
                 self.updateTableViewList()
             }
         }
@@ -95,7 +96,7 @@ class VoiceRecorderListTableViewController: UITableViewController {
             let vc = segue.destination as! PlayVoiceViewController
             if let selectRecord = selectRecord {
                 vc.playVoiceViewModel = PlayVoiceViewModel(selectedPitch: .normal, voiceRecordViewModel: selectRecord)
-                vc.firebaseStorageManager = FirebaseStorageManager()
+                vc.firebaseDownloadManager = FirebaseStorageDownloadManager(fileName: selectRecord.fileName, fileLength: selectRecord.fileLength)
             }
         }
         else if segue.identifier == "RecordVoice"{
