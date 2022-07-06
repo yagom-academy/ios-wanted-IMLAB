@@ -128,7 +128,7 @@ class VoiceMemoRecordViewController: UIViewController {
         hiddenPlayRelatedButtons(.record)
         presentationController?.delegate = self
         audioManager.liveBufferDataDelegate = self
-        configureObserver()
+        NotificationCenter.default.addObserver(self, selector: #selector(audioPlaybackTimeIsOver(_:)), name: .audioPlaybackTimeIsOver, object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -141,10 +141,6 @@ class VoiceMemoRecordViewController: UIViewController {
     private func configure() {
         
         self.view.backgroundColor = .systemBackground
-    }
-    
-    private func configureObserver() {
-        NotificationCenter.default.addObserver(self, selector: #selector(audioPlaybackTimeIsOver(_:)), name: .audioPlaybackTimeIsOver, object: nil)
     }
     
     // MARK: - UI Design
@@ -220,7 +216,11 @@ class VoiceMemoRecordViewController: UIViewController {
         ])
     }
     
-    // MARK: - Method
+}
+
+// MARK: - Method
+
+extension VoiceMemoRecordViewController {
     
     /// 녹음완료후 음성파일의 시간
     private func showVoiceMemoDuration() -> String {
@@ -270,7 +270,6 @@ class VoiceMemoRecordViewController: UIViewController {
         
         NotificationCenter.default.post(name: .recordViewUploadComplete, object: nil)
     }
-    
 }
 
 // MARK: - objc Method
