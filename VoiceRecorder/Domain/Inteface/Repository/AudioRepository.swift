@@ -13,6 +13,7 @@ protocol AudioRepository {
 
     func fetchAll() async throws -> [EndPoint]
     func download(from endPoint: EndPoint) async throws -> Data
-    func upload() -> EndPoint
-    func delete(_ endPoint: EndPoint)
+    func putDataLocally(from endPoint: EndPoint) -> URL
+    func upload()
+    func delete(_ endPoint: EndPoint) async throws
 }

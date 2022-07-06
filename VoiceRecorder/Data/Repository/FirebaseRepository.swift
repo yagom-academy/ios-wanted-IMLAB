@@ -8,8 +8,11 @@
 import Foundation
 import FirebaseStorage
 
-final class FirebaseRepository: FirebaseRepositoryInterface {
-    
+final class FirebaseRepository: AudioRepository {
+
+    typealias AudioName = String
+    typealias EndPoint = AudioName
+
     private lazy var recordURL: URL = {
         var documentsURL: URL = {
             let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
@@ -19,45 +22,45 @@ final class FirebaseRepository: FirebaseRepositoryInterface {
         let url = documentsURL.appendingPathComponent(fileName)
         return url
     }()
-    
-    func upload() async throws -> URL {
-        let metadata = StorageMetadata()
-        metadata.contentType = Audio.contentType
-        let audioReference = Storage.storage().reference().child("\(Date.now)\(Audio.format)")
 
-        audioReference.putFile(from: recordURL, metadata: metadata)
-        let url = try await audioReference.downloadURL()
-        
-        return url
-    }
-    
-    func downloadURL() async throws -> [AudioURL] {
+    func fetchAll() async throws -> [AudioName] {
         let audioReference = Storage.storage().reference()
         let storageListResult = try await audioReference.listAll()
-        
-        var audioURLs: [AudioURL] = []
+
+        var audioNames: [AudioName] = []
         
         for storageReference in storageListResult.items {
-            let fileName = storageReference.name
-            let url = try await storageReference.downloadURL()
-            let audioURL = AudioURL(name: fileName, url: url)
-            audioURLs.append(audioURL)
+            audioNames.append(storageReference.name)
         }
-        
-        return audioURLs
+
+        return audioNames
     }
-    
-    func downloadData(from url: URL) async throws -> Data {
-        let audioReference = Storage.storage().reference(forURL: url.absoluteString)
-        
-        let data = try await audioReference.data(maxSize: Audio.megabyte)
+
+    func download(from endPoint: AudioName) async throws -> Data {
+        let storageReference = Storage.storage().reference().child(endPoint)
+        let data = try await storageReference.data(maxSize: Audio.megabyte)
+
         return data
     }
-    
-    func delete(from url: URL) async throws {
-        let audioReference = Storage.storage().reference(forURL: url.absoluteString)
-        
-        _ = try await audioReference.delete()
+
+    func putDataLocally(from endPoint: AudioName) -> URL {
+        let storageReference = Storage.storage().reference().child(endPoint)
+        storageReference.write(toFile: recordURL)
+        return recordURL
+    }
+
+    func upload() {
+        let metadata = StorageMetadata()
+        metadata.contentType = Audio.contentType
+        let audioReference = Storage.storage().reference().child("voiceRecords\(Date.now).\(Audio.format)")
+
+        audioReference.putFile(from: recordURL, metadata: metadata)
+    }
+
+    func delete(_ endPoint: AudioName) async throws {
+        let audioReference = Storage.storage().reference().child(endPoint)
+
+        try await audioReference.delete()
     }
 }
 
