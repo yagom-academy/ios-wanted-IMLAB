@@ -9,6 +9,10 @@ protocol RecordVoiceDelegate : AnyObject{
     func updateList()
 }
 
+enum AudioStatus {
+case beforeRecording, afterRecording, beforePlaying, afterPlaying
+}
+
 import UIKit
 import AVFoundation
 
@@ -126,14 +130,14 @@ class RecordVoiceViewController: UIViewController {
             }
             record_start_stop_button.setImage(UIImage(systemName: "circle.fill"), for: .normal)
             record_start_stop_button.tintColor = .red
-            setUIAfterRecording()
+            updateUI(when: .afterRecording)
             print("recording stop")
         } else {
             recordVoiceManager.startRecording()
             drawWaveFormManager.startDrawing(of: recordVoiceManager.recorder!, in: waveFormCanvasView)
             record_start_stop_button.setImage(UIImage(systemName: "stop.fill"), for: .normal)
             record_start_stop_button.tintColor = .black
-            setUIBeforeRecording()
+            updateUI(when: .beforeRecording)
             print("recording start")
         }
     }
@@ -156,6 +160,8 @@ class RecordVoiceViewController: UIViewController {
     
     func setView() {
         self.view.addSubview(waveFormCanvasView)
+        self.view.addSubview(waveFormImageView)
+        self.view.addSubview(verticalLineView)
         
         self.view.addSubview(frequencyLabel)
         self.view.addSubview(frequencySlider)
@@ -174,31 +180,35 @@ class RecordVoiceViewController: UIViewController {
     
     func autoLayout() {
         NSLayoutConstraint.activate([
-            waveFormCanvasView.topAnchor.constraint(equalToSystemSpacingBelow: self.view.topAnchor, multiplier: 10),
-            waveFormCanvasView.widthAnchor.constraint(equalTo: self.view.widthAnchor),
-            waveFormCanvasView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.15),
+            waveFormCanvasView.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 10),
+            waveFormCanvasView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            waveFormCanvasView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.15),
+            
+            waveFormImageView.leadingAnchor.constraint(equalTo: view.centerXAnchor),
+            waveFormImageView.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 10),
+            waveFormImageView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            waveFormImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.15),
+            
+            verticalLineView.leadingAnchor.constraint(equalTo: view.centerXAnchor),
+            verticalLineView.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 10),
+            verticalLineView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            verticalLineView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.15),
             
             frequencyLabel.topAnchor.constraint(equalToSystemSpacingBelow: waveFormCanvasView.bottomAnchor, multiplier: 2),
-            frequencyLabel.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.8),
-            frequencyLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            frequencyLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.8),
+            frequencyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             frequencySlider.topAnchor.constraint(equalTo: frequencyLabel.bottomAnchor),
-            frequencySlider.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.8),
-            frequencySlider.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            frequencySlider.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.8),
+            frequencySlider.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             progressTimeLabel.topAnchor.constraint(equalTo: frequencySlider.bottomAnchor),
-            progressTimeLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            progressTimeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             buttonStackView.topAnchor.constraint(equalTo: progressTimeLabel.bottomAnchor, constant: 30),
-//            buttonStackView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.8),
-//            buttonStackView.heightAnchor.constraint(equalTo: waveFormCanvasView.heightAnchor, multiplier: 0.9),
-            buttonStackView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            
-//            record_start_stop_button.heightAnchor.constraint(equalTo: buttonStackView.heightAnchor),
-//            record_start_stop_button.widthAnchor.constraint(equalTo: record_start_stop_button.heightAnchor),
-            
-//            recordFile_ButtonStackView.centerYAnchor.constraint(equalTo: record_start_stop_button.centerYAnchor),
+            buttonStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
         ])
+        view.bringSubviewToFront(verticalLineView)
     }
     
     func setUI() {
@@ -209,6 +219,8 @@ class RecordVoiceViewController: UIViewController {
         record_start_stop_button.setImage(UIImage(systemName: "circle.fill"), for: .normal)
         record_start_stop_button.tintColor = .red
         recordFile_ButtonStackView.isHidden = true
+        waveFormImageView.isHidden = true
+        verticalLineView.isHidden = true
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -220,12 +232,25 @@ class RecordVoiceViewController: UIViewController {
         }
     }
     
-    func setUIAfterRecording(){
-        recordFile_ButtonStackView.isHidden = false
-    }
-    
-    func setUIBeforeRecording(){
-        recordFile_ButtonStackView.isHidden = true
+    func updateUI(when status : AudioStatus) {
+        switch status {
+        case .beforeRecording:
+            recordFile_ButtonStackView.isHidden = true
+            frequencySlider.isHidden = true
+            waveFormCanvasView.isHidden = false
+            waveFormImageView.isHidden = true
+            verticalLineView.isHidden = true
+        case .afterRecording:
+            recordFile_ButtonStackView.isHidden = false
+            frequencySlider.isHidden = false
+        case .beforePlaying:
+            waveFormCanvasView.isHidden = true
+            waveFormImageView.isHidden = false
+            verticalLineView.isHidden = false
+            recordFile_play_PauseButton.setImage(UIImage(systemName: "pause"), for: .normal)
+        case .afterPlaying:
+            recordFile_play_PauseButton.setImage(UIImage(systemName: "play"), for: .normal)
+        }
     }
     
     @objc func tabForward(){
@@ -239,10 +264,10 @@ class RecordVoiceViewController: UIViewController {
     @objc func tapButton(){
         if playVoiceManager.isPlay{
             playVoiceManager.stopAudio()
-            recordFile_play_PauseButton.setImage(UIImage(systemName: "play"), for: .normal)
+            updateUI(when: .afterPlaying)
         }else{
             playVoiceManager.playAudio()
-            recordFile_play_PauseButton.setImage(UIImage(systemName: "pause"), for: .normal)
+            updateUI(when: .beforePlaying)
         }
     }
 
