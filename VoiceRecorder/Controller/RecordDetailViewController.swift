@@ -276,9 +276,6 @@ class RecordDetailViewController: UIViewController {
     
     // MARK: - IBActions
     
-    @IBAction func controlRecordProgressBar(_ sender: UISlider) {
-    }
-    
     @IBAction func controlRecordButton(_ sender: UIButton) {
         if audioRecorder == nil {
             setupAudioRecorder()
@@ -299,7 +296,7 @@ class RecordDetailViewController: UIViewController {
         player?.currentTime += 5
     }
     
-    @IBAction func test(_ sender: UISegmentedControl) {
+    @IBAction func selectCutoffFrequency(_ sender: UISegmentedControl) {
         let selectedVoiceValue = sender.selectedSegmentIndex
         
         switch selectedVoiceValue {
