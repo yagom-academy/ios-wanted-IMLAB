@@ -14,9 +14,12 @@ class PlayViewController: UIViewController {
     @IBOutlet weak var voiceChangeSegment: UISegmentedControl!
     @IBOutlet weak var volumeView: UIView!
     @IBOutlet weak var playButton: UIButton!
+    @IBOutlet weak var playBackButton: UIButton!
+    @IBOutlet weak var playForwardButton: UIButton!
     
     // MARK: - UI Components
     private lazy var mpVolumeView = MPVolumeView()
+    private lazy var activityIndicator = UIActivityIndicatorView(style: .large)
     
     // MARK: - Properties
     var recordFile: RecordModel?
@@ -29,7 +32,15 @@ class PlayViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        setUpLocalFileManger()
+        activityIndicator.startAnimating()
+        setUpLocalFileManger {
+            self.setupEngine {
+                DispatchQueue.main.async {
+                    self.activityIndicator.stopAnimating()
+                    self.enableButton()
+                }
+            }
+        }
         setupMPVolumeView()
     }
     override func viewDidDisappear(_ animated: Bool) {
@@ -46,11 +57,10 @@ class PlayViewController: UIViewController {
     }
     @IBAction func didTapPlayPauseButton(_ sender: UIButton) {
         if isPlay {
-            sender.setImage(Icon.play.image, for: .normal)
+            sender.setImage(.play)
             engine.pause()
         } else {
-            sender.setImage(Icon.pauseFill.image, for: .normal)
-            setupEngine()
+            sender.setImage(.pauseFill)
             engine.play()
         }
         isPlay = !isPlay
@@ -80,15 +90,31 @@ private extension PlayViewController {
     func configureUI() {
         guard let recordFile = recordFile else { return }
         dateTitleLabel.text = String(recordFile.name.dropLast(4))
+        
+        view.addSubview(activityIndicator)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        
+        activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
     }
-    func setupEngine() {
+    func enableButton() {
+        playButton.isEnabled = true
+        playBackButton.isEnabled = true
+        playForwardButton.isEnabled = true
+    }
+    func setupEngine(didFinish completion: @escaping () -> Void) {
         guard let recordFile = recordFile,
               let eqString = recordFile.metaData[MetaData.eq.key] else { return }
         let gains = eqString.split(separator: " ").map { String($0) }.map { Float($0) ?? 0.0 }
                 
         engine.url = localFileManager?.audioPath
         engine.gains = gains
-        try! engine.setupEngine()
+        do {
+            try engine.setupEngine()
+            completion()
+        } catch {
+            print("ERROR \(error.localizedDescription)🌔")
+        }
     }
     func setupMPVolumeView() {
         volumeView.addSubview(mpVolumeView)
@@ -102,9 +128,9 @@ private extension PlayViewController {
         mpVolumeView.setRouteButtonImage(UIImage(), for: .normal)
         mpVolumeView.showsVolumeSlider = true
     }
-    func setUpLocalFileManger() {
+    func setUpLocalFileManger(didFinish completion: @escaping () -> Void) {
         guard let recordFile = recordFile else { return }
         localFileManager = LocalFileManager(recordModel: recordFile)
-        localFileManager?.downloadToLocal()
+        localFileManager?.downloadToLocal { completion() }
     }
 }
