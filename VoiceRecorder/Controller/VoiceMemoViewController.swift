@@ -124,5 +124,6 @@ extension VoiceMemoViewController: UITableViewDelegate {
         playingVC.fileURL = localUrls[indexPath.row]
         present(playingVC, animated: true)
     }
+    
 }
 

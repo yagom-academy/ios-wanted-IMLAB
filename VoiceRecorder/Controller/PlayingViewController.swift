@@ -77,6 +77,15 @@ class PlayingViewController: UIViewController, ObservableObject, AVAudioPlayerDe
         drawWaveForm()
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if audioPlayer.isPlaying {
+            audioPlayer.stop()
+            audioEngine.stop()
+        }
+        
+    }
+    
     // MARK: - Methods
     
     func drawWaveForm() {
@@ -102,6 +111,7 @@ class PlayingViewController: UIViewController, ObservableObject, AVAudioPlayerDe
             audioLengthSamples = file.length
             audioSampleRate = format.sampleRate
             audioLengthSeconds = Double(audioLengthSamples) / audioSampleRate
+            audioPlayer.volume = volumeControlSlider.value
             
             audioFile = file
             
