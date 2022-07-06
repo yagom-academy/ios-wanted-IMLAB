@@ -12,7 +12,8 @@ import UIKit
 class FirebaseStorageManager {
     
     private var baseReference: StorageReference!
-    private var dateUtil = DateUtil()
+    private let dateUtil = DateUtil()
+    private let soundManager = SoundManager()
     
     init() {
         baseReference = Storage.storage().reference()
@@ -26,7 +27,7 @@ class FirebaseStorageManager {
         let metaData = StorageMetadata()
         let customData = [
             "title": title,
-            "length": "03:24"
+            "length": String(Int(soundManager.totalPlayTime()))
         ]
         metaData.customMetadata = customData
         metaData.contentType = "audio/x-caf"
