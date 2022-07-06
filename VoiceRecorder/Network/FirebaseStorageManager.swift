@@ -12,13 +12,15 @@ import UIKit
 class FirebaseStorageManager {
     
     private var baseReference: StorageReference!
+    private var dateUtil = DateUtil()
     
     init() {
         baseReference = Storage.storage().reference()
     }
     
     func uploadAudio(url: URL) {
-        let filePath = "0705_11_29.caf"
+        let title = dateUtil.formatDate()
+        let filePath = "\(title).caf"
         let data = try! Data(contentsOf: url)
         let metaData = StorageMetadata()
         metaData.contentType = "audio/x-caf"
