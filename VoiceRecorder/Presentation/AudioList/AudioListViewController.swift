@@ -1,5 +1,5 @@
 //
-//  HomeViewController.swift
+//  AudioListViewController.swift
 //  VoiceRecorder
 //
 //  Created by 김승찬 on 2022/06/29.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class HomeViewController: BaseViewController {
+final class AudioListViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
