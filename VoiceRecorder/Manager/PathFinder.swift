@@ -67,7 +67,6 @@ class PathFinder {
         var tempPath = basePath
         let fileNameToAppend = "\(fileName).caf"
         tempPath.appendPathComponent(fileNameToAppend)
-        print(tempPath)
         
         return manager.fileExists(atPath: tempPath.absoluteString)
         

@@ -153,14 +153,16 @@ extension VoiceMemoListViewController: UITableViewDelegate, UITableViewDataSourc
             firebaseManager.fetchVoiceMemoAtFirebase(with: joinTarget, localPath: pathFinder.getPath(fileName: joinTarget)) { result in
                 switch result {
                 case .success(let isSuccess):
-                    print(isSuccess)
+                    self.coordinator?.presentPlayView(selectedFile: joinTarget)
                 case .failure(let error):
                     print(error.localizedDescription)
                 }
             }
+        } else {
+            self.coordinator?.presentPlayView(selectedFile: joinTarget)
         }
         
-        self.coordinator?.presentPlayView(selectedFile: joinTarget)
+        
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
