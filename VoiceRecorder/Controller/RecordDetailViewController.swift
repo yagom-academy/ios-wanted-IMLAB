@@ -29,8 +29,8 @@ class RecordDetailViewController: UIViewController {
     
     var audioFileURL : URL?
     
-    let readyToRecordButtonImage = UIImage(systemName: "record.circle")
-    let recordingButtonImage = UIImage(systemName: "record.circle.fill")
+    let readyToRecordButtonImage = UIImage(systemName: "circle.fill")
+    let recordingButtonImage = UIImage(systemName: "square.fill")
     
     let playButtonImage = UIImage(systemName: "play.fill")
     let pauseButtonImage = UIImage(systemName: "pause.fill")
@@ -39,8 +39,8 @@ class RecordDetailViewController: UIViewController {
     
     var timer : Timer?
     lazy var pencil = UIBezierPath(rect: waveView.bounds)
-    lazy var firstPoint = CGPoint(x: waveView.bounds.midX/2, y: (waveView.bounds.midY))
-    lazy var jump : CGFloat = (waveView.bounds.width - (firstPoint.x * 2))/200
+    lazy var firstPoint = CGPoint(x: waveView.bounds.midX, y: waveView.bounds.midY)
+    lazy var jump : CGFloat = (firstPoint.x)/200
     let waveLayer = CAShapeLayer()
     var traitLength : CGFloat!
     var start : CGPoint!
@@ -134,10 +134,10 @@ class RecordDetailViewController: UIViewController {
         var translationX = 0.0
 
         
-        timer = Timer.scheduledTimer(withTimeInterval: 0.02, repeats: true) { timer in
-            UIView.animate(withDuration: 2, delay: 0, options: [.curveLinear]) {
+        timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
+            UIView.animate(withDuration: 0.01, delay: 0, options: [.curveLinear]) {
                 self.waveView.transform = CGAffineTransform(translationX: translationX, y: 0)
-                translationX -= 1.02
+                translationX -= self.jump
             }
             self.audioRecorder?.updateMeters()
             // write waveforms
@@ -232,6 +232,7 @@ class RecordDetailViewController: UIViewController {
             if timer != nil || audioRecorder != nil {
                 timer?.invalidate()
                 audioRecorder?.stop()
+                audioRecorder = nil
             }
             
             return
