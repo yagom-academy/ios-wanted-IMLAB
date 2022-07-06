@@ -19,9 +19,9 @@ class CutoffFrequencyView: UIView {
     
     private let frequencySlider: UISlider = {
         let slider = UISlider()
-        slider.value = 0.5
+        slider.value = 0.0
         slider.minimumValue = 0.0
-        slider.maximumValue = 1.0
+        slider.maximumValue = 60.0
         
         return slider
     }()
@@ -49,7 +49,7 @@ extension CutoffFrequencyView {
         
         let inset: CGFloat = 30.0
         
-        cutoffLabel.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        cutoffLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: inset).isActive = true
         cutoffLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: inset).isActive = true
         
         frequencySlider.topAnchor.constraint(equalTo: cutoffLabel.bottomAnchor, constant: 8).isActive = true

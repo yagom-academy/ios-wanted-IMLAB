@@ -6,10 +6,67 @@
 //
 
 import UIKit
+import AVFoundation
 
 class RecordAndPlayView: UIView {
-    private let recordManager = RecordManager()
     private let networkManager = RecordNetworkManager()
+    private let recordManager = RecordManager()
+
+    var recorder: AVAudioRecorder?
+    var audioFile: URL!
+    var timer: Timer?
+    
+    var barWidth: CGFloat = 2.0
+    
+    var color = UIColor.red.cgColor
+    var waveForms = [Int](repeating: 0, count: 200)
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        layout()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func draw(_ rect: CGRect) {
+        guard let context = UIGraphicsGetCurrentContext() else {
+            return
+        }
+        
+        var bar: CGFloat = 0
+        
+        context.clear(rect)
+        context.setFillColor(red: 0, green: 0, blue: 0, alpha: 0)
+        context.fill(rect)
+        context.setLineWidth(1.5)
+        context.setStrokeColor(self.color)
+        
+        let centerY: CGFloat = 150
+        
+        for i in 0..<self.waveForms.count {
+            let firstX = bar * self.barWidth
+            let firstY = centerY + CGFloat(self.waveForms[i])
+            let secondY = centerY - CGFloat(self.waveForms[i])
+            
+            context.move(to: CGPoint(x: firstX, y: centerY))
+            context.addLine(to: CGPoint(x: firstX, y: firstY))
+            context.move(to: CGPoint(x: firstX, y: centerY))
+            context.addLine(to: CGPoint(x: firstX, y: secondY))
+            context.strokePath()
+            
+            bar += 1
+        }
+    }
+    
+    private let frequencyView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        
+        return view
+    }()
     
     private var viewModel: PlayerButtonViewModel!
     
@@ -73,7 +130,11 @@ class RecordAndPlayView: UIView {
     }
     
     @objc func didTapPlayButton(sender: UIButton) {
+<<<<<<< HEAD
         sender.isSelected = viewModel.playPauseAudio()
+=======
+        sender.isSelected = !sender.isSelected
+>>>>>>> feature-record
     }
     
     private let recordButton: UIButton = {
@@ -94,14 +155,18 @@ class RecordAndPlayView: UIView {
         sender.isSelected = !sender.isSelected
         
         if sender.isSelected {
-            recordManager.startRecord()
+            startRecord()
         } else {
+<<<<<<< HEAD
             recordManager.endRecord()
             
             guard let audioFile = recordManager.makePlayer() else {
                 return
             }
             viewModel.setAudioFile(audioFile)
+=======
+            endRecord()
+>>>>>>> feature-record
             buttonStackView.isHidden = false
             
         }
@@ -126,16 +191,6 @@ class RecordAndPlayView: UIView {
         // 저장 후 dismiss
         networkManager.saveRecord(filename: file)
     }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        layout()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 }
 
 extension RecordAndPlayView {
@@ -147,6 +202,7 @@ extension RecordAndPlayView {
     
     private func layout() {
         [
+            frequencyView,
             buttonStackView,
             recordButton,
             downloadButton
@@ -154,6 +210,11 @@ extension RecordAndPlayView {
             addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
+        
+        frequencyView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        frequencyView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
+        frequencyView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
+        frequencyView.heightAnchor.constraint(equalTo: self.safeAreaLayoutGuide.heightAnchor, multiplier: 0.5).isActive = true
         
         buttonStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         buttonStackView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
@@ -163,5 +224,50 @@ extension RecordAndPlayView {
         
         downloadButton.bottomAnchor.constraint(equalTo: recordButton.bottomAnchor).isActive = true
         downloadButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -30).isActive = true
+    }
+}
+
+extension RecordAndPlayView {
+    func startRecord() {
+        var currentSample = 0
+        let numberOfSamples = 200
+
+        let dirPaths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let docsDir = dirPaths[0]
+
+        audioFile = docsDir.appendingPathComponent("record.m4a")
+
+        let recordSettings = [
+            AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
+            AVSampleRateKey: 16000,
+            AVNumberOfChannelsKey: 2,
+            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
+        ]
+
+        do {
+            recorder = try AVAudioRecorder(url: audioFile, settings: recordSettings)
+            recorder?.record()
+
+            recorder?.isMeteringEnabled = true
+            timer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true, block: { [weak self] (timer) in
+                guard let self = self else { return }
+                self.recorder?.updateMeters()
+                self.waveForms[currentSample] = self.recordManager.normalizeSoundLevel(self.recorder?.averagePower(forChannel: 0))
+                currentSample = (currentSample + 1) % numberOfSamples
+                DispatchQueue.main.async {
+                    self.setNeedsDisplay()
+                }
+            })
+        } catch {
+            print("Record Error: \(error.localizedDescription)")
+        }
+    }
+    
+    func endRecord() {
+//        var fileName = dateToFileName(Date())
+        timer?.invalidate()
+        
+        recorder?.stop()
+        recorder = nil
     }
 }

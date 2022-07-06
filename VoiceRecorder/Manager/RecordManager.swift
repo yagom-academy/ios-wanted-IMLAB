@@ -7,16 +7,18 @@
 
 import UIKit
 import AVFoundation
-import Accelerate
 
-class RecordManager: NSObject, AVAudioPlayerDelegate {
+protocol RecordService {
+    func initRecordSession()
+    func normalizeSoundLevel(_ level: Float?) -> Int
+    func dateToFileName(_ date: Date) -> String
+}
+
+class RecordManager: RecordService {
     var recorder: AVAudioRecorder?
-    var audioPlayer = AVAudioPlayer()
     var audioFile: URL!
-    
     var timer: Timer?
-    var currentSample: Int = 0
-    var soundSamples = [Float](repeating: 0, count: 10)
+    var waveForms = [Int](repeating: 0, count: 200)
     
     func initRecordSession() {
         let audioSession = AVAudioSession.sharedInstance()
@@ -39,6 +41,7 @@ class RecordManager: NSObject, AVAudioPlayerDelegate {
         }
     }
     
+<<<<<<< HEAD
     func makePlayer() -> AVAudioFile? {
 //        do {
 //            audioPlayer = try AVAudioPlayer(contentsOf: audioFile)
@@ -89,9 +92,17 @@ class RecordManager: NSObject, AVAudioPlayerDelegate {
     func endRecord() {
 //        var fileName = dateToFileNamdate(Date())
         timer?.invalidate()
+=======
+    func normalizeSoundLevel(_ level: Float?) -> Int {
+        guard let level = level else { return 0 }
+        let lowLevel: Float = -70
+        let highLevel: Float = -10
         
-        recorder?.stop()
-        recorder = nil
+        var normalLevel = max(0.0, level - lowLevel)
+        normalLevel = min(normalLevel, highLevel - lowLevel)
+>>>>>>> feature-record
+        
+        return Int(normalLevel)
     }
 
     func dateToFileName(_ date: Date) -> String {
@@ -100,19 +111,5 @@ class RecordManager: NSObject, AVAudioPlayerDelegate {
         formatter.dateFormat = "yyyy_MM_dd_HH:mm:ss"
         let fileName = formatter.string(from: Date())
         return fileName
-    }
-}
-
-extension RecordManager {
-    func startPlay() {
-        audioPlayer.play()
-    }
-    
-    func isPlaying() -> Bool {
-        return audioPlayer.isPlaying
-    }
-    
-    func pausePlay() {
-        audioPlayer.pause()
     }
 }
