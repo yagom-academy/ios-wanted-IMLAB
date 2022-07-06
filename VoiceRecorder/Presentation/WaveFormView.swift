@@ -39,6 +39,7 @@ class WaveFormView: UIView {
     override init (frame : CGRect) {
         super.init(frame : frame)
         self.backgroundColor = UIColor.clear
+        
         restartWaveForm()
         self.layer.addSublayer(caLayer)
     }
@@ -55,6 +56,7 @@ class WaveFormView: UIView {
             layer.transform = transform
         }
     }
+    
     
     func restartWaveForm() {
         count = 0

@@ -243,6 +243,7 @@ extension VoiceMemoRecordViewController {
         sender.isSelected.toggle()
         
         if sender.isSelected {
+            
             waveFormView.restartWaveForm()
             playTimeLabel.text = ""
             playRelatedButtonsHiddenAnimation(.record)
