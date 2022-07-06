@@ -63,13 +63,27 @@ class PathFinder {
         return path
     }
     
+    func getCurrentFilePath(fileName: String) -> URL {
+        return basePath.appendingPathComponent("\(fileName).caf")
+    }
+    
     func checkLocalIsExist(fileName: String) -> Bool {
         var tempPath = basePath
         let fileNameToAppend = "\(fileName).caf"
         tempPath.appendPathComponent(fileNameToAppend)
-        
-        return manager.fileExists(atPath: tempPath.absoluteString)
-        
+        return manager.fileExists(atPath: tempPath.relativePath)
     }
     
+    func deleteLocalFile(fileName: String) {
+        var tempPath = basePath
+        let fileNameToAppend = "\(fileName).caf"
+        
+        tempPath.appendPathComponent(fileNameToAppend)
+        
+        do {
+            try manager.removeItem(atPath: tempPath.relativePath)
+        } catch let error {
+            print(error.localizedDescription)
+        }
+    }
 }

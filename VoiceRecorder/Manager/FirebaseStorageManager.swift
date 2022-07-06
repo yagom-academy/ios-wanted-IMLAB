@@ -62,7 +62,7 @@ class FirebaseStorageManager {
         let reference = storage.reference().child("\(storageReferenceStr)\(fileName)")
         
         reference.delete { error in
-            guard error != nil else {
+            guard error == nil else {
                 completion(.failure(.error))
                 return
             }
