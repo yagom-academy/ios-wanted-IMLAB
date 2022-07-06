@@ -12,18 +12,18 @@ class FirebaseStorageManager {
     static let shared = FirebaseStorageManager()
     private let folderName = "voiceRecords"
     private lazy var storage = Storage.storage().reference().child(folderName)
-    private let deviceId: String?
+    private let deviceID: String?
     
     private init() {
-        self.deviceId = UIDevice.current.identifierForVendor?.uuidString
+        self.deviceID = UIDevice.current.identifierForVendor?.uuidString
     }
     
     func fetch(completion: @escaping (Result<Audio, Error>) -> Void) {
-        guard let deviceId = deviceId else {
+        guard let deviceID = deviceID else {
             return
         }
 
-        storage.child(deviceId).listAll { result in
+        storage.child(deviceID).listAll { result in
             switch result {
             case .success(let result):
                 result.items.forEach { item in
@@ -32,7 +32,6 @@ class FirebaseStorageManager {
                         switch result {
                         case .success(let url):
                             let audio = Audio(title: title, url: url, fileName: item.name)
-                            print(audio.title, audio.fileName)
                             completion(.success(audio))
                         case .failure(let error):
                             completion(.failure(error))
@@ -46,18 +45,18 @@ class FirebaseStorageManager {
     }
         
     func uploadData(url: URL, fileName: String) {
-        if let deviceId = deviceId {
-            storage.child("\(deviceId)/\(fileName)").putFile(from: url)
+        if let deviceID = deviceID {
+            storage.child("\(deviceID)/\(fileName)").putFile(from: url)
         }
     }
     
     func deleteData(title: String) {
-        if let deviceId = deviceId {
-            storage.child("\(deviceId)/\(title)").delete { err in
-                guard let err = err else {
+        if let deviceID = deviceID {
+            storage.child("\(deviceID)/\(title)").delete { error in
+                guard let error = error else {
                     return
                 }
-                print(err.localizedDescription)
+                print(error.localizedDescription)
             }
         }
     }

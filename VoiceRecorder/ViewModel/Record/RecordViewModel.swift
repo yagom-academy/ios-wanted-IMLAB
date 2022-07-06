@@ -10,6 +10,7 @@ import AVFAudio
 import Combine
 import QuartzCore
 
+// TODO: - Drawable -> Deleagte
 protocol RecordDrawable: AnyObject{
     func updateValue(_ value:CGFloat)
     func clearAll()
@@ -39,6 +40,7 @@ class RecordViewModel {
         do {
             try AVAudioSession.sharedInstance().setCategory(.playAndRecord,mode: .default,options: .defaultToSpeaker)
             try AVAudioSession.sharedInstance().setActive(true)
+            // TODO: - !
             recorder = try AVAudioRecorder(url: recordFileURL,settings: recordFormat!.settings)
             recorder.prepareToRecord()
         } catch {

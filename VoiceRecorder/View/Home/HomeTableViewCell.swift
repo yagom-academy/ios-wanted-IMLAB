@@ -8,9 +8,10 @@
 import UIKit
 
 class HomeTableViewCell: UITableViewCell {
-
+    // TODO: - identifier 공통화
     static let identfier = String(describing: HomeTableViewCell.self)
     
+    // TODO: - configure 공개 메서드로 접근
     var audio: Audio? {
         didSet {
             titleLabel.text = audio?.title
@@ -19,7 +20,6 @@ class HomeTableViewCell: UITableViewCell {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.numberOfLines = 0
         return label
     }()
 

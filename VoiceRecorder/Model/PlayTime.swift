@@ -7,9 +7,10 @@
 
 import Foundation
 
+// TODO: - scope 범위 줄이기
 enum TimeConstant {
     static let secsPerMin = 60
-    static let secsPerHour = TimeConstant.secsPerMin * 60
+    static let secsPerHour = 3600
 }
 
 struct PlayerTime {
@@ -23,6 +24,7 @@ struct PlayerTime {
         remainingText = PlayerTime.formatted(time: remainingTime)
     }
     
+    // TODO: - extension으로 구현
     private static func formatted(time: Double) -> String {
         var seconds = Int(ceil(time))
         var hours = 0

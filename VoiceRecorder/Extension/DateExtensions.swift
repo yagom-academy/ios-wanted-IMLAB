@@ -10,6 +10,7 @@ import Foundation
 extension Date {
     static let dateFormatter = DateFormatter()
     
+    // TODO: - format 기본값 선언, locale 분리, DateFormatter Extension
     func toString(_ format: String) -> String {
         Self.dateFormatter.dateFormat = format
         Self.dateFormatter.locale = Locale(identifier: "ko_KR")

@@ -7,8 +7,11 @@
 
 import UIKit
 
+// TODO: - final 붙이지 않는 이유
 class PlaySeekStackView: UIStackView {
-    
+    // 버튼 생성 기능 구현 합치기
+    // private
+    // public한 함수를 통해서 바꿔주는 것이 좋다. delegate 사용
     let backwardButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "gobackward"), for: .normal)

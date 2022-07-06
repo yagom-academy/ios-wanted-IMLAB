@@ -7,7 +7,8 @@ import UIKit
 import AVFAudio
 
 class HomeViewController: UIViewController {
-    var permission: Bool = false
+    private var permission: Bool = false
+    
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
         tableView.tableFooterView = UIView()
@@ -45,6 +46,7 @@ private extension HomeViewController {
         view.backgroundColor = .systemBackground
     }
     
+    // TODO: - String 관리
     func configureNavigation() {
         navigationItem.title = "음성 메모장"
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(touchAddButton))
@@ -70,6 +72,8 @@ private extension HomeViewController {
             recordController.delegate = self
             present(recordController, animated: true)
         } else {
+            // TODO: - 권한 유도 다시 해주기
+            // String
             let alertController = UIAlertController(title: "", message: "설정에서 마이크 권한을 허용해주세요.", preferredStyle: .alert)
             alertController.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
             present(alertController, animated: true)
