@@ -123,6 +123,7 @@ extension VoiceMemoListViewController: UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: VoiceMemoCell.identifier, for: indexPath) as! VoiceMemoCell
         let name = voiceMemoListAllData[indexPath.row].description
+        cell.selectionStyle = .none
         
         firebaseManager.getMetaData(fileName: name) { result in
             DispatchQueue.main.async {
