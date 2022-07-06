@@ -13,7 +13,7 @@ class AudioEngine {
     private let speedControl = AVAudioUnitVarispeed()
     private let pitchControl = AVAudioUnitTimePitch()
     private var equalizer: AVAudioUnitEQ?
-
+    
     // 주파수 * 초 = 프레임
     private var audioSampleRate = 0.0 // 현재 주파수
     var audioLengthSeconds = 0.0 // 총 길이 (초)
@@ -45,14 +45,16 @@ class AudioEngine {
         audioSampleRate = format.sampleRate
         audioLengthSeconds = Double(audioLengthSamples) / audioSampleRate
         
+        audioPlayer.volume = 0.5
+        
         engine.attach(audioPlayer)
-        engine.attach(equalizer)
         engine.attach(pitchControl)
         engine.attach(speedControl)
+        engine.attach(equalizer)
         engine.connect(audioPlayer, to: speedControl, format: nil)
         engine.connect(speedControl, to: pitchControl, format: nil)
         engine.connect(pitchControl, to: equalizer, format: nil)
-        engine.connect(equalizer, to: engine.outputNode, format: nil)
+        engine.connect(equalizer, to: engine.mainMixerNode, format: nil)
         audioPlayer.scheduleFile(file, at: nil)
         try engine.start()
     }
@@ -117,5 +119,9 @@ class AudioEngine {
         let currentTime = Float(getCurrentTime().toStringDecimalPoint2) ?? 0.0
         let totalLengthTime = Float(audioLengthSeconds.toStringDecimalPoint2) ?? 0.0
         return currentTime >= totalLengthTime
+    }
+    
+    func changeVolume(_ value: Float) {
+        audioPlayer.volume = value
     }
 }

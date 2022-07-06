@@ -5,28 +5,26 @@
 
 import UIKit
 import AVKit
-import MediaPlayer
 
 class PlayViewController: UIViewController {
     
     // MARK: - @IBOutlet
     @IBOutlet weak var dateTitleLabel: UILabel!
     @IBOutlet weak var voiceChangeSegment: UISegmentedControl!
-    @IBOutlet weak var volumeView: UIView!
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var playBackButton: UIButton!
     @IBOutlet weak var playForwardButton: UIButton!
+    @IBOutlet weak var volumeTextLabel: UILabel!
     
     // MARK: - UI Components
-    private lazy var mpVolumeView = MPVolumeView()
     private lazy var activityIndicator = UIActivityIndicatorView(style: .large)
     
     // MARK: - Properties
     var recordFile: RecordModel?
-    var isPlay = false
-    var localFileManager: LocalFileManager?
+    private var isPlay = false
+    private var localFileManager: LocalFileManager?
     
-    let engine = AudioEngine()
+    private let engine = AudioEngine()
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -41,7 +39,6 @@ class PlayViewController: UIViewController {
                 }
             }
         }
-        setupMPVolumeView()
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
@@ -80,6 +77,10 @@ class PlayViewController: UIViewController {
             break
         }
     }
+    @IBAction func changeVolume(_ sender: UISlider) {
+        engine.changeVolume(sender.value)
+        volumeTextLabel.text = "volume \(Int(sender.value * 100))%"
+    }
 }
 
 // MARK: - Methods
@@ -115,18 +116,6 @@ private extension PlayViewController {
         } catch {
             print("ERROR \(error.localizedDescription)🌔")
         }
-    }
-    func setupMPVolumeView() {
-        volumeView.addSubview(mpVolumeView)
-        
-        mpVolumeView.translatesAutoresizingMaskIntoConstraints = false
-        mpVolumeView.leadingAnchor.constraint(equalTo: volumeView.leadingAnchor).isActive = true
-        mpVolumeView.topAnchor.constraint(equalTo: volumeView.topAnchor).isActive = true
-        mpVolumeView.trailingAnchor.constraint(equalTo: volumeView.trailingAnchor).isActive = true
-        mpVolumeView.bottomAnchor.constraint(equalTo: volumeView.bottomAnchor).isActive = true
-        
-        mpVolumeView.setRouteButtonImage(UIImage(), for: .normal)
-        mpVolumeView.showsVolumeSlider = true
     }
     func setUpLocalFileManger(didFinish completion: @escaping () -> Void) {
         guard let recordFile = recordFile else { return }
