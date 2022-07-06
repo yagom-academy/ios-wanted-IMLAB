@@ -33,10 +33,6 @@ class VoiceMemoViewController: UIViewController {
     
     // MARK: - IBActions
     
-    @IBAction func moveToRecordDetail(_ sender: UIBarButtonItem) {
-        // 두번째 화면 이동
-    }
-    
     // MARK: - Methods
     
     func fetchRecordingData() {
@@ -50,7 +46,6 @@ class VoiceMemoViewController: UIViewController {
                     self.voiceMemoTableView.refreshControl?.endRefreshing()
                     self.isFetching = false
                 }
-                
             }
             
         }
@@ -119,14 +114,17 @@ extension VoiceMemoViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        
         if editingStyle == .delete {
+            
             FireStorageManager.shared.deleteItem(fileNames[indexPath.row])
             do {
                 try FileManager.default.removeItem(at: localUrls[indexPath.row])
             } catch {
-                print(error)
+                print("Error: <tableView firebase delete> - \(error.localizedDescription)")
             }
             localUrls.remove(at: indexPath.row)
+            fileNames.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }

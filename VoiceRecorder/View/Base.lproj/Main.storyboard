@@ -33,7 +33,6 @@
                     <navigationItem key="navigationItem" title="Voice Memos" id="k16-aB-Zws">
                         <barButtonItem key="rightBarButtonItem" image="plus" catalog="system" id="Vqv-wA-g9E">
                             <connections>
-                                <action selector="moveToRecordDetail:" destination="BYZ-38-t0r" id="Kh2-rb-qq0"/>
                                 <segue destination="ozQ-a5-b4X" kind="presentation" id="ljU-Vh-14v"/>
                             </connections>
                         </barButtonItem>
