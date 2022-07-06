@@ -9,7 +9,11 @@ import AVFAudio
 import Foundation
 
 class PlayerButtonViewModel {
-    private var audioPlayer = PlayerManager.shared
+    private var audioPlayer: PlayerService
+
+    init(_ audioPlayer: PlayerService) {
+        self.audioPlayer = audioPlayer
+    }
 
     func isAudioAvailable() -> Bool {
         return true
@@ -36,7 +40,7 @@ class PlayerButtonViewModel {
     func setAudioFile(_ audioFile: AVAudioFile) {
         audioPlayer.setAudioFile(audioFile)
     }
-    
+
     func duration() -> String {
         return audioPlayer.duration()
     }

@@ -17,7 +17,11 @@ protocol NetworkManager {
 }
 
 struct RecordNetworkManager: NetworkManager {
+    static let shared = RecordNetworkManager()
+
     let storageRef = Storage.storage().reference().child("record")
+
+    private init() {}
 
     func saveRecord(filename: String, completion: ((Bool) -> Void)? = nil) {
         let localRecordFileURL = Config.getRecordFilePath()
@@ -63,7 +67,7 @@ struct RecordNetworkManager: NetworkManager {
                         return
                     }
                     print("success download data!")
-                        completion?(.success(data))
+                    completion?(.success(data))
                 }
             }
         }

@@ -9,6 +9,8 @@ import AVFoundation
 import Foundation
 
 protocol PlayerService {
+    var isPlaying: Bool { get }
+
     func setAudioFile(_ audioFile: AVAudioFile?)
 
     func resetAudio()
@@ -150,7 +152,6 @@ class PlayerManager: PlayerService {
         seekFrame = max(seekFrame, 0)
         seekFrame = min(seekFrame, audioLengthSamples)
         currentPosition = seekFrame
-
 
         let wasPlaying = audioPlayer.isPlaying
         audioPlayer.stop()

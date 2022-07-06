@@ -9,15 +9,19 @@ import AVFoundation
 import Foundation
 
 class PlayerViewModel {
-    private let model = PlayerModel()
+    private let model = PlayerModel(RecordNetworkManager.shared)
     private var audioPlayer: PlayerService!
     
-    var pitchViewModel = PitchViewModel()
-    var volumeViewModel = VolumeViewModel()
-    var playerButtonViewModel = PlayerButtonViewModel()
+    var pitchViewModel: PitchViewModel!
+    var volumeViewModel: VolumeViewModel!
+    var playerButtonViewModel: PlayerButtonViewModel!
     
     init(_ audioPlayer: PlayerService) {
         self.audioPlayer = audioPlayer
+        
+        self.pitchViewModel = PitchViewModel(audioPlayer)
+        self.volumeViewModel = VolumeViewModel(audioPlayer)
+        self.playerButtonViewModel = PlayerButtonViewModel(audioPlayer)
     }
 
     func update(_ filename: String, _ completion: @escaping (Error?) -> Void) {

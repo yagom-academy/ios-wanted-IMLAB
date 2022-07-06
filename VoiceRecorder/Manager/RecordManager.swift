@@ -15,10 +15,15 @@ protocol RecordService {
 }
 
 class RecordManager: RecordService {
+    
+    static let shared = RecordManager()
+    
     var recorder: AVAudioRecorder?
     var audioFile: URL!
     var timer: Timer?
     var waveForms = [Int](repeating: 0, count: 200)
+    
+    private init () {}
     
     func initRecordSession() {
         let audioSession = AVAudioSession.sharedInstance()

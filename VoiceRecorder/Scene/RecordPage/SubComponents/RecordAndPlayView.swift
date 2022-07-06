@@ -9,8 +9,8 @@ import AVFoundation
 import UIKit
 
 class RecordAndPlayView: UIView {
-    private let networkManager = RecordNetworkManager()
-    private let recordManager = RecordManager()
+    private let networkManager =  RecordNetworkManager.shared
+    private let recordManager: RecordService!
 
     var recorder: AVAudioRecorder?
     var audioFile: URL!
@@ -21,8 +21,16 @@ class RecordAndPlayView: UIView {
     var color = UIColor.red.cgColor
     var waveForms = [Int](repeating: 0, count: 200)
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+//    override init(frame: CGRect) {
+//        super.init(frame: frame)
+//
+//        layout()
+//    }
+    
+    init(_ recordManager: RecordService) {
+        self.recordManager = recordManager
+        
+        super.init(frame: .zero)
 
         layout()
     }

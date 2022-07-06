@@ -8,7 +8,11 @@
 import Foundation
 
 class VolumeViewModel {
-    private var audioPlayer = PlayerManager.shared
+    private var audioPlayer: PlayerService
+
+    init(_ audioPlayer: PlayerService) {
+        self.audioPlayer = audioPlayer
+    }
 
     func changedVolume(_ value: Float) {
         audioPlayer.setVolume(value)

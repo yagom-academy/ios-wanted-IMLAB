@@ -14,7 +14,7 @@ class RecordViewController: UIViewController {
     let frequencyView = FrequencyView(frame: .zero)
 
     let cutoffFrequencyView = CutoffFrequencyView(frame: .zero)
-    let recordAndPlayView = RecordAndPlayView(frame: .zero)
+    let recordAndPlayView = RecordAndPlayView(RecordManager.shared)
     
     override func viewDidLoad() {
         super.viewDidLoad()

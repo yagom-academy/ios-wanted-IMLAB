@@ -9,7 +9,7 @@ import UIKit
 
 class FrequencyView: UIView {
     
-    let manager = RecordManager()
+    let manager = RecordManager.shared
     
     var barWidth: CGFloat = 40.0
     

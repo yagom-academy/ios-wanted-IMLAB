@@ -9,7 +9,7 @@ import UIKit
 
 class RecordListViewController: UIViewController {
     private let tableView = UITableView()
-    private let viewModel = RecordListViewModel(networkManager: RecordNetworkManager())
+    private let viewModel = RecordListViewModel(networkManager:  RecordNetworkManager.shared)
     
     init() {
         super.init(nibName: nil, bundle: nil)

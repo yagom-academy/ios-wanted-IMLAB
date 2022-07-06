@@ -11,10 +11,14 @@ import Foundation
 class PlayerModel {
     private var data: AVAudioFile?
     private var fileData: FileData?
+    
+    let networkManager: NetworkManager!
+    
+    init(_ networkManager: NetworkManager) {
+        self.networkManager = networkManager
+    }
 
     func update(_ filename: String, _ completion: @escaping (Error?) -> Void) {
-        let networkManager = RecordNetworkManager()
-
         parsingFileData(filename)
 
         networkManager.getRecordData(filename: filename) { result in
