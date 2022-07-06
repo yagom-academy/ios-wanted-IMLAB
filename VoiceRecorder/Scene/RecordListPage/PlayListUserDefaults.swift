@@ -8,22 +8,24 @@
 import Foundation
 
 class PlayListUserDefaults {
+    typealias DBData = [String]
+    static let shared = PlayListUserDefaults()
+    private init() { }
+    
     private let userDefaults = UserDefaults(suiteName: "playList")
     
-    func save(playList: [String]) {
-        userDefaults?.setValue(playList, forKey: "playList")
+    func save(playList: DBData) {
+        self.userDefaults?.setValue(playList, forKey: "playList")
     }
     
-    func getData() -> [String] {
-        guard let savedData = userDefaults?.object(forKey: "playList") as? [String] else { return [] }
+    func getData() -> DBData {
+        guard let savedData = userDefaults?.object(forKey: "playList") as? DBData else { return [] }
         return savedData
     }
     
-    func update(networkData: [String]) -> [String] {
-        print("networkData: ", networkData)
-        print("getdata: ", getData())
-        let frontList = getData().filter { networkData.contains($0) }
-        let backList = networkData.filter { frontList.contains($0) == false }
+    func update(networkDataFilename: DBData) -> DBData {
+        let frontList = getData().filter { networkDataFilename.contains($0) }
+        let backList = networkDataFilename.filter { frontList.contains($0) == false }
 
         let result = frontList + backList
         save(playList: result)

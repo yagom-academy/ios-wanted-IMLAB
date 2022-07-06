@@ -9,14 +9,13 @@ import UIKit
 
 class RecordListViewController: UIViewController {
     private let tableView = UITableView()
-    private let viewModel = RecordListViewModel()
-
+    private let viewModel = RecordListViewModel(networkManager: RecordNetworkManager())
+    
     init() {
         super.init(nibName: nil, bundle: nil)
         attribute()
         layout()
         setRefresh()
-//        RecordNetworkManager().saveRecord(filename: "bb")
     }
 
     required init?(coder: NSCoder) {
@@ -76,7 +75,7 @@ extension RecordListViewController: UITableViewDataSource, UITableViewDelegate {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: RecordListCell.identifier, for: indexPath) as? RecordListCell else {
             return UITableViewCell()
         }
-        cell.setData(filename: viewModel.getCellData(indexPath))
+        cell.setData(data: RecordListCell.CellData(filename: viewModel.getCellData(indexPath)))
         cell.addTapGesture(action: handleLongPress(with:_:))
         return cell
     }
@@ -127,13 +126,14 @@ extension RecordListViewController {
     }
 
     func swapByPress(with sender: UILongPressGestureRecognizer, toCenterPoint: CGPoint) {
+        let tableViewWidth: CGFloat = tableView.contentSize.width
+        let tableViewHeight: CGFloat = tableView.contentSize.height
         var longPressedPoint = sender.location(in: tableView)
-//        print("long: ", longPressedPoint, "toCenterPoint: ", toCenterPoint)
 
         longPressedPoint.x = longPressedPoint.x <= 1 ? 1 : longPressedPoint.x
-        longPressedPoint.x = longPressedPoint.x >= tableView.frame.width-1 ? tableView.frame.width-1 : longPressedPoint.x
+        longPressedPoint.x = longPressedPoint.x >= tableViewWidth-1 ? tableViewWidth-1 : longPressedPoint.x
         longPressedPoint.y = longPressedPoint.y <= 1 ? 1 : longPressedPoint.y
-        longPressedPoint.y = longPressedPoint.y >= tableView.frame.height-1 ? tableView.frame.height-1 : longPressedPoint.y
+        longPressedPoint.y = longPressedPoint.y >= tableViewHeight-1 ? tableViewHeight-1 : longPressedPoint.y
 
         guard let indexPath = tableView.indexPathForRow(at: longPressedPoint) else {
             print("fail to find indexPath!")
@@ -185,7 +185,7 @@ extension RecordListViewController {
             }
         case .changed:
             CellSnapshotView.value?.center = longPressedPoint
-
+            
             if let beforeIndexPath = BeforeIndexPath.value, beforeIndexPath != indexPath {
                 viewModel.swapCell(beforeIndexPath.row, indexPath.row)
                 tableView.moveRow(at: beforeIndexPath, to: indexPath)
