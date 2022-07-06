@@ -31,6 +31,7 @@ class SoundManager: NSObject {
     var startInSongSeconds: Float = 0
     
     var audioFile: AVAudioFile!
+    var audioFileManager = AudioFileManager()
     
     override init() {
         try? AVAudioSession.sharedInstance().setCategory(.playAndRecord)
@@ -98,6 +99,10 @@ class SoundManager: NSObject {
     private func createAudioFile(filePath: URL) throws -> AVAudioFile {
         let format = inputNode.outputFormat(forBus: 0)
         return try AVAudioFile(forWriting: filePath, settings: format.settings)
+    }
+    
+    private func getAudioFile(filePath: URL) throws -> AVAudioFile {
+        return try AVAudioFile(forReading: filePath)
     }
     
     func startRecord(filePath: URL) {
@@ -179,3 +184,41 @@ class SoundManager: NSObject {
     
 }
 
+extension SoundManager {
+    
+    // - MARK: playTime
+    
+    func updatePlayTime() -> Double {
+        let audioCurrentTime = Double(playerNode.currentTime)
+        
+        let length = audioFile.length
+        let sampleRate = audioFile.processingFormat.sampleRate
+        let audioPlayTime = Double(length) / sampleRate
+        
+        return audioCurrentTime / audioPlayTime
+    }
+    
+    func totalPlayTime() -> Double {
+        let url = audioFileManager.getAudioFilePath(fileName: "fileNAME")
+        do {
+            audioFile = try getAudioFile(filePath: url)
+        } catch {
+            print("[error] : timetime")
+        }
+        
+        let length = audioFile.length
+        let sampleRate = audioFile.processingFormat.sampleRate
+        let audioPlayTime = Double(length) / sampleRate
+        
+        return audioPlayTime
+    }
+    
+    func convertTimeToString() -> String { //_ time: TimeInterval
+        let time = playerNode.currentTime
+        let min = Int(time / 60)
+        let sec = Int(time.truncatingRemainder(dividingBy: 60))
+        let strTime = String(format: "%02d:%02d", min, sec)
+        
+        return strTime
+    }
+}

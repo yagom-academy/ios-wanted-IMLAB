@@ -22,7 +22,13 @@ class FirebaseStorageManager {
         let title = dateUtil.formatDate()
         let filePath = "\(title).caf"
         let data = try! Data(contentsOf: url)
+        
         let metaData = StorageMetadata()
+        let customData = [
+            "title": title,
+            "length": "03:24"
+        ]
+        metaData.customMetadata = customData
         metaData.contentType = "audio/x-caf"
         
         baseReference.child(filePath).putData(data, metadata: metaData) { metaData, error in
