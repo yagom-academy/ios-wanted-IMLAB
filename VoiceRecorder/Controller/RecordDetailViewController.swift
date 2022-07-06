@@ -203,11 +203,13 @@ class RecordDetailViewController: UIViewController {
             player?.play()
             playButton.setImage(pauseButtonImage, for: .normal)
             recordButton.isHidden = true
+            cutOffSlider.isHidden = true
         } else {
             player?.pause()
             player?.prepareToPlay()
             playButton.setImage(playButtonImage, for: .normal)
             recordButton.isHidden = false
+            cutOffSlider.isHidden = false
         }
     }
     
@@ -290,5 +292,6 @@ extension RecordDetailViewController: AVAudioPlayerDelegate {
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         playButton.setImage(playButtonImage, for: .normal)
         recordButton.isHidden = false
+        cutOffSlider.isHidden = false
     }
 }
