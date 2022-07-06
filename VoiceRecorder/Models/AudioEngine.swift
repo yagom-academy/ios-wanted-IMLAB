@@ -21,7 +21,6 @@ class AudioEngine {
     private var currentPosition: AVAudioFramePosition = 0 // 현재 프레임
     private var audioLengthSamples: AVAudioFramePosition = 0 // 프레임 총 길이
     
-    
     var url: URL?
     var audioFile: AVAudioFile?
     var gains: [Float] = [0, 0, 0, 0, 0]
@@ -115,6 +114,8 @@ class AudioEngine {
     }
     
     func isFinish() -> Bool {
-        return getCurrentTime().toStringDecimalPoint2 >= audioLengthSeconds.toStringDecimalPoint2
+        let currentTime = Float(getCurrentTime().toStringDecimalPoint2) ?? 0.0
+        let totalLengthTime = Float(audioLengthSeconds.toStringDecimalPoint2) ?? 0.0
+        return currentTime >= totalLengthTime
     }
 }
