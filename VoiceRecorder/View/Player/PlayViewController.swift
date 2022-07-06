@@ -14,7 +14,7 @@ class PlayViewController: UIViewController {
         didSet {
             titleLabel.text = audio?.title
             guard let url = audio?.url else { return }
-            downloadAudioAndRemoveAndMoveFile(url)
+            downloadAudioAndMove(url)
         }
     }
     
@@ -48,7 +48,7 @@ class PlayViewController: UIViewController {
     private lazy var volumeSlider: UISlider = {
         let slider = UISlider()
         slider.addTarget(self, action: #selector(volumeSliderValueChanged(_:)), for: .valueChanged)
-        slider.setValue(1.0, animated: false)
+        slider.setValue(0.5, animated: false)
         return slider
     }()
     
@@ -156,33 +156,21 @@ private extension PlayViewController {
     }
     
     @objc func pitchSegmentedControlValueChanged(_ sender: UISegmentedControl) {
-        let pitches: [Double] = [0, 0.5, -0.5]
-        let value = pitches[sender.selectedSegmentIndex]
-        viewModel?.pitchControlValueChanged(Float(value))
+        viewModel?.pitchControlValueChanged(sender.selectedSegmentIndex)
     }
     
     // MARK: - 기능 구현
     
-    func downloadAudioAndRemoveAndMoveFile(_ url: URL) {
-        guard let documentURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
-            return
-        }
-        let fileURL = documentURL.appendingPathComponent("Record.m4a")
-        
-        URLSession.shared.downloadTask(with: url) { [weak self] localUrl, response, error in
-            guard let localUrl = localUrl, error == nil else { return }
-            do {
-                if FileManager.default.fileExists(atPath: fileURL.path) {
-                    try FileManager.default.removeItem(at: fileURL)
-                }
-                try FileManager.default.moveItem(at: localUrl, to: fileURL)
-                
-                self?.viewModel = PlayViewModel(url: fileURL)
+    func downloadAudioAndMove(_ url: URL) {
+        NetworkManager.shared.downloadAudioAndMove(url) { [weak self] result in
+            switch result {
+            case .success(let url):
+                self?.viewModel = PlayViewModel(url: url)
                 self?.bind()
-            } catch {
-                print("FileManager Error: \(error.localizedDescription)")
+            case .failure(let error):
+                print(error.localizedDescription)
             }
-        }.resume()
+        }
     }
     
     func bind() {
@@ -190,6 +178,15 @@ private extension PlayViewController {
             .receive(on: DispatchQueue.main)
             .sink { value in
                 self.progressTimeView.progressView.progress = value
+            }
+            .store(in: &cancellable)
+        
+        viewModel?.$playerIsReady
+            .receive(on: DispatchQueue.main)
+            .sink { isReady in
+                self.playSeekStackView.backwardButton.isEnabled = isReady ? true : false
+                self.playSeekStackView.playPauseButton.isEnabled = isReady ? true : false
+                self.playSeekStackView.forwardButton.isEnabled = isReady ? true : false
             }
             .store(in: &cancellable)
         

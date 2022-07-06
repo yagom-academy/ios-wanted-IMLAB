@@ -13,7 +13,11 @@ import Combine
 class PlayViewModel {
     private var url: URL
     
-    private var audioPlayer = AVAudioPlayerNode()
+    private var audioPlayer: AVAudioPlayerNode = {
+        let audioPlayer = AVAudioPlayerNode()
+        audioPlayer.volume = 0.5
+        return audioPlayer
+    }()
     private var audioFile: AVAudioFile?
     private var audioFormat = AVAudioFormat()
     private var engine = AVAudioEngine()
@@ -21,7 +25,7 @@ class PlayViewModel {
     
     private var seekFrame: AVAudioFramePosition = 0
     private var currentPosition: AVAudioFramePosition = 0
-    private var audioLengthSamples: AVAudioFramePosition = 0
+    private var audioLength: AVAudioFramePosition = 0
     private var currentFrame: AVAudioFramePosition {
         guard let lastRenderTime = audioPlayer.lastRenderTime,
               let playerTime = audioPlayer.playerTime(forNodeTime: lastRenderTime) else {
@@ -30,7 +34,7 @@ class PlayViewModel {
         return playerTime.sampleTime
     }
     
-    private var audioSampleRate:Double = 0
+    private var audioSampleRate: Double = 0
     private var audioLengthSeconds: Double = 0
     
     private var needsFileScheduled = true
@@ -38,6 +42,7 @@ class PlayViewModel {
     private var displayLink: CADisplayLink?
     
     @Published var playerProgress: Float = 0
+    @Published var playerIsReady: Bool = false
     @Published var playerIsPlaying: Bool = false
     @Published var playerTime: PlayerTime = .zero
     
@@ -53,13 +58,12 @@ class PlayViewModel {
             
             audioFormat = file.processingFormat
             
-            audioLengthSamples = file.length
+            audioLength = file.length
             audioSampleRate = audioFormat.sampleRate
-            audioLengthSeconds = Double(audioLengthSamples) / audioSampleRate
+            audioLengthSeconds = Double(audioLength) / audioSampleRate
             
             audioFile = file
             
-            setupPlayerTime()
             setupAudioEngine()
         } catch {
             print("AudioFile Error: \(error.localizedDescription)")
@@ -77,6 +81,8 @@ class PlayViewModel {
             try engine.start()
             
             scheduleAudioFile()
+            setupPlayerTime()
+            playerIsReady = true
         } catch {
             print("AudioEngine Error: \(error.localizedDescription)")
         }
@@ -115,8 +121,9 @@ class PlayViewModel {
         audioPlayer.volume = value
     }
     
-    func pitchControlValueChanged(_ value: Float) {
-        pitchControl.pitch = 1200 * value
+    func pitchControlValueChanged(_ index: Int) {
+        let pitches: [Float] = [0, 0.5, -0.5]
+        pitchControl.pitch = 1200 * pitches[index]
     }
     
     func skip(forwards: Bool) {
@@ -133,17 +140,17 @@ class PlayViewModel {
         
         seekFrame = currentPosition + offset
         seekFrame = max(seekFrame, 0)
-        seekFrame = min(seekFrame, audioLengthSamples)
+        seekFrame = min(seekFrame, audioLength)
         currentPosition = seekFrame
         
         let wasPlaying = audioPlayer.isPlaying
         audioPlayer.stop()
         
-        if currentPosition < audioLengthSamples {
+        if currentPosition < audioLength {
             updateDisplay()
             needsFileScheduled = false
             
-            let frameCount = AVAudioFrameCount(audioLengthSamples - seekFrame)
+            let frameCount = AVAudioFrameCount(audioLength - seekFrame)
             audioPlayer.scheduleSegment(audioFile, startingFrame: seekFrame, frameCount: frameCount, at: nil) {
                 self.needsFileScheduled = true
             }
@@ -152,16 +159,14 @@ class PlayViewModel {
                 audioPlayer.play()
             }
         }
-        
-        
     }
     
     @objc private func updateDisplay() {
         currentPosition = currentFrame + seekFrame
         currentPosition = max(currentPosition, 0)
-        currentPosition = min(currentPosition, audioLengthSamples)
+        currentPosition = min(currentPosition, audioLength)
         
-        if currentPosition >= audioLengthSamples{
+        if currentPosition >= audioLength {
             audioPlayer.stop()
             
             seekFrame = 0
@@ -172,7 +177,7 @@ class PlayViewModel {
         }
         
         setupPlayerTime()
-        playerProgress = Float(currentPosition) / Float(audioLengthSamples)
+        playerProgress = Float(currentPosition) / Float(audioLength)
     }
     
     private func setupPlayerTime() {

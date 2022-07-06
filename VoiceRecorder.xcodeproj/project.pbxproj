@@ -19,6 +19,7 @@
 		01696161286ADEFA0020AAAC /* PlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01696160286ADEFA0020AAAC /* PlayViewController.swift */; };
 		01E1AB0428747085004ADBAE /* PlaySeekStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E1AB0328747085004ADBAE /* PlaySeekStackView.swift */; };
 		01E1AB0628747841004ADBAE /* ProgressTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E1AB0528747841004ADBAE /* ProgressTimeView.swift */; };
+		01E1AB0A28755857004ADBAE /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E1AB0928755857004ADBAE /* NetworkManager.swift */; };
 		181CA6C92872CC2100092A2C /* MeterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181CA6C82872CC2100092A2C /* MeterView.swift */; };
 		182C8732286AD69700F3C24D /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182C8731286AD69700F3C24D /* DateExtensions.swift */; };
 		185AC9742873BE990026E924 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 185AC9732873BE990026E924 /* GoogleService-Info.plist */; };
@@ -45,6 +46,7 @@
 		01696160286ADEFA0020AAAC /* PlayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayViewController.swift; sourceTree = "<group>"; };
 		01E1AB0328747085004ADBAE /* PlaySeekStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaySeekStackView.swift; sourceTree = "<group>"; };
 		01E1AB0528747841004ADBAE /* ProgressTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressTimeView.swift; sourceTree = "<group>"; };
+		01E1AB0928755857004ADBAE /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		181CA6C82872CC2100092A2C /* MeterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeterView.swift; sourceTree = "<group>"; };
 		182C8731286AD69700F3C24D /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
 		185AC9732873BE990026E924 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 			isa = PBXGroup;
 			children = (
 				0169615A286ACF3E0020AAAC /* FirebaseStorageManager.swift */,
+				01E1AB0928755857004ADBAE /* NetworkManager.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -287,6 +290,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				01E1AB0A28755857004ADBAE /* NetworkManager.swift in Sources */,
 				18CE51F4286EEA8E004AAF7C /* PlayViewModel.swift in Sources */,
 				0146B7B0286BE37100DD28D2 /* SceneDelegate.swift in Sources */,
 				181CA6C92872CC2100092A2C /* MeterView.swift in Sources */,
