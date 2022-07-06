@@ -15,6 +15,9 @@ class FirebaseStorageManager {
     private let dateUtil = DateUtil()
     private let soundManager = SoundManager()
     
+    var audioLength: String = ""
+    var audioTitle: String = ""
+    
     init() {
         baseReference = Storage.storage().reference()
     }
@@ -49,8 +52,7 @@ class FirebaseStorageManager {
     }
     
     func downloadAll() {
-        baseReference.listAll { (result, error) in
-            
+        baseReference.listAll { result, error in
             if let error = error {
                 print(error.localizedDescription)
             }
@@ -58,21 +60,28 @@ class FirebaseStorageManager {
             if let result = result {
                 for item in result.items {
                     // item.reference로 파일 다운
-                    print("item storage", item.storage)
-                    print("item bucket", item.bucket)
-                    print("item fullPath", item.fullPath)
-                    print("item desc", item.description)
-                    print("item name", item.name)
-                    print("item hash", item.hash)
-                    print("item", item)
+                    self.downloadMetaData(filePath: item.name)
                 }
             }
         }
     }
     
-    func downLoadMetaData() {
-        baseReference.getMetadata { metaData, error in
-            print(metaData?.name)
+    func downloadMetaData(filePath: String) {
+        let ref = baseReference.child(filePath)
+        var length: String = ""
+        var title: String = ""
+        
+        ref.getMetadata { metaData, error in
+            if let error = error {
+                print(error.localizedDescription)
+            }
+            
+            let data = metaData?.customMetadata
+            length =  data?["length"] ?? "00:00"
+            title = data?["title"] ?? "no title"
         }
+        
+        audioLength = length
+        audioTitle = title
     }
 }

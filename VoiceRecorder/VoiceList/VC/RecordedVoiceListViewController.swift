@@ -70,10 +70,11 @@ class RecordedVoiceListViewController: UIViewController {
             recordedVoiceTableView.widthAnchor.constraint(equalTo: view.widthAnchor)
         ])
         
+        firestorageManager.downloadAll()
     }
     
     func initalizeFirebaseAudioFiles() {
-        firestorageManager.downLoadMetaData()
+        //firestorageManager.downloadMetaData()
     }
     
     @objc func createNewVoiceRecordButtonAction() {
