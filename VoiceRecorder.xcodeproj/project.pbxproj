@@ -69,18 +69,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		182C8733286AD73600F3C24D /* VIew */ = {
+		182C8733286AD73600F3C24D /* View */ = {
 			isa = PBXGroup;
 			children = (
-				0169615C286ACF460020AAAC /* HomeTableViewCell.swift */,
-				0146B7B1286BE38F00DD28D2 /* HomeViewController.swift */,
-				0146B7B3286BE39400DD28D2 /* RecordViewController.swift */,
-				01696160286ADEFA0020AAAC /* PlayViewController.swift */,
 				181CA6C82872CC2100092A2C /* MeterView.swift */,
 				01E1AB0328747085004ADBAE /* PlaySeekStackView.swift */,
 				01E1AB0528747841004ADBAE /* ProgressTimeView.swift */,
+				18F09789287519AC00CAEA18 /* Home */,
+				18F0978A287519AF00CAEA18 /* Player */,
+				18F0978B287519B200CAEA18 /* Record */,
 			);
-			path = VIew;
+			path = View;
 			sourceTree = "<group>";
 		};
 		182C8734286AD73B00F3C24D /* Model */ = {
@@ -93,14 +92,14 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		182C8735286AD73E00F3C24D /* VIewModel */ = {
+		182C8735286AD73E00F3C24D /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				0169615E286ACF4B0020AAAC /* HomeViewModel.swift */,
-				18D4A0CD28708EA000839E73 /* RecordViewModel.swift */,
-				18CE51F3286EEA8E004AAF7C /* PlayViewModel.swift */,
+				18F0978D287519E000CAEA18 /* Home */,
+				18F0978F287519E700CAEA18 /* Player */,
+				18F0978E287519E300CAEA18 /* Record */,
 			);
-			path = VIewModel;
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		182C8737286AD79000F3C24D /* Application */ = {
@@ -119,10 +118,66 @@
 		182C8738286AD82800F3C24D /* Service */ = {
 			isa = PBXGroup;
 			children = (
-				182C8731286AD69700F3C24D /* DateExtensions.swift */,
 				0169615A286ACF3E0020AAAC /* FirebaseStorageManager.swift */,
 			);
 			path = Service;
+			sourceTree = "<group>";
+		};
+		18F09789287519AC00CAEA18 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				0169615C286ACF460020AAAC /* HomeTableViewCell.swift */,
+				0146B7B1286BE38F00DD28D2 /* HomeViewController.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		18F0978A287519AF00CAEA18 /* Player */ = {
+			isa = PBXGroup;
+			children = (
+				01696160286ADEFA0020AAAC /* PlayViewController.swift */,
+			);
+			path = Player;
+			sourceTree = "<group>";
+		};
+		18F0978B287519B200CAEA18 /* Record */ = {
+			isa = PBXGroup;
+			children = (
+				0146B7B3286BE39400DD28D2 /* RecordViewController.swift */,
+			);
+			path = Record;
+			sourceTree = "<group>";
+		};
+		18F0978D287519E000CAEA18 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				0169615E286ACF4B0020AAAC /* HomeViewModel.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		18F0978E287519E300CAEA18 /* Record */ = {
+			isa = PBXGroup;
+			children = (
+				18D4A0CD28708EA000839E73 /* RecordViewModel.swift */,
+			);
+			path = Record;
+			sourceTree = "<group>";
+		};
+		18F0978F287519E700CAEA18 /* Player */ = {
+			isa = PBXGroup;
+			children = (
+				18CE51F3286EEA8E004AAF7C /* PlayViewModel.swift */,
+			);
+			path = Player;
+			sourceTree = "<group>";
+		};
+		18F0979028751BA000CAEA18 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				182C8731286AD69700F3C24D /* DateExtensions.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 		DE15E64F28604278003DD2F5 = {
@@ -145,10 +200,11 @@
 			isa = PBXGroup;
 			children = (
 				182C8737286AD79000F3C24D /* Application */,
+				18F0979028751BA000CAEA18 /* Extension */,
 				182C8734286AD73B00F3C24D /* Model */,
 				182C8738286AD82800F3C24D /* Service */,
-				182C8733286AD73600F3C24D /* VIew */,
-				182C8735286AD73E00F3C24D /* VIewModel */,
+				182C8733286AD73600F3C24D /* View */,
+				182C8735286AD73E00F3C24D /* ViewModel */,
 			);
 			path = VoiceRecorder;
 			sourceTree = "<group>";

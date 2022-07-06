@@ -10,6 +10,7 @@ import AVFAudio
 import Combine
 
 class RecordViewModel {
+    let storage = FirebaseStorageManager.shared
     var recorder = AVAudioRecorder()
     var player = AVAudioPlayer()
     var recordFormat = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: 44100, channels: 1, interleaved: true)
@@ -23,17 +24,7 @@ class RecordViewModel {
         do {
             try AVAudioSession.sharedInstance().setCategory(.playAndRecord,mode: .default,options: .defaultToSpeaker)
             try AVAudioSession.sharedInstance().setActive(true)
-            
-            let recordSetting: [String:Any] = [
-                AVFormatIDKey:NSNumber(value: kAudioFileMPEG4Type as UInt32),
-                AVEncoderAudioQualityKey:AVAudioQuality.high,
-                AVEncoderBitRateKey:16,
-                AVEncoderBitRatePerChannelKey:2,
-                AVSampleRateKey:44100.0
-            ]
-            
-            recorder = try AVAudioRecorder(url: recordFileURL, settings: recordSetting)
-            
+            recorder = try AVAudioRecorder(url: recordFileURL, settings: recordFormat!.settings)
         } catch {
             print("Could not Prepare Recorder \(error)")
         }
@@ -42,12 +33,21 @@ class RecordViewModel {
     func startRec() {
         recorder.record()
         recorder.isMeteringEnabled = true
-        print("Start record")
-        print(recorder.isRecording)
+
+        
+        DispatchQueue.global().async {
+            while self.recorder.isRecording {
+                self.recorder.updateMeters()
+                self.writeWave()
+            }
+        }
+        self.writeWave()
     }
     
     func stopRec() {
         recorder.stop()
+        
+        storage.uploadData(url: recordFileURL, fileName: Date().toString("yyyy_MM_dd_HH:mm:ss"))
     }
     
     func playAudio() {
@@ -55,9 +55,14 @@ class RecordViewModel {
             player = try AVAudioPlayer(data: getDataFrom())
             player.play()
             print("play audio")
+            print(player.settings)
         } catch {
             print("Fail to play audio")
         }
+    }
+    
+    func stopAudio() {
+        player.pause()
     }
     
     func getDataFrom() -> Data {
@@ -68,5 +73,13 @@ class RecordViewModel {
         print(data.description)
         return data
     }
+    
+    func writeWave() {
+//        print(self.recorder.averagePower(forChannel: 0))
+        
+//        print(AVAudioPlayer().settings.keys)
+        
+    }
+
 }
 

@@ -76,20 +76,6 @@ class RecordViewController:UIViewController{
         return view
     }()
     
-    lazy var scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.backgroundColor = .lightGray
-        scrollView.showsVerticalScrollIndicator = false
-        return scrollView
-    }()
-    
-    private let contentView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .secondarySystemGroupedBackground
@@ -111,13 +97,10 @@ private extension RecordViewController{
     }
     
     func addSubViews(){
-        
-        [controlStackView,volumeBar,progressView,scrollView,meterView].forEach{
+        [controlStackView,volumeBar,progressView,meterView].forEach{
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
-        
-        scrollView.addSubview(contentView)
     }
     
     func makeConstrains(){
@@ -173,6 +156,7 @@ private extension RecordViewController{
     }
     @objc func playPause(_ sender:UIButton){
         if viewModel.player.isPlaying {
+            viewModel.stopAudio()
             sender.setImage(UIImage(systemName: "play.fill"), for: .normal)
         } else {
             viewModel.playAudio()
