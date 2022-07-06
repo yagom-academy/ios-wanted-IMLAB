@@ -59,7 +59,7 @@ class AudioManager {
             changePitchNode.pitch = pitchMode.pitchValue
         }
     }
-    var delegateMethod: ((Float) -> Void)!
+    var delegateMethod: ((Float) -> Void)?
     private var isSkip = false
     
     // - MARK: LifeCycle
@@ -348,7 +348,7 @@ extension AudioManager {
             
             let ratio = Float(currentTime / wholeTime)
             
-            delegateMethod(ratio)
+            delegateMethod?(ratio)
             
             if ratio >= 1 {
                 validateStopPlayBack(isSkip: isSkip)
