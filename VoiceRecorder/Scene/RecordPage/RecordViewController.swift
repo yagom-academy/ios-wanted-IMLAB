@@ -9,6 +9,8 @@ import UIKit
 
 class RecordViewController: UIViewController {
     
+    let viewModel = TempRecordViewModel(PlayerManager.shared)
+    
     let frequencyView = FrequencyView(frame: .zero)
     let cutoffFrequencyView = CutoffFrequencyView(frame: .zero)
     let recordAndPlayView = RecordAndPlayView(frame: .zero)
@@ -18,14 +20,25 @@ class RecordViewController: UIViewController {
         
         view.backgroundColor = .systemBackground
         layout()
+        bind()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        viewModel.resetAudioPlayer()
+    }
 }
 
 extension RecordViewController {
+    
+    private func bind() {
+        recordAndPlayView.bind(viewModel.playerButtonViewModel)
+    }
+    
     private func layout() {
         [
             frequencyView,

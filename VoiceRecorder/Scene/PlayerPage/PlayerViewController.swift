@@ -8,7 +8,7 @@
 import UIKit
 
 class PlayerViewController: UIViewController {
-    private let viewModel = PlayerViewModel()
+    private let viewModel = PlayerViewModel(PlayerManager.shared)
     private var safearea: UILayoutGuide!
 
     private let fileNameLabel: UILabel = {
@@ -53,7 +53,8 @@ class PlayerViewController: UIViewController {
         super.viewWillDisappear(true)
 
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
-        // TODO: - 화면 나갈때 audioPlayer 해제 (멈추게), 재생 끝날때 다시 처음으로 초기화
+        // TODO: - 재생 끝날때 다시 처음으로 초기화
+        viewModel.resetAudioPlayer()
     }
 }
 

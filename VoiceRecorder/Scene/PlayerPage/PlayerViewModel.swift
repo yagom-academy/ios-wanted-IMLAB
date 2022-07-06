@@ -10,11 +10,15 @@ import Foundation
 
 class PlayerViewModel {
     private let model = PlayerModel()
-    private var audioPlayer = PlayerManager.shared
+    private var audioPlayer: PlayerService!
     
     var pitchViewModel = PitchViewModel()
     var volumeViewModel = VolumeViewModel()
     var playerButtonViewModel = PlayerButtonViewModel()
+    
+    init(_ audioPlayer: PlayerService) {
+        self.audioPlayer = audioPlayer
+    }
 
     func update(_ filename: String, _ completion: @escaping (Error?) -> Void) {
         model.update(filename) { error in
@@ -36,6 +40,10 @@ class PlayerViewModel {
     
     func setAudioReady() {
         playerButtonViewModel.isAudioAvailable()
+    }
+    
+    func resetAudioPlayer() {
+        audioPlayer.resetAudio()
     }
     
 }

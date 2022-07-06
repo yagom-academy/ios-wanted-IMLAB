@@ -8,7 +8,25 @@
 import AVFoundation
 import Foundation
 
-class PlayerManager {
+protocol PlayerService {
+    func setAudioFile(_ audioFile: AVAudioFile?)
+
+    func resetAudio()
+    func configureAudioEngine()
+    func setPlayerToZero()
+
+    func startPlayer()
+    func pausePlayer()
+
+    func skip(_ calc: @escaping (Int64, Int64) -> Int64)
+    func seek(to time: Double)
+    func updateTime()
+
+    func setVolume(_ value: Float)
+    func setPitch(_ value: Int)
+}
+
+class PlayerManager: PlayerService {
     static let shared = PlayerManager()
     private init() {}
 
@@ -44,6 +62,16 @@ class PlayerManager {
         self.audioFile = audioFile
 
         configureAudioEngine()
+    }
+    
+    func resetAudio() {
+        audioFile = nil
+        
+        audioPlayer.stop()
+        audioPlayer.reset()
+        
+        audioEngine.stop()
+        audioEngine.reset()
     }
 
     func configureAudioEngine() {
@@ -97,8 +125,7 @@ class PlayerManager {
             return
         }
 
-        audioSampleRate += time * audioSampleRate
-        let offset = AVAudioFramePosition(audioSampleRate)
+        let offset = AVAudioFramePosition(time * audioSampleRate)
 
         seekFrame = currentPosition + offset
         seekFrame = max(seekFrame, 0)

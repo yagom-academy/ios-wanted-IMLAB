@@ -11,6 +11,8 @@ class RecordAndPlayView: UIView {
     private let recordManager = RecordManager()
     private let networkManager = RecordNetworkManager()
     
+    private var viewModel: PlayerButtonViewModel!
+    
     private let buttonStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
@@ -25,13 +27,15 @@ class RecordAndPlayView: UIView {
             button.widthAnchor.constraint(equalToConstant: 40).isActive = true
             button.heightAnchor.constraint(equalToConstant: 40).isActive = true
             
+            button.addTarget(self, action: #selector(didTapBackwardButton(sender:)), for: .touchUpInside)
+            
             return button
         }()
         
         let playButton: UIButton = {
             let button = UIButton()
-            button.setImage(systemName: "play", state: .normal)
-            button.setImage(systemName: "pause", state: .selected)
+            button.setImage(systemName: "play.fill", state: .normal)
+            button.setImage(systemName: "pause.fill", state: .selected)
             button.tintColor = .label
             button.widthAnchor.constraint(equalToConstant: 40).isActive = true
             button.heightAnchor.constraint(equalToConstant: 40).isActive = true
@@ -48,6 +52,8 @@ class RecordAndPlayView: UIView {
             button.widthAnchor.constraint(equalToConstant: 40).isActive = true
             button.heightAnchor.constraint(equalToConstant: 40).isActive = true
             
+            button.addTarget(self, action: #selector(didTapForwardButton(sender:)), for: .touchUpInside)
+            
             return button
         }()
         
@@ -58,14 +64,16 @@ class RecordAndPlayView: UIView {
         return stackView
     }()
     
+    @objc func didTapBackwardButton(sender: UIButton) {
+        viewModel.goBackward()
+    }
+    
+    @objc func didTapForwardButton(sender: UIButton) {
+        viewModel.goForward()
+    }
+    
     @objc func didTapPlayButton(sender: UIButton) {
-        sender.isSelected = !sender.isSelected
-        
-        if recordManager.isPlaying() {
-            recordManager.pausePlay()
-        } else {
-            recordManager.startPlay()
-        }
+        sender.isSelected = viewModel.playPauseAudio()
     }
     
     private let recordButton: UIButton = {
@@ -89,8 +97,13 @@ class RecordAndPlayView: UIView {
             recordManager.startRecord()
         } else {
             recordManager.endRecord()
-            recordManager.makePlayer()
+            
+            guard let audioFile = recordManager.makePlayer() else {
+                return
+            }
+            viewModel.setAudioFile(audioFile)
             buttonStackView.isHidden = false
+            
         }
     }
     
@@ -126,6 +139,12 @@ class RecordAndPlayView: UIView {
 }
 
 extension RecordAndPlayView {
+    
+    func bind(_ viewModel: PlayerButtonViewModel) {
+        self.viewModel = viewModel
+
+    }
+    
     private func layout() {
         [
             buttonStackView,

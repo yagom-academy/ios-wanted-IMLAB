@@ -39,13 +39,21 @@ class RecordManager: NSObject, AVAudioPlayerDelegate {
         }
     }
     
-    func makePlayer() {
+    func makePlayer() -> AVAudioFile? {
+//        do {
+//            audioPlayer = try AVAudioPlayer(contentsOf: audioFile)
+//            audioPlayer.prepareToPlay()
+//            audioPlayer.delegate = self
+//        } catch let error {
+//            print("Make Player Error: \(error)")
+//        }
+        
         do {
-            audioPlayer = try AVAudioPlayer(contentsOf: audioFile)
-            audioPlayer.prepareToPlay()
-            audioPlayer.delegate = self
+            let newAudioFile = try AVAudioFile(forReading: audioFile)
+            return newAudioFile
         } catch let error {
-            print("Make Player Error: \(error)")
+            print("fileDir -> file error : \(error)")
+            return nil
         }
     }
 

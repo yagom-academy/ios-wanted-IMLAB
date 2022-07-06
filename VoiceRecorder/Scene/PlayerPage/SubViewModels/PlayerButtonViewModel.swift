@@ -5,6 +5,7 @@
 //  Created by 장재훈 on 2022/07/04.
 //
 
+import AVFAudio
 import Foundation
 
 class PlayerButtonViewModel {
@@ -30,5 +31,9 @@ class PlayerButtonViewModel {
 
     func goForward() {
         audioPlayer.skip(+)
+    }
+
+    func setAudioFile(_ audioFile: AVAudioFile) {
+        audioPlayer.setAudioFile(audioFile)
     }
 }

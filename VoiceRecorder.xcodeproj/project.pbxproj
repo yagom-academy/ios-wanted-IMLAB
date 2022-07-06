@@ -13,6 +13,7 @@
 		04FF93A1286C004C00EB34B6 /* RecordAndPlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF93A0286C004C00EB34B6 /* RecordAndPlayView.swift */; };
 		04FF93A4286C15AA00EB34B6 /* UIButton+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF93A3286C15AA00EB34B6 /* UIButton+.swift */; };
 		04FF93A7286C270600EB34B6 /* RecordManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF93A6286C270600EB34B6 /* RecordManager.swift */; };
+		0D26B1222875393A00FE1B04 /* TempRecordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D26B1212875393A00FE1B04 /* TempRecordViewModel.swift */; };
 		0D2E6BB2286BE0C5003D2EE1 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D2E6BB1286BE0C5003D2EE1 /* PlayerViewController.swift */; };
 		0D2E6BB4286C21B3003D2EE1 /* PlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D2E6BB3286C21B3003D2EE1 /* PlayerManager.swift */; };
 		0D8172E5286D69140009E8AA /* FileData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D8172E4286D69140009E8AA /* FileData.swift */; };
@@ -51,6 +52,7 @@
 		04FF93A0286C004C00EB34B6 /* RecordAndPlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordAndPlayView.swift; sourceTree = "<group>"; };
 		04FF93A3286C15AA00EB34B6 /* UIButton+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+.swift"; sourceTree = "<group>"; };
 		04FF93A6286C270600EB34B6 /* RecordManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordManager.swift; sourceTree = "<group>"; };
+		0D26B1212875393A00FE1B04 /* TempRecordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempRecordViewModel.swift; sourceTree = "<group>"; };
 		0D2E6BB1286BE0C5003D2EE1 /* PlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
 		0D2E6BB3286C21B3003D2EE1 /* PlayerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerManager.swift; sourceTree = "<group>"; };
 		0D8172E4286D69140009E8AA /* FileData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileData.swift; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 			children = (
 				0D8172DF286D67F10009E8AA /* SubComponents */,
 				04FF9393286BEEFB00EB34B6 /* RecordViewController.swift */,
+				0D26B1212875393A00FE1B04 /* TempRecordViewModel.swift */,
 			);
 			path = RecordPage;
 			sourceTree = "<group>";
@@ -342,6 +345,7 @@
 				0D2E6BB2286BE0C5003D2EE1 /* PlayerViewController.swift in Sources */,
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
 				04FF939F286C004200EB34B6 /* CutoffFrequencyView.swift in Sources */,
+				0D26B1222875393A00FE1B04 /* TempRecordViewModel.swift in Sources */,
 				0DCB66CC287050DE00800B1C /* VolumeControlView.swift in Sources */,
 				0DCB66CE287050F600800B1C /* PlayerButtonView.swift in Sources */,
 				0D8172EE286D7A950009E8AA /* Data+.swift in Sources */,
