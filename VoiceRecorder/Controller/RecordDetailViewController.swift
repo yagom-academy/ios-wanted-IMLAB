@@ -15,7 +15,7 @@ class RecordDetailViewController: UIViewController {
     
     @IBOutlet weak var waveView: UIView!
     @IBOutlet weak var cutoffLabel: UILabel!
-    @IBOutlet weak var recordProgressBar: UISlider!
+    @IBOutlet weak var cutOffSlider: UISlider!
     @IBOutlet weak var durationLabel: UILabel!
     @IBOutlet weak var recordButton: UIButton!
     @IBOutlet weak var buttonsStackView: UIStackView!
@@ -78,7 +78,7 @@ class RecordDetailViewController: UIViewController {
         do {
             try recordingSession?.setCategory(.playAndRecord, mode: .default)
             try recordingSession?.setActive(true)
-//            enableBuiltInMic()
+            try recordingSession?.setPreferredSampleRate(Double(cutOffSlider.value))
             recordingSession?.requestRecordPermission({ [unowned self] allowed in
                 DispatchQueue.main.async {
                     if allowed {
@@ -116,7 +116,7 @@ class RecordDetailViewController: UIViewController {
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
             AVSampleRateKey: 12000,
             AVNumberOfChannelsKey: 1,
-            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
+            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue,
         ]
         pencil.removeAllPoints()
         waveLayer.removeFromSuperlayer()
@@ -128,6 +128,7 @@ class RecordDetailViewController: UIViewController {
             durationLabel.text = "녹음중 .."
             buttonsStackView.isHidden = true
             recordButton.setImage(recordingButtonImage, for: .normal)
+            cutOffSlider.isHidden = true
         } catch {
             finishRecording(success: false, audioFileURL)
         }
@@ -159,6 +160,7 @@ class RecordDetailViewController: UIViewController {
         uploadRecordDataToFirebase(url)
         recordButton.setImage(readyToRecordButtonImage, for: .normal)
         buttonsStackView.isHidden = false
+        cutOffSlider.isHidden = false
     }
     
     func showDuration(_ url: URL?) {
@@ -206,23 +208,6 @@ class RecordDetailViewController: UIViewController {
             player?.prepareToPlay()
             playButton.setImage(playButtonImage, for: .normal)
             recordButton.isHidden = false
-        }
-    }
-    
-    private func enableBuiltInMic() {
-        // Get the shared audio session.
-        let session = AVAudioSession.sharedInstance()
-        // Find the built-in microphone input.
-        guard let availableInputs = session.availableInputs,
-              let builtInMicInput = availableInputs.first(where: { $0.portType == .builtInMic }) else {
-            print("The device must have a built-in microphone.")
-            return
-        }
-        // Make the built-in microphone input the preferred input.
-        do {
-            try session.setPreferredInput(builtInMicInput)
-        } catch {
-            print("Unable to set the built-in mic as the preferred input.")
         }
     }
     

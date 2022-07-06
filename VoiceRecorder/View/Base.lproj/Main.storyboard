@@ -59,14 +59,14 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="2IU-Om-2nW">
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="26050" minValue="8000" maxValue="44100" translatesAutoresizingMaskIntoConstraints="NO" id="2IU-Om-2nW">
                                 <rect key="frame" x="38" y="441" width="338" height="31"/>
                                 <connections>
                                     <action selector="controlRecordProgressBar:" destination="ozQ-a5-b4X" eventType="valueChanged" id="9rp-0R-OJs"/>
                                 </connections>
                             </slider>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="apc-b5-Hp1">
-                                <rect key="frame" x="186.5" y="498" width="41.5" height="20.5"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="apc-b5-Hp1">
+                                <rect key="frame" x="205" y="498" width="4.5" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -146,11 +146,11 @@
                     </view>
                     <connections>
                         <outlet property="buttonsStackView" destination="SRg-j9-lGu" id="z0T-vP-scj"/>
+                        <outlet property="cutOffSlider" destination="2IU-Om-2nW" id="dq6-n5-TtK"/>
                         <outlet property="cutoffLabel" destination="Uwp-S3-BQB" id="qR4-wg-zuB"/>
                         <outlet property="durationLabel" destination="apc-b5-Hp1" id="zT1-sP-nFE"/>
                         <outlet property="playButton" destination="6Go-Dt-yoo" id="2Af-Pw-YgZ"/>
                         <outlet property="recordButton" destination="QZr-Sv-d2j" id="8Yh-2T-vd8"/>
-                        <outlet property="recordProgressBar" destination="2IU-Om-2nW" id="dq6-n5-TtK"/>
                         <outlet property="waveView" destination="Cy0-ML-w6z" id="V0y-KS-MCf"/>
                     </connections>
                 </viewController>
