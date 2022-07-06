@@ -69,8 +69,8 @@ class WaveFormView: UIView {
     }
     
     private func allDraw() {
-        print(waveforms)
-        count += 1
+        
+        count = 0
         
         let path: UIBezierPath!
         
@@ -81,6 +81,7 @@ class WaveFormView: UIView {
         }
         
         for wave in waveforms {
+            count += 1
             
             var waveData = wave
             
@@ -92,18 +93,16 @@ class WaveFormView: UIView {
                 waveData = 1
             }
             
-            let startX = self.bounds.width + 5 * CGFloat(count)
+            let startX = self.bounds.origin.x + 1 * CGFloat(count)
             
             //waveForm뷰의 y축의 중간
             let startY = self.bounds.origin.y + self.bounds.height / 2
-            print("startX값: \(startX)")
-            print("startY값: \(startY)")
-            
+  
             //위로 이동하는 포인터
-            path.move(to: CGPoint(x: startX, y: startY + CGFloat(waveData * 100)))
+            path.move(to: CGPoint(x: startX, y: startY + CGFloat(waveData * Float(self.bounds.height) / 2)))
             
             //포인터를 아래로 잡아끄는 것
-            path.addLine(to: CGPoint(x: startX, y: startY - CGFloat(waveData * 100)))
+            path.addLine(to: CGPoint(x: startX, y: startY - CGFloat(waveData * Float(self.bounds.height) / 2)))
             
             caLayer.path = path.cgPath
         }
@@ -122,7 +121,7 @@ class WaveFormView: UIView {
         }
         
         guard var wave = waveforms.last else { return }
-        print("wave값 : \(wave)")
+        
         if (wave <= 0) {
             wave = 0.02
         }
@@ -133,8 +132,7 @@ class WaveFormView: UIView {
         
         let startX = self.bounds.width + 5 * CGFloat(count)
         let startY = self.bounds.origin.y + self.bounds.height / 2
-        print("startX값: \(startX)")
-        print("startY값: \(startY)")
+
         path.move(to: CGPoint(x: startX, y: startY + CGFloat(wave * 100)))
         path.addLine(to: CGPoint(x: startX, y: startY - CGFloat(wave * 100)))
         

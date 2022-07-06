@@ -22,7 +22,7 @@ class FirebaseStorageManager {
     
     // Todo: customError 타입 만들기 ( NetworkError )
     func uploadVoiceMemoToFirebase(with voiceMemoURL: URL, fileName: String, playTime:String, completion: @escaping ((Result<Bool, NetworkError>) -> Void)) {
-        print(#function)
+        
         guard let voiceMemoData = try? Data(contentsOf: voiceMemoURL) else {
             completion(.failure(.error))
             return
@@ -44,7 +44,7 @@ class FirebaseStorageManager {
     }
     
     func fetchVoiceMemoAtFirebase(with fileName: String, localPath: URL, completion: @escaping ((Result<Bool, NetworkError>)-> Void)) {
-        print(#function)
+        
         let islandReference = storage.reference().child("\(storageReferenceStr)\(fileName)")
         let localPathURL = localPath
         
@@ -58,7 +58,7 @@ class FirebaseStorageManager {
     }
     
     func removeVoiceMemoInFirebase(with fileName: String, completion: @escaping ((Result<Bool, NetworkError>) -> Void)) {
-        print(#function)
+        
         let reference = storage.reference().child("\(storageReferenceStr)\(fileName)")
         
         reference.delete { error in
