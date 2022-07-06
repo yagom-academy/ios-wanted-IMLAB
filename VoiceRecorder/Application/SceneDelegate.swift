@@ -28,6 +28,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             fatalError(error.localizedDescription)
         }
         
+        audioManager.requestPermission()
+        
         let navController = UINavigationController()
         appCoordinator = AppCoordinator(navigationController: navController,audioManager: audioManager,pathFinder: pathFinder,firebasemanager: firebaseStorageManager)
         appCoordinator.start()

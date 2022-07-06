@@ -53,14 +53,12 @@ class AudioManager {
             changePitchNode.pitch = pitchMode.pitchValue
         }
     }
-    var delegateMethod: ((Float) -> Void)!
+    var delegateMethod: ((Float) -> Void)?
     private var isSkip = false
     
     // - MARK: LifeCycle
     
-    init() {
-        configureAudioSession()
-    }
+    init() {}
     
     private func configureAudioSession() {
         let session = AVAudioSession.sharedInstance()
@@ -69,6 +67,15 @@ class AudioManager {
             try session.setActive(true)
         } catch {
             fatalError(error.localizedDescription)
+        }
+    }
+    
+    func requestPermission() {
+        let session = AVAudioSession.sharedInstance()
+        session.requestRecordPermission() { [unowned self] isGranted in
+            if isGranted {
+                configureAudioSession()
+            }
         }
     }
     
@@ -340,7 +347,7 @@ extension AudioManager {
             
             let ratio = Float(currentTime / wholeTime)
             
-            delegateMethod(ratio)
+            delegateMethod?(ratio)
             
             if ratio >= 1 {
                 validateStopPlayBack(isSkip: isSkip)
