@@ -8,14 +8,11 @@
 import UIKit
 
 class RecordViewController: UIViewController {
-<<<<<<< HEAD
     
     let viewModel = TempRecordViewModel(PlayerManager.shared)
     
     let frequencyView = FrequencyView(frame: .zero)
-=======
 
->>>>>>> feature-record
     let cutoffFrequencyView = CutoffFrequencyView(frame: .zero)
     let recordAndPlayView = RecordAndPlayView(frame: .zero)
     
@@ -26,18 +23,19 @@ class RecordViewController: UIViewController {
         layout()
         bind()
     }
-<<<<<<< HEAD
+    
+    init() {
+        super.init(nibName: nil, bundle: nil)
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
         viewModel.resetAudioPlayer()
     }
-=======
->>>>>>> feature-record
 }
 
 extension RecordViewController {
