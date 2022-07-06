@@ -9,7 +9,7 @@ import Foundation
 import AVFoundation
 import Accelerate
 
-protocol AudioManagerDelegate: AnyObject {
+protocol AudioBufferLiveDataDelegate: AnyObject {
     func communicationBufferData(bufferData: Float)
 }
 
@@ -32,8 +32,8 @@ class AudioManager {
     
     // - MARK: Property
     
-    weak var delegate: AudioManagerDelegate?
-    
+    weak var liveBufferDataDelegate: AudioBufferLiveDataDelegate?
+
     // recording properties
     lazy var audioEngine = AVAudioEngine()
     private lazy var audioEQ = AVAudioUnitEQ(numberOfBands: 1)
@@ -53,7 +53,7 @@ class AudioManager {
     private lazy var seekFrame: AVAudioFramePosition = 0
     private lazy var audioPlayerNode = AVAudioPlayerNode()
     private lazy var changePitchNode = AVAudioUnitTimePitch()
-
+    
     lazy var pitchMode: AudioPitchMode = .basic {
         didSet {
             changePitchNode.pitch = pitchMode.pitchValue
@@ -100,9 +100,9 @@ class AudioManager {
         audioEngine.attach(mixerNode)
         
         audioEngine.connect(mixerNode, to: audioEQ,
-                             format: format)
+                            format: format)
         audioEngine.connect(inputNode, to: mixerNode,
-                             format: format)
+                            format: format)
     }
     
     private func prepareAudioEQNode() {
@@ -128,7 +128,7 @@ class AudioManager {
         audioEQ.installTap(onBus: 0, bufferSize: 1024, format: format) { [weak self] buffer, time in
             guard let self = self else { return }
             let bufferData = self.calculatorBufferGraphData(buffer: buffer)
-            self.delegate?.communicationBufferData(bufferData: bufferData)
+            self.liveBufferDataDelegate?.communicationBufferData(bufferData: bufferData)
             
             do {
                 try audioFile.write(from: buffer)
@@ -193,7 +193,7 @@ extension AudioManager {
         let audioLengthSamples = audioFile.length
         var currentFrame = playerTime.sampleTime + seekFrame
         currentFrame = validateFrameEdge(with: currentFrame,
-                                            limit: audioLengthSamples)
+                                         limit: audioLengthSamples)
         
         return validateFrameEdge(with: currentFrame + moveOffset,
                                  limit: audioLengthSamples)
@@ -384,7 +384,7 @@ extension AudioManager {
         }
         
         seekFrame = getCurrentFramePosition(nodeTime: lastRenderTime,
-                                audioFile: audioFile,
+                                            audioFile: audioFile,
                                             moveOffset: offset)!
         
         isSkip = true

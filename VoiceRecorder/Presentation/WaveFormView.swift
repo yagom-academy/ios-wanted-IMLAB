@@ -60,6 +60,56 @@ class WaveFormView: UIView {
     }
     
     override func draw(_ rect: CGRect) {
+        if waveFormViewDataType == .live {
+            liveDraw()
+        } else {
+            allDraw()
+        }
+        
+    }
+    
+    private func allDraw() {
+        print(waveforms)
+        count += 1
+        
+        let path: UIBezierPath!
+        
+        if let ppath = caLayer.path {
+            path = UIBezierPath(cgPath: ppath)
+        } else {
+            path = UIBezierPath()
+        }
+        
+        for wave in waveforms {
+            
+            var waveData = wave
+            
+            if (waveData <= 0) {
+                waveData = 0.02
+            }
+            
+            if (waveData > 1) {
+                waveData = 1
+            }
+            
+            let startX = self.bounds.width + 5 * CGFloat(count)
+            
+            //waveForm뷰의 y축의 중간
+            let startY = self.bounds.origin.y + self.bounds.height / 2
+            print("startX값: \(startX)")
+            print("startY값: \(startY)")
+            
+            //위로 이동하는 포인터
+            path.move(to: CGPoint(x: startX, y: startY + CGFloat(waveData * 100)))
+            
+            //포인터를 아래로 잡아끄는 것
+            path.addLine(to: CGPoint(x: startX, y: startY - CGFloat(waveData * 100)))
+            
+            caLayer.path = path.cgPath
+        }
+    }
+    
+    private func liveDraw() {
         shiftWaveform()
         count += 1
         
@@ -70,7 +120,7 @@ class WaveFormView: UIView {
         } else {
             path = UIBezierPath()
         }
-    
+        
         guard var wave = waveforms.last else { return }
         print("wave값 : \(wave)")
         if (wave <= 0) {
@@ -87,8 +137,7 @@ class WaveFormView: UIView {
         print("startY값: \(startY)")
         path.move(to: CGPoint(x: startX, y: startY + CGFloat(wave * 100)))
         path.addLine(to: CGPoint(x: startX, y: startY - CGFloat(wave * 100)))
-      
+        
         caLayer.path = path.cgPath
     }
-    
 }

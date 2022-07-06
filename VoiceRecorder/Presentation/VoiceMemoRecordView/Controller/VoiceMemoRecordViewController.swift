@@ -17,12 +17,10 @@ class VoiceMemoRecordViewController: UIViewController {
     // - MARK: UI init
     var waveFormView: WaveFormView = {
         let view = WaveFormView(frame: .zero)
+        view.waveFormViewDataType = .live
         view.backgroundColor = .systemGray2
         return view
     }()
-    
-    var layer: CAShapeLayer?
-    var waveform = [Float]()
     
     let cutoffLabel: UILabel = {
         let label = UILabel()
@@ -103,7 +101,7 @@ class VoiceMemoRecordViewController: UIViewController {
         playRelatedButtonsHiddenAnimation(.record)
         configureTargetMethod()
         presentationController?.delegate = self
-        audioManager.delegate = self
+        audioManager.liveBufferDataDelegate = self
         NotificationCenter.default.addObserver(self, selector: #selector(audioPlaybackTimeIsOver(_:)), name: .audioPlaybackTimeIsOver, object: nil)
     }
     
@@ -306,7 +304,7 @@ extension VoiceMemoRecordViewController: UIAdaptivePresentationControllerDelegat
     }
 }
 
-extension VoiceMemoRecordViewController: AudioManagerDelegate {
+extension VoiceMemoRecordViewController: AudioBufferLiveDataDelegate {
     func communicationBufferData(bufferData: Float) {
         print(bufferData)
         waveFormView.waveforms.append(bufferData)

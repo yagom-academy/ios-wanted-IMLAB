@@ -25,10 +25,10 @@ class VoiceMemoPlayViewController: UIViewController {
         return label
     }()
     
-    private let waveFormView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .systemGray
-        
+    private let waveFormView: WaveFormView = {
+        let view = WaveFormView(frame: .zero)
+        view.waveFormViewDataType = .all
+        view.backgroundColor = .systemGray2
         return view
     }()
     
@@ -200,6 +200,12 @@ class VoiceMemoPlayViewController: UIViewController {
         
         audioManager.delegateMethod = modifyGrayParentViewTrailingAnchor
         NotificationCenter.default.addObserver(self, selector: #selector(audioPlaybackTimeIsOver(_:)), name: .audioPlaybackTimeIsOver, object: nil)
+        guard let bufferDatas = audioManager.calculatorBufferGraphData(width: view.bounds.width - 80, filePath: pathFinder.lastUsedUrl) else {
+        return
+        }
+        
+        waveFormView.waveforms = bufferDatas
+
     }
     
 }
