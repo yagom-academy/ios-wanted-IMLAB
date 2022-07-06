@@ -124,9 +124,11 @@ class RecordVoiceViewController: UIViewController {
                 time = time[0..<5]
             }
             drawWaveFormManager.stopDrawing(in: waveFormCanvasView)
-            recordVoiceManager.stopRecording(time: time) {
-                self.delegate?.updateList()
+            recordVoiceManager.stopRecording() {
                 self.playVoiceManager.setNewScheduleFile()
+                FirebaseStorageManager().uploadRecord(time: time) {
+                    self.delegate?.updateList()
+                }
             }
             record_start_stop_button.setImage(UIImage(systemName: "circle.fill"), for: .normal)
             record_start_stop_button.tintColor = .red
@@ -225,9 +227,11 @@ class RecordVoiceViewController: UIViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         if recordVoiceManager.isRecording(){
-            recordVoiceManager.stopRecording(time: progressTimeLabel.text!) {
+            recordVoiceManager.stopRecording() {
                 self.drawWaveFormManager.stopDrawing(in: self.waveFormCanvasView)
-                self.delegate?.updateList()
+                FirebaseStorageManager().uploadRecord(time: self.progressTimeLabel.text!) {
+                    self.delegate?.updateList()
+                }
             }
         }
     }
