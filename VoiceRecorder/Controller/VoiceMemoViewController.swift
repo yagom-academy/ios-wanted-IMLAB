@@ -18,6 +18,7 @@ class VoiceMemoViewController: UIViewController {
     var localUrls: [URL] = []
     var fileNames: [String] = []
     var fileDurations: [String] = []
+    var isFetching: Bool = false
     
     var player: AVAudioPlayer?
     
@@ -28,14 +29,12 @@ class VoiceMemoViewController: UIViewController {
         
         configureTableView()
         fetchRecordingData()
-        
     }
     
     // MARK: - IBActions
     
     @IBAction func moveToRecordDetail(_ sender: UIBarButtonItem) {
-        
-        
+        // 두번째 화면 이동
     }
     
     // MARK: - Methods
@@ -47,7 +46,13 @@ class VoiceMemoViewController: UIViewController {
             self.getFileDuration(urls: results)
             DispatchQueue.main.async {
                 self.voiceMemoTableView.reloadData()
+                if self.isFetching {
+                    self.voiceMemoTableView.refreshControl?.endRefreshing()
+                    self.isFetching = false
+                }
+                
             }
+            
         }
     }
     
@@ -85,6 +90,16 @@ class VoiceMemoViewController: UIViewController {
         voiceMemoTableView.register(cell, forCellReuseIdentifier: VoiceMemoTableViewCell.identifier)
         voiceMemoTableView.delegate = self
         voiceMemoTableView.dataSource = self
+        
+        voiceMemoTableView.refreshControl = UIRefreshControl()
+        voiceMemoTableView.refreshControl?.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
+    }
+    
+    // MARK: - @objc
+    
+    @objc func pullToRefresh() {
+        isFetching = true
+        fetchRecordingData()
     }
 }
 
