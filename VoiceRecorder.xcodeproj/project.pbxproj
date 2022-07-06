@@ -20,6 +20,7 @@
 		DE15E66028604278003DD2F5 /* VoiceMemoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65F28604278003DD2F5 /* VoiceMemoListViewController.swift */; };
 		DE15E66528604279003DD2F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66428604279003DD2F5 /* Assets.xcassets */; };
 		DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */; };
+		FF3BC26F2872FDF200566C18 /* WaveFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3BC26E2872FDF200566C18 /* WaveFormView.swift */; };
 		FF76356C286AE23200147127 /* VoiceMemoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF76356B286AE23200147127 /* VoiceMemoCell.swift */; };
 		FF76356E286AE60C00147127 /* VoiceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF76356D286AE60C00147127 /* VoiceData.swift */; };
 		FF763574286D8E2100147127 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF763573286D8E2100147127 /* Coordinator.swift */; };
@@ -44,6 +45,7 @@
 		DE15E66428604279003DD2F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DE15E66728604279003DD2F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DE15E66928604279003DD2F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FF3BC26E2872FDF200566C18 /* WaveFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveFormView.swift; sourceTree = "<group>"; };
 		FF76356B286AE23200147127 /* VoiceMemoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceMemoCell.swift; sourceTree = "<group>"; };
 		FF76356D286AE60C00147127 /* VoiceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceData.swift; sourceTree = "<group>"; };
 		FF763573286D8E2100147127 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
@@ -138,6 +140,7 @@
 				0EAD22D4286AD7AA0093E2D0 /* VoiceMemoPlayView */,
 				B0C058D9286AD709008426B2 /* VoiceMemoRecordView */,
 				B096C04528698E4400077FC4 /* VoiceMemoListView */,
+				FF3BC26E2872FDF200566C18 /* WaveFormView.swift */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -349,6 +352,7 @@
 				0EEFBFE82869C7D700AD8075 /* FirebaseStorageManager.swift in Sources */,
 				DE15E66028604278003DD2F5 /* VoiceMemoListViewController.swift in Sources */,
 				FF76356C286AE23200147127 /* VoiceMemoCell.swift in Sources */,
+				FF3BC26F2872FDF200566C18 /* WaveFormView.swift in Sources */,
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
 				0E927B77286EBCB2006E82E2 /* AudioManager.swift in Sources */,
 				DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */,

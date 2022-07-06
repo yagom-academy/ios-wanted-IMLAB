@@ -15,8 +15,9 @@ class VoiceMemoRecordViewController: UIViewController {
     }
     
     // - MARK: UI init
-    let waveView: UIView = {
-        let view = UIView.init(frame: CGRect.init(origin: CGPoint.init(), size: CGSize.init(width: 100, height: 100)))
+    var waveFormView: WaveFormView = {
+        let view = WaveFormView(frame: .zero)
+        view.waveFormViewDataType = .live
         view.backgroundColor = .systemGray2
         return view
     }()
@@ -100,6 +101,7 @@ class VoiceMemoRecordViewController: UIViewController {
         playRelatedButtonsHiddenAnimation(.record)
         configureTargetMethod()
         presentationController?.delegate = self
+        audioManager.liveBufferDataDelegate = self
         NotificationCenter.default.addObserver(self, selector: #selector(audioPlaybackTimeIsOver(_:)), name: .audioPlaybackTimeIsOver, object: nil)
     }
     
@@ -124,23 +126,23 @@ class VoiceMemoRecordViewController: UIViewController {
     }
     
     private func designateWaveView() {
-        self.view.addSubview(waveView)
-        waveView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            waveView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: view.frame.height * 0.1),
-            waveView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            waveView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            waveView.heightAnchor.constraint(equalToConstant: 100)
-        ])
+        self.view.addSubview(waveFormView)
+        waveFormView.translatesAutoresizingMaskIntoConstraints = false
+             NSLayoutConstraint.activate([
+                 waveFormView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: view.frame.height * 0.1),
+                 waveFormView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+                 waveFormView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+                 waveFormView.heightAnchor.constraint(equalToConstant: 100)
+             ])
     }
     
     private func designateCutOffLabel() {
         self.view.addSubview(cutoffLabel)
         cutoffLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            cutoffLabel.topAnchor.constraint(equalTo: waveView.safeAreaLayoutGuide.bottomAnchor, constant: 30),
-            cutoffLabel.leadingAnchor.constraint(equalTo: waveView.safeAreaLayoutGuide.leadingAnchor),
-            cutoffLabel.trailingAnchor.constraint(equalTo: waveView.safeAreaLayoutGuide.trailingAnchor),
+            cutoffLabel.topAnchor.constraint(equalTo: waveFormView.safeAreaLayoutGuide.bottomAnchor, constant: 30),
+            cutoffLabel.leadingAnchor.constraint(equalTo: waveFormView.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            cutoffLabel.trailingAnchor.constraint(equalTo: waveFormView.safeAreaLayoutGuide.trailingAnchor,  constant: -16),
             
             cutoffLabel.heightAnchor.constraint(equalToConstant: 20)
         ])
@@ -210,12 +212,6 @@ class VoiceMemoRecordViewController: UIViewController {
         }
     }
     
-    private func createCustomMetaData() -> [String: String] {
-        let time = audioManager.getPlayTime(filePath: pathFinder.lastUsedUrl)
-        
-        return ["playTime": time]
-    }
-    
     private func convertSecToMin() -> String {
         guard let time = Int(audioManager.getPlayTime(filePath: pathFinder.lastUsedUrl)) else {
             return ""
@@ -226,14 +222,18 @@ class VoiceMemoRecordViewController: UIViewController {
     }
     
     private func uploadVoiceMemoToFirebaseStorage() {
-        FirebaseStorageManager.shared.uploadVoiceMemoToFirebase(with: pathFinder.lastUsedUrl, fileName: pathFinder.lastUsedFileName) { result in
+        firebaseManager.uploadVoiceMemoToFirebase(with: pathFinder.lastUsedUrl, fileName: pathFinder.lastUsedFileName, playTime: audioManager.getPlayTime(filePath:pathFinder.lastUsedUrl)) { [weak self] result in
             switch result {
             case .success(_):
-                print("성공")
+                self?.validateUploadFinish()
             case .failure(let error):
                 print(error.localizedDescription)
             }
         }
+    }
+    
+    private func validateUploadFinish() {
+        NotificationCenter.default.post(name: .recordViewUploadComplete, object: nil)
     }
 }
 
@@ -243,6 +243,8 @@ extension VoiceMemoRecordViewController {
         sender.isSelected.toggle()
         
         if sender.isSelected {
+            
+            waveFormView.restartWaveForm()
             playTimeLabel.text = ""
             playRelatedButtonsHiddenAnimation(.record)
             audioManager.startRecord(filePath: pathFinder.getPathWithTime())
@@ -250,7 +252,6 @@ extension VoiceMemoRecordViewController {
             playRelatedButtonsHiddenAnimation(.play)
             audioManager.stopRecord()
             playTimeLabel.text = convertSecToMin()
-
             uploadVoiceMemoToFirebaseStorage()
         }
     }
@@ -300,6 +301,15 @@ extension VoiceMemoRecordViewController: UIAdaptivePresentationControllerDelegat
             self.present(alert, animated: true)
         } else {
             self.dismiss(animated: true)
+        }
+    }
+}
+
+extension VoiceMemoRecordViewController: AudioBufferLiveDataDelegate {
+    func communicationBufferData(bufferData: Float) {
+        waveFormView.waveforms.append(bufferData)
+        DispatchQueue.main.async {
+            self.waveFormView.setNeedsDisplay()
         }
     }
 }
