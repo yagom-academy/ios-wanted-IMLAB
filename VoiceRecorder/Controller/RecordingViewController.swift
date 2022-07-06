@@ -81,17 +81,26 @@ class RecordingViewController: UIViewController {
             
             sender.controlFlashAnimate(recordingMode: true)
             self.playButton.isEnabled = false
-            audioRecorderHandler.startRecord()
-            self.progressTimer = Timer.scheduledTimer(timeInterval: 0.1,
-                                                      target: self,
-                                                      selector: #selector(updateRecordTime),
-                                                      userInfo: nil,
-                                                      repeats: true)
-            RunLoop.main.add(progressTimer, forMode: .common)
+            do {
+                try audioRecorderHandler.startRecording()
+            } catch {
+                print(error.localizedDescription)
+            }
+            
+//            audioRecorderHandler.startRecord()
+//            self.progressTimer = Timer.scheduledTimer(timeInterval: 0.1,
+//                                                      target: self,
+//                                                      selector: #selector(updateRecordTime),
+//                                                      userInfo: nil,
+//                                                      repeats: true)
+//            RunLoop.main.add(progressTimer, forMode: .common)
+            inRecordMode = !inRecordMode
         } else {
             sender.controlFlashAnimate(recordingMode: false)
             self.playButton.isEnabled = true
-            finishedRecord()
+            audioRecorderHandler.stopRecording()
+//            finishedRecord()
+            inRecordMode = !inRecordMode
         }
         inRecordMode.toggle()
     }
@@ -147,6 +156,9 @@ class RecordingViewController: UIViewController {
         let player = audioPlayerHandler.audioPlayer
         player.currentTime = player.currentTime - 5.0
         player.play()
+    }
+    @IBAction func setCutoffFrequency(_ sender: UISlider) {
+        audioRecorderHandler.setFrequency(frequency: sender.value)
     }
     
     @IBAction func goForwardButtonTapped(_ sender: UIButton) {
