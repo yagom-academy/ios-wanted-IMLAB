@@ -39,10 +39,7 @@ class WaveFormView: UIView {
     override init (frame : CGRect) {
         super.init(frame : frame)
         self.backgroundColor = UIColor.clear
-        caLayer = CAShapeLayer()
-        caLayer.strokeColor = UIColor.red.cgColor
-        caLayer.lineWidth = 1
-        caLayer.cornerRadius = 0.5
+        restartWaveForm()
         self.layer.addSublayer(caLayer)
     }
     
@@ -59,6 +56,16 @@ class WaveFormView: UIView {
         }
     }
     
+    func restartWaveForm() {
+        count = 0
+        self.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
+        caLayer = CAShapeLayer()
+        caLayer.strokeColor = UIColor.red.cgColor
+        caLayer.lineWidth = 1
+        caLayer.cornerRadius = 0.5
+        self.layer.addSublayer(caLayer)
+    }
+    
     override func draw(_ rect: CGRect) {
         if waveFormViewDataType == .live {
             liveDraw()
@@ -69,7 +76,6 @@ class WaveFormView: UIView {
     }
     
     private func allDraw() {
-        print(waveforms)
         count += 1
         
         let path: UIBezierPath!
@@ -96,8 +102,6 @@ class WaveFormView: UIView {
             
             //waveForm뷰의 y축의 중간
             let startY = self.bounds.origin.y + self.bounds.height / 2
-            print("startX값: \(startX)")
-            print("startY값: \(startY)")
             
             //위로 이동하는 포인터
             path.move(to: CGPoint(x: startX, y: startY + CGFloat(waveData * 100)))
@@ -122,7 +126,6 @@ class WaveFormView: UIView {
         }
         
         guard var wave = waveforms.last else { return }
-        print("wave값 : \(wave)")
         if (wave <= 0) {
             wave = 0.02
         }
@@ -133,8 +136,6 @@ class WaveFormView: UIView {
         
         let startX = self.bounds.width + 5 * CGFloat(count)
         let startY = self.bounds.origin.y + self.bounds.height / 2
-        print("startX값: \(startX)")
-        print("startY값: \(startY)")
         path.move(to: CGPoint(x: startX, y: startY + CGFloat(wave * 100)))
         path.addLine(to: CGPoint(x: startX, y: startY - CGFloat(wave * 100)))
         

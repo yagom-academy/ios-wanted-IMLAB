@@ -225,7 +225,6 @@ class VoiceMemoRecordViewController: UIViewController {
         firebaseManager.uploadVoiceMemoToFirebase(with: pathFinder.lastUsedUrl, fileName: pathFinder.lastUsedFileName, playTime: audioManager.getPlayTime(filePath:pathFinder.lastUsedUrl)) { [weak self] result in
             switch result {
             case .success(_):
-                print("성공")
                 self?.validateUploadFinish()
             case .failure(let error):
                 print(error.localizedDescription)
@@ -244,6 +243,7 @@ extension VoiceMemoRecordViewController {
         sender.isSelected.toggle()
         
         if sender.isSelected {
+            waveFormView.restartWaveForm()
             playTimeLabel.text = ""
             playRelatedButtonsHiddenAnimation(.record)
             audioManager.startRecord(filePath: pathFinder.getPathWithTime())
@@ -306,7 +306,6 @@ extension VoiceMemoRecordViewController: UIAdaptivePresentationControllerDelegat
 
 extension VoiceMemoRecordViewController: AudioBufferLiveDataDelegate {
     func communicationBufferData(bufferData: Float) {
-        print(bufferData)
         waveFormView.waveforms.append(bufferData)
         DispatchQueue.main.async {
             self.waveFormView.setNeedsDisplay()
