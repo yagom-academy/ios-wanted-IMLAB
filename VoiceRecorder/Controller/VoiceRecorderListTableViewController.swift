@@ -79,7 +79,7 @@ class VoiceRecorderListTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            self.firebaseStorageManger.deleteRecord(fileName : voiceRecordListViewModel.ListAtIndex(index: indexPath.row).fileName) {
+            self.firebaseStorageManger.deleteRecord(fileName : "\(voiceRecordListViewModel.ListAtIndex(index: indexPath.row).fileName)@\(voiceRecordListViewModel.ListAtIndex(index: indexPath.row).fileLength)") {
                 self.updateTableViewList()
             }
         }
