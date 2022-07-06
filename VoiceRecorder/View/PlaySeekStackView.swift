@@ -13,6 +13,7 @@ class PlaySeekStackView: UIStackView {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "gobackward.5"), for: .normal)
         button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: 32.0), forImageIn: .normal)
+        button.isEnabled = false
         return button
     }()
     
@@ -20,6 +21,7 @@ class PlaySeekStackView: UIStackView {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "goforward.5"), for: .normal)
         button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: 32.0), forImageIn: .normal)
+        button.isEnabled = false
         return button
     }()
     
@@ -27,6 +29,7 @@ class PlaySeekStackView: UIStackView {
         let button = UIButton(type: .custom)
         button.setImage(UIImage(systemName: "play.fill"), for: .normal)
         button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: 32.0), forImageIn: .normal)
+        button.isEnabled = false
         return button
     }()
     
