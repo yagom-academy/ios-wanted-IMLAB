@@ -21,11 +21,23 @@ class RecordVoiceViewController: UIViewController {
     var audioSessionManager = AudioSessionManager()
     var isHour = false
         
-    let waveFormView : UIView = {
-        let waveFormView = UIView()
-        waveFormView.translatesAutoresizingMaskIntoConstraints = false
-        waveFormView.frame.size.width = CGFloat(FP_INFINITE)
-        return waveFormView
+    let waveFormCanvasView : UIView = {
+        let waveFormCanvasView = UIView()
+        waveFormCanvasView.translatesAutoresizingMaskIntoConstraints = false
+        waveFormCanvasView.frame.size.width = CGFloat(FP_INFINITE)
+        return waveFormCanvasView
+    }()
+    
+    var verticalLineView : VerticalLineView = {
+        let verticalLineView = VerticalLineView()
+        verticalLineView.translatesAutoresizingMaskIntoConstraints = false
+        return verticalLineView
+    }()
+    
+    let waveFormImageView : WaveFormImageView = {
+        let waveFormImageView = WaveFormImageView(frame: CGRect())
+        waveFormImageView.translatesAutoresizingMaskIntoConstraints = false
+        return waveFormImageView
     }()
     
     let frequencyLabel : UILabel = {
@@ -107,7 +119,7 @@ class RecordVoiceViewController: UIViewController {
             if !isHour{
                 time = time[0..<5]
             }
-            drawWaveFormManager.stopDrawing(in: waveFormView)
+            drawWaveFormManager.stopDrawing(in: waveFormCanvasView)
             recordVoiceManager.stopRecording(time: time) {
                 self.delegate?.updateList()
                 self.playVoiceManager.setNewScheduleFile()
@@ -118,7 +130,7 @@ class RecordVoiceViewController: UIViewController {
             print("recording stop")
         } else {
             recordVoiceManager.startRecording()
-            drawWaveFormManager.startDrawing(of: recordVoiceManager.recorder!, in: waveFormView)
+            drawWaveFormManager.startDrawing(of: recordVoiceManager.recorder!, in: waveFormCanvasView)
             record_start_stop_button.setImage(UIImage(systemName: "stop.fill"), for: .normal)
             record_start_stop_button.tintColor = .black
             setUIBeforeRecording()
@@ -143,7 +155,7 @@ class RecordVoiceViewController: UIViewController {
     }
     
     func setView() {
-        self.view.addSubview(waveFormView)
+        self.view.addSubview(waveFormCanvasView)
         
         self.view.addSubview(frequencyLabel)
         self.view.addSubview(frequencySlider)
@@ -162,11 +174,11 @@ class RecordVoiceViewController: UIViewController {
     
     func autoLayout() {
         NSLayoutConstraint.activate([
-            waveFormView.topAnchor.constraint(equalToSystemSpacingBelow: self.view.topAnchor, multiplier: 10),
-            waveFormView.widthAnchor.constraint(equalTo: self.view.widthAnchor),
-            waveFormView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.15),
+            waveFormCanvasView.topAnchor.constraint(equalToSystemSpacingBelow: self.view.topAnchor, multiplier: 10),
+            waveFormCanvasView.widthAnchor.constraint(equalTo: self.view.widthAnchor),
+            waveFormCanvasView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.15),
             
-            frequencyLabel.topAnchor.constraint(equalToSystemSpacingBelow: waveFormView.bottomAnchor, multiplier: 2),
+            frequencyLabel.topAnchor.constraint(equalToSystemSpacingBelow: waveFormCanvasView.bottomAnchor, multiplier: 2),
             frequencyLabel.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.8),
             frequencyLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             
@@ -179,7 +191,7 @@ class RecordVoiceViewController: UIViewController {
             
             buttonStackView.topAnchor.constraint(equalTo: progressTimeLabel.bottomAnchor, constant: 30),
 //            buttonStackView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.8),
-//            buttonStackView.heightAnchor.constraint(equalTo: waveFormView.heightAnchor, multiplier: 0.9),
+//            buttonStackView.heightAnchor.constraint(equalTo: waveFormCanvasView.heightAnchor, multiplier: 0.9),
             buttonStackView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             
 //            record_start_stop_button.heightAnchor.constraint(equalTo: buttonStackView.heightAnchor),
@@ -202,7 +214,7 @@ class RecordVoiceViewController: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         if recordVoiceManager.isRecording(){
             recordVoiceManager.stopRecording(time: progressTimeLabel.text!) {
-                self.drawWaveFormManager.stopDrawing(in: self.waveFormView)
+                self.drawWaveFormManager.stopDrawing(in: self.waveFormCanvasView)
                 self.delegate?.updateList()
             }
         }
@@ -243,12 +255,12 @@ extension RecordVoiceViewController : DrawWaveFormManagerDelegate {
     func moveWaveFormView(_ step: CGFloat) {
         
         UIView.animate(withDuration: 1/14, animations: {
-            self.waveFormView.transform = CGAffineTransform(translationX: -step, y: 0)
+            self.waveFormCanvasView.transform = CGAffineTransform(translationX: -step, y: 0)
         })
     }
     
     func resetWaveFormView() {
-        self.waveFormView.transform = CGAffineTransform(translationX: 0, y: 0)
+        self.waveFormCanvasView.transform = CGAffineTransform(translationX: 0, y: 0)
     }
 }
 
