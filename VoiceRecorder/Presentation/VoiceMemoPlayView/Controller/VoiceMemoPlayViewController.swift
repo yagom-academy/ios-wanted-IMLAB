@@ -202,6 +202,11 @@ class VoiceMemoPlayViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(audioPlaybackTimeIsOver(_:)), name: .audioPlaybackTimeIsOver, object: nil)
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        audioManager.stopPlay()
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         guard let bufferDatas = audioManager.calculatorBufferGraphData(width: waveFormView.bounds.width, filePath: pathFinder.getCurrentFilePath(fileName: audioFileName ?? "")) else {
