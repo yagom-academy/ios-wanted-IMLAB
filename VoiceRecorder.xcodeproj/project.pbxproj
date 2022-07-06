@@ -22,7 +22,6 @@
 		DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */; };
 		FF3BC26F2872FDF200566C18 /* WaveFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3BC26E2872FDF200566C18 /* WaveFormView.swift */; };
 		FF76356C286AE23200147127 /* VoiceMemoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF76356B286AE23200147127 /* VoiceMemoCell.swift */; };
-		FF76356E286AE60C00147127 /* VoiceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF76356D286AE60C00147127 /* VoiceData.swift */; };
 		FF763574286D8E2100147127 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF763573286D8E2100147127 /* Coordinator.swift */; };
 		FF763576286D8E8700147127 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF763575286D8E8700147127 /* AppCoordinator.swift */; };
 /* End PBXBuildFile section */
@@ -47,7 +46,6 @@
 		DE15E66928604279003DD2F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FF3BC26E2872FDF200566C18 /* WaveFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveFormView.swift; sourceTree = "<group>"; };
 		FF76356B286AE23200147127 /* VoiceMemoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceMemoCell.swift; sourceTree = "<group>"; };
-		FF76356D286AE60C00147127 /* VoiceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceData.swift; sourceTree = "<group>"; };
 		FF763573286D8E2100147127 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		FF763575286D8E8700147127 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -214,7 +212,6 @@
 			isa = PBXGroup;
 			children = (
 				FF76356B286AE23200147127 /* VoiceMemoCell.swift */,
-				FF76356D286AE60C00147127 /* VoiceData.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -345,7 +342,6 @@
 			files = (
 				FF763576286D8E8700147127 /* AppCoordinator.swift in Sources */,
 				0EAD22D9286AD8160093E2D0 /* VoiceMemoPlayViewController.swift in Sources */,
-				FF76356E286AE60C00147127 /* VoiceData.swift in Sources */,
 				B0966F002872DADA00D10EAD /* Notification.Name+Extension.swift in Sources */,
 				B0540017286D5DD600BB5A34 /* PathFinder.swift in Sources */,
 				B0C058DC286AD73F008426B2 /* VoiceMemoRecordViewController.swift in Sources */,
@@ -496,7 +492,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 8PRV428ULN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VoiceRecorder/Resource/Info.plist;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "마이크 사용 권한 요청";
@@ -526,7 +522,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 8PRV428ULN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VoiceRecorder/Resource/Info.plist;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "마이크 사용 권한 요청";

@@ -17,7 +17,7 @@ class WaveFormView: UIView {
     
     // MARK: - Properties
     
-    var waveFormViewDataType: WaveFormViewMode = .record
+    var waveFormViewMode: WaveFormViewMode = .record
     var waveforms = [Float]()
     private var caLayer: CAShapeLayer!
     private let barWidth: CGFloat = 4.0
@@ -63,7 +63,7 @@ class WaveFormView: UIView {
     
     override func draw(_ rect: CGRect) {
         
-        if waveFormViewDataType == .record {
+        if waveFormViewMode == .record {
             drawRecordViewWaveForm()
         } else {
             drawPlayViewWaveForm()

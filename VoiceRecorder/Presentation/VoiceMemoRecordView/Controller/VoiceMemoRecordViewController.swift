@@ -14,76 +14,101 @@ class VoiceMemoRecordViewController: UIViewController {
         case play
     }
     
-    // - MARK: UI init
-    var waveFormView: WaveFormView = {
+    // MARK: - Properties
+    
+    private let pathFinder: PathFinder!
+    private let audioManager: AudioManager!
+    private let firebaseManager: FirebaseStorageManager!
+    
+    //  MARK: - ViewProperties
+    
+    private var waveFormView: WaveFormView = {
+        
         let view = WaveFormView(frame: .zero)
-        view.waveFormViewDataType = .live
+        view.waveFormViewMode = .record
         view.backgroundColor = .systemGray2
         return view
     }()
     
-    let cutoffLabel: UILabel = {
+    private let cutoffFrequencyLabel: UILabel = {
+        
         let label = UILabel()
-        label.text = "cutoff freq"
+        label.text = "cutoff freqency"
         return label
     }()
     
-    let cutOffFrequencySlider: UISlider = {
+    private let cutOffFrequencySlider: UISlider = {
+        
         let slider = UISlider()
         slider.value = 1
-        
+        slider.addTarget(nil, action: #selector(cutOffFrequencySliderValueChanged(_:)), for: .valueChanged)
         return slider
     }()
     
-    let playTimeLabel: UILabel = {
+    private let playTimeLabel: UILabel = {
+        
         let label = UILabel()
-        label.text = "Play Time"
+        label.text = ""
         return label
     }()
     
-    let playOrPauseButton: UIButton = {
-        let button = UIButton.init()
+    private let playOrPauseButton: UIButton = {
         
-        button.setImage(UIImage.init(systemName: "play"), for: .normal)
-        button.setImage(UIImage.init(systemName: "pause.fill"), for: .selected)
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "play"), for: .normal)
+        button.setImage(UIImage(systemName: "pause.fill"), for: .selected)
         button.setPreferredSymbolConfiguration(.init(pointSize: 35, weight: .regular, scale: .default), forImageIn: .normal)
+        button.addTarget(nil, action: #selector(playOrPauseButtonTouched(_:)), for: .touchUpInside)
         return button
     }()
     
-    let recordButton: UIButton = {
-        let button = UIButton.init()
+    private let recordButton: UIButton = {
         
+        let button = UIButton()
         button.tintColor = .systemRed
-        button.setImage(UIImage.init(systemName: "circle.fill"), for: .normal)
-        button.setImage(UIImage.init(systemName: "stop.fill"), for: .selected)
-        button.setPreferredSymbolConfiguration(.init(pointSize: 35, weight: .regular, scale: .default), forImageIn: .normal)
+        button.setImage(UIImage(systemName: "circle.fill"), for: .normal)
+        button.setImage(UIImage(systemName: "stop.fill"), for: .selected)
+        let symbol = UIImage.SymbolConfiguration(pointSize: 35, weight: .regular, scale: .default)
+        button.setPreferredSymbolConfiguration(symbol, forImageIn: .normal)
+        button.addTarget(nil, action: #selector(recordButtonTapped(_:)), for: .touchUpInside)
         return button
     }()
     
-    let goForward5SecButton: UIButton = {
-        let button = UIButton.init()
+    private let skipForward5SecondsButton: UIButton = {
         
-        button.setImage(UIImage.init(systemName: "goforward.5"), for: .normal)
-        button.setPreferredSymbolConfiguration(.init(pointSize: 35, weight: .regular, scale: .default), forImageIn: .normal)
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "goforward.5"), for: .normal)
+        let symbol = UIImage.SymbolConfiguration(pointSize: 35, weight: .regular, scale: .default)
+        button.setPreferredSymbolConfiguration(symbol, forImageIn: .normal)
+        button.addTarget(nil, action: #selector(skip5SecondsButtonTouched(_:)), for: .touchUpInside)
         return button
     }()
     
-    let goBackward5SecButton: UIButton = {
-        let button = UIButton.init()
+    private let skipBackward5SecondsButton: UIButton = {
         
-        button.setImage(UIImage.init(systemName: "gobackward.5"), for: .normal)
-        button.setPreferredSymbolConfiguration(.init(pointSize: 35, weight: .regular, scale: .default), forImageIn: .normal)
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "gobackward.5"), for: .normal)
+        let symbol = UIImage.SymbolConfiguration(pointSize: 35, weight: .regular, scale: .default)
+        button.setPreferredSymbolConfiguration(symbol, forImageIn: .normal)
+        button.addTarget(nil, action: #selector(skip5SecondsButtonTouched(_:)), for: .touchUpInside)
         return button
     }()
     
-    // MARK: - Properties
-    let pathFinder: PathFinder!
-    let audioManager: AudioManager!
-    let firebaseManager: FirebaseStorageManager!
+    private let playButtonStackView: UIStackView = {
+        
+        let stack = UIStackView()
+        stack.axis = .horizontal
+        stack.spacing = 30
+        
+        return stack
+    }()
     
-    // - MARK: LifeCycle
+    // MARK: - Life Cycle
     
-    init(pathFinder: PathFinder, audioManager: AudioManager, firebaseManager: FirebaseStorageManager) {
+    init(pathFinder: PathFinder,
+         audioManager: AudioManager,
+         firebaseManager: FirebaseStorageManager) {
+        
         self.pathFinder = pathFinder
         self.audioManager = audioManager
         self.firebaseManager = firebaseManager
@@ -91,119 +116,124 @@ class VoiceMemoRecordViewController: UIViewController {
     }
     
     required init?(coder: NSCoder) {
+        
         fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         configure()
-        designateUIs()
-        playRelatedButtonsHiddenAnimation(.record)
-        configureTargetMethod()
+        designUI()
+        hiddenPlayRelatedButtons(.record)
         presentationController?.delegate = self
         audioManager.liveBufferDataDelegate = self
-        NotificationCenter.default.addObserver(self, selector: #selector(audioPlaybackTimeIsOver(_:)), name: .audioPlaybackTimeIsOver, object: nil)
+        configureObserver()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        
         super.viewWillDisappear(true)
         audioManager.stopRecord()
         audioManager.stopPlay()
     }
     
     private func configure() {
+        
         self.view.backgroundColor = .systemBackground
     }
     
-    // - MARK: UI Design
-    
-    private func designateUIs() {
-        designateWaveView()
-        designateCutOffLabel()
-        designateSlider()
-        designatePlayTimeLabel()
-        designateButtons()
+    private func configureObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(audioPlaybackTimeIsOver(_:)), name: .audioPlaybackTimeIsOver, object: nil)
     }
     
-    private func designateWaveView() {
-        self.view.addSubview(waveFormView)
-        waveFormView.translatesAutoresizingMaskIntoConstraints = false
-             NSLayoutConstraint.activate([
-                 waveFormView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: view.frame.height * 0.1),
-                 waveFormView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-                 waveFormView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-                 waveFormView.heightAnchor.constraint(equalToConstant: 100)
-             ])
+    // MARK: - UI Design
+    
+    private func configureSubviews() {
+        
+        [waveFormView, playOrPauseButton, playButtonStackView,
+         cutoffFrequencyLabel, cutOffFrequencySlider, playTimeLabel].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview($0)
+        }
+        
+        [recordButton, skipBackward5SecondsButton, playOrPauseButton,
+         skipForward5SecondsButton].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            playButtonStackView.addArrangedSubview($0)
+        }
     }
     
-    private func designateCutOffLabel() {
-        self.view.addSubview(cutoffLabel)
-        cutoffLabel.translatesAutoresizingMaskIntoConstraints = false
+    private func designUI() {
+        
+        configureSubviews()
+        desigWaveView()
+        designCutOffLabel()
+        designSlider()
+        designPlayTimeLabel()
+        designButtons()
+    }
+    
+    private func desigWaveView() {
+        
         NSLayoutConstraint.activate([
-            cutoffLabel.topAnchor.constraint(equalTo: waveFormView.safeAreaLayoutGuide.bottomAnchor, constant: 30),
-            cutoffLabel.leadingAnchor.constraint(equalTo: waveFormView.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            cutoffLabel.trailingAnchor.constraint(equalTo: waveFormView.safeAreaLayoutGuide.trailingAnchor,  constant: -16),
-            
-            cutoffLabel.heightAnchor.constraint(equalToConstant: 20)
+            waveFormView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: view.frame.height * 0.1),
+            waveFormView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            waveFormView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            waveFormView.heightAnchor.constraint(equalToConstant: 100)
         ])
     }
     
-    private func designateSlider() {
-        self.view.addSubview(cutOffFrequencySlider)
-        cutOffFrequencySlider.translatesAutoresizingMaskIntoConstraints = false
+    private func designCutOffLabel() {
+        
         NSLayoutConstraint.activate([
-            cutOffFrequencySlider.topAnchor.constraint(equalTo: cutoffLabel.safeAreaLayoutGuide.bottomAnchor, constant: 16),
-            cutOffFrequencySlider.leadingAnchor.constraint(equalTo: cutoffLabel.safeAreaLayoutGuide.leadingAnchor),
-            cutOffFrequencySlider.trailingAnchor.constraint(equalTo: cutoffLabel.safeAreaLayoutGuide.trailingAnchor)
+            cutoffFrequencyLabel.topAnchor.constraint(equalTo: waveFormView.safeAreaLayoutGuide.bottomAnchor, constant: 30),
+            cutoffFrequencyLabel.leadingAnchor.constraint(equalTo: waveFormView.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            cutoffFrequencyLabel.trailingAnchor.constraint(equalTo: waveFormView.safeAreaLayoutGuide.trailingAnchor,  constant: -16),
+            cutoffFrequencyLabel.heightAnchor.constraint(equalToConstant: 20)
         ])
     }
     
-    private func designatePlayTimeLabel() {
-        self.view.addSubview(playTimeLabel)
-        playTimeLabel.translatesAutoresizingMaskIntoConstraints = false
+    private func designSlider() {
+        
+        NSLayoutConstraint.activate([
+            cutOffFrequencySlider.topAnchor.constraint(equalTo: cutoffFrequencyLabel.safeAreaLayoutGuide.bottomAnchor, constant: 16),
+            cutOffFrequencySlider.leadingAnchor.constraint(equalTo: cutoffFrequencyLabel.safeAreaLayoutGuide.leadingAnchor),
+            cutOffFrequencySlider.trailingAnchor.constraint(equalTo: cutoffFrequencyLabel.safeAreaLayoutGuide.trailingAnchor)
+        ])
+    }
+    
+    private func designPlayTimeLabel() {
+        
         NSLayoutConstraint.activate([
             playTimeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             playTimeLabel.topAnchor.constraint(equalTo: cutOffFrequencySlider.safeAreaLayoutGuide.bottomAnchor, constant: 8),
-            
             playTimeLabel.heightAnchor.constraint(equalToConstant: 20)
         ])
     }
     
-    private func designateButtons() {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.spacing = 20
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(stackView)
-        stackView.addArrangedSubview(recordButton)
-        stackView.addArrangedSubview(goBackward5SecButton)
-        stackView.addArrangedSubview(playOrPauseButton)
-        stackView.addArrangedSubview(goForward5SecButton)
+    private func designButtons() {
         
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo:playTimeLabel.safeAreaLayoutGuide.bottomAnchor, constant: 35),
-            stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            playButtonStackView.topAnchor.constraint(equalTo:playTimeLabel.safeAreaLayoutGuide.bottomAnchor, constant: 35),
+            playButtonStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
     
     // MARK: - Method
-    private func configureTargetMethod() {
-        recordButton.addTarget(self, action: #selector(recordButtonTapped(_:)), for: .touchUpInside)
-        playOrPauseButton.addTarget(self, action: #selector(playOrPauseButtonTapped(_:)), for: .touchUpInside)
-        goForward5SecButton.addTarget(self, action: #selector(move5SecondsButtonTapped(_:)), for: .touchUpInside)
-        goBackward5SecButton.addTarget(self, action: #selector(move5SecondsButtonTapped(_:)), for: .touchUpInside)
-        cutOffFrequencySlider.addTarget(self, action: #selector(cutOffFrequencySliderValueChanged(_:)), for: .valueChanged)
-    }
     
     /// 녹음완료후 음성파일의 시간
     private func showVoiceMemoDuration() -> String {
+        
         return audioManager.getPlayTime(filePath: pathFinder.lastUsedUrl)
     }
     
     /// 플레이관련 버튼들의 hidden animation
-    private func playRelatedButtonsHiddenAnimation(_ mode: RecordViewJobMode) {
-        let playRelatedButtons = [playOrPauseButton, goBackward5SecButton, goForward5SecButton]
+    private func hiddenPlayRelatedButtons(_ mode: RecordViewJobMode) {
+        
+        let playRelatedButtons = [playOrPauseButton, skipBackward5SecondsButton, skipForward5SecondsButton]
         UIView.animate(withDuration: 0.05) {
+            
             if mode == .record {
                 playRelatedButtons.forEach { $0.isHidden = true }
             } else {
@@ -212,17 +242,21 @@ class VoiceMemoRecordViewController: UIViewController {
         }
     }
     
-    private func convertSecToMin() -> String {
+    private func convertSecondToMinute() -> String {
+        
         guard let time = Int(audioManager.getPlayTime(filePath: pathFinder.lastUsedUrl)) else {
             return ""
         }
-        let min = String(format: "%02d", time / 60)
-        let sec = String(format: "%02d", time % 60)
-        return "\(min):\(sec)"
+        
+        let minute = String(format: "%02d", time / 60)
+        let second = String(format: "%02d", time % 60)
+        return "\(minute):\(second)"
     }
     
     private func uploadVoiceMemoToFirebaseStorage() {
+        
         firebaseManager.uploadVoiceMemoToFirebase(with: pathFinder.lastUsedUrl, fileName: pathFinder.lastUsedFileName, playTime: audioManager.getPlayTime(filePath:pathFinder.lastUsedUrl)) { [weak self] result in
+            
             switch result {
             case .success(_):
                 self?.validateUploadFinish()
@@ -233,30 +267,35 @@ class VoiceMemoRecordViewController: UIViewController {
     }
     
     private func validateUploadFinish() {
+        
         NotificationCenter.default.post(name: .recordViewUploadComplete, object: nil)
     }
+    
 }
 
-// MARK: - TargetMethod
+// MARK: - objc Method
+
 extension VoiceMemoRecordViewController {
+    
     @objc private func recordButtonTapped(_ sender: UIButton) {
+        
         sender.isSelected.toggle()
         
         if sender.isSelected {
-            
             waveFormView.restartWaveForm()
             playTimeLabel.text = ""
-            playRelatedButtonsHiddenAnimation(.record)
+            hiddenPlayRelatedButtons(.record)
             audioManager.startRecord(filePath: pathFinder.getPathWithTime())
         } else {
-            playRelatedButtonsHiddenAnimation(.play)
+            hiddenPlayRelatedButtons(.play)
             audioManager.stopRecord()
-            playTimeLabel.text = convertSecToMin()
+            playTimeLabel.text = convertSecondToMinute()
             uploadVoiceMemoToFirebaseStorage()
         }
     }
     
-    @objc private func playOrPauseButtonTapped(_ sender: UIButton) {
+    @objc private func playOrPauseButtonTouched(_ sender: UIButton) {
+        
         sender.isSelected.toggle()
         
         if sender.isSelected {
@@ -266,8 +305,9 @@ extension VoiceMemoRecordViewController {
         }
     }
     
-    @objc private func move5SecondsButtonTapped(_ sender: UIButton) {
-        if sender === goForward5SecButton {
+    @objc private func skip5SecondsButtonTouched(_ sender: UIButton) {
+        
+        if sender === skipForward5SecondsButton {
             audioManager.skip(for: 5, filePath: pathFinder.lastUsedUrl)
         } else {
             audioManager.skip(for: -5, filePath: pathFinder.lastUsedUrl)
@@ -275,27 +315,37 @@ extension VoiceMemoRecordViewController {
     }
     
     @objc private func cutOffFrequencySliderValueChanged(_ sender: UISlider) {
+        
         let value = round(sender.value * 10) / 10
         audioManager.cutOffFrequency = value
     }
     
     @objc private func audioPlaybackTimeIsOver(_ sender: Notification) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.playOrPauseButton.isSelected = false
-            self.audioManager.stopPlay()
+        
+        DispatchQueue.main.async { [unowned self] in
+            
+            playOrPauseButton.isSelected = false
+            audioManager.stopPlay()
         }
     }
+    
 }
 
+// MARK: - UIAdaptivePresentationControllerDelegate
+
 extension VoiceMemoRecordViewController: UIAdaptivePresentationControllerDelegate {
+    
     func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
+        
         if recordButton.isSelected {
-            let alert = UIAlertController(title: nil, message: "녹음중인 파일이 저장되지 않습니다.", preferredStyle: .alert)
-            let dismissAction = UIAlertAction(title: "확인", style: .default) { [weak self] _ in
-                self?.dismiss(animated: true)
+            let alert = UIAlertController(title: nil,
+                                          message: "녹음중인 파일이 저장되지 않습니다.", preferredStyle: .alert)
+            let dismissAction = UIAlertAction(title: "확인", style: .default) { [unowned self] _ in
+                
+                dismiss(animated: true)
             }
             let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+            
             alert.addAction(dismissAction)
             alert.addAction(cancelAction)
             self.present(alert, animated: true)
@@ -303,13 +353,20 @@ extension VoiceMemoRecordViewController: UIAdaptivePresentationControllerDelegat
             self.dismiss(animated: true)
         }
     }
+    
 }
 
+// MARK: - AudioBufferLiveDataDelegate
+
 extension VoiceMemoRecordViewController: AudioBufferLiveDataDelegate {
+    
     func communicationBufferData(bufferData: Float) {
+        
         waveFormView.waveforms.append(bufferData)
-        DispatchQueue.main.async {
-            self.waveFormView.setNeedsDisplay()
+        DispatchQueue.main.async { [unowned self] in
+            
+            waveFormView.setNeedsDisplay()
         }
     }
+    
 }
