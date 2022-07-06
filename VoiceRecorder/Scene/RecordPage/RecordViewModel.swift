@@ -7,7 +7,7 @@
 
 import Foundation
 
-class TempRecordViewModel {
+class RecordViewModel {
     private let playerModel = PlayerModel()
     private var audioPlayer: PlayerService!
 

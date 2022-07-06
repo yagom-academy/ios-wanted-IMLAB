@@ -39,19 +39,7 @@ class RecordManager: RecordService {
         } catch {
             print("init Session Error: \(error.localizedDescription)")
         }
-    }
-    
-    func makePlayer() -> AVAudioFile? {
-        do {
-            let newAudioFile = try AVAudioFile(forReading: audioFile)
-            return newAudioFile
-        } catch let error {
-            print("fileDir -> file error : \(error)")
-            return nil
-        }
-    }
-
-    
+    }    
 
     func normalizeSoundLevel(_ level: Float?) -> Int {
         guard let level = level else { return 0 }

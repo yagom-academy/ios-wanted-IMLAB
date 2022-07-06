@@ -9,7 +9,7 @@ import UIKit
 
 class RecordViewController: UIViewController {
     
-    let viewModel = TempRecordViewModel(PlayerManager.shared)
+    let viewModel = RecordViewModel(PlayerManager.shared)
     
     let frequencyView = FrequencyView(frame: .zero)
 

@@ -39,7 +39,7 @@ class RecordAndPlayView: UIView {
         var bar: CGFloat = 0
 
         context.clear(rect)
-        context.setFillColor(red: 0, green: 0, blue: 0, alpha: 0)
+        context.setFillColor(red: 1, green: 1, blue: 1, alpha: 1)
         context.fill(rect)
         context.setLineWidth(1.5)
         context.setStrokeColor(color)
@@ -152,13 +152,7 @@ class RecordAndPlayView: UIView {
         if sender.isSelected {
             startRecord()
         } else {
-//            recordManager.endRecord()
-//
-//            guard let audioFile = recordManager.makePlayer() else {
-//                return
-//            }
-//            viewModel.setAudioFile(audioFile)
-//            endRecord()
+            endRecord()
             buttonStackView.isHidden = false
         }
     }
@@ -218,12 +212,9 @@ extension RecordAndPlayView {
 extension RecordAndPlayView {
     func startRecord() {
         var currentSample = 0
-        let numberOfSamples = 200
+        let numberOfSamples = waveForms.count
 
-        let dirPaths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        let docsDir = dirPaths[0]
-
-        audioFile = docsDir.appendingPathComponent("record.m4a")
+        audioFile = Config.getRecordFilePath()
 
         let recordSettings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
@@ -240,8 +231,18 @@ extension RecordAndPlayView {
             timer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true, block: { [weak self] _ in
                 guard let self = self else { return }
                 self.recorder?.updateMeters()
-                self.waveForms[currentSample] = self.recordManager.normalizeSoundLevel(self.recorder?.averagePower(forChannel: 0))
-                currentSample = (currentSample + 1) % numberOfSamples
+
+                if currentSample == numberOfSamples {
+                    self.waveForms.removeFirst()
+                    self.waveForms.append(self.recordManager.normalizeSoundLevel(self.recorder?.averagePower(forChannel: 0)))
+                } else {
+                    self.waveForms[currentSample] = self.recordManager.normalizeSoundLevel(self.recorder?.averagePower(forChannel: 0))
+                }
+
+                if currentSample < numberOfSamples {
+                    currentSample += 1
+                }
+
                 DispatchQueue.main.async {
                     self.setNeedsDisplay()
                 }
@@ -252,10 +253,20 @@ extension RecordAndPlayView {
     }
 
     func endRecord() {
-//        var fileName = dateToFileName(Date())
         timer?.invalidate()
 
         recorder?.stop()
         recorder = nil
+        
+        guard let audioFile = audioFile else {
+            return
+        }
+
+        do {
+            let newAudioFile = try AVAudioFile(forReading: audioFile)
+            viewModel.setAudioFile(newAudioFile)
+        } catch let error {
+            print("play record file error: \(error)")
+        }
     }
 }
