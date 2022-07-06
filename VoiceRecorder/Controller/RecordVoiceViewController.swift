@@ -10,7 +10,7 @@ protocol RecordVoiceDelegate : AnyObject{
 }
 
 enum AudioStatus {
-case beforeRecording, afterRecording, beforePlaying, afterPlaying
+case beforeRecording, afterRecording, beforePlaying, afterPlaying, forward, backward
 }
 
 import UIKit
@@ -42,6 +42,13 @@ class RecordVoiceViewController: UIViewController {
         let waveFormImageView = WaveFormImageView(frame: CGRect())
         waveFormImageView.translatesAutoresizingMaskIntoConstraints = false
         return waveFormImageView
+    }()
+    
+    var waveFormBackgroundView : UIView = {
+        let waveFormBackgroundView = UIView()
+        waveFormBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+        waveFormBackgroundView.backgroundColor = .systemGray6
+        return waveFormBackgroundView
     }()
     
     let frequencyLabel : UILabel = {
@@ -161,6 +168,7 @@ class RecordVoiceViewController: UIViewController {
     }
     
     func setView() {
+        self.view.addSubview(waveFormBackgroundView)
         self.view.addSubview(waveFormCanvasView)
         self.view.addSubview(waveFormImageView)
         self.view.addSubview(verticalLineView)
@@ -182,6 +190,11 @@ class RecordVoiceViewController: UIViewController {
     
     func autoLayout() {
         NSLayoutConstraint.activate([
+            waveFormBackgroundView.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 10),
+            waveFormBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            waveFormBackgroundView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.15),
+            waveFormBackgroundView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            
             waveFormCanvasView.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 10),
             waveFormCanvasView.widthAnchor.constraint(equalTo: view.widthAnchor),
             waveFormCanvasView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.15),
@@ -257,6 +270,8 @@ class RecordVoiceViewController: UIViewController {
             recordFile_play_PauseButton.setImage(UIImage(systemName: "pause"), for: .normal)
         case .afterPlaying:
             recordFile_play_PauseButton.setImage(UIImage(systemName: "play"), for: .normal)
+        default:
+            break
         }
     }
     

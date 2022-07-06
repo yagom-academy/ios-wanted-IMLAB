@@ -24,20 +24,7 @@ class DrawWaveFormManager{
     private var waveFormImage : UIImage!
     private var start : CGPoint!
     private var step : CGFloat!
-    
     weak var delegate : DrawWaveFormManagerDelegate?
-    
-    func prepareDrawing(in view : UIView){
-        if pencil != nil && waveLayer != nil {
-            removeWaveForm()
-        }
-        pencil = UIBezierPath()
-        firstPoint = CGPoint(x: (view.bounds.width), y: (view.bounds.midY))
-        jump = view.bounds.width/112
-        waveLayer = CAShapeLayer()
-        start = firstPoint
-        step = 0
-    }
     
     func startDrawing(of recorder : AVAudioRecorder, in view : UIView){
         prepareDrawing(in: view)
@@ -53,13 +40,29 @@ class DrawWaveFormManager{
         saveImageInLocal(waveFormImage)
     }
     
-    func removeWaveForm() {
+    func getWaveFormImage() -> UIImage {
+        return waveFormImage
+    }
+    
+    private func prepareDrawing(in view : UIView){
+        if pencil != nil && waveLayer != nil {
+            removeWaveForm()
+        }
+        pencil = UIBezierPath()
+        firstPoint = CGPoint(x: (view.bounds.width), y: (view.bounds.midY))
+        jump = view.bounds.width/112
+        waveLayer = CAShapeLayer()
+        start = firstPoint
+        step = 0
+    }
+    
+    private func removeWaveForm() {
         pencil.removeAllPoints()
         waveLayer.removeFromSuperlayer()
         delegate?.resetWaveFormView()
     }
     
-    func drawWaveForm(_ input : Float, in view : UIView) {
+    private func drawWaveForm(_ input : Float, in view : UIView) {
 
         let viewHeight = view.bounds.height
         let maxTraitLength = (viewHeight/2) - 10
@@ -95,15 +98,13 @@ class DrawWaveFormManager{
         view.layer.addSublayer(waveLayer)
         waveLayer.contentsCenter = view.frame
         
-        view.setNeedsDisplay()
-        
         start = CGPoint(x: start.x + jump, y: start.y)
         step += jump
         delegate?.moveWaveFormView(step)
         
     }
     
-    func getUIImage(from view: UIView) -> UIImage {
+    private func getUIImage(from view: UIView) -> UIImage {
         let resizedBounds = CGRect(x: view.bounds.maxX, y: view.bounds.minY, width: step, height: view.bounds.height)
         let renderer = UIGraphicsImageRenderer(bounds: resizedBounds)
         return renderer.image { rendererContext in
@@ -112,7 +113,7 @@ class DrawWaveFormManager{
     }
     
     
-    func saveImageInLocal(_ imageUI: UIImage) {
+    private func saveImageInLocal(_ imageUI: UIImage) {
         let imageFileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("myWaveForm.png")
         let imageData = imageUI.pngData()
@@ -124,7 +125,4 @@ class DrawWaveFormManager{
         }
     }
     
-    func getWaveFormImage() -> UIImage {
-        return waveFormImage
-    }
 }

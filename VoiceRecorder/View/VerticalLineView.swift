@@ -11,8 +11,7 @@ class VerticalLineView: UIView {
     
     private var path: UIBezierPath!
     private var shape: CAShapeLayer!
-    private var screenRect : CGRect!
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
@@ -22,19 +21,19 @@ class VerticalLineView: UIView {
     }
     
     override func draw(_ rect: CGRect) {
-        screenRect = UIScreen.main.bounds
-        self.frame.size.width = screenRect.size.width
-        self.frame.size.height = screenRect.size.height * (0.15)
+        let upperCenter = CGPoint(x: 0, y: 0)
+        let bottomCenter = CGPoint(x: 0, y: frame.height)
         
         path = UIBezierPath()
-        path.move(to: CGPoint(x: 0, y: 0))
-        path.addLine(to: CGPoint(x: 0, y: self.frame.height))
+        
+        path.move(to: bottomCenter)
+        path.addLine(to: upperCenter)
         
         shape = CAShapeLayer()
         shape.path = path.cgPath
         shape.strokeColor = UIColor.black.cgColor
         shape.fillColor = UIColor.clear.cgColor
-        shape.lineWidth = screenRect.size.width/112/10
+        shape.lineWidth = UIScreen.main.bounds.size.width/112/10
         
         self.layer.addSublayer(shape)
     }
