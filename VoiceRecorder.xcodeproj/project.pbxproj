@@ -7,11 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0107ED4C28756B5500561E19 /* PlayImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0107ED4B28756B5500561E19 /* PlayImageView.swift */; };
 		0146B7A8286BE34700DD28D2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0146B7A7286BE34700DD28D2 /* AppDelegate.swift */; };
 		0146B7AA286BE35500DD28D2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0146B7A9286BE35500DD28D2 /* Assets.xcassets */; };
 		0146B7B0286BE37100DD28D2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0146B7AF286BE37100DD28D2 /* SceneDelegate.swift */; };
 		0146B7B2286BE38F00DD28D2 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0146B7B1286BE38F00DD28D2 /* HomeViewController.swift */; };
 		0146B7B4286BE39400DD28D2 /* RecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0146B7B3286BE39400DD28D2 /* RecordViewController.swift */; };
+		016916672875787C0024BB48 /* PlayContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 016916662875787C0024BB48 /* PlayContentView.swift */; };
 		01696159286ACF280020AAAC /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01696158286ACF280020AAAC /* Audio.swift */; };
 		0169615B286ACF3E0020AAAC /* FirebaseStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0169615A286ACF3E0020AAAC /* FirebaseStorageManager.swift */; };
 		0169615D286ACF460020AAAC /* HomeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0169615C286ACF460020AAAC /* HomeTableViewCell.swift */; };
@@ -33,12 +35,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0107ED4B28756B5500561E19 /* PlayImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayImageView.swift; sourceTree = "<group>"; };
 		0146B7A7286BE34700DD28D2 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0146B7A9286BE35500DD28D2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0146B7AD286BE36B00DD28D2 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0146B7AF286BE37100DD28D2 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		0146B7B1286BE38F00DD28D2 /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		0146B7B3286BE39400DD28D2 /* RecordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordViewController.swift; sourceTree = "<group>"; };
+		016916662875787C0024BB48 /* PlayContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayContentView.swift; sourceTree = "<group>"; };
 		01696158286ACF280020AAAC /* Audio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Audio.swift; sourceTree = "<group>"; };
 		0169615A286ACF3E0020AAAC /* FirebaseStorageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseStorageManager.swift; sourceTree = "<group>"; };
 		0169615C286ACF460020AAAC /* HomeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeTableViewCell.swift; sourceTree = "<group>"; };
@@ -138,6 +142,8 @@
 		18F0978A287519AF00CAEA18 /* Player */ = {
 			isa = PBXGroup;
 			children = (
+				0107ED4B28756B5500561E19 /* PlayImageView.swift */,
+				016916662875787C0024BB48 /* PlayContentView.swift */,
 				01696160286ADEFA0020AAAC /* PlayViewController.swift */,
 			);
 			path = Player;
@@ -298,6 +304,7 @@
 				01E1AB0628747841004ADBAE /* ProgressTimeView.swift in Sources */,
 				18F41487286C2AA100BB9911 /* AudioLevels.swift in Sources */,
 				0146B7B2286BE38F00DD28D2 /* HomeViewController.swift in Sources */,
+				016916672875787C0024BB48 /* PlayContentView.swift in Sources */,
 				0146B7A8286BE34700DD28D2 /* AppDelegate.swift in Sources */,
 				0169615D286ACF460020AAAC /* HomeTableViewCell.swift in Sources */,
 				0169615F286ACF4B0020AAAC /* HomeViewModel.swift in Sources */,
@@ -308,6 +315,7 @@
 				0146B7B4286BE39400DD28D2 /* RecordViewController.swift in Sources */,
 				0169615B286ACF3E0020AAAC /* FirebaseStorageManager.swift in Sources */,
 				01696159286ACF280020AAAC /* Audio.swift in Sources */,
+				0107ED4C28756B5500561E19 /* PlayImageView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

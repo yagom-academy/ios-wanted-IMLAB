@@ -19,7 +19,6 @@ class FirebaseStorageManager {
     }
     
     func fetch(completion: @escaping (Result<Audio, Error>) -> Void) {
-        
         guard let deviceId = deviceId else {
             return
         }
@@ -44,49 +43,8 @@ class FirebaseStorageManager {
                 completion(.failure(error))
             }
         }
-        
-//        if let deviceId = deviceId {
-//            storage.child(deviceId).listAll { result in
-//                switch result{
-//                case .success(let result):
-//                    DispatchQueue.main.async {
-//                        result.items.forEach { item in
-//                            let title = "voiceRecords_" + item.name.replacingOccurrences(of: ".m4a", with: "")
-//
-//                            let fileURL = URL(fileURLWithPath: title, isDirectory: false, relativeTo: URL(fileURLWithPath: NSTemporaryDirectory()))
-//                            item.write(toFile: fileURL) { [weak self] url, err in
-//                                guard let self = self,
-//                                      err == nil else{return}
-//                                if let url = url{
-//                                    let audio = Audio(title: title, url: url, fileName: item.name)
-//                                    completion(.success(audio))
-//                                }
-//                            }
-//                    }
-                    
-                        //TODO: - item을 로컬로 다운로드 하고, 캐싱 처리하기
-//                        item.write(toFile: URL(string: title)) { url, error in
-//                            Audio(title: title, url: url)
-//
-//                            AVAudioFile(forReading: url)
-//                        }
-                        
-//                        item.downloadURL { url, err in
-//                            if let url = url{
-//                                let audio = Audio(title: title, url: url)
-//                                completion(.success(audio))
-//                            }
-//                        }
-//                    }
-//                case let .failure(err):
-//                    print("Error in fetch FirebaseManager \(err.localizedDescription)")
-//                }
-//            }
-//        }
     }
-    
-    // upload는 fileName, delete는 title -> 둘이 통합 가능할지 고민
-    
+        
     func uploadData(url: URL, fileName: String) {
         if let deviceId = deviceId {
             storage.child("\(deviceId)/\(fileName)").putFile(from: url)

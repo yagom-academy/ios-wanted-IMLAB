@@ -12,7 +12,7 @@ class PlayViewController: UIViewController {
     
     var audio: Audio? {
         didSet {
-            titleLabel.text = audio?.title
+            playContentView.titleLabel.text = audio?.title
             guard let url = audio?.url else { return }
             downloadAudioAndMove(url)
         }
@@ -21,50 +21,8 @@ class PlayViewController: UIViewController {
     private var viewModel: PlayViewModel?
     private var cancellable = Set<AnyCancellable>()
     
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.numberOfLines = 0
-        return label
-    }()
-    
-    private let progressTimeView = ProgressTimeView()
-    
-    private let playSeekStackView = PlaySeekStackView()
-    
-    private let minVolumeImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "speaker.fill")
-        imageView.contentMode = .scaleAspectFit
-        return imageView
-    }()
-    
-    private let maxVolumeImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "speaker.3.fill")
-        imageView.contentMode = .scaleAspectFit
-        return imageView
-    }()
-    
-    private lazy var volumeSlider: UISlider = {
-        let slider = UISlider()
-        slider.addTarget(self, action: #selector(volumeSliderValueChanged(_:)), for: .valueChanged)
-        slider.setValue(0.5, animated: false)
-        return slider
-    }()
-    
-    private lazy var volumeStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [minVolumeImageView, volumeSlider, maxVolumeImageView])
-        stackView.axis = .horizontal
-        stackView.spacing = 10
-        return stackView
-    }()
-    
-    private lazy var pitchSegmentedControl: UISegmentedControl = {
-        let segmentedControl = UISegmentedControl(items: ["일반 목소리", "아기 목소리", "할아버지 목소리"])
-        segmentedControl.selectedSegmentIndex = 0
-        segmentedControl.addTarget(self, action: #selector(pitchSegmentedControlValueChanged(_:)), for: .valueChanged)
-        return segmentedControl
-    }()
+    private let playImageView = PlayImageView()
+    private let playContentView = PlayContentView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -98,43 +56,34 @@ private extension PlayViewController {
     }
     
     func addSubViews() {
-        [titleLabel, progressTimeView, playSeekStackView, volumeStackView, pitchSegmentedControl].forEach {
+        [playImageView, playContentView].forEach {
             view.addSubview($0)
         }
     }
     
     func makeConstraints() {
-        [titleLabel, progressTimeView, playSeekStackView, volumeStackView, pitchSegmentedControl].forEach {
+        [playImageView, playContentView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 32.0),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32.0),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32.0),
+            playImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8.0),
+            playImageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            playImageView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            playImageView.bottomAnchor.constraint(equalTo: view.centerYAnchor),
             
-            progressTimeView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 32.0),
-            progressTimeView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            progressTimeView.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            progressTimeView.heightAnchor.constraint(equalToConstant: 32.0),
-            
-            playSeekStackView.topAnchor.constraint(equalTo: progressTimeView.bottomAnchor, constant: 32.0),
-            playSeekStackView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            playSeekStackView.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            
-            volumeStackView.topAnchor.constraint(equalTo: playSeekStackView.bottomAnchor, constant: 32.0),
-            volumeStackView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            volumeStackView.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            
-            pitchSegmentedControl.topAnchor.constraint(equalTo: volumeStackView.bottomAnchor, constant: 32.0),
-            pitchSegmentedControl.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            pitchSegmentedControl.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            playContentView.topAnchor.constraint(equalTo: playImageView.bottomAnchor),
+            playContentView.leadingAnchor.constraint(equalTo: playImageView.leadingAnchor),
+            playContentView.trailingAnchor.constraint(equalTo: playImageView.trailingAnchor),
+            playContentView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
     }
     
     func addTargets() {
-        playSeekStackView.backwardButton.addTarget(self, action: #selector(touchBackwardButton), for: .touchUpInside)
-        playSeekStackView.forwardButton.addTarget(self, action: #selector(touchForwardButton), for: .touchUpInside)
-        playSeekStackView.playPauseButton.addTarget(self, action: #selector(touchPlayPauseButton), for: .touchUpInside)
+        playContentView.playSeekStackView.backwardButton.addTarget(self, action: #selector(touchBackwardButton), for: .touchUpInside)
+        playContentView.playSeekStackView.forwardButton.addTarget(self, action: #selector(touchForwardButton), for: .touchUpInside)
+        playContentView.playSeekStackView.playPauseButton.addTarget(self, action: #selector(touchPlayPauseButton), for: .touchUpInside)
+        playContentView.volumeSlider.addTarget(self, action: #selector(volumeSliderValueChanged(_:)), for: .valueChanged)
+        playContentView.pitchSegmentedControl.addTarget(self, action: #selector(pitchSegmentedControlValueChanged(_:)), for: .valueChanged)
     }
     
     // MARK: - objc func
@@ -177,16 +126,16 @@ private extension PlayViewController {
         viewModel?.$playerProgress
             .receive(on: DispatchQueue.main)
             .sink { value in
-                self.progressTimeView.progressView.progress = value
+                self.playContentView.progressTimeView.progressView.progress = value
             }
             .store(in: &cancellable)
         
         viewModel?.$playerIsReady
             .receive(on: DispatchQueue.main)
             .sink { isReady in
-                self.playSeekStackView.backwardButton.isEnabled = isReady ? true : false
-                self.playSeekStackView.playPauseButton.isEnabled = isReady ? true : false
-                self.playSeekStackView.forwardButton.isEnabled = isReady ? true : false
+                self.playContentView.playSeekStackView.backwardButton.isEnabled = isReady ? true : false
+                self.playContentView.playSeekStackView.playPauseButton.isEnabled = isReady ? true : false
+                self.playContentView.playSeekStackView.forwardButton.isEnabled = isReady ? true : false
             }
             .store(in: &cancellable)
         
@@ -194,9 +143,9 @@ private extension PlayViewController {
             .receive(on: DispatchQueue.main)
             .sink { isPlaying in
                 if isPlaying {
-                    self.playSeekStackView.playPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+                    self.playContentView.playSeekStackView.playPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
                 } else {
-                    self.playSeekStackView.playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+                    self.playContentView.playSeekStackView.playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
                 }
             }
             .store(in: &cancellable)
@@ -204,8 +153,8 @@ private extension PlayViewController {
         viewModel?.$playerTime
             .receive(on: DispatchQueue.main)
             .sink { playerTime in
-                self.progressTimeView.playTimeLabel.text = playerTime.elapsedText
-                self.progressTimeView.playTimeRemainLabel.text = playerTime.remainingText
+                self.playContentView.progressTimeView.playTimeLabel.text = playerTime.elapsedText
+                self.playContentView.progressTimeView.playTimeRemainLabel.text = playerTime.remainingText
             }
             .store(in: &cancellable)
     }
