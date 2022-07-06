@@ -67,8 +67,7 @@ class PathFinder {
         var tempPath = basePath
         let fileNameToAppend = "\(fileName).caf"
         tempPath.appendPathComponent(fileNameToAppend)
-        print(tempPath)
-        return manager.fileExists(atPath: tempPath.absoluteString)
+        return manager.fileExists(atPath: tempPath.relativePath)
     }
     
     func deleteLocalFile(fileName: String) {
@@ -76,14 +75,11 @@ class PathFinder {
         let fileNameToAppend = "\(fileName).caf"
         
         tempPath.appendPathComponent(fileNameToAppend)
-        print("delete", tempPath)
         
         do {
-            try manager.removeItem(at: tempPath)
-            print("성공")
+            try manager.removeItem(atPath: tempPath.relativePath)
         } catch let error {
             print(error.localizedDescription)
         }
-//        print(tempPath)
     }
 }

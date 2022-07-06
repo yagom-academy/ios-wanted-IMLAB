@@ -147,7 +147,6 @@ extension VoiceMemoListViewController: UITableViewDelegate, UITableViewDataSourc
         var targetSliced = target.components(separatedBy: "/")
         targetSliced.removeFirst()
         let  joinTarget = targetSliced.joined(separator: "/")
-        print("join!" ,joinTarget)
         let isExist = pathFinder.checkLocalIsExist(fileName: joinTarget)
         
         if !isExist {
@@ -182,12 +181,9 @@ extension VoiceMemoListViewController: UITableViewDelegate, UITableViewDataSourc
                 case .success(_):
                     if isExist {
                         self.pathFinder.deleteLocalFile(fileName: joinTarget)
-                    } else {
-                        print("실패")
                     }
                 case .failure(let error):
-                    print(error.localizedDescription, "삭제실패")
-                    
+                    print(error.localizedDescription)
                 }
             }
         }
