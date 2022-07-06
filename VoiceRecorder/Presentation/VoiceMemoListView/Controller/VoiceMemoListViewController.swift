@@ -51,7 +51,7 @@ class VoiceMemoListViewController: UIViewController {
         configureTableView()
         designUI()
         fetchFirebaseListAll()
-        createObservers()
+        NotificationCenter.default.addObserver(self, selector: #selector(recordViewUploadComplete(_:)), name: .recordViewUploadComplete, object: nil)
     }
     
 }
@@ -59,22 +59,6 @@ class VoiceMemoListViewController: UIViewController {
 extension VoiceMemoListViewController {
     
     // MARK: - Method
-    
-    private func configureTableView() {
-        
-        tableView.register(VoiceMemoCell.self, forCellReuseIdentifier: VoiceMemoCell.identifier)
-        tableView.delegate = self
-        tableView.dataSource = self
-    }
-    
-    private func designUI() {
-        
-        view.backgroundColor = .systemBackground
-        self.navigationItem.title = "Voice Memos"
-        navigationController?.navigationBar.topItem?.rightBarButtonItem = rightButton
-        view.addSubview(tableView)
-        designTableView()
-    }
     
     private func fetchFirebaseListAll() {
         
@@ -92,12 +76,7 @@ extension VoiceMemoListViewController {
             }
         }
     }
-    
-    private func createObservers() {
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(recordViewUploadComplete(_:)), name: .recordViewUploadComplete, object: nil)
-    }
-    
+
     private func convertSecondToMinute(time: String) -> String {
         
         guard let time = Int(time) else { return ""}
@@ -106,7 +85,7 @@ extension VoiceMemoListViewController {
         return "\(minute):\(second)"
     }
     
-    // MARK: - Action Method
+    // MARK: - Objc Method
     
     @objc private func addButtonTouched() {
         
@@ -126,6 +105,22 @@ extension VoiceMemoListViewController {
 // MARK: - UI Design
 
 extension VoiceMemoListViewController {
+    
+    private func configureTableView() {
+        
+        tableView.register(VoiceMemoCell.self, forCellReuseIdentifier: VoiceMemoCell.identifier)
+        tableView.delegate = self
+        tableView.dataSource = self
+    }
+    
+    private func designUI() {
+        
+        view.backgroundColor = .systemBackground
+        self.navigationItem.title = "Voice Memos"
+        navigationController?.navigationBar.topItem?.rightBarButtonItem = rightButton
+        view.addSubview(tableView)
+        designTableView()
+    }
     
     private func designTableView() {
         
