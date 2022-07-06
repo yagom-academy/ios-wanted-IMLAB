@@ -122,7 +122,7 @@ class RecordAndPlayView: UIView {
     }()
     
     @objc func didTapDownloadButton() {
-        let file = recordManager.dateToFileName(Date())
+        let file = recordManager.dateToFileName(Date()) + "+" + viewModel.duration()
         // 저장 후 dismiss
         networkManager.saveRecord(filename: file)
     }

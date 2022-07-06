@@ -20,8 +20,8 @@ class PlayListUserDefaults {
     }
     
     func update(networkData: [String]) -> [String] {
-        print("networkData: ", networkData)
-        print("getdata: ", getData())
+//        print("networkData: ", networkData)
+//        print("getdata: ", getData())
         let frontList = getData().filter { networkData.contains($0) }
         let backList = networkData.filter { frontList.contains($0) == false }
 

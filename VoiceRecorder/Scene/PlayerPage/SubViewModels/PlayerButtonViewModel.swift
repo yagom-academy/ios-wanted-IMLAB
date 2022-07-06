@@ -36,4 +36,8 @@ class PlayerButtonViewModel {
     func setAudioFile(_ audioFile: AVAudioFile) {
         audioPlayer.setAudioFile(audioFile)
     }
+    
+    func duration() -> String {
+        return audioPlayer.duration()
+    }
 }

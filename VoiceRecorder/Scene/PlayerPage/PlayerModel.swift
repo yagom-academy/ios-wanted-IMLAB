@@ -28,10 +28,6 @@ class PlayerModel {
             }
         }
     }
-    
-    func getFilefromRecord() {
-        
-    }
 
     private func parsingFileData(_ filename: String) {
         let file = filename.split(separator: "+").map { String($0) }

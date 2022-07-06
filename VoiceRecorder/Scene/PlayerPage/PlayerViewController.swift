@@ -45,14 +45,11 @@ class PlayerViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-
-        NotificationCenter.default.addObserver(self, selector: #selector(audioDidEnd(notification:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
 
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
         // TODO: - 재생 끝날때 다시 처음으로 초기화
         viewModel.resetAudioPlayer()
     }
@@ -121,7 +118,8 @@ extension PlayerViewController {
 extension PlayerViewController {
     // 재생상태 초기화
     @objc private func audioDidEnd(notification: NSNotification) {
-//        viewModel.setPlayerToZero()
+        print("player ended!")
+        viewModel.setPlayerToZero()
     }
 }
 

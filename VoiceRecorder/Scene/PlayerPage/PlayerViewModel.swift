@@ -42,6 +42,11 @@ class PlayerViewModel {
         playerButtonViewModel.isAudioAvailable()
     }
     
+    func setPlayerToZero() {
+        audioPlayer.setPlayerToZero()
+        
+    }
+    
     func resetAudioPlayer() {
         audioPlayer.resetAudio()
     }

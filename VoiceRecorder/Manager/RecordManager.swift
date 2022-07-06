@@ -87,7 +87,7 @@ class RecordManager: NSObject, AVAudioPlayerDelegate {
     }
     
     func endRecord() {
-//        var fileName = dateToFileName(Date())
+//        var fileName = dateToFileNamdate(Date())
         timer?.invalidate()
         
         recorder?.stop()

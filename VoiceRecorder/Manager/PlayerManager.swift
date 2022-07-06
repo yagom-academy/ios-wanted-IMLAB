@@ -24,6 +24,8 @@ protocol PlayerService {
 
     func setVolume(_ value: Float)
     func setPitch(_ value: Int)
+
+    func duration() -> String
 }
 
 class PlayerManager: PlayerService {
@@ -63,13 +65,13 @@ class PlayerManager: PlayerService {
 
         configureAudioEngine()
     }
-    
+
     func resetAudio() {
-        audioFile = nil
-        
+//        audioFile = nil
+
         audioPlayer.stop()
         audioPlayer.reset()
-        
+
         audioEngine.stop()
         audioEngine.reset()
     }
@@ -88,6 +90,7 @@ class PlayerManager: PlayerService {
         }
         do {
             audioPlayer.scheduleFile(audioFile, at: nil)
+
             setVolume(0.5)
 
             audioLengthSamples = audioFile.length
@@ -101,7 +104,16 @@ class PlayerManager: PlayerService {
     }
 
     func setPlayerToZero() {
-        // 재생 끝났을때 처음으로
+        guard let audioFile = audioFile else {
+            return
+        }
+        audioPlayer.stop()
+
+        let frameCount = AVAudioFrameCount(audioLengthSamples)
+
+        audioPlayer.scheduleSegment(audioFile, startingFrame: 0, frameCount: frameCount, at: nil) {
+            print("scheduled")
+        }
     }
 
     // 재생
@@ -125,6 +137,13 @@ class PlayerManager: PlayerService {
             return
         }
 
+        guard let nodeTime: AVAudioTime = audioPlayer.lastRenderTime,
+              let playerTime: AVAudioTime = audioPlayer.playerTime(forNodeTime: nodeTime) else {
+            return
+        }
+        let currentSeconds = Double(Double(playerTime.sampleTime) / playerTime.sampleRate)
+        currentPosition += AVAudioFramePosition(currentSeconds * audioSampleRate)
+
         let offset = AVAudioFramePosition(time * audioSampleRate)
 
         seekFrame = currentPosition + offset
@@ -132,10 +151,11 @@ class PlayerManager: PlayerService {
         seekFrame = min(seekFrame, audioLengthSamples)
         currentPosition = seekFrame
 
+
         let wasPlaying = audioPlayer.isPlaying
         audioPlayer.stop()
 
-        if currentPosition < audioLengthSamples {
+        if seekFrame < audioLengthSamples {
             updateTime()
 
             let frameCount = AVAudioFrameCount(audioLengthSamples - seekFrame)
@@ -145,8 +165,7 @@ class PlayerManager: PlayerService {
                 startingFrame: seekFrame,
                 frameCount: frameCount,
                 at: nil
-            ) {
-            }
+            )
 
             if wasPlaying {
                 audioPlayer.play()
@@ -155,10 +174,6 @@ class PlayerManager: PlayerService {
     }
 
     func updateTime() {
-        currentPosition = currentFrame + seekFrame
-        currentPosition = max(currentPosition, 0)
-        currentPosition = min(currentPosition, audioLengthSamples)
-
         if currentPosition >= audioLengthSamples {
             audioPlayer.stop()
 
@@ -181,5 +196,22 @@ class PlayerManager: PlayerService {
         }
 
         pitchControl.pitch = audioPitch
+    }
+
+    func duration() -> String {
+        if audioLengthSeconds == 0.0 {
+            return ""
+        }
+
+        let duration = Int(audioLengthSeconds)
+        var result = ""
+
+        let min = duration / 60
+        let sec = duration % 60
+
+        result += min < 10 ? "0\(min):" : "\(min)"
+        result += sec < 10 ? "0\(sec)" : "\(sec)"
+
+        return result
     }
 }
