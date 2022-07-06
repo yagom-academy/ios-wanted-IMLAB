@@ -18,7 +18,7 @@ class RecordVoiceManager{
     weak var delegate : RecordVoiceManagerDelegate?
     
     init(){
-        self.recorder = nil // 초기화
+        self.recorder = nil
         let soundFileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("myRecoding.m4a")
         let recordSettings = [
@@ -47,9 +47,7 @@ class RecordVoiceManager{
     func stopRecording(completion : @escaping ()->Void) {
         self.recorder?.stop()
         timer?.invalidate()
-        // 파일 업로드
         completion()
-        // 당장은 서버에 업로드 되지 않게 처리(테스트 해봐야 하니까)
     }
     
     func isRecording() -> Bool {
