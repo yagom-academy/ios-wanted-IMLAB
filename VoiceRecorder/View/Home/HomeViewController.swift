@@ -69,12 +69,14 @@ private extension HomeViewController {
             let recordController = RecordViewController()
             recordController.delegate = self
             present(recordController, animated: true)
+        } else {
+            let alertController = UIAlertController(title: "", message: "설정에서 마이크 권한을 허용해주세요.", preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
+            present(alertController, animated: true)
         }
-        
-        //TODO: - 권한 확인 알림 창 띄우기
     }
     
-    private func checkPermission() {
+    func checkPermission() {
         let session = AVAudioSession.sharedInstance()
         
         switch session.recordPermission {
@@ -89,7 +91,6 @@ private extension HomeViewController {
         default:
             self.permission = false
         }
-        
     }
 }
 
