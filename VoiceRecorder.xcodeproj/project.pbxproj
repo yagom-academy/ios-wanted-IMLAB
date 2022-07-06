@@ -12,6 +12,8 @@
 		9F25234328699DB4008A9819 /* RecordVoiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F25234228699DB4008A9819 /* RecordVoiceViewController.swift */; };
 		9F6E7F83287511C50096DE3B /* WaveFormImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6E7F82287511C50096DE3B /* WaveFormImageView.swift */; };
 		9F6E7F85287512210096DE3B /* VerticalLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6E7F84287512210096DE3B /* VerticalLineView.swift */; };
+		9F6E7F872875869D0096DE3B /* TimeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6E7F862875869D0096DE3B /* TimeLabel.swift */; };
+		9F6E7F8A287586D10096DE3B /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6E7F89287586D10096DE3B /* Constants.swift */; };
 		9F8E2C3E2873096E009C16BF /* DisplayWaveFormManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8E2C3D2873096D009C16BF /* DisplayWaveFormManager.swift */; };
 		9F99812B286C6D84004AE695 /* DrawWaveFormManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F99812A286C6D84004AE695 /* DrawWaveFormManager.swift */; };
 		9F9DA2ED286C1D84004AE2EA /* RecorderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9DA2EC286C1D84004AE2EA /* RecorderViewModel.swift */; };
@@ -43,6 +45,8 @@
 		9F25234228699DB4008A9819 /* RecordVoiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordVoiceViewController.swift; sourceTree = "<group>"; };
 		9F6E7F82287511C50096DE3B /* WaveFormImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveFormImageView.swift; sourceTree = "<group>"; };
 		9F6E7F84287512210096DE3B /* VerticalLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalLineView.swift; sourceTree = "<group>"; };
+		9F6E7F862875869D0096DE3B /* TimeLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLabel.swift; sourceTree = "<group>"; };
+		9F6E7F89287586D10096DE3B /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		9F8E2C3D2873096D009C16BF /* DisplayWaveFormManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayWaveFormManager.swift; sourceTree = "<group>"; };
 		9F99812A286C6D84004AE695 /* DrawWaveFormManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawWaveFormManager.swift; sourceTree = "<group>"; };
 		9F9DA2EC286C1D84004AE2EA /* RecorderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecorderViewModel.swift; sourceTree = "<group>"; };
@@ -95,8 +99,17 @@
 			children = (
 				9F6E7F82287511C50096DE3B /* WaveFormImageView.swift */,
 				9F6E7F84287512210096DE3B /* VerticalLineView.swift */,
+				9F6E7F862875869D0096DE3B /* TimeLabel.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		9F6E7F88287586C10096DE3B /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				9F6E7F89287586D10096DE3B /* Constants.swift */,
+			);
+			path = Util;
 			sourceTree = "<group>";
 		};
 		B00FF35539F71ACE9067B68B /* Pods */ = {
@@ -179,6 +192,7 @@
 		DE15E65A28604278003DD2F5 /* VoiceRecorder */ = {
 			isa = PBXGroup;
 			children = (
+				9F6E7F88287586C10096DE3B /* Util */,
 				9F6E7F7D287511240096DE3B /* View */,
 				C730AA9C286BF5070004D11C /* ViewModel */,
 				C730AA98286BEB7D0004D11C /* Model */,
@@ -313,12 +327,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				9F99812B286C6D84004AE695 /* DrawWaveFormManager.swift in Sources */,
+				9F6E7F8A287586D10096DE3B /* Constants.swift in Sources */,
 				9F25234128698A9C008A9819 /* VoiceRecorderListTableViewController.swift in Sources */,
 				9F6E7F85287512210096DE3B /* VerticalLineView.swift in Sources */,
 				9F9DA2ED286C1D84004AE2EA /* RecorderViewModel.swift in Sources */,
 				9F25234328699DB4008A9819 /* RecordVoiceViewController.swift in Sources */,
 				C730AA9A286BEB9C0004D11C /* RecordFile.swift in Sources */,
 				9FA3152428703D280080E484 /* AudioSessionManager.swift in Sources */,
+				9F6E7F872875869D0096DE3B /* TimeLabel.swift in Sources */,
 				C77F4C2D2869925900B2646E /* VoiceRecordTableViewCell.swift in Sources */,
 				C7AB10492875AA1E00ED16C5 /* FirebaseStorageDownloadManager.swift in Sources */,
 				C730AAA0286BF5400004D11C /* VoiceRecordViewModel.swift in Sources */,

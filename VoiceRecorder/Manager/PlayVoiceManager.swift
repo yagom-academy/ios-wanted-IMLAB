@@ -186,7 +186,7 @@ class PlayVoiceManager{
         currentPosition = max(currentPosition, 0)
         currentPosition = min(currentPosition, audioLengthSamples)
         if currentPosition >= audioLengthSamples{
-            delegate.displayWaveForm(to: audioLengthSamples, in: audioLengthSamples) // 이 부분 순서 변경
+            delegate.displayWaveForm(to: audioLengthSamples, in: audioLengthSamples)
             playerNode.stop()
             seekFrame = 0
             currentPosition = 0
@@ -195,7 +195,7 @@ class PlayVoiceManager{
             delegate.playEndTime()
             setScheduleFile()
         } else {
-            delegate.displayWaveForm(to: currentPosition, in: audioLengthSamples) // 이 부분 순서 변경
+            delegate.displayWaveForm(to: currentPosition, in: audioLengthSamples)
         }
         
     }
