@@ -22,6 +22,9 @@ class RecordViewController: UIViewController {
     @IBOutlet weak var playBackwardButton: UIButton!
     @IBOutlet weak var playForwardButton: UIButton!
     
+    // MARK: - UI Components
+    private lazy var activityIndicator = UIActivityIndicatorView(style: .large)
+    
     // MARK: - Properties
     weak var delegate: RecordViewControllerDelegate?
     private let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -56,6 +59,7 @@ class RecordViewController: UIViewController {
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureUI()
         requestRecord()
         setupButton(isHidden: true)
         setupAudioRecorder()
@@ -66,7 +70,6 @@ class RecordViewController: UIViewController {
     }
     
     // MARK: - @IBAction
-    
     @IBAction func setCutOffFrequency(_ sender: UISlider) {
         sender.isContinuous = false
         let currentValue = Float(Int(sender.value))
@@ -90,10 +93,8 @@ class RecordViewController: UIViewController {
     
     @IBAction func didTapRecordButton(_ sender: UIButton) {
         if isRecord {
-            sender.setImage(Icon.circleFill.image, for: .normal)
-            setupButton(isHidden: false)
+            sender.setImage(.circleFill)
             endRecord()
-            blockEQSlider()
             guard let data = recorder.data else { return }
             engine.url = fileName
             try! engine.setupEngine()
@@ -103,10 +104,19 @@ class RecordViewController: UIViewController {
                 MetaData.eq.key: eqSliderValues.joined(separator: " ")
             ]
             
-            uploadFile(data, fileName: recordDate ?? "", newMetaData: newMetaData)
+            activityIndicator.startAnimating()
+            uploadFile(
+                data,
+                fileName: recordDate ?? "",
+                newMetaData: newMetaData
+            ) {
+                self.activityIndicator.stopAnimating()
+                self.setupButton(isHidden: false)
+                self.blockEQSlider()
+            }
             print(fileName)
         } else {
-            sender.setImage(Icon.circle.image, for: .normal)
+            sender.setImage(.circle)
             recorder.record()
             recorderTimer = Timer.scheduledTimer(
                 timeInterval: 0.01,
@@ -129,7 +139,7 @@ class RecordViewController: UIViewController {
     
     @IBAction func didTapPlayPauseButton(_ sender: UIButton) {
         if isPlay {
-            sender.setImage(Icon.play.image, for: .normal)
+            sender.setImage(.play)
             playerTimer?.invalidate()
             engine.pause()
         } else {
@@ -142,7 +152,7 @@ class RecordViewController: UIViewController {
                 userInfo: nil,
                 repeats: true
             )
-            sender.setImage(Icon.pauseFill.image, for: .normal)
+            sender.setImage(.pauseFill)
         }
         isPlay = !isPlay
     }
@@ -157,7 +167,7 @@ private extension RecordViewController {
     @objc func update2() {
         print(engine.getCurrentTime())
         if engine.isFinish() {
-            playButton.setImage(Icon.play.image, for: .normal)
+            playButton.setImage(.play)
             isPlay = false
             playerTimer?.invalidate()
             engine.stop()
@@ -170,6 +180,13 @@ private extension RecordViewController {
 
 // MARK: - Methods
 private extension RecordViewController {
+    func configureUI() {
+        view.addSubview(activityIndicator)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        
+        activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+    }
     func setupAudioRecorder() {
         recordDate = Date.now.dateToString
         fileName = fileURL.appendingPathComponent("\(recordDate ?? "").m4a")
@@ -221,7 +238,12 @@ private extension RecordViewController {
         counter = 0.0
     }
     
-    func uploadFile(_ data: Data, fileName: String, newMetaData: [String: String]) {
+    func uploadFile(
+        _ data: Data,
+        fileName: String,
+        newMetaData: [String: String],
+        didFinish completion: @escaping () -> Void
+    ) {
         StorageManager.shared.upload(
             data: data,
             fileName: fileName,
@@ -231,6 +253,7 @@ private extension RecordViewController {
             case .success(_):
                 print("저장 성공🎉")
                 self.delegate?.recordView(didFinishRecord: true)
+                completion()
             case .failure(let error):
                 print("ERROR \(error.localizedDescription)🌡🌡")
             }

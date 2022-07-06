@@ -10,6 +10,17 @@ class ListViewController: UIViewController {
     // MARK: - @IBOutlet
     @IBOutlet weak var recordListTableView: UITableView!
     
+    // MARK: - UI Components
+    private lazy var refreshControl: UIRefreshControl = {
+        let control = UIRefreshControl()
+        control.addTarget(
+            self,
+            action: #selector(beginRefresh),
+            for: .valueChanged
+        )
+        return control
+    }()
+    
     // MARK: - Properties
     var recordList = [RecordModel]() {
         didSet {
@@ -97,6 +108,15 @@ extension ListViewController: RecordViewControllerDelegate {
     }
 }
 
+// MARK: - @objc Methods
+private extension ListViewController {
+    @objc func beginRefresh(_ sender: UIRefreshControl) {
+        recordList = []
+        fetchRecordFile()
+        sender.endRefreshing()
+    }
+}
+
 // MARK: - Methods
 private extension ListViewController {
     func fetchRecordFile() {
@@ -115,6 +135,7 @@ private extension ListViewController {
 // MARK: - UI Methods
 private extension ListViewController {
     func setupRecordListTableView() {
+        recordListTableView.refreshControl = refreshControl
         recordListTableView.delegate = self
         recordListTableView.dataSource = self
         recordListTableView.register(

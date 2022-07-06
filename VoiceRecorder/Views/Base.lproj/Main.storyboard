@@ -347,7 +347,7 @@
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="nl7-I1-MpL">
                                 <rect key="frame" x="138" y="806.5" width="138" height="39.5"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wdY-eq-EiC">
+                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wdY-eq-EiC">
                                         <rect key="frame" x="0.0" y="0.0" width="38" height="39.5"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                         <state key="normal" image="gobackward.5" catalog="system">
@@ -357,7 +357,7 @@
                                             <action selector="didTapPlayBack5Button:" destination="lmi-ig-c4Q" eventType="touchUpInside" id="5C4-X6-SIf"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZXT-xL-ecs">
+                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZXT-xL-ecs">
                                         <rect key="frame" x="50" y="4.5" width="38" height="30.5"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                         <state key="normal" image="play" catalog="system">
@@ -367,7 +367,7 @@
                                             <action selector="didTapPlayPauseButton:" destination="lmi-ig-c4Q" eventType="touchUpInside" id="4Eo-7q-68f"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KCt-VN-UiT">
+                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KCt-VN-UiT">
                                         <rect key="frame" x="100" y="0.0" width="38" height="39.5"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                         <state key="normal" image="goforward.5" catalog="system">
@@ -429,7 +429,9 @@
                     </view>
                     <connections>
                         <outlet property="dateTitleLabel" destination="756-8S-E39" id="reP-vl-nGU"/>
+                        <outlet property="playBackButton" destination="wdY-eq-EiC" id="W82-li-QRk"/>
                         <outlet property="playButton" destination="ZXT-xL-ecs" id="NV0-d4-U2S"/>
+                        <outlet property="playForwardButton" destination="KCt-VN-UiT" id="hsr-Vh-TCl"/>
                         <outlet property="voiceChangeSegment" destination="qY9-Ow-Yxv" id="j2l-9F-4io"/>
                         <outlet property="volumeView" destination="H8j-VG-WSz" id="udx-Im-4JA"/>
                     </connections>
