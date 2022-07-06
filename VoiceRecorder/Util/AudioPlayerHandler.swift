@@ -19,7 +19,7 @@ class AudioPlayerHandler {
     var audioFile: AVAudioFile!
     var audioEngine = AVAudioEngine()
     var audioPlayerNode = AVAudioPlayerNode()
-    let audioUnitTimePich = AVAudioUnitTimePitch()
+    let audioUnitTimePitch = AVAudioUnitTimePitch()
     
     init(handler: LocalFileProtocol, updateTimeInterval: UpdateTimer) {
         self.localFileHandler = handler
@@ -65,10 +65,14 @@ class AudioPlayerHandler {
         }
         
         audioEngine.attach(audioPlayerNode)
-        audioEngine.attach(audioUnitTimePich)
+        audioEngine.attach(audioUnitTimePitch)
         
-        audioEngine.connect(audioPlayerNode, to: audioUnitTimePich, format: audioFile.processingFormat)
-        audioEngine.connect(audioUnitTimePich, to: audioEngine.outputNode, format: audioFile.processingFormat)
+        //audioplayNode
+        //audioUnitTimePitch
+        //ouput 사이에 들어가야한다.
+        
+        audioEngine.connect(audioPlayerNode, to: audioUnitTimePitch, format: audioFile.processingFormat)
+        audioEngine.connect(audioUnitTimePitch, to: audioEngine.outputNode, format: audioFile.processingFormat)
 
         audioPlayerNode.volume = 5.0
         audioPlayerNode.stop()
@@ -82,7 +86,7 @@ class AudioPlayerHandler {
     }
     
     func changePitch(to pitch: Float) {
-        audioUnitTimePich.pitch = pitch
+        audioUnitTimePitch.pitch = pitch
     }
 //
 //    private func seek(to time: Double) {
