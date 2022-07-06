@@ -8,11 +8,17 @@
 import UIKit
 
 final class PlayViewController: BaseViewController {
-
+    
+    private let playView = PlayView()
+    
+    override func loadView() {
+        self.view = playView
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+    
+        
     }
     
 
