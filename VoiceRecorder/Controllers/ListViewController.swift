@@ -20,6 +20,7 @@ class ListViewController: UIViewController {
         )
         return control
     }()
+    private lazy var activityIndicator = UIActivityIndicatorView(style: .large)
     
     // MARK: - Properties
     var recordList = [RecordModel]() {
@@ -32,7 +33,7 @@ class ListViewController: UIViewController {
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        configureUI()
         setupRecordListTableView()
         fetchRecordFile()
     }
@@ -120,11 +121,15 @@ private extension ListViewController {
 // MARK: - Methods
 private extension ListViewController {
     func fetchRecordFile() {
+        if !self.refreshControl.isRefreshing {
+            activityIndicator.startAnimating()
+        }
         StorageManager.shared.get { result in
             switch result {
             case .success(let recordFile):
                 self.recordList.append(recordFile)
                 self.recordListTableView.reloadData()
+                self.activityIndicator.stopAnimating()
             case .failure(let error):
                 print("ERROR \(error.localizedDescription)🐸")
             }
@@ -134,6 +139,13 @@ private extension ListViewController {
 
 // MARK: - UI Methods
 private extension ListViewController {
+    func configureUI() {
+        view.addSubview(activityIndicator)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        
+        activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+    }
     func setupRecordListTableView() {
         recordListTableView.refreshControl = refreshControl
         recordListTableView.delegate = self
