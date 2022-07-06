@@ -14,7 +14,7 @@ final class AudioListTableViewCell: UITableViewCell {
     lazy var nameLabel: UILabel = {
         let label = UILabel()
         
-        label.font = UIFont.boldSystemFont(ofSize: 25)
+        label.font = UIFont.preferredFont(forTextStyle: .body)
         label.text = "dateLabel"
         
         return label
@@ -23,7 +23,7 @@ final class AudioListTableViewCell: UITableViewCell {
     lazy var timeLabel: UILabel = {
         let label = UILabel()
         
-        label.font = UIFont.systemFont(ofSize: 12)
+        label.font = UIFont.preferredFont(forTextStyle: .callout)
         label.text = "time label"
         
         return label
@@ -49,7 +49,8 @@ final class AudioListTableViewCell: UITableViewCell {
     func setupConstraints() {
         NSLayoutConstraint.activate([
             nameLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
-            nameLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor)
+            nameLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+            nameLabel.trailingAnchor.constraint(equalTo: self.timeLabel.leadingAnchor)
         ])
         
         NSLayoutConstraint.activate([
@@ -57,5 +58,12 @@ final class AudioListTableViewCell: UITableViewCell {
             timeLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
+    
+    func configureCell(audioInformation: AudioInformation) {
+        
+        guard let duration = audioInformation.duration else { return }
+        
+        nameLabel.text = audioInformation.name
+        timeLabel.text = "\(duration)"
+    }
 }
-

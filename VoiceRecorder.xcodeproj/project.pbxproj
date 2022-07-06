@@ -19,6 +19,7 @@
 		DFDF51A0286EE670000E55EC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DFDF519F286EE670000E55EC /* GoogleService-Info.plist */; };
 		DFDF52292875191E000E55EC /* AudioRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFDF52282875191E000E55EC /* AudioRepository.swift */; };
 		EC11323528754CE500D7C4B6 /* AudioListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC11323428754CE500D7C4B6 /* AudioListTableViewCell.swift */; };
+		EC1132382875565A00D7C4B6 /* AudioListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1132372875565A00D7C4B6 /* AudioListViewModel.swift */; };
 		ECB8A5DE286BECF200B1D363 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB8A5DD286BECF200B1D363 /* BaseViewController.swift */; };
 		ECB8A5E0286BED1B00B1D363 /* ViewPresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB8A5DF286BED1B00B1D363 /* ViewPresentable.swift */; };
 		ECB8A5E7286BED7A00B1D363 /* AudioListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB8A5E6286BED7A00B1D363 /* AudioListViewController.swift */; };
@@ -42,6 +43,7 @@
 		DFDF519F286EE670000E55EC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		DFDF52282875191E000E55EC /* AudioRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRepository.swift; sourceTree = "<group>"; };
 		EC11323428754CE500D7C4B6 /* AudioListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioListTableViewCell.swift; sourceTree = "<group>"; };
+		EC1132372875565A00D7C4B6 /* AudioListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioListViewModel.swift; sourceTree = "<group>"; };
 		ECB8A5DD286BECF200B1D363 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		ECB8A5DF286BED1B00B1D363 /* ViewPresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewPresentable.swift; sourceTree = "<group>"; };
 		ECB8A5E6286BED7A00B1D363 /* AudioListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioListViewController.swift; sourceTree = "<group>"; };
@@ -145,12 +147,29 @@
 			path = Repository;
 			sourceTree = "<group>";
 		};
-		EC11323328754CD700D7C4B6 /* AudioListTableViewCell */ = {
+		EC11323328754CD700D7C4B6 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
 				EC11323428754CE500D7C4B6 /* AudioListTableViewCell.swift */,
 			);
-			path = AudioListTableViewCell;
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		EC1132362875564D00D7C4B6 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				EC1132372875565A00D7C4B6 /* AudioListViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		EC1132392875565E00D7C4B6 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				ECB8A5F0286BED9D00B1D363 /* AudioListView.swift */,
+				ECB8A5E6286BED7A00B1D363 /* AudioListViewController.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		EC4C064B286D426100F311FC /* Inteface */ = {
@@ -218,9 +237,9 @@
 		ECB8A5E2286BED5E00B1D363 /* AudioList */ = {
 			isa = PBXGroup;
 			children = (
-				ECB8A5F0286BED9D00B1D363 /* AudioListView.swift */,
-				ECB8A5E6286BED7A00B1D363 /* AudioListViewController.swift */,
-				EC11323328754CD700D7C4B6 /* AudioListTableViewCell */,
+				EC11323328754CD700D7C4B6 /* Cell */,
+				EC1132392875565E00D7C4B6 /* View */,
+				EC1132362875564D00D7C4B6 /* ViewModel */,
 			);
 			path = AudioList;
 			sourceTree = "<group>";
@@ -335,6 +354,7 @@
 				ECB8A5EF286BED9800B1D363 /* RecordingView.swift in Sources */,
 				ECB8A5ED286BED8F00B1D363 /* PlayView.swift in Sources */,
 				DF6408D1286C23DA00567DAC /* AudioInformation.swift in Sources */,
+				EC1132382875565A00D7C4B6 /* AudioListViewModel.swift in Sources */,
 				DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */,
 				ECB8A5E7286BED7A00B1D363 /* AudioListViewController.swift in Sources */,
 			);

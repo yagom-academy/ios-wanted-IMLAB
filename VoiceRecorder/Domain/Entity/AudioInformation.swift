@@ -10,5 +10,7 @@ import Foundation
 struct AudioInformation {
 
     let name: String
-    let duration: Double
+    let data: Data
+    let fileURL: URL
+    let duration: Double?
 }
