@@ -31,9 +31,9 @@
 		DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65D28604278003DD2F5 /* SceneDelegate.swift */; };
 		DE15E66528604279003DD2F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66428604279003DD2F5 /* Assets.xcassets */; };
 		DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */; };
+		FE178319287592BA00DEB555 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = FE178318287592BA00DEB555 /* FirebaseStorage */; };
+		FE17831B287592D700DEB555 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FE17831A287592D700DEB555 /* GoogleService-Info.plist */; };
 		FE7A188A2872D182003CC843 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7A18892872D182003CC843 /* UIView+.swift */; };
-		FE7A188F28731234003CC843 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FE7A188E28731234003CC843 /* GoogleService-Info.plist */; };
-		FE7A18952873139B003CC843 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = FE7A18942873139B003CC843 /* FirebaseStorage */; };
 		FE7A18972873319F003CC843 /* CustomNetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7A18962873319F003CC843 /* CustomNetworkError.swift */; };
 		FEA5330C286C3D48002E1169 /* CustomNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA5330B286C3D48002E1169 /* CustomNavigationController.swift */; };
 		FEA53310286C3DC8002E1169 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA5330F286C3DC8002E1169 /* Config.swift */; };
@@ -41,7 +41,6 @@
 		FEEC697E286C3ACF002E020F /* RecordListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEEC697D286C3ACF002E020F /* RecordListViewModel.swift */; };
 		FEEC6981286C3AEE002E020F /* RecordListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEEC6980286C3AEE002E020F /* RecordListCell.swift */; };
 		FEEC6984286C3B2D002E020F /* RecordNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEEC6983286C3B2D002E020F /* RecordNetworkManager.swift */; };
-		FEFCE08E287050B200200AF1 /* RecordListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEFCE08D287050B200200AF1 /* RecordListModel.swift */; };
 		FEFCE0902870549F00200AF1 /* PlayListUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEFCE08F2870549F00200AF1 /* PlayListUserDefaults.swift */; };
 /* End PBXBuildFile section */
 
@@ -72,8 +71,8 @@
 		DE15E66428604279003DD2F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DE15E66728604279003DD2F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DE15E66928604279003DD2F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FE17831A287592D700DEB555 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FE7A18892872D182003CC843 /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
-		FE7A188E28731234003CC843 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FE7A18962873319F003CC843 /* CustomNetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNetworkError.swift; sourceTree = "<group>"; };
 		FEA5330B286C3D48002E1169 /* CustomNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationController.swift; sourceTree = "<group>"; };
 		FEA5330F286C3DC8002E1169 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
@@ -81,7 +80,6 @@
 		FEEC697D286C3ACF002E020F /* RecordListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListViewModel.swift; sourceTree = "<group>"; };
 		FEEC6980286C3AEE002E020F /* RecordListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListCell.swift; sourceTree = "<group>"; };
 		FEEC6983286C3B2D002E020F /* RecordNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordNetworkManager.swift; sourceTree = "<group>"; };
-		FEFCE08D287050B200200AF1 /* RecordListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListModel.swift; sourceTree = "<group>"; };
 		FEFCE08F2870549F00200AF1 /* PlayListUserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayListUserDefaults.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -90,7 +88,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FE7A18952873139B003CC843 /* FirebaseStorage in Frameworks */,
+				FE178319287592BA00DEB555 /* FirebaseStorage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -134,7 +132,6 @@
 			children = (
 				FEEC697B286C3AB0002E020F /* RecordListViewController.swift */,
 				FEEC697D286C3ACF002E020F /* RecordListViewModel.swift */,
-				FEFCE08D287050B200200AF1 /* RecordListModel.swift */,
 				FEFCE08F2870549F00200AF1 /* PlayListUserDefaults.swift */,
 				FEEC697F286C3AD8002E020F /* SubComponents */,
 			);
@@ -230,8 +227,8 @@
 				DE15E65D28604278003DD2F5 /* SceneDelegate.swift */,
 				DE15E66428604279003DD2F5 /* Assets.xcassets */,
 				DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */,
+				FE17831A287592D700DEB555 /* GoogleService-Info.plist */,
 				DE15E66928604279003DD2F5 /* Info.plist */,
-				FE7A188E28731234003CC843 /* GoogleService-Info.plist */,
 			);
 			path = VoiceRecorder;
 			sourceTree = "<group>";
@@ -269,7 +266,7 @@
 			);
 			name = VoiceRecorder;
 			packageProductDependencies = (
-				FE7A18942873139B003CC843 /* FirebaseStorage */,
+				FE178318287592BA00DEB555 /* FirebaseStorage */,
 			);
 			productName = SNPLab;
 			productReference = DE15E65828604278003DD2F5 /* VoiceRecorder.app */;
@@ -300,7 +297,7 @@
 			);
 			mainGroup = DE15E64F28604278003DD2F5;
 			packageReferences = (
-				FE7A18932873139B003CC843 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				FE178317287592BA00DEB555 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = DE15E65928604278003DD2F5 /* Products */;
 			projectDirPath = "";
@@ -318,7 +315,7 @@
 			files = (
 				DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */,
 				DE15E66528604279003DD2F5 /* Assets.xcassets in Resources */,
-				FE7A188F28731234003CC843 /* GoogleService-Info.plist in Resources */,
+				FE17831B287592D700DEB555 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -330,7 +327,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				FE7A188A2872D182003CC843 /* UIView+.swift in Sources */,
-				FEFCE08E287050B200200AF1 /* RecordListModel.swift in Sources */,
 				0DFCD7342872C1D300F31EBA /* PlayerButtonViewModel.swift in Sources */,
 				04FF93A7286C270600EB34B6 /* RecordManager.swift in Sources */,
 				0D8172EC286D71430009E8AA /* AVPlayer+.swift in Sources */,
@@ -499,8 +495,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CNGL9PR533;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VoiceRecorder/Info.plist;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -511,7 +509,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = net.yagom.VoiceRecorder;
+				PRODUCT_BUNDLE_IDENTIFIER = net.yagom.VoiceRecorder1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -526,8 +524,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CNGL9PR533;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VoiceRecorder/Info.plist;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -538,7 +538,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = net.yagom.VoiceRecorder;
+				PRODUCT_BUNDLE_IDENTIFIER = net.yagom.VoiceRecorder1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -570,7 +570,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		FE7A18932873139B003CC843 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+		FE178317287592BA00DEB555 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
 			requirement = {
@@ -581,9 +581,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		FE7A18942873139B003CC843 /* FirebaseStorage */ = {
+		FE178318287592BA00DEB555 /* FirebaseStorage */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = FE7A18932873139B003CC843 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = FE178317287592BA00DEB555 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
 		};
 /* End XCSwiftPackageProductDependency section */
