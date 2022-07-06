@@ -16,9 +16,7 @@ protocol RecordViewControllerDelegate: AnyObject {
 }
 
 class RecordViewController:UIViewController{
-
-    
-    private var viewModel:RecordViewModel!
+    private var viewModel = RecordViewModel()
     private var cancellable = Set<AnyCancellable>()
     
     weak var delegate: RecordViewControllerDelegate?
@@ -78,29 +76,28 @@ class RecordViewController:UIViewController{
         return view
     }()
     
+    lazy var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.backgroundColor = .lightGray
+        scrollView.showsVerticalScrollIndicator = false
+        return scrollView
+    }()
+    
+    private let contentView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .secondarySystemGroupedBackground
         
-        setupViewModel()
         configure()
-        
-        bindProgress()
-        bindPlayButton()
-        bindRecordButton()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        
-        viewModel.player.stop()
-        viewModel.engine.stop()
-        do{
-            try AVAudioSession.sharedInstance().setActive(false)
-        } catch {
-            print("Could not set active false")
-        }
-        
-        delegate?.recordViewControllerDidDisappear()
         super.viewDidDisappear(animated)
     }
 }
@@ -115,10 +112,12 @@ private extension RecordViewController{
     
     func addSubViews(){
         
-        [controlStackView,volumeBar,progressView,meterView].forEach{
+        [controlStackView,volumeBar,progressView,scrollView,meterView].forEach{
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
+        
+        scrollView.addSubview(contentView)
     }
     
     func makeConstrains(){
@@ -152,114 +151,36 @@ private extension RecordViewController{
     }
     
     @objc func didTapRecord(_ sender:UIButton){
-        
-        viewModel.checkEngineRunning()
-        
-        if viewModel.isRecording {
-            viewModel.stopRecording()
+        if viewModel.recorder.isRecording {
+            viewModel.stopRec()
+            sender.setImage(UIImage(systemName: "circle.fill"), for: .normal)
+            
+            self.playButton.isEnabled = true
+            self.prevButton.isEnabled = true
+            self.nextButton.isEnabled = true
+            
         } else {
-            viewModel.startRecord()
-            viewModel.progressValue = 0
-            viewModel.isPlaying = false
+            viewModel.startRec()
+            sender.setImage(UIImage(systemName: "stop.fill"), for: .normal)
         }
-        
+
     }
     @objc func previusSec(){
-        viewModel.checkEngineRunning()
-        viewModel.skip(forwards: false)
+
     }
     @objc func nextSec(){
-        viewModel.checkEngineRunning()
-        viewModel.skip(forwards: true)
+
     }
     @objc func playPause(_ sender:UIButton){
-        viewModel.checkEngineRunning()
-        
-        if viewModel.player.isPlaying{
-            viewModel.stopPlaying()
+        if viewModel.player.isPlaying {
+            sender.setImage(UIImage(systemName: "play.fill"), for: .normal)
         } else {
-            viewModel.startPlaying()
+            viewModel.playAudio()
+            sender.setImage(UIImage(systemName: "pause.fill"), for: .normal)
         }
     }
     
     @objc func touchSlider(_ sender:UISlider!){
-        viewModel.engine.inputNode.volume = sender.value
-        viewModel.engine.mainMixerNode.outputVolume = sender.value
-    }
-    
-    func setupViewModel(){
-        do{
-            self.viewModel = try RecordViewModel()
-            self.viewModel.delegate = self
-            try AVAudioSession.sharedInstance().setCategory(.playAndRecord,mode: .default,options: .defaultToSpeaker)
-            try AVAudioSession.sharedInstance().setActive(true)
-        } catch {
-            print("Could not init viewmodel")
-        }
+
     }
 }
-
-extension RecordViewController {
-    private func bindPlayButton() {
-        viewModel.$isPlaying
-            .receive(on: DispatchQueue.main)
-            .sink { isPlaying in
-                if isPlaying{
-                    self.playButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
-                    [self.prevButton,self.nextButton].forEach { button in
-                        button.isEnabled = true
-                    }
-                } else {
-                    self.playButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
-                    
-                    if self.viewModel.audioLengthSeconds == 0{
-                        self.playButton.isEnabled = false
-                    }
-                    
-                    [self.prevButton,self.nextButton].forEach { button in
-                        button.isEnabled = false
-                    }
-                }
-            }
-            .store(in: &cancellable)
-    }
-    
-    private func bindRecordButton(){
-        viewModel.$isRecording
-            .receive(on: DispatchQueue.main)
-            .sink { isRecording in
-                if isRecording {
-                    self.recordButton.setImage(UIImage(systemName: "stop.fill"), for: .normal)
-                    
-                    [self.prevButton,self.playButton,self.nextButton].forEach { button in
-                        button.isEnabled = false
-                    }
-                    self.meterView.disPlayLink?.isPaused = false
-                } else {
-                    self.recordButton.setImage(UIImage(systemName: "circle.fill"), for: .normal)
-                    
-                    [self.prevButton,self.playButton,self.nextButton].forEach { button in
-                        button.isEnabled = true
-                    }
-                }
-            }
-            .store(in: &cancellable)
-    }
-    
-    private func bindProgress(){
-        viewModel.$progressValue
-            .receive(on: DispatchQueue.main)
-            .sink { value in
-                self.progressView.progress = value
-            }
-            .store(in: &cancellable)
-    }
-}
-
-extension RecordViewController: RecordDrawable {
-    func updateValue(_ value:CGFloat) {
-        self.meterView.value = value
-    }
-}
-
-extension RecordViewController: UIScrollViewDelegate {}

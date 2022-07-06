@@ -12,12 +12,11 @@ class RecordMeterView: UIView {
     var value:CGFloat?
     var currentX:CGFloat = 0.0
     var disPlayLink:CADisplayLink?
-    lazy var scrollLayer: CAScrollLayer = {
-        let scrollLayer = CAScrollLayer()
-        scrollLayer.bounds = CGRect(x: 0, y: 0, width: 150, height: 80)
-        scrollLayer.scrollMode = .horizontally
-        return scrollLayer
-    }()
+    
+    var myLayer = CALayer()
+    lazy var startPoint = CGPoint(x: self.bounds.midX, y: self.bounds.midY)
+    lazy var jump: CGFloat = (self.bounds.width - (startPoint.x * 2)) / 200
+    var start: CGPoint!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -28,6 +27,10 @@ class RecordMeterView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override class var layerClass: AnyClass {
+        return CAScrollLayer.self
+    }
+    
     func setUpDisPlayLink(){
         self.layer.backgroundColor = UIColor.gray.cgColor
         disPlayLink = CADisplayLink(target: self, selector: #selector(updateDisplay))
@@ -35,25 +38,33 @@ class RecordMeterView: UIView {
         disPlayLink?.isPaused = true
     }
     
-    @objc func updateDisplay(){
+    @objc func updateDisplay() {
+        let centerHeight = self.frame.height / 2
+        let centerWidth = self.frame.width / 2
+//        print(centerWidth)
         let layer = CALayer()
         currentX += 0.1
         let value = value ?? 0
-        let center = self.frame.height / 2
+        
+        print(value)
+        
         var realValue = value * 100 > 80 ? 80:value * 100
-        print(value * 100)
-        layer.frame = .init(x: currentX, y: center, width: 1.5, height: realValue == 0 ? 10:realValue)
+        
+        self.layer.addSublayer(myLayer)
+        layer.frame = .init(x: currentX + centerWidth, y: centerHeight, width: 1.0, height: realValue)
         layer.frame = layer.frame.offsetBy(dx: 0, dy: -realValue / 2)
-        
+
+
         layer.backgroundColor = UIColor.systemBlue.cgColor
-        
         layer.cornerCurve = .continuous
-        
-        self.layer.scroll(CGPoint(x: currentX, y: center))
-        self.layer.addSublayer(scrollLayer)
-        scrollLayer.addSublayer(layer)
+
+        var newPoint = self.bounds.origin
+        newPoint.x += 0.1
+
+        self.layer.addSublayer(layer)
         self.layer.shouldRasterize = true
         self.layer.drawsAsynchronously = true
         
+        self.layer.scroll(newPoint)
     }
 }
