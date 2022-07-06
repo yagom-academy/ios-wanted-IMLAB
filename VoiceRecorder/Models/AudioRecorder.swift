@@ -9,8 +9,11 @@ import Foundation
 import AVFAudio
 
 class AudioRecorder {
-    var recorder: AVAudioRecorder?
-    
+    private var recorder: AVAudioRecorder?
+
+    var averagePower: Float {
+        recorder?.averagePower(forChannel: 0) ?? 0.0
+    }
     var path: URL?
     var settings: [String: Any]?
     
@@ -40,6 +43,7 @@ class AudioRecorder {
     func record() {
         guard let recorder = recorder else { return }
         recorder.prepareToRecord()
+        recorder.isMeteringEnabled = true
         recorder.record()
     }
     func stop() {
@@ -49,5 +53,8 @@ class AudioRecorder {
     func deleteRecording() {
         guard let recorder = recorder else { return }
         recorder.deleteRecording()
+    }
+    func updateMeters() {
+        recorder?.updateMeters()
     }
 }

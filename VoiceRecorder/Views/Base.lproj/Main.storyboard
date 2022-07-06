@@ -54,7 +54,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="H32-1b-n7C">
-                                <rect key="frame" x="16" y="270.5" width="382" height="195.5"/>
+                                <rect key="frame" x="16" y="311.5" width="382" height="195.5"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="6Dr-fT-gfw">
                                         <rect key="frame" x="0.0" y="0.0" width="382" height="195.5"/>
@@ -201,19 +201,19 @@
                                 </subviews>
                             </stackView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gRT-WD-I6Z">
-                                <rect key="frame" x="171.5" y="482" width="71" height="20.5"/>
+                                <rect key="frame" x="171.5" y="523" width="71" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Set CutOff Frequency" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="96P-79-zEn">
-                                <rect key="frame" x="16" y="234" width="382" height="20.5"/>
+                                <rect key="frame" x="16" y="275" width="382" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="9" translatesAutoresizingMaskIntoConstraints="NO" id="TI4-JT-Y4w">
-                                <rect key="frame" x="16" y="534.5" width="382" height="39.5"/>
+                                <rect key="frame" x="16" y="575.5" width="382" height="39.5"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gBD-le-cBS">
                                         <rect key="frame" x="0.0" y="2" width="89" height="36"/>
@@ -260,11 +260,11 @@
                                     </button>
                                 </subviews>
                             </stackView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tfq-CC-0oZ">
-                                <rect key="frame" x="16" y="64" width="382" height="150"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tfq-CC-0oZ" customClass="GraphView" customModule="VoiceRecorder" customModuleProvider="target">
+                                <rect key="frame" x="16" y="64" width="382" height="191"/>
                                 <color key="backgroundColor" systemColor="systemGray5Color"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="150" id="il3-i9-KfL"/>
+                                    <constraint firstAttribute="width" secondItem="tfq-CC-0oZ" secondAttribute="height" multiplier="2:1" id="bgR-ay-hIw"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isRound" value="YES"/>
@@ -297,6 +297,7 @@
                         <outlet property="eq250HzSlider" destination="hTE-CC-zBJ" id="vaV-pZ-ZoV"/>
                         <outlet property="eq7500HzSlider" destination="Fiy-Gn-PNX" id="5Ia-eq-IcW"/>
                         <outlet property="eq75HzSlider" destination="o5l-n1-qtG" id="Max-B2-SdV"/>
+                        <outlet property="graphView" destination="tfq-CC-0oZ" id="59a-bg-b7f"/>
                         <outlet property="playBackwardButton" destination="Tpb-eI-pUV" id="FJY-f5-E6x"/>
                         <outlet property="playButton" destination="x2c-KM-V3g" id="yYU-XX-VpI"/>
                         <outlet property="playForwardButton" destination="F2S-lW-VA6" id="JSZ-ae-C4a"/>

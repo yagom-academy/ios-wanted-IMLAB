@@ -15,6 +15,7 @@ class RecordViewController: UIViewController {
     @IBOutlet weak var eq1040HzSlider: UISlider!
     @IBOutlet weak var eq2500HzSlider: UISlider!
     @IBOutlet weak var eq7500HzSlider: UISlider!
+    @IBOutlet weak var graphView: GraphView!
     
     @IBOutlet weak var recordTimeLabel: UILabel!
     @IBOutlet weak var recordButton: UIButton!
@@ -42,8 +43,11 @@ class RecordViewController: UIViewController {
     private var isPlay = false
     private var recorderTimer: Timer?
     private var playerTimer: Timer?
+    private var waveTimer: Timer?
     private var counter = 0.0
+    private var buffer = LastNItemsBuffer<CGFloat>.init(count: 80)
     
+    private let stepDuration = 0.01
     private let engine = AudioEngine()
     private let recorder = AudioRecorder()
     private let audioSession = AVAudioSession.sharedInstance()
@@ -63,6 +67,12 @@ class RecordViewController: UIViewController {
         requestRecord()
         setupButton(isHidden: true)
         setupAudioRecorder()
+        enableBuiltInMic()
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        buffer.forceToValue(0.0)
+        graphView.points = buffer
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
@@ -97,8 +107,11 @@ class RecordViewController: UIViewController {
             endRecord()
             guard let data = recorder.data else { return }
             engine.url = fileName
-            try! engine.setupEngine()
-            
+            do {
+            try engine.setupEngine()
+            } catch {
+                print(error)
+            }
             let newMetaData = [
                 MetaData.duration.key: "\(engine.audioLengthSeconds.toStringTimeFormat)",
                 MetaData.eq.key: eqSliderValues.joined(separator: " ")
@@ -118,6 +131,8 @@ class RecordViewController: UIViewController {
         } else {
             sender.setImage(.circle)
             recorder.record()
+            graphView.drawBarGraph = true
+            
             recorderTimer = Timer.scheduledTimer(
                 timeInterval: 0.01,
                 target: self,
@@ -125,16 +140,23 @@ class RecordViewController: UIViewController {
                 userInfo: nil,
                 repeats: true
             )
+            waveTimer = Timer.scheduledTimer(
+                timeInterval: stepDuration,
+                target: self,
+                selector: #selector(update3),
+                userInfo: nil,
+                repeats: true
+            )
+            isRecord = !isRecord
         }
-        isRecord = !isRecord
     }
     
     @IBAction func didTapPlayBack5Button(_ sender: UIButton) {
-        engine.skip(forwards: false)
+        engine.seek(to: -3)
     }
     
     @IBAction func didTapPlayForward5Button(_ sender: UIButton) {
-        engine.skip(forwards: true)
+        engine.seek(to: 3)
     }
     
     @IBAction func didTapPlayPauseButton(_ sender: UIButton) {
@@ -174,6 +196,30 @@ private extension RecordViewController {
             try! engine.setupEngine()
         } else {
             recordTimeLabel.text = "\(engine.getCurrentTime().toStringTimeFormat)"
+        }
+    }
+    @objc func update3() {
+        recorder.updateMeters()
+        let value = pow(Double(10), (0.05 * Double(recorder.averagePower))) * 100
+        if value > 160 {
+            self.graphView.animateNewValue(CGFloat(graphView.maxValue), duration: self.stepDuration)
+        } else {
+            self.graphView.animateNewValue(CGFloat(value), duration: self.stepDuration)
+        }
+        print(value)
+        
+    }
+    private func enableBuiltInMic() {
+        let session = AVAudioSession.sharedInstance()
+        guard let inputPorts = session.availableInputs,
+              let builtInMic = inputPorts.first(where: { $0.portType == .builtInMic }) else {
+            print("The device must have a built-in microphone.")
+            return
+        }
+        do {
+            try session.setPreferredInput(builtInMic)
+        } catch {
+            print("Unable to set the built-in mic as the preferred input.")
         }
     }
 }
@@ -235,6 +281,7 @@ private extension RecordViewController {
     func endRecord() {
         recorder.stop()
         recorderTimer?.invalidate()
+        waveTimer?.invalidate()
         counter = 0.0
     }
     
