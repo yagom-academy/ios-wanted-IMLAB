@@ -19,23 +19,40 @@ class RecordViewController:UIViewController {
     private var viewModel = RecordViewModel()
     weak var delegate: RecordViewControllerDelegate?
     private var cancellable = Set<AnyCancellable>()
+    var timer: Timer?
+    var timerNumber: Int = 0
+    
+    lazy var meterView: RecordMeterView = {
+        let view = RecordMeterView(frame: .zero)
+        view.backgroundColor = .secondarySystemBackground
+        return view
+    }()
+    
+    lazy var recordedTimeLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .black
+        return label
+    }()
     
     lazy var recordButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "circle.fill"), for: .normal)
+        button.setImage(UIImage(systemName: "mic.circle.fill"), for: .normal)
+        button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: 50), forImageIn: .normal)
         return button
     }()
     
     lazy var prevButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "gobackward.5"), for: .normal)
+        button.setImage(UIImage(systemName: "gobackward"), for: .normal)
+        button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: 30), forImageIn: .normal)
         button.isEnabled = false
         return button
     }()
     
     lazy var nextButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "goforward.5"), for: .normal)
+        button.setImage(UIImage(systemName: "goforward"), for: .normal)
+        button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: 30), forImageIn: .normal)
         button.isEnabled = false
         return button
     }()
@@ -43,12 +60,13 @@ class RecordViewController:UIViewController {
     lazy var playButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "play.fill"), for: .normal)
+        button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: 30), forImageIn: .normal)
         button.isEnabled = false
         return button
     }()
     
     lazy var controlStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [recordButton,prevButton,playButton,nextButton])
+        let stackView = UIStackView(arrangedSubviews: [prevButton,playButton,nextButton])
         stackView.distribution = .fillEqually
         
         return stackView
@@ -68,12 +86,7 @@ class RecordViewController:UIViewController {
         return progressView
     }()
     
-    lazy var meterView: RecordMeterView = {
-        let view = RecordMeterView(frame: .zero)
-        view.backgroundColor = .secondarySystemBackground
-        view.layer.cornerRadius = 10
-        return view
-    }()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -102,7 +115,7 @@ private extension RecordViewController{
     }
     
     func addSubViews(){
-        [controlStackView,volumeBar,progressView,meterView].forEach{
+        [controlStackView,recordedTimeLabel,volumeBar,progressView,meterView,recordButton].forEach{
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
@@ -110,23 +123,29 @@ private extension RecordViewController{
     
     func makeConstrains(){
         NSLayoutConstraint.activate([
-            controlStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            controlStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            controlStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            controlStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: -50),
+            meterView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            meterView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            meterView.topAnchor.constraint(equalTo: view.topAnchor,constant: 40),
+            meterView.bottomAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            recordedTimeLabel.centerXAnchor.constraint(equalTo: meterView.centerXAnchor),
+            recordedTimeLabel.topAnchor.constraint(equalTo: meterView.bottomAnchor,constant: 10),
+            recordedTimeLabel.heightAnchor.constraint(equalToConstant: 50),
             
             volumeBar.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 30),
             volumeBar.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -30),
-            volumeBar.bottomAnchor.constraint(equalTo: controlStackView.topAnchor,constant: -50),
+            volumeBar.topAnchor.constraint(equalTo: recordedTimeLabel.bottomAnchor,constant: 10),
             
-            progressView.leadingAnchor.constraint(equalTo: volumeBar.leadingAnchor),
-            progressView.trailingAnchor.constraint(equalTo: volumeBar.trailingAnchor),
-            progressView.bottomAnchor.constraint(equalTo: volumeBar.topAnchor,constant: -30),
+            progressView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,constant: 30),
+            progressView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,constant: -30),
+            progressView.topAnchor.constraint(equalTo: volumeBar.bottomAnchor,constant: 100),
             
-            meterView.leadingAnchor.constraint(equalTo: progressView.leadingAnchor),
-            meterView.trailingAnchor.constraint(equalTo: progressView.trailingAnchor),
-            meterView.bottomAnchor.constraint(equalTo: progressView.topAnchor,constant: -30),
-            meterView.heightAnchor.constraint(equalToConstant: 80),
+            controlStackView.leadingAnchor.constraint(equalTo: progressView.leadingAnchor),
+            controlStackView.trailingAnchor.constraint(equalTo: progressView.trailingAnchor),
+            controlStackView.bottomAnchor.constraint(equalTo: recordButton.topAnchor,constant: -50),
+            
+            recordButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            recordButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
     
@@ -141,17 +160,17 @@ private extension RecordViewController{
     @objc func didTapRecord(_ sender:UIButton){
         if viewModel.recorder.isRecording {
             viewModel.stopRec()
-            sender.setImage(UIImage(systemName: "circle.fill"), for: .normal)
+            sender.setImage(UIImage(systemName: "mic.circle.fill"), for: .normal)
             
             self.playButton.isEnabled = true
             self.prevButton.isEnabled = true
             self.nextButton.isEnabled = true
-            
         } else {
             viewModel.startRec()
-            sender.setImage(UIImage(systemName: "stop.fill"), for: .normal)
+            sender.setImage(UIImage(systemName: "stop.circle"), for: .normal)
+            startTimer()
         }
-
+        
     }
     @objc func previusSec(){
         if viewModel.player.isPlaying {
@@ -169,7 +188,7 @@ private extension RecordViewController{
             sender.setImage(UIImage(systemName: "play.fill"), for: .normal)
         } else {
             viewModel.playAudio()
-            sender.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+            sender.setImage(UIImage(systemName: "stop.fill"), for: .normal)
         }
     }
     
@@ -190,7 +209,7 @@ private extension RecordViewController{
             .sink { [weak self] isPlaying in
                 self?.prevButton.isEnabled = isPlaying
                 self?.nextButton.isEnabled = isPlaying
-                self?.playButton.setImage(UIImage(systemName: isPlaying ? "pause.fill":"play.fill"), for: .normal)
+                self?.playButton.setImage(UIImage(systemName: isPlaying ? "stop.fill":"play.fill"), for: .normal)
             }
             .store(in: &cancellable)
     }
@@ -203,17 +222,30 @@ private extension RecordViewController{
             }
             .store(in: &cancellable)
     }
+    
+    func startTimer() {
+        if timer != nil && timer!.isValid {
+            timer!.invalidate()
+        }
+        
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timerCallBack), userInfo: nil, repeats: false)
+    }
+    
+    @objc private func timerCallBack() {
+        self.recordedTimeLabel.text = "\(timerNumber) 초"
+        timerNumber += 1
+    }
 }
 
 extension RecordViewController: RecordDrawable {
     func clearAll() {
-        self.meterView.value.removeAll()
+        self.meterView.values.removeAll()
         self.meterView.layer.sublayers = nil
     }
     
     func updateValue(_ value: CGFloat) {
         DispatchQueue.main.sync {
-            self.meterView.value.append(value)
+            self.meterView.values.append(value)
         }
     }
 }

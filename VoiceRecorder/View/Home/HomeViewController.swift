@@ -4,9 +4,10 @@
 //
 
 import UIKit
+import AVFAudio
 
 class HomeViewController: UIViewController {
-    
+    var permission: Bool = false
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
         tableView.tableFooterView = UIView()
@@ -20,6 +21,7 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        checkPermission()
         
         configure()
         
@@ -44,14 +46,12 @@ private extension HomeViewController {
     }
     
     func configureNavigation() {
-        navigationItem.title = "Voice Memos"
+        navigationItem.title = "음성 메모장"
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(touchAddButton))
     }
     
     func addSubViews() {
-        [tableView].forEach{
-            view.addSubview($0)
-        }
+        view.addSubview(tableView)
     }
     
     func makeConstraints() {
@@ -65,9 +65,31 @@ private extension HomeViewController {
     }
     
     @objc func touchAddButton() {
-        let recordController = RecordViewController()
-        recordController.delegate = self
-        present(recordController, animated: true)
+        if permission {
+            let recordController = RecordViewController()
+            recordController.delegate = self
+            present(recordController, animated: true)
+        }
+        
+        //TODO: - 권한 확인 알림 창 띄우기
+    }
+    
+    private func checkPermission() {
+        let session = AVAudioSession.sharedInstance()
+        
+        switch session.recordPermission {
+        case .granted:
+            self.permission = true
+        case .denied:
+            self.permission = false
+        case .undetermined:
+            session.requestRecordPermission { permission in
+                self.permission = permission
+            }
+        default:
+            self.permission = false
+        }
+        
     }
 }
 
@@ -88,7 +110,6 @@ extension HomeViewController: UITableViewDataSource {
 }
 
 // MARK: - UITableViewDelegate
-
 extension HomeViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let audio = viewModel.audio(at: indexPath.row)
@@ -112,7 +133,6 @@ extension HomeViewController: UITableViewDelegate {
 }
 
 // MARK: - RecordViewControllerDelegate
-
 extension HomeViewController: RecordViewControllerDelegate {
     func recordViewControllerDidDisappear() {
         viewModel.fetch()

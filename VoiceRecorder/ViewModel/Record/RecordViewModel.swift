@@ -39,8 +39,10 @@ class RecordViewModel {
         do {
             try AVAudioSession.sharedInstance().setCategory(.playAndRecord,mode: .default,options: .defaultToSpeaker)
             try AVAudioSession.sharedInstance().setActive(true)
-            recorder = try AVAudioRecorder(url: recordFileURL, settings: recordFormat!.settings)
+            recorder = try AVAudioRecorder(url: recordFileURL,settings: recordFormat!.settings)
+            recorder.prepareToRecord()
         } catch {
+            print("Error in prepare Recoder")
             print("Could not Prepare Recorder \(error)")
         }
     }
@@ -54,7 +56,6 @@ class RecordViewModel {
         DispatchQueue.global(qos: .background).async {
             while self.recorder.isRecording {
                 self.recorder.updateMeters()
-    //                print(self.recorder.averagePower(forChannel: 0))
                 self.delegate?.updateValue(self.nomalizeSoundLevel(level: self.recorder.averagePower(forChannel: 0)))
             }
         }
@@ -82,6 +83,7 @@ class RecordViewModel {
     func stopAudio() {
         player.pause()
         isPlaying = false
+        player.currentTime = 0
     }
     
     func getDataFrom() -> Data {
@@ -133,8 +135,8 @@ class RecordViewModel {
     private func nomalizeSoundLevel(level:Float) -> CGFloat {
         let level = max(0.2, CGFloat(level) + 50) / 2
 //        print(level)
-//        print(CGFloat(level * (80 / 25)))
-        return CGFloat(level * (80 / 25))
+//        print(CGFloat(level * (350 / 25)))
+        return CGFloat(level * (350 / 25))
     }
 }
 
