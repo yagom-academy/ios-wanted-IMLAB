@@ -191,7 +191,9 @@ extension RecordAndPlayView {
         downloadButton.bottomAnchor.constraint(equalTo: recordButton.bottomAnchor).isActive = true
         downloadButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -30).isActive = true
     }
-    
+}
+
+extension RecordAndPlayView {
     func startRecord() {
         var currentSample = 0
         let numberOfSamples = 200
