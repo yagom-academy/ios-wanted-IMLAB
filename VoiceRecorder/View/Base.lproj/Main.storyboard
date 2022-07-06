@@ -53,20 +53,29 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="cutoff freq" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uwp-S3-BQB">
-                                <rect key="frame" x="40" y="508.5" width="80.5" height="20.5"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Cy0-ML-w6z">
+                                <rect key="frame" x="0.0" y="152" width="414" height="128"/>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cutoff frequency (Hz)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uwp-S3-BQB">
+                                <rect key="frame" x="40" y="508.5" width="166.5" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="26050" minValue="8000" maxValue="44100" translatesAutoresizingMaskIntoConstraints="NO" id="2IU-Om-2nW">
-                                <rect key="frame" x="38" y="561" width="338" height="31"/>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="8Kg-pa-DvV">
+                                <rect key="frame" x="40" y="541.5" width="334" height="32"/>
+                                <segments>
+                                    <segment title="8,000"/>
+                                    <segment title="16,000"/>
+                                    <segment title="32,000"/>
+                                    <segment title="44,100"/>
+                                </segments>
                                 <connections>
-                                    <action selector="controlRecordProgressBar:" destination="ozQ-a5-b4X" eventType="valueChanged" id="9rp-0R-OJs"/>
+                                    <action selector="selectCutoffFrequency:" destination="ozQ-a5-b4X" eventType="valueChanged" id="dGx-KR-Ywo"/>
                                 </connections>
-                            </slider>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="apc-b5-Hp1">
-                                <rect key="frame" x="205" y="618" width="4.5" height="20.5"/>
+                            </segmentedControl>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="apc-b5-Hp1">
+                                <rect key="frame" x="184" y="618" width="46" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -106,9 +115,6 @@
                                     </button>
                                 </subviews>
                             </stackView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Cy0-ML-w6z">
-                                <rect key="frame" x="0.0" y="152" width="414" height="128"/>
-                            </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QZr-Sv-d2j">
                                 <rect key="frame" x="164.5" y="752.5" width="85" height="49.5"/>
                                 <color key="tintColor" systemColor="systemRedColor"/>
@@ -125,8 +131,8 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="SRg-j9-lGu" firstAttribute="top" secondItem="apc-b5-Hp1" secondAttribute="bottom" constant="34" id="1CT-7l-sj4"/>
+                            <constraint firstItem="8Kg-pa-DvV" firstAttribute="leading" secondItem="JKT-6g-hs8" secondAttribute="leading" constant="40" id="CJt-3D-V5f"/>
                             <constraint firstItem="Cy0-ML-w6z" firstAttribute="top" secondItem="JKT-6g-hs8" secondAttribute="top" constant="108" id="DVn-YI-1ND"/>
-                            <constraint firstItem="JKT-6g-hs8" firstAttribute="trailing" secondItem="2IU-Om-2nW" secondAttribute="trailing" constant="40" id="EhT-Fc-d8a"/>
                             <constraint firstItem="JKT-6g-hs8" firstAttribute="bottom" secondItem="SRg-j9-lGu" secondAttribute="bottom" constant="120" id="Fc5-jD-BLj"/>
                             <constraint firstItem="SRg-j9-lGu" firstAttribute="centerX" secondItem="apc-b5-Hp1" secondAttribute="centerX" id="IP3-gj-pzD"/>
                             <constraint firstItem="Cy0-ML-w6z" firstAttribute="leading" secondItem="JKT-6g-hs8" secondAttribute="leading" id="KFr-l0-T5a"/>
@@ -134,19 +140,18 @@
                             <constraint firstItem="Cy0-ML-w6z" firstAttribute="height" secondItem="yIh-Nd-Erh" secondAttribute="height" multiplier="0.152019" id="Knz-Cl-xxz"/>
                             <constraint firstItem="QZr-Sv-d2j" firstAttribute="bottom" secondItem="SRg-j9-lGu" secondAttribute="bottom" constant="80" id="Kve-Oz-Fvd"/>
                             <constraint firstItem="QZr-Sv-d2j" firstAttribute="leading" secondItem="6Go-Dt-yoo" secondAttribute="leading" id="LOI-Y4-SlD"/>
-                            <constraint firstItem="apc-b5-Hp1" firstAttribute="centerX" secondItem="2IU-Om-2nW" secondAttribute="centerX" id="OEo-qK-YlX"/>
+                            <constraint firstItem="JKT-6g-hs8" firstAttribute="trailing" secondItem="8Kg-pa-DvV" secondAttribute="trailing" constant="40" id="S9c-wU-iVA"/>
                             <constraint firstItem="SRg-j9-lGu" firstAttribute="leading" secondItem="JKT-6g-hs8" secondAttribute="leading" constant="80" id="atK-1G-yPH"/>
                             <constraint firstItem="JKT-6g-hs8" firstAttribute="trailing" secondItem="Cy0-ML-w6z" secondAttribute="trailing" id="ctZ-sO-whh"/>
-                            <constraint firstItem="apc-b5-Hp1" firstAttribute="top" secondItem="2IU-Om-2nW" secondAttribute="bottom" constant="27" id="eYd-PV-cjT"/>
+                            <constraint firstItem="Uwp-S3-BQB" firstAttribute="top" secondItem="Cy0-ML-w6z" secondAttribute="bottom" constant="228.5" id="hX1-QZ-ffW"/>
                             <constraint firstItem="JKT-6g-hs8" firstAttribute="trailing" secondItem="SRg-j9-lGu" secondAttribute="trailing" constant="80" id="k6O-zM-sPi"/>
-                            <constraint firstItem="2IU-Om-2nW" firstAttribute="top" secondItem="Uwp-S3-BQB" secondAttribute="bottom" constant="32" id="lcL-Ld-2WD"/>
+                            <constraint firstItem="SRg-j9-lGu" firstAttribute="top" secondItem="8Kg-pa-DvV" secondAttribute="bottom" constant="100" id="l6v-Ng-grQ"/>
                             <constraint firstItem="Uwp-S3-BQB" firstAttribute="leading" secondItem="JKT-6g-hs8" secondAttribute="leading" constant="40" id="uDU-Oh-nbw"/>
-                            <constraint firstItem="2IU-Om-2nW" firstAttribute="leading" secondItem="Uwp-S3-BQB" secondAttribute="leading" id="uJK-hA-ueQ"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="buttonsStackView" destination="SRg-j9-lGu" id="z0T-vP-scj"/>
-                        <outlet property="cutOffSlider" destination="2IU-Om-2nW" id="dq6-n5-TtK"/>
+                        <outlet property="cutOffFreqSegmentedControl" destination="8Kg-pa-DvV" id="wNB-ZT-EKG"/>
                         <outlet property="cutoffLabel" destination="Uwp-S3-BQB" id="qR4-wg-zuB"/>
                         <outlet property="durationLabel" destination="apc-b5-Hp1" id="zT1-sP-nFE"/>
                         <outlet property="playButton" destination="6Go-Dt-yoo" id="2Af-Pw-YgZ"/>
