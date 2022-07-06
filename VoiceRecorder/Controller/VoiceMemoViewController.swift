@@ -18,6 +18,7 @@ class VoiceMemoViewController: UIViewController {
     var localUrls: [URL] = []
     var fileNames: [String] = []
     var fileDurations: [String] = []
+    var isFetching: Bool = false
     
     var player: AVAudioPlayer?
     
@@ -28,15 +29,9 @@ class VoiceMemoViewController: UIViewController {
         
         configureTableView()
         fetchRecordingData()
-        
     }
     
     // MARK: - IBActions
-    
-    @IBAction func moveToRecordDetail(_ sender: UIBarButtonItem) {
-        
-        
-    }
     
     // MARK: - Methods
     
@@ -47,7 +42,12 @@ class VoiceMemoViewController: UIViewController {
             self.getFileDuration(urls: results)
             DispatchQueue.main.async {
                 self.voiceMemoTableView.reloadData()
+                if self.isFetching {
+                    self.voiceMemoTableView.refreshControl?.endRefreshing()
+                    self.isFetching = false
+                }
             }
+            
         }
     }
     
@@ -85,6 +85,16 @@ class VoiceMemoViewController: UIViewController {
         voiceMemoTableView.register(cell, forCellReuseIdentifier: VoiceMemoTableViewCell.identifier)
         voiceMemoTableView.delegate = self
         voiceMemoTableView.dataSource = self
+        
+        voiceMemoTableView.refreshControl = UIRefreshControl()
+        voiceMemoTableView.refreshControl?.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
+    }
+    
+    // MARK: - @objc
+    
+    @objc func pullToRefresh() {
+        isFetching = true
+        fetchRecordingData()
     }
 }
 
@@ -104,14 +114,17 @@ extension VoiceMemoViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        
         if editingStyle == .delete {
+            
             FireStorageManager.shared.deleteItem(fileNames[indexPath.row])
             do {
                 try FileManager.default.removeItem(at: localUrls[indexPath.row])
             } catch {
-                print(error)
+                print("Error: <tableView firebase delete> - \(error.localizedDescription)")
             }
             localUrls.remove(at: indexPath.row)
+            fileNames.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }

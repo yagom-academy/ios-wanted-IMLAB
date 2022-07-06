@@ -26,7 +26,6 @@ class FireStorageManager {
         }
     }
     
-    var items: [URL] = []
     let storage = Storage.storage()
     
     func uploadData(_ url: URL?) {
@@ -56,18 +55,23 @@ class FireStorageManager {
     func downloadToLocal(uris: [StorageReference]
                          ,completion: @escaping ([URL]) -> Void
     ) {
+        
+        var items: [String] = []
         let stringUri: [String] = uris.map { "\($0)" }
         for uri in stringUri {
-            let storageRef = storage.reference(forURL: uri)
+            let storageRef = self.storage.reference(forURL: uri)
             // 긴 uri 에서 "recording_2022_06_30_20:12:51" 끝 부분만 가져오기 위함
             let findIndex = uri.index(uri.endIndex, offsetBy: -29)
             let fileName = "\(uri[findIndex...]).m4a"
             guard let localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent(fileName) else { return }
+            
             storageRef.write(toFile: localPath) { url, error in
                 if let url = url {
-                    self.items.append(url)
+                    items.append(url.absoluteString)
                 }
-                completion(self.items)
+                let sortedItems = items.sorted()
+                let itemsToURL = sortedItems.compactMap { URL(string: $0) }
+                completion(itemsToURL)
             }
         }
     }
@@ -75,7 +79,6 @@ class FireStorageManager {
     func deleteItem(_ name : String) {
         let storageRef = storage.reference()
         let fileRef = storageRef.child("\(RecordFileString.Ref.recordDir)\(name)")
-        print("\(RecordFileString.Ref.recordDir)\(name)")
         fileRef.delete()
     }
 }
