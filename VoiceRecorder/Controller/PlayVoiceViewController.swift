@@ -175,20 +175,20 @@ class PlayVoiceViewController: UIViewController {
     
     @objc func tapButton(){
         if playVoiceManager.isPlay{
-            playVoiceManager.stopAudio()
+            playVoiceManager.playOrPauseAudio()
             playAndPauseButton.setImage(UIImage(systemName: "play"), for: .normal)
         }else{
-            playVoiceManager.playAudio()
+            playVoiceManager.playOrPauseAudio()
             playAndPauseButton.setImage(UIImage(systemName: "pause"), for: .normal)
         }
     }
     
     @objc func tabForward(){
-        playVoiceManager.forwardFiveSecond()
+        playVoiceManager.forwardOrBackWard(forward: true)
     }
     
     @objc func tabBackward(){
-        playVoiceManager.backwardFiveSecond()
+        playVoiceManager.forwardOrBackWard(forward: false)
     }
     
     @objc func slideVolumeButton(_ sender : UISlider){
@@ -196,7 +196,7 @@ class PlayVoiceViewController: UIViewController {
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        playVoiceManager.stopAudio()
+        playVoiceManager.closeAudio()
     }
     
     deinit{

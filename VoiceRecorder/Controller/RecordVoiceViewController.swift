@@ -210,6 +210,7 @@ class RecordVoiceViewController: UIViewController {
                 }
             }
         }
+        playVoiceManager.closeAudio()
     }
     
     func setUIAfterRecording(){
@@ -221,11 +222,11 @@ class RecordVoiceViewController: UIViewController {
     }
     
     @objc func tabForward(){
-        playVoiceManager.forwardFiveSecond()
+        playVoiceManager.forwardOrBackWard(forward: true)
     }
     
     @objc func tabBackward(){
-        playVoiceManager.backwardFiveSecond()
+        playVoiceManager.forwardOrBackWard(forward: false)
     }
     
     @objc func tapButton(){

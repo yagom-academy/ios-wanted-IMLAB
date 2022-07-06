@@ -16,14 +16,14 @@ import NotificationCenter
 
 class PlayVoiceManager{
     //재생할 오디오 파일 정보
-    var audioFile : AVAudioFile?
-    var format : AVAudioFormat?
-    var audioFileSampleRate : Double = 0
-    var audioFileLengthSecond : Double = 0
-    var audioLengthSamples : AVAudioFramePosition = 0
-    var currentPosition : AVAudioFramePosition = 0
-    var seekFrame : AVAudioFramePosition = 0
-    var currentFrame : AVAudioFramePosition{
+    private var audioFile : AVAudioFile?
+    private var format : AVAudioFormat?
+    private var audioFileSampleRate : Double = 0
+    private var audioFileLengthSecond : Double = 0
+    private var audioLengthSamples : AVAudioFramePosition = 0
+    private var currentPosition : AVAudioFramePosition = 0
+    private var seekFrame : AVAudioFramePosition = 0
+    private var currentFrame : AVAudioFramePosition{
         guard let lastRenderTime = playerNode.lastRenderTime,
               let playerTime = playerNode.playerTime(forNodeTime: lastRenderTime)
         else{
@@ -32,13 +32,13 @@ class PlayVoiceManager{
         return playerTime.sampleTime
     }
     //오디오 엔진
-    let audioEngine = AVAudioEngine()
-    let playerNode = AVAudioPlayerNode()
-    var pitchControl = AVAudioUnitTimePitch()
+    private let audioEngine = AVAudioEngine()
+    private let playerNode = AVAudioPlayerNode()
+    private var pitchControl = AVAudioUnitTimePitch()
     weak var delegate : PlayVoiceDelegate!
     var isPlay = false
     
-    var displayLink : CADisplayLink?
+    private var displayLink : CADisplayLink?
     
     init(){
         setAudio()
@@ -62,7 +62,7 @@ class PlayVoiceManager{
         setEngine(format: self.format ?? nil)
     }
     
-    func setEngine(format : AVAudioFormat?){
+    private func setEngine(format : AVAudioFormat?){
         audioEngine.attach(playerNode)
         audioEngine.attach(pitchControl)
         
@@ -84,17 +84,23 @@ class PlayVoiceManager{
         playerNode.scheduleFile(file, at: nil, completionCallbackType: .dataPlayedBack)
     }
     
-    func playAudio(){
-        isPlay = true
-        playerNode.play()
-        displayLink?.isPaused = false
+    func playOrPauseAudio(){
+        isPlay.toggle()
+        if isPlay{
+            playerNode.play()
+            displayLink?.isPaused = false
+        }else{
+            playerNode.pause()
+            displayLink?.isPaused = true
+        }
     }
     
-    func stopAudio(){
+    func closeAudio(){
         isPlay = false
-        playerNode.pause()
         displayLink?.isPaused = true
-        }
+        playerNode.stop()
+        audioEngine.stop()
+    }
     
     func setNewScheduleFile(){
         playerNode.stop()
@@ -103,17 +109,18 @@ class PlayVoiceManager{
         setScheduleFile()
     }
     
-    func forwardFiveSecond(){
-        seek(time: 5.0)
-        delegate.displayWaveForm(to: currentPosition, in: audioLengthSamples)
-    }
-    
-    func backwardFiveSecond(){
-        seek(time: -5.0)
+    func forwardOrBackWard(forward : Bool){
+        var seekTime : Double
+        if forward{
+            seekTime = 5.0
+        }else{
+            seekTime = -5.0
+        }
+        seek(time: seekTime)
         delegate.displayWaveForm(to: currentPosition, in: audioLengthSamples)
     }
         
-    func seek(time : Double){
+    private func seek(time : Double){
         guard let audioFile = audioFile else {
             return
         }
@@ -167,13 +174,13 @@ class PlayVoiceManager{
         }
     }
     
-    func setDisplayLink(){
+    private func setDisplayLink(){
         displayLink = CADisplayLink(target: self, selector: #selector(updateDisplay))
         displayLink?.add(to: .current, forMode: .default)
         displayLink?.isPaused = true
     }
     
-    @objc func updateDisplay(){
+    @objc private func updateDisplay(){
         currentPosition = currentFrame + seekFrame
         currentPosition = max(currentPosition, 0)
         currentPosition = min(currentPosition, audioLengthSamples)
