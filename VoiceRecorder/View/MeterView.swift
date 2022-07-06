@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 class RecordMeterView: UIView {
-    var value:CGFloat?
+    var value:[CGFloat] = []
     var currentX:CGFloat = 0.0
     var disPlayLink:CADisplayLink?
     
@@ -39,32 +39,55 @@ class RecordMeterView: UIView {
     }
     
     @objc func updateDisplay() {
-        let centerHeight = self.frame.height / 2
-        let centerWidth = self.frame.width / 2
-//        print(centerWidth)
-        let layer = CALayer()
+        //        let centerHeight = self.frame.height / 2
+        //        let centerWidth = self.frame.width / 2
+        //        let layer = CALayer()
+        //        let secondLayer = CALayer()
+        //
+        //        currentX += 0.1
+        //        let value = value.last ?? 0
+        //        print(value)
+        //
+        //        layer.frame = .init(x: currentX + centerWidth, y: centerHeight, width: 2, height: calNormal(input: value))
+        //        secondLayer.frame = .init(x: currentX + centerWidth, y: centerHeight, width: 1.0, height: calNormal(input: value))
+        //
+        //
+        //        layer.backgroundColor = UIColor.systemBlue.cgColor
+        //        layer.cornerCurve = .continuous
+        //
+        //
+        
         currentX += 0.1
-        let value = value ?? 0
+        let value = value.last ?? 0
+        let calValue = calNormal(input: value)
         
-        print(value)
+        let pencil = UIBezierPath()
+        pencil.move(to: CGPoint(x: currentX + self.frame.width / 2, y: self.bounds.midY))
+        pencil.addLine(to: CGPoint(x: currentX + self.frame.width / 2, y: self.bounds.midY + (calValue / 2)))
         
-        var realValue = value * 100 > 80 ? 80:value * 100
+        pencil.move(to: CGPoint(x: currentX + self.frame.width / 2, y: self.bounds.midY))
+        pencil.addLine(to: CGPoint(x: currentX + self.frame.width / 2, y: self.bounds.midY - (calValue / 2)))
         
-        self.layer.addSublayer(myLayer)
-        layer.frame = .init(x: currentX + centerWidth, y: centerHeight, width: 1.0, height: realValue)
-        layer.frame = layer.frame.offsetBy(dx: 0, dy: -realValue / 2)
-
-
-        layer.backgroundColor = UIColor.systemBlue.cgColor
-        layer.cornerCurve = .continuous
-
-        var newPoint = self.bounds.origin
-        newPoint.x += 0.1
-
+        let layer = CAShapeLayer()
+        layer.strokeColor = UIColor.systemBlue.cgColor
+        layer.path = pencil.cgPath
+        
         self.layer.addSublayer(layer)
         self.layer.shouldRasterize = true
         self.layer.drawsAsynchronously = true
         
+        var newPoint = self.bounds.origin
+        newPoint.x += 0.1
         self.layer.scroll(newPoint)
+    }
+    
+    private func calNormal(input:CGFloat) -> CGFloat{
+        if input < 1 {
+            return 1
+        } else if input > 80 {
+            return 78
+        } else {
+            return input
+        }
     }
 }

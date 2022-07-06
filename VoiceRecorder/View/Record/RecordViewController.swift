@@ -8,18 +8,17 @@
 import Foundation
 import UIKit
 import AVFoundation
-import MediaPlayer
 import Combine
 
 protocol RecordViewControllerDelegate: AnyObject {
     func recordViewControllerDidDisappear()
 }
 
-class RecordViewController:UIViewController{
-    private var viewModel = RecordViewModel()
-    private var cancellable = Set<AnyCancellable>()
+class RecordViewController:UIViewController {
     
+    private var viewModel = RecordViewModel()
     weak var delegate: RecordViewControllerDelegate?
+    private var cancellable = Set<AnyCancellable>()
     
     lazy var recordButton: UIButton = {
         let button = UIButton()
@@ -58,9 +57,9 @@ class RecordViewController:UIViewController{
     lazy var volumeBar:UISlider = {
         let slider = UISlider()
         slider.setThumbImage(UIImage(systemName: "circle.fill"), for: .normal)
-        slider.maximumValue = 100
-        slider.minimumValue = 0
-        slider.setValue(50, animated: false)
+        slider.maximumValue = 1.0
+        slider.minimumValue = 0.0
+        slider.setValue(0.5, animated: false)
         return slider
     }()
     
@@ -78,13 +77,19 @@ class RecordViewController:UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewModel.delegate = self
         view.backgroundColor = .secondarySystemGroupedBackground
         
         configure()
+        
+        bindProgress()
+        bindIsPlaying()
+        bindRecording()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        delegate?.recordViewControllerDidDisappear()
     }
 }
 
@@ -149,10 +154,14 @@ private extension RecordViewController{
 
     }
     @objc func previusSec(){
-
+        if viewModel.player.isPlaying {
+            viewModel.seek(front: false)
+        }
     }
     @objc func nextSec(){
-
+        if viewModel.player.isPlaying {
+            viewModel.seek(front: true)
+        }
     }
     @objc func playPause(_ sender:UIButton){
         if viewModel.player.isPlaying {
@@ -165,6 +174,46 @@ private extension RecordViewController{
     }
     
     @objc func touchSlider(_ sender:UISlider!){
+        viewModel.player.setVolume(sender.value, fadeDuration: 1)
+    }
+    
+    func bindProgress() {
+        viewModel.$progressValue
+            .sink { [weak self] progress in
+                self?.progressView.progress = progress
+            }
+            .store(in: &cancellable)
+    }
+    
+    func bindIsPlaying() {
+        viewModel.$isPlaying
+            .sink { [weak self] isPlaying in
+                self?.prevButton.isEnabled = isPlaying
+                self?.nextButton.isEnabled = isPlaying
+                self?.playButton.setImage(UIImage(systemName: isPlaying ? "pause.fill":"play.fill"), for: .normal)
+            }
+            .store(in: &cancellable)
+    }
+    
+    func bindRecording() {
+        viewModel.$isRecording
+            .sink { [weak self] isRecording in
+                print(isRecording)
+                self?.meterView.disPlayLink?.isPaused = !isRecording
+            }
+            .store(in: &cancellable)
+    }
+}
 
+extension RecordViewController: RecordDrawable {
+    func clearAll() {
+        self.meterView.value.removeAll()
+        self.meterView.layer.sublayers = nil
+    }
+    
+    func updateValue(_ value: CGFloat) {
+        DispatchQueue.main.sync {
+            self.meterView.value.append(value)
+        }
     }
 }
