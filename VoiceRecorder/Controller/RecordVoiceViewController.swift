@@ -270,10 +270,10 @@ class RecordVoiceViewController: UIViewController {
     
     @objc func tapButton(){
         if playVoiceManager.isPlay{
-            playVoiceManager.stopAudio()
+            playVoiceManager.playOrPauseAudio()
             updateUI(when: .afterPlaying)
         }else{
-            playVoiceManager.playAudio()
+            playVoiceManager.playOrPauseAudio()
             updateUI(when: .beforePlaying)
         }
     }
