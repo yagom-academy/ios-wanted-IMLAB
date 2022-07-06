@@ -261,7 +261,7 @@ extension AudioManager {
                 vDSP_maxv(pointer, stride, &maxValue, length)
                 
                 let rms = (sqrt(minValue * minValue) + sqrt(maxValue * maxValue)) / 2
-                let avgPower = 20 * log10(rms)
+                let avgPower = 30 * log10(rms)
                 let meterLevel = self.scalePower(power: avgPower)
                 arr.append(meterLevel)
             }
