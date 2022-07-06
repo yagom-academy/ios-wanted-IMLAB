@@ -200,7 +200,11 @@ class VoiceMemoPlayViewController: UIViewController {
         
         audioManager.delegateMethod = modifyGrayParentViewTrailingAnchor
         NotificationCenter.default.addObserver(self, selector: #selector(audioPlaybackTimeIsOver(_:)), name: .audioPlaybackTimeIsOver, object: nil)
-        guard let bufferDatas = audioManager.calculatorBufferGraphData(width: view.bounds.width - 80, filePath: pathFinder.lastUsedUrl) else {
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        guard let bufferDatas = audioManager.calculatorBufferGraphData(width: waveFormView.bounds.width, filePath: pathFinder.lastUsedUrl) else {
         return
         }
         
