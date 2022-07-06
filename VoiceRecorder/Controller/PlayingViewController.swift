@@ -40,7 +40,11 @@ class PlayingViewController: UIViewController {
     
     func configureVolumeSlider() {
         let volumeView = MPVolumeView()
-        volumeView.showsRouteButton = false
+        if #available(iOS 13, *) {
+                
+        } else {
+            volumeView.showsRouteButton = false
+        }
         volumeView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(volumeView)
         NSLayoutConstraint.activate([
@@ -55,39 +59,12 @@ class PlayingViewController: UIViewController {
         goForwardButton.isEnabled = enable
     }
     
-    @IBAction func playButtonTapped(_ sender: UIButton) {
-        if inPlayMode {
-            sender.setImage(UIImage(systemName: "pause"), for: .normal)
-            setButton(enable: true)
-            audioPlayerHandler.audioPlayerNode.play()
-            setTimer(validate: true)
-            totalPlayTimeLabel.text = audioPlayerHandler.updateTimer(audioPlayerHandler.audioPlayer.duration)
-        } else {
-            sender.setImage(UIImage(systemName: "play"), for: .normal)
-            setButton(enable: false)
-            audioPlayerHandler.audioPlayerNode.pause()
-        }
-        inPlayMode.toggle()
-    }
-
     @IBAction func goForwardButtonTapped(_ sender: UIButton) {
         let player = audioPlayerHandler.audioPlayer
         player.currentTime = player.currentTime + 5.0
         player.play()
     }
-    
-    func setTimer(validate: Bool) {
-        if validate {
-//            pitchTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(confirmSoundPitchDidChange), userInfo: nil, repeats: true)
-            playTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(audioplayerNodeDidFinishPlaying), userInfo: nil, repeats: true)
-            progressTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateProgress), userInfo: nil, repeats: true)
-        } else {
-//            pitchTimer.invalidate()
-            playTimer.invalidate()
-            progressTimer.invalidate()
-        }
-        
-    }
+
     
     @IBAction func changePitch(_ sender: UISegmentedControl) {
         switch soundPitchControl.selectedSegmentIndex {
@@ -102,14 +79,6 @@ class PlayingViewController: UIViewController {
         }
     }
     
-    @IBAction func goBackwardButtonTapped(_ sender: UIButton) {
-        
-    }
-    
-    @IBAction func goForwardButtonTapped(_ sender: UIButton) {
-        
-    }
-
     @IBAction func playButtonTapped(_ sender: UIButton) {
         if inPlayMode {
             sender.setImage(UIImage(systemName: "pause"), for: .normal)

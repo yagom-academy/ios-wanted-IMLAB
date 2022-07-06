@@ -38,6 +38,8 @@ class RecordingViewController: UIViewController {
     var inPlayMode = true
     var durationTime = 0.0
     var currentTime = 0.0
+    var recordCurrentTime = 0.0
+    var totalTime : TimeInterval?
     
 
     let audioRecorderHandler = AudioRecoderHandler(handler: LocalFileHandler(), updateTimeInterval: UpdateTimeInterval())
@@ -88,35 +90,41 @@ class RecordingViewController: UIViewController {
             }
             
 //            audioRecorderHandler.startRecord()
-//            self.progressTimer = Timer.scheduledTimer(timeInterval: 0.1,
-//                                                      target: self,
-//                                                      selector: #selector(updateRecordTime),
-//                                                      userInfo: nil,
-//                                                      repeats: true)
-//            RunLoop.main.add(progressTimer, forMode: .common)
-            inRecordMode = !inRecordMode
+            self.progressTimer = Timer.scheduledTimer(timeInterval: 0.1,
+                                                      target: self,
+                                                      selector: #selector(updateRecordTime),
+                                                      userInfo: nil,
+                                                      repeats: true)
+            RunLoop.main.add(progressTimer, forMode: .common)
+            
         } else {
             sender.controlFlashAnimate(recordingMode: false)
             self.playButton.isEnabled = true
-            audioRecorderHandler.stopRecording()
-//            finishedRecord()
-            inRecordMode = !inRecordMode
+            finishedRecord()
         }
         inRecordMode.toggle()
     }
     
     func finishedRecord() {
+        
         guard let fileName = audioRecorderHandler.fileName else { return }
-        let recordTotalTime = audioRecorderHandler.updateTimer(audioRecorderHandler.audioRecorder.currentTime)
-        audioRecorderHandler.stopRecord(totalTime: recordTotalTime)
+        let recordTotalTime = audioRecorderHandler.updateTimer(totalTime!)
+        audioRecorderHandler.stopRecording(totalTime: recordTotalTime)
         delegate?.finsihRecord(fileName: fileName, totalTime: recordTotalTime)
+        recordCurrentTime = 0.0
         progressTimer.invalidate()
     }
     
     @objc func updateRecordTime() {
-        audioRecorderHandler.audioRecorder.updateMeters()
-        self.writeWaves(audioRecorderHandler.audioRecorder.averagePower(forChannel: 0))
-        self.totalRecordTimeLabel.text = audioRecorderHandler.updateTimer(audioRecorderHandler.audioRecorder.currentTime)
+        recordCurrentTime += 0.1
+        totalTime = TimeInterval(recordCurrentTime)
+        if let totalTime = totalTime {
+            self.totalRecordTimeLabel.text = audioRecorderHandler.updateTimer(totalTime)
+        }
+        
+//        audioRecorderHandler.audioRecorder.updateMeters()
+//        self.writeWaves(audioRecorderHandler.audioRecorder.averagePower(forChannel: 0))
+//        self.totalRecordTimeLabel.text = audioRecorderHandler.updateTimer(audioRecorderHandler.audioRecorder.currentTime)
     }
     
     @IBAction func playButtonTapped(_ sender: UIButton) {
@@ -131,15 +139,15 @@ class RecordingViewController: UIViewController {
             self.recordingButton.isEnabled = false
             self.goForwardButton.isEnabled = true
             self.goBackwardButton.isEnabled = true
-            endPlayTimeLabel.text = audioPlayerHandler.updateTimer(audioPlayerHandler.audioPlayer.duration)
-            progressTimer = Timer.scheduledTimer(timeInterval: 0.05,
-                                                 target: self,
-                                                 selector: #selector(updatePlayTime),
-                                                 userInfo: nil,
-                                                 repeats: true)
+//            endPlayTimeLabel.text = audioPlayerHandler.updateTimer(audioPlayerHandler.audioPlayer.duration)
+//            progressTimer = Timer.scheduledTimer(timeInterval: 0.05,
+//                                                 target: self,
+//                                                 selector: #selector(updatePlayTime),
+//                                                 userInfo: nil,
+//                                                 repeats: true)
         } else {
             sender.setImage(UIImage(systemName: "play"), for: .normal)
-            audioPlayerHandler.audioPlayer.pause()
+//            audioPlayerHandler.audioPlayer.pause()
             self.recordingButton.isEnabled = true
         }
         inPlayMode.toggle()
@@ -165,10 +173,6 @@ class RecordingViewController: UIViewController {
         let player = audioPlayerHandler.audioPlayer
         player.currentTime = player.currentTime + 5.0
         player.play()
-    }
-    
-    @IBAction func cutoffSliderChanged(_ sender: UISlider) {
-        
     }
     
     func writeWaves(_ input: Float) {
@@ -247,7 +251,7 @@ extension RecordingViewController: AVAudioPlayerDelegate {
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         player.stop()
         self.playButton.setImage(UIImage(systemName: "play"), for: .normal)
-        progressTimer.invalidate()
+//        progressTimer.invalidate()
         self.recordingButton.isEnabled = true
         inPlayMode.toggle()
     }
