@@ -14,30 +14,16 @@ class PlayVoiceViewController: UIViewController {
     var playVoiceViewModel : PlayVoiceViewModel!
     var firebaseStorageManager : FirebaseStorageManager!
     
-    var currentPositionView : UIView = {
-        let currentPositionView = UIView()
-        currentPositionView.translatesAutoresizingMaskIntoConstraints = false
-        let screenRect = UIScreen.main.bounds
-        currentPositionView.frame.size.width = screenRect.size.width
-        currentPositionView.frame.size.height = screenRect.size.height * (0.15)
-        let path = UIBezierPath()
-        path.move(to: CGPoint(x: 0, y: 0))
-        path.addLine(to: CGPoint(x: 0, y: currentPositionView.frame.height))
-        let shape = CAShapeLayer()
-        shape.path = path.cgPath
-        shape.strokeColor = UIColor.black.cgColor
-        shape.fillColor = UIColor.clear.cgColor
-        shape.lineWidth = screenRect.size.width/112/10
-        currentPositionView.layer.addSublayer(shape)
-        return currentPositionView
+    var verticalLineView : VerticalLineView = {
+        let verticalLineView = VerticalLineView()
+        verticalLineView.translatesAutoresizingMaskIntoConstraints = false
+        return verticalLineView
     }()
     
-    var soundWaveImageView : UIImageView = {
-        let soundWaveImageView = UIImageView()
-        soundWaveImageView.translatesAutoresizingMaskIntoConstraints = false
-        soundWaveImageView.frame.size.width = CGFloat(FP_INFINITE)
-        soundWaveImageView.contentMode = .left
-        return soundWaveImageView
+    var waveFormImageView : WaveFormImageView = {
+        let waveFormImageView = WaveFormImageView(frame: CGRect())
+        waveFormImageView.translatesAutoresizingMaskIntoConstraints = false
+        return waveFormImageView
     }()
     
     var selectedPitchSegment : UISegmentedControl = {
@@ -118,8 +104,8 @@ class PlayVoiceViewController: UIViewController {
     
     func setView(){
         self.view.addSubview(fileNameLabel)
-        self.view.addSubview(currentPositionView)
-        self.view.addSubview(soundWaveImageView)
+        self.view.addSubview(verticalLineView)
+        self.view.addSubview(waveFormImageView)
         self.view.addSubview(selectedPitchSegment)
         self.view.addSubview(volumeTextLabel)
         self.view.addSubview(volumeSlider)
@@ -135,18 +121,18 @@ class PlayVoiceViewController: UIViewController {
             fileNameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             fileNameLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 30),
             
-            soundWaveImageView.leadingAnchor.constraint(equalTo: view.centerXAnchor),
-            soundWaveImageView.topAnchor.constraint(equalTo: fileNameLabel.bottomAnchor, constant: 30),
-            soundWaveImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.15),
-            soundWaveImageView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            waveFormImageView.leadingAnchor.constraint(equalTo: view.centerXAnchor),
+            waveFormImageView.topAnchor.constraint(equalTo: fileNameLabel.bottomAnchor, constant: 30),
+            waveFormImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.15),
+            waveFormImageView.widthAnchor.constraint(equalTo: view.widthAnchor),
             
-            currentPositionView.leadingAnchor.constraint(equalTo: view.centerXAnchor),
-            currentPositionView.topAnchor.constraint(equalTo: fileNameLabel.bottomAnchor, constant: 30),
-            currentPositionView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.15),
-            currentPositionView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            verticalLineView.leadingAnchor.constraint(equalTo: view.centerXAnchor),
+            verticalLineView.topAnchor.constraint(equalTo: fileNameLabel.bottomAnchor, constant: 30),
+            verticalLineView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.15),
+            verticalLineView.widthAnchor.constraint(equalTo: view.widthAnchor),
             
             selectedPitchSegment.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            selectedPitchSegment.topAnchor.constraint(equalTo: soundWaveImageView.bottomAnchor, constant: 30),
+            selectedPitchSegment.topAnchor.constraint(equalTo: waveFormImageView.bottomAnchor, constant: 30),
             
             volumeTextLabel.topAnchor.constraint(equalTo: selectedPitchSegment.bottomAnchor, constant: 30),
             volumeTextLabel.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.8),
@@ -160,7 +146,7 @@ class PlayVoiceViewController: UIViewController {
             playAndPauseButton.centerYAnchor.constraint(equalTo: volumeSlider.bottomAnchor, constant: 30),
                         
         ])
-        view.bringSubviewToFront(currentPositionView)
+        view.bringSubviewToFront(verticalLineView)
     }
     
     func setUIText(){
@@ -206,7 +192,7 @@ class PlayVoiceViewController: UIViewController {
 
 extension PlayVoiceViewController : FirebaseStorageManagerDelegate{
     func downloadComplete(url : URL) {
-        soundWaveImageView.load(url: url) {
+        waveFormImageView.load(url: url) {
             self.playAndPauseButton.isEnabled = true
         }
         playVoiceManager = PlayVoiceManager()
@@ -225,8 +211,8 @@ extension PlayVoiceViewController : PlayVoiceDelegate{
     
     func displayWaveForm(to currentPosition : AVAudioFramePosition, in audioLengthSamples : AVAudioFramePosition) {
         print("currentPosition: \(currentPosition), audioLengthSamples: \(audioLengthSamples)")
-        let newX = (self.soundWaveImageView.image?.size.width ?? 0) * CGFloat(currentPosition) / CGFloat(audioLengthSamples)
-        self.soundWaveImageView.transform = CGAffineTransform(translationX: -newX, y: 0)
+        let newX = (self.waveFormImageView.image?.size.width ?? 0) * CGFloat(currentPosition) / CGFloat(audioLengthSamples)
+        self.waveFormImageView.transform = CGAffineTransform(translationX: -newX, y: 0)
     }
 }
 

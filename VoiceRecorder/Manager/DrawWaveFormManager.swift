@@ -21,6 +21,7 @@ class DrawWaveFormManager{
     private var jump : CGFloat!
     private var waveLayer : CAShapeLayer!
     private var traitLength : CGFloat!
+    private var waveFormImage : UIImage!
     private var start : CGPoint!
     private var step : CGFloat!
     
@@ -46,10 +47,10 @@ class DrawWaveFormManager{
         })
     }
     
-    func stopDrawing(in view : UIView){
+    func stopDrawing(in view : UIView) {
         timer.invalidate()
-        saveImageInLocal(getUIImage(from: view))
-        // 파일 업로드
+        waveFormImage = getUIImage(from: view)
+        saveImageInLocal(waveFormImage)
     }
     
     func removeWaveForm() {
@@ -121,5 +122,9 @@ class DrawWaveFormManager{
         catch {
             print("error - saveImageInLocal")
         }
+    }
+    
+    func getWaveFormImage() -> UIImage {
+        return waveFormImage
     }
 }
