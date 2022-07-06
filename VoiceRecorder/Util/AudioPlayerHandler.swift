@@ -7,6 +7,7 @@
 
 import Foundation
 import AVFoundation
+import MediaPlayer
 
 class AudioPlayerHandler {
     
@@ -83,29 +84,61 @@ class AudioPlayerHandler {
     func changePitch(to pitch: Float) {
         audioUnitTimePich.pitch = pitch
     }
-    
-    func stopEffect() {
-        audioPlayerNode.stop()
-        audioEngine.stop()
-        audioEngine.reset()
-    }
-}
-
-extension AVAudioFile {
-
-    var duration: TimeInterval {
-        let sampleRateSong = Double(processingFormat.sampleRate)
-        let lengthSongSeconds = Double(length) / sampleRateSong
-        return lengthSongSeconds
-    }
-}
-
-extension AVAudioPlayerNode {
-
-    var currentTime: TimeInterval {
-        if let nodeTime = lastRenderTime, let playerTime = playerTime(forNodeTime: nodeTime) {
-            return Double(playerTime.sampleTime) / playerTime.sampleRate
-        }
-        return 0
-    }
+//
+//    private func seek(to time: Double) {
+//      guard let audioFile = audioFile else {
+//        return
+//      }
+//
+//      let offset = AVAudioFramePosition(time * audioSampleRate)
+//      seekFrame = currentPosition + offset
+//      seekFrame = max(seekFrame, 0)
+//      seekFrame = min(seekFrame, audioLengthSamples)
+//      currentPosition = seekFrame
+//
+//      let wasPlaying = audioPlayerNode.isPlaying
+//        audioPlayerNode.stop()
+//
+//      if currentPosition < audioLengthSamples {
+//        updateDisplay()
+//        needsFileScheduled = false
+//
+//        let frameCount = AVAudioFrameCount(audioLengthSamples - seekFrame)
+//          audioPlayerNode.scheduleSegment(
+//          audioFile,
+//          startingFrame: seekFrame,
+//          frameCount: frameCount,
+//          at: nil
+//        ) {
+//          self.needsFileScheduled = true
+//        }
+//
+//        if wasPlaying {
+//            audioPlayerNode.play()
+//        }
+//      }
+//    }
+//
+//    @objc private func updateDisplay() {
+//      currentPosition = currentFrame + seekFrame
+//      currentPosition = max(currentPosition, 0)
+//      currentPosition = min(currentPosition, audioLengthSamples)
+//
+//      if currentPosition >= audioLengthSamples {
+//        audioPlayerNode.stop()
+//
+//        seekFrame = 0
+//        currentPosition = 0
+//
+//        isPlaying = false
+//        displayLink?.isPaused = true
+//      }
+//
+////      playerProgress = Double(currentPosition) / Double(audioLengthSamples)
+//
+//      let time = Double(currentPosition) / audioSampleRate
+//      playerTime = PlayerTime(
+//        elapsedTime: time,
+//        remainingTime: audioLengthSeconds - time)
+//    }
 }

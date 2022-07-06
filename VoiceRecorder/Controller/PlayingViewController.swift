@@ -7,6 +7,7 @@
 
 import UIKit
 import AVFoundation
+import MediaPlayer
 
 class PlayingViewController: UIViewController {
     
@@ -15,14 +16,11 @@ class PlayingViewController: UIViewController {
     @IBOutlet weak var playProgressBar: UIProgressView!
     @IBOutlet weak var currentPlayTimeLabel: UILabel!
     @IBOutlet weak var totalPlayTimeLabel: UILabel!
-    @IBOutlet weak var volumeSlider: UISlider!
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var goBackwardButton: UIButton!
     @IBOutlet weak var goForwardButton: UIButton!
     var selectedFileInfo: RecordModel?
-    var pitchTimer: Timer!
-    var playTimer: Timer!
-    var progressTimer: Timer!
+    var progressTimer: Timer?
     var inPlayMode: Bool = true
     
     override func viewDidLoad() {
@@ -31,20 +29,25 @@ class PlayingViewController: UIViewController {
         guard let fileInfo = selectedFileInfo else { return }
         self.fileNameLabel.text = fileInfo.recordFileName
         self.totalPlayTimeLabel.text = fileInfo.recordTime
-        volumeSlider.maximumValue = 10.0
-        volumeSlider.value = 5.0
         playProgressBar.progress = 0.0
         audioPlayerHandler.selectPlayFile(self.fileNameLabel.text)
         audioPlayerHandler.prepareToPlay()
         audioPlayerHandler.setEngine()
+        configureVolumeSlider()
     }
     
     let audioPlayerHandler = AudioPlayerHandler(handler: LocalFileHandler(), updateTimeInterval: UpdateTimeInterval())
     
-    @IBAction func goBackwardButtonTapped(_ sender: UIButton) {
-        let player = audioPlayerHandler.audioPlayer
-        player.currentTime = player.currentTime - 5.0
-        player.play()
+    func configureVolumeSlider() {
+        let volumeView = MPVolumeView()
+        volumeView.showsRouteButton = false
+        volumeView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(volumeView)
+        NSLayoutConstraint.activate([
+            volumeView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
+            volumeView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
+            volumeView.centerYAnchor.constraint(equalTo: view.bottomAnchor, constant: -80)
+        ])
     }
     
     func setButton(enable: Bool) {
@@ -52,41 +55,7 @@ class PlayingViewController: UIViewController {
         goForwardButton.isEnabled = enable
     }
     
-    @IBAction func playButtonTapped(_ sender: UIButton) {
-        if inPlayMode {
-            sender.setImage(UIImage(systemName: "pause"), for: .normal)
-            setButton(enable: true)
-            audioPlayerHandler.audioPlayerNode.play()
-            setTimer(validate: true)
-            totalPlayTimeLabel.text = audioPlayerHandler.updateTimer(audioPlayerHandler.audioPlayer.duration)
-        } else {
-            sender.setImage(UIImage(systemName: "play"), for: .normal)
-            setButton(enable: false)
-            audioPlayerHandler.audioPlayerNode.pause()
-        }
-        inPlayMode.toggle()
-    }
-
-    @IBAction func goForwardButtonTapped(_ sender: UIButton) {
-        let player = audioPlayerHandler.audioPlayer
-        player.currentTime = player.currentTime + 5.0
-        player.play()
-    }
-    
-    func setTimer(validate: Bool) {
-        if validate {
-            pitchTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(confirmSoundPitchDidChange), userInfo: nil, repeats: true)
-            playTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(audioplayerNodeDidFinishPlaying), userInfo: nil, repeats: true)
-            progressTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateProgress), userInfo: nil, repeats: true)
-        } else {
-            pitchTimer.invalidate()
-            playTimer.invalidate()
-            progressTimer.invalidate()
-        }
-        
-    }
-    
-    @objc func confirmSoundPitchDidChange() {
+    @IBAction func changePitch(_ sender: UISegmentedControl) {
         switch soundPitchControl.selectedSegmentIndex {
         case 0:
             audioPlayerHandler.changePitch(to: 0)
@@ -99,17 +68,29 @@ class PlayingViewController: UIViewController {
         }
     }
     
-    @objc func audioplayerNodeDidFinishPlaying() {
-        if audioPlayerHandler.audioPlayerNode.currentTime > audioPlayerHandler.audioFile.duration {
-            self.playButton.setImage(UIImage(systemName: "play"), for: .normal)
-            audioPlayerHandler.audioPlayerNode.stop()
-            audioPlayerHandler.stopEffect()
-            audioPlayerHandler.setEngine()
-            setButton(enable: false)
-            setTimer(validate: false)
-            inPlayMode.toggle()
-        }
+    @IBAction func goBackwardButtonTapped(_ sender: UIButton) {
+        
     }
+    
+    @IBAction func goForwardButtonTapped(_ sender: UIButton) {
+        
+    }
+
+    @IBAction func playButtonTapped(_ sender: UIButton) {
+        if inPlayMode {
+            sender.setImage(UIImage(systemName: "pause"), for: .normal)
+            setButton(enable: true)
+            audioPlayerHandler.audioPlayerNode.play()
+            totalPlayTimeLabel.text = audioPlayerHandler.updateTimer(audioPlayerHandler.audioPlayer.duration)
+            progressTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updateProgress), userInfo: nil, repeats: true)
+        } else {
+            sender.setImage(UIImage(systemName: "play"), for: .normal)
+            setButton(enable: false)
+            audioPlayerHandler.audioPlayerNode.pause()
+        }
+        inPlayMode.toggle()
+    }
+    
     
     @objc func updateProgress() {
         let currentTime = audioPlayerHandler.audioPlayerNode.currentTime
@@ -117,5 +98,13 @@ class PlayingViewController: UIViewController {
         currentPlayTimeLabel.text = audioPlayerHandler.updateTimer(currentTime)
         let time = Float(currentTime / duration)
         playProgressBar.setProgress(time, animated: true)
+        
+        if audioPlayerHandler.audioPlayerNode.currentTime > audioPlayerHandler.audioFile.duration {
+            self.playButton.setImage(UIImage(systemName: "play"), for: .normal)
+            audioPlayerHandler.audioPlayerNode.stop()
+            audioPlayerHandler.setEngine()
+            setButton(enable: false)
+            inPlayMode.toggle()
+        }
     }
 }

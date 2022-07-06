@@ -14,6 +14,7 @@ protocol FinishRecord : AnyObject {
 
 class RecordingViewController: UIViewController {
     
+    @IBOutlet weak var lowPassCutoffSlider: UISlider!
     @IBOutlet weak var totalRecordTimeLabel: UILabel!
     @IBOutlet weak var playProgressBar: UIProgressView!
     @IBOutlet weak var currentPlayTimeLabel: UILabel!
@@ -49,8 +50,8 @@ class RecordingViewController: UIViewController {
         self.totalRecordTimeLabel.text = "00:00"
         self.currentPlayTimeLabel.text = "00:00"
         self.endPlayTimeLabel.text = "00:00"
-//        self.goBackwardButton.isEnabled = false
-//        self.goForwardButton.isEnabled = false
+        self.goBackwardButton.isEnabled = false
+        self.goForwardButton.isEnabled = false
         self.playButton.isEnabled = false
     }
     
@@ -60,10 +61,10 @@ class RecordingViewController: UIViewController {
         }
     }
     
-    func setButton(recording: Bool, goBack: Bool, goForward: Bool) {
-        self.recordingButton.isEnabled = recording
-        self.goBackwardButton.isEnabled = goBack
-        self.goForwardButton.isEnabled = goForward
+    func setButton(_ enable: Bool) {
+        self.recordingButton.isEnabled = enable
+        self.goBackwardButton.isEnabled = enable
+        self.goForwardButton.isEnabled = enable
     }
     
     @IBAction func recordingButtonTapped(_ sender: UIButton) {
@@ -87,13 +88,12 @@ class RecordingViewController: UIViewController {
                                                       userInfo: nil,
                                                       repeats: true)
             RunLoop.main.add(progressTimer, forMode: .common)
-            inRecordMode = !inRecordMode
         } else {
             sender.controlFlashAnimate(recordingMode: false)
             self.playButton.isEnabled = true
             finishedRecord()
-            inRecordMode = !inRecordMode
         }
+        inRecordMode.toggle()
     }
     
     func finishedRecord() {
@@ -116,7 +116,6 @@ class RecordingViewController: UIViewController {
             if audioPlayerHandler.audioPlayer.currentTime == 0.0 {
                 audioPlayerHandler.selectPlayFile(nil)
                 audioPlayerHandler.prepareToPlay()
-                audioPlayerHandler.audioPlayer.play()
             }
             audioPlayerHandler.audioPlayer.delegate = self
             audioPlayerHandler.audioPlayer.play()
@@ -154,6 +153,10 @@ class RecordingViewController: UIViewController {
         let player = audioPlayerHandler.audioPlayer
         player.currentTime = player.currentTime + 5.0
         player.play()
+    }
+    
+    @IBAction func cutoffSliderChanged(_ sender: UISlider) {
+        
     }
     
     func writeWaves(_ input: Float) {

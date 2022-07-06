@@ -7,6 +7,7 @@
 
 import UIKit
 
+// MARK: - 녹음 버튼 깜빡임 효과용
 extension UIView {
     func controlFlashAnimate(duration: TimeInterval = 1.0, delay: TimeInterval = 0.0, alpha: CGFloat = 1.0, recordingMode: Bool) {
         self.alpha = 0.2
