@@ -12,7 +12,7 @@ extension TimeInterval {
         String(format:"%d:%02d:%02d", hour, minute, second)
     }
     var minuteSecond: String {
-        String(format:"%d:%02d", minute, second)
+        String(format:"%02d:%02d", minute, second)
     }
     var minuteSecondMS: String {
         String(format:"%d:%02d.%03d", minute, second, millisecond)

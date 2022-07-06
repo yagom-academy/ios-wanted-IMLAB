@@ -15,11 +15,11 @@ class RecordDetailViewController: UIViewController {
     
     @IBOutlet weak var waveView: UIView!
     @IBOutlet weak var cutoffLabel: UILabel!
-    @IBOutlet weak var cutOffSlider: UISlider!
     @IBOutlet weak var durationLabel: UILabel!
     @IBOutlet weak var recordButton: UIButton!
     @IBOutlet weak var buttonsStackView: UIStackView!
     @IBOutlet weak var playButton: UIButton!
+    @IBOutlet weak var cutOffFreqSegmentedControl: UISegmentedControl!
     
     // MARK: - Properties
     
@@ -44,6 +44,8 @@ class RecordDetailViewController: UIViewController {
     let waveLayer = CAShapeLayer()
     var traitLength : CGFloat!
     var start : CGPoint!
+    var sampeRate : Int?
+    var recordingTimer : Timer?
     
     
     // MARK: - LifeCycle
@@ -78,7 +80,7 @@ class RecordDetailViewController: UIViewController {
         do {
             try recordingSession?.setCategory(.playAndRecord, mode: .default)
             try recordingSession?.setActive(true)
-            try recordingSession?.setPreferredSampleRate(Double(cutOffSlider.value))
+            try recordingSession?.setPreferredSampleRate(Double(sampeRate ?? 0))
             recordingSession?.requestRecordPermission({ [unowned self] allowed in
                 DispatchQueue.main.async {
                     if allowed {
@@ -125,15 +127,15 @@ class RecordDetailViewController: UIViewController {
             audioRecorder = try AVAudioRecorder(url: audioFileURL, settings: settings)
             audioRecorder?.record() // 이것의 상태를 조건으로 다른 것 control하는 듯
             audioRecorder?.isMeteringEnabled = true
-            durationLabel.text = "녹음중 .."
             buttonsStackView.isHidden = true
             recordButton.setImage(recordingButtonImage, for: .normal)
-            cutOffSlider.isHidden = true
+            cutoffLabel.isHidden = true
+            cutOffFreqSegmentedControl.isHidden = true
         } catch {
             finishRecording(success: false, audioFileURL)
         }
         var translationX = 0.0
-
+        getRecordingTime()
         
         timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
             UIView.animate(withDuration: 0.01, delay: 0, options: [.curveLinear]) {
@@ -160,7 +162,8 @@ class RecordDetailViewController: UIViewController {
         uploadRecordDataToFirebase(url)
         recordButton.setImage(readyToRecordButtonImage, for: .normal)
         buttonsStackView.isHidden = false
-        cutOffSlider.isHidden = false
+        cutoffLabel.isHidden = false
+        cutOffFreqSegmentedControl.isHidden = false
     }
     
     func showDuration(_ url: URL?) {
@@ -172,7 +175,7 @@ class RecordDetailViewController: UIViewController {
             player?.delegate = self
             // 여기서 그림이랑 재생시간 계속 리로드
             if let duration = player?.duration {
-                durationTime = duration.minuteSecondMS
+                durationTime = duration.minuteSecond
                 durationLabel.text = durationTime
             }
         } catch {
@@ -203,13 +206,15 @@ class RecordDetailViewController: UIViewController {
             player?.play()
             playButton.setImage(pauseButtonImage, for: .normal)
             recordButton.isHidden = true
-            cutOffSlider.isHidden = true
+            cutoffLabel.isHidden = true
+            cutOffFreqSegmentedControl.isHidden = true
         } else {
             player?.pause()
             player?.prepareToPlay()
             playButton.setImage(playButtonImage, for: .normal)
             recordButton.isHidden = false
-            cutOffSlider.isHidden = false
+            cutoffLabel.isHidden = false
+            cutOffFreqSegmentedControl.isHidden = false
         }
     }
     
@@ -218,6 +223,7 @@ class RecordDetailViewController: UIViewController {
             start = firstPoint
             if timer != nil || audioRecorder != nil {
                 timer?.invalidate()
+                recordingTimer?.invalidate()
                 audioRecorder?.stop()
                 audioRecorder = nil
             }
@@ -260,6 +266,14 @@ class RecordDetailViewController: UIViewController {
         }
     }
     
+    func getRecordingTime() {
+        var totalSecond : TimeInterval = 0.0
+        recordingTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+            totalSecond += 1.0
+            self.durationLabel.text = totalSecond.minuteSecond
+        }
+    }
+    
     // MARK: - IBActions
     
     @IBAction func controlRecordProgressBar(_ sender: UISlider) {
@@ -285,6 +299,20 @@ class RecordDetailViewController: UIViewController {
         player?.currentTime += 5
     }
     
+    @IBAction func test(_ sender: UISegmentedControl) {
+        let selectedVoiceValue = sender.selectedSegmentIndex
+        
+        switch selectedVoiceValue {
+        case 0:
+            sampeRate = 8000
+        case 1:
+            sampeRate = 16000
+        case 2:
+            sampeRate = 32000
+        default:
+            sampeRate = 44100
+        }
+    }
 }
 // MARK: - Extensions
 
@@ -292,6 +320,7 @@ extension RecordDetailViewController: AVAudioPlayerDelegate {
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         playButton.setImage(playButtonImage, for: .normal)
         recordButton.isHidden = false
-        cutOffSlider.isHidden = false
+        cutoffLabel.isHidden = false
+        cutOffFreqSegmentedControl.isHidden = false
     }
 }
