@@ -127,36 +127,36 @@ class PlayVoiceViewController: UIViewController {
         NSLayoutConstraint.activate([
             
             fileNameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            fileNameLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 30),
+            fileNameLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: standardConstant),
             
+            waveFormBackgroundView.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: waveFormTopAnchorMP),
             waveFormBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            waveFormBackgroundView.topAnchor.constraint(equalTo: fileNameLabel.bottomAnchor, constant: 30),
-            waveFormBackgroundView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.15),
+            waveFormBackgroundView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: waveFormHeightMP),
             waveFormBackgroundView.widthAnchor.constraint(equalTo: view.widthAnchor),
             
             waveFormImageView.leadingAnchor.constraint(equalTo: view.centerXAnchor),
-            waveFormImageView.topAnchor.constraint(equalTo: fileNameLabel.bottomAnchor, constant: 30),
-            waveFormImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.15),
+            waveFormImageView.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: waveFormTopAnchorMP),
             waveFormImageView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            waveFormImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: waveFormHeightMP),
             
             verticalLineView.leadingAnchor.constraint(equalTo: view.centerXAnchor),
-            verticalLineView.topAnchor.constraint(equalTo: fileNameLabel.bottomAnchor, constant: 30),
-            verticalLineView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.15),
+            verticalLineView.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: waveFormTopAnchorMP),
             verticalLineView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            verticalLineView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: waveFormHeightMP),
             
             selectedPitchSegment.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            selectedPitchSegment.topAnchor.constraint(equalTo: waveFormImageView.bottomAnchor, constant: 30),
+            selectedPitchSegment.topAnchor.constraint(equalTo: waveFormImageView.bottomAnchor, constant: standardConstant),
             
-            volumeTextLabel.topAnchor.constraint(equalTo: selectedPitchSegment.bottomAnchor, constant: 30),
-            volumeTextLabel.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.8),
-            volumeTextLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            volumeTextLabel.topAnchor.constraint(equalTo: selectedPitchSegment.bottomAnchor, constant: standardConstant),
+            volumeTextLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: standardWidthMP),
+            volumeTextLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             volumeSlider.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             volumeSlider.topAnchor.constraint(equalTo: volumeTextLabel.bottomAnchor),
-            volumeSlider.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.8),
+            volumeSlider.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: standardWidthMP),
             
             playAndPauseButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            playAndPauseButton.centerYAnchor.constraint(equalTo: volumeSlider.bottomAnchor, constant: 30),
+            playAndPauseButton.centerYAnchor.constraint(equalTo: volumeSlider.bottomAnchor, constant: standardConstant),
                         
         ])
         view.bringSubviewToFront(waveFormImageView)
@@ -216,6 +216,7 @@ extension PlayVoiceViewController : FirebaseStorageManagerDelegate{
 }
 
 extension PlayVoiceViewController : PlayVoiceDelegate{
+    
     func playEndTime() {
         playVoiceManager.isPlay = false
         DispatchQueue.main.async {

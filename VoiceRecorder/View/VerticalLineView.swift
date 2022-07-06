@@ -33,7 +33,7 @@ class VerticalLineView: UIView {
         shape.path = path.cgPath
         shape.strokeColor = UIColor.black.cgColor
         shape.fillColor = UIColor.clear.cgColor
-        shape.lineWidth = UIScreen.main.bounds.size.width/112/10
+        shape.lineWidth = UIScreen.main.bounds.size.width/112/5
         
         self.layer.addSublayer(shape)
     }
