@@ -171,47 +171,45 @@ extension VoiceMemoListViewController: UITableViewDelegate, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let target = voiceMemoListAllData[indexPath.row]
-        var targetSliced = target.components(separatedBy: "/")
-        targetSliced.removeFirst()
-        let joinTarget = targetSliced.joined(separator: "/")
-        let isExist = pathFinder.checkLocalIsExist(fileName: joinTarget)
+        let filePathFromStorage = voiceMemoListAllData[indexPath.row]
+        let fileNameWithoutDirectory = filePathFromStorage.components(separatedBy: "/").dropFirst().joined(separator: "/")
+        let isExist = pathFinder.checkLocalIsExist(fileName: fileNameWithoutDirectory)
         
         if !isExist {
-            firebaseManager.fetchVoiceMemoAtFirebase(with: joinTarget,
-                                                     localPath: pathFinder.getPath(fileName: joinTarget)
+            firebaseManager.fetchVoiceMemoAtFirebase(with: fileNameWithoutDirectory,
+                                                     localPath: pathFinder.getPath(fileName: fileNameWithoutDirectory)
             ) { result in
                 
                 switch result {
                 case .success(_):
-                    self.coordinator?.presentPlayView(selectedFile: joinTarget)
+                    self.coordinator?.presentPlayView(selectedFile: fileNameWithoutDirectory)
                 case .failure(let error):
                     print(error.localizedDescription)
                 }
             }
         } else {
-            self.coordinator?.presentPlayView(selectedFile: joinTarget)
+            self.coordinator?.presentPlayView(selectedFile: fileNameWithoutDirectory)
         }
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         
-        let target = voiceMemoListAllData[indexPath.row]
-        var targetSliced = target.components(separatedBy: "/")
-        targetSliced.removeFirst()
-        let joinTarget = targetSliced.joined(separator: "/")
-        let isExist = pathFinder.checkLocalIsExist(fileName: joinTarget)
+        let filePathFromStorage = voiceMemoListAllData[indexPath.row]
+        let fileNameWithoutDirectory = filePathFromStorage.components(separatedBy: "/").dropFirst().joined(separator: "/")
+        let isExist = pathFinder.checkLocalIsExist(fileName: fileNameWithoutDirectory)
         
         if editingStyle == .delete {
-            voiceMemoListAllData.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .fade)
-            firebaseManager.removeVoiceMemoInFirebase(with: joinTarget) { result in
+            
+            if isExist {
+                self.pathFinder.deleteLocalFile(fileName: fileNameWithoutDirectory)
+            }
+            
+            firebaseManager.removeVoiceMemoInFirebase(with: fileNameWithoutDirectory) { [unowned self] result in
                 
                 switch result {
                 case .success(_):
-                    if isExist {
-                        self.pathFinder.deleteLocalFile(fileName: joinTarget)
-                    }
+                    voiceMemoListAllData.remove(at: indexPath.row)
+                    tableView.deleteRows(at: [indexPath], with: .fade)
                 case .failure(let error):
                     print(error.localizedDescription)
                 }

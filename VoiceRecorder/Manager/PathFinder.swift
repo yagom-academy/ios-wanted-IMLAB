@@ -63,10 +63,6 @@ class PathFinder {
         return path
     }
     
-    func getCurrentFilePath(fileName: String) -> URL {
-        return basePath.appendingPathComponent("\(fileName).caf")
-    }
-    
     func checkLocalIsExist(fileName: String) -> Bool {
         var tempPath = basePath
         let fileNameToAppend = "\(fileName).caf"
