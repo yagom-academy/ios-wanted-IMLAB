@@ -18,6 +18,8 @@ class AudioRecoderHandler {
     init(handler : LocalFileProtocol, updateTimeInterval : UpdateTimer ){
         self.localFileHandler = handler
         self.updateTimeInterval = updateTimeInterval
+        setupSession()
+        setupEngine()
     }
     
     var recordSettings : [String: Any] = [
@@ -38,6 +40,10 @@ class AudioRecoderHandler {
             print(error.localizedDescription)
         }
     }
+    
+    private var mixerNode : AVAudioMixerNode!
+    private var audioEngine : AVAudioEngine!
+    private var equalizer : AVAudioUnitEQ!
     
     private func setupEngine() {
         audioEngine = AVAudioEngine()
@@ -109,9 +115,6 @@ class AudioRecoderHandler {
         print(filter.frequency)
     }
     
-    
-=======
->>>>>>> parent of dc7b987 (Merge pull request #15 from JangJuMyeong/iw_1_hoifather)
     private func enableBuiltInMic() {
         // Get the shared audio session.
         let session = AVAudioSession.sharedInstance()

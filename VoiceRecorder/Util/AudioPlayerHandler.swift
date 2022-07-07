@@ -16,7 +16,6 @@ class AudioPlayerHandler {
     var updateTimeInterval: UpdateTimer
     var recordFileURL: URL!
     var audioFile: AVAudioFile!
-<<<<<<< HEAD
     var audioEngine: AVAudioEngine!
     var audioPlayerNode: AVAudioPlayerNode!
     var audioUnitTimePitch: AVAudioUnitTimePitch!
@@ -49,14 +48,20 @@ class AudioPlayerHandler {
         setupDisplayLink()
     }
     
-    func selectPlayFile(_ fileName: String?) {
+    func selectPlayFile(_ fileName: String?,_ isRecordFile : Bool = false) {
         if fileName == nil {
             let latestRecordFileName = localFileHandler.getLatestFileName()
             let latestRecordFileURL = localFileHandler.localFileURL.appendingPathComponent(latestRecordFileName)
             self.recordFileURL = latestRecordFileURL
         } else {
             guard let playFileName = fileName else { return }
-            let selectedFileURL = localFileHandler.localFileURL.appendingPathComponent("voiceRecords_\(playFileName)")
+            var selectedFileURL : URL?
+            if isRecordFile {
+                selectedFileURL = localFileHandler.localFileURL.appendingPathComponent("\(playFileName)")
+            } else {
+                selectedFileURL = localFileHandler.localFileURL.appendingPathComponent("voiceRecords_\(playFileName)")
+            }
+            
             self.recordFileURL = selectedFileURL
         }
         setUpSession()
@@ -66,9 +71,6 @@ class AudioPlayerHandler {
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback)
             try AVAudioSession.sharedInstance().setActive(true)
-            let audioPlayer = try AVAudioPlayer(contentsOf: recordFileURL)
-            self.audioPlayer = audioPlayer
-            self.audioPlayer.prepareToPlay()
             setupAudio()
         } catch let error {
             print("Error : setUpPlayer - \(error)")
@@ -96,7 +98,6 @@ class AudioPlayerHandler {
         audioMixerNode = AVAudioMixerNode()
         
         audioEngine.attach(audioPlayerNode)
-<<<<<<< HEAD
         audioEngine.attach(audioUnitTimePitch)
         audioEngine.attach(audioMixerNode)
         
@@ -104,14 +105,12 @@ class AudioPlayerHandler {
         audioEngine.connect(audioUnitTimePitch, to: audioEngine.outputNode, format: audioFile.processingFormat)
         audioEngine.connect(audioUnitTimePitch, to: audioEngine.mainMixerNode, format: buffer.format)
         
-=======
-        audioEngine.attach(audioUnitTimePich)
+        audioEngine.attach(audioUnitTimePitch)
         
-        audioEngine.connect(audioPlayerNode, to: audioUnitTimePich, format: audioFile.processingFormat)
-        audioEngine.connect(audioUnitTimePich, to: audioEngine.outputNode, format: audioFile.processingFormat)
+        audioEngine.connect(audioPlayerNode, to: audioUnitTimePitch, format: audioFile.processingFormat)
+        audioEngine.connect(audioUnitTimePitch, to: audioEngine.outputNode, format: audioFile.processingFormat)
 
         audioPlayerNode.volume = 5.0
->>>>>>> parent of dc7b987 (Merge pull request #15 from JangJuMyeong/iw_1_hoifather)
         audioPlayerNode.stop()
         audioPlayerNode.scheduleFile(audioFile, at: nil)
         
@@ -124,7 +123,7 @@ class AudioPlayerHandler {
     }
     
     func changePitch(to pitch: Float) {
-        audioUnitTimePich.pitch = pitch
+        audioUnitTimePitch.pitch = pitch
     }
     
     func scheduleAudioFile() {
@@ -155,6 +154,14 @@ class AudioPlayerHandler {
         seekFrame = currentPosition + offset
         seekFrame = max(seekFrame, 0)
         seekFrame = min(seekFrame, audioLengthSamples)
+        
+        let oneOffset = AVAudioFramePosition(time * audioSampleRate)
+        if seekFrame + oneOffset >= audioLengthSamples {
+            seekFrame = audioLengthSamples
+        } else if seekFrame - oneOffset <= 0 {
+            seekFrame = 0
+        }
+        
         currentPosition = seekFrame
         audioPlayerNode.stop()
         if currentPosition <= audioLengthSamples {
@@ -188,7 +195,11 @@ class AudioPlayerHandler {
         audioPlayerNode.stop()
 
         seekFrame = 0
-        currentPosition = 0
+          if audioPlayerNode.isPlaying {
+              currentPosition = 0
+          } else {
+              currentPosition = audioLengthSamples
+          }
 
         isPlaying = false
         displayLink?.isPaused = true

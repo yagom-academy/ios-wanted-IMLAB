@@ -79,7 +79,7 @@ class PlayingViewController: UIViewController {
         inPlayMode.toggle()
         audioPlayerHandler.playOrPause()
         progressTimer = Timer.scheduledTimer(
-            timeInterval: 0.05,
+            timeInterval: 1,
             target: self,
             selector: #selector(updateProgress),
             userInfo: nil, repeats: true)
