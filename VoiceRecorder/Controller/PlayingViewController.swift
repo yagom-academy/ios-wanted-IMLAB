@@ -38,7 +38,11 @@ class PlayingViewController: UIViewController {
     
     func configureVolumeSlider() {
         let volumeView = MPVolumeView()
-        volumeView.showsRouteButton = false
+        if #available(iOS 13, *) {
+                
+        } else {
+            volumeView.showsRouteButton = false
+        }
         volumeView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(volumeView)
         NSLayoutConstraint.activate([
@@ -52,6 +56,13 @@ class PlayingViewController: UIViewController {
         goBackwardButton.isEnabled = enable
         goForwardButton.isEnabled = enable
     }
+    
+    @IBAction func goForwardButtonTapped(_ sender: UIButton) {
+        let player = audioPlayerHandler.audioPlayer
+        player.currentTime = player.currentTime + 5.0
+        player.play()
+    }
+
     
     @IBAction func changePitch(_ sender: UISegmentedControl) {
         switch soundPitchControl.selectedSegmentIndex {

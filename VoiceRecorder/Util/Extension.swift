@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 // MARK: - 녹음 버튼 깜빡임 효과용
 extension UIView {

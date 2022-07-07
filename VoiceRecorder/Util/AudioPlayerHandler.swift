@@ -37,6 +37,9 @@ class AudioPlayerHandler {
 
       return playerTime.sampleTime
     }
+    var audioEngine = AVAudioEngine()
+    var audioPlayerNode = AVAudioPlayerNode()
+    let audioUnitTimePitch = AVAudioUnitTimePitch()
     
     init(handler: LocalFileProtocol, updateTimeInterval: UpdateTimer) {
         self.localFileHandler = handler
@@ -94,9 +97,13 @@ class AudioPlayerHandler {
         
         audioEngine.attach(audioPlayerNode)
         audioEngine.attach(audioUnitTimePitch)
-        
+       
         audioEngine.connect(audioPlayerNode, to: audioUnitTimePitch, format: audioFile.processingFormat)
         audioEngine.connect(audioUnitTimePitch, to: audioEngine.outputNode, format: audioFile.processingFormat)
+
+        audioPlayerNode.volume = 5.0
+        audioPlayerNode.stop()
+        audioPlayerNode.scheduleFile(audioFile, at: nil)
         
         do {
             try audioEngine.start()
