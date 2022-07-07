@@ -12,7 +12,8 @@ import UIKit
 class FirebaseStorageManager {
     
     private var baseReference: StorageReference!
-    private var dateUtil = DateUtil()
+    private let dateUtil = DateUtil()
+    private let soundManager = SoundManager()
     
     init() {
         baseReference = Storage.storage().reference()
@@ -26,7 +27,7 @@ class FirebaseStorageManager {
         let metaData = StorageMetadata()
         let customData = [
             "title": title,
-            "length": "03:24"
+            "duration": String(Int(soundManager.totalPlayTime()))
         ]
         metaData.customMetadata = customData
         metaData.contentType = "audio/x-caf"
@@ -47,9 +48,8 @@ class FirebaseStorageManager {
         }
     }
     
-    func downloadAll() {
-        baseReference.listAll { (result, error) in
-            
+    func downloadAll(completion: @escaping (Result<AudioData, Error>) -> Void) {
+        baseReference.listAll { result, error in
             if let error = error {
                 print(error.localizedDescription)
             }
@@ -57,21 +57,37 @@ class FirebaseStorageManager {
             if let result = result {
                 for item in result.items {
                     // item.reference로 파일 다운
-                    print("item storage", item.storage)
-                    print("item bucket", item.bucket)
-                    print("item fullPath", item.fullPath)
-                    print("item desc", item.description)
-                    print("item name", item.name)
-                    print("item hash", item.hash)
-                    print("item", item)
+                    self.downloadMetaData(filePath: item.name) { result in
+                        switch result {
+                        case .success(let audioData) :
+                            completion(.success(audioData))
+                        case .failure(let error) :
+                            completion(.failure(error))
+                        }
+                    }
                 }
             }
         }
     }
     
-    func downLoadMetaData() {
-        baseReference.getMetadata { metaData, error in
-            print(metaData?.name)
+    func downloadMetaData(filePath: String, completion: @escaping (Result<AudioData, Error>) -> Void) {
+        let ref = baseReference.child(filePath)
+        var audioData = AudioData(title: "", duration: "")
+        var title: String = ""
+        var duration: String = ""
+        
+        ref.getMetadata { metaData, error in
+            if let error = error {
+                completion(.failure(error))
+            }
+            
+            let data = metaData?.customMetadata
+            title = data?["title"] ?? "no title"
+            duration =  data?["duration"] ?? "00:00"
+            
+            audioData = AudioData(title: title, duration: duration)
+            completion(.success(audioData))
         }
     }
+    
 }

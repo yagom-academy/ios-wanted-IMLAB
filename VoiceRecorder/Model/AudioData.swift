@@ -10,14 +10,11 @@ import Foundation
 class AudioData: Codable {
     
     var title: String
-    var created_Date: Date
-    var playTime: String
-    var data: Data?
+    var duration: String
     
-    init(title: String, created_Data: Date, playTime: String) {
+    init(title: String, duration: String) {
         self.title = title
-        self.created_Date = created_Data
-        self.playTime = playTime
+        self.duration = duration
     }
     
 }
