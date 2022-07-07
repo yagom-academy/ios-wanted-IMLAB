@@ -8,6 +8,7 @@
 protocol PlayVoiceDelegate : AnyObject{
     func playEndTime()
     func displayWaveForm(to currentPosition : AVAudioFramePosition, in audioLengthSamples : AVAudioFramePosition)
+    func displayCurrentTime(_ currentPosition : AVAudioFramePosition, _ audioLengthSamples : AVAudioFramePosition, _ audioFileLengthSecond : Double)
 }
 
 import Foundation
@@ -119,6 +120,7 @@ class PlayVoiceManager{
         }
         seek(time: seekTime)
         delegate.displayWaveForm(to: currentPosition, in: audioLengthSamples)
+        delegate.displayCurrentTime(currentPosition, audioLengthSamples, audioFileLengthSecond)
     }
         
     private func seek(time : Double){
@@ -145,13 +147,13 @@ class PlayVoiceManager{
         }
         }else{
             delegate.displayWaveForm(to: 0, in: audioLengthSamples)
+            delegate.displayCurrentTime(0, audioLengthSamples, audioFileLengthSecond)
             playerNode.stop()
             seekFrame = 0
             currentPosition = 0
             isPlay = false
             displayLink?.isPaused = true
             delegate.playEndTime()
-            delegate.displayWaveForm(to: 0, in: audioLengthSamples)
             setScheduleFile()
         }
     }
@@ -162,6 +164,10 @@ class PlayVoiceManager{
     
     func getVolume()->Float{
         return playerNode.volume
+    }
+    
+    func getAudioFileLengthSecond()->Double{
+        return audioFileLengthSecond
     }
     
     func setPitch(pitch : SoundPitch){
@@ -185,8 +191,9 @@ class PlayVoiceManager{
         currentPosition = currentFrame + seekFrame
         currentPosition = max(currentPosition, 0)
         currentPosition = min(currentPosition, audioLengthSamples)
+        delegate.displayCurrentTime(currentPosition, audioLengthSamples, audioFileLengthSecond)
+        delegate.displayWaveForm(to: currentPosition, in: audioLengthSamples)
         if currentPosition >= audioLengthSamples{
-            delegate.displayWaveForm(to: audioLengthSamples, in: audioLengthSamples)
             playerNode.stop()
             seekFrame = 0
             currentPosition = 0
@@ -195,9 +202,8 @@ class PlayVoiceManager{
             delegate.playEndTime()
             setScheduleFile()
         } else {
-            delegate.displayWaveForm(to: currentPosition, in: audioLengthSamples)
+            
         }
-        
     }
     
     deinit{

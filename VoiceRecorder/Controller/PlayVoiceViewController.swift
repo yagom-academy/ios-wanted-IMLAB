@@ -14,6 +14,12 @@ class PlayVoiceViewController: UIViewController {
     var playVoiceViewModel : PlayVoiceViewModel!
     var firebaseDownloadManager : FirebaseStorageDownloadManager!
     
+    let progressTimeLabel : TimeLabel = {
+        let progressTimeLabel = TimeLabel()
+        progressTimeLabel.translatesAutoresizingMaskIntoConstraints = false
+        return progressTimeLabel
+    }()
+    
     var verticalLineView : VerticalLineView = {
         let verticalLineView = VerticalLineView()
         verticalLineView.translatesAutoresizingMaskIntoConstraints = false
@@ -111,6 +117,7 @@ class PlayVoiceViewController: UIViewController {
     
     func setView(){
         self.view.addSubview(fileNameLabel)
+        self.view.addSubview(progressTimeLabel)
         self.view.addSubview(verticalLineView)
         self.view.addSubview(waveFormImageView)
         self.view.addSubview(waveFormBackgroundView)
@@ -128,6 +135,9 @@ class PlayVoiceViewController: UIViewController {
             
             fileNameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             fileNameLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: standardConstant),
+            
+            progressTimeLabel.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: timeLabelTopAnchorMP),
+            progressTimeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             waveFormBackgroundView.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: waveFormTopAnchorMP),
             waveFormBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -225,6 +235,18 @@ extension PlayVoiceViewController : FirebaseDownloadManagerDelegate{
 }
 
 extension PlayVoiceViewController : PlayVoiceDelegate{
+    func displayCurrentTime(_ currentPosition: AVAudioFramePosition, _ audioLengthSamples: AVAudioFramePosition, _ audioFileLengthSecond: Double) {
+        var currentTime : Double
+        if currentPosition <= 0 {
+            currentTime = 0
+        } else if currentPosition >= audioLengthSamples {
+            currentTime = audioFileLengthSecond
+        } else {
+            currentTime = (Double(currentPosition)/Double(audioLengthSamples)) * audioFileLengthSecond
+        }
+        self.progressTimeLabel.setText(currentTime)
+    }
+    
     
     func playEndTime() {
         playVoiceManager.isPlay = false
@@ -234,7 +256,14 @@ extension PlayVoiceViewController : PlayVoiceDelegate{
     }
     
     func displayWaveForm(to currentPosition : AVAudioFramePosition, in audioLengthSamples : AVAudioFramePosition) {
-        let newX = (self.waveFormImageView.image?.size.width ?? 0) * CGFloat(currentPosition) / CGFloat(audioLengthSamples)
+        var newX : CGFloat
+        if currentPosition <= 0 {
+            newX = 0
+        } else if currentPosition >= audioLengthSamples {
+            newX = self.waveFormImageView.image?.size.width ?? 0
+        } else {
+            newX = (self.waveFormImageView.image?.size.width ?? 0) * CGFloat(currentPosition) / CGFloat(audioLengthSamples)
+        }
         self.waveFormImageView.transform = CGAffineTransform(translationX: -newX, y: 0)
     }
 }

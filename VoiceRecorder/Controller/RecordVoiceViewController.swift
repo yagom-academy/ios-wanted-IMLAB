@@ -228,9 +228,8 @@ class RecordVoiceViewController: UIViewController {
     }
     
     func setUI() {
-        frequencyLabel.text = "cutoff frequency"
+        frequencyLabel.text = "cutoff frequency: "
         frequencySlider.value = 44100
-        progressTimeLabel.text = "00:00:00"
         record_start_stop_button.setImage(UIImage(systemName: "circle.fill"), for: .normal)
         record_start_stop_button.tintColor = .red
         recordFile_ButtonStackView.isHidden = true
@@ -276,6 +275,7 @@ class RecordVoiceViewController: UIViewController {
             frequencySlider.isEnabled = true
             frequencySlider.tintColor = .systemBlue
             waveFormImageView.image = drawWaveFormManager.getWaveFormImage()
+            progressTimeLabel.setText(playVoiceManager.getAudioFileLengthSecond())
             recordFile_play_PauseButton.setImage(UIImage(systemName: "play"), for: .normal)
         case .beforePlaying:
             waveFormCanvasView.isHidden = true
@@ -334,9 +334,27 @@ extension RecordVoiceViewController : RecordVoiceManagerDelegate {
 }
 
 extension RecordVoiceViewController : PlayVoiceDelegate{
+    func displayCurrentTime(_ currentPosition: AVAudioFramePosition, _ audioLengthSamples: AVAudioFramePosition, _ audioFileLengthSecond: Double) {
+        var currentTime : Double
+        if currentPosition <= 0 {
+            currentTime = 0
+        } else if currentPosition >= audioLengthSamples {
+            currentTime = audioFileLengthSecond
+        } else {
+            currentTime = (Double(currentPosition)/Double(audioLengthSamples)) * audioFileLengthSecond
+        }
+        self.progressTimeLabel.setText(currentTime)
+    }
 
     func displayWaveForm(to currentPosition: AVAudioFramePosition, in audioLengthSamples: AVAudioFramePosition) {
-        let newX = (self.waveFormImageView.image?.size.width ?? 0) * CGFloat(currentPosition) / CGFloat(audioLengthSamples)
+        var newX : CGFloat
+        if currentPosition <= 0 {
+            newX = 0
+        } else if currentPosition >= audioLengthSamples {
+            newX = self.waveFormImageView.image?.size.width ?? 0
+        } else {
+            newX = (self.waveFormImageView.image?.size.width ?? 0) * CGFloat(currentPosition) / CGFloat(audioLengthSamples)
+        }
         self.waveFormImageView.transform = CGAffineTransform(translationX: -newX, y: 0)
     }
     
