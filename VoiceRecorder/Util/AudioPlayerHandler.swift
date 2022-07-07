@@ -187,7 +187,11 @@ class AudioPlayerHandler {
         audioPlayerNode.stop()
 
         seekFrame = 0
-        currentPosition = 0
+          if audioPlayerNode.isPlaying {
+              currentPosition = 0
+          } else {
+              currentPosition = audioLengthSamples
+          }
 
         isPlaying = false
         displayLink?.isPaused = true
