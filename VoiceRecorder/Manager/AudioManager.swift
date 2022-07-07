@@ -314,7 +314,7 @@ extension AudioManager {
     func startPlay(fileURL: URL) {
         if !audioEngine.isRunning {
             audioEngine.reset()
-            preparePlayEngine()
+            preparePlayEngine(fileURL)
             preparePlay(filePath: fileURL)
             
             do {
@@ -336,11 +336,23 @@ extension AudioManager {
         audioPlayerNode.pause()
     }
     
-    private func preparePlayEngine() {
+    private func preparePlayEngine(_ filePath: URL) {
+        
+        var audioFile: AVAudioFile
+        do {
+            audioFile = try getAudioFile(filePath: filePath)
+        } catch {
+            fatalError()
+        }
+        
         audioEngine.attach(audioPlayerNode)
         audioEngine.attach(changePitchNode)
-        audioEngine.connect(audioPlayerNode, to: changePitchNode, format: nil)
-        audioEngine.connect(changePitchNode, to: audioEngine.mainMixerNode, format: nil)
+        
+        let format = audioPlayerNode.outputFormat(forBus: 0)
+        let customFormat = AVAudioFormat(commonFormat: format.commonFormat, sampleRate: audioFile.fileFormat.sampleRate, channels: format.channelCount, interleaved: false)
+
+        audioEngine.connect(audioPlayerNode, to: changePitchNode, format: customFormat)
+        audioEngine.connect(changePitchNode, to: audioEngine.mainMixerNode, format: customFormat)
     }
     
     private func preparePlay(filePath: URL) {
