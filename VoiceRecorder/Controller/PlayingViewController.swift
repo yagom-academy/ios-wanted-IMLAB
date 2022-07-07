@@ -21,8 +21,8 @@ class PlayingViewController: UIViewController {
     @IBOutlet weak var goBackwardButton: UIButton!
     @IBOutlet weak var goForwardButton: UIButton!
     var selectedFileInfo: RecordModel?
-    var progressTimer: Timer?
-    var inPlayMode: Bool = false
+    private var progressTimer: Timer?
+    private var inPlayMode: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,14 +35,17 @@ class PlayingViewController: UIViewController {
         configureVolumeSlider()
     }
     
-    let audioPlayerHandler = AudioPlayerHandler(handler: LocalFileHandler(), updateTimeInterval: UpdateTimeInterval())
+    let audioPlayerHandler = AudioPlayerHandler(
+        handler: LocalFileHandler(),
+        updateTimeInterval: UpdateTimeInterval()
+    )
     
-    func configureVolumeSlider() {
+    private func configureVolumeSlider() {
         let volumeView = MPVolumeView(frame: volumeSliderView.bounds)
         volumeSliderView.addSubview(volumeView)
     }
     
-    func setButton(enable: Bool) {
+    private func setButton(enable: Bool) {
         goBackwardButton.isEnabled = enable
         goForwardButton.isEnabled = enable
     }
@@ -73,10 +76,14 @@ class PlayingViewController: UIViewController {
         audioPlayerHandler.playOrPause()
         if inPlayMode {
             self.playButton.setImage(UIImage(systemName: "pause"), for: .normal)
-            progressTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateProgress), userInfo: nil, repeats: true)
         } else {
             self.playButton.setImage(UIImage(systemName: "play"), for: .normal)
         }
+        progressTimer = Timer.scheduledTimer(
+            timeInterval: 0.05,
+            target: self,
+            selector: #selector(updateProgress),
+            userInfo: nil, repeats: true)
     }
     
     @objc func updateProgress() {
@@ -84,6 +91,7 @@ class PlayingViewController: UIViewController {
         playProgressBar.progress = audioPlayerHandler.getProgress()
         if !audioPlayerHandler.isPlaying {
             self.playButton.setImage(UIImage(systemName: "play"), for: .normal)
+            progressTimer?.invalidate()
         }
     }
 }
