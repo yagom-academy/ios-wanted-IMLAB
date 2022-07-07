@@ -39,34 +39,24 @@ class SoundManager: NSObject {
     }
     
     func initializedEngine(url: URL) {
-        
         do {
             let file = try AVAudioFile(forReading: url)
             let fileFormat = file.processingFormat
-            let audioFrameCount = UInt32(file.length)
-            
-            
-            let buffer = AVAudioPCMBuffer(pcmFormat: fileFormat, frameCapacity: audioFrameCount)
-            //
+           
             audioFile = file
             songLengthSamples = audioFile.length
             sampleRateSong = Float(fileFormat.sampleRate)
             lengthSongSeconds = Float(songLengthSamples) / sampleRateSong
-            
-            //
-            
             
             configurePlayEngine(format: fileFormat)
             
             playerNode.scheduleFile(file, at: nil) { [self] in
                 self.delegate?.observeAudioPlayerDidFinishPlaying(playerNode)
             }
-            
         } catch let error as NSError {
             print("엔진 초기화 실패")
             print("코드 : \(error.code), 메세지 : \(error.localizedDescription)")
         }
-        
     }
     
     func configureRecordEngine(format: AVAudioFormat) {
@@ -77,23 +67,13 @@ class SoundManager: NSObject {
     }
     
     func configurePlayEngine(format: AVAudioFormat) {
-        
         engine.attach(playerNode)
         engine.attach(pitchControl)
         
         engine.connect(playerNode, to: pitchControl, format: format)
         engine.connect(pitchControl, to: engine.mainMixerNode, format: format)
-        //engine.connect(engine.mainMixerNode, to: engine.outputNode, format: format)
-        
-        // mainMixerNode로 가면 바로 끝내고 prepare로 돌아가는듯함
-        // ouptNode로 연결하면 무한루프 됨
-        // 아마 mainMixerNode쪽에 종료 메소드가 포함 되어 있는듯
         
         engine.prepare()
-    }
-    
-    func configurePlayerNode() {
-        
     }
     
     private func createAudioFile(filePath: URL) throws -> AVAudioFile {
@@ -146,64 +126,18 @@ class SoundManager: NSObject {
     func pause() {
         playerNode.pause()
     }
-    
-    func stopPlayer() {
-        playerNode.stop()
-    }
-    
-    func getCurrentPosition() -> Float {
-        if(self.playerNode.isPlaying){
-            if let nodeTime = self.playerNode.lastRenderTime, let playerTime = playerNode.playerTime(forNodeTime: nodeTime) {
-                let elapsedSeconds = startInSongSeconds + (Float(playerTime.sampleTime) / Float(sampleRateSong))
-                print("Elapsed seconds: \(elapsedSeconds)")
-                return elapsedSeconds
-            }
-        }
-        return 0
-    }
-    
-    func seek(to: Bool) {
-        
-        playerNode.stop()
-        
-        let startSample = Float(4.0)//floor(time * sampleRateSong)
-        let lengthSamples = Float(songLengthSamples) - startSample
-        
-        playerNode.scheduleSegment(audioFile, startingFrame: AVAudioFramePosition(4), frameCount: AVAudioFrameCount(lengthSamples), at: nil, completionHandler: {self.playerNode.pause()})
-        playerNode.play(at: AVAudioTime(hostTime: 5))
-        
-    }
-    
-    func changePitchValue(value: Float) {
-        self.pitchControl.pitch = value
-    }
-    
-    func changeVolume(value: Float) {
-        self.playerNode.volume = value
-    }
-    
 }
 
 extension SoundManager {
     
     // - MARK: playTime
     
-    func updatePlayTime() -> Double {
-        let audioCurrentTime = Double(playerNode.currentTime)
-        
-        let length = audioFile.length
-        let sampleRate = audioFile.processingFormat.sampleRate
-        let audioPlayTime = Double(length) / sampleRate
-        
-        return audioCurrentTime / audioPlayTime
-    }
-    
-    func totalPlayTime() -> Double {
-        let url = audioFileManager.getAudioFilePath(fileName: "fileNAME")
+    func totalPlayTime(date: String) -> Double {
+        let url = audioFileManager.getAudioFilePath(fileName: date)
         do {
             audioFile = try getAudioFile(filePath: url)
         } catch {
-            print("[error] : timetime")
+            print("[error] : totalPlayTime")
         }
         
         let length = audioFile.length
