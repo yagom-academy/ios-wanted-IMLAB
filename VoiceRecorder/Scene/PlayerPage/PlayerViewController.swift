@@ -10,6 +10,8 @@ import UIKit
 class PlayerViewController: UIViewController {
     private let viewModel = PlayerViewModel(PlayerManager.shared)
     private var safearea: UILayoutGuide!
+    
+    private var waves: [Int] = []
 
     private let fileNameLabel: UILabel = {
         let label = UILabel()
@@ -97,13 +99,12 @@ extension PlayerViewController {
 
         // 파일명, 파형, 음성변조, 볼륨, 버튼
         let mainStackViewItems = [
-//            frequencyView,
-            emptyView,
-            fileNameLabel,
+            frequencyView,
+            fileNameLabel,            
             playerButtonView,
             volumeControlView,
             pitchControlView,
-            speedControlView,
+//            speedControlView,
         ]
 
         mainStackViewItems.forEach {
@@ -112,18 +113,21 @@ extension PlayerViewController {
         }
 
         let mainStackViewItemsContraints = [
-            emptyView.heightAnchor.constraint(equalTo: safearea.heightAnchor, multiplier: 0.3),
-            emptyView.topAnchor.constraint(equalTo: safearea.topAnchor, constant: 30),
-
+            frequencyView.heightAnchor.constraint(equalTo: safearea.heightAnchor, multiplier: 0.3),
+            frequencyView.topAnchor.constraint(equalTo: safearea.topAnchor, constant: 30),
             fileNameLabel.heightAnchor.constraint(equalToConstant: 50),
-
             playerButtonView.heightAnchor.constraint(equalToConstant: 50),
             volumeControlView.heightAnchor.constraint(equalToConstant: 30),
             pitchControlView.heightAnchor.constraint(equalToConstant: 30),
-            speedControlView.heightAnchor.constraint(equalToConstant: 20),
+//            speedControlView.heightAnchor.constraint(equalToConstant: 20),
         ]
         
         mainStackView.setCustomSpacing(30, after: emptyView)
+        mainStackView.setCustomSpacing(80, after: fileNameLabel)
+        mainStackView.setCustomSpacing(30, after: playerButtonView)
+        mainStackView.setCustomSpacing(30, after: volumeControlView)
+        mainStackView.setCustomSpacing(20, after: pitchControlView)
+
         mainStackView.setCustomSpacing(80, after: fileNameLabel)
         mainStackView.setCustomSpacing(30, after: playerButtonView)
         mainStackView.setCustomSpacing(30, after: volumeControlView)
@@ -151,7 +155,21 @@ extension PlayerViewController {
                 return
             }
 
+            self.getWaveData(filename)
             self.configurePlayer()
+        }
+    }
+
+    private func getWaveData(_ filename: String) {
+        viewModel.waveData(filename) { result in
+            guard let result = result else {
+                return
+            }
+
+            self.waves = result
+
+            
+            NotificationCenter.default.post(name: Notification.Name("GetWaves"), object: result)
         }
     }
 

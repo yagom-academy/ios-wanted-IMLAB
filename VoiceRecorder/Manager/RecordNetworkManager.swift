@@ -9,7 +9,7 @@ import FirebaseStorage
 import Foundation
 
 protocol NetworkManager {
-    func saveRecord(filename: String, completion: ((Bool) -> Void)?)
+    func saveRecord(filename: String, waves: [String: String], completion: ((Bool) -> Void)?)
     func getRecordData(filename: String, completion: ((Result<Data, CustomNetworkError>) -> Void)?)
     func getRecordMetaData(filename: String, completion: ((StorageMetadata?) -> Void)?)
     func getRecordList(completion: ((Result<[String], CustomNetworkError>) -> Void)?)
@@ -23,15 +23,18 @@ struct RecordNetworkManager: NetworkManager {
 
     private init() {}
 
-    func saveRecord(filename: String, completion: ((Bool) -> Void)? = nil) {
+    func saveRecord(filename: String, waves: [String: String], completion: ((Bool) -> Void)? = nil) {
         let localRecordFileURL = Config.getRecordFilePath()
 
         let recordRef = storageRef.child(filename)
+        
+        let metadata = StorageMetadata()
+        metadata.customMetadata = waves
 
         do {
             let data = try Data(contentsOf: localRecordFileURL)
             DispatchQueue.global().async {
-                recordRef.putData(data, metadata: nil) { metadata, error in
+                recordRef.putData(data, metadata: metadata) { metadata, error in
                     guard error == nil,
                           let metadata = metadata else {
                         print("fail")

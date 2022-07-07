@@ -87,6 +87,10 @@ class PlayerButtonView: UIView {
     @objc private func playerDidEnded() {
         playPauseButton.isSelected = false
     }
+    
+    deinit {
+        viewModel.resetViewModel()
+    }
 }
 
 // MARK: - Layout

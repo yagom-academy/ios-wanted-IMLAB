@@ -5,8 +5,8 @@
 //  Created by Mac on 2022/06/29.
 //
 
-import UIKit
 import AVFoundation
+import UIKit
 
 protocol RecordService {
     var audioFile: URL! { get }
@@ -15,34 +15,37 @@ protocol RecordService {
     func dateToFileName(_ date: Date) -> String
     func startRecord()
     func endRecord()
+    func getWaveData() -> [Int]
 }
 
 class RecordManager: RecordService {
-    
     static let shared = RecordManager()
-    
+
     var recorder: AVAudioRecorder?
     var audioFile: URL!
     var timer: Timer?
+
     var waveForms = [Int](repeating: 0, count: 100)
+    var totalWaveData = [Int]()
+
     var cutValue = 0
-    
-    private init () {
+
+    private init() {
         NotificationCenter.default.addObserver(self, selector: #selector(sendCutValue(_:)), name: Notification.Name("SendCutValue"), object: nil)
     }
-    
+
     @objc func sendCutValue(_ notification: Notification) {
         guard let value = notification.object as? Float else { return }
-        self.cutValue = Int(value)
+        cutValue = Int(value)
     }
-    
+
     func initRecordSession() {
         let audioSession = AVAudioSession.sharedInstance()
-        
+
         do {
             try audioSession.setCategory(.playAndRecord, mode: .default)
             try audioSession.setActive(true)
-            
+
             audioSession.requestRecordPermission { allowed in
                 if allowed {
                     print("Permission Allowed")
@@ -53,16 +56,16 @@ class RecordManager: RecordService {
         } catch {
             print("init Session Error: \(error.localizedDescription)")
         }
-    }    
+    }
 
     func normalizeSoundLevel(_ level: Float?) -> Int {
         guard let level = level else { return 0 }
         let lowLevel: Float = -70
         let highLevel: Float = -10
-        
+
         var normalLevel = max(0.0, level - lowLevel)
         normalLevel = min(normalLevel, highLevel - lowLevel)
-        
+
         return Int(normalLevel)
     }
 
@@ -73,10 +76,10 @@ class RecordManager: RecordService {
         let fileName = formatter.string(from: Date())
         return fileName
     }
-    
+
     func startRecord() {
         audioFile = nil
-        
+
         var currentSample = 0
         let numberOfSamples = waveForms.count
 
@@ -97,28 +100,31 @@ class RecordManager: RecordService {
             timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { [weak self] _ in
                 guard let self = self else { return }
                 self.recorder?.updateMeters()
-                
+
                 let soundLevel = self.normalizeSoundLevel(self.recorder?.averagePower(forChannel: 0))
-                
+
                 if currentSample == numberOfSamples {
                     self.waveForms.removeFirst()
                     if soundLevel > self.cutValue {
                         self.waveForms.append(1)
+                        self.totalWaveData.append(1)
                     } else {
                         self.waveForms.append(soundLevel)
+                        self.totalWaveData.append(soundLevel)
                     }
                 } else {
                     if soundLevel < self.cutValue {
                         self.waveForms[currentSample] = soundLevel
+                        self.totalWaveData.append(soundLevel)
                     } else {
                         self.waveForms[currentSample] = 1
+                        self.totalWaveData.append(1)
                     }
                 }
 
                 if currentSample < numberOfSamples {
                     currentSample += 1
                 }
-                
                 if self.recorder?.isRecording ?? true {
                     NotificationCenter.default.post(name: Notification.Name("SendWaveform"), object: self.waveForms, userInfo: nil)
                 }
@@ -134,6 +140,12 @@ class RecordManager: RecordService {
         recorder?.stop()
         recorder = nil
         
+        print(totalWaveData.count)
+
         waveForms = [Int](repeating: 0, count: 100)
+    }
+    
+    func getWaveData() -> [Int] {
+        return totalWaveData
     }
 }
