@@ -14,7 +14,6 @@ protocol FinishRecord : AnyObject {
 
 class RecordingViewController: UIViewController {
     
-    @IBOutlet weak var lowPassCutoffSlider: UISlider!
     @IBOutlet weak var totalRecordTimeLabel: UILabel!
     @IBOutlet weak var playProgressBar: UIProgressView!
     @IBOutlet weak var currentPlayTimeLabel: UILabel!
@@ -34,8 +33,9 @@ class RecordingViewController: UIViewController {
     lazy var startPoint : CGPoint = CGPoint(x: 6, y: self.waveformView.bounds.midY)
     
     var progressTimer: Timer!
+    var recordTimer : Timer!
     var inRecordMode = true
-    var inPlayMode = true
+    var inPlayMode = false
     var durationTime = 0.0
     var currentTime = 0.0
     var recordCurrentTime = 0.0
@@ -72,18 +72,20 @@ class RecordingViewController: UIViewController {
     @IBAction func recordingButtonTapped(_ sender: UIButton) {
         if inRecordMode {
             
+            currentPlayTimeLabel.text = "00:00"
+            endPlayTimeLabel.text = "00:00"
+            
             pencil.removeAllPoints()
             waveLayer.removeFromSuperlayer()
             
-            if progressTimer != nil {
-                progressTimer.invalidate()
+            if recordTimer != nil {
+                recordTimer.invalidate()
                 scrollView.setContentOffset(CGPoint(x: waveformView.frame.minX, y: 0.0), animated:false)
                 startPoint = CGPoint(x: 6, y: waveformView.bounds.midY)
             }
             
             sender.controlFlashAnimate(recordingMode: true)
             self.playButton.isEnabled = false
-<<<<<<< HEAD
             do {
                 try audioRecorderHandler.startRecording()
             } catch {
@@ -91,12 +93,12 @@ class RecordingViewController: UIViewController {
             }
             
 //            audioRecorderHandler.startRecord()
-            self.progressTimer = Timer.scheduledTimer(timeInterval: 0.1,
+            self.recordTimer = Timer.scheduledTimer(timeInterval: 0.1,
                                                       target: self,
                                                       selector: #selector(updateRecordTime),
                                                       userInfo: nil,
                                                       repeats: true)
-            RunLoop.main.add(progressTimer, forMode: .common)
+            RunLoop.main.add(recordTimer, forMode: .common)
             
         } else {
             sender.controlFlashAnimate(recordingMode: false)
@@ -111,9 +113,11 @@ class RecordingViewController: UIViewController {
         guard let fileName = audioRecorderHandler.fileName else { return }
         let recordTotalTime = audioRecorderHandler.updateTimer(totalTime!)
         audioRecorderHandler.stopRecording(totalTime: recordTotalTime)
+        audioPlayerHandler.selectPlayFile(fileName,true)
         delegate?.finsihRecord(fileName: fileName, totalTime: recordTotalTime)
+        endPlayTimeLabel.text = recordTotalTime
         recordCurrentTime = 0.0
-        progressTimer.invalidate()
+        recordTimer.invalidate()
     }
     
     @objc func updateRecordTime() {
@@ -122,35 +126,43 @@ class RecordingViewController: UIViewController {
         if let totalTime = totalTime {
             self.totalRecordTimeLabel.text = audioRecorderHandler.updateTimer(totalTime)
         }
-        
-//        audioRecorderHandler.audioRecorder.updateMeters()
-//        self.writeWaves(audioRecorderHandler.audioRecorder.averagePower(forChannel: 0))
-//        self.totalRecordTimeLabel.text = audioRecorderHandler.updateTimer(audioRecorderHandler.audioRecorder.currentTime)
     }
     
     @IBAction func playButtonTapped(_ sender: UIButton) {
+        inPlayMode.toggle()
         if inPlayMode {
             sender.setImage(UIImage(systemName: "pause"), for: .normal)
-            if audioPlayerHandler.audioPlayer.currentTime == 0.0 {
-                audioPlayerHandler.selectPlayFile(nil)
-            }
-            audioPlayerHandler.audioPlayer.delegate = self
-            audioPlayerHandler.audioPlayer.play()
+            progressTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateProgress), userInfo: nil, repeats: true)
             self.recordingButton.isEnabled = false
             self.goForwardButton.isEnabled = true
             self.goBackwardButton.isEnabled = true
-//            endPlayTimeLabel.text = audioPlayerHandler.updateTimer(audioPlayerHandler.audioPlayer.duration)
-//            progressTimer = Timer.scheduledTimer(timeInterval: 0.05,
-//                                                 target: self,
-//                                                 selector: #selector(updatePlayTime),
-//                                                 userInfo: nil,
-//                                                 repeats: true)
+            audioPlayerHandler.play()
         } else {
             sender.setImage(UIImage(systemName: "play"), for: .normal)
-//            audioPlayerHandler.audioPlayer.pause()
+            audioPlayerHandler.pause()
             self.recordingButton.isEnabled = true
         }
-        inPlayMode.toggle()
+        
+    }
+    
+    @objc func updateProgress() {
+        currentPlayTimeLabel.text = audioPlayerHandler.getCurrentPlayTime()
+        playProgressBar.progress = audioPlayerHandler.getCurrentProgress()
+        
+        if playProgressBar.progress == 0 {
+            progressTimer.invalidate()
+            self.recordingButton.isEnabled = true
+            self.goForwardButton.isEnabled = false
+            self.goBackwardButton.isEnabled = false
+            inPlayMode = false
+        }
+        if !audioPlayerHandler.isPlaying {
+            self.playButton.setImage(UIImage(systemName: "play"), for: .normal)
+        }
+    }
+    
+    @IBAction func setCutoffFreucy(_ sender: UISlider) {
+        audioRecorderHandler.setFrequency(frequency: sender.value)
     }
     
     @objc func updatePlayTime() {
@@ -244,7 +256,6 @@ extension RecordingViewController: AVAudioPlayerDelegate {
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         player.stop()
         self.playButton.setImage(UIImage(systemName: "play"), for: .normal)
-//        progressTimer.invalidate()
         self.recordingButton.isEnabled = true
         self.goForwardButton.isEnabled = false
         self.goBackwardButton.isEnabled = false
