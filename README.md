@@ -1,8 +1,5 @@
-
-# README 작성시 필수 요소
-- 팀원 소개 (이미지, 닉네임, 담당한 기술 등)
-- 프로젝트 소개
-- 기타 내용은 팀 내부에서 자율적으로 작성하시면 됩니다.
+# VoiceRecord - iOS
+프리온보딩 첫번째 과제 📱
 
 ## 🧑‍💻 Developers
 |서초(조성빈)|Peppo(이병훈)|
@@ -142,7 +139,7 @@ prefix는 Issue에 있는 Prefix와 동일하게 사용한다.
 1. TableView CRUD 구현
 // 레이아웃(Design)을 구현한 경우
 [Design]: 레이아웃 구현
-1. page1 레이아웃 
+1. page1 레이아웃 완료
 ```
 
 </br>
