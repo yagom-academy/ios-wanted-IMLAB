@@ -4,15 +4,17 @@
 //
 
 import UIKit
+import AVFoundation
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
     var appCoordinator: Coordinator!
     
-    let audioManager = AudioManager()
-    var pathFinder : PathFinder!
+    let audioPlayer = DefaultAudioPlayer()
+    let audioRecoder = DefaultAudioRecoder()
     let firebaseStorageManager = FirebaseStorageManager.init()
+    var pathFinder : PathFinder!
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
@@ -26,17 +28,42 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             fatalError(error.localizedDescription)
         }
         
-        audioManager.requestPermission()
+        requestPermission()
         
-        let navController = UINavigationController()
-        appCoordinator = AppCoordinator(navigationController: navController,audioManager: audioManager,pathFinder: pathFinder,firebasemanager: firebaseStorageManager)
+        let navigationController = UINavigationController()
+        appCoordinator = AppCoordinator(navigationController: navigationController,
+                                        audioPlayer: audioPlayer,
+                                        audioRecoder: audioRecoder,
+                                        pathFinder: pathFinder,
+                                        firebasemanager: firebaseStorageManager)
         appCoordinator.start()
         
-        appWindow.rootViewController = navController
+        appWindow.rootViewController = navigationController
         appWindow.makeKeyAndVisible()
         
         window = appWindow
 
+    }
+    
+    private func configureAudioSession() {
+        
+        let session = AVAudioSession.sharedInstance()
+        do {
+            try session.setCategory(.playAndRecord)
+            try session.setActive(true)
+        } catch {
+            fatalError(error.localizedDescription)
+        }
+    }
+    
+    func requestPermission() {
+        
+        let session = AVAudioSession.sharedInstance()
+        session.requestRecordPermission() { [unowned self] isGranted in
+            if isGranted {
+                configureAudioSession()
+            }
+        }
     }
 
 

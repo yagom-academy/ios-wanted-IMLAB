@@ -17,7 +17,8 @@ class VoiceMemoRecordViewController: UIViewController {
     // MARK: - Properties
     
     private let pathFinder: PathFinder!
-    private let audioManager: AudioManager!
+    private let audioRecorder: AudioRecodable!
+    private let audioPlayer: AudioPlayable!
     private let firebaseManager: FirebaseStorageManager!
     
     //  MARK: - ViewProperties
@@ -106,11 +107,13 @@ class VoiceMemoRecordViewController: UIViewController {
     // MARK: - Life Cycle
     
     init(pathFinder: PathFinder,
-         audioManager: AudioManager,
+         audioPlayer: AudioPlayable,
+         audioRecorder: AudioRecodable,
          firebaseManager: FirebaseStorageManager) {
         
         self.pathFinder = pathFinder
-        self.audioManager = audioManager
+        self.audioPlayer = audioPlayer
+        self.audioRecorder = audioRecorder
         self.firebaseManager = firebaseManager
         super.init(nibName: nil, bundle: nil)
     }
@@ -127,15 +130,15 @@ class VoiceMemoRecordViewController: UIViewController {
         designUI()
         hiddenPlayRelatedButtons(.record)
         presentationController?.delegate = self
-        audioManager.liveBufferDataDelegate = self
+        audioRecorder.delegate = self
         NotificationCenter.default.addObserver(self, selector: #selector(audioPlaybackTimeIsOver(_:)), name: .audioPlaybackTimeIsOver, object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         
         super.viewWillDisappear(true)
-        audioManager.stopRecord()
-        audioManager.stopPlay()
+        audioRecorder.stopRecord()
+        audioPlayer.stopPlay()
     }
     
     private func configure() {
@@ -222,12 +225,6 @@ class VoiceMemoRecordViewController: UIViewController {
 
 extension VoiceMemoRecordViewController {
     
-    /// 녹음완료후 음성파일의 시간
-    private func showVoiceMemoDuration() -> String {
-        
-        return audioManager.getPlayTime(filePath: pathFinder.lastUsedUrl)
-    }
-    
     /// 플레이관련 버튼들의 hidden animation
     private func hiddenPlayRelatedButtons(_ mode: RecordViewJobMode) {
         
@@ -244,7 +241,7 @@ extension VoiceMemoRecordViewController {
     
     private func convertSecondToMinute() -> String {
         
-        guard let time = Int(audioManager.getPlayTime(filePath: pathFinder.lastUsedUrl)) else {
+        guard let time = Int(audioRecorder.getPlayTime(filePath: pathFinder.lastUsedUrl)) else {
             return ""
         }
         
@@ -255,7 +252,10 @@ extension VoiceMemoRecordViewController {
     
     private func uploadVoiceMemoToFirebaseStorage() {
         
-        firebaseManager.uploadVoiceMemoToFirebase(with: pathFinder.lastUsedUrl, fileName: pathFinder.lastUsedFileName, playTime: audioManager.getPlayTime(filePath:pathFinder.lastUsedUrl)) { [weak self] result in
+        firebaseManager
+            .uploadVoiceMemoToFirebase(with: pathFinder.lastUsedUrl,
+                                       fileName: pathFinder.lastUsedFileName,
+                                       playTime: audioRecorder.getPlayTime(filePath:pathFinder.lastUsedUrl)) { [weak self] result in
             
             switch result {
             case .success(_):
@@ -284,10 +284,10 @@ extension VoiceMemoRecordViewController {
             waveFormView.restartWaveForm()
             playTimeLabel.text = ""
             hiddenPlayRelatedButtons(.record)
-            audioManager.startRecord(filePath: pathFinder.getPathWithTime())
+            audioRecorder.startRecord(filePath: pathFinder.getPathWithTime())
         } else {
             hiddenPlayRelatedButtons(.play)
-            audioManager.stopRecord()
+            audioRecorder.stopRecord()
             playTimeLabel.text = convertSecondToMinute()
             uploadVoiceMemoToFirebaseStorage()
         }
@@ -298,25 +298,25 @@ extension VoiceMemoRecordViewController {
         sender.isSelected.toggle()
         
         if sender.isSelected {
-            audioManager.startPlay(fileURL: pathFinder.lastUsedUrl)
+            audioPlayer.startPlay(fileURL: pathFinder.lastUsedUrl)
         } else {
-            audioManager.pausePlay()
+            audioPlayer.pausePlay()
         }
     }
     
     @objc private func skip5SecondsButtonTouched(_ sender: UIButton) {
         
         if sender === skipForward5SecondsButton {
-            audioManager.skip(for: 5, filePath: pathFinder.lastUsedUrl)
+            audioPlayer.skip(for: 5, filePath: pathFinder.lastUsedUrl)
         } else {
-            audioManager.skip(for: -5, filePath: pathFinder.lastUsedUrl)
+            audioPlayer.skip(for: -5, filePath: pathFinder.lastUsedUrl)
         }
     }
     
     @objc private func cutOffFrequencySliderValueChanged(_ sender: UISlider) {
         
         let value = round(sender.value * 10) / 10
-        audioManager.cutOffFrequency = value
+        audioRecorder.cutOffFrequency = value
     }
     
     @objc private func audioPlaybackTimeIsOver(_ sender: Notification) {
@@ -324,7 +324,7 @@ extension VoiceMemoRecordViewController {
         DispatchQueue.main.async { [unowned self] in
             
             playOrPauseButton.isSelected = false
-            audioManager.stopPlay()
+            audioPlayer.stopPlay()
         }
     }
     

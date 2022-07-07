@@ -12,7 +12,7 @@ class VoiceMemoPlayViewController: UIViewController {
     // MARK: - Properties
     
     private var audioFileName: String?
-    private weak var audioManager: AudioManager!
+    private weak var audioPlayer: AudioPlayable!
     private weak var pathFinder: PathFinder!
     private weak var firebaseManager: FirebaseStorageManager!
     
@@ -125,12 +125,12 @@ class VoiceMemoPlayViewController: UIViewController {
     }
     
     init(audioFileName: String,
-         audioManager: AudioManager,
+         audioPlayer: AudioPlayable,
          pathFinder: PathFinder,
          firebaseManager: FirebaseStorageManager) {
         
         self.audioFileName = audioFileName
-        self.audioManager = audioManager
+        self.audioPlayer = audioPlayer
         self.pathFinder = pathFinder
         self.firebaseManager = firebaseManager
         super.init(nibName: nil, bundle: nil)
@@ -141,14 +141,14 @@ class VoiceMemoPlayViewController: UIViewController {
         super.viewDidLoad()
         designUI()
         
-        audioManager.delegateMethod = modifyGrayParentViewTrailingAnchor
+        audioPlayer.delegate = self
         NotificationCenter.default.addObserver(self, selector: #selector(audioPlaybackTimeIsOver(_:)), name: .audioPlaybackTimeIsOver, object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
 
         super.viewWillDisappear(true)
-        audioManager.stopPlay()
+        audioPlayer.stopPlay()
     }
     
     override func viewDidLayoutSubviews() {
@@ -158,7 +158,7 @@ class VoiceMemoPlayViewController: UIViewController {
             return
         }
         let filePath = pathFinder.getPath(fileName: audioFileName)
-        guard let bufferDatas = audioManager
+        guard let bufferDatas = audioPlayer
             .calculateBufferGraphData(width: waveFormView.bounds.width, filePath: filePath) else {
             return
         }
@@ -184,9 +184,9 @@ extension VoiceMemoPlayViewController {
             
             sender.isSelected.toggle()
             if sender.isSelected {
-                audioManager.startPlay(fileURL: path)
+                audioPlayer.startPlay(fileURL: path)
             } else {
-                audioManager.stopPlay()
+                audioPlayer.pausePlay()
             }
         }
     }
@@ -194,9 +194,9 @@ extension VoiceMemoPlayViewController {
     @objc private func skip5SecondsButtonTouched(_ sender: UIButton) {
         
         if sender === skipForward5SecondButton {
-            audioManager.skip(for: 5, filePath: pathFinder.lastUsedUrl)
+            audioPlayer.skip(for: 5, filePath: pathFinder.lastUsedUrl)
         } else {
-            audioManager.skip(for: -5, filePath: pathFinder.lastUsedUrl)
+            audioPlayer.skip(for: -5, filePath: pathFinder.lastUsedUrl)
         }
     }
     
@@ -204,33 +204,34 @@ extension VoiceMemoPlayViewController {
         
         switch sender.selectedSegmentIndex {
         case 0:
-            audioManager.pitchMode = .basic
+            audioPlayer.pitchMode = .basic
         case 1:
-            audioManager.pitchMode = .baby
+            audioPlayer.pitchMode = .baby
         case 2:
-            audioManager.pitchMode = .grandFather
+            audioPlayer.pitchMode = .grandFather
         default:
-            audioManager.pitchMode = .basic
+            audioPlayer.pitchMode = .basic
         }
     }
     
     @objc private func sliderValueDidChange(_ sender: UISlider) {
         
-        audioManager.controlVolume(newValue: sender.value)
+        audioPlayer.controlVolume(newValue: sender.value)
     }
     
     @objc private func audioPlaybackTimeIsOver(_ sender: NSNotification) {
         
         playOrPauseButtonTouched(playOrPauseButton)
+        audioPlayer.stopPlay()
     }
     
 }
 
-// MARK: - GrayParentView Delegate
+// MARK: - PlaybackTimeTrackerable Delegate
 
-extension VoiceMemoPlayViewController {
+extension VoiceMemoPlayViewController: PlaybackTimeTrackerable {
     
-    private func modifyGrayParentViewTrailingAnchor(ratio: Float) {
+    func trackPlaybackTime(with ratio: Float) {
         
         DispatchQueue.main.async { [unowned self] in
             

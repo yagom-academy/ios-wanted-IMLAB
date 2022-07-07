@@ -10,7 +10,6 @@ class VoiceMemoListViewController: UIViewController {
     // MARK: - Properties
     
     private let pathFinder: PathFinder!
-    private let audioManager: AudioManager!
     private let firebaseManager: FirebaseStorageManager!
     
     weak var coordinator: AppCoordinator?
@@ -32,10 +31,9 @@ class VoiceMemoListViewController: UIViewController {
     
     // MARK: - Life Cycle
     
-    init(pathFinder: PathFinder, audioManager: AudioManager, firebaseManager: FirebaseStorageManager) {
+    init(pathFinder: PathFinder, firebaseManager: FirebaseStorageManager) {
         
         self.pathFinder = pathFinder
-        self.audioManager = audioManager
         self.firebaseManager = firebaseManager
         super.init(nibName: nil, bundle: nil)
     }
