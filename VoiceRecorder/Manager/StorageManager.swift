@@ -36,15 +36,18 @@ class StorageManager {
         }
     }
     
-    func get(completion: @escaping (Result<RecordModel, Error>) -> Void) {
+    func get(completion: @escaping (Result<[RecordModel], Error>) -> Void) {
         let storageRef = storage.reference()
         let recordRef = storageRef.child("\(StoragePath.voiceRecords.rawValue)/")
         recordRef.listAll { result, error in
             if let error = error {
                 completion(.failure(error))
             }
-            
             if let result = result {
+                if result.items.isEmpty {
+                    completion(.success([]))
+                    return
+                }
                 result.items.forEach { item in
                     item.downloadURL { url, error in
                         if let error = error {
@@ -66,7 +69,7 @@ class StorageManager {
                                         url: url,
                                         metaData: customMetaData
                                     )
-                                    completion(.success(recordModel))
+                                    completion(.success([recordModel]))
                                     return
                                 }
                             }
