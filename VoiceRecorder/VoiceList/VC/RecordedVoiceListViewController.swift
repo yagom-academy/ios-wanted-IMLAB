@@ -78,7 +78,6 @@ class RecordedVoiceListViewController: UIViewController {
             case .success(let data) :
                 self.audioList.append(data)
                 self.recordedVoiceTableView.reloadData()
-                print(data.duration, data.title, "here")
             case .failure(let error) :
                 print(error.localizedDescription)
             }
