@@ -142,7 +142,6 @@ class AudioPlayerHandler {
         currentPosition = seekFrame
         audioPlayerNode.stop()
         if currentPosition < audioLengthSamples {
-            updatePosition()
             needsFileScheduled = false
             let frameCount = AVAudioFrameCount(audioLengthSamples - seekFrame)
             audioPlayerNode.scheduleSegment(audioFile, startingFrame: seekFrame, frameCount: frameCount, at: nil) {
@@ -152,10 +151,6 @@ class AudioPlayerHandler {
         if isPlaying {
             audioPlayerNode.play()
         }
-    }
-    
-    func updatePosition() {
-        currentPosition = currentFrame + seekFrame
     }
     
     func getProgress() -> Float {
