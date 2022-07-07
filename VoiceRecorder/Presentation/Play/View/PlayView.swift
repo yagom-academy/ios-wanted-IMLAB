@@ -15,18 +15,18 @@ final class PlayView: UIView, ViewPresentable {
         return label
     }()
     
-    private let segmentedContoller: UISegmentedControl = {
+     let segmentedContoller: UISegmentedControl = {
         let segment = UISegmentedControl(items: ["일반 목소리","아기 목소리","할아버지 목소리"])
         return segment
     }()
     
-    private let goforward5Button:UIButton = {
+     let goforward5Button:UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "goforward.5"), for: .normal)
         return button
     }()
     
-    private let goBackrward5Button:UIButton = {
+     let goBackrward5Button:UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "gobackward.5"), for: .normal)
         return button
@@ -49,13 +49,13 @@ final class PlayView: UIView, ViewPresentable {
          return stackView
     }()
     
-    private let startButton : UIButton = {
+     let startButton : UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "play"), for: .normal)
         return button
     }()
     
-    private let slider : UISlider = {
+     let slider : UISlider = {
         let slider = UISlider()
         slider.minimumValue = 0
         slider.maximumValue = 10
@@ -89,7 +89,6 @@ final class PlayView: UIView, ViewPresentable {
             playButtonHorizontalStackView.addArrangedSubview($0)
         }
         
-
     }
     
     func setupConstraints() {
