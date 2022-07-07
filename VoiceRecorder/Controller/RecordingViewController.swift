@@ -83,6 +83,7 @@ class RecordingViewController: UIViewController {
             
             sender.controlFlashAnimate(recordingMode: true)
             self.playButton.isEnabled = false
+<<<<<<< HEAD
             do {
                 try audioRecorderHandler.startRecording()
             } catch {
@@ -161,9 +162,6 @@ class RecordingViewController: UIViewController {
     
     @IBAction func goBackwardButtonTapped(_ sender: UIButton) {
         audioPlayerHandler.seek(to: -5.0)
-    }
-    @IBAction func setCutoffFrequency(_ sender: UISlider) {
-        audioRecorderHandler.setFrequency(frequency: sender.value)
     }
     
     @IBAction func goForwardButtonTapped(_ sender: UIButton) {

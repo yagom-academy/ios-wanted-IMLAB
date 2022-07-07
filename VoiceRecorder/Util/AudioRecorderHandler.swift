@@ -14,26 +14,11 @@ class AudioRecoderHandler {
     var localFileHandler : LocalFileProtocol
     var updateTimeInterval : UpdateTimer
     var fileName: String?
-    var recordTime : String?
-    
-    enum Recordingstate {
-        case recording
-        case paused
-        case stopped
-    }
-    
-    private var audioEngine : AVAudioEngine!
-    private var mixerNode : AVAudioMixerNode!
-    private var equalizer : AVAudioUnitEQ!
-    private var state : Recordingstate = .stopped
     
     init(handler : LocalFileProtocol, updateTimeInterval : UpdateTimer ){
         self.localFileHandler = handler
         self.updateTimeInterval = updateTimeInterval
-        setupSession()
-        setupEngine()
     }
-    
     
     var recordSettings : [String: Any] = [
         AVFormatIDKey: NSNumber(value: kAudioFormatAppleLossless as UInt32),
@@ -125,6 +110,8 @@ class AudioRecoderHandler {
     }
     
     
+=======
+>>>>>>> parent of dc7b987 (Merge pull request #15 from JangJuMyeong/iw_1_hoifather)
     private func enableBuiltInMic() {
         // Get the shared audio session.
         let session = AVAudioSession.sharedInstance()

@@ -16,6 +16,7 @@ class AudioPlayerHandler {
     var updateTimeInterval: UpdateTimer
     var recordFileURL: URL!
     var audioFile: AVAudioFile!
+<<<<<<< HEAD
     var audioEngine: AVAudioEngine!
     var audioPlayerNode: AVAudioPlayerNode!
     var audioUnitTimePitch: AVAudioUnitTimePitch!
@@ -92,6 +93,7 @@ class AudioPlayerHandler {
         audioMixerNode = AVAudioMixerNode()
         
         audioEngine.attach(audioPlayerNode)
+<<<<<<< HEAD
         audioEngine.attach(audioUnitTimePitch)
         audioEngine.attach(audioMixerNode)
         
@@ -99,6 +101,14 @@ class AudioPlayerHandler {
         audioEngine.connect(audioUnitTimePitch, to: audioEngine.outputNode, format: audioFile.processingFormat)
         audioEngine.connect(audioUnitTimePitch, to: audioEngine.mainMixerNode, format: buffer.format)
         
+=======
+        audioEngine.attach(audioUnitTimePich)
+        
+        audioEngine.connect(audioPlayerNode, to: audioUnitTimePich, format: audioFile.processingFormat)
+        audioEngine.connect(audioUnitTimePich, to: audioEngine.outputNode, format: audioFile.processingFormat)
+
+        audioPlayerNode.volume = 5.0
+>>>>>>> parent of dc7b987 (Merge pull request #15 from JangJuMyeong/iw_1_hoifather)
         audioPlayerNode.stop()
         audioPlayerNode.scheduleFile(audioFile, at: nil)
         
@@ -111,7 +121,7 @@ class AudioPlayerHandler {
     }
     
     func changePitch(to pitch: Float) {
-        audioUnitTimePitch.pitch = pitch
+        audioUnitTimePich.pitch = pitch
     }
     
     func scheduleAudioFile() {
