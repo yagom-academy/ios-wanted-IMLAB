@@ -110,12 +110,12 @@ class RecordDetailViewController: UIViewController {
         }
         // TODO: fileURL refactoring
         let fileName = DataFormatter.makeFileName()
-        FireStorageManager.RecordFileString.Path.fileName = fileName
-        currentFileName = FireStorageManager.RecordFileString.fileFullName
+        FireStorageManager.File.Path.fileName = fileName
+        currentFileName = FireStorageManager.File.fileFullName
         // 파일 생성
         guard let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
-        audioFileURL = fileURL.appendingPathComponent("\(FireStorageManager.RecordFileString.fileFullName)\(FireStorageManager.RecordFileString.contentType.audio)")
-        let audioFileURL = fileURL.appendingPathComponent("\(FireStorageManager.RecordFileString.fileFullName)\(FireStorageManager.RecordFileString.contentType.audio)")
+        audioFileURL = fileURL.appendingPathComponent("\(FireStorageManager.File.fileFullName)\(FireStorageManager.File.contentType.audio)")
+        let audioFileURL = fileURL.appendingPathComponent("\(FireStorageManager.File.fileFullName)\(FireStorageManager.File.contentType.audio)")
         let settings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
             AVSampleRateKey: 12000,

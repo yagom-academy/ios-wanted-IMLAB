@@ -8,7 +8,7 @@
 import AVFoundation
 import UIKit
 
-class PlayingViewController: UIViewController, ObservableObject {
+class PlayingViewController: UIViewController {
     
     // MARK: - IBOutlets
     
@@ -25,26 +25,15 @@ class PlayingViewController: UIViewController, ObservableObject {
     
     static let identifier: String = "PlayingViewController"
     
-    var isPlayerReady = false {
-        willSet {
-            objectWillChange.send()
-        }
-    }
-    private var playerTime: PlayerTime = .zero {
-        willSet {
-            objectWillChange.send()
-        }
-    }
+    private var playerTime: PlayerTime = .zero
     
     var fileName : String?
     var fileURL : URL?
     
-    private let speedControl = AVAudioUnitVarispeed()
     private let audioEngine = AVAudioEngine()
     private let audioPlayer = AVAudioPlayerNode()
     private let timeEffect = AVAudioUnitTimePitch()
     private var displayLink: CADisplayLink?
-    private var timer : Timer?
     
     private var needsFileScheduled = true
     
@@ -62,7 +51,6 @@ class PlayingViewController: UIViewController, ObservableObject {
         else {
             return 0
         }
-        
         return playerTime.sampleTime
     }
     
@@ -101,9 +89,8 @@ class PlayingViewController: UIViewController, ObservableObject {
     }
     
     private func setupAudio() {
-        guard let fileURL = fileURL else {
-            return
-        }
+        guard let fileURL = fileURL else { return }
+        
         do {
             let file = try AVAudioFile(forReading: fileURL)
             let format = file.processingFormat
@@ -117,7 +104,7 @@ class PlayingViewController: UIViewController, ObservableObject {
             
             configureEngine(with: format)
         } catch {
-            print("Error reading the audio file: \(error.localizedDescription)")
+            print("Error: <setupAudio the audio file> -  \(error.localizedDescription)")
         }
         
     }
@@ -125,7 +112,6 @@ class PlayingViewController: UIViewController, ObservableObject {
     private func configureEngine(with format: AVAudioFormat) {
         audioEngine.attach(audioPlayer)
         audioEngine.attach(timeEffect)
-        
         audioEngine.connect(audioPlayer,
                             to: timeEffect,
                             format: format)
@@ -139,7 +125,6 @@ class PlayingViewController: UIViewController, ObservableObject {
             try audioEngine.start()
             
             scheduleAudioFile()
-            isPlayerReady = true
         } catch {
             print("Error starting the player: \(error.localizedDescription)")
         }
@@ -147,10 +132,7 @@ class PlayingViewController: UIViewController, ObservableObject {
     }
     
     private func scheduleAudioFile() {
-        guard let file = audioFile,
-              needsFileScheduled else {
-            return
-        }
+        guard let file = audioFile else { return }
         
         needsFileScheduled = false
         seekFrame = 0
@@ -164,7 +146,9 @@ class PlayingViewController: UIViewController, ObservableObject {
         if audioPlayer.isPlaying {
             displayLink?.isPaused = true
             audioPlayer.pause()
+            
             playButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+            
         } else {
             displayLink?.isPaused = false
 
@@ -185,7 +169,7 @@ class PlayingViewController: UIViewController, ObservableObject {
         let offset = AVAudioFramePosition(time * audioSampleRate)
         seekFrame = currentPosition + offset
         seekFrame = max(seekFrame, 0)
-        seekFrame = min(seekFrame, audioLengthSamples)
+//        seekFrame = min(seekFrame, audioLengthSamples)
         currentPosition = seekFrame
         
         let wasPlaying = audioPlayer.isPlaying
@@ -214,7 +198,7 @@ class PlayingViewController: UIViewController, ObservableObject {
     private func setupDisplayLink() {
         displayLink = CADisplayLink(target: self,
                                     selector: #selector(updateTimer))
-        displayLink?.add(to: .current, forMode: .default)
+        displayLink?.add(to: .current, forMode: .default )
         displayLink?.isPaused = true
     }
     
@@ -224,23 +208,18 @@ class PlayingViewController: UIViewController, ObservableObject {
         
         currentPosition = currentFrame + seekFrame
         currentPosition = max(currentPosition, 0)
-        currentPosition = min(currentPosition, audioLengthSamples)
+
         if currentPosition >= audioLengthSamples {
             audioPlayer.stop()
-            
+
             seekFrame = 0
             currentPosition = 0
-            
+
             displayLink?.isPaused = true
             playButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
         }
         
         positionProgressView.progress = Float(currentPosition) / Float(audioLengthSamples)
-        
-        let time = Double(currentPosition) / audioSampleRate
-        playerTime = PlayerTime(
-            elapsedTime: time,
-            remainingTime: audioLengthSeconds - time)
         
     }
     
