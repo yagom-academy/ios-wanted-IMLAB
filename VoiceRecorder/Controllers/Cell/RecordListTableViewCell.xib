@@ -17,25 +17,25 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2022. 05. 08 12:33:44" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Sj-vC-eWx">
-                        <rect key="frame" x="16" y="5" width="171" height="34"/>
+                        <rect key="frame" x="16" y="10" width="171" height="24"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="01:33" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kuU-iX-4TF">
-                        <rect key="frame" x="261" y="5" width="43" height="34"/>
+                        <rect key="frame" x="261" y="10" width="43" height="24"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="0Sj-vC-eWx" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="6YL-aW-NqI"/>
-                    <constraint firstItem="kuU-iX-4TF" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="bEx-LB-jzR"/>
+                    <constraint firstItem="0Sj-vC-eWx" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="6YL-aW-NqI"/>
+                    <constraint firstItem="kuU-iX-4TF" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="bEx-LB-jzR"/>
                     <constraint firstAttribute="trailing" secondItem="kuU-iX-4TF" secondAttribute="trailing" constant="16" id="gvW-dc-p1f"/>
-                    <constraint firstAttribute="bottom" secondItem="0Sj-vC-eWx" secondAttribute="bottom" constant="5" id="hzt-EL-cDn"/>
+                    <constraint firstAttribute="bottom" secondItem="0Sj-vC-eWx" secondAttribute="bottom" constant="10" id="hzt-EL-cDn"/>
                     <constraint firstItem="0Sj-vC-eWx" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="tkT-Yw-ohS"/>
-                    <constraint firstAttribute="bottom" secondItem="kuU-iX-4TF" secondAttribute="bottom" constant="5" id="yTc-ET-kkq"/>
+                    <constraint firstAttribute="bottom" secondItem="kuU-iX-4TF" secondAttribute="bottom" constant="10" id="yTc-ET-kkq"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
