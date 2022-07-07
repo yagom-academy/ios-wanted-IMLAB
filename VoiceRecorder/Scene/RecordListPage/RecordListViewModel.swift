@@ -8,22 +8,15 @@
 import UIKit
 
 class RecordListViewModel {
-    struct CellData {
-        let filename: String
-        // TODO: 파일명을 분리해서 변수로 만들기 [x]
-    }
-
     private var playList: [String] = []
     private var networkManager: NetworkManager
-    private let playListUserDefaults = RecordListUserDefaults.shared
+    private let recordListUserDefaults = RecordListUserDefaults.shared
 
     init(networkManager: NetworkManager) {
         self.networkManager = networkManager
     }
 
     func getCellData(_ indexPath: IndexPath) -> FileData {
-        // TODO: - 파일인코딩에 맞춰 분리해서 CellData로 반환 [x]
-
         let rawFileName = playList[indexPath.row].split(separator: "+").map { String($0) }
         let fileData = FileData(rawFilename: playList[indexPath.row],filename: rawFileName[0], duration: rawFileName[1])
 
@@ -39,7 +32,7 @@ class RecordListViewModel {
             guard let self = self else { return }
             switch result {
             case let .success(data):
-                self.playList = self.playListUserDefaults.update(networkDataFilename: data)
+                self.playList = self.recordListUserDefaults.update(networkDataFilename: data)
                 completion?()
             case let .failure(error):
                 // TODO: 에러처리
@@ -67,6 +60,6 @@ class RecordListViewModel {
     }
 
     func endTapped() {
-        playListUserDefaults.save(playList: playList)
+        recordListUserDefaults.save(playList: playList)
     }
 }

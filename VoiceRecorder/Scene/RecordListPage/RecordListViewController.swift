@@ -101,7 +101,7 @@ extension RecordListViewController: UITableViewDataSource, UITableViewDelegate {
         }
 
         cell.setData(data: viewModel.getCellData(indexPath))
-        cell.addTapGesture(action: handleLongPress(with:_:))
+        cell.addSwapCellTapGesture(action: handleLongPress(with:_:))
 
         return cell
     }

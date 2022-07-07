@@ -10,24 +10,17 @@ import UIKit
 class RecordListCell: UITableViewCell {
     static let identifier = "RecordListCell"
 
-    private var isSetGesture: Bool = false
-    private var action: ((_ sender: UILongPressGestureRecognizer, _ toCenterPoint: CGPoint) -> Void)?
+    private var isSetSwapGesture: Bool = false
+    private var swapGestureAction: ((_ sender: UILongPressGestureRecognizer, _ toCenterPoint: CGPoint) -> Void)?
+    private var isSetFavoriteMarkAction: Bool = false
 
-    private let labelContainer = UIView()
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 18)
-
-        return label
-    }()
-
-    private let durationLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 15)
-        label.textColor = .white
-
-        return label
-    }()
+    private let container = UIStackView()
+    
+    private let favoriteMark = UIButton()
+    
+    private let labelContainer = UIStackView()
+    private let titleLabel = UILabel()
+    private let durationLabel = UILabel()
 
     private let swipeTapView = UIImageView(image: UIImage(systemName: "text.justify"))
 
@@ -53,10 +46,17 @@ class RecordListCell: UITableViewCell {
         durationLabel.text = data.duration
     }
 
-    func addTapGesture(action: @escaping (_ sender: UILongPressGestureRecognizer, _ toCenterPoint: CGPoint) -> Void) {
-        if isSetGesture == false {
-            isSetGesture = true
-            self.action = action
+    func addFavoriteMarkAction() {
+        if isSetFavoriteMarkAction == false {
+            isSetFavoriteMarkAction = true
+//            self.favoriteMark.addTarget(self, action: <#T##Selector#>, for: <#T##UIControl.Event#>)
+        }
+    }
+    
+    func addSwapCellTapGesture(action: @escaping (_ sender: UILongPressGestureRecognizer, _ toCenterPoint: CGPoint) -> Void) {
+        if isSetSwapGesture == false {
+            isSetSwapGesture = true
+            self.swapGestureAction = action
             swipeTapView.isUserInteractionEnabled = true
             let longPressedGesture = UILongPressGestureRecognizer(target: self, action: #selector(connector(with:)))
             longPressedGesture.minimumPressDuration = 0
@@ -69,46 +69,67 @@ class RecordListCell: UITableViewCell {
     @objc func connector(with sender: UILongPressGestureRecognizer) {
         let pointAtCell = sender.location(in: self)
         let toCenterPoint = CGPoint(x: pointAtCell.x - frame.width / 2, y: pointAtCell.y - frame.height / 2)
-        action?(sender, toCenterPoint)
+        swapGestureAction?(sender, toCenterPoint)
     }
 
     private func attribute() {
         self.selectionStyle = .none
         self.backgroundColor = .clear
         self.layer.borderWidth = 1
-        self.layer.borderColor = UIColor.systemGray4.cgColor
+        self.layer.borderColor = UIColor.white.cgColor
 
         contentView.backgroundColor = YagomColor.two.uiColor
         contentView.layer.cornerRadius = 10
 
+        container.axis = .horizontal
+        container.distribution = .equalSpacing
+        container.alignment = .center
+        
+        labelContainer.axis = .vertical
+        labelContainer.distribution = .equalCentering
+        
+        favoriteMark.setTitle("☆", for: .normal)
+        favoriteMark.titleLabel?.font = .systemFont(ofSize: 25)
+        
         titleLabel.textColor = .white
+        titleLabel.font = .systemFont(ofSize: 18)
+        
+        durationLabel.textColor = .white
+        durationLabel.font = .systemFont(ofSize: 15)
 
         swipeTapView.tintColor = YagomColor.three.uiColor
     }
 
     private func layout() {
+        self.contentView.addSubview(container)
+        container.translatesAutoresizingMaskIntoConstraints = false
+        container.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
+        container.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
+        container.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
+        container.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+
         [titleLabel, durationLabel].forEach {
-            labelContainer.addSubview($0)
+            labelContainer.addArrangedSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+        
+        let leftPadding = UIView()
+        let rightPadding = UIView()
+        
+        [leftPadding, favoriteMark, labelContainer, swipeTapView, rightPadding].forEach {
+            container.addArrangedSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
 
-        titleLabel.topAnchor.constraint(equalTo: labelContainer.topAnchor).isActive = true
-        titleLabel.leadingAnchor.constraint(equalTo: labelContainer.leadingAnchor, constant: 20).isActive = true
+        leftPadding.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.01).isActive = true
+        
+        favoriteMark.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.1).isActive = true
+        
+        labelContainer.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.7).isActive = true
 
-        durationLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 3).isActive = true
-        durationLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor).isActive = true
-        durationLabel.bottomAnchor.constraint(equalTo: labelContainer.bottomAnchor).isActive = true
+        swipeTapView.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.1).isActive = true
+        swipeTapView.heightAnchor.constraint(equalTo: container.heightAnchor, multiplier: 0.5).isActive = true
 
-        [labelContainer, swipeTapView].forEach {
-            self.contentView.addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
-        }
-
-        labelContainer.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-
-        swipeTapView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        swipeTapView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
-        swipeTapView.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.5).isActive = true
-        swipeTapView.widthAnchor.constraint(equalTo: swipeTapView.heightAnchor).isActive = true
+        rightPadding.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.01).isActive = true
     }
 }
