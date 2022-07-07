@@ -27,6 +27,23 @@ protocol AudioPlayable: AudioManager {
     func calculateBufferGraphData(width: CGFloat, filePath: URL) -> [Float]?
 }
 
+enum AudioPitchMode {
+    
+    case baby, basic, grandFather
+    
+    var pitchValue: Float {
+        
+        switch self {
+        case .baby:
+            return 1200
+        case .basic:
+            return 0
+        case .grandFather:
+            return -1200
+        }
+    }
+}
+
 class DefaultAudioPlayer: AudioManager, AudioPlayable {
     
     // MARK: - Properties
@@ -252,7 +269,7 @@ class DefaultAudioPlayer: AudioManager, AudioPlayable {
     }
     
     /// 재생중인 audioFile의 현재 PlayerTime의 FramePosition을 반환
-    func getCurrentFramePosition(nodeTime: AVAudioTime, audioFile: AVAudioFile, moveOffset: AVAudioFramePosition) -> AVAudioFramePosition? {
+    private func getCurrentFramePosition(nodeTime: AVAudioTime, audioFile: AVAudioFile, moveOffset: AVAudioFramePosition) -> AVAudioFramePosition? {
         
         guard let playerTime = audioPlayerNode.playerTime(forNodeTime: nodeTime) else  {
             return nil

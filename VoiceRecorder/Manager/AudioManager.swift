@@ -8,24 +8,6 @@
 import Foundation
 import AVFoundation
 
-
-enum AudioPitchMode {
-    
-    case baby, basic, grandFather
-    
-    var pitchValue: Float {
-        
-        switch self {
-        case .baby:
-            return 1200
-        case .basic:
-            return 0
-        case .grandFather:
-            return -1200
-        }
-    }
-}
-
 class AudioManager {
     
     // - MARK: Property

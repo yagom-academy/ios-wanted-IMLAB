@@ -56,7 +56,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
     }
     
-    func requestPermission() {
+    private func requestPermission() {
         
         let session = AVAudioSession.sharedInstance()
         session.requestRecordPermission() { [unowned self] isGranted in
@@ -65,7 +65,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             }
         }
     }
-
 
 }
 
