@@ -9,5 +9,5 @@ import Foundation
 
 protocol RecordViewControllerDelegate: AnyObject {
     func recordView(didFinishRecord: Bool)
-//    func didFinishRecord()
+    func recordView(cancelRecord: Bool)
 }
