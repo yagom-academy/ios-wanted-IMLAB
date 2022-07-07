@@ -10,13 +10,16 @@ import AVFoundation
 import Accelerate
 
 protocol AudioBufferLiveDataDelegate: AnyObject {
+    
     func communicationBufferData(bufferData: Float)
 }
 
 enum AudioPitchMode {
+    
     case baby, basic, grandFather
     
     var pitchValue: Float {
+        
         switch self {
         case .baby:
             return 1200
@@ -42,6 +45,7 @@ class AudioManager {
     private lazy var mixerNode = AVAudioMixerNode()
     lazy var cutOffFrequency: Float = 1 {
         didSet {
+            
             let sampleRate = inputNode.outputFormat(forBus: 0).sampleRate
             let sampleRateUnit = Float(sampleRate / 2 / 10)
             
@@ -122,9 +126,10 @@ class AudioManager {
     }
     
     private func record(filePath: URL) {
-        let format = inputNode.outputFormat(forBus: 0)
         
-        let audioFile: AVAudioFile!
+        let format = inputNode.outputFormat(forBus: 0)
+        let audioFile: AVAudioFile
+        
         do {
             audioFile = try createAudioFile(filePath: filePath)
         } catch {
@@ -133,6 +138,7 @@ class AudioManager {
         
         audioEQ.removeTap(onBus: 0)
         audioEQ.installTap(onBus: 0, bufferSize: 1024, format: format) { [weak self] buffer, time in
+            
             guard let self = self else { return }
             let bufferData = self.calculateBufferGraphData(buffer: buffer)
             self.liveBufferDataDelegate?.communicationBufferData(bufferData: bufferData)
@@ -146,13 +152,14 @@ class AudioManager {
     }
     
     func startRecord(filePath: URL) {
+        
         audioEngine.reset()
         
         let format = inputNode.outputFormat(forBus: 0)
         prepareRecordEngine(format: format)
         prepareAudioEQNode()
-        
         record(filePath: filePath)
+        
         do {
             try audioEngine.start()
         } catch {
@@ -162,23 +169,27 @@ class AudioManager {
     
     /// 레코딩 완료
     func stopRecord() {
+        
         audioEngine.stop()
         removeEngineNodes()
     }
     
 }
 
+// - MARK: Audio Info Methods
+
 extension AudioManager {
-    
-    // - MARK: Audio Info Methods
-    
+
     /// 현재 재생중인 audioFile의 전체 길이. float을 Int로 변환하고, string으로 반환
     func getPlayTime(filePath: URL) -> String {
+        
         return "\(Int(getPlayTime(filePath: filePath)))"
     }
     
     func getPlayTime(filePath: URL) -> Double {
+        
         let audioFile: AVAudioFile
+        
         do {
             audioFile = try getAudioFile(filePath: filePath)
         } catch {
@@ -203,11 +214,12 @@ extension AudioManager {
     
     /// 재생중인 audioFile의 현재 PlayerTime의 FramePosition을 반환
     func getCurrentFramePosition(nodeTime: AVAudioTime, audioFile: AVAudioFile, moveOffset: AVAudioFramePosition) -> AVAudioFramePosition? {
+        
         guard let playerTime = audioPlayerNode.playerTime(forNodeTime: nodeTime) else  {
             return nil
         }
         
-        let audioLengthSamples = AVAudioFramePosition(Double(audioFile.length) * playerTime.sampleRate / audioFile.processingFormat.sampleRate)
+        let audioLengthSamples = audioFile.length
         
         var currentFrame = playerTime.sampleTime + seekFrame
         currentFrame = validateFrameEdge(with: currentFrame,
@@ -218,6 +230,7 @@ extension AudioManager {
     }
     
     private func calculateBufferGraphData(buffer: AVAudioPCMBuffer) -> Float {
+        
         guard let channelData = buffer.floatChannelData else { return 0 }
         let channelDataValue = channelData.pointee
         let channelDataArrayValue = stride(from: 0,
@@ -294,6 +307,7 @@ extension AudioManager {
     }
     
     private func scalePower(power: Float) -> Float {
+        
         guard power.isFinite else { return 0 }
         let minDB: Float = -80
         
@@ -305,13 +319,15 @@ extension AudioManager {
             return (abs(minDB) - abs(power)) / abs(minDB)
         }
     }
+    
 }
 
+// - MARK: Audio Play Method
+
 extension AudioManager {
-    
-    // - MARK: Audio Play Method
-    
+
     func startPlay(fileURL: URL) {
+        
         if !audioEngine.isRunning {
             audioEngine.reset()
             preparePlayEngine(fileURL)
@@ -327,18 +343,21 @@ extension AudioManager {
     }
     
     func stopPlay() {
+        
         audioEngine.stop()
         seekFrame = 0
         removeEngineNodes()
     }
     
     func pausePlay() {
+        
         audioPlayerNode.pause()
     }
     
     private func preparePlayEngine(_ filePath: URL) {
         
         var audioFile: AVAudioFile
+        
         do {
             audioFile = try getAudioFile(filePath: filePath)
         } catch {
@@ -356,6 +375,7 @@ extension AudioManager {
     }
     
     private func preparePlay(filePath: URL) {
+        
         let audioFile: AVAudioFile
         
         do {
@@ -374,7 +394,6 @@ extension AudioManager {
             
             let currentTime = Double(framePosition) / Double(time.sampleRate)
             let wholeTime: Double = getPlayTime(audioFile: audioFile)
-            
             let ratio = Float(currentTime / wholeTime)
             
             delegateMethod?(ratio)
@@ -388,6 +407,7 @@ extension AudioManager {
     }
     
     private func validateFrameEdge(with frame: AVAudioFramePosition, limit: AVAudioFramePosition) -> AVAudioFramePosition {
+        
         var frame = frame
         frame = max(frame, 0)
         frame = min(frame, limit)
@@ -397,6 +417,7 @@ extension AudioManager {
     
     /// second는 이동할 시간, 음수도 가능.
     func skip(for second: Double, filePath: URL) {
+        
         let audioFile: AVAudioFile
         
         do {
@@ -408,16 +429,19 @@ extension AudioManager {
         let offset = AVAudioFramePosition(second * audioFile.processingFormat.sampleRate)
         let audioLengthSamples = audioFile.length
         
-        guard let lastRenderTime = audioPlayerNode.lastRenderTime else {
+        guard let lastRenderTime = audioPlayerNode.lastRenderTime,
+              let movedFrame = getCurrentFramePosition(nodeTime: lastRenderTime,
+                                                       audioFile: audioFile,
+                                                       moveOffset: offset)
+        else {
             return
         }
         
-        seekFrame = getCurrentFramePosition(nodeTime: lastRenderTime,
-                                            audioFile: audioFile,
-                                            moveOffset: offset)!
+        seekFrame = movedFrame
         
         isSkip = true
         audioPlayerNode.stop()
+        
         if seekFrame < audioLengthSamples {
             let frameCount = AVAudioFrameCount( audioLengthSamples - seekFrame)
             
@@ -433,11 +457,13 @@ extension AudioManager {
                     }
                 }
         }
+        
         isSkip = false
         audioPlayerNode.play()
     }
     
     func controlVolume(newValue: Float) {
+        
         if newValue >= 1 {
             audioPlayerNode.volume = 1
         } else if newValue <= 0 {
@@ -448,6 +474,7 @@ extension AudioManager {
     }
     
     private func validateStopPlayBack(isSkip: Bool) {
+        
         if !isSkip {
             NotificationCenter.default.post(name: .audioPlaybackTimeIsOver, object: nil, userInfo: nil)
         }

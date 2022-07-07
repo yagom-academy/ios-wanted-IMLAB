@@ -22,6 +22,7 @@ class PathFinder {
     var basePath: URL
     
     init() throws {
+        
         var tempURL: URL!
         
         do {
@@ -34,6 +35,7 @@ class PathFinder {
     }
     
     func getPath(fileName: String) -> URL {
+        
         let fileNameToAppend = "\(fileName).caf"
         var pathToReturn = basePath
         pathToReturn.appendPathComponent(fileNameToAppend)
@@ -43,6 +45,7 @@ class PathFinder {
     }
     
     func getTimeNow() -> String {
+        
         let timeNow = Date.now.formatted(
             Date.FormatStyle()
                 .year(.defaultDigits)
@@ -51,10 +54,12 @@ class PathFinder {
                 .hour(.twoDigits(amPM: .abbreviated))
                 .minute(.twoDigits)
                 .second(.twoDigits))
+        
         return timeNow
     }
     
     func getPathWithTime() -> URL {
+        
         let converted = getTimeNow().components(separatedBy: "/").joined(separator: "_")
         lastUsedFileName = converted
         let path = getPath(fileName: converted)
@@ -64,6 +69,7 @@ class PathFinder {
     }
     
     func checkLocalIsExist(fileName: String) -> Bool {
+        
         var tempPath = basePath
         let fileNameToAppend = "\(fileName).caf"
         tempPath.appendPathComponent(fileNameToAppend)
@@ -71,6 +77,7 @@ class PathFinder {
     }
     
     func deleteLocalFile(fileName: String) {
+        
         var tempPath = basePath
         let fileNameToAppend = "\(fileName).caf"
         
@@ -82,4 +89,5 @@ class PathFinder {
             print(error.localizedDescription)
         }
     }
+    
 }

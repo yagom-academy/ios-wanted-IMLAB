@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 
 class AppCoordinator: NSObject, Coordinator {
+    
     var navigationController: UINavigationController
     private weak var audioManager: AudioManager!
     private weak var pathFinder: PathFinder!
@@ -18,6 +19,7 @@ class AppCoordinator: NSObject, Coordinator {
          audioManager: AudioManager,
          pathFinder: PathFinder,
          firebasemanager: FirebaseStorageManager) {
+        
         self.navigationController = navigationController
         self.audioManager = audioManager
         self.pathFinder = pathFinder
@@ -25,22 +27,26 @@ class AppCoordinator: NSObject, Coordinator {
     }
     
     func start() {
+        
         let vc = VoiceMemoListViewController(pathFinder: pathFinder, audioManager: audioManager, firebaseManager: firebaseManager)
         vc.coordinator = self
         navigationController.pushViewController(vc, animated: false)
     }
     
     func presentRecordView() {
+        
         let vc = VoiceMemoRecordViewController(pathFinder: pathFinder, audioManager: audioManager, firebaseManager: firebaseManager)
         vc.isModalInPresentation = true
         navigationController.present(vc, animated: true)
     }
     
     func presentPlayView(selectedFile: String) {
+        
         let vc = VoiceMemoPlayViewController(audioFileName: selectedFile,
                                              audioManager: audioManager,
                                              pathFinder: pathFinder,
                                              firebaseManager: firebaseManager)
         navigationController.present(vc, animated: true)
     }
+    
 }

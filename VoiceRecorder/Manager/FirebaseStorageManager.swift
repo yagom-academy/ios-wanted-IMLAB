@@ -71,6 +71,7 @@ class FirebaseStorageManager {
     }
     
     func listAll(completion: @escaping ((Result<[String], NetworkError>) -> Void)) {
+        
         let reference = storage.reference().child(storageReferenceStr)
         reference.listAll {
             (result, error) in
@@ -85,6 +86,7 @@ class FirebaseStorageManager {
     }
     
     func getMetaData(fileName: String, completion: @escaping ((Result<String, NetworkError>) -> Void)) {
+        
         let reference = storage.reference().child("\(fileName)")
         reference.getMetadata {
             (result, error) in
@@ -101,4 +103,5 @@ class FirebaseStorageManager {
             completion(.success(metaData))
         }
     }
+    
 }
