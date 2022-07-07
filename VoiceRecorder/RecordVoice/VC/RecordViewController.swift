@@ -94,10 +94,11 @@ class RecordViewController: UIViewController {
         let url = audioFileManager.getAudioFilePath(fileName: date)
         if isStartRecording { // 녹음 시작일 때
             soundManager.startRecord(filePath: url)
+            print(url)
         } else { // 녹음 끝일 때
             DispatchQueue.global().sync {
                 soundManager.stopRecord()
-                firebaseStorageManager.uploadAudio(url: url)
+                firebaseStorageManager.uploadAudio(url: url, date: date)
                 soundManager.initializedEngine(url: url)
             }
         }
