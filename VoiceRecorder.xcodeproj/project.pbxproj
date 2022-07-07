@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		049B44AF2876659300FD4C26 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 049B44AE2876659300FD4C26 /* GoogleService-Info.plist */; };
 		04FF9394286BEEFB00EB34B6 /* RecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF9393286BEEFB00EB34B6 /* RecordViewController.swift */; };
 		04FF939D286C003500EB34B6 /* FrequencyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF939C286C003500EB34B6 /* FrequencyView.swift */; };
 		04FF939F286C004200EB34B6 /* CutoffFrequencyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF939E286C004200EB34B6 /* CutoffFrequencyView.swift */; };
@@ -33,7 +34,6 @@
 		DE15E66528604279003DD2F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66428604279003DD2F5 /* Assets.xcassets */; };
 		DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */; };
 		FE178319287592BA00DEB555 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = FE178318287592BA00DEB555 /* FirebaseStorage */; };
-		FE17831B287592D700DEB555 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FE17831A287592D700DEB555 /* GoogleService-Info.plist */; };
 		FE47347E28765D0500B753FB /* PlayControllerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE47347D28765D0500B753FB /* PlayControllerView.swift */; };
 		FE47348028765EF200B753FB /* PlayControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE47347F28765EF200B753FB /* PlayControllerViewModel.swift */; };
 		FE4734822876605D00B753FB /* RecordControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4734812876605D00B753FB /* RecordControllerViewModel.swift */; };
@@ -50,6 +50,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		049B44AE2876659300FD4C26 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		04FF9393286BEEFB00EB34B6 /* RecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewController.swift; sourceTree = "<group>"; };
 		04FF939C286C003500EB34B6 /* FrequencyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrequencyView.swift; sourceTree = "<group>"; };
 		04FF939E286C004200EB34B6 /* CutoffFrequencyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CutoffFrequencyView.swift; sourceTree = "<group>"; };
@@ -77,7 +78,6 @@
 		DE15E66428604279003DD2F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DE15E66728604279003DD2F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DE15E66928604279003DD2F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		FE17831A287592D700DEB555 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FE47347D28765D0500B753FB /* PlayControllerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayControllerView.swift; sourceTree = "<group>"; };
 		FE47347F28765EF200B753FB /* PlayControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayControllerViewModel.swift; sourceTree = "<group>"; };
 		FE4734812876605D00B753FB /* RecordControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordControllerViewModel.swift; sourceTree = "<group>"; };
@@ -242,7 +242,7 @@
 				DE15E65D28604278003DD2F5 /* SceneDelegate.swift */,
 				DE15E66428604279003DD2F5 /* Assets.xcassets */,
 				DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */,
-				FE17831A287592D700DEB555 /* GoogleService-Info.plist */,
+				049B44AE2876659300FD4C26 /* GoogleService-Info.plist */,
 				DE15E66928604279003DD2F5 /* Info.plist */,
 			);
 			path = VoiceRecorder;
@@ -330,7 +330,7 @@
 			files = (
 				DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */,
 				DE15E66528604279003DD2F5 /* Assets.xcassets in Resources */,
-				FE17831B287592D700DEB555 /* GoogleService-Info.plist in Resources */,
+				049B44AF2876659300FD4C26 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

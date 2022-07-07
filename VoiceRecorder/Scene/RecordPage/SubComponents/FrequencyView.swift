@@ -8,49 +8,57 @@
 import UIKit
 
 class FrequencyView: UIView {
-    
-    let manager = RecordManager.shared
-    
-    var barWidth: CGFloat = 40.0
-    
+    var barWidth: CGFloat = 4.0
     var color = UIColor.red.cgColor
-    var waveForms = [Int](repeating: 0, count: 10)
+    
+    var waveForms = [Int](repeating: 0, count: 100) {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
     
     override init (frame: CGRect) {
         super.init(frame: frame)
         
-        self.backgroundColor = .clear
+        self.backgroundColor = .black
+        NotificationCenter.default.addObserver(self, selector: #selector(sendWaveformNotification(_:)), name: Notification.Name("SendWaveform"), object: nil)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-        
+    }
+    
+    @objc func sendWaveformNotification(_ notification: Notification) {
+        guard let wave = notification.object as? [Int] else { return }
+        self.waveForms = wave
     }
     
     override func draw(_ rect: CGRect) {
-        print("in draw")
         guard let context = UIGraphicsGetCurrentContext() else {
             return
         }
-        
+
         var bar: CGFloat = 0
-        
+
         context.clear(rect)
-        context.setFillColor(red: 0, green: 0, blue: 0, alpha: 0)
+        context.setFillColor(red: 1, green: 1, blue: 1, alpha: 1)
         context.fill(rect)
-        context.setLineWidth(2)
-        context.setStrokeColor(self.color)
-        
-        let centerY = rect.size.height / 2
-        
-        for i in 0..<self.waveForms.count {
-            let firstX = bar * self.barWidth
-            let firstY = centerY + CGFloat(self.waveForms[i])
-            
+        context.setLineWidth(3)
+        context.setStrokeColor(color)
+
+        let centerY: CGFloat = 150
+
+        for i in 0 ..< waveForms.count {
+            let firstX = bar * barWidth
+            let firstY = centerY + CGFloat(waveForms[i])
+            let secondY = centerY - CGFloat(waveForms[i])
+
             context.move(to: CGPoint(x: firstX, y: centerY))
             context.addLine(to: CGPoint(x: firstX, y: firstY))
+            context.move(to: CGPoint(x: firstX, y: centerY))
+            context.addLine(to: CGPoint(x: firstX, y: secondY))
             context.strokePath()
-            
+
             bar += 1
         }
     }
