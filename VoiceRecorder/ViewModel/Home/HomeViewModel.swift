@@ -31,6 +31,10 @@ class HomeViewModel {
         FirebaseStorageManager.shared.fetch { result in
             switch result {
             case .success(let audio):
+                guard let audio = audio else {
+                    self.isReady = true
+                    return
+                }
                 self.audios.append(audio)
             case .failure(let error):
                 print(error.localizedDescription)
