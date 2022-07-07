@@ -77,13 +77,14 @@ class PlayingViewController: UIViewController {
     // MARK: - Methods
     
     func drawWaveForm() {
-        let scale = UIScreen.main.scale;
-        let imageSizeInPixel =  CGSize(width:waveImageView.bounds.width * scale,height:waveImageView.bounds.height * scale);
-        generateWaveformImage(audioURL: fileURL!, imageSizeInPixel: imageSizeInPixel, waveColor: UIColor.gray) {[weak self] (waveFormImage) in
+        guard let fileURL = fileURL else {return}
+        let scale = UIScreen.main.scale; // 기기의 해상도
+        let imageSizeInPixel =  CGSize(width: waveImageView.bounds.width * scale, height : waveImageView.bounds.height * scale);
+        generateWaveformImage(audioURL: fileURL, imageSizeInPixel: imageSizeInPixel, waveColor: UIColor.gray) {[weak self] (waveFormImage) in
             if let waveFormImage = waveFormImage {
                 self?.waveImageView.image = waveFormImage;
             } else {
-                // error
+                print("Error: <draw waveform> - not exist waveform image")
             }
         }
     }

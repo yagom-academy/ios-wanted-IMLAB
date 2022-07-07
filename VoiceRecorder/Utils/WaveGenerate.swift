@@ -42,13 +42,7 @@ func generateWaveformImage(audioURL:URL, imageSizeInPixel:CGSize, waveColor:UICo
                     readerOutput.alwaysCopiesSampleData = false
                     reader.add(readerOutput)
                     
-                    var channelCount = 1
-                    
-                    let formatDesc = assetTrack.formatDescriptions
-                    for item in formatDesc {
-                        guard let fmtDesc = CMAudioFormatDescriptionGetStreamBasicDescription(item as! CMAudioFormatDescription) else { continue }    // TODO: Can the forced downcast in here be safer?
-                        channelCount = Int(fmtDesc.pointee.mChannelsPerFrame)
-                    }
+                    let channelCount = 1
                     
                     var sampleMax = noiseFloor
                     
