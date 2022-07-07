@@ -14,12 +14,14 @@ class RecordViewController: UIViewController {
     let frequencyView = FrequencyView(frame: .zero)
 
     let cutoffFrequencyView = CutoffFrequencyView(frame: .zero)
-    let recordAndPlayView = RecordAndPlayView(RecordManager.shared)
+    let recordControllerView = RecordControllerView(RecordManager.shared)
+    let playControllerView = PlayControllerView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .systemBackground
+        attribute()
         layout()
         bind()
     }
@@ -40,14 +42,20 @@ class RecordViewController: UIViewController {
 
 extension RecordViewController {
     
+    private func attribute() {
+        recordControllerView.delegate = self
+    }
+    
     private func bind() {
-        recordAndPlayView.bind(viewModel.playerButtonViewModel)
+        recordControllerView.bind(viewModel.recordControllerViewModel)
+        playControllerView.bind(viewModel.playControllerViewModel)
     }
     
     private func layout() {
         [
             cutoffFrequencyView,
-            recordAndPlayView
+            recordControllerView,
+            playControllerView
         ].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -58,9 +66,19 @@ extension RecordViewController {
         cutoffFrequencyView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         cutoffFrequencyView.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor, multiplier: 0.3).isActive = true
         
-        recordAndPlayView.topAnchor.constraint(equalTo: cutoffFrequencyView.bottomAnchor).isActive = true
-        recordAndPlayView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        recordAndPlayView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        recordAndPlayView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        recordControllerView.topAnchor.constraint(equalTo: cutoffFrequencyView.bottomAnchor).isActive = true
+        recordControllerView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        recordControllerView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        recordControllerView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        playControllerView.centerXAnchor.constraint(equalTo: recordControllerView.centerXAnchor).isActive = true
+        playControllerView.centerYAnchor.constraint(equalTo: recordControllerView.centerYAnchor).isActive = true
+    }
+}
+
+//MARK: - RecordController delegate
+extension RecordViewController: RecordControllerDelegate {
+    func endRecord() {
+        playControllerView.isHidden = false
     }
 }

@@ -10,7 +10,7 @@
 		04FF9394286BEEFB00EB34B6 /* RecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF9393286BEEFB00EB34B6 /* RecordViewController.swift */; };
 		04FF939D286C003500EB34B6 /* FrequencyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF939C286C003500EB34B6 /* FrequencyView.swift */; };
 		04FF939F286C004200EB34B6 /* CutoffFrequencyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF939E286C004200EB34B6 /* CutoffFrequencyView.swift */; };
-		04FF93A1286C004C00EB34B6 /* RecordAndPlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF93A0286C004C00EB34B6 /* RecordAndPlayView.swift */; };
+		04FF93A1286C004C00EB34B6 /* RecordControllerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF93A0286C004C00EB34B6 /* RecordControllerView.swift */; };
 		04FF93A4286C15AA00EB34B6 /* UIButton+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF93A3286C15AA00EB34B6 /* UIButton+.swift */; };
 		04FF93A7286C270600EB34B6 /* RecordManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF93A6286C270600EB34B6 /* RecordManager.swift */; };
 		0D26B1222875393A00FE1B04 /* RecordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D26B1212875393A00FE1B04 /* RecordViewModel.swift */; };
@@ -36,6 +36,10 @@
 		DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */; };
 		FE178319287592BA00DEB555 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = FE178318287592BA00DEB555 /* FirebaseStorage */; };
 		FE17831B287592D700DEB555 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FE17831A287592D700DEB555 /* GoogleService-Info.plist */; };
+		FE47347E28765D0500B753FB /* PlayControllerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE47347D28765D0500B753FB /* PlayControllerView.swift */; };
+		FE47348028765EF200B753FB /* PlayControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE47347F28765EF200B753FB /* PlayControllerViewModel.swift */; };
+		FE4734822876605D00B753FB /* RecordControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4734812876605D00B753FB /* RecordControllerViewModel.swift */; };
+		FE473484287661BC00B753FB /* RecordControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE473483287661BC00B753FB /* RecordControllerDelegate.swift */; };
 		FE7A188A2872D182003CC843 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7A18892872D182003CC843 /* UIView+.swift */; };
 		FE7A18972873319F003CC843 /* CustomNetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7A18962873319F003CC843 /* CustomNetworkError.swift */; };
 		FEA5330C286C3D48002E1169 /* CustomNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA5330B286C3D48002E1169 /* CustomNavigationController.swift */; };
@@ -51,7 +55,7 @@
 		04FF9393286BEEFB00EB34B6 /* RecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewController.swift; sourceTree = "<group>"; };
 		04FF939C286C003500EB34B6 /* FrequencyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrequencyView.swift; sourceTree = "<group>"; };
 		04FF939E286C004200EB34B6 /* CutoffFrequencyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CutoffFrequencyView.swift; sourceTree = "<group>"; };
-		04FF93A0286C004C00EB34B6 /* RecordAndPlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordAndPlayView.swift; sourceTree = "<group>"; };
+		04FF93A0286C004C00EB34B6 /* RecordControllerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordControllerView.swift; sourceTree = "<group>"; };
 		04FF93A3286C15AA00EB34B6 /* UIButton+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+.swift"; sourceTree = "<group>"; };
 		04FF93A6286C270600EB34B6 /* RecordManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordManager.swift; sourceTree = "<group>"; };
 		0D26B1212875393A00FE1B04 /* RecordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewModel.swift; sourceTree = "<group>"; };
@@ -78,6 +82,10 @@
 		DE15E66728604279003DD2F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DE15E66928604279003DD2F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FE17831A287592D700DEB555 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		FE47347D28765D0500B753FB /* PlayControllerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayControllerView.swift; sourceTree = "<group>"; };
+		FE47347F28765EF200B753FB /* PlayControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayControllerViewModel.swift; sourceTree = "<group>"; };
+		FE4734812876605D00B753FB /* RecordControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordControllerViewModel.swift; sourceTree = "<group>"; };
+		FE473483287661BC00B753FB /* RecordControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordControllerDelegate.swift; sourceTree = "<group>"; };
 		FE7A18892872D182003CC843 /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
 		FE7A18962873319F003CC843 /* CustomNetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNetworkError.swift; sourceTree = "<group>"; };
 		FEA5330B286C3D48002E1169 /* CustomNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationController.swift; sourceTree = "<group>"; };
@@ -150,7 +158,11 @@
 			children = (
 				04FF939C286C003500EB34B6 /* FrequencyView.swift */,
 				04FF939E286C004200EB34B6 /* CutoffFrequencyView.swift */,
-				04FF93A0286C004C00EB34B6 /* RecordAndPlayView.swift */,
+				04FF93A0286C004C00EB34B6 /* RecordControllerView.swift */,
+				FE473483287661BC00B753FB /* RecordControllerDelegate.swift */,
+				FE4734812876605D00B753FB /* RecordControllerViewModel.swift */,
+				FE47347D28765D0500B753FB /* PlayControllerView.swift */,
+				FE47347F28765EF200B753FB /* PlayControllerViewModel.swift */,
 			);
 			path = SubComponents;
 			sourceTree = "<group>";
@@ -346,6 +358,7 @@
 				FEEC697E286C3ACF002E020F /* RecordListViewModel.swift in Sources */,
 				0DFCD7322872C15300F31EBA /* VolumeViewModel.swift in Sources */,
 				0DCB66CA28704D3E00800B1C /* PitchControlView.swift in Sources */,
+				FE473484287661BC00B753FB /* RecordControllerDelegate.swift in Sources */,
 				FEA53310286C3DC8002E1169 /* Config.swift in Sources */,
 				0D2E6BB2286BE0C5003D2EE1 /* PlayerViewController.swift in Sources */,
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
@@ -357,10 +370,13 @@
 				0D8172EE286D7A950009E8AA /* Data+.swift in Sources */,
 				04FF939D286C003500EB34B6 /* FrequencyView.swift in Sources */,
 				0D8172E8286D6EE10009E8AA /* PlayerViewModel.swift in Sources */,
-				04FF93A1286C004C00EB34B6 /* RecordAndPlayView.swift in Sources */,
+				04FF93A1286C004C00EB34B6 /* RecordControllerView.swift in Sources */,
 				0D8172EA286D6F000009E8AA /* PlayerModel.swift in Sources */,
 				04FF9394286BEEFB00EB34B6 /* RecordViewController.swift in Sources */,
+				FE47347E28765D0500B753FB /* PlayControllerView.swift in Sources */,
+				FE4734822876605D00B753FB /* RecordControllerViewModel.swift in Sources */,
 				0D8172E5286D69140009E8AA /* FileData.swift in Sources */,
+				FE47348028765EF200B753FB /* PlayControllerViewModel.swift in Sources */,
 				04FF93A4286C15AA00EB34B6 /* UIButton+.swift in Sources */,
 				FEA5330C286C3D48002E1169 /* CustomNavigationController.swift in Sources */,
 				FEFCE0902870549F00200AF1 /* PlayListUserDefaults.swift in Sources */,

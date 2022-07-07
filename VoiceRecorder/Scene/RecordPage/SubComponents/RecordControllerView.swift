@@ -8,9 +8,10 @@
 import AVFoundation
 import UIKit
 
-class RecordAndPlayView: UIView {
+class RecordControllerView: UIView {
     private let networkManager =  RecordNetworkManager.shared
     private let recordManager: RecordService!
+    var delegate: RecordControllerDelegate?
 
     var recorder: AVAudioRecorder?
     var audioFile: URL!
@@ -20,12 +21,7 @@ class RecordAndPlayView: UIView {
 
     var color = UIColor.red.cgColor
     var waveForms = [Int](repeating: 0, count: 200)
-
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//
-//        layout()
-//    }
+    var viewModel: RecordControllerViewModel!
     
     init(_ recordManager: RecordService) {
         self.recordManager = recordManager
@@ -76,71 +72,6 @@ class RecordAndPlayView: UIView {
         return view
     }()
 
-    private var viewModel: PlayerButtonViewModel!
-
-    private let buttonStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.distribution = .equalSpacing
-        stackView.spacing = 40
-        stackView.isHidden = true
-
-        let backwardButton: UIButton = {
-            let button = UIButton()
-            button.setImage(systemName: "gobackward.5", state: .normal)
-            button.tintColor = .label
-            button.widthAnchor.constraint(equalToConstant: 40).isActive = true
-            button.heightAnchor.constraint(equalToConstant: 40).isActive = true
-
-            button.addTarget(self, action: #selector(didTapBackwardButton(sender:)), for: .touchUpInside)
-
-            return button
-        }()
-
-        let playButton: UIButton = {
-            let button = UIButton()
-            button.setImage(systemName: "play.fill", state: .normal)
-            button.setImage(systemName: "pause.fill", state: .selected)
-            button.tintColor = .label
-            button.widthAnchor.constraint(equalToConstant: 40).isActive = true
-            button.heightAnchor.constraint(equalToConstant: 40).isActive = true
-
-            button.addTarget(self, action: #selector(didTapPlayButton(sender:)), for: .touchUpInside)
-
-            return button
-        }()
-
-        let forwardButton: UIButton = {
-            let button = UIButton()
-            button.setImage(systemName: "goforward.5", state: .normal)
-            button.tintColor = .label
-            button.widthAnchor.constraint(equalToConstant: 40).isActive = true
-            button.heightAnchor.constraint(equalToConstant: 40).isActive = true
-
-            button.addTarget(self, action: #selector(didTapForwardButton(sender:)), for: .touchUpInside)
-
-            return button
-        }()
-
-        [backwardButton, playButton, forwardButton].forEach {
-            stackView.addArrangedSubview($0)
-        }
-
-        return stackView
-    }()
-
-    @objc func didTapBackwardButton(sender: UIButton) {
-        viewModel.goBackward()
-    }
-
-    @objc func didTapForwardButton(sender: UIButton) {
-        viewModel.goForward()
-    }
-
-    @objc func didTapPlayButton(sender: UIButton) {
-        sender.isSelected = viewModel.playPauseAudio()
-    }
-
     private let recordButton: UIButton = {
         let button = UIButton()
         button.setImage(systemName: "circle.fill", state: .normal)
@@ -161,7 +92,7 @@ class RecordAndPlayView: UIView {
             startRecord()
         } else {
             endRecord()
-            buttonStackView.isHidden = false
+            delegate?.endRecord()
         }
     }
 
@@ -185,15 +116,14 @@ class RecordAndPlayView: UIView {
     }
 }
 
-extension RecordAndPlayView {
-    func bind(_ viewModel: PlayerButtonViewModel) {
+extension RecordControllerView {
+    func bind(_ viewModel: RecordControllerViewModel) {
         self.viewModel = viewModel
     }
 
     private func layout() {
         [
             frequencyView,
-            buttonStackView,
             recordButton,
             downloadButton,
         ].forEach {
@@ -206,9 +136,6 @@ extension RecordAndPlayView {
         frequencyView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         frequencyView.heightAnchor.constraint(equalTo: safeAreaLayoutGuide.heightAnchor, multiplier: 0.5).isActive = true
 
-        buttonStackView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        buttonStackView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-
         recordButton.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         recordButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -50).isActive = true
 
@@ -217,7 +144,7 @@ extension RecordAndPlayView {
     }
 }
 
-extension RecordAndPlayView {
+extension RecordControllerView {
     func startRecord() {
         var currentSample = 0
         let numberOfSamples = waveForms.count
