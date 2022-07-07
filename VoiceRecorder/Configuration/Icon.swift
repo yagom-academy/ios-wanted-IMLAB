@@ -12,6 +12,7 @@ enum Icon {
     case circleFill
     case play
     case pauseFill
+    case delete
     
     var image: UIImage? {
         switch self {
@@ -23,6 +24,8 @@ enum Icon {
             return UIImage(systemName: "play")
         case .pauseFill:
             return UIImage(systemName: "pause.fill")
+        case .delete:
+            return UIImage(systemName: "trash.fill")
         }
     }
 }
