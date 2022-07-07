@@ -1,6 +1,10 @@
 # VoiceRecord - iOS
 프리온보딩 첫번째 과제 📱
 
+> VoiceRecord 는 기존의 녹음 기능에 더해 저장된 데이터를 Firebase와 연동하여 보다 쉽게 관리 할 수 있도록 만든 앱입니다.
+
+<br>
+
 ## 🧑‍💻 Developers
 |서초(조성빈)|Peppo(이병훈)|
 |---|---|
@@ -12,7 +16,7 @@
 ## 👀 미리보기
 |VoiceMemoVC(1st page)|RecordDetailVC(2nd page)|PlayingVC(3rd page)|
 |---|---|---|
-|<img width = "250" alt="page1-VoiceRecorder" src = "https://user-images.githubusercontent.com/64088377/177666676-397756b0-299c-419c-9592-45e611ddb1f5.gif">|<img width = "250" alt= "page2-VoiceRecorder" src = "https://user-images.githubusercontent.com/64088377/177666696-d2d25b25-1354-4899-9c1c-69b586eb7a0a.gif">|<img width = "280" alt= "page3-VoiceRecorder" src = "https://user-images.githubusercontent.com/64088377/177666695-1fa3ad69-0aa6-4c4a-accd-4a321e5aed85.gif">|
+|<img width = "250" alt="page1-VoiceRecorder" src = "https://user-images.githubusercontent.com/64088377/177675103-1a0ba9d2-2f43-4247-be2c-63af279cee1f.gif">|<img width = "250" alt= "page2-VoiceRecorder" src = "https://user-images.githubusercontent.com/64088377/177666696-d2d25b25-1354-4899-9c1c-69b586eb7a0a.gif">|<img width = "280" alt= "page3-VoiceRecorder" src = "https://user-images.githubusercontent.com/64088377/177666695-1fa3ad69-0aa6-4c4a-accd-4a321e5aed85.gif">|
 
 <br>
 
