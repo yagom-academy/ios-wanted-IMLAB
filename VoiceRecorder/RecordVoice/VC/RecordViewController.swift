@@ -97,7 +97,6 @@ class RecordViewController: UIViewController {
             soundManager.stopRecord()
             firebaseStorageManager.uploadAudio(url: url)
             soundManager.initializedEngine(url: url)
-            print(soundManager.totalPlayTime(), "시간")
         }
     }
 }
