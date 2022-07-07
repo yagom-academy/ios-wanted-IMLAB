@@ -75,7 +75,7 @@ struct RecordNetworkManager: NetworkManager {
 
     func getRecordMetaData(filename: String, completion: ((StorageMetadata?) -> Void)? = nil) {
         let recordRef = storageRef.child(filename)
-
+        
         DispatchQueue.global().async {
             recordRef.getMetadata { metadata, error in
                 if let error = error {
