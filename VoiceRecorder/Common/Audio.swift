@@ -115,6 +115,8 @@ class Audio {
     audioSampleRate = format.sampleRate
     audioLengthSeconds = Double(audioLengthSamples) / audioSampleRate
 
+    print(format.sampleRate)
+
     audioFile = file
 
     configureEngine(with: format)

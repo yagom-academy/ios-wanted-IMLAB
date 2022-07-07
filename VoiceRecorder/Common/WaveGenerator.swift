@@ -75,7 +75,12 @@ extension UIImageView {
   func generateWaveImage(from audioFile: AVAudioFile) {
     let samples = WaveGenerator.readBuffer(audioFile)
     DispatchQueue.main.async {
-      let img = WaveGenerator.generateWaveImage(samples, CGSize(width: self.frame.width, height: self.frame.height), UIColor.blue, UIColor.white)
+      let img = WaveGenerator.generateWaveImage(
+        samples,
+        CGSize(width: self.frame.width, height: self.frame.height),
+        UIColor.blue,
+        UIColor.white
+      )
       self.image = img
     }
   }
