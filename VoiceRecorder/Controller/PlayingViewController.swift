@@ -87,8 +87,8 @@ class PlayingViewController: UIViewController {
     }
     
     @objc func updateProgress() {
-        currentPlayTimeLabel.text = audioPlayerHandler.getCurrentPlayTime()
-        playProgressBar.progress = audioPlayerHandler.getProgress()
+        currentPlayTimeLabel.text = audioPlayerHandler.currentTime
+        playProgressBar.progress = audioPlayerHandler.playerProgress
         if !audioPlayerHandler.isPlaying {
             self.playButton.setImage(UIImage(systemName: "play"), for: .normal)
             progressTimer?.invalidate()
