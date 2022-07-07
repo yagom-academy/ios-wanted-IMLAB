@@ -26,7 +26,7 @@ class FirebaseStorageManager {
         let data = try! Data(contentsOf: url)
         
         let metaData = StorageMetadata()
-        let totalTime = soundManager.totalPlayTime()
+        let totalTime = soundManager.totalPlayTime(date: date)
         let duration = soundManager.convertTimeToString(totalTime)
         let localUrl = date
         let customData = [

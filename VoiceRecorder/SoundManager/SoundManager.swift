@@ -198,8 +198,8 @@ extension SoundManager {
         return audioCurrentTime / audioPlayTime
     }
     
-    func totalPlayTime() -> Double {
-        let url = audioFileManager.getAudioFilePath(fileName: "fileNAME")
+    func totalPlayTime(date: String) -> Double {
+        let url = audioFileManager.getAudioFilePath(fileName: date)
         do {
             audioFile = try getAudioFile(filePath: url)
         } catch {

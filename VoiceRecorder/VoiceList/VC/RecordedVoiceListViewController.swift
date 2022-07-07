@@ -123,7 +123,6 @@ extension RecordedVoiceListViewController: UITableViewDataSource, UITableViewDel
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         firestorageManager.deleteAudio(urlString: audioList[indexPath.row].title + ".caf")
         audioList.remove(at: indexPath.row)
-        
         recordedVoiceTableView.reloadData()
     }
 }
