@@ -130,16 +130,15 @@ class RecordingViewController: UIViewController {
     
     @IBAction func playButtonTapped(_ sender: UIButton) {
         inPlayMode.toggle()
+        audioPlayerHandler.playOrPause()
         if inPlayMode {
             sender.setImage(UIImage(systemName: "pause"), for: .normal)
             progressTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateProgress), userInfo: nil, repeats: true)
             self.recordingButton.isEnabled = false
             self.goForwardButton.isEnabled = true
             self.goBackwardButton.isEnabled = true
-            audioPlayerHandler.play()
         } else {
             sender.setImage(UIImage(systemName: "play"), for: .normal)
-            audioPlayerHandler.pause()
             self.recordingButton.isEnabled = true
         }
         
@@ -147,7 +146,7 @@ class RecordingViewController: UIViewController {
     
     @objc func updateProgress() {
         currentPlayTimeLabel.text = audioPlayerHandler.getCurrentPlayTime()
-        playProgressBar.progress = audioPlayerHandler.getCurrentProgress()
+        playProgressBar.progress = audioPlayerHandler.getProgress()
         
         if playProgressBar.progress == 0 {
             progressTimer.invalidate()
