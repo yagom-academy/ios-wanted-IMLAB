@@ -104,6 +104,7 @@ class RecordViewController: UIViewController {
     @IBAction func didTapRecordButton(_ sender: UIButton) {
         if isRecord {
             sender.setImage(.circleFill)
+            sender.isEnabled = false
             endRecord()
             guard let data = recorder.data else { return }
             engine.url = fileName
@@ -147,8 +148,8 @@ class RecordViewController: UIViewController {
                 userInfo: nil,
                 repeats: true
             )
-            isRecord = !isRecord
         }
+        isRecord = !isRecord
     }
     
     @IBAction func didTapPlayBack5Button(_ sender: UIButton) {
@@ -273,6 +274,8 @@ private extension RecordViewController {
             recorder.stop()
             recorder.deleteRecording()
             recorderTimer?.invalidate()
+            waveTimer?.invalidate()
+            delegate?.recordView(cancelRecord: true)
         }
         engine.stop()
         playerTimer?.invalidate()

@@ -65,21 +65,25 @@ extension ListViewController: UITableViewDelegate {
     
     func tableView(
         _ tableView: UITableView,
-        commit editingStyle: UITableViewCell.EditingStyle,
-        forRowAt indexPath: IndexPath
-    ) {
-        if editingStyle == .delete {
-            LocalFileManager(recordModel: recordList[indexPath.row]).deleteToLocal()
-            StorageManager.shared.delete(fileName: recordList[indexPath.row].name) { result in
-                switch result {
-                case .success(_ ):
-                    self.recordList.remove(at: indexPath.row)
-                    tableView.deleteRows(at: [indexPath], with: .fade)
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
+        trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath
+    ) -> UISwipeActionsConfiguration? {
+        let action = UIContextualAction(
+            style: .destructive,
+            title: "삭제"
+        ) { _, _, _ in
+            UIAlertController.showCancelAlert(
+                self,
+                title: "삭제",
+                message: "정말로 삭제 하시겠습니까?"
+            ) { _ in
+                self.removeRecordFile(indexPath: indexPath, tableView: tableView)
             }
         }
+        action.image = Icon.delete.image
+        action.backgroundColor = .red
+        let configuration = UISwipeActionsConfiguration(actions: [action])
+        configuration.performsFirstActionWithFullSwipe = false
+        return configuration
     }
 }
 
@@ -107,6 +111,14 @@ extension ListViewController: RecordViewControllerDelegate {
     func recordView(didFinishRecord: Bool) {
         fetchRecordFile()
     }
+    func recordView(cancelRecord: Bool) {
+        UIAlertController.showOKAlert(
+            self,
+            title: "녹음 중지",
+            message: "녹음이 취소 되어 저장에 실패했습니다.",
+            handler: nil
+        )
+    }
 }
 
 // MARK: - @objc Methods
@@ -127,11 +139,35 @@ private extension ListViewController {
         StorageManager.shared.get { result in
             switch result {
             case .success(let recordFile):
-                self.recordList.append(recordFile)
+                if recordFile.isEmpty {
+                    UIAlertController.showOKAlert(
+                        self,
+                        title: "알림",
+                        message: "녹음 파일이 없습니다.",
+                        handler: nil
+                    )
+                }
+                self.recordList += (recordFile)
                 self.recordListTableView.reloadData()
                 self.activityIndicator.stopAnimating()
             case .failure(let error):
                 print("ERROR \(error.localizedDescription)🐸")
+            }
+        }
+    }
+    func removeRecordFile(indexPath: IndexPath, tableView: UITableView) {
+        LocalFileManager(
+            recordModel: recordList[indexPath.row]
+        ).deleteToLocal()
+        StorageManager.shared.delete(
+            fileName: recordList[indexPath.row].name
+        ) { result in
+            switch result {
+            case .success(_ ):
+                self.recordList.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .fade)
+            case .failure(let error):
+                print(error.localizedDescription)
             }
         }
     }
