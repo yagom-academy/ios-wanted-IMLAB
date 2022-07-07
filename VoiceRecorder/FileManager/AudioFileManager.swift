@@ -36,7 +36,7 @@ class AudioFileManager {
     }
     
     func getAudioData(fileName: String, completion: @escaping (AudioData?) -> Void) {
-        let data = AudioData(title: fileName, created_Data: Date(), playTime: "")
+        let data = AudioData(title: fileName, duration: "")
         completion(data)
     }
     

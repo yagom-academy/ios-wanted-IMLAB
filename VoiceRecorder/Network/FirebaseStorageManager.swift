@@ -15,9 +15,6 @@ class FirebaseStorageManager {
     private let dateUtil = DateUtil()
     private let soundManager = SoundManager()
     
-    var audioLength: String = ""
-    var audioTitle: String = ""
-    
     init() {
         baseReference = Storage.storage().reference()
     }
@@ -30,7 +27,7 @@ class FirebaseStorageManager {
         let metaData = StorageMetadata()
         let customData = [
             "title": title,
-            "length": String(Int(soundManager.totalPlayTime()))
+            "duration": String(Int(soundManager.totalPlayTime()))
         ]
         metaData.customMetadata = customData
         metaData.contentType = "audio/x-caf"
@@ -51,7 +48,7 @@ class FirebaseStorageManager {
         }
     }
     
-    func downloadAll() {
+    func downloadAll(completion: @escaping (Result<AudioData, Error>) -> Void) {
         baseReference.listAll { result, error in
             if let error = error {
                 print(error.localizedDescription)
@@ -60,28 +57,37 @@ class FirebaseStorageManager {
             if let result = result {
                 for item in result.items {
                     // item.reference로 파일 다운
-                    self.downloadMetaData(filePath: item.name)
+                    self.downloadMetaData(filePath: item.name) { result in
+                        switch result {
+                        case .success(let audioData) :
+                            completion(.success(audioData))
+                        case .failure(let error) :
+                            completion(.failure(error))
+                        }
+                    }
                 }
             }
         }
     }
     
-    func downloadMetaData(filePath: String) {
+    func downloadMetaData(filePath: String, completion: @escaping (Result<AudioData, Error>) -> Void) {
         let ref = baseReference.child(filePath)
-        var length: String = ""
+        var audioData = AudioData(title: "", duration: "")
         var title: String = ""
+        var duration: String = ""
         
         ref.getMetadata { metaData, error in
             if let error = error {
-                print(error.localizedDescription)
+                completion(.failure(error))
             }
             
             let data = metaData?.customMetadata
-            length =  data?["length"] ?? "00:00"
             title = data?["title"] ?? "no title"
+            duration =  data?["duration"] ?? "00:00"
+            
+            audioData = AudioData(title: title, duration: duration)
+            completion(.success(audioData))
         }
-        
-        audioLength = length
-        audioTitle = title
     }
+    
 }

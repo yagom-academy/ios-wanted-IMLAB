@@ -10,7 +10,7 @@ class RecordedVoiceListViewController: UIViewController {
     
     var firestorageManager = FirebaseStorageManager()
     
-    let audioList = [AudioData(title: "2022_07_02_20_48.m4a", created_Data: Date(), playTime: "03:02"), AudioData(title: "2022_07_02_20_52.m4a", created_Data: Date(), playTime: "02:34")]
+    var audioList: [AudioData] = []
     
     lazy var navigationBar: UINavigationBar = {
         var navigationBar = UINavigationBar()
@@ -28,6 +28,7 @@ class RecordedVoiceListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        initalizeFirebaseAudioFiles()
         setNavgationBarProperties()
         configureRecordedVoiceListLayout()
     }
@@ -69,12 +70,19 @@ class RecordedVoiceListViewController: UIViewController {
             recordedVoiceTableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             recordedVoiceTableView.widthAnchor.constraint(equalTo: view.widthAnchor)
         ])
-        
-        firestorageManager.downloadAll()
     }
     
     func initalizeFirebaseAudioFiles() {
-        //firestorageManager.downloadMetaData()
+        firestorageManager.downloadAll { result in
+            switch result {
+            case .success(let data) :
+                self.audioList.append(data)
+                self.recordedVoiceTableView.reloadData()
+                print(data.duration, data.title, "here")
+            case .failure(let error) :
+                print(error.localizedDescription)
+            }
+        }
     }
     
     @objc func createNewVoiceRecordButtonAction() {
