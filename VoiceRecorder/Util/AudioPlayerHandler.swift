@@ -31,14 +31,13 @@ class AudioPlayerHandler {
     var needsFileScheduled = true
     var isPlaying = false
     private var currentFrame: AVAudioFramePosition {
-      guard
-        let lastRenderTime = audioPlayerNode.lastRenderTime,
-        let playerTime = audioPlayerNode.playerTime(forNodeTime: lastRenderTime)
-      else {
-        return 0
-      }
-
-      return playerTime.sampleTime
+        guard
+            let lastRenderTime = audioPlayerNode.lastRenderTime,
+            let playerTime = audioPlayerNode.playerTime(forNodeTime: lastRenderTime)
+        else {
+            return currentPosition
+        }
+        return playerTime.sampleTime
     }
     
     init(handler: LocalFileProtocol, updateTimeInterval: UpdateTimer) {
@@ -132,22 +131,17 @@ class AudioPlayerHandler {
         }
     }
     
-    func play() {
-        isPlaying = true
-        if needsFileScheduled {
-            scheduleAudioFile()
+    func playOrPause() {
+        isPlaying.toggle()
+        
+        if audioPlayerNode.isPlaying {
+            audioPlayerNode.pause()
+        } else {
+            if needsFileScheduled {
+                scheduleAudioFile()
+            }
+            audioPlayerNode.play()
         }
-        audioPlayerNode.play()
-    }
-    
-    func pause() {
-        isPlaying = false
-        audioPlayerNode.pause()
-    }
-    
-    func stop() {
-        isPlaying = false
-        audioPlayerNode.stop()
     }
     
     func seek(to time: Double) {
@@ -157,27 +151,27 @@ class AudioPlayerHandler {
         seekFrame = min(seekFrame, audioLengthSamples)
         currentPosition = seekFrame
         audioPlayerNode.stop()
-        
         if currentPosition < audioLengthSamples {
-            currentProgress()
+            updatePosition()
             needsFileScheduled = false
             let frameCount = AVAudioFrameCount(audioLengthSamples - seekFrame)
             audioPlayerNode.scheduleSegment(audioFile, startingFrame: seekFrame, frameCount: frameCount, at: nil) {
                 self.needsFileScheduled = true
             }
         }
-        audioPlayerNode.play()
+        if isPlaying {
+            audioPlayerNode.play()
+        }
     }
     
-    func currentProgress() {
+    func updatePosition() {
+        currentPosition = currentFrame + seekFrame
+    }
+    
+    func getProgress() -> Float {
         currentPosition = currentFrame + seekFrame
         currentPosition = max(currentPosition, 0)
         currentPosition = min(currentPosition, audioLengthSamples)
-        playerProgress = Float(currentPosition) / Float(audioLengthSamples)
-    }
-    
-    func getCurrentProgress() -> Float {
-        currentPosition = currentFrame + seekFrame
         if currentPosition >= audioLengthSamples {
             audioPlayerNode.stop()
             isPlaying = false

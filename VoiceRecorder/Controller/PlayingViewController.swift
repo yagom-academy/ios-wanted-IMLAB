@@ -70,19 +70,18 @@ class PlayingViewController: UIViewController {
     
     @IBAction func playButtonTapped(_ sender: UIButton) {
         inPlayMode.toggle()
+        audioPlayerHandler.playOrPause()
         if inPlayMode {
-            audioPlayerHandler.play()
             self.playButton.setImage(UIImage(systemName: "pause"), for: .normal)
             progressTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateProgress), userInfo: nil, repeats: true)
         } else {
-            audioPlayerHandler.pause()
             self.playButton.setImage(UIImage(systemName: "play"), for: .normal)
         }
     }
     
     @objc func updateProgress() {
         currentPlayTimeLabel.text = audioPlayerHandler.getCurrentPlayTime()
-        playProgressBar.progress = audioPlayerHandler.getCurrentProgress()
+        playProgressBar.progress = audioPlayerHandler.getProgress()
         if !audioPlayerHandler.isPlaying {
             self.playButton.setImage(UIImage(systemName: "play"), for: .normal)
         }
