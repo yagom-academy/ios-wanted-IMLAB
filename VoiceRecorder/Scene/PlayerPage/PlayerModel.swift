@@ -18,6 +18,12 @@ class PlayerModel {
         self.networkManager = networkManager
     }
 
+    let networkManager: NetworkManager!
+
+    init(_ networkManager: NetworkManager) {
+        self.networkManager = networkManager
+    }
+
     func update(_ filename: String, _ completion: @escaping (Error?) -> Void) {
         parsingFileData(filename)
 

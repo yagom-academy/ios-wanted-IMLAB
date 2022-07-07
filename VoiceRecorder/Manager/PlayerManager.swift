@@ -28,6 +28,7 @@ protocol PlayerService {
     func setPitch(_ value: Int)
 
     func duration() -> String
+    func checkIsFinished() -> Bool
 }
 
 class PlayerManager: PlayerService {
@@ -38,7 +39,6 @@ class PlayerManager: PlayerService {
     private var audioPlayer = AVAudioPlayerNode()
 
     private let audioEngine = AVAudioEngine()
-    private let speedControl = AVAudioUnitVarispeed()
     private let pitchControl = AVAudioUnitTimePitch()
 
     private var seekFrame: AVAudioFramePosition = 0
@@ -47,13 +47,6 @@ class PlayerManager: PlayerService {
 
     private var audioSampleRate: Double = 0
     private var audioLengthSeconds: Double = 0
-    private var currentFrame: AVAudioFramePosition {
-        guard let lastRenderTime = audioPlayer.lastRenderTime,
-              let playerTime = audioPlayer.playerTime(forNodeTime: lastRenderTime) else {
-            return 0
-        }
-        return playerTime.sampleTime
-    }
 
     var isPlaying: Bool {
         return audioPlayer.isPlaying
@@ -69,29 +62,53 @@ class PlayerManager: PlayerService {
     }
 
     func resetAudio() {
-//        audioFile = nil
+        audioFile = nil
 
         audioPlayer.stop()
         audioPlayer.reset()
 
         audioEngine.stop()
         audioEngine.reset()
+
+        pitchControl.pitch = 0
+
+        seekFrame = 0
+        currentPosition = 0
+        audioLengthSeconds = 0
+        audioLengthSamples = 0
+        audioSampleRate = 0
+
+        setVolume(0.5)
     }
 
     func configureAudioEngine() {
-        audioEngine.attach(audioPlayer)
-        audioEngine.attach(speedControl)
-        audioEngine.attach(pitchControl)
-
-        audioEngine.connect(audioPlayer, to: speedControl, format: nil)
-        audioEngine.connect(speedControl, to: pitchControl, format: nil)
-        audioEngine.connect(pitchControl, to: audioEngine.mainMixerNode, format: nil)
-
         guard let audioFile = audioFile else {
             return
         }
+
+        audioEngine.attach(audioPlayer)
+        audioEngine.attach(pitchControl)
+
+        audioEngine.connect(audioPlayer, to: pitchControl, format: nil)
+        audioEngine.connect(pitchControl, to: audioEngine.mainMixerNode, format: nil)
+
         do {
-            audioPlayer.scheduleFile(audioFile, at: nil)
+            audioPlayer.scheduleFile(
+                audioFile,
+                at: nil,
+                completionCallbackType: .dataPlayedBack
+            ) { [weak self] _ in
+
+                guard let self = self else {
+                    return
+                }
+
+                if self.checkIsFinished() {
+                    DispatchQueue.global().async {
+                        self.setPlayerToZero()
+                    }
+                }
+            }
 
             setVolume(0.5)
 
@@ -110,12 +127,12 @@ class PlayerManager: PlayerService {
             return
         }
         audioPlayer.stop()
+        audioEngine.stop()
 
-        let frameCount = AVAudioFrameCount(audioLengthSamples)
+        seekFrame = 0
+        currentPosition = 0
 
-        audioPlayer.scheduleSegment(audioFile, startingFrame: 0, frameCount: frameCount, at: nil) {
-            print("scheduled")
-        }
+        configureAudioEngine()
     }
 
     // 재생
@@ -143,14 +160,18 @@ class PlayerManager: PlayerService {
               let playerTime: AVAudioTime = audioPlayer.playerTime(forNodeTime: nodeTime) else {
             return
         }
+
+        // audioPlayer 새로 스케쥴링하고 지난 시간
         let currentSeconds = Double(Double(playerTime.sampleTime) / playerTime.sampleRate)
+        // 기존에 진행되었던 시간값에 더해주기
         currentPosition += AVAudioFramePosition(currentSeconds * audioSampleRate)
 
         let offset = AVAudioFramePosition(time * audioSampleRate)
-
         seekFrame = currentPosition + offset
         seekFrame = max(seekFrame, 0)
         seekFrame = min(seekFrame, audioLengthSamples)
+
+        // currentPosition 을 옮겨줄 시간으로 변경
         currentPosition = seekFrame
 
         let wasPlaying = audioPlayer.isPlaying
@@ -165,8 +186,20 @@ class PlayerManager: PlayerService {
                 audioFile,
                 startingFrame: seekFrame,
                 frameCount: frameCount,
-                at: nil
-            )
+                at: nil,
+                completionCallbackType: .dataPlayedBack
+            ) { [weak self] _ in
+                guard let self = self else {
+                    return
+                }
+
+                if self.checkIsFinished() {
+                    DispatchQueue.global().async {
+                        self.setPlayerToZero()
+                    }
+                    return
+                }
+            }
 
             if wasPlaying {
                 audioPlayer.play()
@@ -214,5 +247,22 @@ class PlayerManager: PlayerService {
         result += sec < 10 ? "0\(sec)" : "\(sec)"
 
         return result
+    }
+
+    func checkIsFinished() -> Bool {
+        guard let nodeTime: AVAudioTime = audioPlayer.lastRenderTime,
+              let playerTime: AVAudioTime = audioPlayer.playerTime(forNodeTime: nodeTime) else {
+            return true
+        }
+
+        let currentSeconds = Double(Double(playerTime.sampleTime) / playerTime.sampleRate) + (Double(currentPosition) / audioSampleRate)
+
+        print(currentSeconds, audioLengthSeconds)
+
+        if currentSeconds >= audioLengthSeconds {
+            return true
+        } else {
+            return false
+        }
     }
 }
