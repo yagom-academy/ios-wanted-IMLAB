@@ -60,10 +60,9 @@ class RecordVoiceViewController: UIViewController {
     lazy var frequencySlider : UISlider = {
         let frequencySlider = UISlider()
         frequencySlider.translatesAutoresizingMaskIntoConstraints = false
-        frequencySlider.isContinuous = false
         frequencySlider.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
-        frequencySlider.minimumValue = 8000
-        frequencySlider.maximumValue = 44100
+        frequencySlider.minimumValue = CNS.sampleRate.min
+        frequencySlider.maximumValue = CNS.sampleRate.max
         return frequencySlider
     }()
     
@@ -85,7 +84,7 @@ class RecordVoiceViewController: UIViewController {
         let record_start_stop_button = UIButton()
         record_start_stop_button.translatesAutoresizingMaskIntoConstraints = false
         record_start_stop_button.addTarget(self, action: #selector(tab_record_start_stop_Button), for: .touchUpInside)
-        record_start_stop_button.setPreferredSymbolConfiguration(.init(pointSize: 40), forImageIn: .normal)
+        record_start_stop_button.setPreferredSymbolConfiguration(.init(pointSize: CNS.size.recordButton), forImageIn: .normal)
         return record_start_stop_button
     }()
     
@@ -100,7 +99,7 @@ class RecordVoiceViewController: UIViewController {
     lazy var recordFile_play_PauseButton: UIButton = {
         let recordFile_play_PauseButton = UIButton()
         recordFile_play_PauseButton.translatesAutoresizingMaskIntoConstraints = false
-        recordFile_play_PauseButton.setPreferredSymbolConfiguration(.init(pointSize: 30), forImageIn: .normal)
+        recordFile_play_PauseButton.setPreferredSymbolConfiguration(.init(pointSize: CNS.size.playButton), forImageIn: .normal)
         recordFile_play_PauseButton.setImage(UIImage(systemName: "play"), for: .normal)
         recordFile_play_PauseButton.addTarget(self, action: #selector(tapButton), for: .touchUpInside)
         return recordFile_play_PauseButton
@@ -109,7 +108,7 @@ class RecordVoiceViewController: UIViewController {
     lazy var forwardFive: UIButton = {
         let forwardFive = UIButton()
         forwardFive.translatesAutoresizingMaskIntoConstraints = false
-        forwardFive.setPreferredSymbolConfiguration(.init(pointSize: 30), forImageIn: .normal)
+        forwardFive.setPreferredSymbolConfiguration(.init(pointSize: CNS.size.playButton), forImageIn: .normal)
         forwardFive.setImage(UIImage(systemName: "goforward.5"), for: .normal)
         forwardFive.addTarget(self, action: #selector(tabForward), for: .touchUpInside)
         return forwardFive
@@ -118,7 +117,7 @@ class RecordVoiceViewController: UIViewController {
     lazy var backwardFive: UIButton = {
         let backwardFive = UIButton()
         backwardFive.translatesAutoresizingMaskIntoConstraints = false
-        backwardFive.setPreferredSymbolConfiguration(.init(pointSize: 30), forImageIn: .normal)
+        backwardFive.setPreferredSymbolConfiguration(.init(pointSize: CNS.size.playButton), forImageIn: .normal)
         backwardFive.setImage(UIImage(systemName: "gobackward.5"), for: .normal)
         backwardFive.addTarget(self, action: #selector(tabBackward), for: .touchUpInside)
         return backwardFive
@@ -153,6 +152,7 @@ class RecordVoiceViewController: UIViewController {
     
     @objc func sliderValueChanged() {
         audioSessionManager.setSampleRate(Double(frequencySlider.value))
+        frequencyLabel.text = "cutoff frequency: \(Int(audioSessionManager.getSampleRate()))Hz"
     }
     
     override func viewDidLoad() {
@@ -160,7 +160,7 @@ class RecordVoiceViewController: UIViewController {
         drawWaveFormManager.delegate = self
         recordVoiceManager.delegate = self
         playVoiceManager.delegate = self
-        audioSessionManager.setSampleRate(44100)
+        audioSessionManager.setSampleRate(Double(CNS.sampleRate.max))
 
         setView()
         autoLayout()
@@ -191,45 +191,45 @@ class RecordVoiceViewController: UIViewController {
     func autoLayout() {
         NSLayoutConstraint.activate([
             
-            progressTimeLabel.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: timeLabelTopAnchorMP),
             progressTimeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            progressTimeLabel.bottomAnchor.constraint(equalTo: waveFormImageView.topAnchor, constant: -CNS.autoLayout.minConstant),
             
-            waveFormBackgroundView.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: waveFormTopAnchorMP),
             waveFormBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            waveFormBackgroundView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: waveFormHeightMP),
+            waveFormBackgroundView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: CNS.autoLayout.waveFormHeightMP),
             waveFormBackgroundView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            waveFormBackgroundView.bottomAnchor.constraint(equalTo: view.centerYAnchor),
             
-            waveFormCanvasView.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: waveFormTopAnchorMP),
             waveFormCanvasView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            waveFormCanvasView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: waveFormHeightMP),
+            waveFormCanvasView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: CNS.autoLayout.waveFormHeightMP),
+            waveFormCanvasView.bottomAnchor.constraint(equalTo: view.centerYAnchor),
             
             waveFormImageView.leadingAnchor.constraint(equalTo: view.centerXAnchor),
-            waveFormImageView.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: waveFormTopAnchorMP),
             waveFormImageView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            waveFormImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: waveFormHeightMP),
+            waveFormImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: CNS.autoLayout.waveFormHeightMP),
+            waveFormImageView.bottomAnchor.constraint(equalTo: view.centerYAnchor),
             
             verticalLineView.leadingAnchor.constraint(equalTo: view.centerXAnchor),
-            verticalLineView.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: waveFormTopAnchorMP),
             verticalLineView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            verticalLineView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: waveFormHeightMP),
+            verticalLineView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: CNS.autoLayout.waveFormHeightMP),
+            verticalLineView.bottomAnchor.constraint(equalTo: view.centerYAnchor),
             
-            frequencyLabel.topAnchor.constraint(equalTo: verticalLineView.bottomAnchor, constant: standardConstant),
-            frequencyLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: standardWidthMP),
+            frequencyLabel.topAnchor.constraint(equalTo: verticalLineView.bottomAnchor, constant: CNS.autoLayout.standardConstant),
+            frequencyLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: CNS.autoLayout.standardWidthMP),
             frequencyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             frequencySlider.topAnchor.constraint(equalTo: frequencyLabel.bottomAnchor),
-            frequencySlider.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: standardWidthMP),
+            frequencySlider.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: CNS.autoLayout.standardWidthMP),
             frequencySlider.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
-            buttonStackView.topAnchor.constraint(equalTo: frequencySlider.bottomAnchor, constant: standardConstant),
+            buttonStackView.topAnchor.constraint(equalTo: frequencySlider.bottomAnchor, constant: CNS.autoLayout.standardConstant),
             buttonStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
         ])
         view.bringSubviewToFront(verticalLineView)
     }
     
     func setUI() {
-        frequencyLabel.text = "cutoff frequency: "
-        frequencySlider.value = 44100
+        frequencyLabel.text = "cutoff frequency: \(Int(audioSessionManager.getSampleRate()))Hz"
+        frequencySlider.value = CNS.sampleRate.max
         record_start_stop_button.setImage(UIImage(systemName: "circle.fill"), for: .normal)
         record_start_stop_button.tintColor = .red
         recordFile_ButtonStackView.isHidden = true
@@ -314,10 +314,7 @@ class RecordVoiceViewController: UIViewController {
 extension RecordVoiceViewController : DrawWaveFormManagerDelegate {
     
     func moveWaveFormView(_ step: CGFloat) {
-        
-        UIView.animate(withDuration: 1/14, animations: {
-            self.waveFormCanvasView.transform = CGAffineTransform(translationX: -step, y: 0)
-        })
+        self.waveFormCanvasView.transform = CGAffineTransform(translationX: -step, y: 0)
     }
     
     func resetWaveFormView() {
