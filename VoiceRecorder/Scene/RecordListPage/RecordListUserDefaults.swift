@@ -8,27 +8,33 @@
 import Foundation
 
 class RecordListUserDefaults {
-    typealias DBData = [String]
     static let shared = RecordListUserDefaults()
     private init() { }
+    
+    private let userDefaults = UserDefaults(suiteName: "recordData")
 
-    private let userDefaults = UserDefaults(suiteName: "recordList")
-
-    func save(playList: DBData) {
-        self.userDefaults?.setValue(playList, forKey: "recordList")
+    func save(data: [CellData]) {
+        let encoder = JSONEncoder()
+        if let encoded = try? encoder.encode(data) {
+            self.userDefaults?.setValue(encoded, forKey: "recordData")
+        }
     }
     
-    func getData() -> DBData {
-        guard let savedData = userDefaults?.object(forKey: "recordList") as? DBData else { return [] }
-        return savedData
+    func getData() -> [CellData] {
+        if let savedData = userDefaults?.object(forKey: "recordData") as? Data {
+            let decoder = JSONDecoder()
+            let savedObject = try? decoder.decode([CellData].self, from: savedData)
+            return savedObject ?? []
+        }
+        return []
     }
 
-    func update(networkDataFilename: DBData) -> DBData {
-        let frontList = getData().filter { networkDataFilename.contains($0) }
-        let backList = networkDataFilename.filter { frontList.contains($0) == false }
+    func update(networkData: [CellData]) -> [CellData] {
+        let frontList = getData().filter { $0.isContain(data: networkData) }
+        let backList = networkData.filter { $0.isContain(data: frontList) == false }
 
         let result = frontList + backList
-        save(playList: result)
+        save(data: result)
         return result
     }
 }

@@ -8,30 +8,20 @@
 import UIKit
 
 class RecordListViewModel {
-    struct CellData {
-        let filename: String
-        // TODO: 파일명을 분리해서 변수로 만들기 [x]
-    }
-
-    private var playList: [String] = []
+    private var recordDatas: [CellData] = []
     private var networkManager: NetworkManager
-    private let playListUserDefaults = RecordListUserDefaults.shared
-
+    private let recordListUserDefaults = RecordListUserDefaults.shared
+    
     init(networkManager: NetworkManager) {
         self.networkManager = networkManager
     }
 
-    func getCellData(_ indexPath: IndexPath) -> FileData {
-        // TODO: - 파일인코딩에 맞춰 분리해서 CellData로 반환 [x]
-
-        let rawFileName = playList[indexPath.row].split(separator: "+").map { String($0) }
-        let fileData = FileData(rawFilename: playList[indexPath.row],filename: rawFileName[0], duration: rawFileName[1])
-
-        return fileData
+    func getCellData(_ indexPath: IndexPath) -> CellData {
+        return recordDatas[indexPath.row]
     }
 
     func getCellTotalCount() -> Int {
-        return playList.count
+        return recordDatas.count
     }
 
     func update(completion: (() -> Void)? = nil) {
@@ -39,7 +29,13 @@ class RecordListViewModel {
             guard let self = self else { return }
             switch result {
             case let .success(data):
-                self.playList = self.playListUserDefaults.update(networkDataFilename: data)
+                let parsingData: [CellData] = data.map { data in
+                    let rawFileName = data.split(separator: "+").map { String($0) }
+                    let fileData = FileData(rawFilename: data,filename: rawFileName[0], duration: rawFileName[1])
+                    let result = CellData(fileInfo: fileData)
+                    return result
+                }
+                self.recordDatas = self.recordListUserDefaults.update(networkData: parsingData)
                 completion?()
             case let .failure(error):
                 // TODO: 에러처리
@@ -49,10 +45,10 @@ class RecordListViewModel {
     }
 
     func deleteCell(_ indexPath: IndexPath, completion: @escaping () -> Void) {
-        let filename = playList[indexPath.row]
+        let filename = recordDatas[indexPath.row].fileInfo.rawFilename
         networkManager.deleteRecord(filename: filename) { isDeleted in
             if isDeleted == true {
-                self.playList = self.playList.filter { $0 != filename }
+                self.recordDatas = self.recordDatas.filter { $0.fileInfo.rawFilename != filename }
                 completion()
             } else {
             }
@@ -60,13 +56,54 @@ class RecordListViewModel {
     }
 
     func swapCell(_ beforeIndexPathRow: Int, _ indexPathRow: Int) {
-        let beforeValue = playList[beforeIndexPathRow]
-        let afterValue = playList[indexPathRow]
-        playList[beforeIndexPathRow] = afterValue
-        playList[indexPathRow] = beforeValue
+        let beforeValue = recordDatas[beforeIndexPathRow]
+        let afterValue = recordDatas[indexPathRow]
+        recordDatas[beforeIndexPathRow] = afterValue
+        recordDatas[indexPathRow] = beforeValue
     }
 
-    func endTapped() {
-        playListUserDefaults.save(playList: playList)
+    func endSwapCellTapped() {
+        recordListUserDefaults.save(data: recordDatas)
+    }
+    
+    func tappedFavoriteButton(indexPath: IndexPath) {
+        recordDatas[indexPath.row].isFavorite = !recordDatas[indexPath.row].isFavorite
+        recordListUserDefaults.save(data: recordDatas)
+    }
+    
+    func sortButtonTapped(beforeState: RecordListSortState, afterState: RecordListSortState, completion: @escaping () -> ()) {
+        guard beforeState == .favorite || beforeState != afterState else { return }
+        if beforeState == .favorite && afterState != .favorite {
+            update {
+                doSort(afterState)
+            }
+        } else {
+            doSort(afterState)
+        }
+        
+        func doSort(_ afterState: RecordListSortState) {
+            self.recordDatas = recordListUserDefaults.getData()
+            switch afterState {
+            case .basic:
+                completion()
+            case .latest:
+                recordDatas.sort(by: sortLatest(a:b:))
+                completion()
+            case .oldest:
+                recordDatas.sort(by: sortOldest(a:b:))
+                completion()
+            case .favorite:
+                recordDatas = recordDatas.filter { $0.isFavorite }
+                completion()
+            }
+        }
+        
+        func sortLatest(a: CellData, b: CellData) -> Bool {
+            return a.fileInfo.filename > b.fileInfo.filename
+        }
+        
+        func sortOldest(a: CellData, b: CellData) -> Bool {
+            return a.fileInfo.filename < b.fileInfo.filename
+        }
     }
 }
