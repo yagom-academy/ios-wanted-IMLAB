@@ -99,10 +99,11 @@ extension RecordListViewController: UITableViewDataSource, UITableViewDelegate {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: RecordListCell.identifier, for: indexPath) as? RecordListCell else {
             return UITableViewCell()
         }
-
-        cell.setData(data: viewModel.getCellData(indexPath))
+        
+        cell.setData(data: viewModel.getCellData(indexPath), indexPath: indexPath)
         cell.addSwapCellTapGesture(action: handleLongPress(with:_:))
-
+        cell.addFavoriteMarkAction(action: handleFavoriteButton(indexPath:))
+        
         return cell
     }
 
@@ -123,7 +124,7 @@ extension RecordListViewController: UITableViewDataSource, UITableViewDelegate {
         let data = viewModel.getCellData(indexPath)
         let vc = PlayerViewController()
 
-        vc.setData(data.rawFilename)
+        vc.setData(data.fileInfo.rawFilename)
 
         navigationController?.pushViewController(vc, animated: true)
     }
@@ -157,6 +158,14 @@ extension RecordListViewController: RecordListSortBarDelegate {
     }
 }
 
+//MARK: - 즐겨찾기 버튼 이벤트
+extension RecordListViewController {
+    private func handleFavoriteButton(indexPath: IndexPath) {
+        viewModel.tappedFavoriteButton(indexPath: indexPath)
+        self.tableView.reloadData()
+    }
+}
+
 //MARK: - 셀이동 이벤트
 extension RecordListViewController {
     private func handleLongPress(with sender: UILongPressGestureRecognizer, _ toCenterPoint: CGPoint) {
@@ -175,7 +184,7 @@ extension RecordListViewController {
 
         guard let indexPath = tableView.indexPathForRow(at: longPressedPoint) else {
             print("fail to find indexPath!")
-            viewModel.endTapped()
+            viewModel.endSwapCellTapped()
             return
         }
 
@@ -231,7 +240,7 @@ extension RecordListViewController {
                 BeforeIndexPath.value = indexPath
             }
         case .ended:
-            viewModel.endTapped()
+            viewModel.endSwapCellTapped()
             // 손가락을 떼면 indexPath에 셀이 나타나는 애니메이션
             guard let beforeIndexPath = BeforeIndexPath.value,
                   let cell = tableView.cellForRow(at: beforeIndexPath) else { return }

@@ -9,10 +9,12 @@ import UIKit
 
 class RecordListCell: UITableViewCell {
     static let identifier = "RecordListCell"
-
+    private var indexPath: IndexPath?
+    
     private var isSetSwapGesture: Bool = false
     private var swapGestureAction: ((_ sender: UILongPressGestureRecognizer, _ toCenterPoint: CGPoint) -> Void)?
     private var isSetFavoriteMarkAction: Bool = false
+    private var favoriteMarkAction: ((_ indexPath: IndexPath) -> ())?
 
     private let container = UIStackView()
     
@@ -41,16 +43,27 @@ class RecordListCell: UITableViewCell {
         contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0))
     }
 
-    func setData(data: FileData) {
-        titleLabel.text = data.filename
-        durationLabel.text = data.duration
+    func setData(data: RecordListViewModel.CellData, indexPath: IndexPath) {
+        self.indexPath = indexPath
+        titleLabel.text = data.fileInfo.filename
+        durationLabel.text = data.fileInfo.duration
+        let favoritMarkTitle = data.isFavorite ? "★" : "☆"
+        self.favoriteMark.setTitle(favoritMarkTitle, for: .normal)
     }
 
-    func addFavoriteMarkAction() {
+    func addFavoriteMarkAction(action: ((_ indexPath: IndexPath) -> ())?) {
         if isSetFavoriteMarkAction == false {
             isSetFavoriteMarkAction = true
-//            self.favoriteMark.addTarget(self, action: <#T##Selector#>, for: <#T##UIControl.Event#>)
+            self.favoriteMarkAction = action
+            self.favoriteMark.addTarget(self, action: #selector(tappedFavoriteMarkAction), for: .touchUpInside)
         }
+    }
+    
+    @objc func tappedFavoriteMarkAction() {
+        guard let indexPath = indexPath else {
+            return
+        }
+        self.favoriteMarkAction?(indexPath)
     }
     
     func addSwapCellTapGesture(action: @escaping (_ sender: UILongPressGestureRecognizer, _ toCenterPoint: CGPoint) -> Void) {
@@ -58,7 +71,7 @@ class RecordListCell: UITableViewCell {
             isSetSwapGesture = true
             self.swapGestureAction = action
             swipeTapView.isUserInteractionEnabled = true
-            let longPressedGesture = UILongPressGestureRecognizer(target: self, action: #selector(connector(with:)))
+            let longPressedGesture = UILongPressGestureRecognizer(target: self, action: #selector(swapCellAction(with:)))
             longPressedGesture.minimumPressDuration = 0
             //        longPressedGesture.delegate = self
             longPressedGesture.delaysTouchesBegan = true
@@ -66,7 +79,7 @@ class RecordListCell: UITableViewCell {
         }
     }
 
-    @objc func connector(with sender: UILongPressGestureRecognizer) {
+    @objc func swapCellAction(with sender: UILongPressGestureRecognizer) {
         let pointAtCell = sender.location(in: self)
         let toCenterPoint = CGPoint(x: pointAtCell.x - frame.width / 2, y: pointAtCell.y - frame.height / 2)
         swapGestureAction?(sender, toCenterPoint)

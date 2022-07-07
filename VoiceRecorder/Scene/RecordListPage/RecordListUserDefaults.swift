@@ -8,7 +8,7 @@
 import Foundation
 
 class RecordListUserDefaults {
-    struct DBData {
+    struct DBData: Codable {
         var fileName: String
         var isFavorite: Bool = false
         
@@ -17,27 +17,35 @@ class RecordListUserDefaults {
             return dataFileNames.contains(fileName)
         }
     }
-
+    
     static let shared = RecordListUserDefaults()
     private init() { }
+    
+    private let userDefaults = UserDefaults(suiteName: "recordData")
 
-    private let userDefaults = UserDefaults(suiteName: "recordList")
-
-    func save(playList: [DBData]) {
-        self.userDefaults?.setValue(playList, forKey: "recordList")
+    func save(data: [DBData]) {
+        let encoder = JSONEncoder()
+        if let encoded = try? encoder.encode(data) {
+            self.userDefaults?.setValue(encoded, forKey: "recordData")
+        }
     }
     
     func getData() -> [DBData] {
-        guard let savedData = userDefaults?.object(forKey: "recordList") as? [DBData] else { return [] }
-        return savedData
+        if let savedData = userDefaults?.object(forKey: "recordData") as? Data {
+            let decoder = JSONDecoder()
+            let savedObject = try? decoder.decode([DBData].self, from: savedData)
+            return savedObject ?? []
+        }
+        return []
     }
 
-    func update(networkData: [DBData]) -> [DBData] {
-        let frontList = getData().filter { $0.isContain(data: networkData) }
-        let backList = networkData.filter { $0.isContain(data: frontList) == false }
+    func update(networkData: [String]) -> [DBData] {
+        let newDBData = networkData.map { DBData(fileName: $0) }
+        let frontList = getData().filter { $0.isContain(data: newDBData) }
+        let backList = newDBData.filter { $0.isContain(data: frontList) == false }
 
         let result = frontList + backList
-        save(playList: result)
+        save(data: result)
         return result
     }
 }

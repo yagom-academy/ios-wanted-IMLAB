@@ -8,23 +8,28 @@
 import UIKit
 
 class RecordListViewModel {
-    private var playList: [String] = []
+    struct CellData {
+        var fileInfo: FileData
+        var isFavorite: Bool = false
+    }
+    private var recordDatas: [RecordListUserDefaults.DBData] = []
     private var networkManager: NetworkManager
     private let recordListUserDefaults = RecordListUserDefaults.shared
-
+    
     init(networkManager: NetworkManager) {
         self.networkManager = networkManager
     }
 
-    func getCellData(_ indexPath: IndexPath) -> FileData {
-        let rawFileName = playList[indexPath.row].split(separator: "+").map { String($0) }
-        let fileData = FileData(rawFilename: playList[indexPath.row],filename: rawFileName[0], duration: rawFileName[1])
-
-        return fileData
+    func getCellData(_ indexPath: IndexPath) -> CellData {
+        let rawFileName = recordDatas[indexPath.row].fileName.split(separator: "+").map { String($0) }
+        let fileData = FileData(rawFilename: recordDatas[indexPath.row].fileName,filename: rawFileName[0], duration: rawFileName[1])
+        let result = CellData(fileInfo: fileData, isFavorite: recordDatas[indexPath.row].isFavorite)
+        
+        return result
     }
 
     func getCellTotalCount() -> Int {
-        return playList.count
+        return recordDatas.count
     }
 
     func update(completion: (() -> Void)? = nil) {
@@ -32,7 +37,7 @@ class RecordListViewModel {
             guard let self = self else { return }
             switch result {
             case let .success(data):
-                self.playList = self.recordListUserDefaults.update(networkDataFilename: data)
+                self.recordDatas = self.recordListUserDefaults.update(networkData: data)
                 completion?()
             case let .failure(error):
                 // TODO: 에러처리
@@ -42,10 +47,10 @@ class RecordListViewModel {
     }
 
     func deleteCell(_ indexPath: IndexPath, completion: @escaping () -> Void) {
-        let filename = playList[indexPath.row]
+        let filename = recordDatas[indexPath.row].fileName
         networkManager.deleteRecord(filename: filename) { isDeleted in
             if isDeleted == true {
-                self.playList = self.playList.filter { $0 != filename }
+                self.recordDatas = self.recordDatas.filter { $0.fileName != filename }
                 completion()
             } else {
             }
@@ -53,13 +58,18 @@ class RecordListViewModel {
     }
 
     func swapCell(_ beforeIndexPathRow: Int, _ indexPathRow: Int) {
-        let beforeValue = playList[beforeIndexPathRow]
-        let afterValue = playList[indexPathRow]
-        playList[beforeIndexPathRow] = afterValue
-        playList[indexPathRow] = beforeValue
+        let beforeValue = recordDatas[beforeIndexPathRow]
+        let afterValue = recordDatas[indexPathRow]
+        recordDatas[beforeIndexPathRow] = afterValue
+        recordDatas[indexPathRow] = beforeValue
     }
 
-    func endTapped() {
-        recordListUserDefaults.save(playList: playList)
+    func endSwapCellTapped() {
+        recordListUserDefaults.save(data: recordDatas)
+    }
+    
+    func tappedFavoriteButton(indexPath: IndexPath) {
+        recordDatas[indexPath.row].isFavorite = !recordDatas[indexPath.row].isFavorite
+        recordListUserDefaults.save(data: recordDatas)
     }
 }
