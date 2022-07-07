@@ -28,6 +28,7 @@ class PlayerViewController: UIViewController {
 
     private let frequencyView = FrequencyView(frame: .zero)
     private let pitchControlView = PitchControlView(frame: .zero)
+    private let speedControlView = SpeedControlView(frame: .zero)
     private let volumeControlView = VolumeControlView(frame: .zero)
     private let playerButtonView = PlayerButtonView(frame: .zero)
 
@@ -50,7 +51,6 @@ class PlayerViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
 
-        // TODO: - 재생 끝날때 다시 처음으로 초기화
         viewModel.resetAudioPlayer()
     }
 }
@@ -61,6 +61,7 @@ extension PlayerViewController {
     private func bind() {
         playerButtonView.bind(viewModel.playerButtonViewModel)
         pitchControlView.bind(viewModel.pitchViewModel)
+        speedControlView.bind(viewModel.speedViewModel)
         volumeControlView.bind(viewModel.volumeViewModel)
     }
 
@@ -95,6 +96,7 @@ extension PlayerViewController {
             playerButtonView,
             volumeControlView,
             pitchControlView,
+            speedControlView
         ]
 
         mainStackViewItems.forEach {
@@ -107,6 +109,7 @@ extension PlayerViewController {
             frequencyView.heightAnchor.constraint(equalTo: safearea.heightAnchor, multiplier: 0.3),
             pitchControlView.heightAnchor.constraint(equalTo: safearea.heightAnchor, multiplier: 0.05),
             volumeControlView.heightAnchor.constraint(equalTo: safearea.heightAnchor, multiplier: 0.03),
+            speedControlView.heightAnchor.constraint(equalTo: safearea.heightAnchor, multiplier: 0.03),
             playerButtonView.heightAnchor.constraint(equalTo: safearea.heightAnchor, multiplier: 0.1),
         ]
 
@@ -142,7 +145,6 @@ extension PlayerViewController {
         fileNameLabel.text = fileData?.filename
 
         viewModel.setPlayerItem()
-        viewModel.setAudioReady()
     }
 
     func isInvalidFile() {

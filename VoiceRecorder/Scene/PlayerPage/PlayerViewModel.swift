@@ -13,6 +13,7 @@ class PlayerViewModel {
     private var audioPlayer: PlayerService!
 
     var pitchViewModel: PitchViewModel!
+    var speedViewModel: SpeedViewModel!
     var volumeViewModel: VolumeViewModel!
     var playerButtonViewModel: PlayerButtonViewModel!
 
@@ -20,6 +21,7 @@ class PlayerViewModel {
         self.audioPlayer = audioPlayer
 
         pitchViewModel = PitchViewModel(audioPlayer)
+        speedViewModel = SpeedViewModel(audioPlayer)
         volumeViewModel = VolumeViewModel(audioPlayer)
         playerButtonViewModel = PlayerButtonViewModel(audioPlayer)
     }
@@ -40,10 +42,6 @@ class PlayerViewModel {
 
     func setPlayerItem() {
         audioPlayer.setAudioFile(model.getAVAudioFile())
-    }
-
-    func setAudioReady() {
-        playerButtonViewModel.isAudioAvailable()
     }
 
     func setPlayerToZero() {

@@ -74,12 +74,18 @@ class PlayerButtonView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
+        NotificationCenter.default.addObserver(self, selector: #selector(playerDidEnded), name: NSNotification.Name("PlayerDidEnded"), object: nil)
+
         attribute()
         layout()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    @objc private func playerDidEnded() {
+        playPauseButton.isSelected = false
     }
 }
 
@@ -116,11 +122,7 @@ extension PlayerButtonView {
 
 extension PlayerButtonView {
     private func setPlayPauseButtonState(_ isPlaying: Bool) {
-        if isPlaying {
-            playPauseButton.isSelected = true
-        } else {
-            playPauseButton.isSelected = false
-        }
+        playPauseButton.isSelected = isPlaying
     }
 
     @objc private func onTappedPlayPauseButton(sender: UIButton) {
