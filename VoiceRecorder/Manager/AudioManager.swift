@@ -191,13 +191,24 @@ extension AudioManager {
         
         return audioPlayTime
     }
+    
+    func getPlayTime(audioFile: AVAudioFile) -> Double {
+        
+        let audioLengthSamples = audioFile.length
+        let sampleRate = audioFile.processingFormat.sampleRate
+        let audioPlayTime = Double(audioLengthSamples) / sampleRate
+        
+        return audioPlayTime
+    }
+    
     /// 재생중인 audioFile의 현재 PlayerTime의 FramePosition을 반환
     func getCurrentFramePosition(nodeTime: AVAudioTime, audioFile: AVAudioFile, moveOffset: AVAudioFramePosition) -> AVAudioFramePosition? {
         guard let playerTime = audioPlayerNode.playerTime(forNodeTime: nodeTime) else  {
             return nil
         }
         
-        let audioLengthSamples = audioFile.length
+        let audioLengthSamples = AVAudioFramePosition(Double(audioFile.length) * playerTime.sampleRate / audioFile.processingFormat.sampleRate)
+        
         var currentFrame = playerTime.sampleTime + seekFrame
         currentFrame = validateFrameEdge(with: currentFrame,
                                          limit: audioLengthSamples)
@@ -349,9 +360,8 @@ extension AudioManager {
                 return
             }
             
-            let currentTime = Double(framePosition) / Double(audioFile.processingFormat.sampleRate)
-            
-            let wholeTime: Double = getPlayTime(filePath: filePath)
+            let currentTime = Double(framePosition) / Double(time.sampleRate)
+            let wholeTime: Double = getPlayTime(audioFile: audioFile)
             
             let ratio = Float(currentTime / wholeTime)
             
