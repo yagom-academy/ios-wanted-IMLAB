@@ -125,12 +125,12 @@ class RecordViewController: UIViewController {
             ) {
                 self.activityIndicator.stopAnimating()
                 self.setupButton(isHidden: false)
-                self.blockEQSlider()
             }
             print(fileName)
         } else {
             sender.setImage(.circle)
             recorder.record()
+            blockEQSlider()
             graphView.drawBarGraph = true
             
             recorderTimer = Timer.scheduledTimer(
