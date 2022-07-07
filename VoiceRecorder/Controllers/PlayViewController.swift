@@ -23,6 +23,7 @@ class PlayViewController: UIViewController {
     var recordFile: RecordModel?
     private var isPlay = false
     private var localFileManager: LocalFileManager?
+    private var playerTimer: Timer?
     
     private let engine = AudioEngine()
     
@@ -59,6 +60,13 @@ class PlayViewController: UIViewController {
         } else {
             sender.setImage(.pauseFill)
             engine.play()
+            playerTimer = Timer.scheduledTimer(
+                timeInterval: 0.01,
+                target: self,
+                selector: #selector(update),
+                userInfo: nil,
+                repeats: true
+            )
         }
         isPlay = !isPlay
     }
@@ -80,6 +88,19 @@ class PlayViewController: UIViewController {
     @IBAction func changeVolume(_ sender: UISlider) {
         engine.changeVolume(sender.value)
         volumeTextLabel.text = "volume \(Int(sender.value * 100))%"
+    }
+}
+
+// MARK: - @objc Methods
+private extension PlayViewController {
+    @objc func update() {
+        if engine.isFinish() {
+            playButton.setImage(.play)
+            isPlay = false
+            playerTimer?.invalidate()
+            engine.stop()
+            try! engine.setupEngine()
+        }
     }
 }
 
@@ -107,7 +128,7 @@ private extension PlayViewController {
         guard let recordFile = recordFile,
               let eqString = recordFile.metaData[MetaData.eq.key] else { return }
         let gains = eqString.split(separator: " ").map { String($0) }.map { Float($0) ?? 0.0 }
-                
+        
         engine.url = localFileManager?.audioPath
         engine.gains = gains
         do {
