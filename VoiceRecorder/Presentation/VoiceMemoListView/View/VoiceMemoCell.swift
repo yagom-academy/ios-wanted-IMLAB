@@ -10,16 +10,19 @@ import UIKit
 class VoiceMemoCell: UITableViewCell {
     
     // MARK: - Properties
+    
     static let identifier = "VoiceMemoCell"
     
-    lazy var fileNameLabel: UILabel = {
+    var fileTitleLabel: UILabel = {
+        
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 12)
         return label
     }()
     
-    lazy var fileTimeLabel: UILabel = {
+    var playTimeLabel: UILabel = {
+        
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 12)
@@ -27,28 +30,36 @@ class VoiceMemoCell: UITableViewCell {
     }()
     
     // MARK: - Life Cycle
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        configureUI()
+        designUI()
     }
     
     required init?(coder: NSCoder) {
+        
         fatalError("init(coder:) has not been implemented")
     }
+    
 }
 
+// MARK: - UI Design
+
 extension VoiceMemoCell {
-    func configureUI() {
-        contentView.addSubview(fileNameLabel)
+    
+    private func designUI() {
+        contentView.addSubview(fileTitleLabel)
         NSLayoutConstraint.activate([
-            fileNameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            fileNameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            ])
+            fileTitleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            fileTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+        ])
         
-        contentView.addSubview(fileTimeLabel)
+        contentView.addSubview(playTimeLabel)
         NSLayoutConstraint.activate([
-            fileTimeLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            fileTimeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            ])
+            playTimeLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            playTimeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+        ])
     }
+    
 }

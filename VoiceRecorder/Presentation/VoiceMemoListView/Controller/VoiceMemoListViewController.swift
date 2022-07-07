@@ -157,7 +157,7 @@ extension VoiceMemoListViewController: UITableViewDelegate, UITableViewDataSourc
                 switch result {
                 case .success(let time):
                     let convertTime  = self.convertSecondToMinute(time: time)
-                    cell.fileTimeLabel.text = convertTime
+                    cell.playTimeLabel.text = convertTime
                 case .failure(let error):
                     print(error.localizedDescription)
                 }
@@ -165,7 +165,7 @@ extension VoiceMemoListViewController: UITableViewDelegate, UITableViewDataSourc
             }
         }
         
-        cell.fileNameLabel.text = name
+        cell.fileTitleLabel.text = name
         return cell
     }
     
