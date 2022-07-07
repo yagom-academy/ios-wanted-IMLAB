@@ -21,11 +21,7 @@
 		01E1AB0628747841004ADBAE /* ProgressTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E1AB0528747841004ADBAE /* ProgressTimeView.swift */; };
 		01E1AB0A28755857004ADBAE /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E1AB0928755857004ADBAE /* NetworkManager.swift */; };
 		18129BC928766FDA006C7F8C /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18129BC828766FDA006C7F8C /* Constants.swift */; };
-<<<<<<< HEAD
-		181CA6C92872CC2100092A2C /* RecordMeterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181CA6C82872CC2100092A2C /* RecordMeterView.swift */; };
-=======
 		181CA6C92872CC2100092A2C /* MeterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181CA6C82872CC2100092A2C /* MeterView.swift */; };
->>>>>>> main
 		182C8732286AD69700F3C24D /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182C8731286AD69700F3C24D /* DateExtensions.swift */; };
 		185AC9742873BE990026E924 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 185AC9732873BE990026E924 /* GoogleService-Info.plist */; };
 		18CE51F4286EEA8E004AAF7C /* PlayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CE51F3286EEA8E004AAF7C /* PlayViewModel.swift */; };
@@ -52,11 +48,7 @@
 		01E1AB0528747841004ADBAE /* ProgressTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressTimeView.swift; sourceTree = "<group>"; };
 		01E1AB0928755857004ADBAE /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		18129BC828766FDA006C7F8C /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-<<<<<<< HEAD
-		181CA6C82872CC2100092A2C /* RecordMeterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordMeterView.swift; sourceTree = "<group>"; };
-=======
 		181CA6C82872CC2100092A2C /* MeterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeterView.swift; sourceTree = "<group>"; };
->>>>>>> main
 		182C8731286AD69700F3C24D /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
 		185AC9732873BE990026E924 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		18CE51F3286EEA8E004AAF7C /* PlayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayViewModel.swift; sourceTree = "<group>"; };
@@ -96,11 +88,7 @@
 			isa = PBXGroup;
 			children = (
 				01696158286ACF280020AAAC /* Audio.swift */,
-<<<<<<< HEAD
-				18CE51F6286EEEA1004AAF7C /* PlayTime.swift */,
-=======
 				18CE51F6286EEEA1004AAF7C /* PlayerTime.swift */,
->>>>>>> main
 			);
 			path = Model;
 			sourceTree = "<group>";
