@@ -139,7 +139,7 @@ extension PlayerViewController {
     func configurePlayer() {
         let fileData = viewModel.getFileData()
 
-        fileNameLabel.text = fileData?.fileName
+        fileNameLabel.text = fileData?.filename
 
         viewModel.setPlayerItem()
         viewModel.setAudioReady()

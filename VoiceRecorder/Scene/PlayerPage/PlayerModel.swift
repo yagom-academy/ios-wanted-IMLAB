@@ -18,12 +18,6 @@ class PlayerModel {
         self.networkManager = networkManager
     }
 
-    let networkManager: NetworkManager!
-
-    init(_ networkManager: NetworkManager) {
-        self.networkManager = networkManager
-    }
-
     func update(_ filename: String, _ completion: @escaping (Error?) -> Void) {
         parsingFileData(filename)
 
@@ -43,7 +37,7 @@ class PlayerModel {
         let file = filename.split(separator: "+").map { String($0) }
 
         if file.count == 2 {
-            fileData = FileData(fileName: file[0], duration: file[1])
+            fileData = FileData(rawFilename: filename, filename: file[0], duration: file[1])
         }
     }
 

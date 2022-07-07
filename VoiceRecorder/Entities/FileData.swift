@@ -8,6 +8,7 @@
 import Foundation
 
 struct FileData {
-    var fileName: String
+    var rawFilename: String
+    var filename: String
     var duration: String
 }
