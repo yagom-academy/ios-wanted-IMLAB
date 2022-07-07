@@ -11,6 +11,7 @@ import MediaPlayer
 
 class PlayingViewController: UIViewController {
     
+    @IBOutlet weak var volumeSliderView: UIView!
     @IBOutlet weak var fileNameLabel: UILabel!
     @IBOutlet weak var soundPitchControl: UISegmentedControl!
     @IBOutlet weak var playProgressBar: UIProgressView!
@@ -31,38 +32,20 @@ class PlayingViewController: UIViewController {
         self.totalPlayTimeLabel.text = fileInfo.recordTime
         playProgressBar.progress = 0.0
         audioPlayerHandler.selectPlayFile(self.fileNameLabel.text)
-//        configureVolumeSlider()
+        configureVolumeSlider()
     }
     
     let audioPlayerHandler = AudioPlayerHandler(handler: LocalFileHandler(), updateTimeInterval: UpdateTimeInterval())
     
     func configureVolumeSlider() {
-        let volumeView = MPVolumeView()
-        if #available(iOS 13, *) {
-                
-        } else {
-            volumeView.showsRouteButton = false
-        }
-        volumeView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(volumeView)
-        NSLayoutConstraint.activate([
-            volumeView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
-            volumeView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
-            volumeView.centerYAnchor.constraint(equalTo: view.bottomAnchor, constant: -80)
-        ])
+        let volumeView = MPVolumeView(frame: volumeSliderView.bounds)
+        volumeSliderView.addSubview(volumeView)
     }
     
     func setButton(enable: Bool) {
         goBackwardButton.isEnabled = enable
         goForwardButton.isEnabled = enable
     }
-    
-    @IBAction func goForwardButtonTapped(_ sender: UIButton) {
-        let player = audioPlayerHandler.audioPlayer
-        player.currentTime = player.currentTime + 5.0
-        player.play()
-    }
-
     
     @IBAction func changePitch(_ sender: UISegmentedControl) {
         switch soundPitchControl.selectedSegmentIndex {

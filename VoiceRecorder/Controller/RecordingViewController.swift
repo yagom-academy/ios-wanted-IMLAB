@@ -132,7 +132,6 @@ class RecordingViewController: UIViewController {
             sender.setImage(UIImage(systemName: "pause"), for: .normal)
             if audioPlayerHandler.audioPlayer.currentTime == 0.0 {
                 audioPlayerHandler.selectPlayFile(nil)
-                audioPlayerHandler.prepareToPlay()
             }
             audioPlayerHandler.audioPlayer.delegate = self
             audioPlayerHandler.audioPlayer.play()

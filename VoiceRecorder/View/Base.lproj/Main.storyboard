@@ -285,7 +285,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="47" translatesAutoresizingMaskIntoConstraints="NO" id="jVz-As-2vE">
-                                <rect key="frame" x="57" y="516.5" width="300" height="195.5"/>
+                                <rect key="frame" x="57" y="389.5" width="300" height="392.5"/>
                                 <subviews>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="VjU-pj-Gei">
                                         <rect key="frame" x="0.0" y="0.0" width="300" height="32"/>
@@ -352,6 +352,14 @@
                                             </button>
                                         </subviews>
                                     </stackView>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="STt-MF-5Xp">
+                                        <rect key="frame" x="0.0" y="242.5" width="300" height="150"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="150" id="YPQ-Xa-x5v"/>
+                                            <constraint firstAttribute="width" constant="300" id="s5P-h9-hkD"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="6py-Qc-iYd" firstAttribute="leading" secondItem="jVz-As-2vE" secondAttribute="leading" id="Bl9-vr-LqS"/>
@@ -364,7 +372,7 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="Fr1-YX-kWG" firstAttribute="centerX" secondItem="6lg-m5-uDI" secondAttribute="centerX" id="39d-qu-IZ1"/>
-                            <constraint firstItem="cKT-NR-Ran" firstAttribute="bottom" secondItem="jVz-As-2vE" secondAttribute="bottom" constant="150" id="Ahp-ps-xw1"/>
+                            <constraint firstItem="cKT-NR-Ran" firstAttribute="bottom" secondItem="jVz-As-2vE" secondAttribute="bottom" constant="80" id="Ahp-ps-xw1"/>
                             <constraint firstItem="Fr1-YX-kWG" firstAttribute="top" secondItem="cKT-NR-Ran" secondAttribute="top" constant="40" id="gF1-Ni-BDu"/>
                             <constraint firstItem="jVz-As-2vE" firstAttribute="centerX" secondItem="6lg-m5-uDI" secondAttribute="centerX" id="j8w-ei-JE3"/>
                         </constraints>
@@ -378,6 +386,7 @@
                         <outlet property="playProgressBar" destination="4KN-1J-mU2" id="2Q1-Mt-tAw"/>
                         <outlet property="soundPitchControl" destination="VjU-pj-Gei" id="3qh-ok-tcD"/>
                         <outlet property="totalPlayTimeLabel" destination="5MX-UE-EBA" id="Cfm-33-vcS"/>
+                        <outlet property="volumeSliderView" destination="STt-MF-5Xp" id="v2N-yx-wyF"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="t3i-Uo-ISH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
