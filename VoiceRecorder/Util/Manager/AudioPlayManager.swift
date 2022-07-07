@@ -9,6 +9,17 @@ import AVFoundation
 
 struct AudioPlayManager {
     
+    let audioURL: URL
+    
+    init(audioURL: URL) {
+        self.audioURL = audioURL
+        do {
+           try setupAudio(audioURL)
+        }catch {
+            
+        }
+    }
+    
     let engine = AVAudioEngine()
     var audioFile: AVAudioFile?
     

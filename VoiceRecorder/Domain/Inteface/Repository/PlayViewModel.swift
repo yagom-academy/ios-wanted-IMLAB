@@ -11,11 +11,31 @@ import AVFoundation
 final class PlayViewModel {
     
     var audioInformation: AudioInformation
-    let audioPlayManager: AudioPlayManager
+    var audioPlayManager: AudioPlayManager
     
-    init(audioInformation: AudioInformation, audioPlayManager: AudioPlayManager = AudioPlayManager()) {
+    init(audioInformation: AudioInformation) {
         self.audioInformation = audioInformation
-        self.audioPlayManager = audioPlayManager
+        self.audioPlayManager = AudioPlayManager(audioURL: audioInformation.fileURL)
     }
     
+    func changePitch(to voice: Int) {
+        audioPlayManager.changePitch(to: voice)
+    }
+    
+    func controlVolume(to volume: Float) {
+        audioPlayManager.controlVolume(to: volume)
+    }
+    
+    func move(seconds: Double) {
+        audioPlayManager.seek(to: seconds)
+    }
+    
+    func play() {
+        audioPlayManager.play()
+    }
+    
+    func pause() {
+        audioPlayManager.pause()
+    }
+
 }
