@@ -9,6 +9,8 @@ import AVFoundation
 import Foundation
 
 protocol PlayerService {
+    var isPlaying: Bool { get }
+
     func setAudioFile(_ audioFile: AVAudioFile?)
 
     func resetAudio()
@@ -171,7 +173,6 @@ class PlayerManager: PlayerService {
 
         // currentPosition 을 옮겨줄 시간으로 변경
         currentPosition = seekFrame
-
 
         let wasPlaying = audioPlayer.isPlaying
         audioPlayer.stop()

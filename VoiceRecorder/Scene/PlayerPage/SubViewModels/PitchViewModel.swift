@@ -8,7 +8,11 @@
 import Foundation
 
 class PitchViewModel {
-    private var audioPlayer = PlayerManager.shared
+    private var audioPlayer: PlayerService
+
+    init(_ audioPlayer: PlayerService) {
+        self.audioPlayer = audioPlayer
+    }
 
     func changePitch(_ value: Int) {
         audioPlayer.setPitch(value)

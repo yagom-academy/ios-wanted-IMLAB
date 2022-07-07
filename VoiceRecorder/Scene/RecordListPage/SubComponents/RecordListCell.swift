@@ -8,6 +8,9 @@
 import UIKit
 
 class RecordListCell: UITableViewCell {
+    struct CellData {
+        let filename: String
+    }
     static let identifier = "RecordListCell"
     private var isSetGesture: Bool = false
     private var action: ((_ sender: UILongPressGestureRecognizer, _ toCenterPoint: CGPoint) -> ())?
@@ -32,14 +35,13 @@ class RecordListCell: UITableViewCell {
         contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 16.0, left: 16, bottom: 16, right: 16))
     }
     
-    func setData(filename: String) {
-        self.titleLabel.text = filename
+    func setData(data: CellData) {
+        self.titleLabel.text = data.filename
     }
     
     func addTapGesture(action: @escaping (_ sender: UILongPressGestureRecognizer, _ toCenterPoint: CGPoint) -> ()) {
         if (isSetGesture == false) {
             isSetGesture = true
-            
             self.action = action
             swipeTapView.isUserInteractionEnabled = true
             let longPressedGesture = UILongPressGestureRecognizer(target: self, action: #selector(connector(with:)))

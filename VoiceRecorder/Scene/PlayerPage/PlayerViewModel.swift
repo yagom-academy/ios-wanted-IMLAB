@@ -9,7 +9,7 @@ import AVFoundation
 import Foundation
 
 class PlayerViewModel {
-    private let model = PlayerModel()
+    private let model = PlayerModel(RecordNetworkManager.shared)
     private var audioPlayer: PlayerService!
 
     var pitchViewModel: PitchViewModel!

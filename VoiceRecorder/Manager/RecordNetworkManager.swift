@@ -8,8 +8,20 @@
 import FirebaseStorage
 import Foundation
 
-struct RecordNetworkManager {
+protocol NetworkManager {
+    func saveRecord(filename: String, completion: ((Bool) -> Void)?)
+    func getRecordData(filename: String, completion: ((Result<Data, CustomNetworkError>) -> Void)?)
+    func getRecordMetaData(filename: String, completion: ((StorageMetadata?) -> Void)?)
+    func getRecordList(completion: ((Result<[String], CustomNetworkError>) -> Void)?)
+    func deleteRecord(filename: String, completion: ((Bool) -> Void)?)
+}
+
+struct RecordNetworkManager: NetworkManager {
+    static let shared = RecordNetworkManager()
+
     let storageRef = Storage.storage().reference().child("record")
+
+    private init() {}
 
     func saveRecord(filename: String, completion: ((Bool) -> Void)? = nil) {
         let localRecordFileURL = Config.getRecordFilePath()
@@ -42,7 +54,6 @@ struct RecordNetworkManager {
 
     func getRecordData(filename: String, completion: ((Result<Data, CustomNetworkError>) -> Void)? = nil) {
         let recordRef = storageRef.child(filename)
-        
         DispatchQueue.global().async {
             recordRef.getData(maxSize: 1500000) { data, error in
                 if let error = error {
@@ -56,9 +67,7 @@ struct RecordNetworkManager {
                         return
                     }
                     print("success download data!")
-                    DispatchQueue.main.async {
-                        completion?(.success(data))
-                    }
+                    completion?(.success(data))
                 }
             }
         }
@@ -76,9 +85,7 @@ struct RecordNetworkManager {
                     }
                 } else {
                     print("success download metaData!")
-                    DispatchQueue.main.async {
-                        completion?(metadata)
-                    }
+                    completion?(metadata)
                 }
             }
         }
@@ -109,9 +116,7 @@ struct RecordNetworkManager {
                 }
 
                 let result = data.items.map { $0.name }
-                DispatchQueue.main.async {
-                    completion?(.success(result))
-                }
+                completion?(.success(result))
             }
         }
     }
