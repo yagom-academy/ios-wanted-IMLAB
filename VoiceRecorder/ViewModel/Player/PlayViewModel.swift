@@ -42,9 +42,8 @@ class PlayViewModel {
     private var displayLink: CADisplayLink?
     
     @Published var playerProgress: Float = 0
-    // TODO: - false면 무조건 Bool 지워도 알 수 있다.
-    @Published var playerIsReady: Bool = false
-    @Published var playerIsPlaying: Bool = false
+    @Published var playerIsReady = false
+    @Published var playerIsPlaying = false
     @Published var playerTime: PlayerTime = .zero
     
     init(url: URL) {

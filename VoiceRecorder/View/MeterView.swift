@@ -9,26 +9,19 @@ import Foundation
 import UIKit
 
 class RecordMeterView: UIView {
-    // TODO: - 띄어쓰기
-    var values:[CGFloat] = []
-    var currentX:CGFloat = 0.0
-    var disPlayLink:CADisplayLink?
+    var values: [CGFloat] = []
+    private var currentX: CGFloat = 0.0
+
+    var disPlayLink: CADisplayLink?
     
-    var myLayer = CALayer()
-    // TODO: - lazy 삭제
-    lazy var startPoint = CGPoint(x: self.bounds.midX, y: self.bounds.midY)
-    lazy var jump: CGFloat = (self.bounds.width - (startPoint.x * 2)) / 200
-    var start: CGPoint!
-    //  삭제
-    
-    override init(frame: CGRect) {
+    required override init(frame:CGRect) {
         super.init(frame: frame)
         setUpDisPlayLink()
     }
     
-    // TODO: - 고민 fatalError, override init, required init?
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        setUpDisPlayLink()
     }
     
     override class var layerClass: AnyClass {
@@ -42,7 +35,6 @@ class RecordMeterView: UIView {
         disPlayLink?.isPaused = true
     }
     
-    // TODO: - @objc 사용 이유
     @objc func updateDisplay() {
         currentX += 0.1
         let calValue = calculateValue()

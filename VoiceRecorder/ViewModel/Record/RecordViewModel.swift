@@ -8,10 +8,10 @@
 import Foundation
 import AVFAudio
 import Combine
+import FirebaseStorage
 import QuartzCore
 
-// TODO: - Drawable -> Deleagte
-protocol RecordDrawable: AnyObject{
+protocol RecordDrawDelegate: AnyObject{
     func updateValue(_ value:CGFloat)
     func clearAll()
 }
@@ -20,7 +20,7 @@ class RecordViewModel {
     let storage = FirebaseStorageManager.shared
     var recorder = AVAudioRecorder()
     var player = AVAudioPlayer()
-    var recordFormat = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: 44100.0, channels: 1, interleaved: true)
+    let recordFormat = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: 44100.0, channels: 1, interleaved: true)
     let recordFileURL = URL(fileURLWithPath: NSTemporaryDirectory().appending("input.m4a"))
     
     private var displayLink: CADisplayLink?
@@ -29,7 +29,7 @@ class RecordViewModel {
     @Published var isPlaying: Bool = false
     @Published var isRecording: Bool = false
     
-    weak var delegate: RecordDrawable?
+    weak var delegate: RecordDrawDelegate?
     
     init() {
         prepareRecorder()
@@ -41,7 +41,7 @@ class RecordViewModel {
             try AVAudioSession.sharedInstance().setCategory(.playAndRecord,mode: .default,options: .defaultToSpeaker)
             try AVAudioSession.sharedInstance().setActive(true)
             // TODO: - !
-            recorder = try AVAudioRecorder(url: recordFileURL,settings: recordFormat!.settings)
+            recorder = try AVAudioRecorder(url: recordFileURL,settings: recordFormat?.settings ?? [:])
             recorder.prepareToRecord()
         } catch {
             print("Error in prepare Recoder")
@@ -67,7 +67,7 @@ class RecordViewModel {
     func stopRec() {
         recorder.stop()
         isRecording = recorder.isRecording
-        storage.uploadData(url: recordFileURL, fileName: Date().toString("yyyy_MM_dd_HH:mm:ss"))
+        storage.uploadData(url: recordFileURL, fileName: DateFormatter().toString(Date()))
     }
     
     func playAudio() {
@@ -136,9 +136,6 @@ class RecordViewModel {
     
     private func nomalizeSoundLevel(level:Float) -> CGFloat {
         let level = max(0.2, CGFloat(level) + 50) / 2
-//        print(level)
-//        print(CGFloat(level * (350 / 25)))
         return CGFloat(level * (350 / 25))
     }
 }
-

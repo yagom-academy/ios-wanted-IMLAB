@@ -8,8 +8,8 @@
 import UIKit
 
 class HomeTableViewCell: UITableViewCell {
-    // TODO: - identifier 공통화
-    static let identfier = String(describing: HomeTableViewCell.self)
+    // TODO: - identifier 공통화 (문자열과 함께)
+    static let identfier = Constants.HomeTableCellIdentifier
     
     // TODO: - configure 공개 메서드로 접근
     var audio: Audio? {

@@ -7,15 +7,14 @@
 
 import Foundation
 
-// TODO: - scope 범위 줄이기
-enum TimeConstant {
-    static let secsPerMin = 60
-    static let secsPerHour = 3600
-}
-
 struct PlayerTime {
     let elapsedText: String
     let remainingText: String
+    
+    enum TimeConstant {
+        static let secsPerMin = 60
+        static let secsPerHour = 3600
+    }
     
     static let zero: PlayerTime = PlayerTime.init(elapsedTime: 0, remainingTime: 0)
     
@@ -29,23 +28,23 @@ struct PlayerTime {
         var seconds = Int(ceil(time))
         var hours = 0
         var minutes = 0
-        
+
         if seconds > TimeConstant.secsPerHour {
             hours = seconds / TimeConstant.secsPerHour
             seconds -= hours * TimeConstant.secsPerHour
         }
-        
+
         if seconds > TimeConstant.secsPerMin {
             minutes = seconds / TimeConstant.secsPerMin
             seconds -= minutes * TimeConstant.secsPerMin
         }
-        
+
         var formattedString = ""
-        
+
         if hours > 0 {
             formattedString = "\(String(format: "%02d", hours)):"
         }
-        
+
         formattedString += "\(String(format: "%02d", minutes)):\(String(format: "%02d", seconds))"
         return formattedString
     }

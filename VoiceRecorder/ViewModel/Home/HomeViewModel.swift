@@ -9,6 +9,7 @@ import Foundation
 
 class HomeViewModel {
     // TODO: - Combine
+    // TODO: - View Indicator 추가
     var audios: [Audio]
     var loadingEnded: () -> Void = { }
     

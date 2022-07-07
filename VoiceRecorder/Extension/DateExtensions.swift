@@ -7,13 +7,16 @@
 
 import Foundation
 
-extension Date {
-    static let dateFormatter = DateFormatter()
+
+extension DateFormatter {
+    static let dateFormatter:DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ko_KR")
+        return dateFormatter
+    }()
     
-    // TODO: - format 기본값 선언, locale 분리, DateFormatter Extension
-    func toString(_ format: String) -> String {
-        Self.dateFormatter.dateFormat = format
-        Self.dateFormatter.locale = Locale(identifier: "ko_KR")
-        return Self.dateFormatter.string(from: self)
+    func toString(_ date:Date, to format:String = "yyyy_MM_dd_HH:mm:ss") -> String {
+        self.dateFormat = format
+        return Self.dateFormatter.string(from: date)
     }
 }

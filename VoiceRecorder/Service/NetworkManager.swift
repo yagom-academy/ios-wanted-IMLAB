@@ -18,9 +18,11 @@ class NetworkManager {
         }
         let fileURL = documentURL.appendingPathComponent("Record.m4a")
         
-        // TODO: - dataTask, downloadTask
         URLSession.shared.downloadTask(with: url) { localUrl, response, error in
-            guard let localUrl = localUrl, error == nil else { return }
+            guard let localUrl = localUrl, error == nil else {
+                //TODO: - Error 처리 하기
+                return
+            }
             do {
                 if FileManager.default.fileExists(atPath: fileURL.path) {
                     try FileManager.default.removeItem(at: fileURL)
@@ -30,6 +32,7 @@ class NetworkManager {
             } catch {
                 completion(.failure(error))
             }
-        }.resume()
+        }
+        .resume()
     }
 }

@@ -236,7 +236,7 @@ private extension RecordViewController{
     }
 }
 
-extension RecordViewController: RecordDrawable {
+extension RecordViewController: RecordDrawDelegate {
     func clearAll() {
         self.meterView.values.removeAll()
         self.meterView.layer.sublayers = nil

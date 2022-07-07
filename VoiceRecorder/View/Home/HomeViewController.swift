@@ -73,6 +73,9 @@ private extension HomeViewController {
             present(recordController, animated: true)
         } else {
             // TODO: - 권한 유도 다시 해주기
+            AVAudioSession.sharedInstance().requestRecordPermission { isPermission in
+                self.permission = isPermission
+            }
             // String
             let alertController = UIAlertController(title: "", message: "설정에서 마이크 권한을 허용해주세요.", preferredStyle: .alert)
             alertController.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
