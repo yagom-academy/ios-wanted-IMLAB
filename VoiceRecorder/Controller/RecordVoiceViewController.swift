@@ -346,9 +346,6 @@ extension TimeInterval{
         let sec = Int(seconds) % 60
         let cen = Int(seconds * 100) % 100
         
-        print(hour)
-        print(min)
-        print(seconds)
         if hour == 0{
             let formatString = "%0.2d:%0.2d:%0.2d"
             return String(format: formatString, min, sec, cen)
