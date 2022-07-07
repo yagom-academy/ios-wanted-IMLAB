@@ -142,7 +142,7 @@
                                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="5000" minValue="10" maxValue="15000" translatesAutoresizingMaskIntoConstraints="NO" id="xM2-uk-oVq">
                                                 <rect key="frame" x="-2" y="28.5" width="304" height="31"/>
                                                 <connections>
-                                                    <action selector="setCutoffFrequency:" destination="X5L-vM-0v8" eventType="valueChanged" id="EAS-Qz-aEu"/>
+                                                    <action selector="setCutoffFreucy:" destination="X5L-vM-0v8" eventType="valueChanged" id="f51-oR-AOt"/>
                                                 </connections>
                                             </slider>
                                         </subviews>
