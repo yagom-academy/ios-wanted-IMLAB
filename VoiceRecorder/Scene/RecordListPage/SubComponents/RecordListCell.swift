@@ -24,7 +24,7 @@ class RecordListCell: UITableViewCell {
     private let durationLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 15)
-        label.textColor = .secondaryLabel
+        label.textColor = .white
 
         return label
     }()
@@ -107,6 +107,8 @@ class RecordListCell: UITableViewCell {
         labelContainer.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
 
         swipeTapView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        swipeTapView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
+        swipeTapView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
+        swipeTapView.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.5).isActive = true
+        swipeTapView.widthAnchor.constraint(equalTo: swipeTapView.heightAnchor).isActive = true
     }
 }
