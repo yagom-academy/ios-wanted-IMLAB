@@ -57,7 +57,7 @@ class RecordVoiceViewController: UIViewController {
         return frequencyLabel
     }()
     
-    let frequencySlider : UISlider = {
+    lazy var frequencySlider : UISlider = {
         let frequencySlider = UISlider()
         frequencySlider.translatesAutoresizingMaskIntoConstraints = false
         frequencySlider.isContinuous = false
@@ -81,7 +81,7 @@ class RecordVoiceViewController: UIViewController {
         return buttonStackView
     }()
     
-    let record_start_stop_button : UIButton = {
+    lazy var record_start_stop_button : UIButton = {
         let record_start_stop_button = UIButton()
         record_start_stop_button.translatesAutoresizingMaskIntoConstraints = false
         record_start_stop_button.addTarget(self, action: #selector(tab_record_start_stop_Button), for: .touchUpInside)
@@ -97,7 +97,7 @@ class RecordVoiceViewController: UIViewController {
         return recordFile_ButtonStackView
     }()
     
-    var recordFile_play_PauseButton: UIButton = {
+    lazy var recordFile_play_PauseButton: UIButton = {
         let recordFile_play_PauseButton = UIButton()
         recordFile_play_PauseButton.translatesAutoresizingMaskIntoConstraints = false
         recordFile_play_PauseButton.setPreferredSymbolConfiguration(.init(pointSize: 30), forImageIn: .normal)
@@ -106,7 +106,7 @@ class RecordVoiceViewController: UIViewController {
         return recordFile_play_PauseButton
     }()
     
-    var forwardFive: UIButton = {
+    lazy var forwardFive: UIButton = {
         let forwardFive = UIButton()
         forwardFive.translatesAutoresizingMaskIntoConstraints = false
         forwardFive.setPreferredSymbolConfiguration(.init(pointSize: 30), forImageIn: .normal)
@@ -115,7 +115,7 @@ class RecordVoiceViewController: UIViewController {
         return forwardFive
     }()
     
-    var backwardFive: UIButton = {
+    lazy var backwardFive: UIButton = {
         let backwardFive = UIButton()
         backwardFive.translatesAutoresizingMaskIntoConstraints = false
         backwardFive.setPreferredSymbolConfiguration(.init(pointSize: 30), forImageIn: .normal)

@@ -26,7 +26,7 @@ class PlayVoiceViewController: UIViewController {
         return waveFormImageView
     }()
     
-    var selectedPitchSegment : UISegmentedControl = {
+    lazy var selectedPitchSegment : UISegmentedControl = {
         let selectedPitchSegment = UISegmentedControl(items: ["일반 목소리","아기목소리","할아버지목소리"])
         selectedPitchSegment.translatesAutoresizingMaskIntoConstraints = false
         selectedPitchSegment.selectedSegmentIndex = 0
@@ -49,7 +49,7 @@ class PlayVoiceViewController: UIViewController {
         return timeControlButtonStackView
     }()
 
-    var playAndPauseButton: UIButton = {
+    lazy var playAndPauseButton: UIButton = {
         let playAndPauseButton = UIButton()
         playAndPauseButton.translatesAutoresizingMaskIntoConstraints = false
         playAndPauseButton.setPreferredSymbolConfiguration(.init(pointSize: 30), forImageIn: .normal)
@@ -58,7 +58,7 @@ class PlayVoiceViewController: UIViewController {
         return playAndPauseButton
     }()
     
-    var forwardFive: UIButton = {
+    lazy var forwardFive: UIButton = {
         let forwardFive = UIButton()
         forwardFive.translatesAutoresizingMaskIntoConstraints = false
         forwardFive.setPreferredSymbolConfiguration(.init(pointSize: 30), forImageIn: .normal)
@@ -67,7 +67,7 @@ class PlayVoiceViewController: UIViewController {
         return forwardFive
     }()
     
-    var backwardFive: UIButton = {
+    lazy var backwardFive: UIButton = {
         let backwardFive = UIButton()
         backwardFive.translatesAutoresizingMaskIntoConstraints = false
         backwardFive.setPreferredSymbolConfiguration(.init(pointSize: 30), forImageIn: .normal)
@@ -83,7 +83,7 @@ class PlayVoiceViewController: UIViewController {
         return volumeTextLabel
     }()
     
-    let volumeSlider : UISlider = {
+    lazy var volumeSlider : UISlider = {
         let volumeSlider = UISlider()
         volumeSlider.translatesAutoresizingMaskIntoConstraints = false
         volumeSlider.addTarget(self, action: #selector(slideVolumeButton(_:)), for: .allTouchEvents)
