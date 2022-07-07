@@ -27,6 +27,9 @@ class AudioPlayerHandler {
     var seekFrame: AVAudioFramePosition = 0
     var currentPosition: AVAudioFramePosition = 0
     var audioLengthSamples: AVAudioFramePosition = 0
+    private var displayLink: CADisplayLink?
+    var currentTime: String?
+    
     var needsFileScheduled = true
     var isPlaying = false
     private var currentFrame: AVAudioFramePosition {
@@ -34,7 +37,7 @@ class AudioPlayerHandler {
             let lastRenderTime = audioPlayerNode.lastRenderTime,
             let playerTime = audioPlayerNode.playerTime(forNodeTime: lastRenderTime)
         else {
-            return currentPosition
+            return 0
         }
         return playerTime.sampleTime
     }
@@ -42,6 +45,7 @@ class AudioPlayerHandler {
     init(handler: LocalFileProtocol, updateTimeInterval: UpdateTimer) {
         self.localFileHandler = handler
         self.updateTimeInterval = updateTimeInterval
+        setupDisplayLink()
     }
     
     func selectPlayFile(_ fileName: String?) {
@@ -125,8 +129,10 @@ class AudioPlayerHandler {
         isPlaying.toggle()
         
         if audioPlayerNode.isPlaying {
+            displayLink?.isPaused = true
             audioPlayerNode.pause()
         } else {
+            displayLink?.isPaused = false
             if needsFileScheduled {
                 scheduleAudioFile()
             }
@@ -142,35 +148,47 @@ class AudioPlayerHandler {
         currentPosition = seekFrame
         audioPlayerNode.stop()
         if currentPosition < audioLengthSamples {
+            updateDisplay()
             needsFileScheduled = false
             let frameCount = AVAudioFrameCount(audioLengthSamples - seekFrame)
             audioPlayerNode.scheduleSegment(audioFile, startingFrame: seekFrame, frameCount: frameCount, at: nil) {
                 self.needsFileScheduled = true
             }
+            if isPlaying {
+                audioPlayerNode.play()
+            }
         }
-        if isPlaying {
-            audioPlayerNode.play()
-        }
+        
     }
     
-    func getProgress() -> Float {
-        currentPosition = currentFrame + seekFrame
-        currentPosition = max(currentPosition, 0)
-        currentPosition = min(currentPosition, audioLengthSamples)
-        if currentPosition >= audioLengthSamples {
-            audioPlayerNode.stop()
-            isPlaying = false
-            seekFrame = 0
-            currentPosition = 0
-        }
-        playerProgress = Float(currentPosition) / Float(audioLengthSamples)
-        return playerProgress
+    private func setupDisplayLink() {
+      displayLink = CADisplayLink(
+        target: self,
+        selector: #selector(updateDisplay))
+      displayLink?.add(to: .current, forMode: .default)
+      displayLink?.isPaused = true
     }
-    
-    func getCurrentPlayTime() -> String {
-        let time = Double(currentPosition) / audioSampleRate
+
+    @objc private func updateDisplay() {
+      currentPosition = currentFrame + seekFrame
+      currentPosition = max(currentPosition, 0)
+      currentPosition = min(currentPosition, audioLengthSamples)
+
+      if currentPosition >= audioLengthSamples {
+        audioPlayerNode.stop()
+
+        seekFrame = 0
+        currentPosition = 0
+
+        isPlaying = false
+        displayLink?.isPaused = true
+      }
+
+        playerProgress = Float(Double(currentPosition) / Double(audioLengthSamples))
+
+      let time = Double(currentPosition) / audioSampleRate
         let convertedTime = updateTimer(time)
-        return convertedTime
+        currentTime = convertedTime
     }
     
     func updateTimer(_ time: TimeInterval) -> String {
