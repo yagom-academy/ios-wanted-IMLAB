@@ -161,18 +161,14 @@ class RecordingViewController: UIViewController {
     }
     
     @IBAction func goBackwardButtonTapped(_ sender: UIButton) {
-        let player = audioPlayerHandler.audioPlayer
-        player.currentTime = player.currentTime - 5.0
-        player.play()
+        audioPlayerHandler.seek(to: -5.0)
     }
     @IBAction func setCutoffFrequency(_ sender: UISlider) {
         audioRecorderHandler.setFrequency(frequency: sender.value)
     }
     
     @IBAction func goForwardButtonTapped(_ sender: UIButton) {
-        let player = audioPlayerHandler.audioPlayer
-        player.currentTime = player.currentTime + 5.0
-        player.play()
+        audioPlayerHandler.seek(to: 5.0)
     }
     
     func writeWaves(_ input: Float) {
