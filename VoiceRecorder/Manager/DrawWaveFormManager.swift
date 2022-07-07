@@ -63,25 +63,14 @@ class DrawWaveFormManager{
     }
     
     private func drawWaveForm(_ input : Float, in view : UIView) {
-
+        let newInput = pow(10, input / 20)
         let viewHeight = view.bounds.height
         let maxTraitLength = (viewHeight/2) - 10
         let minTraitLength = viewHeight/100
-        let newTraitLength = ((CGFloat(input + 55) * (maxTraitLength - minTraitLength))/55) + minTraitLength
+        let newTraitLength = ((CGFloat(newInput) * (maxTraitLength - minTraitLength))) + minTraitLength
         
-        switch input {
-        case ..<(-55):
-            traitLength = minTraitLength
-        case (-55)..<(-40):
-            traitLength = max(minTraitLength, newTraitLength * (7/10))
-        case (-40)..<(-20):
-            traitLength = max(minTraitLength, newTraitLength * (8/10))
-        case (-20)..<(-1):
-            traitLength = newTraitLength
-        default:
-            traitLength = maxTraitLength
-        }
-        
+        traitLength = newInput > 1 ? maxTraitLength : newTraitLength
+
         pencil.move(to: start)
         pencil.addLine(to: CGPoint(x: start.x, y: start.y + traitLength))
 

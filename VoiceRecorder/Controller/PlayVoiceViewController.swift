@@ -234,7 +234,6 @@ extension PlayVoiceViewController : PlayVoiceDelegate{
     }
     
     func displayWaveForm(to currentPosition : AVAudioFramePosition, in audioLengthSamples : AVAudioFramePosition) {
-        print("currentPosition: \(currentPosition), audioLengthSamples: \(audioLengthSamples)")
         let newX = (self.waveFormImageView.image?.size.width ?? 0) * CGFloat(currentPosition) / CGFloat(audioLengthSamples)
         self.waveFormImageView.transform = CGAffineTransform(translationX: -newX, y: 0)
     }
