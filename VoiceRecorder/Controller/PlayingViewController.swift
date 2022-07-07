@@ -5,10 +5,10 @@
 //  Created by Jinhyang Kim on 2022/06/27.
 //
 
-import UIKit
 import AVFoundation
+import UIKit
 
-class PlayingViewController: UIViewController, ObservableObject, AVAudioPlayerDelegate {
+class PlayingViewController: UIViewController, ObservableObject {
     
     // MARK: - IBOutlets
     
