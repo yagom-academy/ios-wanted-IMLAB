@@ -4,28 +4,75 @@
 - 프로젝트 소개
 - 기타 내용은 팀 내부에서 자율적으로 작성하시면 됩니다.
 
-
-
 ## 🧑‍💻 Developers
 |서초(조성빈)|Peppo(이병훈)|
 |---|---|
-|<img width = "200" alt= "Peppo(이병훈)" src = "https://user-images.githubusercontent.com/64088377/177667367-3c9650d1-f89a-45dc-bc65-d249deedd39b.jpg">|<img width = "200" alt= "Peppo(이병훈)" src = "https://user-images.githubusercontent.com/64088377/177667367-3c9650d1-f89a-45dc-bc65-d249deedd39b.jpg">|
+|<img width = "200" alt= "서초(조성빈)" src = "https://user-images.githubusercontent.com/64088377/177668277-f9db3eb2-b252-4795-9eec-4f8cc5e10304.jpeg">|<img width = "200" alt= "Peppo(이병훈)" src = "https://user-images.githubusercontent.com/64088377/177667367-3c9650d1-f89a-45dc-bc65-d249deedd39b.jpg">|
 
-<br><br>
+<br>
 
 
 ## 👀 미리보기
-|VoiceMemoList(1st page)|RecordDetail(2nd page)|Playing(3rd page)|
+|VoiceMemoVC(1st page)|RecordDetailVC(2nd page)|PlayingVC(3rd page)|
 |---|---|---|
 |<img width = "250" alt="page1-VoiceRecorder" src = "https://user-images.githubusercontent.com/64088377/177666676-397756b0-299c-419c-9592-45e611ddb1f5.gif">|<img width = "250" alt= "page2-VoiceRecorder" src = "https://user-images.githubusercontent.com/64088377/177666696-d2d25b25-1354-4899-9c1c-69b586eb7a0a.gif">|<img width = "250" alt= "page3-VoiceRecorder" src = "https://user-images.githubusercontent.com/64088377/177666695-1fa3ad69-0aa6-4c4a-accd-4a321e5aed85.gif">|
 
+<br>
 
+## 🛠 개발환경
+<img width="77" alt="스크린샷 2021-11-19 오후 3 52 02" src="https://img.shields.io/badge/iOS-13.0+-silver"> <img width="93" alt="스크린샷 2021-11-19 오후 3 52 02" src="https://img.shields.io/badge/Xcode-13.4-blue">
+
+<br>
+
+## 🛠 라이브러리
+|라이브러리|Version|Tool|
+|-------|-------|----|
+|FirebaseStorage|`8.15.`|`CocoaPod`|
+
+<br>
+
+## 구현
+
+#### 공통 
+1. FileManager, FireStorage
+  - 로컬/ 원격 파일에 대한 Create, Read, Delete 구현
+
+<br>
+
+#### VoiceMemoVC(1st page)
+1. AVFoundation
+    - AVAudioPlayer를 이용해서 각 녹음파일의 총 시간(duration) 표시
+
+2. TableView
+    - TableView를 사용해서 각 파일들 나열
+    - Refresh Control을 사용하여 데이터 Fetch
+
+<br>
+
+#### RecordDetailVC(2nd page)
+
+1. AVFoundation
+    - AVAudioSession을 통해 Input setting
+    - AVAudioRecorder를 통해 recorder 생성
+
+2. CGPoint, CGFloat, UIBezierPath
+    - View의 값들을 이용해서 파형 그리기
+
+#### PlayingVC(3rd page)
+
+1. AVFoundation
+      - AVAudioEngine
+      - AVAudioPlayerNode
+      - AVAudioUnitTimePitch
+          1. 목소리 변조
+
+<br>
 
 ## 🔀  Git Branch
 
 개별 브랜치 관리 및 병합의 안정성을 위해 `Git Forking WorkFlow`를 적용했습니다.
 
-Branch를 생성하기 전 Issue를 먼저 작성하고,
+Branch를 생성하기 전 [노션페이지](https://good-pirate-c9d.notion.site/Recording-300dabbafd22487783b864820e8655e1)에 일정 및 구현내용을 작성하고,
 
 `<Prefix>/#<Issue_Number>` 의 양식에 따라 브랜치 명을 작성합니다.
 
