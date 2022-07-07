@@ -237,6 +237,8 @@ extension RecordingViewController: AVAudioPlayerDelegate {
         self.playButton.setImage(UIImage(systemName: "play"), for: .normal)
         progressTimer.invalidate()
         self.recordingButton.isEnabled = true
+        self.goForwardButton.isEnabled = false
+        self.goBackwardButton.isEnabled = false
         inPlayMode.toggle()
     }
 }
