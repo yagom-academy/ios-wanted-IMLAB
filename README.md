@@ -21,7 +21,7 @@
 ### Demo Gif
   - 첫 화면
   
-![home](https://user-images.githubusercontent.com/107861353/177719312-f70af8e1-55c3-4526-8d4e-71c0cd4427f4.gif)
+![home](https://user-images.githubusercontent.com/107861353/177721330-350630d5-0181-4cf3-8406-f78d8d3fe80d.gif)
 
   - RecordView, 레코드 기능
   
