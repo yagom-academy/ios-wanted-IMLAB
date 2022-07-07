@@ -253,14 +253,26 @@ class RecordVoiceViewController: UIViewController {
     func updateUI(when status : AudioStatus) {
         switch status {
         case .beforeRecording:
-            recordFile_ButtonStackView.isHidden = true
+            UIView.animate(withDuration: 0.2) {
+                self.recordFile_ButtonStackView.alpha = 0.0
+            } completion: { _ in
+                UIView.animate(withDuration: 0.3) {
+                    self.recordFile_ButtonStackView.isHidden = true
+                }
+            }
             frequencySlider.isEnabled = false
             frequencySlider.tintColor = .darkGray
             waveFormCanvasView.isHidden = false
             waveFormImageView.isHidden = true
             verticalLineView.isHidden = true
         case .afterRecording:
-            recordFile_ButtonStackView.isHidden = false
+            UIView.animate(withDuration: 0.3) {
+                self.recordFile_ButtonStackView.isHidden = false
+            } completion: { _ in
+                UIView.animate(withDuration: 0.2) {
+                    self.recordFile_ButtonStackView.alpha = 1.0
+                }
+            }
             frequencySlider.isEnabled = true
             frequencySlider.tintColor = .systemBlue
             waveFormImageView.image = drawWaveFormManager.getWaveFormImage()
