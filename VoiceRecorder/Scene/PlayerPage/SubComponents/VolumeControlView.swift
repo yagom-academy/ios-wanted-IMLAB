@@ -27,7 +27,7 @@ class VolumeControlView: UIView {
         return imageView
     }()
 
-    private let volumeSlider: UISlider = {
+    private lazy var volumeSlider: UISlider = {
         let slider = UISlider()
         slider.value = 0.5
         slider.minimumValue = 0.0

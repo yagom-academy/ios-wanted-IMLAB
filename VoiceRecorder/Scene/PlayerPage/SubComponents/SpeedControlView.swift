@@ -29,7 +29,7 @@ class SpeedControlView: UIView {
         return label
     }()
 
-    let speedUpButton: UIButton = {
+    private lazy var speedUpButton: UIButton = {
         let button = UIButton()
         button.setImage(systemName: "plus.circle.fill", state: .normal)
         button.tintColor = .systemBlue
@@ -46,7 +46,7 @@ class SpeedControlView: UIView {
         return button
     }()
 
-    let speedDownButton: UIButton = {
+    private lazy var speedDownButton: UIButton = {
         let button = UIButton()
         button.setImage(systemName: "minus.circle.fill", state: .normal)
         button.tintColor = .systemBlue

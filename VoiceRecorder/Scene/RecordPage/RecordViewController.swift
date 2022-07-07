@@ -90,4 +90,8 @@ extension RecordViewController: RecordControllerDelegate {
     func endRecord() {
         playControllerView.isHidden = false
     }
+    
+    func completeDownload() {
+        self.dismiss(animated: true)
+    }
 }

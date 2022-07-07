@@ -10,7 +10,7 @@ import UIKit
 class PitchControlView: UIView {
     private var viewModel: PitchViewModel!
 
-    private let pitchControl: UISegmentedControl = {
+    private lazy var pitchControl: UISegmentedControl = {
         let items = ["일반 목소리", "아기 목소리", "할아버지 목소리"]
         let control = UISegmentedControl(items: items)
         control.selectedSegmentIndex = 0

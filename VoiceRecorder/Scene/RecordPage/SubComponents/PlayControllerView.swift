@@ -11,7 +11,7 @@ import UIKit
 class PlayControllerView: UIStackView {
     private var viewModel: PlayControllerViewModel!
     
-    private let backwardButton: UIButton = {
+    private lazy var backwardButton: UIButton = {
         let button = UIButton()
         button.setImage(systemName: "gobackward.5", state: .normal)
         button.tintColor = .label
@@ -21,7 +21,7 @@ class PlayControllerView: UIStackView {
         return button
     }()
 
-    private let playButton: UIButton = {
+    private lazy var playButton: UIButton = {
         let button = UIButton()
         button.setImage(systemName: "play.fill", state: .normal)
         button.setImage(systemName: "pause.fill", state: .selected)
@@ -32,7 +32,7 @@ class PlayControllerView: UIStackView {
         return button
     }()
 
-    private let forwardButton: UIButton = {
+    private lazy var forwardButton: UIButton = {
         let button = UIButton()
         button.setImage(systemName: "goforward.5", state: .normal)
         button.tintColor = .label
@@ -45,6 +45,8 @@ class PlayControllerView: UIStackView {
     init() {
         super.init(frame: CGRect.zero)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(playerDidEnded), name: NSNotification.Name("PlayerDidEnded"), object: nil)
+        
         attribute()
         layout()
     }
@@ -54,6 +56,10 @@ class PlayControllerView: UIStackView {
     }
     
     //MARK: - Action 함수
+    @objc private func playerDidEnded() {
+        playButton.isSelected = false
+    }
+    
     @objc func didTapBackwardButton(sender: UIButton) {
         viewModel.goBackward()
     }

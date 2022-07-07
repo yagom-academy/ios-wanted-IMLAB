@@ -19,7 +19,7 @@ class PlayerButtonView: UIView {
         return stackView
     }()
 
-    let playPauseButton: UIButton = {
+    private lazy var playPauseButton: UIButton = {
         let button = UIButton()
         button.setImage(systemName: "play.fill", state: .normal)
         button.setImage(systemName: "pause.fill", state: .selected)
@@ -37,7 +37,7 @@ class PlayerButtonView: UIView {
         return button
     }()
 
-    let forwardButton: UIButton = {
+    private lazy var forwardButton: UIButton = {
         let button = UIButton()
         button.setImage(systemName: "goforward.5", state: .normal)
         button.tintColor = .label
@@ -54,7 +54,7 @@ class PlayerButtonView: UIView {
         return button
     }()
 
-    let backwardButton: UIButton = {
+    private lazy var backwardButton: UIButton = {
         let button = UIButton()
         button.setImage(systemName: "gobackward.5", state: .normal)
         button.tintColor = .label

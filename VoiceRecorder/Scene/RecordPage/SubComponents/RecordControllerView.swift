@@ -12,7 +12,7 @@ class RecordControllerView: UIView {
     private var viewModel = RecordControllerViewModel(PlayerManager.shared, RecordManager.shared,RecordNetworkManager.shared)
     var delegate: RecordControllerDelegate?
 
-    private let recordButton: UIButton = {
+    private lazy var recordButton: UIButton = {
         let button = UIButton()
         button.setImage(systemName: "circle.fill", state: .normal)
         button.setImage(systemName: "square.fill", state: .selected)
@@ -24,7 +24,7 @@ class RecordControllerView: UIView {
         return button
     }()
 
-    private let downloadButton: UIButton = {
+    private lazy var downloadButton: UIButton = {
         let button = UIButton()
         button.setImage(systemName: "arrow.down.circle", state: .normal)
         button.isEnabled = false
@@ -64,8 +64,8 @@ class RecordControllerView: UIView {
     
     @objc func didTapDownloadButton() {
         let file = viewModel.dateToFileName() + "+" + viewModel.duration()
-        // 저장 후 dismiss
         viewModel.saveRecord(file)
+        delegate?.completeDownload()
     }
 }
 
