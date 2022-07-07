@@ -82,7 +82,7 @@ extension PlayerViewController {
             mainStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             mainStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             mainStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            mainStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 30),
+            mainStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -40),
         ]
 
         NSLayoutConstraint.activate(mainStackViewConstraints)
@@ -91,9 +91,10 @@ extension PlayerViewController {
         let mainStackViewItems = [
             fileNameLabel,
             frequencyView,
-            pitchControlView,
+            
             playerButtonView,
             volumeControlView,
+            pitchControlView,
         ]
 
         mainStackViewItems.forEach {
@@ -104,8 +105,8 @@ extension PlayerViewController {
         let mainStackViewItemsContraints = [
             fileNameLabel.heightAnchor.constraint(equalTo: safearea.heightAnchor, multiplier: 0.1),
             frequencyView.heightAnchor.constraint(equalTo: safearea.heightAnchor, multiplier: 0.3),
-            pitchControlView.heightAnchor.constraint(equalTo: safearea.heightAnchor, multiplier: 0.1),
-            volumeControlView.heightAnchor.constraint(equalTo: safearea.heightAnchor, multiplier: 0.1),
+            pitchControlView.heightAnchor.constraint(equalTo: safearea.heightAnchor, multiplier: 0.05),
+            volumeControlView.heightAnchor.constraint(equalTo: safearea.heightAnchor, multiplier: 0.03),
             playerButtonView.heightAnchor.constraint(equalTo: safearea.heightAnchor, multiplier: 0.1),
         ]
 

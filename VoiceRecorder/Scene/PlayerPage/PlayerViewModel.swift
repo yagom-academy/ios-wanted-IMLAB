@@ -11,13 +11,17 @@ import Foundation
 class PlayerViewModel {
     private let model = PlayerModel()
     private var audioPlayer: PlayerService!
-    
-    var pitchViewModel = PitchViewModel()
-    var volumeViewModel = VolumeViewModel()
-    var playerButtonViewModel = PlayerButtonViewModel()
-    
+
+    var pitchViewModel: PitchViewModel!
+    var volumeViewModel: VolumeViewModel!
+    var playerButtonViewModel: PlayerButtonViewModel!
+
     init(_ audioPlayer: PlayerService) {
         self.audioPlayer = audioPlayer
+
+        pitchViewModel = PitchViewModel(audioPlayer)
+        volumeViewModel = VolumeViewModel(audioPlayer)
+        playerButtonViewModel = PlayerButtonViewModel(audioPlayer)
     }
 
     func update(_ filename: String, _ completion: @escaping (Error?) -> Void) {
@@ -37,18 +41,16 @@ class PlayerViewModel {
     func setPlayerItem() {
         audioPlayer.setAudioFile(model.getAVAudioFile())
     }
-    
+
     func setAudioReady() {
         playerButtonViewModel.isAudioAvailable()
     }
-    
+
     func setPlayerToZero() {
         audioPlayer.setPlayerToZero()
-        
     }
-    
+
     func resetAudioPlayer() {
         audioPlayer.resetAudio()
     }
-    
 }
