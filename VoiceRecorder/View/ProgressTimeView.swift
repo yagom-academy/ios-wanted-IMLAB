@@ -7,23 +7,30 @@
 
 import UIKit
 
-class ProgressTimeView: UIView {
+class ProgressTimeView: UIStackView {
     
-    let progressView: UIProgressView = {
+    private let progressView: UIProgressView = {
         let progressView = UIProgressView()
         return progressView
     }()
     
-    let playTimeLabel: UILabel = {
+    private let playTimeLabel: UILabel = {
         let label = UILabel()
         label.text = "00:00"
         return label
     }()
     
-    let playTimeRemainLabel: UILabel = {
+    private let playTimeRemainLabel: UILabel = {
         let label = UILabel()
         label.text = "00:00"
         return label
+    }()
+    
+    private lazy var timeLabelStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [playTimeLabel, playTimeRemainLabel])
+        stackView.axis = .horizontal
+        stackView.distribution = .equalSpacing
+        return stackView
     }()
     
     override init(frame: CGRect) {
@@ -32,37 +39,41 @@ class ProgressTimeView: UIView {
         configure()
     }
     
-    required init?(coder: NSCoder) {
+    required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
 
+// MARK: - Private Function
+
 private extension ProgressTimeView {
     func configure() {
-        addSubViews()
-        makeConstraints()
+        addArrangedSubViews()
+        setup()
     }
     
-    func addSubViews() {
-        [progressView, playTimeLabel, playTimeRemainLabel].forEach {
-            addSubview($0)
+    func addArrangedSubViews() {
+        [progressView, timeLabelStackView].forEach {
+            addArrangedSubview($0)
         }
     }
     
-    func makeConstraints() {
-        [progressView, playTimeLabel, playTimeRemainLabel].forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-        }
-        NSLayoutConstraint.activate([
-            progressView.topAnchor.constraint(equalTo: topAnchor),
-            progressView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            progressView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            
-            playTimeLabel.topAnchor.constraint(equalTo: progressView.bottomAnchor, constant: 8.0),
-            playTimeLabel.leadingAnchor.constraint(equalTo: progressView.leadingAnchor),
-            
-            playTimeRemainLabel.topAnchor.constraint(equalTo: progressView.bottomAnchor, constant: 8.0),
-            playTimeRemainLabel.trailingAnchor.constraint(equalTo: progressView.trailingAnchor),
-        ])
+    func setup() {
+        axis = .vertical
+        spacing = 10
+        distribution = .equalSpacing
+    }
+}
+
+// MARK: - Public Function
+
+extension ProgressTimeView {
+    func configureProgressValue(_ value: Float) {
+        progressView.progress = value
+    }
+    
+    func configureTimeText(_ playerTime: PlayerTime) {
+        playTimeLabel.text = playerTime.elapsedText
+        playTimeRemainLabel.text = playerTime.remainingText
     }
 }
