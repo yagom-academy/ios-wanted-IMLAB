@@ -10,9 +10,11 @@ import AVFAudio
 
 struct RecordControllerViewModel {
     private var audioPlayer: PlayerService
+    private var audioRecorder: RecordService
 
-    init(_ audioPlayer: PlayerService) {
+    init(_ audioPlayer: PlayerService, _ audioRecorder: RecordService) {
         self.audioPlayer = audioPlayer
+        self.audioRecorder = audioRecorder
     }
     
     func setAudioFile(_ audioFile: AVAudioFile) {
@@ -21,5 +23,21 @@ struct RecordControllerViewModel {
 
     func duration() -> String {
         return audioPlayer.duration()
+    }
+    
+    func initRecordSession() {
+        return audioRecorder.initRecordSession()
+    }
+    
+    func startRecord() {
+        return audioRecorder.startRecord()
+    }
+    
+    func endRecord() {
+        return audioRecorder.endRecord()
+    }
+    
+    func dateToFileName() -> String {
+        return audioRecorder.dateToFileName(Date())
     }
 }

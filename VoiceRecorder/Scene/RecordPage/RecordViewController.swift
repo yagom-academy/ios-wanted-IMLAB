@@ -9,11 +9,11 @@ import UIKit
 
 class RecordViewController: UIViewController {
     
-    let viewModel = RecordViewModel(PlayerManager.shared)
+    let viewModel = RecordViewModel(PlayerManager.shared, RecordManager.shared)
     
     let frequencyView = FrequencyView(frame: .zero)
     let cutoffFrequencyView = CutoffFrequencyView(frame: .zero)
-    let recordControllerView = RecordControllerView(RecordManager.shared)
+    let recordControllerView = RecordControllerView()
     let playControllerView = PlayControllerView()
     
     override func viewDidLoad() {

@@ -24,8 +24,16 @@ class RecordManager: RecordService {
     var audioFile: URL!
     var timer: Timer?
     var waveForms = [Int](repeating: 0, count: 100)
+    var cutValue = 0
     
-    private init () {}
+    private init () {
+        NotificationCenter.default.addObserver(self, selector: #selector(sendCutValue(_:)), name: Notification.Name("SendCutValue"), object: nil)
+    }
+    
+    @objc func sendCutValue(_ notification: Notification) {
+        guard let value = notification.object as? Float else { return }
+        self.cutValue = Int(value)
+    }
     
     func initRecordSession() {
         let audioSession = AVAudioSession.sharedInstance()
@@ -35,12 +43,10 @@ class RecordManager: RecordService {
             try audioSession.setActive(true)
             
             audioSession.requestRecordPermission { allowed in
-                DispatchQueue.main.async {
-                    if allowed {
-                        print("Permission Allowed")
-                    } else {
-                        print("Permission Fail")
-                    }
+                if allowed {
+                    print("Permission Allowed")
+                } else {
+                    print("Permission Fail")
                 }
             }
         } catch {
@@ -90,12 +96,20 @@ class RecordManager: RecordService {
                 self.recorder?.updateMeters()
                 
                 let soundLevel = self.normalizeSoundLevel(self.recorder?.averagePower(forChannel: 0))
-
+                
                 if currentSample == numberOfSamples {
                     self.waveForms.removeFirst()
-                    self.waveForms.append(soundLevel)
+                    if soundLevel > self.cutValue {
+                        self.waveForms.append(1)
+                    } else {
+                        self.waveForms.append(soundLevel)
+                    }
                 } else {
-                    self.waveForms[currentSample] = soundLevel
+                    if soundLevel < self.cutValue {
+                        self.waveForms[currentSample] = soundLevel
+                    } else {
+                        self.waveForms[currentSample] = 1
+                    }
                 }
 
                 if currentSample < numberOfSamples {

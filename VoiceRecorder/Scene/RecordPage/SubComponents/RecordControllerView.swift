@@ -10,10 +10,8 @@ import UIKit
 
 class RecordControllerView: UIView {
     private let networkManager =  RecordNetworkManager.shared
-    private let recordManager: RecordService!
+    private var viewModel = RecordControllerViewModel(PlayerManager.shared, RecordManager.shared)
     var delegate: RecordControllerDelegate?
-
-    var viewModel: RecordControllerViewModel!
 
     private let recordButton: UIButton = {
         let button = UIButton()
@@ -38,10 +36,9 @@ class RecordControllerView: UIView {
         return button
     }()
     
-    init(_ recordManager: RecordService) {
-        self.recordManager = recordManager
-        
+    init() {
         super.init(frame: .zero)
+        viewModel.initRecordSession()
         layout()
     }
 
@@ -54,15 +51,15 @@ class RecordControllerView: UIView {
         sender.isSelected = !sender.isSelected
 
         if sender.isSelected {
-            recordManager.startRecord()
+            viewModel.startRecord()
         } else {
-            recordManager.endRecord()
+            viewModel.endRecord()
             delegate?.endRecord()
         }
     }
     
     @objc func didTapDownloadButton() {
-        let file = recordManager.dateToFileName(Date()) + "+" + viewModel.duration()
+        let file = viewModel.dateToFileName() + "+" + viewModel.duration()
         // 저장 후 dismiss
         networkManager.saveRecord(filename: file)
     }
@@ -72,7 +69,7 @@ extension RecordControllerView {
     func bind(_ viewModel: RecordControllerViewModel) {
         self.viewModel = viewModel
     }
-
+    
     private func layout() {
         [
             recordButton,
