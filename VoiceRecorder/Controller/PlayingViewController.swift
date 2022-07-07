@@ -65,20 +65,19 @@ class PlayingViewController: UIViewController {
     
     @IBAction func goBackwardButtonTapped(_ sender: UIButton) {
         audioPlayerHandler.seek(to: -5.0)
+        playProgressBar.progress = audioPlayerHandler.playerProgress
+        currentPlayTimeLabel.text = audioPlayerHandler.currentTime
     }
     
     @IBAction func goForwardButtonTapped(_ sender: UIButton) {
         audioPlayerHandler.seek(to: 5.0)
+        playProgressBar.progress = audioPlayerHandler.playerProgress
+        currentPlayTimeLabel.text = audioPlayerHandler.currentTime
     }
     
     @IBAction func playButtonTapped(_ sender: UIButton) {
         inPlayMode.toggle()
         audioPlayerHandler.playOrPause()
-        if inPlayMode {
-            self.playButton.setImage(UIImage(systemName: "pause"), for: .normal)
-        } else {
-            self.playButton.setImage(UIImage(systemName: "play"), for: .normal)
-        }
         progressTimer = Timer.scheduledTimer(
             timeInterval: 0.05,
             target: self,
@@ -92,6 +91,8 @@ class PlayingViewController: UIViewController {
         if !audioPlayerHandler.isPlaying {
             self.playButton.setImage(UIImage(systemName: "play"), for: .normal)
             progressTimer?.invalidate()
+        } else {
+            self.playButton.setImage(UIImage(systemName: "pause"), for: .normal)
         }
     }
 }

@@ -157,7 +157,7 @@ class AudioPlayerHandler {
         seekFrame = min(seekFrame, audioLengthSamples)
         currentPosition = seekFrame
         audioPlayerNode.stop()
-        if currentPosition < audioLengthSamples {
+        if currentPosition <= audioLengthSamples {
             updateDisplay()
             needsFileScheduled = false
             let frameCount = AVAudioFrameCount(audioLengthSamples - seekFrame)
