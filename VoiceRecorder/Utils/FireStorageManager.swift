@@ -21,11 +21,11 @@ class FireStorageManager {
         enum contentType {
             static let audio: String = ".m4a"
         }
-        static let fileFullName: String = "recording\(Path.fileName)"
-        
+        static var fileFullName: String {
+            return ("recording\(Path.fileName)")
+        }
     }
     
-    var items: [StorageReference] = []
     let storage = Storage.storage()
     
     func uploadData(_ url: URL?) {
@@ -33,36 +33,52 @@ class FireStorageManager {
             return
         }
         let storageRef = storage.reference()
+        let metadata = StorageMetadata()
+        metadata.contentType = "audio/x-m4a"
         let fileRef = storageRef.child("\(RecordFileString.Ref.recordDir)\(RecordFileString.fileFullName)")
-        fileRef.putFile(from: url)
+        fileRef.putFile(from: url, metadata: metadata)
     }
     
-    func fetchData(completion: @escaping ([StorageReference]) -> Void )  {
+    func fetchData(completion: @escaping ([URL]) -> Void )  {
         let storageRef = storage.reference()
         let fileRef = storageRef.child(RecordFileString.Ref.recordDir)
         fileRef.listAll() { (result, error) in
             if let error = error {
                 print(error)
             }
-            for item in result.items {
-                self.items.append(item)
+            self.downloadToLocal(uris: result.items) { localUrls in
+                completion(localUrls)
             }
-            completion(self.items)
+        }
+    }
+    
+    func downloadToLocal(uris: [StorageReference]
+                         ,completion: @escaping ([URL]) -> Void
+    ) {
+        
+        var items: [String] = []
+        let stringUri: [String] = uris.map { "\($0)" }
+        for uri in stringUri {
+            let storageRef = self.storage.reference(forURL: uri)
+            // 긴 uri 에서 "recording_2022_06_30_20:12:51" 끝 부분만 가져오기 위함
+            let findIndex = uri.index(uri.endIndex, offsetBy: -29)
+            let fileName = "\(uri[findIndex...]).m4a"
+            guard let localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent(fileName) else { return }
             
+            storageRef.write(toFile: localPath) { url, error in
+                if let url = url {
+                    items.append(url.absoluteString)
+                }
+                let sortedItems = items.sorted()
+                let itemsToURL = sortedItems.compactMap { URL(string: $0) }
+                completion(itemsToURL)
+            }
         }
     }
     
     func deleteItem(_ name : String) {
         let storageRef = storage.reference()
         let fileRef = storageRef.child("\(RecordFileString.Ref.recordDir)\(name)")
-
-        // Delete the file
-        fileRef.delete { error in
-          if let error = error {
-            print(error)
-          } else {
-            // File deleted successfully
-          }
-        }
+        fileRef.delete()
     }
 }
