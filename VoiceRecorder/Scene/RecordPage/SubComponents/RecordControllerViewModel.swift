@@ -17,8 +17,17 @@ struct RecordControllerViewModel {
         self.audioRecorder = audioRecorder
     }
     
-    func setAudioFile(_ audioFile: AVAudioFile) {
-        audioPlayer.setAudioFile(audioFile)
+    func setAudioFile() {
+        guard let audioFile = audioRecorder.audioFile else {
+            return
+        }
+        
+        do {
+            let newAudioFile = try AVAudioFile(forReading: audioFile)
+            return audioPlayer.setAudioFile(newAudioFile)
+        } catch {
+            print("\(error.localizedDescription)")
+        }
     }
 
     func duration() -> String {

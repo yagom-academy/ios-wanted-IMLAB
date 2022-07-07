@@ -28,6 +28,7 @@ class RecordControllerView: UIView {
     private let downloadButton: UIButton = {
         let button = UIButton()
         button.setImage(systemName: "arrow.down.circle", state: .normal)
+        button.isEnabled = false
         button.tintColor = .label
         button.widthAnchor.constraint(equalToConstant: 30).isActive = true
         button.heightAnchor.constraint(equalToConstant: 30).isActive = true
@@ -51,9 +52,13 @@ class RecordControllerView: UIView {
         sender.isSelected = !sender.isSelected
 
         if sender.isSelected {
+            self.downloadButton.isEnabled = false
             viewModel.startRecord()
+            delegate?.startRecord()
         } else {
             viewModel.endRecord()
+            viewModel.setAudioFile()
+            self.downloadButton.isEnabled = true
             delegate?.endRecord()
         }
     }

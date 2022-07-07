@@ -9,6 +9,7 @@ import UIKit
 import AVFoundation
 
 protocol RecordService {
+    var audioFile: URL! { get }
     func initRecordSession()
     func normalizeSoundLevel(_ level: Float?) -> Int
     func dateToFileName(_ date: Date) -> String
@@ -74,6 +75,8 @@ class RecordManager: RecordService {
     }
     
     func startRecord() {
+        audioFile = nil
+        
         var currentSample = 0
         let numberOfSamples = waveForms.count
 
@@ -131,15 +134,6 @@ class RecordManager: RecordService {
         recorder?.stop()
         recorder = nil
         
-//        guard let audioFile = audioFile else {
-//            return
-//        }
-//
-//        do {
-//            let newAudioFile = try AVAudioFile(forReading: audioFile)
-//            viewModel.setAudioFile(newAudioFile)
-//        } catch let error {
-//            print("play record file error: \(error)")
-//        }
+        waveForms = [Int](repeating: 0, count: 100)
     }
 }

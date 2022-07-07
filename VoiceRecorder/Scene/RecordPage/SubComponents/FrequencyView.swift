@@ -10,7 +10,6 @@ import UIKit
 class FrequencyView: UIView {
     private var barWidth: CGFloat = 4.0
     private var color = UIColor.red.cgColor
-    private var cutValue = 0
     
     private var waveForms = [Int](repeating: 0, count: 100) {
         didSet {
@@ -23,7 +22,6 @@ class FrequencyView: UIView {
         
         self.backgroundColor = .black
         NotificationCenter.default.addObserver(self, selector: #selector(sendWaveformNotification(_:)), name: Notification.Name("SendWaveform"), object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(sendCutValue(_:)), name: Notification.Name("SendCutValue"), object: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -36,11 +34,6 @@ class FrequencyView: UIView {
         guard let wave = notification.object as? [Int] else { return }
         self.waveForms = wave
     }
-    
-//    @objc func sendCutValue(_ notification: Notification) {
-//        guard let value = notification.object as? Float else { return }
-//        self.cutValue = Int(value)
-//    }
     
     override func draw(_ rect: CGRect) {
         guard let context = UIGraphicsGetCurrentContext() else {

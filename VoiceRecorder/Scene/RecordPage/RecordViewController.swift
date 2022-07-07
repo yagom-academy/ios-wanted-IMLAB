@@ -83,6 +83,10 @@ extension RecordViewController {
 
 //MARK: - RecordController delegate
 extension RecordViewController: RecordControllerDelegate {
+    func startRecord() {
+        playControllerView.isHidden = true
+    }
+    
     func endRecord() {
         playControllerView.isHidden = false
     }
