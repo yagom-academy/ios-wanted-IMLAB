@@ -153,11 +153,11 @@ class RecordViewController: UIViewController {
     }
     
     @IBAction func didTapPlayBack5Button(_ sender: UIButton) {
-        engine.seek(to: -3)
+        engine.skip(forwards: false)
     }
     
     @IBAction func didTapPlayForward5Button(_ sender: UIButton) {
-        engine.seek(to: 3)
+        engine.skip(forwards: true)
     }
     
     @IBAction func didTapPlayPauseButton(_ sender: UIButton) {
@@ -188,7 +188,6 @@ private extension RecordViewController {
         recordTimeLabel.text = "\(counter.toStringTimeFormat)"
     }
     @objc func update2() {
-        print(engine.getCurrentTime())
         if engine.isFinish() {
             playButton.setImage(.play)
             isPlay = false

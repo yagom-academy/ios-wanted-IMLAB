@@ -80,6 +80,10 @@ class AudioEngine {
     
     func seek(to time: Double) {
         guard let audioFile = audioFile else { return }
+        guard let nodeTime = audioPlayer.lastRenderTime,
+              let playerTime = audioPlayer.playerTime(forNodeTime: nodeTime) else { return }
+
+        currentPosition = playerTime.sampleTime + seekFrame
         
         let offset = AVAudioFramePosition(time * audioSampleRate) // 이동하고 싶은 만큼의 프레임
         seekFrame = currentPosition + offset // 현재 프레임에서 이동하고 싶은 만큼의 프레임을 더한다
@@ -89,7 +93,6 @@ class AudioEngine {
         
         let wasPlaying = audioPlayer.isPlaying // 만약 재생중이라면
         audioPlayer.stop()
-        
         if currentPosition < audioLengthSamples {
             let frameCount = AVAudioFrameCount(audioLengthSamples - seekFrame)
             
@@ -100,18 +103,17 @@ class AudioEngine {
                 at: nil,
                 completionHandler: nil
             )
-        }
-        
-        if wasPlaying {
-            audioPlayer.play()
+            if wasPlaying {
+                audioPlayer.play()
+            }
         }
     }
     
     func skip(forwards: Bool) {
         if forwards {
-            seek(to: 2)
+            seek(to: 5)
         } else {
-            seek(to: -2)
+            seek(to: -5)
         }
     }
     
