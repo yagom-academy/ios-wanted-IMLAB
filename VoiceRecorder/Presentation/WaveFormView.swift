@@ -73,37 +73,12 @@ class WaveFormView: UIView {
     private func drawPlayViewWaveForm() {
         
         count = 0
-        let path: UIBezierPath!
         
-        if let layerPath = caLayer.path {
-            path = UIBezierPath(cgPath: layerPath)
-        } else {
-            path = UIBezierPath()
-        }
+        let path: UIBezierPath = createBezierPath()
         
         for wave in waveforms {
-            
             count += 1
-            var waveData = wave
-            
-            if (waveData <= 0) {
-                waveData = 0.02
-            }
-            
-            if (waveData > 1) {
-                waveData = 1
-            }
-            
-            let startX = self.bounds.origin.x + 1 * CGFloat(count)
-            
-            //waveForm뷰의 y축의 중간
-            let startY = self.bounds.origin.y + self.bounds.height / 2
-            
-            //위로 이동하는 포인터
-            path.move(to: CGPoint(x: startX, y: startY + CGFloat(waveData * Float(self.bounds.height) / 2)))
-            
-            //포인터를 아래로 잡아끄는 것
-            path.addLine(to: CGPoint(x: startX, y: startY - CGFloat(waveData * Float(self.bounds.height) / 2)))
+            createWaveFormBar(with: wave, path: path, mode: .play)
             
             caLayer.path = path.cgPath
         }
@@ -114,7 +89,17 @@ class WaveFormView: UIView {
         shiftWaveform()
         count += 1
         
-        let path: UIBezierPath!
+        let path: UIBezierPath = createBezierPath()
+        
+        guard let wave = waveforms.last else { return }
+        createWaveFormBar(with: wave, path: path, mode: .record)
+        
+        caLayer.path = path.cgPath
+    }
+    
+    private func createBezierPath() -> UIBezierPath {
+        
+        let path: UIBezierPath
         
         if let layerPath = caLayer.path {
             path = UIBezierPath(cgPath: layerPath)
@@ -122,23 +107,29 @@ class WaveFormView: UIView {
             path = UIBezierPath()
         }
         
-        guard var wave = waveforms.last else { return }
+        return path
+    }
+    
+    private func validateWaveFormData(wave: Float) -> Float {
         
-        if (wave <= 0) {
-            wave = 0.02
-        }
+        var waveData = max(0.02, wave)
+        waveData = min(1, waveData)
         
-        if (wave > 1) {
-            wave = 1
-        }
+        return waveData
+    }
+    
+    private func createWaveFormBar(with wave: Float, path: UIBezierPath, mode: WaveFormViewMode) {
         
-        let startX = self.bounds.width + 5 * CGFloat(count)
-        let startY = self.bounds.origin.y + self.bounds.height / 2
+        let waveData = validateWaveFormData(wave: wave)
         
-        path.move(to: CGPoint(x: startX, y: startY + CGFloat(wave * 100)))
-        path.addLine(to: CGPoint(x: startX, y: startY - CGFloat(wave * 100)))
+        let startX = mode == .play ?
+        self.bounds.origin.x + 1 * CGFloat(count) :
+        self.bounds.width + 5 * CGFloat(count)
         
-        caLayer.path = path.cgPath
+        let startY = self.bounds.height / 2
+
+        path.move(to: CGPoint(x: startX, y: startY + CGFloat(waveData * Float(self.bounds.height) / 2)))
+        path.addLine(to: CGPoint(x: startX, y: startY - CGFloat(waveData * Float(self.bounds.height) / 2)))
     }
     
 }
