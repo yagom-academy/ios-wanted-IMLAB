@@ -15,7 +15,7 @@
 ## 👀 미리보기
 |VoiceMemoVC(1st page)|RecordDetailVC(2nd page)|PlayingVC(3rd page)|
 |---|---|---|
-|<img width = "250" alt="page1-VoiceRecorder" src = "https://user-images.githubusercontent.com/64088377/177666676-397756b0-299c-419c-9592-45e611ddb1f5.gif">|<img width = "250" alt= "page2-VoiceRecorder" src = "https://user-images.githubusercontent.com/64088377/177666696-d2d25b25-1354-4899-9c1c-69b586eb7a0a.gif">|<img width = "250" alt= "page3-VoiceRecorder" src = "https://user-images.githubusercontent.com/64088377/177666695-1fa3ad69-0aa6-4c4a-accd-4a321e5aed85.gif">|
+|<img width = "250" alt="page1-VoiceRecorder" src = "https://user-images.githubusercontent.com/64088377/177666676-397756b0-299c-419c-9592-45e611ddb1f5.gif">|<img width = "250" alt= "page2-VoiceRecorder" src = "https://user-images.githubusercontent.com/64088377/177666696-d2d25b25-1354-4899-9c1c-69b586eb7a0a.gif">|<img width = "280" alt= "page3-VoiceRecorder" src = "https://user-images.githubusercontent.com/64088377/177666695-1fa3ad69-0aa6-4c4a-accd-4a321e5aed85.gif">|
 
 <br>
 
@@ -74,7 +74,7 @@
 
 Branch를 생성하기 전 [노션페이지](https://good-pirate-c9d.notion.site/Recording-300dabbafd22487783b864820e8655e1)에 일정 및 구현내용을 작성하고,
 
-`<Prefix>/#<Issue_Number>` 의 양식에 따라 브랜치 명을 작성합니다.
+`<Prefix>/ <구현내용>` 의 양식에 따라 브랜치 명을 작성합니다.
 
 #### 1️⃣ prefix
 
@@ -90,19 +90,20 @@ Branch를 생성하기 전 [노션페이지](https://good-pirate-c9d.notion.site
 1. 팀 프로젝트 repo를 포크한다.(이하 팀 repo)
 2. 포크한 개인 repo(이하 개인 repo)를 clone한다.
 3. 개인 repo에서 작업하고 개인 repo의 원격저장소로 push한다.
-4. pull request를 통해서 팀 repo로 merge한다.
+4. pull request를 한다
+5. reviewer가 코드리뷰를 진행하고 이상 없을시 팀 repo로 merge 혹은 피드백을 준다.
 5. pull 받아야 할 때에는 팀 repo에서 pull 받는다.
 
 </br>
 
 ## ⚠️  Issue Naming Rule
 #### 1️⃣ 기본 형식
-`[<PREFIX>] <Description>` 의 양식을 준수하되, Prefix는 협업하며 맞춰가기로 한다.
+`[<PREFIX>]: <Description>` 의 양식을 준수하되, Prefix는 협업하며 맞춰가기로 한다.
 
 #### 2️⃣ 예시
 ```
-[Feat] 회원가입 구현
-[Fix] MainActivity 버그 수정
+[Feat]: 녹음기능 구현
+[Fix]: 원격/로컬 파일 동기화 안되던 버그 수정
 ```
 
 #### 3️⃣ Prefix의 의미
@@ -128,16 +129,20 @@ Branch를 생성하기 전 [노션페이지](https://good-pirate-c9d.notion.site
 #### 1️⃣ 기본 형식
 prefix는 Issue에 있는 Prefix와 동일하게 사용한다.
 ```swift
-[prefix] #이슈번호 - 이슈 내용
+[prefix]: 이슈제목
+1. 이슈내용
+2. 이슈내용
 ```
 
 #### 2️⃣ 예시 : 아래와 같이 작성하도록 한다.
 
 ```swift
-// 1번 이슈에서 새로운 기능(Feat)을 구현한 경우
-[Feat] #1 - 기능 구현
-// 1번 이슈에서 레이아웃(Design)을 구현한 경우
-[Design] #1 - 레이아웃 구현
+// 새로운 기능(Feat)을 구현한 경우
+[Feat]: 기능 구현
+1. TableView CRUD 구현
+// 레이아웃(Design)을 구현한 경우
+[Design]: 레이아웃 구현
+1. page1 레이아웃 
 ```
 
 </br>
