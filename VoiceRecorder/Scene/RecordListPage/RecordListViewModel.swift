@@ -14,7 +14,7 @@ class RecordListViewModel {
     }
     private var playList: [String] = []
     private var networkManager: NetworkManager
-    private let playListUserDefaults = PlayListUserDefaults.shared
+    private let playListUserDefaults = RecordListUserDefaults.shared
     
     init(networkManager: NetworkManager) {
         self.networkManager = networkManager

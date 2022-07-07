@@ -32,7 +32,7 @@ class RecordListCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 16.0, left: 16, bottom: 16, right: 16))
+        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0))
     }
     
     func setData(data: CellData) {
@@ -60,8 +60,16 @@ class RecordListCell: UITableViewCell {
     
     private func attribute() {
         self.selectionStyle = .none
-        //temp
-        self.contentView.backgroundColor = .purple
+        self.backgroundColor = .clear
+        self.layer.borderWidth = 1
+        self.layer.borderColor = UIColor.systemGray4.cgColor
+        
+        contentView.backgroundColor = YagomColor.two.uiColor
+        contentView.layer.cornerRadius = 10
+        
+        titleLabel.textColor = .white
+        
+        swipeTapView.tintColor = YagomColor.three.uiColor
     }
     
     private func layout() {
@@ -74,6 +82,8 @@ class RecordListCell: UITableViewCell {
         titleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 30).isActive = true
         
         swipeTapView.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive = true
+        swipeTapView.heightAnchor.constraint(equalTo: self.contentView.heightAnchor, multiplier: 0.4).isActive = true
+        swipeTapView.widthAnchor.constraint(equalTo: swipeTapView.heightAnchor).isActive = true
         swipeTapView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20).isActive = true
     }
 }

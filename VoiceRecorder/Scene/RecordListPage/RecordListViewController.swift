@@ -8,8 +8,15 @@
 import UIKit
 
 class RecordListViewController: UIViewController {
+    private let containerStackView = UIStackView()
+    private let sortBar = RecordListSortBar()
     private let tableView = UITableView()
     private let viewModel = RecordListViewModel(networkManager:  RecordNetworkManager.shared)
+    
+    struct Math {
+        static let sortBarHeightMultiplier: Double = 0.05
+        static let tableViewHeightMultiplier: Double = 0.9
+    }
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -31,15 +38,20 @@ class RecordListViewController: UIViewController {
 
     private func attribute() {
         title = "Voice Memos"
-        view.backgroundColor = .white
+        view.backgroundColor = YagomColor.one.uiColor
 
         AddNavigationbarRightItem()
-
+        
+        containerStackView.axis = .vertical
+        containerStackView.distribution = .equalSpacing
+        
+        sortBar.delegate = self
+        
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(RecordListCell.self, forCellReuseIdentifier: RecordListCell.identifier)
         tableView.reloadData()
-        tableView.backgroundColor = .systemPink
+        tableView.backgroundColor = .clear
     }
 
     private func AddNavigationbarRightItem() {
@@ -53,15 +65,23 @@ class RecordListViewController: UIViewController {
     }
 
     private func layout() {
-        [tableView].forEach {
-            view.addSubview($0)
+        self.view.addSubview(containerStackView)
+        containerStackView.translatesAutoresizingMaskIntoConstraints = false
+        containerStackView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor).isActive = true
+        containerStackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
+        containerStackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
+        containerStackView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+        
+        let topPadding = UIView()
+        topPadding.backgroundColor = .red
+        
+        [topPadding, sortBar, tableView].forEach {
+            containerStackView.addArrangedSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
-
-        tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
-        tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
-        tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        topPadding.heightAnchor.constraint(equalToConstant: 0).isActive = true
+        sortBar.heightAnchor.constraint(equalTo: containerStackView.heightAnchor, multiplier: Math.sortBarHeightMultiplier).isActive = true
+        tableView.heightAnchor.constraint(equalTo: containerStackView.heightAnchor, multiplier: Math.tableViewHeightMultiplier).isActive = true
     }
 }
 
@@ -119,6 +139,18 @@ extension RecordListViewController {
     }
 }
 
+//MARK: - 셀정렬버튼
+extension RecordListViewController: RecordListSortBarDelegate {
+    func sortButtonTapped(sortState: RecordListSortState) {
+        switch sortState {
+        case .latest:
+            print("최신순 버튼 클릭!")
+        case .oldest:
+            print("오래된순 버튼 클릭!")
+        }
+    }
+}
+
 //MARK: - 셀이동 이벤트
 extension RecordListViewController {
     private func handleLongPress(with sender: UILongPressGestureRecognizer, _ toCenterPoint: CGPoint) {
@@ -165,7 +197,7 @@ extension RecordListViewController {
             longPressedPoint.y += ToCenterPoint.value?.y ?? 0.0
             // snapshot을 tableView에 추가
             guard let cell = tableView.cellForRow(at: indexPath) else { return }
-            CellSnapshotView.value = cell.snapshotCellStyle()
+            CellSnapshotView.value = cell.contentView.snapshotCellStyle()
             CellSnapshotView.value?.center = cell.center
             CellSnapshotView.value?.alpha = 0.0
             if let cellSnapshotView = CellSnapshotView.value {
