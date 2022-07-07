@@ -155,9 +155,9 @@
                         <outlet property="buttonsStackView" destination="SRg-j9-lGu" id="z0T-vP-scj"/>
                         <outlet property="cutOffFreqSegmentedControl" destination="8Kg-pa-DvV" id="wNB-ZT-EKG"/>
                         <outlet property="cutoffLabel" destination="Uwp-S3-BQB" id="qR4-wg-zuB"/>
-                        <outlet property="durationLabel" destination="apc-b5-Hp1" id="zT1-sP-nFE"/>
                         <outlet property="playButton" destination="6Go-Dt-yoo" id="2Af-Pw-YgZ"/>
                         <outlet property="recordButton" destination="QZr-Sv-d2j" id="8Yh-2T-vd8"/>
+                        <outlet property="recordingTimeLabel" destination="apc-b5-Hp1" id="zT1-sP-nFE"/>
                         <outlet property="waveView" destination="Cy0-ML-w6z" id="V0y-KS-MCf"/>
                     </connections>
                 </viewController>
