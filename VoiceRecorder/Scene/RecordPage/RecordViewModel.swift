@@ -11,12 +11,14 @@ class RecordViewModel {
     private let playerModel = PlayerModel(RecordNetworkManager.shared)
     private var audioPlayer: PlayerService!
 
-    var playerButtonViewModel: PlayerButtonViewModel!
+    var playControllerViewModel: PlayControllerViewModel!
+    var recordControllerViewModel: RecordControllerViewModel!
 
     init(_ audioPlayer: PlayerService) {
         self.audioPlayer = audioPlayer
 
-        playerButtonViewModel = PlayerButtonViewModel(audioPlayer)
+        playControllerViewModel = PlayControllerViewModel(audioPlayer)
+        recordControllerViewModel = RecordControllerViewModel(audioPlayer)
     }
 
     func resetAudioPlayer() {
