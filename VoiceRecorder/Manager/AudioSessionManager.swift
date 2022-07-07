@@ -10,7 +10,7 @@ import AVFoundation
 
 class AudioSessionManager{
     
-    let audioSession = AVAudioSession.sharedInstance()
+    private let audioSession = AVAudioSession.sharedInstance()
 
     func setAudioSession() {
         do {
@@ -31,6 +31,10 @@ class AudioSessionManager{
         } catch {
             print("audioSession error: \(error.localizedDescription)")
         }
+    }
+    
+    func getSampleRate() -> Double {
+        return audioSession.sampleRate
     }
 }
 

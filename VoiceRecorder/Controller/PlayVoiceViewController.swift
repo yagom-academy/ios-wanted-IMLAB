@@ -33,7 +33,7 @@ class PlayVoiceViewController: UIViewController {
     }()
     
     lazy var selectedPitchSegment : UISegmentedControl = {
-        let selectedPitchSegment = UISegmentedControl(items: ["일반 목소리","아기목소리","할아버지목소리"])
+        let selectedPitchSegment = UISegmentedControl(items: [CNS.pitch.normal, CNS.pitch.baby, CNS.pitch.grandfather])
         selectedPitchSegment.translatesAutoresizingMaskIntoConstraints = false
         selectedPitchSegment.selectedSegmentIndex = 0
         selectedPitchSegment.addTarget(self, action: #selector(selectPitch(_:)), for: .valueChanged)
@@ -58,7 +58,7 @@ class PlayVoiceViewController: UIViewController {
     lazy var playAndPauseButton: UIButton = {
         let playAndPauseButton = UIButton()
         playAndPauseButton.translatesAutoresizingMaskIntoConstraints = false
-        playAndPauseButton.setPreferredSymbolConfiguration(.init(pointSize: 30), forImageIn: .normal)
+        playAndPauseButton.setPreferredSymbolConfiguration(.init(pointSize: CNS.size.playButton), forImageIn: .normal)
         playAndPauseButton.setImage(UIImage(systemName: "play"), for: .normal)
         playAndPauseButton.addTarget(self, action: #selector(tapButton), for: .touchUpInside)
         return playAndPauseButton
@@ -67,7 +67,7 @@ class PlayVoiceViewController: UIViewController {
     lazy var forwardFive: UIButton = {
         let forwardFive = UIButton()
         forwardFive.translatesAutoresizingMaskIntoConstraints = false
-        forwardFive.setPreferredSymbolConfiguration(.init(pointSize: 30), forImageIn: .normal)
+        forwardFive.setPreferredSymbolConfiguration(.init(pointSize: CNS.size.playButton), forImageIn: .normal)
         forwardFive.setImage(UIImage(systemName: "goforward.5"), for: .normal)
         forwardFive.addTarget(self, action: #selector(tabForward), for: .touchUpInside)
         return forwardFive
@@ -76,7 +76,7 @@ class PlayVoiceViewController: UIViewController {
     lazy var backwardFive: UIButton = {
         let backwardFive = UIButton()
         backwardFive.translatesAutoresizingMaskIntoConstraints = false
-        backwardFive.setPreferredSymbolConfiguration(.init(pointSize: 30), forImageIn: .normal)
+        backwardFive.setPreferredSymbolConfiguration(.init(pointSize: CNS.size.playButton), forImageIn: .normal)
         backwardFive.setImage(UIImage(systemName: "gobackward.5"), for: .normal)
         backwardFive.addTarget(self, action: #selector(tabBackward), for: .touchUpInside)
         return backwardFive
@@ -101,7 +101,6 @@ class PlayVoiceViewController: UIViewController {
     var fileNameLabel : UILabel = {
         let fileNameLabel = UILabel()
         fileNameLabel.translatesAutoresizingMaskIntoConstraints = false
-        fileNameLabel.font = .boldSystemFont(ofSize: 20)
         return fileNameLabel
     }()
     
@@ -109,7 +108,6 @@ class PlayVoiceViewController: UIViewController {
         super.viewDidLoad()
         setView()
         autolayOut()
-        //순환참조 발생 주의
         firebaseDownloadManager.delegate = self
         playAndPauseButton.isEnabled = false
         firebaseDownloadManager.downloadFile()
@@ -134,39 +132,39 @@ class PlayVoiceViewController: UIViewController {
         NSLayoutConstraint.activate([
             
             fileNameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            fileNameLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: standardConstant),
+            fileNameLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: CNS.autoLayout.standardConstant),
             
-            progressTimeLabel.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: timeLabelTopAnchorMP),
+            progressTimeLabel.bottomAnchor.constraint(equalTo: waveFormImageView.topAnchor, constant: -CNS.autoLayout.minConstant),
             progressTimeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
-            waveFormBackgroundView.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: waveFormTopAnchorMP),
             waveFormBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            waveFormBackgroundView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: waveFormHeightMP),
+            waveFormBackgroundView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: CNS.autoLayout.waveFormHeightMP),
             waveFormBackgroundView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            waveFormBackgroundView.bottomAnchor.constraint(equalTo: view.centerYAnchor),
             
             waveFormImageView.leadingAnchor.constraint(equalTo: view.centerXAnchor),
-            waveFormImageView.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: waveFormTopAnchorMP),
             waveFormImageView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            waveFormImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: waveFormHeightMP),
+            waveFormImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: CNS.autoLayout.waveFormHeightMP),
+            waveFormImageView.bottomAnchor.constraint(equalTo: view.centerYAnchor),
             
             verticalLineView.leadingAnchor.constraint(equalTo: view.centerXAnchor),
-            verticalLineView.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: waveFormTopAnchorMP),
             verticalLineView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            verticalLineView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: waveFormHeightMP),
+            verticalLineView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: CNS.autoLayout.waveFormHeightMP),
+            verticalLineView.bottomAnchor.constraint(equalTo: view.centerYAnchor),
             
             selectedPitchSegment.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            selectedPitchSegment.topAnchor.constraint(equalTo: waveFormImageView.bottomAnchor, constant: standardConstant),
+            selectedPitchSegment.topAnchor.constraint(equalTo: waveFormImageView.bottomAnchor, constant: CNS.autoLayout.standardConstant),
             
-            volumeTextLabel.topAnchor.constraint(equalTo: selectedPitchSegment.bottomAnchor, constant: standardConstant),
-            volumeTextLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: standardWidthMP),
+            volumeTextLabel.topAnchor.constraint(equalTo: selectedPitchSegment.bottomAnchor, constant: CNS.autoLayout.standardConstant),
+            volumeTextLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: CNS.autoLayout.standardWidthMP),
             volumeTextLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             volumeSlider.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             volumeSlider.topAnchor.constraint(equalTo: volumeTextLabel.bottomAnchor),
-            volumeSlider.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: standardWidthMP),
+            volumeSlider.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: CNS.autoLayout.standardWidthMP),
             
             playAndPauseButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            playAndPauseButton.centerYAnchor.constraint(equalTo: volumeSlider.bottomAnchor, constant: standardConstant),
+            playAndPauseButton.centerYAnchor.constraint(equalTo: volumeSlider.bottomAnchor, constant: CNS.autoLayout.standardConstant),
                         
         ])
         view.bringSubviewToFront(waveFormImageView)
@@ -175,7 +173,7 @@ class PlayVoiceViewController: UIViewController {
     
     func setUIText(){
         fileNameLabel.text = playVoiceViewModel.voiceRecordViewModel.fileName
-        fileNameLabel.font = .boldSystemFont(ofSize: self.view.bounds.width / 25)
+        fileNameLabel.font = .boldSystemFont(ofSize: CNS.size.fileName)
         volumeSlider.setValue(playVoiceManager.getVolume(), animated: true)
     }
     

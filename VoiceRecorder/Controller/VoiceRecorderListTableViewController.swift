@@ -14,8 +14,6 @@ class VoiceRecorderListTableViewController: UITableViewController {
         return addButton
     }()
     
-    
-    
     let firebaseStorageManger = FirebaseStorageManager()
     var voiceRecordListViewModel : VoiceRecordListViewModel = VoiceRecordListViewModel(voiceRecordList: [])
     var selectRecord : VoiceRecordViewModel?
@@ -58,7 +56,7 @@ class VoiceRecorderListTableViewController: UITableViewController {
     
     func setTableView() {
         tableView.register(VoiceRecordTableViewCell.self, forCellReuseIdentifier: VoiceRecordTableViewCell.g_identifier)
-        tableView.rowHeight = 45
+        tableView.rowHeight = CNS.size.tableViewRowHeight
     }
     
     func configureRefreshControl() {

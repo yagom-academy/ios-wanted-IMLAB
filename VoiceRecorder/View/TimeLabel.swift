@@ -11,7 +11,7 @@ class TimeLabel: UILabel {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.font = UIFont.preferredFont(forTextStyle: .largeTitle)
+        self.font = UIFont.monospacedDigitSystemFont(ofSize: CNS.size.time, weight: .light)
         self.adjustsFontForContentSizeCategory = true
         self.text = "00:00:00"
     }
