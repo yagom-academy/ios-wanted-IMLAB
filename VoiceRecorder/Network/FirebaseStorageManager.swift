@@ -25,9 +25,11 @@ class FirebaseStorageManager {
         let data = try! Data(contentsOf: url)
         
         let metaData = StorageMetadata()
+        let totalTime = soundManager.totalPlayTime()
+        let duration = soundManager.convertTimeToString(totalTime)
         let customData = [
             "title": title,
-            "duration": String(Int(soundManager.totalPlayTime()))
+            "duration": duration
         ]
         metaData.customMetadata = customData
         metaData.contentType = "audio/x-caf"
@@ -37,7 +39,7 @@ class FirebaseStorageManager {
                 print(error.localizedDescription)
                 return
             } else {
-                print("성공")
+                print("upload success")
             }
         }
     }
@@ -45,6 +47,17 @@ class FirebaseStorageManager {
     func downloadAudio(from urlString: String, to localUrl: URL, completion: @escaping (URL?) -> Void) {
         baseReference.child(urlString).write(toFile: localUrl) { url, error in
             completion(url)
+        }
+    }
+    
+    func deleteAudio(urlString: String) {
+        baseReference.child(urlString).delete { error in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            } else {
+                print("delete success")
+            }
         }
     }
     

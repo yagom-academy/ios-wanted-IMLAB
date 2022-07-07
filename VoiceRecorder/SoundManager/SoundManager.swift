@@ -213,10 +213,13 @@ extension SoundManager {
         return audioPlayTime
     }
     
-    func convertTimeToString() -> String { //_ time: TimeInterval
-        let time = playerNode.currentTime
-        let min = Int(time / 60)
-        let sec = Int(time.truncatingRemainder(dividingBy: 60))
+    func convertTimeToString(_ seconds: TimeInterval) -> String {
+        if seconds.isNaN {
+            return "00:00"
+        }
+        
+        let min = Int(seconds / 60)
+        let sec = Int(seconds.truncatingRemainder(dividingBy: 60))
         let strTime = String(format: "%02d:%02d", min, sec)
         
         return strTime
