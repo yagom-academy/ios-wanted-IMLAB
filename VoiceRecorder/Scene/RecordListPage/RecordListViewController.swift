@@ -142,6 +142,7 @@ extension RecordListViewController {
     @objc private func didPullToRefresh() {
         viewModel.update(completion: {
             self.tableView.reloadData()
+            self.sortBar.viewWillAppear()
             self.tableView.refreshControl?.endRefreshing()
         })
     }
@@ -150,17 +151,19 @@ extension RecordListViewController {
 //MARK: - 셀정렬버튼
 extension RecordListViewController: RecordListSortBarDelegate {
     func sortButtonTapped(sortState: RecordListSortState) {
-        viewModel.sortButtonTapped(sortState: sortState, completion: {
-            tableView.reloadData()
+        viewModel.sortButtonTapped(beforeState: sortBar.sortState, afterState: sortState, completion: { [weak self] in
+            self?.tableView.reloadData()
         })
     }
 }
+
 
 //MARK: - 즐겨찾기 버튼 이벤트
 extension RecordListViewController {
     private func handleFavoriteButton(indexPath: IndexPath) {
         viewModel.tappedFavoriteButton(indexPath: indexPath)
-        self.tableView.reloadData()
+        tableView.reloadData()
+        sortBar.viewWillAppear()
     }
 }
 
@@ -239,12 +242,13 @@ extension RecordListViewController {
             }
         case .ended:
             viewModel.endSwapCellTapped()
+            sortBar.cellChanged()
             // 손가락을 떼면 indexPath에 셀이 나타나는 애니메이션
             guard let beforeIndexPath = BeforeIndexPath.value,
                   let cell = tableView.cellForRow(at: beforeIndexPath) else { return }
             cell.isHidden = false
             cell.alpha = 0.0
-
+            
             // Snapshot이 사라지고 셀이 나타내는 애니메이션 부여
             UIView.animate(withDuration: 0.3) {
                 CellSnapshotView.value?.center = cell.center

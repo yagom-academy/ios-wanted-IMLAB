@@ -16,7 +16,7 @@ class RecordListSortBar: UIView {
     private let oldestSortButton = UIButton()
     private let favoriteSortButton = UIButton()
     
-    private var sortState: RecordListSortState = .basic
+    var sortState: RecordListSortState = .basic
     
     init() {
         super.init(frame: CGRect.zero)
@@ -32,6 +32,10 @@ class RecordListSortBar: UIView {
     
     func viewWillAppear() {
         handleSortButton(sortState: sortState)
+    }
+    
+    func cellChanged() {
+        handleSortButton(sortState: .basic)
     }
     
     private func attribute() {
@@ -76,7 +80,6 @@ class RecordListSortBar: UIView {
     }
     
     private func handleSortButton(sortState: RecordListSortState) {
-        self.sortState = sortState
         delegate?.sortButtonTapped(sortState: sortState)
         [basicSortButton, latestSortButton, oldestSortButton, favoriteSortButton].forEach {
             $0.backgroundColor = .clear
@@ -91,6 +94,7 @@ class RecordListSortBar: UIView {
         case .favorite:
             self.favoriteSortButton.backgroundColor = YagomColor.three.uiColor
         }
+        self.sortState = sortState
     }
     
     private func layout() {

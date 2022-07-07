@@ -71,20 +71,31 @@ class RecordListViewModel {
         recordListUserDefaults.save(data: recordDatas)
     }
     
-    func sortButtonTapped(sortState: RecordListSortState, completion: () -> ()) {
-        recordDatas = recordListUserDefaults.getData()
-        switch sortState {
-        case .basic:
-            completion()
-        case .latest:
-            recordDatas.sort(by: sortLatest(a:b:))
-            completion()
-        case .oldest:
-            recordDatas.sort(by: sortOldest(a:b:))
-            completion()
-        case .favorite:
-            recordDatas = recordDatas.filter { $0.isFavorite }
-            completion()
+    func sortButtonTapped(beforeState: RecordListSortState, afterState: RecordListSortState, completion: @escaping () -> ()) {
+        guard beforeState == .favorite || beforeState != afterState else { return }
+        if beforeState == .favorite && afterState != .favorite {
+            update {
+                doSort(afterState)
+            }
+        } else {
+            doSort(afterState)
+        }
+        
+        func doSort(_ afterState: RecordListSortState) {
+            self.recordDatas = recordListUserDefaults.getData()
+            switch afterState {
+            case .basic:
+                completion()
+            case .latest:
+                recordDatas.sort(by: sortLatest(a:b:))
+                completion()
+            case .oldest:
+                recordDatas.sort(by: sortOldest(a:b:))
+                completion()
+            case .favorite:
+                recordDatas = recordDatas.filter { $0.isFavorite }
+                completion()
+            }
         }
         
         func sortLatest(a: CellData, b: CellData) -> Bool {
