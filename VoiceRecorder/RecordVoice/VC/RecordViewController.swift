@@ -13,6 +13,7 @@ class RecordViewController: UIViewController {
     var soundManager = SoundManager()
     var audioFileManager = AudioFileManager()
     var firebaseStorageManager = FirebaseStorageManager()
+    var date = DateUtil().formatDateLocal()
     var engine = AVAudioEngine()
     
     var isStartRecording: Bool = false
@@ -90,13 +91,16 @@ class RecordViewController: UIViewController {
         isStartRecording = !isStartRecording
         recordButtonToggle()
         
-        let url = audioFileManager.getAudioFilePath(fileName: "fileNAME")
+        let url = audioFileManager.getAudioFilePath(fileName: date)
         if isStartRecording { // 녹음 시작일 때
             soundManager.startRecord(filePath: url)
+            print(url)
         } else { // 녹음 끝일 때
-            soundManager.stopRecord()
-            firebaseStorageManager.uploadAudio(url: url)
-            soundManager.initializedEngine(url: url)
+            DispatchQueue.global().sync {
+                soundManager.stopRecord()
+                firebaseStorageManager.uploadAudio(url: url, date: date)
+                soundManager.initializedEngine(url: url)
+            }
         }
     }
 }

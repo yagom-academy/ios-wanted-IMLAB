@@ -14,12 +14,13 @@ class FirebaseStorageManager {
     private var baseReference: StorageReference!
     private let dateUtil = DateUtil()
     private let soundManager = SoundManager()
+    private let audioFileManager = AudioFileManager()
     
     init() {
         baseReference = Storage.storage().reference()
     }
     
-    func uploadAudio(url: URL) {
+    func uploadAudio(url: URL, date: String) {
         let title = dateUtil.formatDate()
         let filePath = "\(title).caf"
         let data = try! Data(contentsOf: url)
@@ -27,9 +28,11 @@ class FirebaseStorageManager {
         let metaData = StorageMetadata()
         let totalTime = soundManager.totalPlayTime()
         let duration = soundManager.convertTimeToString(totalTime)
+        let localUrl = date
         let customData = [
             "title": title,
-            "duration": duration
+            "duration": duration,
+            "url": localUrl
         ]
         metaData.customMetadata = customData
         metaData.contentType = "audio/x-caf"
@@ -54,12 +57,27 @@ class FirebaseStorageManager {
     }
     
     func deleteAudio(urlString: String) {
+        // cloud delete
         baseReference.child(urlString).delete { error in
             if let error = error {
                 print(error.localizedDescription)
                 return
             } else {
                 print("delete success")
+            }
+        }
+        
+        // local delete
+        baseReference.child(urlString).getMetadata { metaData, error in
+            if let error = error {
+                print(error.localizedDescription)
+            }
+            
+            let data = metaData?.customMetadata
+            
+            if let url = data?["url"] {
+                let item = self.audioFileManager.getAudioFilePath(fileName: url)
+                try? FileManager.default.removeItem(at: item)
             }
         }
     }

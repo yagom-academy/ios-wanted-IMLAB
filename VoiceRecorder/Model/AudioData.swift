@@ -13,10 +13,10 @@ class AudioData: Codable {
     var title: String
     var duration: String
     
-    init(url: String ,title: String, duration: String) {
+    init(url: String, title: String, duration: String) {
+        self.url = url
         self.title = title
         self.duration = duration
-        self.url = url
     }
     
 }

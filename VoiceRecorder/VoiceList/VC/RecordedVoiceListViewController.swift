@@ -78,7 +78,6 @@ class RecordedVoiceListViewController: UIViewController {
             case .success(let data) :
                 self.audioList.append(data)
                 self.recordedVoiceTableView.reloadData()
-                print(data.duration, data.title, "here")
             case .failure(let error) :
                 print(error.localizedDescription)
             }
@@ -124,6 +123,7 @@ extension RecordedVoiceListViewController: UITableViewDataSource, UITableViewDel
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         firestorageManager.deleteAudio(urlString: audioList[indexPath.row].title + ".caf")
         audioList.remove(at: indexPath.row)
+        
         recordedVoiceTableView.reloadData()
     }
 }
