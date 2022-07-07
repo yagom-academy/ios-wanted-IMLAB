@@ -35,6 +35,23 @@ class PlayerViewModel {
             completion(nil)
         }
     }
+    
+    func waveData(_ filename: String, _ completion: @escaping ([Int]?) -> Void ) {
+        RecordNetworkManager.shared.getRecordMetaData(filename: filename) { metadata in
+            guard let metadata = metadata, let wavesDict = metadata.customMetadata else {
+                completion(nil)
+                return
+            }
+
+            var waves = [Int]()
+
+            for (key, val) in wavesDict.sorted { Int($0.key)! < Int($1.key)! } {
+                waves.append(Int(val)!)
+            }
+
+            completion(waves)
+        }
+    }
 
     func getFileData() -> FileData? {
         return model.getFileData()
