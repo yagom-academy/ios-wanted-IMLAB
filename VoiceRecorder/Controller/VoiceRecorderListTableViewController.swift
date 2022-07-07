@@ -24,6 +24,7 @@ class VoiceRecorderListTableViewController: UITableViewController {
         super.viewDidLoad()
         setUp()
         updateTableViewList()
+        configureRefreshControl()
     }
 
     func setUp() {
@@ -32,15 +33,17 @@ class VoiceRecorderListTableViewController: UITableViewController {
         setTableView()
     }
     
-    func updateTableViewList(){
+    @objc func updateTableViewList(){
         firebaseStorageManger.fetchRecordList { result in
             if let result = result{
                 self.voiceRecordListViewModel = VoiceRecordListViewModel(voiceRecordList: result)
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
+                    self.tableView.refreshControl?.endRefreshing()
                 }
             }
         }
+              
     }
     
     func setAddBarButton() {
@@ -57,6 +60,12 @@ class VoiceRecorderListTableViewController: UITableViewController {
         tableView.register(VoiceRecordTableViewCell.self, forCellReuseIdentifier: VoiceRecordTableViewCell.g_identifier)
         tableView.rowHeight = 45
     }
+    
+    func configureRefreshControl() {
+        self.tableView.refreshControl = UIRefreshControl()
+        self.tableView.refreshControl?.addTarget(self, action: #selector(updateTableViewList), for: .valueChanged)
+    }
+    
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
