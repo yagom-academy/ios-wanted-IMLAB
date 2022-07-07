@@ -25,9 +25,11 @@ class FirebaseStorageManager {
         let data = try! Data(contentsOf: url)
         
         let metaData = StorageMetadata()
+        let totalTime = soundManager.totalPlayTime()
+        let duration = soundManager.convertTimeToString(totalTime)
         let customData = [
             "title": title,
-            "duration": String(Int(soundManager.totalPlayTime()))
+            "duration": duration
         ]
         metaData.customMetadata = customData
         metaData.contentType = "audio/x-caf"
@@ -37,14 +39,28 @@ class FirebaseStorageManager {
                 print(error.localizedDescription)
                 return
             } else {
-                print("성공")
+                print("upload success")
             }
         }
     }
     
-    func downloadAudio(from urlString: String, to localUrl: URL, completion: @escaping (URL?) -> Void) {
-        baseReference.child(urlString).write(toFile: localUrl) { url, error in
-            completion(url)
+    func downloadAudio(_ urlString: String, to localUrl: URL, completion: @escaping (URL?) -> Void) {
+        DispatchQueue.global().async {
+            self.baseReference.child(urlString).write(toFile: localUrl) { url, error in
+                completion(url)
+            }
+        }
+        
+    }
+    
+    func deleteAudio(urlString: String) {
+        baseReference.child(urlString).delete { error in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            } else {
+                print("delete success")
+            }
         }
     }
     
@@ -56,7 +72,6 @@ class FirebaseStorageManager {
             
             if let result = result {
                 for item in result.items {
-                    // item.reference로 파일 다운
                     self.downloadMetaData(filePath: item.name) { result in
                         switch result {
                         case .success(let audioData) :
@@ -72,21 +87,22 @@ class FirebaseStorageManager {
     
     func downloadMetaData(filePath: String, completion: @escaping (Result<AudioData, Error>) -> Void) {
         let ref = baseReference.child(filePath)
-        var audioData = AudioData(title: "", duration: "")
-        var title: String = ""
-        var duration: String = ""
-        
+        print("filePath: ",filePath)
         ref.getMetadata { metaData, error in
             if let error = error {
                 completion(.failure(error))
             }
-            
             let data = metaData?.customMetadata
-            title = data?["title"] ?? "no title"
-            duration =  data?["duration"] ?? "00:00"
             
-            audioData = AudioData(title: title, duration: duration)
-            completion(.success(audioData))
+            // 파일 이름 메타데이터가 없을 경우 파일 url을 잘라서 이름 양식에 맞춰 리턴
+            let fileName = String(filePath.split(separator: "/").last ?? "")
+            let splitExtension = String(fileName.split(separator: ".").first ?? "")
+            
+            
+            let title = data?["title"] ?? String(splitExtension)
+            let duration = data?["duration"] ?? "00:00"
+            
+            completion(.success(AudioData(url: fileName,title: title, duration: duration)))
         }
     }
     
