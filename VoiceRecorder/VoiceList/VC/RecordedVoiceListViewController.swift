@@ -78,7 +78,6 @@ class RecordedVoiceListViewController: UIViewController {
             case .success(let data) :
                 self.audioList.append(data)
                 self.recordedVoiceTableView.reloadData()
-                print(data.duration, data.title, "here")
             case .failure(let error) :
                 print(error.localizedDescription)
             }
@@ -86,8 +85,8 @@ class RecordedVoiceListViewController: UIViewController {
     }
     
     @objc func createNewVoiceRecordButtonAction() {
-        let recorderVC = RecordViewController()
-        self.present(recorderVC, animated: true)
+        //let recorderVC = RecordViewController()
+        //self.present(recorderVC, animated: true)
     }
 }
 

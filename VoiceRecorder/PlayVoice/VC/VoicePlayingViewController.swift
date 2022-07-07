@@ -112,6 +112,7 @@ class VoicePlayingViewController: UIViewController {
     }
     
     func fetchRecordedDataFromMainVC(dataUrl: URL) {
+        print(dataUrl)
         setSoundManager()
         recordedVoiceTitle.text = "\(dataUrl.lastPathComponent.split(separator: ".")[0])"
         soundManager.initializeSoundManager(url: dataUrl, type: .playBack)
