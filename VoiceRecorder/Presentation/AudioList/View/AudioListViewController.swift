@@ -16,7 +16,7 @@ final class AudioListViewController: BaseViewController {
     override func loadView() {
         self.view = audioListView
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         bind()
@@ -24,6 +24,17 @@ final class AudioListViewController: BaseViewController {
     
     override func setupView() {
         audioListView.tableView.dataSource = self
+        audioListView.tableView.delegate = self
+        
+        title = "Voice Memos"
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "plus"),
+            style: .plain,
+            target: self,
+            action: #selector(plusButtonTapped)
+        )
+        navigationItem.rightBarButtonItem?.tintColor = .black
     }
     
     private func bind() {
@@ -35,6 +46,21 @@ final class AudioListViewController: BaseViewController {
                 self.audioListView.tableView.reloadData()
             }
         }
+    }
+    
+}
+
+extension AudioListViewController {
+    @objc func plusButtonTapped() {
+        
+    }
+    
+    func presentPlayView(audioInformation: AudioInformation) {
+        let playViewController = PlayViewController()
+        let playViewModel = PlayViewModel(audioInformation: audioInformation)
+        playViewController.viewModel = playViewModel
+        
+        self.present(playViewController, animated: true)
     }
 }
 
@@ -49,5 +75,11 @@ extension AudioListViewController: UITableViewDataSource {
         cell.configureCell(audioInformation: viewModel.audioInformation.value[indexPath.row])
         
         return cell
+    }
+}
+
+extension AudioListViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.presentPlayView(audioInformation: viewModel.audioInformation.value[indexPath.row])
     }
 }
