@@ -11,8 +11,7 @@ class HomeTableViewCell: UITableViewCell {
     // TODO: - identifier 공통화 (문자열과 함께)
     static let identfier = Constants.HomeTableCellIdentifier
     
-    // TODO: - configure 공개 메서드로 접근
-    var audio: Audio? {
+    private var audio: Audio? {
         didSet {
             titleLabel.text = audio?.title
         }
@@ -32,8 +31,9 @@ class HomeTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 }
+
+// MARK: - Private
 
 private extension HomeTableViewCell {
     func configure() {
@@ -53,5 +53,13 @@ private extension HomeTableViewCell {
             titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16.0),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
         ])
+    }
+}
+
+// MARK: - Public
+
+extension HomeTableViewCell {
+    func configureAudio(_ audio: Audio) {
+        self.audio = audio
     }
 }

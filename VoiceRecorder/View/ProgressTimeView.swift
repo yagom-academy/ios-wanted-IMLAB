@@ -8,7 +8,6 @@
 import UIKit
 
 class ProgressTimeView: UIStackView {
-    
     private let progressView: UIProgressView = {
         let progressView = UIProgressView()
         return progressView
@@ -44,7 +43,7 @@ class ProgressTimeView: UIStackView {
     }
 }
 
-// MARK: - Private Function
+// MARK: - Private
 
 private extension ProgressTimeView {
     func configure() {
@@ -65,7 +64,7 @@ private extension ProgressTimeView {
     }
 }
 
-// MARK: - Public Function
+// MARK: - Public
 
 extension ProgressTimeView {
     func configureProgressValue(_ value: Float) {

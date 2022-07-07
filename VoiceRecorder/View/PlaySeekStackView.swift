@@ -15,7 +15,6 @@ protocol PlaySeekStackViewDelegate: AnyObject {
 
 // TODO: - final 붙이지 않는 이유
 class PlaySeekStackView: UIStackView {
-    // TODO: 버튼 생성 기능 구현 합치기
     private lazy var backwardButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "gobackward"), for: .normal)
@@ -56,7 +55,7 @@ class PlaySeekStackView: UIStackView {
     }
 }
 
-// MARK: - Private Function
+// MARK: - Private
 
 private extension PlaySeekStackView {
     func configure() {
@@ -87,7 +86,7 @@ private extension PlaySeekStackView {
     }
 }
 
-// MARK: - Public Function
+// MARK: - Public
 
 extension PlaySeekStackView {
     func isReady(_ isReady: Bool) {

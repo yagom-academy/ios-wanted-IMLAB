@@ -37,6 +37,8 @@ class HomeViewController: UIViewController {
     }
 }
 
+// MARK: - Private
+
 private extension HomeViewController {
     func configure() {
         configureView()
@@ -133,6 +135,7 @@ private extension HomeViewController {
 }
 
 // MARK: - UITableViewDataSource
+
 extension HomeViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.audiosCount()
@@ -143,17 +146,18 @@ extension HomeViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         let audio = viewModel.audio(at: indexPath.row)
-        cell.audio = audio
+        cell.configureAudio(audio)
         return cell
     }
 }
 
 // MARK: - UITableViewDelegate
+
 extension HomeViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let audio = viewModel.audio(at: indexPath.row)
         let playViewController = PlayViewController()
-        playViewController.audio = audio
+        playViewController.configureAudio(audio)
         present(playViewController, animated: true)
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -172,6 +176,7 @@ extension HomeViewController: UITableViewDelegate {
 }
 
 // MARK: - RecordViewControllerDelegate
+
 extension HomeViewController: RecordViewControllerDelegate {
     func recordViewControllerDidDisappear() {
         viewModel.fetch()

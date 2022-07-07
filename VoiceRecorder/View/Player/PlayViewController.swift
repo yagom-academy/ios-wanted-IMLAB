@@ -9,12 +9,13 @@ import UIKit
 import Combine
 
 class PlayViewController: UIViewController {
-    // TODO: 이것도 변수로 전달하지 말고 수정
-    var audio: Audio? {
+    private var audio: Audio? {
         didSet {
-            titleLabel.text = audio?.title
-            guard let url = audio?.url else { return }
-            downloadAudioAndMove(url)
+            guard let audio = audio else {
+                return
+            }
+            titleLabel.text = audio.title
+            downloadAudioAndMove(audio.url)
         }
     }
     
@@ -207,5 +208,13 @@ extension PlayViewController: PlaySeekStackViewDelegate {
     
     func touchPlayPauseButton() {
         viewModel?.togglePlaying()
+    }
+}
+
+// MARK: - Public
+
+extension PlayViewController {
+    func configureAudio(_ audio: Audio) {
+        self.audio = audio
     }
 }
