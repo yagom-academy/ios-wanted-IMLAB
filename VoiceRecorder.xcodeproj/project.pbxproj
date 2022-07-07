@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		0E32554069C071CA1D59DC04 /* Pods_VoiceRecorder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9BFC1627DF83D91CB89EB12 /* Pods_VoiceRecorder.framework */; };
-		1211942E2875EF07008ABEE6 /* PlayerTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1211942D2875EF07008ABEE6 /* PlayerTime.swift */; };
 		12BCEDB0286D25D1006C1783 /* RecordingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12BCEDAF286D25D1006C1783 /* RecordingViewController.swift */; };
 		12BCEDBA286D36D7006C1783 /* LocalFileHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12BCEDB9286D36D7006C1783 /* LocalFileHandler.swift */; };
 		12BCEDC0286D3AB3006C1783 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12BCEDBF286D3AB3006C1783 /* Extension.swift */; };
@@ -39,7 +38,6 @@
 
 /* Begin PBXFileReference section */
 		1201D724286989B8005F046B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1211942D2875EF07008ABEE6 /* PlayerTime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerTime.swift; sourceTree = "<group>"; };
 		12BCEDAF286D25D1006C1783 /* RecordingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingViewController.swift; sourceTree = "<group>"; };
 		12BCEDB9286D36D7006C1783 /* LocalFileHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFileHandler.swift; sourceTree = "<group>"; };
 		12BCEDBF286D3AB3006C1783 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
@@ -156,7 +154,6 @@
 				B7E274962869BA0300FBB977 /* FirebaseStorage.swift */,
 				12BCEDC1286D3BEF006C1783 /* AudioRecorderHandler.swift */,
 				12BCEDD7286DC9E3006C1783 /* AudioPlayerHandler.swift */,
-				1211942D2875EF07008ABEE6 /* PlayerTime.swift */,
 				B78E6BEE286D53EE005AC140 /* UpdateTimeInterval.swift */,
 				12BCEDBF286D3AB3006C1783 /* Extension.swift */,
 				B78E6BEA286D506C005AC140 /* FirebaseUtil */,
@@ -355,7 +352,6 @@
 				12C09BC8286FF5E60032500D /* PlayingViewController.swift in Sources */,
 				12BCEDC2286D3BEF006C1783 /* AudioRecorderHandler.swift in Sources */,
 				12BCEDBA286D36D7006C1783 /* LocalFileHandler.swift in Sources */,
-				1211942E2875EF07008ABEE6 /* PlayerTime.swift in Sources */,
 				B78E6BEF286D53EE005AC140 /* UpdateTimeInterval.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -505,7 +501,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8R2A475KS5;
+				DEVELOPMENT_TEAM = R3GQFF4Z2B;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = VoiceRecorder/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -536,7 +532,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8R2A475KS5;
+				DEVELOPMENT_TEAM = R3GQFF4Z2B;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = VoiceRecorder/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

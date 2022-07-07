@@ -19,6 +19,8 @@ class AudioPlayerHandler {
     var audioEngine: AVAudioEngine!
     var audioPlayerNode: AVAudioPlayerNode!
     var audioUnitTimePitch: AVAudioUnitTimePitch!
+    var audioMixerNode: AVAudioMixerNode!
+    var buffer: AVAudioPCMBuffer!
     var playerProgress: Float = 0 // elapsed time
     var audioSampleRate: Double = 0
     var audioLengthSeconds: Double = 0 // total time
@@ -26,7 +28,7 @@ class AudioPlayerHandler {
     var currentPosition: AVAudioFramePosition = 0
     var audioLengthSamples: AVAudioFramePosition = 0
     var needsFileScheduled = true
-    var isPlaying = true
+    var isPlaying = false
     private var currentFrame: AVAudioFramePosition {
       guard
         let lastRenderTime = audioPlayerNode.lastRenderTime,
@@ -37,9 +39,6 @@ class AudioPlayerHandler {
 
       return playerTime.sampleTime
     }
-    var audioEngine = AVAudioEngine()
-    var audioPlayerNode = AVAudioPlayerNode()
-    let audioUnitTimePitch = AVAudioUnitTimePitch()
     
     init(handler: LocalFileProtocol, updateTimeInterval: UpdateTimer) {
         self.localFileHandler = handler
@@ -56,58 +55,55 @@ class AudioPlayerHandler {
             let selectedFileURL = localFileHandler.localFileURL.appendingPathComponent("voiceRecords_\(playFileName)")
             self.recordFileURL = selectedFileURL
         }
-        setPlayer()
+        setUpSession()
     }
     
-    func prepareToPlay() {
+    func setUpSession() {
         do {
-            try AVAudioSession.sharedInstance().setCategory(.playAndRecord)
+            try AVAudioSession.sharedInstance().setCategory(.playback)
             try AVAudioSession.sharedInstance().setActive(true)
             let audioPlayer = try AVAudioPlayer(contentsOf: recordFileURL)
             self.audioPlayer = audioPlayer
             self.audioPlayer.prepareToPlay()
-            self.audioPlayer.volume = 5.0
+            setupAudio()
         } catch let error {
             print("Error : setUpPlayer - \(error)")
         }
     }
     
-    func setPlayer() {
+    func setupAudio() {
         do {
-            let file = try AVAudioFile(forReading: recordFileURL)
-            let format = file.processingFormat
-            
-            audioLengthSamples = file.length
-            audioSampleRate = format.sampleRate
+            audioFile = try AVAudioFile(forReading: recordFileURL)
+            buffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: AVAudioFrameCount(audioFile.length))
+            try audioFile.read(into: buffer)
+            audioLengthSamples = audioFile.length
+            audioSampleRate = audioFile.processingFormat.sampleRate
             audioLengthSeconds = Double(audioLengthSamples) / audioSampleRate
-            
-            audioFile = file
-            setEngine(with: format)
+            setEngine()
         } catch {
             print(error.localizedDescription)
         }
     }
     
-    
-    
-    func setEngine(with format: AVAudioFormat) {
+    func setEngine() {
         audioEngine = AVAudioEngine()
         audioPlayerNode = AVAudioPlayerNode()
         audioUnitTimePitch = AVAudioUnitTimePitch()
+        audioMixerNode = AVAudioMixerNode()
         
         audioEngine.attach(audioPlayerNode)
         audioEngine.attach(audioUnitTimePitch)
-       
+        audioEngine.attach(audioMixerNode)
+        
         audioEngine.connect(audioPlayerNode, to: audioUnitTimePitch, format: audioFile.processingFormat)
         audioEngine.connect(audioUnitTimePitch, to: audioEngine.outputNode, format: audioFile.processingFormat)
-
-        audioPlayerNode.volume = 5.0
+        audioEngine.connect(audioUnitTimePitch, to: audioEngine.mainMixerNode, format: buffer.format)
+        
         audioPlayerNode.stop()
         audioPlayerNode.scheduleFile(audioFile, at: nil)
         
         do {
             try audioEngine.start()
-            seekFrame = 0
             scheduleAudioFile()
         } catch {
             print(error.localizedDescription)
@@ -153,7 +149,6 @@ class AudioPlayerHandler {
         audioPlayerNode.stop()
         
         if currentPosition < audioLengthSamples {
-            
             currentProgress()
             needsFileScheduled = false
             let frameCount = AVAudioFrameCount(audioLengthSamples - seekFrame)
