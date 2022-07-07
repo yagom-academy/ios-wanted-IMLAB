@@ -149,6 +149,7 @@ class VoiceMemoPlayViewController: UIViewController {
 
         super.viewWillDisappear(true)
         audioPlayer.stopPlay()
+        audioPlayer.pitchMode = .basic
     }
     
     override func viewDidLayoutSubviews() {
