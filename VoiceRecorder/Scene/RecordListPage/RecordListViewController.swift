@@ -9,8 +9,8 @@ import UIKit
 
 class RecordListViewController: UIViewController {
     private let tableView = UITableView()
-    private let viewModel = RecordListViewModel(networkManager:  RecordNetworkManager.shared)
-    
+    private let viewModel = RecordListViewModel(networkManager: RecordNetworkManager.shared)
+
     init() {
         super.init(nibName: nil, bundle: nil)
         attribute()
@@ -34,22 +34,24 @@ class RecordListViewController: UIViewController {
         view.backgroundColor = .white
 
         AddNavigationbarRightItem()
-
+        
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(RecordListCell.self, forCellReuseIdentifier: RecordListCell.identifier)
+        
+        tableView.separatorInset.left = 0
+        
         tableView.reloadData()
-        tableView.backgroundColor = .systemPink
     }
 
     private func AddNavigationbarRightItem() {
         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(presentRecordPage))
-        self.navigationItem.rightBarButtonItems = [addButton]
+        navigationItem.rightBarButtonItems = [addButton]
     }
 
     @objc private func presentRecordPage() {
         let vc = RecordViewController()
-        self.navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
     }
 
     private func layout() {
@@ -60,12 +62,13 @@ class RecordListViewController: UIViewController {
 
         tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
         tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
-        tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
+        tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
 }
 
-//MARK: - UITableViewDataSource, UITableViewDelegate 메서드
+// MARK: - UITableViewDataSource, UITableViewDelegate 메서드
+
 extension RecordListViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.getCellTotalCount()
@@ -75,13 +78,15 @@ extension RecordListViewController: UITableViewDataSource, UITableViewDelegate {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: RecordListCell.identifier, for: indexPath) as? RecordListCell else {
             return UITableViewCell()
         }
-        cell.setData(data: RecordListCell.CellData(filename: viewModel.getCellData(indexPath)))
+
+        cell.setData(data: viewModel.getCellData(indexPath))
         cell.addTapGesture(action: handleLongPress(with:_:))
+        
         return cell
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
+        return 75
     }
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -90,21 +95,21 @@ extension RecordListViewController: UITableViewDataSource, UITableViewDelegate {
                 tableView.deleteRows(at: [indexPath], with: .fade)
             }
         } else if editingStyle == .insert {
-
         }
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
         let data = viewModel.getCellData(indexPath)
         let vc = PlayerViewController()
-        vc.setData(data)
+        
+        vc.setData(data.rawFilename)
 
-        self.navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 
-//MARK: - 테이블뷰를 당겼을 때 새로고침시키는 메서드
+// MARK: - 테이블뷰를 당겼을 때 새로고침시키는 메서드
+
 extension RecordListViewController {
     private func setRefresh() {
         tableView.refreshControl = UIRefreshControl()
@@ -112,14 +117,15 @@ extension RecordListViewController {
     }
 
     @objc private func didPullToRefresh() {
-        self.viewModel.update(completion: {
+        viewModel.update(completion: {
             self.tableView.reloadData()
             self.tableView.refreshControl?.endRefreshing()
         })
     }
 }
 
-//MARK: - 셀이동 이벤트
+// MARK: - 셀이동 이벤트
+
 extension RecordListViewController {
     private func handleLongPress(with sender: UILongPressGestureRecognizer, _ toCenterPoint: CGPoint) {
         swapByPress(with: sender, toCenterPoint: toCenterPoint)
@@ -131,9 +137,9 @@ extension RecordListViewController {
         var longPressedPoint = sender.location(in: tableView)
 
         longPressedPoint.x = longPressedPoint.x <= 1 ? 1 : longPressedPoint.x
-        longPressedPoint.x = longPressedPoint.x >= tableViewWidth-1 ? tableViewWidth-1 : longPressedPoint.x
+        longPressedPoint.x = longPressedPoint.x >= tableViewWidth - 1 ? tableViewWidth - 1 : longPressedPoint.x
         longPressedPoint.y = longPressedPoint.y <= 1 ? 1 : longPressedPoint.y
-        longPressedPoint.y = longPressedPoint.y >= tableViewHeight-1 ? tableViewHeight-1 : longPressedPoint.y
+        longPressedPoint.y = longPressedPoint.y >= tableViewHeight - 1 ? tableViewHeight - 1 : longPressedPoint.y
 
         guard let indexPath = tableView.indexPathForRow(at: longPressedPoint) else {
             print("fail to find indexPath!")
@@ -178,14 +184,14 @@ extension RecordListViewController {
                 CellSnapshotView.value?.transform = CGAffineTransform(scaleX: 1.05, y: 1.05)
                 CellSnapshotView.value?.alpha = 0.98
                 cell.alpha = 0.0
-            } completion: { (isFinish) in
+            } completion: { isFinish in
                 if isFinish {
                     cell.isHidden = true
                 }
             }
         case .changed:
             CellSnapshotView.value?.center = longPressedPoint
-            
+
             if let beforeIndexPath = BeforeIndexPath.value, beforeIndexPath != indexPath {
                 viewModel.swapCell(beforeIndexPath.row, indexPath.row)
                 tableView.moveRow(at: beforeIndexPath, to: indexPath)
@@ -206,7 +212,7 @@ extension RecordListViewController {
                 CellSnapshotView.value?.transform = CGAffineTransform.identity
                 CellSnapshotView.value?.alpha = 1.0
                 cell.alpha = 1.0
-            } completion: { (isFinish) in
+            } completion: { isFinish in
                 if isFinish {
                     BeforeIndexPath.value = nil
                     CellSnapshotView.value?.removeFromSuperview()
@@ -219,4 +225,3 @@ extension RecordListViewController {
         }
     }
 }
-

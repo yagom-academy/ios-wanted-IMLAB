@@ -8,39 +8,53 @@
 import UIKit
 
 class RecordListCell: UITableViewCell {
-    struct CellData {
-        let filename: String
-    }
     static let identifier = "RecordListCell"
+
     private var isSetGesture: Bool = false
-    private var action: ((_ sender: UILongPressGestureRecognizer, _ toCenterPoint: CGPoint) -> ())?
-    
-    private let titleLabel = UILabel()
+    private var action: ((_ sender: UILongPressGestureRecognizer, _ toCenterPoint: CGPoint) -> Void)?
+
+    private let labelContainer = UIView()
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 18)
+
+        return label
+    }()
+
+    private let durationLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 15)
+        label.textColor = .secondaryLabel
+
+        return label
+    }()
+
     private let swipeTapView = UIImageView(image: UIImage(systemName: "text.justify"))
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+
         attribute()
         layout()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
-        
+
         contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 16.0, left: 16, bottom: 16, right: 16))
     }
-    
-    func setData(data: CellData) {
-        self.titleLabel.text = data.filename
+
+    func setData(data: FileData) {
+        titleLabel.text = data.filename
+        durationLabel.text = data.duration
     }
-    
-    func addTapGesture(action: @escaping (_ sender: UILongPressGestureRecognizer, _ toCenterPoint: CGPoint) -> ()) {
-        if (isSetGesture == false) {
+
+    func addTapGesture(action: @escaping (_ sender: UILongPressGestureRecognizer, _ toCenterPoint: CGPoint) -> Void) {
+        if isSetGesture == false {
             isSetGesture = true
             self.action = action
             swipeTapView.isUserInteractionEnabled = true
@@ -51,29 +65,38 @@ class RecordListCell: UITableViewCell {
             swipeTapView.addGestureRecognizer(longPressedGesture)
         }
     }
-    
+
     @objc func connector(with sender: UILongPressGestureRecognizer) {
         let pointAtCell = sender.location(in: self)
-        let toCenterPoint = CGPoint(x: pointAtCell.x-self.frame.width/2, y: pointAtCell.y-self.frame.height/2)
-        self.action?(sender, toCenterPoint)
+        let toCenterPoint = CGPoint(x: pointAtCell.x - frame.width / 2, y: pointAtCell.y - frame.height / 2)
+        action?(sender, toCenterPoint)
     }
-    
+
     private func attribute() {
-        self.selectionStyle = .none
-        //temp
-        self.contentView.backgroundColor = .purple
+        selectionStyle = .none
     }
-    
+
     private func layout() {
-        [titleLabel, swipeTapView].forEach {
+        [titleLabel, durationLabel].forEach {
+            labelContainer.addSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+
+        titleLabel.topAnchor.constraint(equalTo: labelContainer.topAnchor).isActive = true
+        titleLabel.leadingAnchor.constraint(equalTo: labelContainer.leadingAnchor, constant: 20).isActive = true
+
+        durationLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 3).isActive = true
+        durationLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor).isActive = true
+        durationLabel.bottomAnchor.constraint(equalTo: labelContainer.bottomAnchor).isActive = true
+
+        [labelContainer, swipeTapView].forEach {
             self.contentView.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
-        
-        titleLabel.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive = true
-        titleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 30).isActive = true
-        
-        swipeTapView.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive = true
-        swipeTapView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20).isActive = true
+
+        labelContainer.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+
+        swipeTapView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        swipeTapView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
     }
 }
