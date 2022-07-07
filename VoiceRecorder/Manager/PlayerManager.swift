@@ -26,6 +26,7 @@ protocol PlayerService {
 
     func setVolume(_ value: Float)
     func setPitch(_ value: Int)
+    func setSpeed(_ value: Float) -> Float
 
     func duration() -> String
     func checkIsFinished() -> Bool
@@ -40,6 +41,7 @@ class PlayerManager: PlayerService {
 
     private let audioEngine = AVAudioEngine()
     private let pitchControl = AVAudioUnitTimePitch()
+    private let speedControl = AVAudioUnitVarispeed()
 
     private var seekFrame: AVAudioFramePosition = 0
     private var currentPosition: AVAudioFramePosition = 0
@@ -64,11 +66,11 @@ class PlayerManager: PlayerService {
     func resetAudio() {
         audioFile = nil
 
-        audioPlayer.stop()
-        audioPlayer.reset()
-
         audioEngine.stop()
+        audioPlayer.stop()
+
         audioEngine.reset()
+        audioPlayer.reset()
 
         pitchControl.pitch = 0
 
@@ -88,8 +90,10 @@ class PlayerManager: PlayerService {
 
         audioEngine.attach(audioPlayer)
         audioEngine.attach(pitchControl)
+        audioEngine.attach(speedControl)
 
-        audioEngine.connect(audioPlayer, to: pitchControl, format: nil)
+        audioEngine.connect(audioPlayer, to: speedControl, format: nil)
+        audioEngine.connect(speedControl, to: pitchControl, format: nil)
         audioEngine.connect(pitchControl, to: audioEngine.mainMixerNode, format: nil)
 
         do {
@@ -104,7 +108,7 @@ class PlayerManager: PlayerService {
                 }
 
                 if self.checkIsFinished() {
-                    DispatchQueue.global().async {
+                    DispatchQueue.main.async {
                         self.setPlayerToZero()
                     }
                 }
@@ -123,9 +127,6 @@ class PlayerManager: PlayerService {
     }
 
     func setPlayerToZero() {
-        guard let audioFile = audioFile else {
-            return
-        }
         audioPlayer.stop()
         audioEngine.stop()
 
@@ -133,6 +134,8 @@ class PlayerManager: PlayerService {
         currentPosition = 0
 
         configureAudioEngine()
+
+        NotificationCenter.default.post(name: NSNotification.Name("PlayerDidEnded"), object: nil)
     }
 
     // 재생
@@ -194,10 +197,9 @@ class PlayerManager: PlayerService {
                 }
 
                 if self.checkIsFinished() {
-                    DispatchQueue.global().async {
+                    DispatchQueue.main.async {
                         self.setPlayerToZero()
                     }
-                    return
                 }
             }
 
@@ -232,6 +234,19 @@ class PlayerManager: PlayerService {
         pitchControl.pitch = audioPitch
     }
 
+    func setSpeed(_ value: Float) -> Float {
+        let roundedValue = round(value * 10) / 10
+        let roundedRate = round(speedControl.rate * 10) / 10
+        let newRate = roundedValue + roundedRate
+
+        if newRate > 1.5 || newRate < 0.5 {
+            return speedControl.rate
+        }
+        speedControl.rate = newRate
+
+        return speedControl.rate
+    }
+
     func duration() -> String {
         if audioLengthSeconds == 0.0 {
             return ""
@@ -256,8 +271,6 @@ class PlayerManager: PlayerService {
         }
 
         let currentSeconds = Double(Double(playerTime.sampleTime) / playerTime.sampleRate) + (Double(currentPosition) / audioSampleRate)
-
-        print(currentSeconds, audioLengthSeconds)
 
         if currentSeconds >= audioLengthSeconds {
             return true

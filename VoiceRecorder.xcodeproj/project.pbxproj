@@ -25,6 +25,8 @@
 		0DCB66CA28704D3E00800B1C /* PitchControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCB66C928704D3E00800B1C /* PitchControlView.swift */; };
 		0DCB66CC287050DE00800B1C /* VolumeControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCB66CB287050DE00800B1C /* VolumeControlView.swift */; };
 		0DCB66CE287050F600800B1C /* PlayerButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCB66CD287050F600800B1C /* PlayerButtonView.swift */; };
+		0DD2E01928767F2100727315 /* SpeedControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DD2E01828767F2100727315 /* SpeedControlView.swift */; };
+		0DD2E01B2876808700727315 /* SpeedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DD2E01A2876808700727315 /* SpeedViewModel.swift */; };
 		0DFCD72F2872C13900F31EBA /* PitchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DFCD72E2872C13900F31EBA /* PitchViewModel.swift */; };
 		0DFCD7322872C15300F31EBA /* VolumeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DFCD7312872C15300F31EBA /* VolumeViewModel.swift */; };
 		0DFCD7342872C1D300F31EBA /* PlayerButtonViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DFCD7332872C1D300F31EBA /* PlayerButtonViewModel.swift */; };
@@ -68,6 +70,8 @@
 		0DCB66C928704D3E00800B1C /* PitchControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitchControlView.swift; sourceTree = "<group>"; };
 		0DCB66CB287050DE00800B1C /* VolumeControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeControlView.swift; sourceTree = "<group>"; };
 		0DCB66CD287050F600800B1C /* PlayerButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerButtonView.swift; sourceTree = "<group>"; };
+		0DD2E01828767F2100727315 /* SpeedControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedControlView.swift; sourceTree = "<group>"; };
+		0DD2E01A2876808700727315 /* SpeedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedViewModel.swift; sourceTree = "<group>"; };
 		0DFCD72E2872C13900F31EBA /* PitchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitchViewModel.swift; sourceTree = "<group>"; };
 		0DFCD7312872C15300F31EBA /* VolumeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeViewModel.swift; sourceTree = "<group>"; };
 		0DFCD7332872C1D300F31EBA /* PlayerButtonViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerButtonViewModel.swift; sourceTree = "<group>"; };
@@ -200,6 +204,7 @@
 				0DCB66C928704D3E00800B1C /* PitchControlView.swift */,
 				0DCB66CB287050DE00800B1C /* VolumeControlView.swift */,
 				0DCB66CD287050F600800B1C /* PlayerButtonView.swift */,
+				0DD2E01828767F2100727315 /* SpeedControlView.swift */,
 			);
 			path = SubComponents;
 			sourceTree = "<group>";
@@ -210,6 +215,7 @@
 				0DFCD72E2872C13900F31EBA /* PitchViewModel.swift */,
 				0DFCD7312872C15300F31EBA /* VolumeViewModel.swift */,
 				0DFCD7332872C1D300F31EBA /* PlayerButtonViewModel.swift */,
+				0DD2E01A2876808700727315 /* SpeedViewModel.swift */,
 			);
 			path = SubViewModels;
 			sourceTree = "<group>";
@@ -356,6 +362,7 @@
 				FEA53310286C3DC8002E1169 /* Config.swift in Sources */,
 				0D2E6BB2286BE0C5003D2EE1 /* PlayerViewController.swift in Sources */,
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
+				0DD2E01B2876808700727315 /* SpeedViewModel.swift in Sources */,
 				04FF939F286C004200EB34B6 /* CutoffFrequencyView.swift in Sources */,
 				0D26B1222875393A00FE1B04 /* RecordViewModel.swift in Sources */,
 				0DCB66CC287050DE00800B1C /* VolumeControlView.swift in Sources */,
@@ -374,6 +381,7 @@
 				FEA5330C286C3D48002E1169 /* CustomNavigationController.swift in Sources */,
 				FEFCE0902870549F00200AF1 /* PlayListUserDefaults.swift in Sources */,
 				0D26B1252875B1AB00FE1B04 /* RecordModel.swift in Sources */,
+				0DD2E01928767F2100727315 /* SpeedControlView.swift in Sources */,
 				DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */,
 				FEEC6984286C3B2D002E020F /* RecordNetworkManager.swift in Sources */,
 				FEEC697C286C3AB0002E020F /* RecordListViewController.swift in Sources */,

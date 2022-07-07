@@ -15,9 +15,6 @@ class PlayerButtonViewModel {
         self.audioPlayer = audioPlayer
     }
 
-    func isAudioAvailable() -> Bool {
-        return true
-    }
 
     func playPauseAudio() -> Bool {
         if audioPlayer.isPlaying {
