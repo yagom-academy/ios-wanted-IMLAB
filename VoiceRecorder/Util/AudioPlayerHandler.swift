@@ -154,6 +154,14 @@ class AudioPlayerHandler {
         seekFrame = currentPosition + offset
         seekFrame = max(seekFrame, 0)
         seekFrame = min(seekFrame, audioLengthSamples)
+        
+        let oneOffset = AVAudioFramePosition(time * audioSampleRate)
+        if seekFrame + oneOffset >= audioLengthSamples {
+            seekFrame = audioLengthSamples
+        } else if seekFrame - oneOffset <= 0 {
+            seekFrame = 0
+        }
+        
         currentPosition = seekFrame
         audioPlayerNode.stop()
         if currentPosition <= audioLengthSamples {
