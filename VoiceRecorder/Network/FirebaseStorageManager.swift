@@ -21,7 +21,7 @@ class FirebaseStorageManager {
     
     func uploadAudio(url: URL) {
         let title = dateUtil.formatDate()
-        let filePath = "\(title).caf"
+        let filePath = "\(title)"
         let data = try! Data(contentsOf: url)
         
         let metaData = StorageMetadata()
@@ -56,7 +56,6 @@ class FirebaseStorageManager {
             
             if let result = result {
                 for item in result.items {
-                    // item.reference로 파일 다운
                     self.downloadMetaData(filePath: item.name) { result in
                         switch result {
                         case .success(let audioData) :
@@ -72,9 +71,6 @@ class FirebaseStorageManager {
     
     func downloadMetaData(filePath: String, completion: @escaping (Result<AudioData, Error>) -> Void) {
         let ref = baseReference.child(filePath)
-        var audioData = AudioData(title: "", duration: "")
-        var title: String = ""
-        var duration: String = ""
         
         ref.getMetadata { metaData, error in
             if let error = error {
@@ -82,11 +78,11 @@ class FirebaseStorageManager {
             }
             
             let data = metaData?.customMetadata
-            title = data?["title"] ?? "no title"
-            duration =  data?["duration"] ?? "00:00"
+            let endIdx = filePath.index(filePath.endIndex, offsetBy: -5)
+            let title = String(filePath[filePath.startIndex...endIdx])
+            let duration =  data?["duration"] ?? "00:00"
             
-            audioData = AudioData(title: title, duration: duration)
-            completion(.success(audioData))
+            completion(.success(AudioData(title: title, duration: duration)))
         }
     }
     
