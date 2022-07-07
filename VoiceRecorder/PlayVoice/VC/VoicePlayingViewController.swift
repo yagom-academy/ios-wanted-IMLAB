@@ -63,7 +63,7 @@ class VoicePlayingViewController: UIViewController {
         addViewsActionsToVC()
     }
     override func viewWillDisappear(_ animated: Bool) {
-        soundManager.stopPlayer()
+        //soundManager.stopPlayer()
     }
     
     private func configureLayoutOfVoicePlayVC() {
@@ -140,17 +140,16 @@ class VoicePlayingViewController: UIViewController {
     
     
     @objc func changeVolumeValue() {
-        
-        soundManager.changeVolume(value: volumeSlider.value)
+        //soundManager.changeVolume(value: volumeSlider.value)
     }
     
     @objc func changePitchValue() {
         if pitchSegmentController.selectedSegmentIndex == 0 {
-            soundManager.changePitchValue(value: 0)
+            //soundManager.changePitchValue(value: 0)
         } else if pitchSegmentController.selectedSegmentIndex == 1 {
-            soundManager.changePitchValue(value: 50)
+            //soundManager.changePitchValue(value: 50)
         } else {
-            soundManager.changePitchValue(value: -50)
+            //soundManager.changePitchValue(value: -50)
         }
         
     }
@@ -164,18 +163,20 @@ extension VoicePlayingViewController: SoundButtonActionDelegate {
         if sender.isSelected {
             soundManager.pause()
         } else {
-            soundManager.play()
+            DispatchQueue.main.async {
+                self.soundManager.play()
+            }
         }
     }
     
     func backwardButtonTouchUpinside(sender: UIButton) {
         print("backwardButton Clicked")
         
-        soundManager.seek(to: true)
+        //soundManager.seek(to: true)
     }
     
     func forwardTouchUpinside(sender: UIButton) {
-        soundManager.seek(to: false)
+        //soundManager.seek(to: false)
     }
 }
 
@@ -191,7 +192,7 @@ extension VoicePlayingViewController: ReceiveSoundManagerStatus {
             // 임시 초기화 다시 함수와 data형식에 맞춰서 프로퍼티 만들어야함 06.30 이후 업데이트 예정
             let filePath = Bundle.main.path(forResource: "sound", ofType: ".mp3")
             let fileUrl = URL(fileURLWithPath: filePath!)
-            self.soundManager.stopPlayer()
+            //self.soundManager.stopPlayer()
             //self.soundManager.initializedEngine(url: fileUrl)
         }
         

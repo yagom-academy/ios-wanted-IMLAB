@@ -17,12 +17,4 @@ class DateUtil {
         return formatter.string(from: Date())
     }
     
-    func formatDateLocal() -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy_MM_dd_HH_mm_ss"
-        formatter.locale = Locale(identifier: "ko_KR")
-
-        return formatter.string(from: Date())
-    }
-    
 }

@@ -9,12 +9,10 @@ import Foundation
 
 class AudioData: Codable {
     
-    var url: String
     var title: String
     var duration: String
     
-    init(url: String, title: String, duration: String) {
-        self.url = url
+    init(title: String, duration: String) {
         self.title = title
         self.duration = duration
     }

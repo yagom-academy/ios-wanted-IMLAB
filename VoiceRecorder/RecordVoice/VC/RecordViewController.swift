@@ -13,7 +13,7 @@ class RecordViewController: UIViewController {
     var soundManager = SoundManager()
     var audioFileManager = AudioFileManager()
     var firebaseStorageManager = FirebaseStorageManager()
-    var date = DateUtil().formatDateLocal()
+    var date = DateUtil().formatDate()
     var engine = AVAudioEngine()
     
     var isStartRecording: Bool = false
@@ -91,16 +91,13 @@ class RecordViewController: UIViewController {
         isStartRecording = !isStartRecording
         recordButtonToggle()
         
-        let url = audioFileManager.getAudioFilePath(fileName: date)
+        let url = audioFileManager.getAudioFilePath(fileName: date+".caf")
         if isStartRecording { // 녹음 시작일 때
             soundManager.startRecord(filePath: url)
-            print(url)
         } else { // 녹음 끝일 때
-            DispatchQueue.global().sync {
-                soundManager.stopRecord()
-                firebaseStorageManager.uploadAudio(url: url, date: date)
-                soundManager.initializedEngine(url: url)
-            }
+            soundManager.stopRecord()
+            firebaseStorageManager.uploadAudio(url: url, date: date)
+            soundManager.initializedEngine(url: url)
         }
     }
 }
@@ -135,19 +132,17 @@ extension RecordViewController: SoundButtonActionDelegate {
         if sender.isSelected {
             soundManager.pause()
         } else {
-            soundManager.play()
+            DispatchQueue.main.async {
+                self.soundManager.play()
+            }
         }
     }
     
     func backwardButtonTouchUpinside(sender: UIButton) {
         print("backwardButton Clicked")
-        
-        soundManager.seek(to: true)
     }
     
     func forwardTouchUpinside(sender: UIButton) {
         print("forwardButton Clicked")
-        
-        soundManager.seek(to: false)
     }
 }

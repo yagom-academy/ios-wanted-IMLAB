@@ -12,7 +12,6 @@ import UIKit
 class FirebaseStorageManager {
     
     private var baseReference: StorageReference!
-    private let dateUtil = DateUtil()
     private let soundManager = SoundManager()
     private let audioFileManager = AudioFileManager()
     
@@ -21,18 +20,16 @@ class FirebaseStorageManager {
     }
     
     func uploadAudio(url: URL, date: String) {
-        let title = dateUtil.formatDate()
+        let title = date
         let filePath = "\(title).caf"
         let data = try! Data(contentsOf: url)
         
         let metaData = StorageMetadata()
-        let totalTime = soundManager.totalPlayTime(date: date)
+        let totalTime = soundManager.totalPlayTime(date: filePath)
         let duration = soundManager.convertTimeToString(totalTime)
-        let localUrl = date
         let customData = [
             "title": title,
-            "duration": duration,
-            "url": localUrl
+            "duration": duration
         ]
         metaData.customMetadata = customData
         metaData.contentType = "audio/x-caf"
@@ -68,18 +65,8 @@ class FirebaseStorageManager {
         }
         
         // local delete
-        baseReference.child(urlString).getMetadata { metaData, error in
-            if let error = error {
-                print(error.localizedDescription)
-            }
-            
-            let data = metaData?.customMetadata
-            
-            if let url = data?["url"] {
-                let item = self.audioFileManager.getAudioFilePath(fileName: url)
-                try? FileManager.default.removeItem(at: item)
-            }
-        }
+        let item = self.audioFileManager.getAudioFilePath(fileName: urlString)
+        try? FileManager.default.removeItem(at: item)
     }
     
     func downloadAll(completion: @escaping (Result<AudioData, Error>) -> Void) {
@@ -105,22 +92,22 @@ class FirebaseStorageManager {
     
     func downloadMetaData(filePath: String, completion: @escaping (Result<AudioData, Error>) -> Void) {
         let ref = baseReference.child(filePath)
-        print("filePath: ",filePath)
+        
         ref.getMetadata { metaData, error in
             if let error = error {
                 completion(.failure(error))
             }
+            
             let data = metaData?.customMetadata
             
             // 파일 이름 메타데이터가 없을 경우 파일 url을 잘라서 이름 양식에 맞춰 리턴
             let fileName = String(filePath.split(separator: "/").last ?? "")
             let splitExtension = String(fileName.split(separator: ".").first ?? "")
             
-            
             let title = data?["title"] ?? String(splitExtension)
             let duration = data?["duration"] ?? "00:00"
             
-            completion(.success(AudioData(url: fileName,title: title, duration: duration)))
+            completion(.success(AudioData(title: title, duration: duration)))
         }
     }
     
