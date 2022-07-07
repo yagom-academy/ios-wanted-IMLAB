@@ -12,14 +12,17 @@ final class HomeViewModel {
     private (set) var audioTitles: [String] = []
     private var audioPresentation: [AudioPresentation] = []
     private (set) var audioData: [String: Observable<AudioPresentation>] = [:]
+    //private var networkService: FirebaseService = FirebaseService()
+    var errorHandler : ((Error) -> Void)?
     
     subscript(_ indexPath: IndexPath) -> AudioPresentation? {
+        guard !audioTitles.isEmpty else {return nil}
         let title = audioTitles[indexPath.item]
         guard let data = audioData[title]?.value else {return nil}
         return data
     }
     
-    func fetchAudioTitles(completion: @escaping () -> Void) {
+    func fetchAudioTitles(completion: @escaping (Bool) -> Void) {
         FirebaseService.fetchAll { [weak self] result in
             switch result {
             case .success(let data):
@@ -27,9 +30,9 @@ final class HomeViewModel {
                     self?.audioTitles.append($0.name)
                     self?.audioData.updateValue(Observable<AudioPresentation>(AudioPresentation(filename: nil, createdDate: nil, length: nil)), forKey: $0.name)
                 })
-                completion()
+                completion(true)
             case .failure(let error):
-                print(error)
+                self?.errorHandler?(error)
             }
         }
     }
@@ -45,7 +48,7 @@ final class HomeViewModel {
                     case .success(let metadata):
                         self?.audioPresentation.append(metadata.toDomain())
                     case .failure(let error):
-                        print(error)
+                        self?.errorHandler?(error)
                     }
                     group.leave()
                 }
@@ -57,7 +60,6 @@ final class HomeViewModel {
     }
     
     func sortByDate() {
-
             self.audioTitles = self.audioTitles.sorted(by: { (val1, val2) in
                 guard let index1 = self.audioPresentation.firstIndex(where: {$0.filename == val1}) else {return false}
                 guard let index2 = self.audioPresentation.firstIndex(where: {$0.filename == val2}) else {return false}
@@ -78,7 +80,7 @@ final class HomeViewModel {
             case .success(let url):
                 completion(url)
             case .failure(let error):
-                print(error)
+                self.errorHandler?(error)
             }
         }
     }
@@ -90,6 +92,7 @@ final class HomeViewModel {
             if let error = error as? NSError {
                 print(error)
                 completion(false)
+                self?.errorHandler?(error)
             }else{
                 self?.audioTitles.remove(at: indexPath.item)
                 self?.audioPresentation.remove(at: indexPath.item)

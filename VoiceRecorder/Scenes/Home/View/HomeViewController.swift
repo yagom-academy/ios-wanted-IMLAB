@@ -14,6 +14,7 @@ final class HomeViewController: UIViewController {
         super.viewWillAppear(animated)
         LoadingIndicator.showLoading()
         homeViewModel.reset()
+        setFirebaseNetworkErrorHandler()
         setDataBinding()
     }
     
@@ -29,6 +30,7 @@ final class HomeViewController: UIViewController {
         setConstraints()
     }
     
+
 }
 
 private extension HomeViewController {
@@ -48,9 +50,17 @@ private extension HomeViewController {
         let tableView = UITableView(frame: .zero, style: .plain)
         tableView.register(HomeTableViewCell.self, forCellReuseIdentifier: HomeTableViewCell.id)
         homeTableView = tableView
+        homeTableView?.refreshControl = UIRefreshControl()
+        homeTableView?.refreshControl?.addTarget(self, action: #selector(pullToRefresh(_:)), for: .valueChanged)
         homeTableView?.translatesAutoresizingMaskIntoConstraints = false
         homeTableView?.delegate = self
         homeTableView?.dataSource = self
+    }
+    
+    @objc func pullToRefresh(_ sender: Any) {
+        homeViewModel.reset()
+        setDataBinding()
+        homeTableView?.refreshControl?.endRefreshing()
     }
     
     func setConstraints() {
@@ -68,8 +78,10 @@ private extension HomeViewController {
         let group = DispatchGroup()
         DispatchQueue.global().async {
             group.enter()
-            self.homeViewModel.fetchAudioTitles {
-                group.leave()
+            self.homeViewModel.fetchAudioTitles { isSucceed in
+                if isSucceed{
+                    group.leave()
+                }
             }
             group.wait()
             
@@ -78,17 +90,25 @@ private extension HomeViewController {
             }
             
             self.homeViewModel.fetchMetaData()
-            self.homeViewModel.audioData.values.forEach({
-                $0.bind { [weak self] metadata in
-                    DispatchQueue.main.async {
-                        guard let filename = metadata.filename, let index = self?.homeViewModel.audioTitles.firstIndex(of: filename) else {return}
-                        self?.homeTableView?.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-                    }
-                }})
-        }
+       
         
+        self.homeViewModel.audioData.values.forEach({
+            $0.bind { [weak self] metadata in
+                DispatchQueue.main.async {
+                    guard let filename = metadata.filename, let index = self?.homeViewModel.audioTitles.firstIndex(of: filename) else {return}
+                    self?.homeTableView?.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+                }
+            }})
+        }
+    }
+    
+    func setFirebaseNetworkErrorHandler() {
+        self.homeViewModel.errorHandler = { error in
+            Alert.present(title: nil, message: error.localizedDescription, actions: .ok(nil), from: self)
+        }
     }
 }
+
 
 extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     
@@ -108,13 +128,12 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let data = homeViewModel[indexPath] else {return}
-        LoadingIndicator.showLoading()
         homeViewModel.enquireForURL(data) { url in
-            if let url = url {
-                let playScene = PlayViewController()
-                playScene.playViewModel.url = url
-                self.navigationController?.pushViewController(playScene, animated: true)
-            }
+            guard let url = url else {return}
+            LoadingIndicator.showLoading()
+            let playScene = PlayViewController()
+            playScene.playViewModel.url = url
+            self.navigationController?.pushViewController(playScene, animated: true)
         }
     }
     
@@ -130,3 +149,4 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
         }
     }
 }
+
