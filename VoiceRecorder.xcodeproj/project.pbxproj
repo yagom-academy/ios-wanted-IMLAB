@@ -27,7 +27,7 @@
 		182C8732286AD69700F3C24D /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182C8731286AD69700F3C24D /* DateExtensions.swift */; };
 		185AC9742873BE990026E924 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 185AC9732873BE990026E924 /* GoogleService-Info.plist */; };
 		18CE51F4286EEA8E004AAF7C /* PlayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CE51F3286EEA8E004AAF7C /* PlayViewModel.swift */; };
-		18CE51F7286EEEA1004AAF7C /* PlayTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CE51F6286EEEA1004AAF7C /* PlayTime.swift */; };
+		18CE51F7286EEEA1004AAF7C /* PlayerTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CE51F6286EEEA1004AAF7C /* PlayerTime.swift */; };
 		18D1497028697D5700A91B95 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 18D1496F28697D5700A91B95 /* FirebaseAnalytics */; };
 		18D1497228697D5700A91B95 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 18D1497128697D5700A91B95 /* FirebaseStorage */; };
 		18D4A0CE28708EA000839E73 /* RecordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D4A0CD28708EA000839E73 /* RecordViewModel.swift */; };
@@ -56,7 +56,7 @@
 		182C8731286AD69700F3C24D /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
 		185AC9732873BE990026E924 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		18CE51F3286EEA8E004AAF7C /* PlayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayViewModel.swift; sourceTree = "<group>"; };
-		18CE51F6286EEEA1004AAF7C /* PlayTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayTime.swift; sourceTree = "<group>"; };
+		18CE51F6286EEEA1004AAF7C /* PlayerTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerTime.swift; sourceTree = "<group>"; };
 		18D4A0CD28708EA000839E73 /* RecordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewModel.swift; sourceTree = "<group>"; };
 		DE15E65828604278003DD2F5 /* VoiceRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE15E66728604279003DD2F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -92,7 +92,7 @@
 			isa = PBXGroup;
 			children = (
 				01696158286ACF280020AAAC /* Audio.swift */,
-				18CE51F6286EEEA1004AAF7C /* PlayTime.swift */,
+				18CE51F6286EEEA1004AAF7C /* PlayerTime.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -311,7 +311,7 @@
 				18129BC928766FDA006C7F8C /* Constants.swift in Sources */,
 				01E1AB0428747085004ADBAE /* PlaySeekStackView.swift in Sources */,
 				18D4A0CE28708EA000839E73 /* RecordViewModel.swift in Sources */,
-				18CE51F7286EEEA1004AAF7C /* PlayTime.swift in Sources */,
+				18CE51F7286EEEA1004AAF7C /* PlayerTime.swift in Sources */,
 				0146B7B4286BE39400DD28D2 /* RecordViewController.swift in Sources */,
 				0169615B286ACF3E0020AAAC /* FirebaseStorageManager.swift in Sources */,
 				01696159286ACF280020AAAC /* Audio.swift in Sources */,
