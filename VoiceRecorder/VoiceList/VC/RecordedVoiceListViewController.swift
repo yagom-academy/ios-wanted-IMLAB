@@ -108,8 +108,12 @@ extension RecordedVoiceListViewController: UITableViewDataSource, UITableViewDel
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let voicePlayVC = VoicePlayingViewController()
-        let url = fileManager.getAudioFilePath(fileName: audioList[indexPath.item].title)
-        voicePlayVC.fetchRecordedDataFromMainVC(dataUrl: url)
+        voicePlayVC.setTitle(title: audioList[indexPath.item].title)
+        let path = audioList[indexPath.item].url
+        let filePath = fileManager.getAudioFilePath(fileName: path)
+        firestorageManager.downloadAudio(path, to: filePath) { url in
+            voicePlayVC.fetchRecordedDataFromMainVC(dataUrl: filePath)
+        }
         self.present(voicePlayVC, animated: true)
     }
 

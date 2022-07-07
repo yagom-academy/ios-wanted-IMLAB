@@ -119,21 +119,13 @@ class VoicePlayingViewController: UIViewController {
         
     }
     
-    // Model 만들어서 들어와야 함. 06/29 레이아웃만 확인중 ~ 업데이트 예정
+    func setTitle(title: String) {
+        recordedVoiceTitle.text = title
+    }
+    
     func fetchRecordedDataFromMainVC(dataUrl: URL) {
-        
-        setSoundManager() // soundManager 초기화
-        
-        let sampleData = ["Sample Title", 300] as [Any]
-        
-        if let recordedTitle = sampleData[0] as? String {
-            recordedVoiceTitle.text = recordedTitle
-        } else {
-            recordedVoiceTitle.text = "Title"
-        }
-        
+        setSoundManager()
         soundManager.initializedEngine(url: dataUrl)
-        
     }
     
     func setSoundManager() {
