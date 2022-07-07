@@ -44,7 +44,7 @@ class PlayViewModel {
     @Published var playerProgress: Float = 0
     @Published var playerIsReady = false
     @Published var playerIsPlaying = false
-    @Published var playerTime: PlayerTime = .zero
+    @Published var playerTime = PlayerTime(elapsedTime: 0, remainingTime: 0)
     
     init(url: URL) {
         self.url = url
