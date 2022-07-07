@@ -20,9 +20,20 @@
   - 앱의 시작부터 각View에서 일어나는 일을 설명, Ex) 셀 터치 하면, 로컬 파일을 확인하여, 없다면 새로 받아와서 PlayView를 Present한다 같은 내용.
 ### Demo Gif
   - 첫 화면
+  
+![home](https://user-images.githubusercontent.com/107861353/177719312-f70af8e1-55c3-4526-8d4e-71c0cd4427f4.gif)
+
   - RecordView, 레코드 기능
+  
+  ![record](https://user-images.githubusercontent.com/107861353/177719683-1ea2ee52-a2c3-45f0-a33e-100c8586421d.gif)
+
   - RecordView, 재생 기능
+  
+  ![record_play](https://user-images.githubusercontent.com/107861353/177719711-180019c5-7125-41a3-9645-5f5f9cf2aa8b.gif)
+
   - PlayView, 재생기능
+  
+![play](https://user-images.githubusercontent.com/107861353/177719345-d463dba4-3758-4cb7-a02f-4f7dc3eb3b83.gif)
 
 ## 사용한 기술
 `Coordinator Pattern` `Observer Pattern` `Delegate Pattern`
