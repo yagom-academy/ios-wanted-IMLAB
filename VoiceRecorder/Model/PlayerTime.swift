@@ -15,17 +15,8 @@ struct PlayerTime {
     
     let elapsedText: String
     let remainingText: String
+    static let zero = PlayerTime(elapsedTime: 0, remainingTime: 0)
     
-<<<<<<< HEAD:VoiceRecorder/Model/PlayTime.swift
-    enum TimeConstant {
-        static let secsPerMin = 60
-        static let secsPerHour = 3600
-    }
-    
-    static let zero: PlayerTime = PlayerTime.init(elapsedTime: 0, remainingTime: 0)
-    
-=======
->>>>>>> main:VoiceRecorder/Model/PlayerTime.swift
     init(elapsedTime: Double, remainingTime: Double) {
         elapsedText = PlayerTime.formatted(time: elapsedTime)
         remainingText = PlayerTime.formatted(time: remainingTime)
@@ -36,16 +27,6 @@ struct PlayerTime {
         var hours = 0
         var minutes = 0
 
-<<<<<<< HEAD:VoiceRecorder/Model/PlayTime.swift
-        if seconds > TimeConstant.secsPerHour {
-            hours = seconds / TimeConstant.secsPerHour
-            seconds -= hours * TimeConstant.secsPerHour
-        }
-
-        if seconds > TimeConstant.secsPerMin {
-            minutes = seconds / TimeConstant.secsPerMin
-            seconds -= minutes * TimeConstant.secsPerMin
-=======
         if seconds > TimeConstant.secondsHour {
             hours = seconds / TimeConstant.secondsHour
             seconds -= hours * TimeConstant.secondsHour
@@ -54,7 +35,6 @@ struct PlayerTime {
         if seconds > TimeConstant.secondsMinute {
             minutes = seconds / TimeConstant.secondsMinute
             seconds -= minutes * TimeConstant.secondsMinute
->>>>>>> main:VoiceRecorder/Model/PlayerTime.swift
         }
 
         var formattedString = ""

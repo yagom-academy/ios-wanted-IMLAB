@@ -9,15 +9,8 @@ import Foundation
 import Combine
 
 class HomeViewModel {
-<<<<<<< HEAD
-    // TODO: - Combine
-    // TODO: - View Indicator 추가
-    var audios: [Audio]
-    var loadingEnded: () -> Void = { }
-=======
     @Published var audios: [Audio]
     @Published var isReady = false
->>>>>>> main
     
     init() {
         audios = []
