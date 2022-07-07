@@ -103,6 +103,8 @@ class RecordingViewController: UIViewController {
         } else {
             sender.controlFlashAnimate(recordingMode: false)
             self.playButton.isEnabled = true
+            self.goForwardButton.isEnabled = true
+            self.goBackwardButton.isEnabled = true
             finishedRecord()
         }
         inRecordMode.toggle()
@@ -135,8 +137,6 @@ class RecordingViewController: UIViewController {
             sender.setImage(UIImage(systemName: "pause"), for: .normal)
             progressTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateProgress), userInfo: nil, repeats: true)
             self.recordingButton.isEnabled = false
-            self.goForwardButton.isEnabled = true
-            self.goBackwardButton.isEnabled = true
         } else {
             sender.setImage(UIImage(systemName: "play"), for: .normal)
             self.recordingButton.isEnabled = true
@@ -145,18 +145,14 @@ class RecordingViewController: UIViewController {
     }
     
     @objc func updateProgress() {
-        currentPlayTimeLabel.text = audioPlayerHandler.getCurrentPlayTime()
-        playProgressBar.progress = audioPlayerHandler.getProgress()
-        
-        if playProgressBar.progress == 0 {
-            progressTimer.invalidate()
-            self.recordingButton.isEnabled = true
-            self.goForwardButton.isEnabled = false
-            self.goBackwardButton.isEnabled = false
-            inPlayMode = false
-        }
+        currentPlayTimeLabel.text = audioPlayerHandler.currentTime
+        playProgressBar.progress = audioPlayerHandler.playerProgress
         if !audioPlayerHandler.isPlaying {
             self.playButton.setImage(UIImage(systemName: "play"), for: .normal)
+            self.recordingButton.isEnabled = true
+            progressTimer?.invalidate()
+        } else {
+            self.playButton.setImage(UIImage(systemName: "pause"), for: .normal)
         }
     }
     
@@ -173,10 +169,14 @@ class RecordingViewController: UIViewController {
     
     @IBAction func goBackwardButtonTapped(_ sender: UIButton) {
         audioPlayerHandler.seek(to: -5.0)
+        currentPlayTimeLabel.text = audioPlayerHandler.currentTime
+        playProgressBar.progress = audioPlayerHandler.playerProgress
     }
     
     @IBAction func goForwardButtonTapped(_ sender: UIButton) {
         audioPlayerHandler.seek(to: 5.0)
+        currentPlayTimeLabel.text = audioPlayerHandler.currentTime
+        playProgressBar.progress = audioPlayerHandler.playerProgress
     }
     
     func writeWaves(_ input: Float) {

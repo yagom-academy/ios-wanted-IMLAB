@@ -64,14 +64,12 @@ class PlayingViewController: UIViewController {
     }
     
     @IBAction func goBackwardButtonTapped(_ sender: UIButton) {
-        currentPlayTimeLabel.text = audioPlayerHandler.getCurrentPlayTime()
         audioPlayerHandler.seek(to: -5.0)
         playProgressBar.progress = audioPlayerHandler.playerProgress
         currentPlayTimeLabel.text = audioPlayerHandler.currentTime
     }
     
     @IBAction func goForwardButtonTapped(_ sender: UIButton) {
-        currentPlayTimeLabel.text = audioPlayerHandler.getCurrentPlayTime()
         audioPlayerHandler.seek(to: 5.0)
         playProgressBar.progress = audioPlayerHandler.playerProgress
         currentPlayTimeLabel.text = audioPlayerHandler.currentTime
