@@ -9,7 +9,7 @@ import UIKit
 
 class RecordViewController: UIViewController {
     
-    let viewModel = RecordViewModel(PlayerManager.shared, RecordManager.shared)
+    let viewModel = RecordViewModel(PlayerManager.shared, RecordManager.shared, RecordNetworkManager.shared)
     
     let frequencyView = FrequencyView(frame: .zero)
     let cutoffFrequencyView = CutoffFrequencyView(frame: .zero)

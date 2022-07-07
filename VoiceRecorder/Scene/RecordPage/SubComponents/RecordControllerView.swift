@@ -9,8 +9,7 @@ import AVFoundation
 import UIKit
 
 class RecordControllerView: UIView {
-    private let networkManager =  RecordNetworkManager.shared
-    private var viewModel = RecordControllerViewModel(PlayerManager.shared, RecordManager.shared)
+    private var viewModel = RecordControllerViewModel(PlayerManager.shared, RecordManager.shared,RecordNetworkManager.shared)
     var delegate: RecordControllerDelegate?
 
     private let recordButton: UIButton = {
@@ -66,7 +65,7 @@ class RecordControllerView: UIView {
     @objc func didTapDownloadButton() {
         let file = viewModel.dateToFileName() + "+" + viewModel.duration()
         // 저장 후 dismiss
-        networkManager.saveRecord(filename: file)
+        viewModel.saveRecord(file)
     }
 }
 
