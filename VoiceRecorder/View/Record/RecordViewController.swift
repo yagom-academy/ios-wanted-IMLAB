@@ -29,6 +29,7 @@ class RecordViewController:UIViewController {
     
     lazy var recordedTimeLabel: UILabel = {
         let label = UILabel()
+        label.text = PlayerTime.zero.elapsedText
         label.textColor = .black
         return label
     }()
@@ -97,6 +98,7 @@ class RecordViewController:UIViewController {
         bindProgress()
         bindIsPlaying()
         bindRecording()
+        bindTimer()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -137,13 +139,13 @@ private extension RecordViewController{
             
             progressView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,constant: 30),
             progressView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,constant: -30),
-            progressView.topAnchor.constraint(equalTo: volumeBar.bottomAnchor,constant: 100),
+            progressView.bottomAnchor.constraint(equalTo: controlStackView.topAnchor,constant: -20),
             
             controlStackView.leadingAnchor.constraint(equalTo: progressView.leadingAnchor),
             controlStackView.trailingAnchor.constraint(equalTo: progressView.trailingAnchor),
-            controlStackView.bottomAnchor.constraint(equalTo: recordButton.topAnchor,constant: -50),
+            controlStackView.bottomAnchor.constraint(equalTo: recordButton.topAnchor,constant: -30),
             
-            recordButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            recordButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: -10),
             recordButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
@@ -167,7 +169,6 @@ private extension RecordViewController{
         } else {
             viewModel.startRec()
             sender.setImage(UIImage(systemName: "stop.circle"), for: .normal)
-            startTimer()
         }
         
     }
@@ -222,17 +223,12 @@ private extension RecordViewController{
             .store(in: &cancellable)
     }
     
-    func startTimer() {
-        if timer != nil && timer!.isValid {
-            timer!.invalidate()
-        }
-        
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timerCallBack), userInfo: nil, repeats: false)
-    }
-    
-    @objc private func timerCallBack() {
-        self.recordedTimeLabel.text = "\(timerNumber) 초"
-        timerNumber += 1
+    func bindTimer() {
+        viewModel.$recordedTime
+            .sink { playTime in
+                self.recordedTimeLabel.text = playTime.elapsedText
+            }
+            .store(in: &cancellable)
     }
 }
 

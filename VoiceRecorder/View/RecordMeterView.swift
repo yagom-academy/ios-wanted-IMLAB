@@ -38,6 +38,7 @@ class RecordMeterView: UIView {
     @objc func updateDisplay() {
         currentX += 0.1
         let calValue = calculateValue()
+        print(calValue)
         
         let layer = CAShapeLayer()
         layer.strokeColor = UIColor.systemBlue.cgColor
@@ -74,6 +75,8 @@ class RecordMeterView: UIView {
     private func calNormal(input:CGFloat) -> CGFloat{
         if input < 10 {
             return 1
+        } else if input > 190 {
+            return 190
         } else {
             return input
         }

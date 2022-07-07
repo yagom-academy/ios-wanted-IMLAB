@@ -25,10 +25,20 @@ class RecordViewModel {
     
     private var displayLink: CADisplayLink?
     
+    let timer = Timer.publish(every: 1.0, on: .current, in: .default).autoconnect()
+    
+    
     @Published var progressValue: Float = 0
     @Published var isPlaying: Bool = false
     @Published var isRecording: Bool = false
+    @Published var number: Int = 0
+    @Published var recordedTime: PlayerTime = .zero
     
+<<<<<<< HEAD
+    private var cancellable = Set<AnyCancellable>()
+    
+=======
+>>>>>>> main
     weak var delegate: RecordDrawDelegate?
     
     init() {
@@ -53,39 +63,55 @@ class RecordViewModel {
         recorder.record()
         recorder.isMeteringEnabled = true
         isRecording = recorder.isRecording
+        
+        startTimer()
         delegate?.clearAll()
-
+        
         DispatchQueue.global(qos: .background).async {
             while self.recorder.isRecording {
                 self.recorder.updateMeters()
                 self.delegate?.updateValue(self.nomalizeSoundLevel(level: self.recorder.averagePower(forChannel: 0)))
             }
         }
-
+        
     }
     
     func stopRec() {
+        timer.upstream.connect().cancel()
         recorder.stop()
         isRecording = recorder.isRecording
+<<<<<<< HEAD
+        storage.uploadData(url: recordFileURL, fileName: DateFormatter().toString(Date()) + ".m4a")
+=======
         storage.uploadData(url: recordFileURL, fileName: DateFormatter().toString(Date()))
+>>>>>>> main
     }
     
-    func playAudio() {
+    func setupAudio() {
         do {
             player = try AVAudioPlayer(data: getDataFrom())
-            player.volume = 0.5
-            player.play()
-            displayLink?.isPaused = false
-            isPlaying = player.isPlaying
+            player.numberOfLoops = 0
         } catch {
             print("Fail to play audio")
         }
     }
     
+    func playAudio() {
+        if player.data == nil {
+            setupAudio()
+        }
+        
+        player.volume = 0.5
+        player.play()
+        displayLink?.isPaused = false
+        isPlaying = player.isPlaying
+    }
+    
+    
     func stopAudio() {
         player.pause()
         isPlaying = false
-        player.currentTime = 0
+        displayLink?.isPaused = true
     }
     
     func getDataFrom() -> Data {
@@ -93,7 +119,6 @@ class RecordViewModel {
             print("Data is Not Unwrapping")
             return Data()
         }
-        print(data.description)
         return data
     }
     
@@ -102,10 +127,10 @@ class RecordViewModel {
         displayLink?.add(to: .main, forMode: .default)
         displayLink?.isPaused = true
     }
-
+    
     func seek(front:Bool){
         displayLink?.isPaused = true
-
+        
         player.pause()
         
         var currentTime = player.currentTime
@@ -131,7 +156,21 @@ class RecordViewModel {
         isPlaying = player.isPlaying
         
         progressValue = Float(currentPosition) / Float(totalPosition)
-        
+    }
+    
+    func startTimer() {
+        timer
+            .scan(0) { counter, _ in
+                counter + 1
+            }
+            .sink { counter in
+                self.recordedTime = PlayerTime(elapsedTime: counter, remainingTime: 0)
+            }
+            .store(in: &cancellable)
+    }
+    
+    @objc func timerCallBack() {
+        number += 1
     }
     
     private func nomalizeSoundLevel(level:Float) -> CGFloat {
