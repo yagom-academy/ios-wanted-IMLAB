@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0E32554069C071CA1D59DC04 /* Pods_VoiceRecorder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9BFC1627DF83D91CB89EB12 /* Pods_VoiceRecorder.framework */; };
+		125598DF2876A4ED00FE1678 /* UIVolumeslider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 125598DE2876A4ED00FE1678 /* UIVolumeslider.swift */; };
 		12BCEDB0286D25D1006C1783 /* RecordingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12BCEDAF286D25D1006C1783 /* RecordingViewController.swift */; };
 		12BCEDBA286D36D7006C1783 /* LocalFileHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12BCEDB9286D36D7006C1783 /* LocalFileHandler.swift */; };
 		12BCEDC0286D3AB3006C1783 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12BCEDBF286D3AB3006C1783 /* Extension.swift */; };
@@ -38,6 +39,7 @@
 
 /* Begin PBXFileReference section */
 		1201D724286989B8005F046B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		125598DE2876A4ED00FE1678 /* UIVolumeslider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIVolumeslider.swift; sourceTree = "<group>"; };
 		12BCEDAF286D25D1006C1783 /* RecordingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingViewController.swift; sourceTree = "<group>"; };
 		12BCEDB9286D36D7006C1783 /* LocalFileHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFileHandler.swift; sourceTree = "<group>"; };
 		12BCEDBF286D3AB3006C1783 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
@@ -97,6 +99,7 @@
 				12BCEDAF286D25D1006C1783 /* RecordingViewController.swift */,
 				12C09BC7286FF5E60032500D /* PlayingViewController.swift */,
 				B738964228703B4B00722EE8 /* LoadingView.swift */,
+				125598DE2876A4ED00FE1678 /* UIVolumeslider.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -347,6 +350,7 @@
 				12BCEDD8286DC9E3006C1783 /* AudioPlayerHandler.swift in Sources */,
 				B7545787286AE34B00EFCDA2 /* DownloadRecordfile.swift in Sources */,
 				B7545785286AE33D00EFCDA2 /* UploadRecordfile.swift in Sources */,
+				125598DF2876A4ED00FE1678 /* UIVolumeslider.swift in Sources */,
 				B7E274972869BA0300FBB977 /* FirebaseStorage.swift in Sources */,
 				DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */,
 				12C09BC8286FF5E60032500D /* PlayingViewController.swift in Sources */,
