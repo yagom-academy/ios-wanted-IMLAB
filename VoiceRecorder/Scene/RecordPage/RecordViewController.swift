@@ -9,12 +9,11 @@ import UIKit
 
 class RecordViewController: UIViewController {
     
-    let viewModel = RecordViewModel(PlayerManager.shared)
+    let viewModel = RecordViewModel(PlayerManager.shared, RecordManager.shared, RecordNetworkManager.shared)
     
     let frequencyView = FrequencyView(frame: .zero)
-
     let cutoffFrequencyView = CutoffFrequencyView(frame: .zero)
-    let recordControllerView = RecordControllerView(RecordManager.shared)
+    let recordControllerView = RecordControllerView()
     let playControllerView = PlayControllerView()
     
     override func viewDidLoad() {
@@ -53,6 +52,7 @@ extension RecordViewController {
     
     private func layout() {
         [
+            frequencyView,
             cutoffFrequencyView,
             recordControllerView,
             playControllerView
@@ -60,8 +60,13 @@ extension RecordViewController {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
+        
+        frequencyView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        frequencyView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        frequencyView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        frequencyView.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor, multiplier: 0.3).isActive = true
 
-        cutoffFrequencyView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        cutoffFrequencyView.topAnchor.constraint(equalTo: frequencyView.bottomAnchor).isActive = true
         cutoffFrequencyView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         cutoffFrequencyView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         cutoffFrequencyView.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor, multiplier: 0.3).isActive = true
@@ -78,6 +83,10 @@ extension RecordViewController {
 
 //MARK: - RecordController delegate
 extension RecordViewController: RecordControllerDelegate {
+    func startRecord() {
+        playControllerView.isHidden = true
+    }
+    
     func endRecord() {
         playControllerView.isHidden = false
     }

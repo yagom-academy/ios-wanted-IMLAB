@@ -14,7 +14,7 @@ class PlayerButtonView: UIView {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.distribution = .equalSpacing
-        stackView.spacing = 40
+        stackView.spacing = 50
 
         return stackView
     }()
@@ -99,7 +99,6 @@ extension PlayerButtonView {
     private func attribute() {
         [backwardButton, playPauseButton, forwardButton].forEach {
             stackView.addArrangedSubview($0)
-//            $0.isEnabled = false
         }
     }
 
@@ -110,6 +109,8 @@ extension PlayerButtonView {
         }
 
         let stackViewConstraints = [
+            stackView.topAnchor.constraint(equalTo: topAnchor),
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
             stackView.centerXAnchor.constraint(equalTo: centerXAnchor),
             stackView.centerYAnchor.constraint(equalTo: centerYAnchor),
         ]

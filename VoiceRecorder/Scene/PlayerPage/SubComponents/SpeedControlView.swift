@@ -22,7 +22,12 @@ class SpeedControlView: UIView {
         return stackView
     }()
 
-    let speedLabel = UILabel()
+    let speedLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 14, weight: .medium)
+        
+        return label
+    }()
 
     let speedUpButton: UIButton = {
         let button = UIButton()
@@ -89,7 +94,9 @@ extension SpeedControlView {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         let stackViewConstraints = [
-            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 30),
+            stackView.topAnchor.constraint(equalTo: topAnchor),
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -30),
             stackView.centerYAnchor.constraint(equalTo: centerYAnchor),
         ]
 

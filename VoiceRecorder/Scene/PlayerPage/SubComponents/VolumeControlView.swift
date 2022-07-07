@@ -21,8 +21,8 @@ class VolumeControlView: UIView {
 
     private let volumeImage: UIImageView = {
         let imageView = UIImageView(image: UIImage(systemName: "speaker.wave.2.fill"))
-        imageView.widthAnchor.constraint(equalToConstant: 25).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: 30).isActive = true
 
         return imageView
     }()
@@ -67,8 +67,10 @@ extension VolumeControlView {
         let inset: CGFloat = 30.0
 
         let stackViewConstraints = [
+            stackView.topAnchor.constraint(equalTo: topAnchor),
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: inset),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -inset),
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ]
 
         NSLayoutConstraint.activate(stackViewConstraints)

@@ -24,7 +24,7 @@ class RecordListCell: UITableViewCell {
     private let durationLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 15)
-        label.textColor = .secondaryLabel
+        label.textColor = .white
 
         return label
     }()
@@ -45,7 +45,7 @@ class RecordListCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 16.0, left: 16, bottom: 16, right: 16))
+        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0))
     }
 
     func setData(data: FileData) {
@@ -73,7 +73,17 @@ class RecordListCell: UITableViewCell {
     }
 
     private func attribute() {
-        selectionStyle = .none
+        self.selectionStyle = .none
+        self.backgroundColor = .clear
+        self.layer.borderWidth = 1
+        self.layer.borderColor = UIColor.systemGray4.cgColor
+
+        contentView.backgroundColor = YagomColor.two.uiColor
+        contentView.layer.cornerRadius = 10
+
+        titleLabel.textColor = .white
+
+        swipeTapView.tintColor = YagomColor.three.uiColor
     }
 
     private func layout() {
@@ -97,6 +107,8 @@ class RecordListCell: UITableViewCell {
         labelContainer.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
 
         swipeTapView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        swipeTapView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
+        swipeTapView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
+        swipeTapView.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.5).isActive = true
+        swipeTapView.widthAnchor.constraint(equalTo: swipeTapView.heightAnchor).isActive = true
     }
 }

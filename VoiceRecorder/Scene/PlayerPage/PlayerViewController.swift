@@ -14,6 +14,7 @@ class PlayerViewController: UIViewController {
     private let fileNameLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
+        label.font = .systemFont(ofSize: 20, weight: .semibold)
 
         return label
     }()
@@ -21,12 +22,18 @@ class PlayerViewController: UIViewController {
     private let mainStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
-        stackView.distribution = .equalSpacing
+        stackView.distribution = .fill
 
         return stackView
     }()
 
     private let frequencyView = FrequencyView(frame: .zero)
+    private let emptyView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .systemGray5
+        return view
+    }()
+
     private let pitchControlView = PitchControlView(frame: .zero)
     private let speedControlView = SpeedControlView(frame: .zero)
     private let volumeControlView = VolumeControlView(frame: .zero)
@@ -90,13 +97,13 @@ extension PlayerViewController {
 
         // 파일명, 파형, 음성변조, 볼륨, 버튼
         let mainStackViewItems = [
+//            frequencyView,
+            emptyView,
             fileNameLabel,
-            frequencyView,
-            
             playerButtonView,
             volumeControlView,
             pitchControlView,
-            speedControlView
+            speedControlView,
         ]
 
         mainStackViewItems.forEach {
@@ -105,13 +112,22 @@ extension PlayerViewController {
         }
 
         let mainStackViewItemsContraints = [
-            fileNameLabel.heightAnchor.constraint(equalTo: safearea.heightAnchor, multiplier: 0.1),
-            frequencyView.heightAnchor.constraint(equalTo: safearea.heightAnchor, multiplier: 0.3),
-            pitchControlView.heightAnchor.constraint(equalTo: safearea.heightAnchor, multiplier: 0.05),
-            volumeControlView.heightAnchor.constraint(equalTo: safearea.heightAnchor, multiplier: 0.03),
-            speedControlView.heightAnchor.constraint(equalTo: safearea.heightAnchor, multiplier: 0.03),
-            playerButtonView.heightAnchor.constraint(equalTo: safearea.heightAnchor, multiplier: 0.1),
+            emptyView.heightAnchor.constraint(equalTo: safearea.heightAnchor, multiplier: 0.3),
+            emptyView.topAnchor.constraint(equalTo: safearea.topAnchor, constant: 30),
+
+            fileNameLabel.heightAnchor.constraint(equalToConstant: 50),
+
+            playerButtonView.heightAnchor.constraint(equalToConstant: 50),
+            volumeControlView.heightAnchor.constraint(equalToConstant: 30),
+            pitchControlView.heightAnchor.constraint(equalToConstant: 30),
+            speedControlView.heightAnchor.constraint(equalToConstant: 20),
         ]
+        
+        mainStackView.setCustomSpacing(30, after: emptyView)
+        mainStackView.setCustomSpacing(80, after: fileNameLabel)
+        mainStackView.setCustomSpacing(30, after: playerButtonView)
+        mainStackView.setCustomSpacing(30, after: volumeControlView)
+        mainStackView.setCustomSpacing(20, after: pitchControlView)
 
         NSLayoutConstraint.activate(mainStackViewItemsContraints)
     }

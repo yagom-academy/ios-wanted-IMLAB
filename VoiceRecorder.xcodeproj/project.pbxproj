@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		049B44AF2876659300FD4C26 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 049B44AE2876659300FD4C26 /* GoogleService-Info.plist */; };
 		04FF9394286BEEFB00EB34B6 /* RecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF9393286BEEFB00EB34B6 /* RecordViewController.swift */; };
 		04FF939D286C003500EB34B6 /* FrequencyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF939C286C003500EB34B6 /* FrequencyView.swift */; };
 		04FF939F286C004200EB34B6 /* CutoffFrequencyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF939E286C004200EB34B6 /* CutoffFrequencyView.swift */; };
@@ -14,7 +15,6 @@
 		04FF93A4286C15AA00EB34B6 /* UIButton+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF93A3286C15AA00EB34B6 /* UIButton+.swift */; };
 		04FF93A7286C270600EB34B6 /* RecordManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF93A6286C270600EB34B6 /* RecordManager.swift */; };
 		0D26B1222875393A00FE1B04 /* RecordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D26B1212875393A00FE1B04 /* RecordViewModel.swift */; };
-		0D26B1252875B1AB00FE1B04 /* RecordModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D26B1242875B1AB00FE1B04 /* RecordModel.swift */; };
 		0D2E6BB2286BE0C5003D2EE1 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D2E6BB1286BE0C5003D2EE1 /* PlayerViewController.swift */; };
 		0D2E6BB4286C21B3003D2EE1 /* PlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D2E6BB3286C21B3003D2EE1 /* PlayerManager.swift */; };
 		0D8172E5286D69140009E8AA /* FileData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D8172E4286D69140009E8AA /* FileData.swift */; };
@@ -27,6 +27,9 @@
 		0DCB66CE287050F600800B1C /* PlayerButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCB66CD287050F600800B1C /* PlayerButtonView.swift */; };
 		0DD2E01928767F2100727315 /* SpeedControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DD2E01828767F2100727315 /* SpeedControlView.swift */; };
 		0DD2E01B2876808700727315 /* SpeedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DD2E01A2876808700727315 /* SpeedViewModel.swift */; };
+		0DD2E0202876AE4200727315 /* ThemeColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DD2E01F2876AE4200727315 /* ThemeColor.swift */; };
+		0DD2E0222876AE8000727315 /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DD2E0212876AE8000727315 /* UIColor+.swift */; };
+		0DD2E0242876B93400727315 /* TimeControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DD2E0232876B93400727315 /* TimeControlView.swift */; };
 		0DFCD72F2872C13900F31EBA /* PitchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DFCD72E2872C13900F31EBA /* PitchViewModel.swift */; };
 		0DFCD7322872C15300F31EBA /* VolumeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DFCD7312872C15300F31EBA /* VolumeViewModel.swift */; };
 		0DFCD7342872C1D300F31EBA /* PlayerButtonViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DFCD7332872C1D300F31EBA /* PlayerButtonViewModel.swift */; };
@@ -35,11 +38,14 @@
 		DE15E66528604279003DD2F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66428604279003DD2F5 /* Assets.xcassets */; };
 		DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */; };
 		FE178319287592BA00DEB555 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = FE178318287592BA00DEB555 /* FirebaseStorage */; };
-		FE17831B287592D700DEB555 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FE17831A287592D700DEB555 /* GoogleService-Info.plist */; };
 		FE47347E28765D0500B753FB /* PlayControllerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE47347D28765D0500B753FB /* PlayControllerView.swift */; };
 		FE47348028765EF200B753FB /* PlayControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE47347F28765EF200B753FB /* PlayControllerViewModel.swift */; };
 		FE4734822876605D00B753FB /* RecordControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4734812876605D00B753FB /* RecordControllerViewModel.swift */; };
 		FE473484287661BC00B753FB /* RecordControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE473483287661BC00B753FB /* RecordControllerDelegate.swift */; };
+		FE47348628768E8D00B753FB /* RecordListSortBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE47348528768E8D00B753FB /* RecordListSortBar.swift */; };
+		FE4734882876906F00B753FB /* RecordListSortBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4734872876906F00B753FB /* RecordListSortBarDelegate.swift */; };
+		FE47348A287690C900B753FB /* RecordListSortState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE473489287690C900B753FB /* RecordListSortState.swift */; };
+		FE47348C28769ECF00B753FB /* YagomColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE47348B28769ECF00B753FB /* YagomColor.swift */; };
 		FE7A188A2872D182003CC843 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7A18892872D182003CC843 /* UIView+.swift */; };
 		FE7A18972873319F003CC843 /* CustomNetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7A18962873319F003CC843 /* CustomNetworkError.swift */; };
 		FEA5330C286C3D48002E1169 /* CustomNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA5330B286C3D48002E1169 /* CustomNavigationController.swift */; };
@@ -48,10 +54,11 @@
 		FEEC697E286C3ACF002E020F /* RecordListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEEC697D286C3ACF002E020F /* RecordListViewModel.swift */; };
 		FEEC6981286C3AEE002E020F /* RecordListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEEC6980286C3AEE002E020F /* RecordListCell.swift */; };
 		FEEC6984286C3B2D002E020F /* RecordNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEEC6983286C3B2D002E020F /* RecordNetworkManager.swift */; };
-		FEFCE0902870549F00200AF1 /* PlayListUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEFCE08F2870549F00200AF1 /* PlayListUserDefaults.swift */; };
+		FEFCE0902870549F00200AF1 /* RecordListUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEFCE08F2870549F00200AF1 /* RecordListUserDefaults.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		049B44AE2876659300FD4C26 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		04FF9393286BEEFB00EB34B6 /* RecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewController.swift; sourceTree = "<group>"; };
 		04FF939C286C003500EB34B6 /* FrequencyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrequencyView.swift; sourceTree = "<group>"; };
 		04FF939E286C004200EB34B6 /* CutoffFrequencyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CutoffFrequencyView.swift; sourceTree = "<group>"; };
@@ -59,7 +66,6 @@
 		04FF93A3286C15AA00EB34B6 /* UIButton+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+.swift"; sourceTree = "<group>"; };
 		04FF93A6286C270600EB34B6 /* RecordManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordManager.swift; sourceTree = "<group>"; };
 		0D26B1212875393A00FE1B04 /* RecordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewModel.swift; sourceTree = "<group>"; };
-		0D26B1242875B1AB00FE1B04 /* RecordModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordModel.swift; sourceTree = "<group>"; };
 		0D2E6BB1286BE0C5003D2EE1 /* PlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
 		0D2E6BB3286C21B3003D2EE1 /* PlayerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerManager.swift; sourceTree = "<group>"; };
 		0D8172E4286D69140009E8AA /* FileData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileData.swift; sourceTree = "<group>"; };
@@ -72,6 +78,9 @@
 		0DCB66CD287050F600800B1C /* PlayerButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerButtonView.swift; sourceTree = "<group>"; };
 		0DD2E01828767F2100727315 /* SpeedControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedControlView.swift; sourceTree = "<group>"; };
 		0DD2E01A2876808700727315 /* SpeedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedViewModel.swift; sourceTree = "<group>"; };
+		0DD2E01F2876AE4200727315 /* ThemeColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeColor.swift; sourceTree = "<group>"; };
+		0DD2E0212876AE8000727315 /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
+		0DD2E0232876B93400727315 /* TimeControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeControlView.swift; sourceTree = "<group>"; };
 		0DFCD72E2872C13900F31EBA /* PitchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitchViewModel.swift; sourceTree = "<group>"; };
 		0DFCD7312872C15300F31EBA /* VolumeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeViewModel.swift; sourceTree = "<group>"; };
 		0DFCD7332872C1D300F31EBA /* PlayerButtonViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerButtonViewModel.swift; sourceTree = "<group>"; };
@@ -81,11 +90,14 @@
 		DE15E66428604279003DD2F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DE15E66728604279003DD2F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DE15E66928604279003DD2F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		FE17831A287592D700DEB555 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FE47347D28765D0500B753FB /* PlayControllerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayControllerView.swift; sourceTree = "<group>"; };
 		FE47347F28765EF200B753FB /* PlayControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayControllerViewModel.swift; sourceTree = "<group>"; };
 		FE4734812876605D00B753FB /* RecordControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordControllerViewModel.swift; sourceTree = "<group>"; };
 		FE473483287661BC00B753FB /* RecordControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordControllerDelegate.swift; sourceTree = "<group>"; };
+		FE47348528768E8D00B753FB /* RecordListSortBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListSortBar.swift; sourceTree = "<group>"; };
+		FE4734872876906F00B753FB /* RecordListSortBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListSortBarDelegate.swift; sourceTree = "<group>"; };
+		FE473489287690C900B753FB /* RecordListSortState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListSortState.swift; sourceTree = "<group>"; };
+		FE47348B28769ECF00B753FB /* YagomColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YagomColor.swift; sourceTree = "<group>"; };
 		FE7A18892872D182003CC843 /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
 		FE7A18962873319F003CC843 /* CustomNetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNetworkError.swift; sourceTree = "<group>"; };
 		FEA5330B286C3D48002E1169 /* CustomNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationController.swift; sourceTree = "<group>"; };
@@ -94,7 +106,7 @@
 		FEEC697D286C3ACF002E020F /* RecordListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListViewModel.swift; sourceTree = "<group>"; };
 		FEEC6980286C3AEE002E020F /* RecordListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListCell.swift; sourceTree = "<group>"; };
 		FEEC6983286C3B2D002E020F /* RecordNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordNetworkManager.swift; sourceTree = "<group>"; };
-		FEFCE08F2870549F00200AF1 /* PlayListUserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayListUserDefaults.swift; sourceTree = "<group>"; };
+		FEFCE08F2870549F00200AF1 /* RecordListUserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListUserDefaults.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,7 +127,6 @@
 				0D8172DF286D67F10009E8AA /* SubComponents */,
 				04FF9393286BEEFB00EB34B6 /* RecordViewController.swift */,
 				0D26B1212875393A00FE1B04 /* RecordViewModel.swift */,
-				0D26B1242875B1AB00FE1B04 /* RecordModel.swift */,
 			);
 			path = RecordPage;
 			sourceTree = "<group>";
@@ -126,6 +137,7 @@
 				04FF93A3286C15AA00EB34B6 /* UIButton+.swift */,
 				FE7A18892872D182003CC843 /* UIView+.swift */,
 				0D8172EB286D71430009E8AA /* AVPlayer+.swift */,
+				0DD2E0212876AE8000727315 /* UIColor+.swift */,
 				0D8172ED286D7A950009E8AA /* Data+.swift */,
 			);
 			path = Extension;
@@ -147,7 +159,7 @@
 			children = (
 				FEEC697B286C3AB0002E020F /* RecordListViewController.swift */,
 				FEEC697D286C3ACF002E020F /* RecordListViewModel.swift */,
-				FEFCE08F2870549F00200AF1 /* PlayListUserDefaults.swift */,
+				FEFCE08F2870549F00200AF1 /* RecordListUserDefaults.swift */,
 				FEEC697F286C3AD8002E020F /* SubComponents */,
 			);
 			path = RecordListPage;
@@ -184,6 +196,7 @@
 			children = (
 				0D8172E4286D69140009E8AA /* FileData.swift */,
 				FE7A18962873319F003CC843 /* CustomNetworkError.swift */,
+				FE473489287690C900B753FB /* RecordListSortState.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -205,6 +218,7 @@
 				0DCB66CB287050DE00800B1C /* VolumeControlView.swift */,
 				0DCB66CD287050F600800B1C /* PlayerButtonView.swift */,
 				0DD2E01828767F2100727315 /* SpeedControlView.swift */,
+				0DD2E0232876B93400727315 /* TimeControlView.swift */,
 			);
 			path = SubComponents;
 			sourceTree = "<group>";
@@ -248,7 +262,7 @@
 				DE15E65D28604278003DD2F5 /* SceneDelegate.swift */,
 				DE15E66428604279003DD2F5 /* Assets.xcassets */,
 				DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */,
-				FE17831A287592D700DEB555 /* GoogleService-Info.plist */,
+				049B44AE2876659300FD4C26 /* GoogleService-Info.plist */,
 				DE15E66928604279003DD2F5 /* Info.plist */,
 			);
 			path = VoiceRecorder;
@@ -258,6 +272,8 @@
 			isa = PBXGroup;
 			children = (
 				FEA5330F286C3DC8002E1169 /* Config.swift */,
+				FE47348B28769ECF00B753FB /* YagomColor.swift */,
+				0DD2E01F2876AE4200727315 /* ThemeColor.swift */,
 			);
 			path = Config;
 			sourceTree = "<group>";
@@ -266,6 +282,8 @@
 			isa = PBXGroup;
 			children = (
 				FEEC6980286C3AEE002E020F /* RecordListCell.swift */,
+				FE47348528768E8D00B753FB /* RecordListSortBar.swift */,
+				FE4734872876906F00B753FB /* RecordListSortBarDelegate.swift */,
 			);
 			path = SubComponents;
 			sourceTree = "<group>";
@@ -336,7 +354,7 @@
 			files = (
 				DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */,
 				DE15E66528604279003DD2F5 /* Assets.xcassets in Resources */,
-				FE17831B287592D700DEB555 /* GoogleService-Info.plist in Resources */,
+				049B44AF2876659300FD4C26 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -350,7 +368,9 @@
 				FE7A188A2872D182003CC843 /* UIView+.swift in Sources */,
 				0DFCD7342872C1D300F31EBA /* PlayerButtonViewModel.swift in Sources */,
 				04FF93A7286C270600EB34B6 /* RecordManager.swift in Sources */,
+				FE4734882876906F00B753FB /* RecordListSortBarDelegate.swift in Sources */,
 				0D8172EC286D71430009E8AA /* AVPlayer+.swift in Sources */,
+				FE47348628768E8D00B753FB /* RecordListSortBar.swift in Sources */,
 				0D2E6BB4286C21B3003D2EE1 /* PlayerManager.swift in Sources */,
 				FE7A18972873319F003CC843 /* CustomNetworkError.swift in Sources */,
 				FEEC6981286C3AEE002E020F /* RecordListCell.swift in Sources */,
@@ -371,20 +391,25 @@
 				04FF939D286C003500EB34B6 /* FrequencyView.swift in Sources */,
 				0D8172E8286D6EE10009E8AA /* PlayerViewModel.swift in Sources */,
 				04FF93A1286C004C00EB34B6 /* RecordControllerView.swift in Sources */,
+				0DD2E0242876B93400727315 /* TimeControlView.swift in Sources */,
 				0D8172EA286D6F000009E8AA /* PlayerModel.swift in Sources */,
 				04FF9394286BEEFB00EB34B6 /* RecordViewController.swift in Sources */,
 				FE47347E28765D0500B753FB /* PlayControllerView.swift in Sources */,
 				FE4734822876605D00B753FB /* RecordControllerViewModel.swift in Sources */,
+				0DD2E0202876AE4200727315 /* ThemeColor.swift in Sources */,
+				FE47348A287690C900B753FB /* RecordListSortState.swift in Sources */,
 				0D8172E5286D69140009E8AA /* FileData.swift in Sources */,
 				FE47348028765EF200B753FB /* PlayControllerViewModel.swift in Sources */,
 				04FF93A4286C15AA00EB34B6 /* UIButton+.swift in Sources */,
 				FEA5330C286C3D48002E1169 /* CustomNavigationController.swift in Sources */,
-				FEFCE0902870549F00200AF1 /* PlayListUserDefaults.swift in Sources */,
+				FEFCE0902870549F00200AF1 /* RecordListUserDefaults.swift in Sources */,
+				0DD2E0222876AE8000727315 /* UIColor+.swift in Sources */,
 				0D26B1252875B1AB00FE1B04 /* RecordModel.swift in Sources */,
 				0DD2E01928767F2100727315 /* SpeedControlView.swift in Sources */,
 				DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */,
 				FEEC6984286C3B2D002E020F /* RecordNetworkManager.swift in Sources */,
 				FEEC697C286C3AB0002E020F /* RecordListViewController.swift in Sources */,
+				FE47348C28769ECF00B753FB /* YagomColor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

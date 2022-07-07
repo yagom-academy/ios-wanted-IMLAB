@@ -9,6 +9,8 @@ import Foundation
 import UIKit
 
 class PlayControllerView: UIStackView {
+    private var viewModel: PlayControllerViewModel!
+    
     private let backwardButton: UIButton = {
         let button = UIButton()
         button.setImage(systemName: "gobackward.5", state: .normal)
@@ -39,8 +41,6 @@ class PlayControllerView: UIStackView {
 
         return button
     }()
-    
-    private var viewModel: PlayControllerViewModel!
     
     init() {
         super.init(frame: CGRect.zero)

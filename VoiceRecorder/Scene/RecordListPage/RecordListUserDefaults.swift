@@ -7,19 +7,19 @@
 
 import Foundation
 
-class PlayListUserDefaults {
+class RecordListUserDefaults {
     typealias DBData = [String]
-    static let shared = PlayListUserDefaults()
+    static let shared = RecordListUserDefaults()
     private init() { }
 
-    private let userDefaults = UserDefaults(suiteName: "playList")
+    private let userDefaults = UserDefaults(suiteName: "recordList")
 
     func save(playList: DBData) {
-        self.userDefaults?.setValue(playList, forKey: "playList")
+        self.userDefaults?.setValue(playList, forKey: "recordList")
     }
     
     func getData() -> DBData {
-        guard let savedData = userDefaults?.object(forKey: "playList") as? DBData else { return [] }
+        guard let savedData = userDefaults?.object(forKey: "recordList") as? DBData else { return [] }
         return savedData
     }
 
