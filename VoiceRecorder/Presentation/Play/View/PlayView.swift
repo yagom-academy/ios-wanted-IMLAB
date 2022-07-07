@@ -9,6 +9,12 @@ import UIKit
 
 final class PlayView: UIView, ViewPresentable {
     
+    private let titleLabel: UILabel = {
+       let label = UILabel()
+        label.font = UIFont.preferredFont(forTextStyle: .body)
+        return label
+    }()
+    
     private let segmentedContoller: UISegmentedControl = {
         let segment = UISegmentedControl(items: ["일반 목소리","아기 목소리","할아버지 목소리"])
         return segment
@@ -69,8 +75,10 @@ final class PlayView: UIView, ViewPresentable {
     }
 
     func setupView() {
-        verticalStackView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(verticalStackView)
+        [titleLabel,verticalStackView].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            addSubview($0)
+        }
         
         [segmentedContoller,slider,playButtonHorizontalStackView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -85,6 +93,8 @@ final class PlayView: UIView, ViewPresentable {
     }
     
     func setupConstraints() {
+        titleLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 20).isActive = true
+        titleLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         
         slider.leadingAnchor.constraint(equalTo: verticalStackView.leadingAnchor).isActive = true
         slider.trailingAnchor.constraint(equalTo: verticalStackView.trailingAnchor).isActive = true

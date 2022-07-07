@@ -24,6 +24,8 @@ final class AudioListViewController: BaseViewController {
     
     override func setupView() {
         audioListView.tableView.dataSource = self
+        audioListView.tableView.delegate = self
+        
         title = "Voice Memos"
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(
@@ -46,10 +48,20 @@ final class AudioListViewController: BaseViewController {
         }
     }
     
+}
+
+extension AudioListViewController {
     @objc func plusButtonTapped() {
         
     }
     
+    func presentPlayView(audioInformation: AudioInformation) {
+        let playViewController = PlayViewController()
+        let playViewModel = PlayViewModel(audioInformation: audioInformation)
+        playViewController.viewModel = playViewModel
+        
+        self.present(playViewController, animated: true)
+    }
 }
 
 extension AudioListViewController: UITableViewDataSource {
@@ -63,5 +75,11 @@ extension AudioListViewController: UITableViewDataSource {
         cell.configureCell(audioInformation: viewModel.audioInformation.value[indexPath.row])
         
         return cell
+    }
+}
+
+extension AudioListViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.presentPlayView(audioInformation: viewModel.audioInformation.value[indexPath.row])
     }
 }
