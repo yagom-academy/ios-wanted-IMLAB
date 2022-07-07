@@ -33,6 +33,7 @@ class RecordListViewController: UIViewController {
         super.viewWillAppear(animated)
         viewModel.update {
             self.tableView.reloadData()
+            self.sortBar.viewWillAppear()
         }
     }
 
@@ -149,12 +150,9 @@ extension RecordListViewController {
 //MARK: - 셀정렬버튼
 extension RecordListViewController: RecordListSortBarDelegate {
     func sortButtonTapped(sortState: RecordListSortState) {
-        switch sortState {
-        case .latest:
-            print("최신순 버튼 클릭!")
-        case .oldest:
-            print("오래된순 버튼 클릭!")
-        }
+        viewModel.sortButtonTapped(sortState: sortState, completion: {
+            tableView.reloadData()
+        })
     }
 }
 

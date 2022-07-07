@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct FileData {
+struct FileData: Codable {
     var rawFilename: String
     var filename: String
     var duration: String

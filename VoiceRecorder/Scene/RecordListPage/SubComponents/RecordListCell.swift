@@ -43,7 +43,7 @@ class RecordListCell: UITableViewCell {
         contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0))
     }
 
-    func setData(data: RecordListViewModel.CellData, indexPath: IndexPath) {
+    func setData(data: CellData, indexPath: IndexPath) {
         self.indexPath = indexPath
         titleLabel.text = data.fileInfo.filename
         durationLabel.text = data.fileInfo.duration

@@ -8,6 +8,8 @@
 import Foundation
 
 enum RecordListSortState {
+    case basic
     case latest
     case oldest
+    case favorite
 }
