@@ -285,7 +285,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="47" translatesAutoresizingMaskIntoConstraints="NO" id="jVz-As-2vE">
-                                <rect key="frame" x="57" y="389.5" width="300" height="392.5"/>
+                                <rect key="frame" x="57" y="489.5" width="300" height="292.5"/>
                                 <subviews>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="VjU-pj-Gei">
                                         <rect key="frame" x="0.0" y="0.0" width="300" height="32"/>
@@ -353,10 +353,10 @@
                                         </subviews>
                                     </stackView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="STt-MF-5Xp">
-                                        <rect key="frame" x="0.0" y="242.5" width="300" height="150"/>
+                                        <rect key="frame" x="0.0" y="242.5" width="300" height="50"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="150" id="YPQ-Xa-x5v"/>
+                                            <constraint firstAttribute="height" constant="50" id="YPQ-Xa-x5v"/>
                                             <constraint firstAttribute="width" constant="300" id="s5P-h9-hkD"/>
                                         </constraints>
                                     </view>
