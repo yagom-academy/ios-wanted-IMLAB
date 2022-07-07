@@ -16,12 +16,12 @@ class VoiceMemoViewController: UIViewController {
     
     // MARK: - Properties
     
-    var localUrls: [URL] = []
-    var fileNames: [String] = []
-    var fileDurations: [String] = []
-    var isFetching: Bool = false
+    private var localUrls: [URL] = []
+    private var fileNames: [String] = []
+    private var fileDurations: [String] = []
+    private var isFetching: Bool = false
     
-    var player: AVAudioPlayer?
+    private var player: AVAudioPlayer?
     
     // MARK: - LifeCycles
     
@@ -32,11 +32,9 @@ class VoiceMemoViewController: UIViewController {
         fetchRecordingData()
     }
     
-    // MARK: - IBActions
-    
     // MARK: - Methods
     
-    func fetchRecordingData() {
+    private func fetchRecordingData() {
         FireStorageManager.shared.fetchData { results in
             self.localUrls = results
             self.createFileName(urls: results)
@@ -52,7 +50,7 @@ class VoiceMemoViewController: UIViewController {
         }
     }
     
-    func createFileName(urls: [URL]) {
+    private func createFileName(urls: [URL]) {
         fileNames = urls.map { url -> String in
             let urlToString = url.absoluteString
             let findIndex = urlToString.index(urlToString.endIndex, offsetBy: -33)
@@ -62,7 +60,7 @@ class VoiceMemoViewController: UIViewController {
         }
     }
     
-    func getFileDuration(urls: [URL]) {
+    private func getFileDuration(urls: [URL]) {
         
         fileDurations = urls.map { url -> String in
             var durationTime: String = ""
@@ -80,7 +78,7 @@ class VoiceMemoViewController: UIViewController {
     }
     
     
-    func configureTableView() {
+    private func configureTableView() {
         
         let cell = UINib(nibName: VoiceMemoTableViewCell.identifier, bundle: nil)
         voiceMemoTableView.register(cell, forCellReuseIdentifier: VoiceMemoTableViewCell.identifier)
