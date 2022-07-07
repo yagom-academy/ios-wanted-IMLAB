@@ -25,9 +25,11 @@ class FirebaseStorageManager {
         let data = try! Data(contentsOf: url)
         
         let metaData = StorageMetadata()
+        let totalTime = soundManager.totalPlayTime()
+        let duration = soundManager.convertTimeToString(totalTime)
         let customData = [
             "title": title,
-            "duration": String(Int(soundManager.totalPlayTime()))
+            "duration": duration
         ]
         metaData.customMetadata = customData
         metaData.contentType = "audio/x-caf"
