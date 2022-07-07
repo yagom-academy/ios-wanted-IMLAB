@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		96065C7B2876F99D0023FC72 /* AudioPlayManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96065C7A2876F99D0023FC72 /* AudioPlayManager.swift */; };
 		965DB1122875ACE000A8C0DE /* PlayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965DB1112875ACE000A8C0DE /* PlayViewModel.swift */; };
 		DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65B28604278003DD2F5 /* AppDelegate.swift */; };
 		DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65D28604278003DD2F5 /* SceneDelegate.swift */; };
@@ -32,6 +33,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		96065C7A2876F99D0023FC72 /* AudioPlayManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayManager.swift; sourceTree = "<group>"; };
 		965DB1112875ACE000A8C0DE /* PlayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PlayViewModel.swift; path = VoiceRecorder/Domain/Inteface/Repository/PlayViewModel.swift; sourceTree = SOURCE_ROOT; };
 		DE15E65828604278003DD2F5 /* VoiceRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE15E65B28604278003DD2F5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -69,6 +71,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		96065C792876F9810023FC72 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				96065C7A2876F99D0023FC72 /* AudioPlayManager.swift */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
 		965DB10F2875ACBA00A8C0DE /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -220,6 +230,7 @@
 		ECB8A5DA286BECDD00B1D363 /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				96065C792876F9810023FC72 /* Manager */,
 				DFDF5196286EC0B2000E55EC /* Helper */,
 				ECB8A5DC286BECE700B1D363 /* Base */,
 				ECB8A5DB286BECE100B1D363 /* Protocol */,
@@ -370,6 +381,7 @@
 				DFDF52292875191E000E55EC /* AudioRepository.swift in Sources */,
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
 				965DB1122875ACE000A8C0DE /* PlayViewModel.swift in Sources */,
+				96065C7B2876F99D0023FC72 /* AudioPlayManager.swift in Sources */,
 				DF6408EC286D651400567DAC /* FirebaseRepository.swift in Sources */,
 				ECB8A5EF286BED9800B1D363 /* RecordingView.swift in Sources */,
 				ECB8A5ED286BED8F00B1D363 /* PlayView.swift in Sources */,

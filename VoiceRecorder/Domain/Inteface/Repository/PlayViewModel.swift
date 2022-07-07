@@ -6,13 +6,16 @@
 //
 
 import UIKit
+import AVFoundation
 
 final class PlayViewModel {
+    
     var audioInformation: AudioInformation
+    let audioPlayManager: AudioPlayManager
     
-    init(audioInformation: AudioInformation) {
+    init(audioInformation: AudioInformation, audioPlayManager: AudioPlayManager = AudioPlayManager()) {
         self.audioInformation = audioInformation
+        self.audioPlayManager = audioPlayManager
     }
-    
     
 }
