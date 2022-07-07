@@ -285,6 +285,7 @@ extension VoiceMemoRecordViewController {
             playTimeLabel.text = ""
             hiddenPlayRelatedButtons(.record)
             audioRecorder.startRecord(filePath: pathFinder.getPathWithTime())
+            audioPlayer.stopPlay()
         } else {
             hiddenPlayRelatedButtons(.play)
             audioRecorder.stopRecord()
