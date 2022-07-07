@@ -9,7 +9,7 @@ import AVFoundation
 class RecordedVoiceListViewController: UIViewController {
     
     var firestorageManager = FirebaseStorageManager()
-    
+    let fileManager = AudioFileManager()
     var audioList: [AudioData] = []
     
     lazy var navigationBar: UINavigationBar = {
@@ -108,7 +108,7 @@ extension RecordedVoiceListViewController: UITableViewDataSource, UITableViewDel
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let voicePlayVC = VoicePlayingViewController()
-        let url = AudioFileManager().directoryPath.appendingPathComponent(audioList[indexPath.item].title)
+        let url = fileManager.getAudioFilePath(fileName: audioList[indexPath.item].title)
         voicePlayVC.fetchRecordedDataFromMainVC(dataUrl: url)
         self.present(voicePlayVC, animated: true)
     }
