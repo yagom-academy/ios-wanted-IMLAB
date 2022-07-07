@@ -17,8 +17,8 @@ class AudioEngine {
     // 주파수 * 초 = 프레임
     private var audioSampleRate = 0.0 // 현재 주파수
     var audioLengthSeconds = 0.0 // 총 길이 (초)
-    private var seekFrame: AVAudioFramePosition = 0 // 이동할 프레임
-    private var currentPosition: AVAudioFramePosition = 0 // 현재 프레임
+    var seekFrame: AVAudioFramePosition = 0 // 이동할 프레임
+    var currentPosition: AVAudioFramePosition = 0 // 현재 프레임
     private var audioLengthSamples: AVAudioFramePosition = 0 // 프레임 총 길이
     
     var url: URL?
@@ -73,9 +73,9 @@ class AudioEngine {
     }
     func getCurrentTime() -> Double {
         guard let nodeTime = audioPlayer.lastRenderTime,
-              let playerTime = audioPlayer.playerTime(forNodeTime: nodeTime) else { return 0.0 }
+              let playerTime = audioPlayer.playerTime(forNodeTime: nodeTime) else { return audioLengthSeconds + 1000.0 }
         
-        return Double(playerTime.sampleTime) / playerTime.sampleRate
+        return (Double(playerTime.sampleTime) + Double(currentPosition)) / playerTime.sampleRate
     }
     
     func seek(to time: Double) {

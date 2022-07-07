@@ -333,8 +333,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="volume 50%" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hsn-s0-kUN">
-                                <rect key="frame" x="16" y="692" width="382" height="20.5"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="volume 50%" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hsn-s0-kUN">
+                                <rect key="frame" x="16" y="692" width="306.5" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -428,17 +428,25 @@
                                     <action selector="changeVolume:" destination="lmi-ig-c4Q" eventType="valueChanged" id="jzd-Fo-Gx8"/>
                                 </connections>
                             </slider>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wnx-1o-VRd">
+                                <rect key="frame" x="322.5" y="692" width="75.5" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="ebo-OJ-92j"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="Wnx-1o-VRd" firstAttribute="centerY" secondItem="hsn-s0-kUN" secondAttribute="centerY" id="0Xe-bR-FFA"/>
                             <constraint firstItem="hsn-s0-kUN" firstAttribute="leading" secondItem="ebo-OJ-92j" secondAttribute="leading" constant="16" id="4XI-kW-7Tz"/>
                             <constraint firstItem="z0g-cL-0xY" firstAttribute="leading" secondItem="837-TX-AJD" secondAttribute="leading" id="5fL-FT-JHp"/>
                             <constraint firstAttribute="trailing" secondItem="z0g-cL-0xY" secondAttribute="trailing" id="A48-qS-zvQ"/>
                             <constraint firstItem="ebo-OJ-92j" firstAttribute="trailing" secondItem="dHp-yT-TsS" secondAttribute="trailing" constant="16" id="Ale-Ar-t8T"/>
                             <constraint firstItem="ebo-OJ-92j" firstAttribute="bottom" secondItem="nl7-I1-MpL" secondAttribute="bottom" constant="16" id="EEN-ZS-edD"/>
+                            <constraint firstItem="Wnx-1o-VRd" firstAttribute="leading" secondItem="hsn-s0-kUN" secondAttribute="trailing" id="Ef2-68-6q2"/>
                             <constraint firstItem="qY9-Ow-Yxv" firstAttribute="leading" secondItem="ebo-OJ-92j" secondAttribute="leading" constant="16" id="Egv-D3-E0F"/>
-                            <constraint firstItem="ebo-OJ-92j" firstAttribute="trailing" secondItem="hsn-s0-kUN" secondAttribute="trailing" constant="16" id="JsR-Ag-P87"/>
+                            <constraint firstItem="ebo-OJ-92j" firstAttribute="trailing" secondItem="Wnx-1o-VRd" secondAttribute="trailing" constant="16" id="Lhf-P9-pjS"/>
                             <constraint firstItem="ebo-OJ-92j" firstAttribute="trailing" secondItem="qY9-Ow-Yxv" secondAttribute="trailing" constant="16" id="LkF-Ig-rSn"/>
                             <constraint firstItem="ebo-OJ-92j" firstAttribute="trailing" secondItem="ear-tw-qWa" secondAttribute="trailing" id="NSa-ia-goG"/>
                             <constraint firstItem="dHp-yT-TsS" firstAttribute="top" secondItem="hsn-s0-kUN" secondAttribute="bottom" constant="32" id="VTr-pc-UEU"/>
@@ -457,6 +465,7 @@
                         <outlet property="playBackButton" destination="wdY-eq-EiC" id="W82-li-QRk"/>
                         <outlet property="playButton" destination="ZXT-xL-ecs" id="NV0-d4-U2S"/>
                         <outlet property="playForwardButton" destination="KCt-VN-UiT" id="hsr-Vh-TCl"/>
+                        <outlet property="playerTimeLabel" destination="Wnx-1o-VRd" id="gWH-jr-NDK"/>
                         <outlet property="voiceChangeSegment" destination="qY9-Ow-Yxv" id="j2l-9F-4io"/>
                         <outlet property="volumeTextLabel" destination="hsn-s0-kUN" id="EQx-OI-71Q"/>
                     </connections>

@@ -127,7 +127,7 @@ class RecordViewController: UIViewController {
                 self.activityIndicator.stopAnimating()
                 self.setupButton(isHidden: false)
             }
-            print(fileName)
+//            print(fileName)
         } else {
             sender.setImage(.circle)
             recorder.record()
@@ -193,6 +193,9 @@ private extension RecordViewController {
             isPlay = false
             playerTimer?.invalidate()
             engine.stop()
+            engine.currentPosition = 0
+            engine.seekFrame = 0
+            recordTimeLabel.text = "\(engine.audioLengthSeconds.toStringTimeFormat)"
             try! engine.setupEngine()
         } else {
             recordTimeLabel.text = "\(engine.getCurrentTime().toStringTimeFormat)"
@@ -206,8 +209,6 @@ private extension RecordViewController {
         } else {
             self.graphView.animateNewValue(CGFloat(value), duration: self.stepDuration)
         }
-        print(value)
-        
     }
     private func enableBuiltInMic() {
         let session = AVAudioSession.sharedInstance()

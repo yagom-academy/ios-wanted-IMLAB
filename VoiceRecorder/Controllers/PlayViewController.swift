@@ -15,6 +15,7 @@ class PlayViewController: UIViewController {
     @IBOutlet weak var playBackButton: UIButton!
     @IBOutlet weak var playForwardButton: UIButton!
     @IBOutlet weak var volumeTextLabel: UILabel!
+    @IBOutlet weak var playerTimeLabel: UILabel!
     
     // MARK: - UI Components
     private lazy var activityIndicator = UIActivityIndicatorView(style: .large)
@@ -57,6 +58,7 @@ class PlayViewController: UIViewController {
         if isPlay {
             sender.setImage(.play)
             engine.pause()
+            playerTimer?.invalidate()
         } else {
             sender.setImage(.pauseFill)
             engine.play()
@@ -73,13 +75,10 @@ class PlayViewController: UIViewController {
     @IBAction func selectVoice(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case 0:
-            print(sender.selectedSegmentIndex)
             engine.setPitch(0.0)
         case 1:
-            print(sender.selectedSegmentIndex)
             engine.setPitch(800.0)
         case 2:
-            print(sender.selectedSegmentIndex)
             engine.setPitch(-800.0)
         default:
             break
@@ -99,7 +98,12 @@ private extension PlayViewController {
             isPlay = false
             playerTimer?.invalidate()
             engine.stop()
+            engine.currentPosition = 0
+            engine.seekFrame = 0
+            playerTimeLabel.text = "\(engine.audioLengthSeconds.toStringTimeFormat)"
             try! engine.setupEngine()
+        } else {
+            playerTimeLabel.text = "\(engine.getCurrentTime().toStringTimeFormat)"
         }
     }
 }
