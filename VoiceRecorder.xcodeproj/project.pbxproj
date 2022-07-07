@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		049B44AF2876659300FD4C26 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 049B44AE2876659300FD4C26 /* GoogleService-Info.plist */; };
 		04FF9394286BEEFB00EB34B6 /* RecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF9393286BEEFB00EB34B6 /* RecordViewController.swift */; };
 		04FF939D286C003500EB34B6 /* FrequencyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF939C286C003500EB34B6 /* FrequencyView.swift */; };
 		04FF939F286C004200EB34B6 /* CutoffFrequencyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF939E286C004200EB34B6 /* CutoffFrequencyView.swift */; };
@@ -14,7 +15,6 @@
 		04FF93A4286C15AA00EB34B6 /* UIButton+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF93A3286C15AA00EB34B6 /* UIButton+.swift */; };
 		04FF93A7286C270600EB34B6 /* RecordManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FF93A6286C270600EB34B6 /* RecordManager.swift */; };
 		0D26B1222875393A00FE1B04 /* RecordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D26B1212875393A00FE1B04 /* RecordViewModel.swift */; };
-		0D26B1252875B1AB00FE1B04 /* RecordModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D26B1242875B1AB00FE1B04 /* RecordModel.swift */; };
 		0D2E6BB2286BE0C5003D2EE1 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D2E6BB1286BE0C5003D2EE1 /* PlayerViewController.swift */; };
 		0D2E6BB4286C21B3003D2EE1 /* PlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D2E6BB3286C21B3003D2EE1 /* PlayerManager.swift */; };
 		0D8172E5286D69140009E8AA /* FileData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D8172E4286D69140009E8AA /* FileData.swift */; };
@@ -35,7 +35,6 @@
 		DE15E66528604279003DD2F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66428604279003DD2F5 /* Assets.xcassets */; };
 		DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */; };
 		FE178319287592BA00DEB555 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = FE178318287592BA00DEB555 /* FirebaseStorage */; };
-		FE17831B287592D700DEB555 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FE17831A287592D700DEB555 /* GoogleService-Info.plist */; };
 		FE47347E28765D0500B753FB /* PlayControllerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE47347D28765D0500B753FB /* PlayControllerView.swift */; };
 		FE47348028765EF200B753FB /* PlayControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE47347F28765EF200B753FB /* PlayControllerViewModel.swift */; };
 		FE4734822876605D00B753FB /* RecordControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4734812876605D00B753FB /* RecordControllerViewModel.swift */; };
@@ -56,6 +55,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		049B44AE2876659300FD4C26 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		04FF9393286BEEFB00EB34B6 /* RecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewController.swift; sourceTree = "<group>"; };
 		04FF939C286C003500EB34B6 /* FrequencyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrequencyView.swift; sourceTree = "<group>"; };
 		04FF939E286C004200EB34B6 /* CutoffFrequencyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CutoffFrequencyView.swift; sourceTree = "<group>"; };
@@ -63,7 +63,6 @@
 		04FF93A3286C15AA00EB34B6 /* UIButton+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+.swift"; sourceTree = "<group>"; };
 		04FF93A6286C270600EB34B6 /* RecordManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordManager.swift; sourceTree = "<group>"; };
 		0D26B1212875393A00FE1B04 /* RecordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewModel.swift; sourceTree = "<group>"; };
-		0D26B1242875B1AB00FE1B04 /* RecordModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordModel.swift; sourceTree = "<group>"; };
 		0D2E6BB1286BE0C5003D2EE1 /* PlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
 		0D2E6BB3286C21B3003D2EE1 /* PlayerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerManager.swift; sourceTree = "<group>"; };
 		0D8172E4286D69140009E8AA /* FileData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileData.swift; sourceTree = "<group>"; };
@@ -85,7 +84,6 @@
 		DE15E66428604279003DD2F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DE15E66728604279003DD2F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DE15E66928604279003DD2F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		FE17831A287592D700DEB555 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FE47347D28765D0500B753FB /* PlayControllerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayControllerView.swift; sourceTree = "<group>"; };
 		FE47347F28765EF200B753FB /* PlayControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayControllerViewModel.swift; sourceTree = "<group>"; };
 		FE4734812876605D00B753FB /* RecordControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordControllerViewModel.swift; sourceTree = "<group>"; };
@@ -123,7 +121,6 @@
 				0D8172DF286D67F10009E8AA /* SubComponents */,
 				04FF9393286BEEFB00EB34B6 /* RecordViewController.swift */,
 				0D26B1212875393A00FE1B04 /* RecordViewModel.swift */,
-				0D26B1242875B1AB00FE1B04 /* RecordModel.swift */,
 			);
 			path = RecordPage;
 			sourceTree = "<group>";
@@ -257,7 +254,7 @@
 				DE15E65D28604278003DD2F5 /* SceneDelegate.swift */,
 				DE15E66428604279003DD2F5 /* Assets.xcassets */,
 				DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */,
-				FE17831A287592D700DEB555 /* GoogleService-Info.plist */,
+				049B44AE2876659300FD4C26 /* GoogleService-Info.plist */,
 				DE15E66928604279003DD2F5 /* Info.plist */,
 			);
 			path = VoiceRecorder;
@@ -348,7 +345,7 @@
 			files = (
 				DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */,
 				DE15E66528604279003DD2F5 /* Assets.xcassets in Resources */,
-				FE17831B287592D700DEB555 /* GoogleService-Info.plist in Resources */,
+				049B44AF2876659300FD4C26 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -394,9 +391,13 @@
 				FE47348028765EF200B753FB /* PlayControllerViewModel.swift in Sources */,
 				04FF93A4286C15AA00EB34B6 /* UIButton+.swift in Sources */,
 				FEA5330C286C3D48002E1169 /* CustomNavigationController.swift in Sources */,
+<<<<<<< HEAD
 				FEFCE0902870549F00200AF1 /* RecordListUserDefaults.swift in Sources */,
 				0D26B1252875B1AB00FE1B04 /* RecordModel.swift in Sources */,
 				0DD2E01928767F2100727315 /* SpeedControlView.swift in Sources */,
+=======
+				FEFCE0902870549F00200AF1 /* PlayListUserDefaults.swift in Sources */,
+>>>>>>> feature-record
 				DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */,
 				FEEC6984286C3B2D002E020F /* RecordNetworkManager.swift in Sources */,
 				FEEC697C286C3AB0002E020F /* RecordListViewController.swift in Sources */,

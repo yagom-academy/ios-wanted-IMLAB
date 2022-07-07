@@ -9,4 +9,5 @@ import Foundation
 
 protocol RecordControllerDelegate {
     func endRecord()
+    func startRecord()
 }

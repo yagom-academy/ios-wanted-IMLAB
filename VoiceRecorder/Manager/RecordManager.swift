@@ -9,9 +9,12 @@ import UIKit
 import AVFoundation
 
 protocol RecordService {
+    var audioFile: URL! { get }
     func initRecordSession()
     func normalizeSoundLevel(_ level: Float?) -> Int
     func dateToFileName(_ date: Date) -> String
+    func startRecord()
+    func endRecord()
 }
 
 class RecordManager: RecordService {
@@ -21,9 +24,17 @@ class RecordManager: RecordService {
     var recorder: AVAudioRecorder?
     var audioFile: URL!
     var timer: Timer?
-    var waveForms = [Int](repeating: 0, count: 200)
+    var waveForms = [Int](repeating: 0, count: 100)
+    var cutValue = 0
     
-    private init () {}
+    private init () {
+        NotificationCenter.default.addObserver(self, selector: #selector(sendCutValue(_:)), name: Notification.Name("SendCutValue"), object: nil)
+    }
+    
+    @objc func sendCutValue(_ notification: Notification) {
+        guard let value = notification.object as? Float else { return }
+        self.cutValue = Int(value)
+    }
     
     func initRecordSession() {
         let audioSession = AVAudioSession.sharedInstance()
@@ -33,12 +44,10 @@ class RecordManager: RecordService {
             try audioSession.setActive(true)
             
             audioSession.requestRecordPermission { allowed in
-                DispatchQueue.main.async {
-                    if allowed {
-                        print("Permission Allowed")
-                    } else {
-                        print("Permission Fail")
-                    }
+                if allowed {
+                    print("Permission Allowed")
+                } else {
+                    print("Permission Fail")
                 }
             }
         } catch {
@@ -63,5 +72,68 @@ class RecordManager: RecordService {
         formatter.dateFormat = "yyyy_MM_dd_HH:mm:ss"
         let fileName = formatter.string(from: Date())
         return fileName
+    }
+    
+    func startRecord() {
+        audioFile = nil
+        
+        var currentSample = 0
+        let numberOfSamples = waveForms.count
+
+        audioFile = Config.getRecordFilePath()
+
+        let recordSettings = [
+            AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
+            AVSampleRateKey: 16000,
+            AVNumberOfChannelsKey: 2,
+            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue,
+        ]
+
+        do {
+            recorder = try AVAudioRecorder(url: audioFile, settings: recordSettings)
+            recorder?.record()
+
+            recorder?.isMeteringEnabled = true
+            timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { [weak self] _ in
+                guard let self = self else { return }
+                self.recorder?.updateMeters()
+                
+                let soundLevel = self.normalizeSoundLevel(self.recorder?.averagePower(forChannel: 0))
+                
+                if currentSample == numberOfSamples {
+                    self.waveForms.removeFirst()
+                    if soundLevel > self.cutValue {
+                        self.waveForms.append(1)
+                    } else {
+                        self.waveForms.append(soundLevel)
+                    }
+                } else {
+                    if soundLevel < self.cutValue {
+                        self.waveForms[currentSample] = soundLevel
+                    } else {
+                        self.waveForms[currentSample] = 1
+                    }
+                }
+
+                if currentSample < numberOfSamples {
+                    currentSample += 1
+                }
+                
+                if self.recorder?.isRecording ?? true {
+                    NotificationCenter.default.post(name: Notification.Name("SendWaveform"), object: self.waveForms, userInfo: nil)
+                }
+            })
+        } catch {
+            print("Record Error: \(error.localizedDescription)")
+        }
+    }
+
+    func endRecord() {
+        timer?.invalidate()
+
+        recorder?.stop()
+        recorder = nil
+        
+        waveForms = [Int](repeating: 0, count: 100)
     }
 }
