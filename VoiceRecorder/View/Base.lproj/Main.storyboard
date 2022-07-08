@@ -129,8 +129,11 @@
                                     <action selector="controlRecordButton:" destination="ozQ-a5-b4X" eventType="touchUpInside" id="owA-WP-8Nk"/>
                                 </connections>
                             </button>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="02q-3U-Hsq">
-                                <rect key="frame" x="0.0" y="44" width="375" height="128"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LQH-WX-VXE">
+                                <rect key="frame" x="40" y="63" width="295" height="128"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="128" id="Gq8-h5-YCW"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="JKT-6g-hs8"/>
@@ -139,7 +142,6 @@
                             <constraint firstItem="SRg-j9-lGu" firstAttribute="top" secondItem="apc-b5-Hp1" secondAttribute="bottom" constant="34" id="1CT-7l-sj4"/>
                             <constraint firstItem="8Kg-pa-DvV" firstAttribute="leading" secondItem="JKT-6g-hs8" secondAttribute="leading" constant="40" id="CJt-3D-V5f"/>
                             <constraint firstItem="Cy0-ML-w6z" firstAttribute="top" secondItem="JKT-6g-hs8" secondAttribute="top" constant="108" id="DVn-YI-1ND"/>
-                            <constraint firstItem="JKT-6g-hs8" firstAttribute="trailing" secondItem="02q-3U-Hsq" secondAttribute="trailing" id="EO3-OK-5X2"/>
                             <constraint firstItem="Cy0-ML-w6z" firstAttribute="leading" secondItem="JKT-6g-hs8" secondAttribute="leading" id="KFr-l0-T5a"/>
                             <constraint firstItem="Cy0-ML-w6z" firstAttribute="height" secondItem="yIh-Nd-Erh" secondAttribute="height" multiplier="0.152019" id="Knz-Cl-xxz"/>
                             <constraint firstItem="apc-b5-Hp1" firstAttribute="centerX" secondItem="JKT-6g-hs8" secondAttribute="centerX" id="RX0-W6-oQe"/>
@@ -151,7 +153,6 @@
                             <constraint firstItem="JKT-6g-hs8" firstAttribute="trailing" secondItem="SRg-j9-lGu" secondAttribute="trailing" constant="80" id="k6O-zM-sPi"/>
                             <constraint firstItem="apc-b5-Hp1" firstAttribute="top" secondItem="8Kg-pa-DvV" secondAttribute="bottom" constant="40" id="pWc-ix-qhQ"/>
                             <constraint firstItem="QZr-Sv-d2j" firstAttribute="top" secondItem="SRg-j9-lGu" secondAttribute="bottom" constant="27.666666666666629" id="r5m-bW-9Vw"/>
-                            <constraint firstItem="02q-3U-Hsq" firstAttribute="leading" secondItem="JKT-6g-hs8" secondAttribute="leading" id="s1f-Si-ZS4"/>
                             <constraint firstItem="Uwp-S3-BQB" firstAttribute="leading" secondItem="JKT-6g-hs8" secondAttribute="leading" constant="40" id="uDU-Oh-nbw"/>
                             <constraint firstItem="8Kg-pa-DvV" firstAttribute="top" secondItem="Uwp-S3-BQB" secondAttribute="bottom" constant="24" id="yBn-iv-4iU"/>
                         </constraints>
@@ -163,7 +164,7 @@
                         <outlet property="playButton" destination="6Go-Dt-yoo" id="2Af-Pw-YgZ"/>
                         <outlet property="recordButton" destination="QZr-Sv-d2j" id="8Yh-2T-vd8"/>
                         <outlet property="recordingTimeLabel" destination="apc-b5-Hp1" id="zT1-sP-nFE"/>
-                        <outlet property="testImageView" destination="02q-3U-Hsq" id="AMY-7W-dBB"/>
+                        <outlet property="testImageView" destination="LQH-WX-VXE" id="7VK-De-4PG"/>
                         <outlet property="waveView" destination="Cy0-ML-w6z" id="V0y-KS-MCf"/>
                     </connections>
                 </viewController>
@@ -203,7 +204,13 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QbY-Bq-pFQ">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vAx-Kt-MEu">
+                                <rect key="frame" x="40" y="216.33333333333337" width="295" height="128"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="128" id="4vx-fn-luB"/>
+                                </constraints>
+                            </imageView>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QbY-Bq-pFQ">
                                 <rect key="frame" x="40" y="376.33333333333331" width="295" height="4"/>
                             </progressView>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="epG-fG-rh2">
@@ -267,11 +274,6 @@
                                     </button>
                                 </subviews>
                             </stackView>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ibt-1Q-aAn">
-                                <rect key="frame" x="67" y="201" width="240" height="128"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" systemColor="systemGray6Color"/>
-                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="jRn-dk-Vfd"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -279,12 +281,16 @@
                             <constraint firstItem="jRn-dk-Vfd" firstAttribute="trailing" secondItem="epG-fG-rh2" secondAttribute="trailing" constant="40" id="1OQ-Y8-AMf"/>
                             <constraint firstItem="QbY-Bq-pFQ" firstAttribute="leading" secondItem="jRn-dk-Vfd" secondAttribute="leading" constant="40" id="2o3-n3-Qrt"/>
                             <constraint firstItem="jRn-dk-Vfd" firstAttribute="trailing" secondItem="QbY-Bq-pFQ" secondAttribute="trailing" constant="40" id="5P9-TO-b60"/>
+                            <constraint firstItem="QbY-Bq-pFQ" firstAttribute="top" secondItem="vAx-Kt-MEu" secondAttribute="bottom" constant="32" id="6bb-qr-fo2"/>
                             <constraint firstItem="epG-fG-rh2" firstAttribute="leading" secondItem="jRn-dk-Vfd" secondAttribute="leading" constant="40" id="Atd-BO-DGI"/>
                             <constraint firstItem="haY-Q9-0tn" firstAttribute="leading" secondItem="jRn-dk-Vfd" secondAttribute="leading" constant="50" id="EgR-Q9-5mC"/>
+                            <constraint firstItem="vAx-Kt-MEu" firstAttribute="leading" secondItem="jRn-dk-Vfd" secondAttribute="leading" constant="40" id="Oka-DL-D6P"/>
                             <constraint firstItem="MNs-qs-JV0" firstAttribute="leading" secondItem="haY-Q9-0tn" secondAttribute="leading" id="Oqq-hr-RJd"/>
+                            <constraint firstItem="vAx-Kt-MEu" firstAttribute="top" secondItem="vKV-AA-4Ck" secondAttribute="bottom" constant="100" id="RwV-lD-kpY"/>
                             <constraint firstItem="MNs-qs-JV0" firstAttribute="top" secondItem="epG-fG-rh2" secondAttribute="bottom" constant="32" id="WF8-LW-PtE"/>
                             <constraint firstItem="vKV-AA-4Ck" firstAttribute="centerX" secondItem="jRn-dk-Vfd" secondAttribute="centerX" id="Wpj-fH-gIw"/>
                             <constraint firstItem="FkC-sQ-Oeq" firstAttribute="top" secondItem="haY-Q9-0tn" secondAttribute="bottom" constant="48" id="gb1-nh-Dfa"/>
+                            <constraint firstItem="jRn-dk-Vfd" firstAttribute="trailing" secondItem="vAx-Kt-MEu" secondAttribute="trailing" constant="40" id="pCi-hV-3je"/>
                             <constraint firstItem="jRn-dk-Vfd" firstAttribute="trailing" secondItem="haY-Q9-0tn" secondAttribute="trailing" constant="50" id="pNM-6n-0oT"/>
                             <constraint firstItem="haY-Q9-0tn" firstAttribute="top" secondItem="MNs-qs-JV0" secondAttribute="bottom" constant="32" id="qWm-XP-Htx"/>
                             <constraint firstItem="jRn-dk-Vfd" firstAttribute="bottom" secondItem="FkC-sQ-Oeq" secondAttribute="bottom" constant="60" id="xVm-yC-kmm"/>
@@ -300,6 +306,7 @@
                         <outlet property="voiceChangeSegmentedControl" destination="epG-fG-rh2" id="eQ9-zR-RQM"/>
                         <outlet property="volumeControlSlider" destination="haY-Q9-0tn" id="pNk-Ge-leG"/>
                         <outlet property="volumeLabel" destination="MNs-qs-JV0" id="pFJ-vT-o83"/>
+                        <outlet property="waveFormImageView" destination="vAx-Kt-MEu" id="s1h-u8-xxC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Hyd-wk-g8u" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -315,9 +322,6 @@
         <image name="plus" catalog="system" width="128" height="113"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemGray6Color">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemRedColor">
             <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -19,6 +19,7 @@ class PlayingViewController: UIViewController {
     @IBOutlet weak var voiceChangeSegmentedControl: UISegmentedControl!
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var positionProgressView: UIProgressView!
+    @IBOutlet weak var waveFormImageView: UIImageView!
     
     // MARK: - Properties
     
@@ -61,6 +62,7 @@ class PlayingViewController: UIViewController {
         setupAudio()
         setupDisplayLink()
         titleLabel.text = fileName
+        getImageFromLocal(fileName)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -73,6 +75,16 @@ class PlayingViewController: UIViewController {
     }
     
     // MARK: - Methods
+    
+    private func getImageFromLocal(_ fileName : String?) {
+        guard let fileName = fileName else {
+            return
+        }
+
+        if let directory = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false) {
+            waveFormImageView.image = UIImage(contentsOfFile: URL(fileURLWithPath: directory.absoluteString).appendingPathComponent(fileName).path)
+        }
+    }
     
     private func setupAudio() {
         guard let fileURL = fileURL else { return }

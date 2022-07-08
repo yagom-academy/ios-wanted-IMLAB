@@ -101,7 +101,7 @@ class FireStorageManager {
         }
     }
     
-    func deleteItem(_ name : String) {
+    func deleteRecording(_ name : String) {
         let storageRef = storage.reference()
         let fileRef = storageRef.child("\(File.Ref.recordDir)\(name)")
         fileRef.delete()

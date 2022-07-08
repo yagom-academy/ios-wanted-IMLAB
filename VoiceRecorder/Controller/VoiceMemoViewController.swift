@@ -16,7 +16,7 @@ class VoiceMemoViewController: UIViewController {
     
     // MARK: - Properties
     
-    private var localUrls: [URL] = []
+    private var audioLocalUrls: [URL] = []
     private var fileNames: [String] = []
     private var fileDurations: [String] = []
     private var isFetching: Bool = false
@@ -36,7 +36,7 @@ class VoiceMemoViewController: UIViewController {
     
     private func fetchRecordingData() {
         FireStorageManager.shared.fetchData { results in
-            self.localUrls = results
+            self.audioLocalUrls = results
             self.createFileName(urls: results)
             self.getFileDuration(urls: results)
             DispatchQueue.main.async {
@@ -101,7 +101,7 @@ class VoiceMemoViewController: UIViewController {
 
 extension VoiceMemoViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return localUrls.count
+        return audioLocalUrls.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -113,16 +113,17 @@ extension VoiceMemoViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        
         if editingStyle == .delete {
-            
-            FireStorageManager.shared.deleteItem(fileNames[indexPath.row])
+            let urlToString : String = audioLocalUrls[indexPath.row].absoluteString
+            guard let reNameLocalUrl = URL(string: urlToString.replacingOccurrences(of: ".m4a", with: ".jpeg")) else {return}
+            FireStorageManager.shared.deleteRecording(fileNames[indexPath.row])
             do {
-                try FileManager.default.removeItem(at: localUrls[indexPath.row])
+                try FileManager.default.removeItem(at: audioLocalUrls[indexPath.row])
+                try FileManager.default.removeItem(at: reNameLocalUrl)
             } catch {
                 print("Error: <tableView firebase delete> - \(error.localizedDescription)")
             }
-            localUrls.remove(at: indexPath.row)
+            audioLocalUrls.remove(at: indexPath.row)
             fileNames.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
@@ -133,7 +134,7 @@ extension VoiceMemoViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let playingVC = self.storyboard?.instantiateViewController(withIdentifier: PlayingViewController.identifier) as? PlayingViewController else {return}
         playingVC.fileName = fileNames[indexPath.row]
-        playingVC.fileURL = localUrls[indexPath.row]
+        playingVC.fileURL = audioLocalUrls[indexPath.row]
         present(playingVC, animated: true)
     }
     
