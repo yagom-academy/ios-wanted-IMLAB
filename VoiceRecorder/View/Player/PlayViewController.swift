@@ -131,7 +131,6 @@ private extension PlayViewController {
             imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             imageView.bottomAnchor.constraint(equalTo: view.centerYAnchor),
             imageView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1 / 2),
-            imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor),
             
             contentStackView.topAnchor.constraint(equalTo: imageView.bottomAnchor),
             contentStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 32.0),

@@ -14,6 +14,7 @@ import QuartzCore
 protocol RecordDrawDelegate: AnyObject{
     func updateValue(_ value:CGFloat)
     func clearAll()
+    func uploadSuccess()
 }
 
 class RecordViewModel {
@@ -79,7 +80,28 @@ class RecordViewModel {
         timer.upstream.connect().cancel()
         recorder.stop()
         isRecording = recorder.isRecording
-        storage.uploadData(url: recordFileURL, fileName: DateFormatter().toString(Date()) + ".m4a")
+        
+        // 원래 녹음 파일을 가지고 있다 -> 지우고 다시 업로드
+        // 지금은 그냥 업로드되고 나시 녹음해도 업로드되고 있지 않음
+        // fileName으로 삭제 업데이트 이루어짐
+        let title = DateFormatter().toString(Date())
+        let fileName = title + ".m4a"
+        
+//        print(fileName)
+        
+//        if previousFileName == "" {
+//            storage.uploadData(url: recordFileURL, fileName: fileName)
+//        } else {
+//            storage.replaceData(title: previousFileName, url: recordFileURL, fileName: fileName)
+//            storage.deleteData(title: previousFileName)
+        storage.uploadData(url: recordFileURL, fileName: fileName) {
+            self.delegate?.uploadSuccess()
+        }
+//        }
+        
+//        previousFileName = fileName
+        
+//        storage.uploadData(url: recordFileURL, fileName: DateFormatter().toString(Date()) + ".m4a")
     }
     
     func setupAudio() {
@@ -92,9 +114,9 @@ class RecordViewModel {
     }
     
     func playAudio() {
-        if player.data == nil {
+//        if player.data == nil {
             setupAudio()
-        }
+//        }
         
         player.volume = 0.5
         player.play()

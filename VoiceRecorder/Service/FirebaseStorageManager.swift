@@ -13,12 +13,12 @@ class FirebaseStorageManager {
     private let folderName = "voiceRecords"
     private lazy var storage = Storage.storage().reference().child(folderName)
     private let deviceID: String?
-    
+        
     private init() {
         self.deviceID = UIDevice.current.identifierForVendor?.uuidString
     }
     
-    func fetch(completion: @escaping (Result<Audio?, Error>) -> Void) {
+    func fetch(completion: @escaping (Result<Audio, Error>) -> Void) {
         guard let deviceID = deviceID else {
             return
         }
@@ -31,10 +31,6 @@ class FirebaseStorageManager {
                 return
             }
             
-            if result.items.isEmpty {
-                completion(.success(nil))
-            }
-            
             result.items.forEach { item in
                 self.itemDownloadURL(item) { audio in
                     completion(.success(audio))
@@ -43,32 +39,44 @@ class FirebaseStorageManager {
         }
     }
     
-    func itemDownloadURL(_ item: StorageReference, completion: @escaping (Audio) -> Void) {
+    private func itemDownloadURL(_ item: StorageReference, completion: @escaping (Audio) -> Void) {
         let title = "\(self.folderName)_" + item.name.replacingOccurrences(of: ".m4a", with: "")
         item.downloadURL { url, error in
             guard let url = url, error == nil else {
                 return
             }
-            
+             
             let audio = Audio(title: title, url: url, fileName: item.name)
             completion(audio)
         }
     }
     
-    func uploadData(url: URL, fileName: String) {
-        if let deviceID = deviceID {
-            storage.child("\(deviceID)/\(fileName)").putFile(from: url)
+    func uploadData(url: URL, fileName: String, completion: @escaping () -> Void) {
+        guard let deviceID = deviceID else {
+            return
+        }
+        
+        storage.child("\(deviceID)/\(fileName)").putFile(from: url) { result in
+            switch result {
+            case .success(_):
+                print("upload success")
+                completion()
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
         }
     }
     
     func deleteData(title: String) {
-        if let deviceID = deviceID {
-            storage.child("\(deviceID)/\(title)").delete { error in
-                guard let error = error else {
-                    return
-                }
+        guard let deviceID = deviceID else {
+            return
+        }
+        
+        storage.child("\(deviceID)/\(title)").delete { error in
+            if let error = error {
                 print(error.localizedDescription)
             }
+            print("delete success")
         }
     }
 }

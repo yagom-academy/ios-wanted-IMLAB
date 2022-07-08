@@ -10,7 +10,7 @@ import AVFoundation
 import Combine
 
 protocol RecordViewControllerDelegate: AnyObject {
-    func recordViewControllerDidDisappear()
+    func uploadSuccess()
 }
 
 class RecordViewController:UIViewController {
@@ -101,10 +101,10 @@ class RecordViewController:UIViewController {
 //        bindTimer()
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        delegate?.recordViewControllerDidDisappear()
-    }
+//    override func viewDidDisappear(_ animated: Bool) {
+//        super.viewDidDisappear(animated)
+//        delegate?.uploadSuccess()
+//    }
 }
 
 //MARK: - View Configure
@@ -209,9 +209,7 @@ private extension RecordViewController{
         viewModel.$isRecording
             .sink { [weak self] isRecording in
                 print(isRecording)
-                self?.recordButton.setImage(UIImage(systemName: isRecording ? "stop.circle":"mic.circle.fill"), for: .normal)
-                self?.playButton.isEnabled = !isRecording
-                //                self?.meterView.disPlayLink?.isPaused = !isRecording
+                self?.meterView.disPlayLink?.isPaused = !isRecording
             }
             .store(in: &cancellable)
     }
@@ -235,5 +233,9 @@ extension RecordViewController: RecordDrawDelegate {
         DispatchQueue.main.sync {
             self.meterView.values.append(value)
         }
+    }
+    
+    func uploadSuccess() {
+        self.delegate?.uploadSuccess()
     }
 }

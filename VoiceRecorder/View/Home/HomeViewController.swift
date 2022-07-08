@@ -14,12 +14,15 @@ class HomeViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(HomeTableViewCell.self, forCellReuseIdentifier: HomeTableViewCell.identfier)
+        tableView.refreshControl = refreshControl
         return tableView
     }()
     
-    private let activityIndicatorView: UIActivityIndicatorView = {
-        let activityIndicatorView = UIActivityIndicatorView()
-        return activityIndicatorView
+    private lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refreshTableView(_:)), for: .valueChanged)
+        refreshControl.isHidden = true
+        return refreshControl
     }()
     
     private let viewModel = HomeViewModel()
@@ -56,13 +59,13 @@ private extension HomeViewController {
     }
     
     func addSubViews() {
-        [tableView, activityIndicatorView].forEach {
+        [tableView].forEach {
             view.addSubview($0)
         }
     }
     
     func makeConstraints() {
-        [tableView, activityIndicatorView].forEach {
+        [tableView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         NSLayoutConstraint.activate([
@@ -70,9 +73,6 @@ private extension HomeViewController {
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            
-            activityIndicatorView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            activityIndicatorView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
         ])
     }
     
@@ -94,22 +94,16 @@ private extension HomeViewController {
         }
     }
     
+    @objc func refreshTableView(_ refreshControl: UIRefreshControl) {
+        self.viewModel.fetch()
+        refreshControl.endRefreshing()
+    }
+    
     func bind() {
         viewModel.$audios
             .receive(on: DispatchQueue.main)
             .sink { _ in
                 self.tableView.reloadData()
-            }
-            .store(in: &cancellable)
-        
-        viewModel.$isReady
-            .receive(on: DispatchQueue.main)
-            .sink { isReady in
-                if isReady {
-                    self.activityIndicatorView.stopAnimating()
-                } else {
-                    self.activityIndicatorView.startAnimating()
-                }
             }
             .store(in: &cancellable)
     }
@@ -159,7 +153,7 @@ extension HomeViewController: UITableViewDelegate {
 // MARK: - RecordViewControllerDelegate
 
 extension HomeViewController: RecordViewControllerDelegate {
-    func recordViewControllerDidDisappear() {
+    func uploadSuccess() {
         viewModel.fetch()
     }
 }

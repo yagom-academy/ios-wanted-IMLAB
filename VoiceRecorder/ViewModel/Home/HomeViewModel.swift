@@ -10,7 +10,6 @@ import Combine
 
 class HomeViewModel {
     @Published var audios: [Audio]
-    @Published var isReady = false
     
     init() {
         audios = []
@@ -25,23 +24,17 @@ class HomeViewModel {
     }
     
     func fetch() {
-        isReady = false
         audios.removeAll()
         
         FirebaseStorageManager.shared.fetch { result in
             switch result {
             case .success(let audio):
-                guard let audio = audio else {
-                    self.isReady = true
-                    return
-                }
                 self.audios.append(audio)
             case .failure(let error):
                 print(error.localizedDescription)
             }
             
             self.audios.sort { $0.title < $1.title }
-            self.isReady = true
         }
     }
     

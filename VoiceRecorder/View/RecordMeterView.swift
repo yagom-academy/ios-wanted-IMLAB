@@ -38,7 +38,7 @@ class RecordMeterView: UIView {
     @objc func updateDisplay() {
         currentX += 0.1
         let calValue = calculateValue()
-        print(calValue)
+//        print(calValue)
         
         let layer = CAShapeLayer()
         layer.strokeColor = UIColor.systemBlue.cgColor
