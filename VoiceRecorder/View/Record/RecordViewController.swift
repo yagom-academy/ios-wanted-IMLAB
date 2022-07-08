@@ -90,15 +90,15 @@ class RecordViewController:UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        viewModel.delegate = self
+        //        viewModel.delegate = self
         view.backgroundColor = .secondarySystemGroupedBackground
         
         configure()
         
-//        bindProgress()
+        //        bindProgress()
         bindIsPlaying()
         bindRecording()
-        bindTimer()
+//        bindTimer()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -152,8 +152,8 @@ private extension RecordViewController{
     
     func configureButton(){
         self.recordButton.addTarget(self, action: #selector(didTapRecord(_:)), for: .touchUpInside)
-//        self.prevButton.addTarget(self, action: #selector(previusSec), for: .touchUpInside)
-//        self.nextButton.addTarget(self, action: #selector(nextSec), for: .touchUpInside)
+        //        self.prevButton.addTarget(self, action: #selector(previusSec), for: .touchUpInside)
+        //        self.nextButton.addTarget(self, action: #selector(nextSec), for: .touchUpInside)
         self.playButton.addTarget(self, action: #selector(playPause(_:)), for: .touchUpInside)
         self.volumeBar.addTarget(self, action: #selector(touchSlider(_:)), for: .valueChanged)
     }
@@ -164,16 +164,17 @@ private extension RecordViewController{
         } else {
             viewModel.stopRec()
         }
-//    @objc func previusSec(){
-//        if viewModel.player.isPlaying {
-//            viewModel.seek(front: false)
-//        }
-//    }
-//    @objc func nextSec(){
-//        if viewModel.player.isPlaying {
-//            viewModel.seek(front: true)
-//        }
-//    }
+    }
+    //    @objc func previusSec(){
+    //        if viewModel.player.isPlaying {
+    //            viewModel.seek(front: false)
+    //        }
+    //    }
+    //    @objc func nextSec(){
+    //        if viewModel.player.isPlaying {
+    //            viewModel.seek(front: true)
+    //        }
+    //    }
     @objc func playPause(_ sender:UIButton){
         if !viewModel.isPlaying {
             viewModel.play()
@@ -181,19 +182,19 @@ private extension RecordViewController{
             viewModel.pausePlay()
         }
     }
-//
+    //
     @objc func touchSlider(_ sender:UISlider!){
         viewModel.changeFrequency(value: sender.value)
     }
-//
-//    func bindProgress() {
-//        viewModel.$progressValue
-//            .sink { [weak self] progress in
-//                self?.progressView.progress = progress
-//            }
-//            .store(in: &cancellable)
-//    }
-//
+    //
+    //    func bindProgress() {
+    //        viewModel.$progressValue
+    //            .sink { [weak self] progress in
+    //                self?.progressView.progress = progress
+    //            }
+    //            .store(in: &cancellable)
+    //    }
+    //
     func bindIsPlaying() {
         viewModel.$isPlaying
             .sink { [weak self] isPlaying in
@@ -203,25 +204,25 @@ private extension RecordViewController{
             }
             .store(in: &cancellable)
     }
-//
+    //
     func bindRecording() {
         viewModel.$isRecording
             .sink { [weak self] isRecording in
                 print(isRecording)
                 self?.recordButton.setImage(UIImage(systemName: isRecording ? "stop.circle":"mic.circle.fill"), for: .normal)
                 self?.playButton.isEnabled = !isRecording
-//                self?.meterView.disPlayLink?.isPaused = !isRecording
+                //                self?.meterView.disPlayLink?.isPaused = !isRecording
             }
             .store(in: &cancellable)
     }
-//
-//    func bindTimer() {
-//        viewModel.$recordedTime
-//            .sink { playTime in
-//                self.recordedTimeLabel.text = playTime.elapsedText
-//            }
-//            .store(in: &cancellable)
-//    }
+    //
+    //    func bindTimer() {
+    //        viewModel.$recordedTime
+    //            .sink { playTime in
+    //                self.recordedTimeLabel.text = playTime.elapsedText
+    //            }
+    //            .store(in: &cancellable)
+    //    }
 }
 
 extension RecordViewController: RecordDrawDelegate {

@@ -15,8 +15,7 @@ class RecordingViewModel {
     private var EQNode = AVAudioUnitEQ(numberOfBands: 2)
     private var audioPlayerNode = AVAudioPlayerNode()
     var setting: [String:Any]?
-    var audioPlayer: AVAudioPlayer?
-    let recordFileURL: URL?
+    let recordFileURL: URL = URL(fileURLWithPath: "\(DateFormatter().toString(Date())).caf", isDirectory: false)
     let settings = [AVFormatIDKey: kAudioFileMPEG4Type, AVLinearPCMIsFloatKey: true, AVSampleRateKey: Float64(44100), AVNumberOfChannelsKey: 1] as [String : Any]
     
     @Published var isRecording = false
@@ -186,9 +185,5 @@ class RecordingViewModel {
     
     func stopPlay() {
         audioPlayerNode.stop()
-    }
-    
-    private func createURL() {
-        
     }
 }

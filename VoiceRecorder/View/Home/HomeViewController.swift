@@ -84,19 +84,12 @@ private extension HomeViewController {
             let recordController = RecordViewController()
             recordController.delegate = self
             present(recordController, animated: true)
-        } else {
-            
-            // TODO: - 권한 유도 다시 해주기
-            
-            AVAudioSession.sharedInstance().requestRecordPermission { isPermission in
-                self.permission = isPermission
-            }
+        case .denied:
             let alertController = UIAlertController(title: "", message: "설정에서 마이크 권한을 허용해주세요.", preferredStyle: .alert)
             alertController.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
             present(alertController, animated: true)
         case .undetermined:
-            session.requestRecordPermission { _ in
-            }
+            session.requestRecordPermission { _ in }
         default: break
         }
     }
