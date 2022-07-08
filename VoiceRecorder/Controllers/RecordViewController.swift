@@ -106,12 +106,12 @@ class RecordViewController: UIViewController {
     @IBAction func didTapRecordButton(_ sender: UIButton) {
         if isRecord {
             sender.setImage(.circleFill)
-            sender.isEnabled = false
             endRecord()
+            blockEQSlider(isEnabled: true)
             guard let data = recorder.data else { return }
             engine.url = fileName
             do {
-            try engine.setupEngine()
+                try engine.setupEngine()
             } catch {
                 print(error)
             }
@@ -132,7 +132,8 @@ class RecordViewController: UIViewController {
         } else {
             sender.setImage(.circle)
             recorder.record()
-            blockEQSlider()
+            blockEQSlider(isEnabled: false)
+            setupButton(isHidden: true)
             graphView.drawBarGraph = true
             
             recorderTimer = Timer.scheduledTimer(
@@ -267,9 +268,6 @@ private extension RecordViewController {
         playButton.isHidden = isHidden
         playBackwardButton.isHidden = isHidden
         playForwardButton.isHidden = isHidden
-        if isHidden == false {
-            recordButton.isHidden = true
-        }
     }
     
     func cancelRecording() {
@@ -324,18 +322,18 @@ private extension RecordViewController {
         }
     }
     
-    func blockEQSlider() {
-        eq75HzSlider.isEnabled = false
-        eq250HzSlider.isEnabled = false
-        eq1040HzSlider.isEnabled = false
-        eq2500HzSlider.isEnabled = false
-        eq7500HzSlider.isEnabled = false
+    func blockEQSlider(isEnabled: Bool) {
+        eq75HzSlider.isEnabled = isEnabled
+        eq250HzSlider.isEnabled = isEnabled
+        eq1040HzSlider.isEnabled = isEnabled
+        eq2500HzSlider.isEnabled = isEnabled
+        eq7500HzSlider.isEnabled = isEnabled
         
-        eq75HzSlider.thumbTintColor = .clear
-        eq250HzSlider.thumbTintColor = .clear
-        eq1040HzSlider.thumbTintColor = .clear
-        eq2500HzSlider.thumbTintColor = .clear
-        eq7500HzSlider.thumbTintColor = .clear
+        eq75HzSlider.thumbTintColor = isEnabled ? .white : .clear
+        eq250HzSlider.thumbTintColor = isEnabled ? .white : .clear
+        eq1040HzSlider.thumbTintColor = isEnabled ? .white : .clear
+        eq2500HzSlider.thumbTintColor = isEnabled ? .white : .clear
+        eq7500HzSlider.thumbTintColor = isEnabled ? .white : .clear
     }
     
 }
