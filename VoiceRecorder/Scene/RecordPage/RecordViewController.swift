@@ -20,6 +20,8 @@ class RecordViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .systemBackground
+        self.title = "음성 녹음"
+        
         attribute()
         layout()
         bind()

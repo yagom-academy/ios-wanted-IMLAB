@@ -9,7 +9,7 @@ import UIKit
 
 class FrequencyView: UIView {
     private var barWidth: CGFloat = 4.0
-    private var color = UIColor.red.cgColor
+    private var color = ThemeColor.blue600.cgColor
     
     private var waveForms = [Int](repeating: 0, count: 100) {
         didSet {
@@ -20,7 +20,6 @@ class FrequencyView: UIView {
     override init (frame: CGRect) {
         super.init(frame: frame)
         
-        self.backgroundColor = .black
         NotificationCenter.default.addObserver(self, selector: #selector(sendWaveformNotification(_:)), name: Notification.Name("SendWaveform"), object: nil)
     }
     
@@ -43,12 +42,12 @@ class FrequencyView: UIView {
         var bar: CGFloat = 0
 
         context.clear(rect)
-        context.setFillColor(red: 1, green: 1, blue: 1, alpha: 1)
+        context.setFillColor(ThemeColor.blue100.cgColor)
         context.fill(rect)
         context.setLineWidth(3)
         context.setStrokeColor(color)
 
-        let centerY: CGFloat = 150
+        let centerY: CGFloat = self.frame.height / 2
 
         for i in 0 ..< waveForms.count {
             let firstX = bar * barWidth

@@ -23,6 +23,7 @@ class VolumeControlView: UIView {
         let imageView = UIImageView(image: UIImage(systemName: "speaker.wave.2.fill"))
         imageView.widthAnchor.constraint(equalToConstant: 30).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        imageView.tintColor = ThemeColor.blue300
 
         return imageView
     }()
@@ -32,6 +33,7 @@ class VolumeControlView: UIView {
         slider.value = 0.5
         slider.minimumValue = 0.0
         slider.maximumValue = 1.0
+        slider.tintColor = ThemeColor.blue300
 
         slider.addTarget(self, action: #selector(onChangedVolume(_:)), for: .valueChanged)
 
@@ -70,7 +72,7 @@ extension VolumeControlView {
             stackView.topAnchor.constraint(equalTo: topAnchor),
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: inset),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -inset),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
         ]
 
         NSLayoutConstraint.activate(stackViewConstraints)

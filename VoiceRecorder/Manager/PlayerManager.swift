@@ -136,7 +136,7 @@ class PlayerManager: PlayerService {
         configureAudioEngine()
 
         NotificationCenter.default.post(name: NSNotification.Name("PlayerDidEnded"), object: nil)
-        
+
         NotificationCenter.default.post(name: NSNotification.Name("SendWaveform"), object: Array(repeating: 1, count: 100))
     }
 

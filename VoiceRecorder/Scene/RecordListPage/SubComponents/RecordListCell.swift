@@ -10,16 +10,16 @@ import UIKit
 class RecordListCell: UITableViewCell {
     static let identifier = "RecordListCell"
     private var indexPath: IndexPath?
-    
+
     private var isSetSwapGesture: Bool = false
     private var swapGestureAction: ((_ sender: UILongPressGestureRecognizer, _ toCenterPoint: CGPoint) -> Void)?
     private var isSetFavoriteMarkAction: Bool = false
-    private var favoriteMarkAction: ((_ indexPath: IndexPath) -> ())?
+    private var favoriteMarkAction: ((_ indexPath: IndexPath) -> Void)?
 
     private let container = UIStackView()
-    
+
     private let favoriteMark = UIButton()
-    
+
     private let labelContainer = UIStackView()
     private let titleLabel = UILabel()
     private let durationLabel = UILabel()
@@ -40,7 +40,7 @@ class RecordListCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0))
+        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 5.0, left: 10.0, bottom: 5.0, right: 10.0))
     }
 
     func setData(data: CellData, indexPath: IndexPath) {
@@ -48,28 +48,28 @@ class RecordListCell: UITableViewCell {
         titleLabel.text = data.fileInfo.filename
         durationLabel.text = data.fileInfo.duration
         let favoritMarkTitle = data.isFavorite ? "★" : "☆"
-        self.favoriteMark.setTitle(favoritMarkTitle, for: .normal)
+        favoriteMark.setTitle(favoritMarkTitle, for: .normal)
     }
 
-    func addFavoriteMarkAction(action: ((_ indexPath: IndexPath) -> ())?) {
+    func addFavoriteMarkAction(action: ((_ indexPath: IndexPath) -> Void)?) {
         if isSetFavoriteMarkAction == false {
             isSetFavoriteMarkAction = true
-            self.favoriteMarkAction = action
-            self.favoriteMark.addTarget(self, action: #selector(tappedFavoriteMarkAction), for: .touchUpInside)
+            favoriteMarkAction = action
+            favoriteMark.addTarget(self, action: #selector(tappedFavoriteMarkAction), for: .touchUpInside)
         }
     }
-    
+
     @objc func tappedFavoriteMarkAction() {
         guard let indexPath = indexPath else {
             return
         }
-        self.favoriteMarkAction?(indexPath)
+        favoriteMarkAction?(indexPath)
     }
-    
+
     func addSwapCellTapGesture(action: @escaping (_ sender: UILongPressGestureRecognizer, _ toCenterPoint: CGPoint) -> Void) {
         if isSetSwapGesture == false {
             isSetSwapGesture = true
-            self.swapGestureAction = action
+            swapGestureAction = action
             swipeTapView.isUserInteractionEnabled = true
             let longPressedGesture = UILongPressGestureRecognizer(target: self, action: #selector(swapCellAction(with:)))
             longPressedGesture.minimumPressDuration = 0
@@ -86,35 +86,36 @@ class RecordListCell: UITableViewCell {
     }
 
     private func attribute() {
-        self.selectionStyle = .none
-        self.backgroundColor = .clear
-        self.layer.borderWidth = 1
-        self.layer.borderColor = UIColor.white.cgColor
+        selectionStyle = .none
+        backgroundColor = .clear
+        layer.borderWidth = 1
+        layer.borderColor = UIColor.white.cgColor
 
-        contentView.backgroundColor = YagomColor.two.uiColor
+        contentView.backgroundColor = .white
         contentView.layer.cornerRadius = 10
 
         container.axis = .horizontal
         container.distribution = .equalSpacing
         container.alignment = .center
-        
+
         labelContainer.axis = .vertical
         labelContainer.distribution = .equalCentering
-        
+
         favoriteMark.setTitle("☆", for: .normal)
         favoriteMark.titleLabel?.font = .systemFont(ofSize: 25)
-        
-        titleLabel.textColor = .white
+        favoriteMark.setTitleColor(.systemYellow, for: .normal)
+
+        titleLabel.textColor = ThemeColor.blue600
         titleLabel.font = .systemFont(ofSize: 18)
-        
-        durationLabel.textColor = .white
+
+        durationLabel.textColor = ThemeColor.blue300
         durationLabel.font = .systemFont(ofSize: 15)
 
-        swipeTapView.tintColor = YagomColor.three.uiColor
+        swipeTapView.tintColor = ThemeColor.blue300
     }
 
     private func layout() {
-        self.contentView.addSubview(container)
+        contentView.addSubview(container)
         container.translatesAutoresizingMaskIntoConstraints = false
         container.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
         container.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
@@ -125,19 +126,19 @@ class RecordListCell: UITableViewCell {
             labelContainer.addArrangedSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
-        
+
         let leftPadding = UIView()
         let rightPadding = UIView()
-        
+
         [leftPadding, favoriteMark, labelContainer, swipeTapView, rightPadding].forEach {
             container.addArrangedSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
 
         leftPadding.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.01).isActive = true
-        
+
         favoriteMark.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.1).isActive = true
-        
+
         labelContainer.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.7).isActive = true
 
         swipeTapView.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.1).isActive = true

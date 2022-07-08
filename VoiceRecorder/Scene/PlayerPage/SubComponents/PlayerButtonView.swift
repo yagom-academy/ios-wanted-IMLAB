@@ -9,6 +9,34 @@ import UIKit
 
 class PlayerButtonView: UIView {
     private var viewModel: PlayerButtonViewModel!
+    private var timer: Timer?
+
+    let currentTimeLabel: UILabel = {
+        let label = UILabel()
+        label.text = " "
+        label.font = .systemFont(ofSize: 20, weight: .regular)
+        label.textColor = ThemeColor.blue300
+
+        return label
+    }()
+
+    let durationLabel: UILabel = {
+        let label = UILabel()
+        label.text = " "
+        label.font = .systemFont(ofSize: 20, weight: .regular)
+        label.textColor = .secondaryLabel
+
+        return label
+    }()
+
+    let labelStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution = .equalSpacing
+        stackView.spacing = 10
+
+        return stackView
+    }()
 
     let stackView: UIStackView = {
         let stackView = UIStackView()
@@ -76,6 +104,8 @@ class PlayerButtonView: UIView {
 
         NotificationCenter.default.addObserver(self, selector: #selector(playerDidEnded), name: NSNotification.Name("PlayerDidEnded"), object: nil)
 
+        NotificationCenter.default.addObserver(self, selector: #selector(buttonEnabled(_:)), name: Notification.Name("ButtonEnabled"), object: nil)
+
         attribute()
         layout()
     }
@@ -86,8 +116,16 @@ class PlayerButtonView: UIView {
 
     @objc private func playerDidEnded() {
         playPauseButton.isSelected = false
+        viewModel.setCurrentTime(0)
+        timer?.invalidate()
     }
-    
+
+    @objc func buttonEnabled(_ notification: Notification) {
+        playPauseButton.isEnabled = true
+        backwardButton.isEnabled = true
+        forwardButton.isEnabled = true
+    }
+
     deinit {
         viewModel.resetViewModel()
     }
@@ -100,26 +138,39 @@ extension PlayerButtonView {
         self.viewModel = viewModel
     }
 
+    func bindDuration(_ duration: String) {
+        currentTimeLabel.text = "00:00"
+        durationLabel.text = "/ \(duration)"
+    }
+
     private func attribute() {
         [backwardButton, playPauseButton, forwardButton].forEach {
             stackView.addArrangedSubview($0)
+            $0.tintColor = ThemeColor.blue600
+            $0.isEnabled = false
+        }
+
+        [currentTimeLabel, durationLabel].forEach {
+            labelStackView.addArrangedSubview($0)
         }
     }
 
     private func layout() {
-        [stackView].forEach {
+        [labelStackView, stackView].forEach {
             addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
 
-        let stackViewConstraints = [
-            stackView.topAnchor.constraint(equalTo: topAnchor),
+        let constraints = [
+            labelStackView.topAnchor.constraint(equalTo: topAnchor),
+            labelStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
+
+            stackView.topAnchor.constraint(equalTo: labelStackView.bottomAnchor, constant: 10),
             stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
             stackView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            stackView.centerYAnchor.constraint(equalTo: centerYAnchor),
         ]
 
-        NSLayoutConstraint.activate(stackViewConstraints)
+        NSLayoutConstraint.activate(constraints)
     }
 }
 
@@ -130,16 +181,32 @@ extension PlayerButtonView {
         playPauseButton.isSelected = isPlaying
     }
 
+    private func handleTimer(_ isPlaying: Bool) {
+        if isPlaying {
+            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(onTimeFires), userInfo: nil, repeats: true)
+        } else {
+            timer?.invalidate()
+        }
+    }
+
+    @objc private func onTimeFires() {
+        viewModel.incrementCurrentTime(1)
+        currentTimeLabel.text = viewModel.secondsToString(viewModel.getCurrentTime())
+    }
+
     @objc private func onTappedPlayPauseButton(sender: UIButton) {
         let isPlaying = viewModel.playPauseAudio()
         setPlayPauseButtonState(isPlaying)
+        handleTimer(isPlaying)
     }
 
     @objc private func onTappedForwardButton(sender: UIButton) {
         viewModel.goForward()
+        viewModel.incrementCurrentTime(5)
     }
 
     @objc private func onTappedBackwardButton(sender: UIButton) {
         viewModel.goBackward()
+        viewModel.incrementCurrentTime(-5)
     }
 }

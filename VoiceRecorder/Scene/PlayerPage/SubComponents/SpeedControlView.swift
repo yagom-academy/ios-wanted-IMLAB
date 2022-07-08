@@ -25,7 +25,7 @@ class SpeedControlView: UIView {
     let speedLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 14, weight: .medium)
-        
+
         return label
     }()
 
@@ -117,9 +117,8 @@ extension SpeedControlView {
             speedDownButton.isEnabled = true
         }
         speedLabel.text = "재생속도 \(String(format: "%.1f", speedRate))"
-        
     }
-    
+
     @objc private func onTappedSpeedUpButton(sender: UIButton) {
         speedRate = viewModel.changeSpeed(+)
         setButtonState()

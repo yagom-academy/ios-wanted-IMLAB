@@ -38,8 +38,8 @@ class RecordListViewController: UIViewController {
     }
 
     private func attribute() {
-        title = "Voice Memos"
-        view.backgroundColor = YagomColor.one.uiColor
+        title = "녹음파일 리스트"
+        view.backgroundColor = ThemeColor.blue100
 
         AddNavigationbarRightItem()
 
@@ -125,7 +125,7 @@ extension RecordListViewController: UITableViewDataSource, UITableViewDelegate {
         let data = viewModel.getCellData(indexPath)
         let vc = PlayerViewController()
 
-        vc.setData(data.fileInfo.rawFilename)
+        vc.setData(data.fileInfo)
 
         navigationController?.pushViewController(vc, animated: true)
     }

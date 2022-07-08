@@ -17,11 +17,13 @@ class CutoffFrequencyView: UIView {
         return label
     }()
     
-    private lazy var frequencySlider: UISlider = {
+    private let frequencySlider: UISlider = {
         let slider = UISlider()
-        slider.value = 60.0
+        
         slider.minimumValue = 0.0
         slider.maximumValue = 60.0
+        
+        slider.value = 60.0
         
         slider.addTarget(self, action: #selector(didChangeSlider(_:)), for: .valueChanged)
         
@@ -41,6 +43,7 @@ class CutoffFrequencyView: UIView {
     // MARK: - Action
     @objc func didChangeSlider(_ sender: UISlider) {
         let cutValue = sender.value
+        
         NotificationCenter.default.post(name: Notification.Name("SendCutValue"), object: cutValue, userInfo: nil)
     }
 }

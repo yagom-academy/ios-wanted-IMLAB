@@ -28,7 +28,7 @@ class RecordManager: RecordService {
     var waveForms = [Int](repeating: 0, count: 100)
     var totalWaveData = [Int]()
 
-    var cutValue = 0
+    var cutValue = 60
 
     private init() {
         NotificationCenter.default.addObserver(self, selector: #selector(sendCutValue(_:)), name: Notification.Name("SendCutValue"), object: nil)

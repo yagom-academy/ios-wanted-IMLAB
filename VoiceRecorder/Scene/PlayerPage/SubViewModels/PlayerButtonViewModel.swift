@@ -18,6 +18,7 @@ class PlayerButtonViewModel {
 
     private var timer: Timer?
     var interval = 0
+    var currentTime = 0
 
     init(_ audioPlayer: PlayerService) {
         self.audioPlayer = audioPlayer
@@ -52,8 +53,6 @@ class PlayerButtonViewModel {
 
             return true
         }
-        
-        
     }
 
     @objc private func onTimeFires() {
@@ -93,14 +92,13 @@ class PlayerButtonViewModel {
             removedWaves = Array(removedWaves[0 ..< count - 50])
             sendToFrequencyView()
         }
-        
     }
 
     func goForward() {
         audioPlayer.skip(+)
 
         if interval + 50 > waves.count {
-            removedWaves += Array(sendWaves[0 ..< interval])
+            removedWaves += Array(sendWaves[0 ..< (waves.count - interval)])
             interval = waves.count - 1
             sendWaves = Array(waves[waves.count - 100 ..< waves.count])
             sendToFrequencyView()
@@ -108,10 +106,9 @@ class PlayerButtonViewModel {
             interval += 50
             removedWaves += Array(sendWaves[0 ..< 50])
             sendWaves = Array(sendWaves[50 ..< 100]) + Array(waves[interval - 50 ..< interval])
-            
+
             sendToFrequencyView()
         }
-        
     }
 
     func setAudioFile(_ audioFile: AVAudioFile) {
@@ -120,5 +117,34 @@ class PlayerButtonViewModel {
 
     func duration() -> String {
         return audioPlayer.duration()
+    }
+
+    func secondsToString(_ seconds: Int) -> String {
+        if seconds == 0 {
+            return "00:00"
+        }
+
+        let duration = Int(seconds)
+        var result = ""
+
+        let min = duration / 60
+        let sec = duration % 60
+
+        result += min < 10 ? "0\(min):" : "\(min)"
+        result += sec < 10 ? "0\(sec)" : "\(sec)"
+
+        return result
+    }
+
+    func getCurrentTime() -> Int {
+        return currentTime
+    }
+
+    func setCurrentTime(_ value: Int) {
+        currentTime = value
+    }
+
+    func incrementCurrentTime(_ value: Int) {
+        currentTime += value
     }
 }

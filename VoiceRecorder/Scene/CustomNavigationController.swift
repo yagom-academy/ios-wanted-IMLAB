@@ -20,6 +20,6 @@ class CustomNavigationController: UINavigationController {
     
     private func attribute() {
         self.navigationBar.topItem?.backButtonTitle = ""
-        self.navigationBar.tintColor = .black
+        self.navigationBar.tintColor = .label
     }
 }
