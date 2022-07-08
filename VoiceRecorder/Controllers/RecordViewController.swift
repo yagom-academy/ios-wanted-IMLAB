@@ -68,7 +68,6 @@ class RecordViewController: UIViewController {
         configureUI()
         requestRecord()
         setupButton(isHidden: true)
-        setupAudioRecorder()
         enableBuiltInMic()
     }
     override func viewDidAppear(_ animated: Bool) {
@@ -124,6 +123,7 @@ class RecordViewController: UIViewController {
                     MetaData.eq.key: self.eqSliderValues.joined(separator: " "),
                     MetaData.decibelDataURL.key: url.description
                 ]
+                self.decibels = []
                 self.uploadFile(data, fileName: self.recordDate ?? "제목 없음", newMetaData: newMetaData) {
                     self.activityIndicator.stopAnimating()
                     self.setupButton(isHidden: false)
@@ -131,10 +131,12 @@ class RecordViewController: UIViewController {
             }
         } else {
             sender.setImage(.circle)
+            setupAudioRecorder()
             recorder.record()
             blockEQSlider(isEnabled: false)
             setupButton(isHidden: true)
             graphView.drawBarGraph = true
+            graphView.reset()
             
             recorderTimer = Timer.scheduledTimer(
                 timeInterval: 0.01,
