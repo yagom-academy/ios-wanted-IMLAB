@@ -15,9 +15,10 @@ class RecordViewController: UIViewController {
     private var firebaseStorageManager = FirebaseStorageManager()
     private let date = DateUtil().currentDate
     
+    
     private var isStartRecording: Bool = false
     
-    var recordButton: UIButton = {
+    private var recordButton: UIButton = {
         var button = UIButton()
         let largeConfig = UIImage.SymbolConfiguration(pointSize: 50, weight: .regular, scale: .large)
         let largeRecordImage = UIImage(systemName: "circle.fill", withConfiguration: largeConfig)
@@ -50,7 +51,7 @@ class RecordViewController: UIViewController {
         NotificationCenter.default.post(name: .dismissVC, object: nil)
     }
     
-    func setLayout() {
+    private func setLayout() {
         view.backgroundColor = .white
         
         recordButton.translatesAutoresizingMaskIntoConstraints = false
@@ -79,11 +80,10 @@ class RecordViewController: UIViewController {
         ])
     }
     
-    func setAudio() {
+    private func setAudio() {
         requestMicrophoneAccess { [self] allowed in
             if allowed {
-                // 녹음 권한 허용
-                let url = audioFileManager.getAudioFilePath(fileName: date+".caf")
+                let url = audioFileManager.getAudioFilePath(fileName: date + ".caf")
                 soundManager.initializeSoundManager(url: url, type: .record)
             } else {
                 // 녹음 권한 거부
@@ -92,7 +92,7 @@ class RecordViewController: UIViewController {
         }
     }
     
-    func recordButtonToggle() {
+    private func recordButtonToggle() {
         let largeConfig = UIImage.SymbolConfiguration(pointSize: 50, weight: .regular, scale: .large)
         let largeRecordImage = UIImage(systemName: "circle.fill", withConfiguration: largeConfig)
         let largePauseImage = UIImage(systemName: "square.circle", withConfiguration: largeConfig)
@@ -111,8 +111,9 @@ class RecordViewController: UIViewController {
             soundManager.startRecord()
         } else { // 녹음 끝일 때
             soundManager.stopRecord()
-            firebaseStorageManager.uploadAudio(url: url, date: date)
-            soundManager.initializeSoundManager(url: url, type: .playBack)
+//            firebaseStorageManager.uploadAudio(url: , date: <#T##String#>)
+//            firebaseStorageManager.uploadAudio(url: url, date: date)
+//            soundManager.initializeSoundManager(url: url, type: .playBack)
         }
     }
 }
