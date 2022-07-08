@@ -45,6 +45,10 @@ class AudioFileManager {
         return directoryPath.appendingPathComponent(fileName)
     }
     
+    func isFileExist(atPath: String) -> Bool {
+        return fileManager.fileExists(atPath: directoryPath.appendingPathComponent(atPath).path)
+    }
+    
     func deleteLocalAudioFile(fileName: String) {
         let filePath = directoryPath.appendingPathComponent(fileName)
         if fileManager.fileExists(atPath: filePath.path) {
