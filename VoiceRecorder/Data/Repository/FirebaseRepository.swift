@@ -13,15 +13,15 @@ final class FirebaseRepository: AudioRepository {
     typealias AudioName = String
     typealias EndPoint = AudioName
 
-    private lazy var recordURL: URL = {
-        var documentsURL: URL = {
+    private var recordURL: URL {
+        let documentsURL: URL = {
             let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
             return paths[0]
         }()
         let fileName = UUID().uuidString + Audio.format
         let url = documentsURL.appendingPathComponent(fileName)
         return url
-    }()
+    }
 
     func fetchAll() async throws -> [AudioName] {
         let audioReference = Storage.storage().reference()
@@ -44,9 +44,10 @@ final class FirebaseRepository: AudioRepository {
     }
 
     func putDataLocally(from endPoint: AudioName) -> URL {
+        let url = recordURL
         let storageReference = Storage.storage().reference().child(endPoint)
-        storageReference.write(toFile: recordURL)
-        return recordURL
+        storageReference.write(toFile: url)
+        return url
     }
 
     func upload() {
