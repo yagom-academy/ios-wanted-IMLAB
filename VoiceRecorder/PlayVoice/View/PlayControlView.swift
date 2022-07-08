@@ -28,6 +28,15 @@ class PlayControlView: UIStackView {
         }
     }
     
+    var isPlayButtonActivate: Bool {
+        get {
+            return playButton.isEnabled
+        }
+        set {
+            playButton.isEnabled = newValue
+        }
+    }
+
     private var playButton: UIButton = {
         var button = UIButton()
         let largeConfig = UIImage.SymbolConfiguration(pointSize: 50, weight: .regular, scale: .large)
@@ -117,4 +126,5 @@ class PlayControlView: UIStackView {
     @objc func forwardButtonHandler() {
         delegate?.forwardTouchUpinside(sender: forwardButton)
     }
+    
 }
