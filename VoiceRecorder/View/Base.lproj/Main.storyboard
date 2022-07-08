@@ -369,10 +369,22 @@
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2ua-NB-Yvn" customClass="DrawWaveform" customModule="VoiceRecorder" customModuleProvider="target">
                                 <rect key="frame" x="57" y="199" width="300" height="150"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7MM-m3-KpH">
+                                        <rect key="frame" x="0.0" y="0.0" width="1" height="150"/>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="1" id="ZMs-GO-ZvG"/>
+                                            <constraint firstAttribute="height" constant="150" id="s8O-Nv-bLM"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
+                                    <constraint firstItem="7MM-m3-KpH" firstAttribute="leading" secondItem="2ua-NB-Yvn" secondAttribute="leading" id="8gx-UW-TiQ"/>
                                     <constraint firstAttribute="width" constant="300" id="E0c-6F-hgs"/>
                                     <constraint firstAttribute="height" constant="150" id="Lz3-qb-kXS"/>
+                                    <constraint firstItem="7MM-m3-KpH" firstAttribute="centerY" secondItem="2ua-NB-Yvn" secondAttribute="centerY" id="vbF-vR-6p3"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -394,6 +406,7 @@
                         <outlet property="goForwardButton" destination="MOa-KV-VDJ" id="MCN-Vq-5Wm"/>
                         <outlet property="playButton" destination="cpy-m0-jJ9" id="fYI-aL-N1u"/>
                         <outlet property="playProgressBar" destination="4KN-1J-mU2" id="2Q1-Mt-tAw"/>
+                        <outlet property="positionBar" destination="7MM-m3-KpH" id="JkJ-hp-4xo"/>
                         <outlet property="soundPitchControl" destination="VjU-pj-Gei" id="3qh-ok-tcD"/>
                         <outlet property="totalPlayTimeLabel" destination="5MX-UE-EBA" id="Cfm-33-vcS"/>
                         <outlet property="volumeSliderView" destination="STt-MF-5Xp" id="v2N-yx-wyF"/>

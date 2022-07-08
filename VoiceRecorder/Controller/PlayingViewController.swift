@@ -11,6 +11,7 @@ import MediaPlayer
 
 class PlayingViewController: UIViewController {
     
+    @IBOutlet weak var positionBar: UIView!
     @IBOutlet weak var volumeSliderView: UIView!
     @IBOutlet weak var fileNameLabel: UILabel!
     @IBOutlet weak var soundPitchControl: UISegmentedControl!
@@ -37,6 +38,8 @@ class PlayingViewController: UIViewController {
         playProgressBar.progress = 0.0
         audioPlayerHandler.selectPlayFile(self.fileNameLabel.text)
         configureVolumeSlider()
+        
+        positionBar.center.x -= waveFormView.bounds.width
 //        let layout = waveCollectionView.collectionViewLayout as! UICollectionViewFlowLayout
 //        layout.scrollDirection = .horizontal
     }
@@ -101,7 +104,9 @@ class PlayingViewController: UIViewController {
         playProgressBar.progress = audioPlayerHandler.progress
         firstindex += 1
 //        waveCollectionView.scrollToItem(at: NSIndexPath(item: firstindex, section: 0) as IndexPath, at: .right, animated: true)
-        
+        UIView.animate(withDuration: 0.5, delay: 0, options: [], animations: {
+            self.positionBar.center.x += self.waveFormView.bounds.width
+        }, completion: nil)
         if !audioPlayerHandler.isPlaying {
             self.playButton.setImage(UIImage(systemName: "play"), for: .normal)
         } else {
