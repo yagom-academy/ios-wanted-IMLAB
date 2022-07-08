@@ -58,11 +58,7 @@ class PlayerManager: PlayerService {
         guard let audioFile = audioFile else {
             return
         }
-<<<<<<< HEAD
 
-=======
-        resetAudio()
->>>>>>> fa79471647c4eb371945e4e6097ad6c9afccb833
         self.audioFile = audioFile
 
         configureAudioEngine()
