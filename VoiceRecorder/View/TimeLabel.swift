@@ -8,7 +8,7 @@
 import UIKit
 
 class TimeLabel: UILabel {
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.font = UIFont.monospacedDigitSystemFont(ofSize: CNS.size.time, weight: .light)

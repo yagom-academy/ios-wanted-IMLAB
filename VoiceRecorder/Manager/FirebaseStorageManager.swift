@@ -84,7 +84,7 @@ class FirebaseStorageManager {
             }else{
                 imageRef.delete { error in
                     if let error = error{
-                    print(error.localizedDescription)
+                        print(error.localizedDescription)
                     }
                     completion()
                 }

@@ -17,14 +17,14 @@ import UIKit
 import AVFoundation
 
 class RecordVoiceViewController: UIViewController {
-
+    
     weak var delegate : RecordVoiceDelegate?
     var recordVoiceManager : RecordVoiceManager!
     var drawWaveFormManager : DrawWaveFormManager!
     var playVoiceManager : PlayVoiceManager!
     var audioSessionManager = AudioSessionManager()
-    var isHour = false    
-        
+    var isHour = false
+    
     let waveFormCanvasView : UIView = {
         let waveFormCanvasView = UIView()
         waveFormCanvasView.translatesAutoresizingMaskIntoConstraints = false
@@ -161,7 +161,7 @@ class RecordVoiceViewController: UIViewController {
         recordVoiceManager.delegate = self
         playVoiceManager.delegate = self
         audioSessionManager.setSampleRate(Double(CNS.sampleRate.max))
-
+        
         setView()
         autoLayout()
         setUI()
@@ -306,7 +306,7 @@ class RecordVoiceViewController: UIViewController {
             updateUI(when: .beforePlaying)
         }
     }
-
+    
 }
 
 // MARK: DrawWaveFormManagerDelegate
@@ -344,7 +344,7 @@ extension RecordVoiceViewController : PlayVoiceDelegate{
         }
         self.progressTimeLabel.setText(currentTime)
     }
-
+    
     func displayWaveForm(to currentPosition: AVAudioFramePosition, in audioLengthSamples: AVAudioFramePosition) {
         var newX : CGFloat
         if currentPosition <= 0 {

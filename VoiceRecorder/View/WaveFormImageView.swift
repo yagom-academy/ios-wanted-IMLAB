@@ -8,7 +8,7 @@
 import UIKit
 
 class WaveFormImageView: UIImageView {
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.frame.size.width = CGFloat(FP_INFINITE)

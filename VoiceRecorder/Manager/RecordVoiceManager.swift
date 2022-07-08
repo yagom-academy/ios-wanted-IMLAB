@@ -25,7 +25,7 @@ class RecordVoiceManager{
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
             AVNumberOfChannelsKey: 1,
             AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
-          ]
+        ]
         
         do {
             try recorder = AVAudioRecorder(url: soundFileURL, settings: recordSettings)

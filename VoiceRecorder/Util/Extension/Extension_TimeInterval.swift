@@ -2,9 +2,9 @@
 import Foundation
 
 extension TimeInterval{
-
+    
     func getStringTimeInterval() -> String {
-
+        
         let seconds = self
         let hour = Int(seconds) / (60 * 60)
         let min = Int(seconds) / 60

@@ -11,7 +11,7 @@ import AVFoundation
 class AudioSessionManager{
     
     private let audioSession = AVAudioSession.sharedInstance()
-
+    
     func setAudioSession() {
         do {
             try audioSession.setCategory(.playAndRecord, options: .defaultToSpeaker)

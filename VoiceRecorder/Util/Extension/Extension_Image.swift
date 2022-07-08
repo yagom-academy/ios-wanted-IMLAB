@@ -8,14 +8,14 @@ extension UIImage {
         let width = self.size.width
         let height = self.size.height
         let scaleFactor = rect.size.height / height
-
+        
         UIGraphicsBeginImageContext(CGSize(width: width * scaleFactor, height: height * scaleFactor))
         self.draw(in: CGRect(x: 0.0, y: 0.0, width: width * scaleFactor, height: height * scaleFactor))
-
+        
         defer {
             UIGraphicsEndImageContext()
         }
-
+        
         return UIGraphicsGetImageFromCurrentImageContext()
     }
 }

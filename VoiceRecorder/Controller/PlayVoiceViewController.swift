@@ -54,7 +54,7 @@ class PlayVoiceViewController: UIViewController {
         timeControlButtonStackView.spacing = 20
         return timeControlButtonStackView
     }()
-
+    
     lazy var playAndPauseButton: UIButton = {
         let playAndPauseButton = UIButton()
         playAndPauseButton.translatesAutoresizingMaskIntoConstraints = false
@@ -165,7 +165,7 @@ class PlayVoiceViewController: UIViewController {
             
             playAndPauseButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             playAndPauseButton.centerYAnchor.constraint(equalTo: volumeSlider.bottomAnchor, constant: CNS.autoLayout.standardConstant),
-                        
+            
         ])
         view.bringSubviewToFront(waveFormImageView)
         view.bringSubviewToFront(verticalLineView)
@@ -229,7 +229,7 @@ extension PlayVoiceViewController : FirebaseDownloadManagerDelegate{
         setUIText()
     }
     
-   
+    
 }
 
 extension PlayVoiceViewController : PlayVoiceDelegate{

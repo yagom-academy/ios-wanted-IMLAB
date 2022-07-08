@@ -49,7 +49,7 @@ class PlayVoiceManager{
     
     func setAudioFile(){
         let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-                .appendingPathComponent("myRecoding.m4a")
+            .appendingPathComponent("myRecoding.m4a")
         guard let file = try? AVAudioFile(forReading: fileURL) else {return}
         self.format = file.processingFormat
         self.audioFile = file
@@ -69,7 +69,6 @@ class PlayVoiceManager{
         
         audioEngine.connect(playerNode, to: pitchControl, format: format)
         audioEngine.connect(pitchControl, to: audioEngine.mainMixerNode, format: format)
-        //audioEngine.connect(audioEngine.mainMixerNode, to: audioEngine.outputNode, format: format)
         
         self.audioEngine.prepare()
         do{
@@ -122,7 +121,7 @@ class PlayVoiceManager{
         delegate.displayWaveForm(to: currentPosition, in: audioLengthSamples)
         delegate.displayCurrentTime(currentPosition, audioLengthSamples, audioFileLengthSecond)
     }
-        
+    
     private func seek(time : Double){
         guard let audioFile = audioFile else {
             return
@@ -137,14 +136,14 @@ class PlayVoiceManager{
         playerNode.stop()
         
         if currentPosition < audioLengthSamples{
-        
-        let frameCount = AVAudioFrameCount(audioLengthSamples - seekFrame)
-        playerNode.scheduleSegment(audioFile, startingFrame: seekFrame, frameCount: frameCount, at: nil) {
-            print("COMPLETE")
-        }
-        if wasPlaying{
-            playerNode.play()
-        }
+            
+            let frameCount = AVAudioFrameCount(audioLengthSamples - seekFrame)
+            playerNode.scheduleSegment(audioFile, startingFrame: seekFrame, frameCount: frameCount, at: nil) {
+                print("COMPLETE")
+            }
+            if wasPlaying{
+                playerNode.play()
+            }
         }else{
             delegate.displayWaveForm(to: 0, in: audioLengthSamples)
             delegate.displayCurrentTime(0, audioLengthSamples, audioFileLengthSecond)

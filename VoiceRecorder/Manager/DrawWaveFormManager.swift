@@ -70,10 +70,10 @@ class DrawWaveFormManager{
         let newTraitLength = ((CGFloat(newInput) * (maxTraitLength - minTraitLength))) + minTraitLength
         
         traitLength = newInput > 1 ? maxTraitLength : newTraitLength
-
+        
         pencil.move(to: start)
         pencil.addLine(to: CGPoint(x: start.x, y: start.y + traitLength))
-
+        
         pencil.move(to: start)
         pencil.addLine(to: CGPoint(x: start.x, y: start.y - traitLength))
         

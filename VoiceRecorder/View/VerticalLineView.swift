@@ -11,7 +11,7 @@ class VerticalLineView: UIView {
     
     private var path: UIBezierPath!
     private var shape: CAShapeLayer!
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
     }

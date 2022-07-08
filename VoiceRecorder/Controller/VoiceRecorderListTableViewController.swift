@@ -8,7 +8,7 @@
 import UIKit
 
 class VoiceRecorderListTableViewController: UITableViewController {
-
+    
     var statusView : DeletePopupView = {
         let statusView = DeletePopupView()
         statusView.translatesAutoresizingMaskIntoConstraints = false
@@ -30,7 +30,7 @@ class VoiceRecorderListTableViewController: UITableViewController {
         updateTableViewList()
         configureRefreshControl()
     }
-
+    
     func setUp() {
         navigationItem.title = "Voice Memos"
         setAddBarButton()
@@ -47,7 +47,7 @@ class VoiceRecorderListTableViewController: UITableViewController {
                 }
             }
         }
-              
+        
     }
     
     func setAddBarButton() {
@@ -71,15 +71,15 @@ class VoiceRecorderListTableViewController: UITableViewController {
     }
     
     // MARK: - Table view data source
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.voiceRecordListViewModel.numOfList()
     }
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let voiceRecodeFile = voiceRecordListViewModel.ListAtIndex(index: indexPath.row)
         guard let cell = tableView.dequeueReusableCell(withIdentifier: VoiceRecordTableViewCell.g_identifier, for: indexPath) as? VoiceRecordTableViewCell else {
@@ -104,6 +104,7 @@ class VoiceRecorderListTableViewController: UITableViewController {
             statusView.tag = 102
             print(statusView.bounds.height)
             statusView.showView()
+            
             NSLayoutConstraint.activate([
                 statusView.topAnchor.constraint(equalTo:view.safeAreaLayoutGuide.topAnchor),
                 statusView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
