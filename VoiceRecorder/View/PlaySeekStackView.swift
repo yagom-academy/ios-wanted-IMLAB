@@ -17,8 +17,8 @@ protocol PlaySeekStackViewDelegate: AnyObject {
 class PlaySeekStackView: UIStackView {
     private lazy var backwardButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "gobackward"), for: .normal)
-        button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: 32.0), forImageIn: .normal)
+        button.setImage(UIImage.gobackward, for: .normal)
+        button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: Constants.ButtonSize.regular), forImageIn: .normal)
         button.addTarget(self, action: #selector(touchBackwardButton), for: .touchUpInside)
         button.isEnabled = false
         return button
@@ -26,8 +26,8 @@ class PlaySeekStackView: UIStackView {
     
     private lazy var forwardButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "goforward"), for: .normal)
-        button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: 32.0), forImageIn: .normal)
+        button.setImage(UIImage.goforward, for: .normal)
+        button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: Constants.ButtonSize.regular), forImageIn: .normal)
         button.addTarget(self, action: #selector(touchForwardButton), for: .touchUpInside)
         button.isEnabled = false
         return button
@@ -35,8 +35,8 @@ class PlaySeekStackView: UIStackView {
     
     private lazy var playPauseButton: UIButton = {
         let button = UIButton(type: .custom)
-        button.setImage(UIImage(systemName: "play.fill"), for: .normal)
-        button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: 32.0), forImageIn: .normal)
+        button.setImage(UIImage.playFill, for: .normal)
+        button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: Constants.ButtonSize.regular), forImageIn: .normal)
         button.addTarget(self, action: #selector(touchPlayPauseButton), for: .touchUpInside)
         button.isEnabled = false
         return button
@@ -97,9 +97,9 @@ extension PlaySeekStackView {
     
     func configurePlayPauseButtonState(_ isPlaying: Bool) {
         if isPlaying {
-            playPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+            playPauseButton.setImage(UIImage.pauseFill, for: .normal)
         } else {
-            playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+            playPauseButton.setImage(UIImage.playFill, for: .normal)
         }
     }
 }

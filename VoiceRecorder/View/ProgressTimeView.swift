@@ -15,13 +15,13 @@ class ProgressTimeView: UIStackView {
     
     private let playTimeLabel: UILabel = {
         let label = UILabel()
-        label.text = "00:00"
+        label.text = Constants.TimeLabelText.zero
         return label
     }()
     
     private let playTimeRemainLabel: UILabel = {
         let label = UILabel()
-        label.text = "00:00"
+        label.text = Constants.TimeLabelText.zero
         return label
     }()
     

@@ -15,7 +15,7 @@ class PlayViewModel {
     
     private var audioPlayer: AVAudioPlayerNode = {
         let audioPlayer = AVAudioPlayerNode()
-        audioPlayer.volume = 0.5
+        audioPlayer.volume = Constants.VolumeSliderSize.half
         return audioPlayer
     }()
     private var audioFile: AVAudioFile?

@@ -25,7 +25,7 @@ class PlayViewController: UIViewController {
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
-        imageView.image = UIImage(named: "microphone")
+        imageView.image = UIImage.microphoneCustom
         return imageView
     }()
     
@@ -38,7 +38,8 @@ class PlayViewController: UIViewController {
     private let progressTimeView = ProgressTimeView()
     
     private lazy var pitchSegmentedControl: UISegmentedControl = {
-        let segmentedControl = UISegmentedControl(items: ["일반 목소리", "아기 목소리", "할아버지 목소리"])
+        let items: [String] = [Constants.SegmentedControlItems.normal, Constants.SegmentedControlItems.baby, Constants.SegmentedControlItems.grandfather]
+        let segmentedControl = UISegmentedControl(items: items)
         segmentedControl.selectedSegmentIndex = 0
         segmentedControl.addTarget(self, action: #selector(pitchSegmentedControlValueChanged(_:)), for: .valueChanged)
         return segmentedControl
@@ -48,21 +49,21 @@ class PlayViewController: UIViewController {
     
     private let minVolumeImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "speaker.fill")
+        imageView.image = UIImage.speakerFill
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
     private let maxVolumeImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "speaker.3.fill")
+        imageView.image = UIImage.speakerThreeFill
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
     private lazy var volumeSlider: UISlider = {
         let slider = UISlider()
-        slider.setValue(0.5, animated: false)
+        slider.setValue(Constants.VolumeSliderSize.half, animated: false)
         slider.addTarget(self, action: #selector(volumeSliderValueChanged(_:)), for: .valueChanged)
         return slider
     }()

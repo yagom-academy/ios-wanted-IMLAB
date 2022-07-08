@@ -13,7 +13,7 @@ class HomeViewController: UIViewController {
         tableView.tableFooterView = UIView()
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(HomeTableViewCell.self, forCellReuseIdentifier: Constants.HomeTableCellIdentifier)
+        tableView.register(HomeTableViewCell.self, forCellReuseIdentifier: Constants.TableViewCellIdentifier.home)
         tableView.refreshControl = refreshControl
         return tableView
     }()
@@ -54,7 +54,7 @@ private extension HomeViewController {
     
     // TODO: - String 관리
     func configureNavigation() {
-        navigationItem.title = "음성 메모장"
+        navigationItem.title = Constants.Home.navigationTitle
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(touchAddButton))
     }
     
@@ -85,8 +85,8 @@ private extension HomeViewController {
             recordController.delegate = self
             present(recordController, animated: true)
         case .denied:
-            let alertController = UIAlertController(title: "", message: "설정에서 마이크 권한을 허용해주세요.", preferredStyle: .alert)
-            alertController.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
+            let alertController = UIAlertController(title: Constants.AlertActionTitle.empty, message: Constants.AlertControllerTitle.microphoneRequest, preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: Constants.AlertActionTitle.ok, style: .default, handler: nil))
             present(alertController, animated: true)
         case .undetermined:
             session.requestRecordPermission { _ in }
@@ -139,9 +139,9 @@ extension HomeViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let alertController = UIAlertController(title: "녹음파일 삭제", message: nil, preferredStyle: .alert)
-            alertController.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
-            alertController.addAction(UIAlertAction(title: "확인", style: .default, handler: { _ in
+            let alertController = UIAlertController(title: Constants.AlertControllerTitle.recordFileRemove, message: nil, preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: Constants.AlertActionTitle.cancel, style: .cancel, handler: nil))
+            alertController.addAction(UIAlertAction(title: Constants.AlertActionTitle.ok, style: .default, handler: { _ in
                 self.viewModel.deleteAudio(indexPath)
                 tableView.deleteRows(at: [indexPath], with: .fade)
             }))
