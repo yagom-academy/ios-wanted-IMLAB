@@ -63,15 +63,6 @@ class RecordViewController: UIViewController {
             playControlView.heightAnchor.constraint(equalToConstant: 100)
         ])
     }
-    
-    func recordButtonToggle() {
-        let largeConfig = UIImage.SymbolConfiguration(pointSize: 50, weight: .regular, scale: .large)
-        let largeRecordImage = UIImage(systemName: "circle.fill", withConfiguration: largeConfig)
-        let largePauseImage = UIImage(systemName: "square.circle", withConfiguration: largeConfig)
-        
-        let image = self.isStartRecording ? largePauseImage : largeRecordImage
-        self.recordButton.setImage(image, for: .normal)
-    }
 
     func setAudio() {
         requestMicrophoneAccess { [weak self] allowed in
@@ -86,6 +77,15 @@ class RecordViewController: UIViewController {
         }
     }
     
+    func recordButtonToggle() {
+        let largeConfig = UIImage.SymbolConfiguration(pointSize: 50, weight: .regular, scale: .large)
+        let largeRecordImage = UIImage(systemName: "circle.fill", withConfiguration: largeConfig)
+        let largePauseImage = UIImage(systemName: "square.circle", withConfiguration: largeConfig)
+        
+        let image = self.isStartRecording ? largePauseImage : largeRecordImage
+        self.recordButton.setImage(image, for: .normal)
+    }
+    
     // 녹음 시작 & 정지 컨트롤
     @objc private func control() {
         isStartRecording = !isStartRecording
@@ -98,6 +98,7 @@ class RecordViewController: UIViewController {
             soundManager.stopRecord()
             firebaseStorageManager.uploadAudio(url: url, date: date)
             soundManager.initializedEngine(url: url)
+            NotificationCenter.default.post(name: .dismissVC, object: nil)
         }
     }
 }

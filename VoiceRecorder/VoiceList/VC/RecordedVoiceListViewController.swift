@@ -35,7 +35,12 @@ class RecordedVoiceListViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("view Will Appear")
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(dismissNotification(notification:)), name: .dismissVC, object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: .dismissVC, object: nil)
     }
     
     func setNavgationBarProperties() {
@@ -73,6 +78,8 @@ class RecordedVoiceListViewController: UIViewController {
     }
     
     func initalizeFirebaseAudioFiles() {
+        self.audioList.removeAll()
+        
         firestorageManager.downloadAll { result in
             switch result {
             case .success(let data) :
@@ -87,6 +94,14 @@ class RecordedVoiceListViewController: UIViewController {
     @objc func createNewVoiceRecordButtonAction() {
         let recorderVC = RecordViewController()
         self.present(recorderVC, animated: true)
+    }
+    
+    @objc func dismissNotification(notification: NSNotification) {
+        initalizeFirebaseAudioFiles()
+        
+        OperationQueue.main.addOperation {
+            self.recordedVoiceTableView.reloadData()
+        }
     }
 }
 
