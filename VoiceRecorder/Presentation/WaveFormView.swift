@@ -45,7 +45,7 @@ class WaveFormView: UIView {
         guard let sublayers = self.layer.sublayers else { return }
         
         for layer in sublayers {
-            let transform  = CATransform3DTranslate(layer.transform, -5, 0, 0)
+            let transform  = CATransform3DTranslate(layer.transform, -1, 0, 0)
             layer.transform = transform
         }
     }
@@ -124,7 +124,7 @@ class WaveFormView: UIView {
         
         let startX = mode == .play ?
         self.bounds.origin.x + 1 * CGFloat(count) :
-        self.bounds.width + 5 * CGFloat(count)
+        self.bounds.width + 1 * CGFloat(count)
         
         let startY = self.bounds.height / 2
 
