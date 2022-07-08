@@ -42,6 +42,10 @@ class RecordViewController: UIViewController {
         recordButton.addTarget(self, action: #selector(control), for: .touchUpInside)
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        NotificationCenter.default.post(name: .dismissVC, object: nil)
+    }
+    
     func setLayout() {
         view.backgroundColor = .white
         
@@ -98,7 +102,6 @@ class RecordViewController: UIViewController {
             soundManager.stopRecord()
             firebaseStorageManager.uploadAudio(url: url, date: date)
             soundManager.initializedEngine(url: url)
-            NotificationCenter.default.post(name: .dismissVC, object: nil)
         }
     }
 }
