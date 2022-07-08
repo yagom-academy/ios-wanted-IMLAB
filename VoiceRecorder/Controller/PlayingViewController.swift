@@ -18,7 +18,6 @@ class PlayingViewController: UIViewController {
     @IBOutlet weak var volumeControlSlider: UISlider!
     @IBOutlet weak var voiceChangeSegmentedControl: UISegmentedControl!
     @IBOutlet weak var playButton: UIButton!
-    @IBOutlet weak var waveImageView: UIImageView!
     @IBOutlet weak var positionProgressView: UIProgressView!
     
     // MARK: - Properties
@@ -62,7 +61,6 @@ class PlayingViewController: UIViewController {
         setupAudio()
         setupDisplayLink()
         titleLabel.text = fileName
-        drawWaveForm()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -75,19 +73,6 @@ class PlayingViewController: UIViewController {
     }
     
     // MARK: - Methods
-    
-    func drawWaveForm() {
-        guard let fileURL = fileURL else {return}
-        let scale = UIScreen.main.scale; // 기기의 해상도
-        let imageSizeInPixel =  CGSize(width: waveImageView.bounds.width * scale, height : waveImageView.bounds.height * scale);
-        generateWaveformImage(audioURL: fileURL, imageSizeInPixel: imageSizeInPixel, waveColor: UIColor.gray) {[weak self] (waveFormImage) in
-            if let waveFormImage = waveFormImage {
-                self?.waveImageView.image = waveFormImage;
-            } else {
-                print("Error: <draw waveform> - not exist waveform image")
-            }
-        }
-    }
     
     private func setupAudio() {
         guard let fileURL = fileURL else { return }

@@ -30,7 +30,6 @@ class RecordDetailViewController: UIViewController {
     private var player : AVAudioPlayer?
     
     private var audioFileURL : URL?
-    private var imageFileURL : URL?
     
     private let readyToRecordButtonImage = UIImage(systemName: "circle.fill")
     private let recordingButtonImage = UIImage(systemName: "square.fill")
@@ -117,7 +116,6 @@ class RecordDetailViewController: UIViewController {
         // 파일 생성
         guard let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
         audioFileURL = fileURL.appendingPathComponent("\(FireStorageManager.File.fileFullName)\(FireStorageManager.File.contentType.audio)")
-        imageFileURL = fileURL.appendingPathComponent("\(FireStorageManager.File.fileFullName)\(FireStorageManager.File.contentType.image)")
         let audioFileURL = fileURL.appendingPathComponent("\(FireStorageManager.File.fileFullName)\(FireStorageManager.File.contentType.audio)")
         let settings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
@@ -169,22 +167,23 @@ class RecordDetailViewController: UIViewController {
         writeWaves(0, false)
         showDuration(url)
         uploadRecordDataToFirebase(url)
+        captureWaveForm()
         
         // Change UI
         recordButton.setImage(readyToRecordButtonImage, for: .normal)
         buttonsStackView.isHidden = false
         cutoffLabel.isHidden = false
         cutOffFreqSegmentedControl.isHidden = false
-        captureWaveForm()
     }
     
     func captureWaveForm() {
-        let renderer = UIGraphicsImageRenderer(size: waveView.bounds.size)
+        let size = CGSize(width: waveView.bounds.width, height: waveView.bounds.height)
+        let renderer = UIGraphicsImageRenderer(size: size)
         let image = renderer.image { ctx in
-            self.updateImageToFirebase()
             waveView.drawHierarchy(in: waveView.bounds, afterScreenUpdates: true)
         }
         testImageView.image = image
+        updateImageToFirebase()
     }
     
     private func updateImageToFirebase() {
