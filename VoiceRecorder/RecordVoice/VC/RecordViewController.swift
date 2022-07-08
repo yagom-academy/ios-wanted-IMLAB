@@ -27,6 +27,7 @@ class RecordViewController: UIViewController {
     
     private lazy var playControlView: PlayControlView = {
         var view = PlayControlView()
+        view.isPlayButtonActivate = false
         view.delegate = self
         return view
     }()
@@ -120,26 +121,44 @@ class RecordViewController: UIViewController {
     }
     
     private func passData(localUrl : URL) {
-        let data = try! Data(contentsOf: localUrl)
-        let totalTime = soundManager.totalPlayTime(date: date)
-        let duration = soundManager.convertTimeToString(totalTime)
-        let audioMetaData = AudioMetaData(title: date, duration: duration, url: urlString)
-        
-        firebaseStorageManager.uploadAudio(audioData: data, audioMetaData: audioMetaData)
+        do {
+            let data = try Data(contentsOf: localUrl)
+            let audioFile = try soundManager.getAudioFile(filePath: localUrl)
+            let totalTime = soundManager.totalPlayTime(audioFile: audioFile)
+            let duration = convertTimeToString(totalTime)
+            let audioMetaData = AudioMetaData(title: date, duration: duration, url: urlString)
+            
+            firebaseStorageManager.uploadAudio(audioData: data, audioMetaData: audioMetaData)
+        } catch {
+            
+        }
     }
+    
+    func convertTimeToString(_ seconds: TimeInterval) -> String {
+        if seconds.isNaN {
+            return "00:00"
+        }
+        
+        let min = Int(seconds / 60)
+        let sec = Int(seconds.truncatingRemainder(dividingBy: 60))
+        let strTime = String(format: "%02d:%02d", min, sec)
+        
+        return strTime
+    }
+    
     
     // 녹음 시작 & 정지 컨트롤
     @objc private func controlRecord() {
         isStartRecording = !isStartRecording
+        playControlView.isPlayButtonActivate = !isStartRecording
         recordButtonToggle()
         
         if isStartRecording { // 녹음 시작일 때
             soundManager.startRecord()
         } else { // 녹음 끝일 때
             soundManager.stopRecord()
-            
+            playControlView.isPlayButtonActivate = !isStartRecording
             let localUrl = audioFileManager.getAudioFilePath(fileName: urlString)
-            print(localUrl)
             passData(localUrl: localUrl)
             soundManager.initializeSoundManager(url: localUrl, type: .playBack)
         }
