@@ -16,6 +16,7 @@ class PlayViewController: UIViewController {
     @IBOutlet weak var playForwardButton: UIButton!
     @IBOutlet weak var volumeTextLabel: UILabel!
     @IBOutlet weak var playerTimeLabel: UILabel!
+    @IBOutlet weak var graphView: GraphView!
     
     // MARK: - UI Components
     private lazy var activityIndicator = UIActivityIndicatorView(style: .large)
@@ -28,6 +29,10 @@ class PlayViewController: UIViewController {
     
     private let engine = AudioEngine()
     
+    private var decibels = [Int]()
+    private var stepDuration = 0.05
+    private var buffer = LastNItemsBuffer<CGFloat>.init(count: 80)
+    
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,24 +40,44 @@ class PlayViewController: UIViewController {
         activityIndicator.startAnimating()
         setUpLocalFileManger {
             self.setupEngine {
-                DispatchQueue.main.async {
-                    self.activityIndicator.stopAnimating()
-                    self.enableButton()
+                self.getDecibel {
+                    DispatchQueue.main.async {
+                        self.activityIndicator.stopAnimating()
+                        self.enableButton()
+                    }
                 }
             }
         }
+        
+        
+        graphView.drawBarGraph = true
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         cancelPlaying()
     }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        buffer.forceToValue(0.0)
+        graphView.points = buffer
+    }
     
     // MARK: - @IBAction
     @IBAction func didTapPlayBack5Button(_ sender: UIButton) {
         engine.skip(forwards: false)
+        graphView.reset()
+        i -= 500
+        if i < 0 {
+            i = 0
+        }
     }
     @IBAction func didTapPlayForward5Button(_ sender: UIButton) {
         engine.skip(forwards: true)
+        graphView.reset()
+        i += 500
+        if i >= decibels.count {
+            i = decibels.count - 1
+        }
     }
     @IBAction func didTapPlayPauseButton(_ sender: UIButton) {
         if isPlay {
@@ -88,6 +113,8 @@ class PlayViewController: UIViewController {
         engine.changeVolume(sender.value)
         volumeTextLabel.text = "volume \(Int(sender.value * 100))%"
     }
+    
+    var i = 0
 }
 
 // MARK: - @objc Methods
@@ -100,10 +127,17 @@ private extension PlayViewController {
             engine.stop()
             engine.currentPosition = 0
             engine.seekFrame = 0
+            i = 0
             playerTimeLabel.text = "\(engine.audioLengthSeconds.toStringTimeFormat)"
             try! engine.setupEngine()
         } else {
             playerTimeLabel.text = "\(engine.getCurrentTime().toStringTimeFormat)"
+        }
+        
+        if i < decibels.count {
+            let value = decibels[i]
+            graphView.animateNewValue(CGFloat(value), duration: self.stepDuration)
+            i += 1
         }
     }
 }
@@ -146,5 +180,23 @@ private extension PlayViewController {
         guard let recordFile = recordFile else { return }
         localFileManager = LocalFileManager(recordModel: recordFile)
         localFileManager?.downloadToLocal { completion() }
+    }
+    
+    func getDecibel(completion: @escaping () -> Void) {
+        guard let urlString = recordFile?.metaData[MetaData.decibelDataURL.key],
+              let url = URL(string: urlString) else { return }
+        
+        Network().fetchData(url: url) { result in
+            switch result {
+            case .success(let data):
+                let decibelArr = JSONDecoder.decode([Int].self, data: data) ?? []
+                self.decibels = decibelArr
+                completion()
+                return
+            case .failure(let error):
+                print("ERROR \(error)🐶🐶")
+                return
+            }
+        }
     }
 }

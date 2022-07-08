@@ -53,7 +53,6 @@ class GraphView: UIView {
         layer.fillColor = UIColor.clear.cgColor
         layer.lineWidth = 2
         layer.lineCap = .round
-
     }
 
     public func reset() {
@@ -92,7 +91,7 @@ class GraphView: UIView {
         let graphBounds = bounds.insetBy(dx: 0, dy: 6)
         let stepWidth = graphBounds.width / (CGFloat(points.count) - 1)
         let range = minValue - maxValue
-        let stepHeight = graphBounds.height  / range
+        let stepHeight = graphBounds.height / range
 
         func pointsForIndex(_ index: Int, value: CGFloat) -> (top: CGPoint, bottom: CGPoint) {
             let top = graphBounds.height / 2 + abs(value) * stepHeight + graphBounds.origin.y

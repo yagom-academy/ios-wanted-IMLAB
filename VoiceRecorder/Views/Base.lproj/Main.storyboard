@@ -8,7 +8,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Voice Memos-->
+        <!--음성 메모-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ListViewController" customModule="VoiceRecorder" customModuleProvider="target" sceneMemberID="viewController">
@@ -17,7 +17,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="lAH-sJ-qya">
-                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                                <rect key="frame" x="0.0" y="140" width="414" height="722"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
                         </subviews>
@@ -30,7 +30,7 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="lAH-sJ-qya" secondAttribute="trailing" id="ySR-Bo-9ID"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Voice Memos" id="bKj-eF-RGO">
+                    <navigationItem key="navigationItem" title="음성 메모" id="bKj-eF-RGO">
                         <barButtonItem key="rightBarButtonItem" title="Item" image="plus" catalog="system" id="1H2-QD-bBg">
                             <connections>
                                 <action selector="didTapShowRecordView:" destination="BYZ-38-t0r" id="3Je-hm-Fmw"/>
@@ -54,7 +54,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="H32-1b-n7C">
-                                <rect key="frame" x="16" y="311.5" width="382" height="195.5"/>
+                                <rect key="frame" x="16" y="327.5" width="382" height="195.5"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="6Dr-fT-gfw">
                                         <rect key="frame" x="0.0" y="0.0" width="382" height="195.5"/>
@@ -201,19 +201,19 @@
                                 </subviews>
                             </stackView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gRT-WD-I6Z">
-                                <rect key="frame" x="171.5" y="523" width="71" height="20.5"/>
+                                <rect key="frame" x="171.5" y="539" width="71" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Set CutOff Frequency" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="96P-79-zEn">
-                                <rect key="frame" x="16" y="275" width="382" height="20.5"/>
+                                <rect key="frame" x="16" y="291" width="382" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="9" translatesAutoresizingMaskIntoConstraints="NO" id="TI4-JT-Y4w">
-                                <rect key="frame" x="16" y="575.5" width="382" height="39.5"/>
+                                <rect key="frame" x="16" y="591.5" width="382" height="39.5"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gBD-le-cBS">
                                         <rect key="frame" x="0.0" y="2" width="89" height="36"/>
@@ -261,7 +261,7 @@
                                 </subviews>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tfq-CC-0oZ" customClass="GraphView" customModule="VoiceRecorder" customModuleProvider="target">
-                                <rect key="frame" x="16" y="64" width="382" height="191"/>
+                                <rect key="frame" x="0.0" y="64" width="414" height="207"/>
                                 <color key="backgroundColor" systemColor="systemGray5Color"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="tfq-CC-0oZ" secondAttribute="height" multiplier="2:1" id="bgR-ay-hIw"/>
@@ -275,13 +275,13 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="H32-1b-n7C" firstAttribute="top" secondItem="96P-79-zEn" secondAttribute="bottom" constant="16" id="3F4-aO-bV8"/>
-                            <constraint firstItem="tfq-CC-0oZ" firstAttribute="leading" secondItem="Iee-YG-Len" secondAttribute="leading" constant="16" id="Ayv-Y9-nZl"/>
+                            <constraint firstItem="tfq-CC-0oZ" firstAttribute="leading" secondItem="Iee-YG-Len" secondAttribute="leading" id="Ayv-Y9-nZl"/>
                             <constraint firstItem="TI4-JT-Y4w" firstAttribute="top" secondItem="gRT-WD-I6Z" secondAttribute="bottom" constant="32" id="CUp-Aa-LWl"/>
                             <constraint firstItem="TI4-JT-Y4w" firstAttribute="leading" secondItem="Iee-YG-Len" secondAttribute="leading" constant="16" id="EZ1-Uj-v0D"/>
                             <constraint firstItem="96P-79-zEn" firstAttribute="top" secondItem="tfq-CC-0oZ" secondAttribute="bottom" constant="20" id="Gs8-1D-fmr"/>
                             <constraint firstItem="H32-1b-n7C" firstAttribute="leading" secondItem="Iee-YG-Len" secondAttribute="leading" constant="16" id="KoR-10-tDP"/>
                             <constraint firstItem="gRT-WD-I6Z" firstAttribute="centerX" secondItem="pW1-cO-dEi" secondAttribute="centerX" id="MYC-O2-5W8"/>
-                            <constraint firstItem="Iee-YG-Len" firstAttribute="trailing" secondItem="tfq-CC-0oZ" secondAttribute="trailing" constant="16" id="Nf6-d8-dEO"/>
+                            <constraint firstItem="Iee-YG-Len" firstAttribute="trailing" secondItem="tfq-CC-0oZ" secondAttribute="trailing" id="Nf6-d8-dEO"/>
                             <constraint firstItem="tfq-CC-0oZ" firstAttribute="top" secondItem="Iee-YG-Len" secondAttribute="top" constant="20" id="UPf-tL-ucj"/>
                             <constraint firstItem="Iee-YG-Len" firstAttribute="trailing" secondItem="H32-1b-n7C" secondAttribute="trailing" constant="16" id="Z0A-RB-zzu"/>
                             <constraint firstItem="Iee-YG-Len" firstAttribute="trailing" secondItem="96P-79-zEn" secondAttribute="trailing" constant="16" id="c2t-Pr-V7X"/>
@@ -313,8 +313,8 @@
         <scene sceneID="Wal-TQ-9eF">
             <objects>
                 <navigationController id="IQD-Ez-W0z" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="opu-xk-9B0">
-                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="opu-xk-9B0">
+                        <rect key="frame" x="0.0" y="44" width="414" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -388,9 +388,9 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ear-tw-qWa">
                                 <rect key="frame" x="0.0" y="104.5" width="414" height="524.5"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FW1-gE-1uO">
-                                        <rect key="frame" x="16" y="167" width="382" height="191"/>
-                                        <color key="backgroundColor" systemColor="systemBrownColor"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FW1-gE-1uO" customClass="GraphView" customModule="VoiceRecorder" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="159" width="414" height="207"/>
+                                        <color key="backgroundColor" systemColor="systemGray5Color"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="FW1-gE-1uO" secondAttribute="height" multiplier="2:1" id="7fA-yn-3LS"/>
                                         </constraints>
@@ -398,10 +398,10 @@
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="FW1-gE-1uO" secondAttribute="trailing" constant="16" id="6a8-VC-eqf"/>
+                                    <constraint firstAttribute="trailing" secondItem="FW1-gE-1uO" secondAttribute="trailing" id="6a8-VC-eqf"/>
                                     <constraint firstItem="FW1-gE-1uO" firstAttribute="centerY" secondItem="ear-tw-qWa" secondAttribute="centerY" id="FJN-HL-5rg"/>
                                     <constraint firstItem="FW1-gE-1uO" firstAttribute="centerX" secondItem="ear-tw-qWa" secondAttribute="centerX" id="UOz-VF-fsg"/>
-                                    <constraint firstItem="FW1-gE-1uO" firstAttribute="leading" secondItem="ear-tw-qWa" secondAttribute="leading" constant="16" id="b0T-IE-Lnv"/>
+                                    <constraint firstItem="FW1-gE-1uO" firstAttribute="leading" secondItem="ear-tw-qWa" secondAttribute="leading" id="b0T-IE-Lnv"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z0g-cL-0xY">
@@ -462,6 +462,7 @@
                     </view>
                     <connections>
                         <outlet property="dateTitleLabel" destination="756-8S-E39" id="reP-vl-nGU"/>
+                        <outlet property="graphView" destination="FW1-gE-1uO" id="sz7-cS-XBI"/>
                         <outlet property="playBackButton" destination="wdY-eq-EiC" id="W82-li-QRk"/>
                         <outlet property="playButton" destination="ZXT-xL-ecs" id="NV0-d4-U2S"/>
                         <outlet property="playForwardButton" destination="KCt-VN-UiT" id="hsr-Vh-TCl"/>
@@ -485,9 +486,6 @@
         <image name="stop.fill" catalog="system" width="128" height="113"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemBrownColor">
-            <color red="0.63529411764705879" green="0.51764705882352946" blue="0.36862745098039218" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray5Color">
             <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

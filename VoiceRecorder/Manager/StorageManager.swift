@@ -95,4 +95,30 @@ class StorageManager {
             }
         }
     }
+    
+    func decibelUpload(_ decibels: [Int], completion: @escaping (Result<URL, Error>) -> Void) {
+        let storageRef = storage.reference()
+        let decibelRef = storageRef.child("Decibel/\(UUID().uuidString)")
+        
+        let data = JSONEncoder.encode(decibels)
+        
+        decibelRef.putData(data) { _, error in
+            if let error = error {
+                print(error, "🐻")
+                completion(.failure(error))
+                return
+            }
+            decibelRef.downloadURL { url, error in
+                if let error = error {
+                    completion(.failure(error))
+                    return
+                }
+                if let url = url {
+                    completion(.success(url))
+                    return
+                }
+            }
+            return
+        }
+    }
 }

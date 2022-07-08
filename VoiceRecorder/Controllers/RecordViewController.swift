@@ -52,6 +52,8 @@ class RecordViewController: UIViewController {
     private let recorder = AudioRecorder()
     private let audioSession = AVAudioSession.sharedInstance()
     
+    private var decibels = [Int]()
+    
     private lazy var eqSliderValues: [String] = [
         eq75HzSlider,
         eq250HzSlider,
@@ -113,21 +115,20 @@ class RecordViewController: UIViewController {
             } catch {
                 print(error)
             }
-            let newMetaData = [
-                MetaData.duration.key: "\(engine.audioLengthSeconds.toStringTimeFormat)",
-                MetaData.eq.key: eqSliderValues.joined(separator: " ")
-            ]
             
             activityIndicator.startAnimating()
-            uploadFile(
-                data,
-                fileName: recordDate ?? "",
-                newMetaData: newMetaData
-            ) {
-                self.activityIndicator.stopAnimating()
-                self.setupButton(isHidden: false)
+            
+            uploadDecibelData(decibels) { url in
+                let newMetaData = [
+                    MetaData.duration.key: "\(self.engine.audioLengthSeconds.toStringTimeFormat)",
+                    MetaData.eq.key: self.eqSliderValues.joined(separator: " "),
+                    MetaData.decibelDataURL.key: url.description
+                ]
+                self.uploadFile(data, fileName: self.recordDate ?? "제목 없음", newMetaData: newMetaData) {
+                    self.activityIndicator.stopAnimating()
+                    self.setupButton(isHidden: false)
+                }
             }
-//            print(fileName)
         } else {
             sender.setImage(.circle)
             recorder.record()
@@ -204,6 +205,8 @@ private extension RecordViewController {
     @objc func update3() {
         recorder.updateMeters()
         let value = pow(Double(10), (0.05 * Double(recorder.averagePower))) * 100
+        print(value)
+        decibels.append(Int(value))
         if value > 160 {
             self.graphView.animateNewValue(CGFloat(graphView.maxValue), duration: self.stepDuration)
         } else {
@@ -286,6 +289,17 @@ private extension RecordViewController {
         recorderTimer?.invalidate()
         waveTimer?.invalidate()
         counter = 0.0
+    }
+    
+    func uploadDecibelData(_ decibels: [Int], completion: @escaping (URL) -> Void) {
+        StorageManager.shared.decibelUpload(decibels) { result in
+            switch result {
+            case .success(let url):
+                completion(url)
+            case .failure(let error):
+                print("ERROR \(error)🍺")
+            }
+        }
     }
     
     func uploadFile(
