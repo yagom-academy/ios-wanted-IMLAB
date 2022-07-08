@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class RecordMeterView: UIView {
+final class RecordMeterView: UIView {
     var values: [CGFloat] = []
     private var currentX: CGFloat = 0.0
 

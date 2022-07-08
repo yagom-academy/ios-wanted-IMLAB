@@ -17,7 +17,7 @@ protocol RecordDrawDelegate: AnyObject{
     func uploadSuccess()
 }
 
-class RecordViewModel {
+final class RecordViewModel {
     let storage = FirebaseStorageManager.shared
     var recorder = AVAudioRecorder()
     var player = AVAudioPlayer()

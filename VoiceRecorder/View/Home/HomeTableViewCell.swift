@@ -7,7 +7,7 @@
 
 import UIKit
 
-class HomeTableViewCell: UITableViewCell {
+final class HomeTableViewCell: UITableViewCell {
     
     static let identfier = Constants.TableViewCellIdentifier.home
     

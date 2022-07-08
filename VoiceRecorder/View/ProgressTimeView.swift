@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ProgressTimeView: UIStackView {
+final class ProgressTimeView: UIStackView {
     private let progressView: UIProgressView = {
         let progressView = UIProgressView()
         return progressView

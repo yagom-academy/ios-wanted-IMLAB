@@ -8,7 +8,7 @@
 import FirebaseStorage
 import UIKit
 
-class FirebaseStorageManager {
+final class FirebaseStorageManager {
     static let shared = FirebaseStorageManager()
     private let folderName = Constants.Firebase.foloderName
     private lazy var storage = Storage.storage().reference().child(folderName)

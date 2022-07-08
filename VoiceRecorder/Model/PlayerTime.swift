@@ -13,12 +13,10 @@ struct PlayerTime {
         static let secsPerHour = 3600
     }
     
-    
     let elapsedText: String
     let remainingText: String
     
     static let zero = PlayerTime(elapsedTime: 0, remainingTime: 0)
-    
 
     init(elapsedTime: Double, remainingTime: Double) {
         elapsedText = PlayerTime.formatted(time: elapsedTime)

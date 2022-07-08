@@ -7,7 +7,7 @@ import UIKit
 import AVFAudio
 import Combine
 
-class HomeViewController: UIViewController {
+final class HomeViewController: UIViewController {
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
         tableView.tableFooterView = UIView()
@@ -52,7 +52,6 @@ private extension HomeViewController {
         view.backgroundColor = .systemBackground
     }
     
-    // TODO: - String 관리
     func configureNavigation() {
         navigationItem.title = Constants.Home.navigationTitle
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(touchAddButton))

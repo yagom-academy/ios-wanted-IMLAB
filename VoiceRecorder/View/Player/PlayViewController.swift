@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class PlayViewController: UIViewController {
+final class PlayViewController: UIViewController {
     private var audio: Audio? {
         didSet {
             guard let audio = audio else {

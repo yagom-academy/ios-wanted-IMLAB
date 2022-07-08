@@ -13,8 +13,7 @@ protocol PlaySeekStackViewDelegate: AnyObject {
     func touchPlayPauseButton()
 }
 
-// TODO: - final 붙이지 않는 이유
-class PlaySeekStackView: UIStackView {
+final class PlaySeekStackView: UIStackView {
     private lazy var backwardButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage.gobackward, for: .normal)

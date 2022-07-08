@@ -13,7 +13,7 @@ protocol RecordViewControllerDelegate: AnyObject {
     func uploadSuccess()
 }
 
-class RecordViewController:UIViewController {
+final class RecordViewController:UIViewController {
     
     private var viewModel = RecordViewModel()
     weak var delegate: RecordViewControllerDelegate?

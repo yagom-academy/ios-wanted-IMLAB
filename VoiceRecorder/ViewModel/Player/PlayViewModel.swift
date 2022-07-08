@@ -10,7 +10,7 @@ import AVFAudio
 import QuartzCore
 import Combine
 
-class PlayViewModel {
+final class PlayViewModel {
     private var url: URL
     
     private var audioPlayer: AVAudioPlayerNode = {
