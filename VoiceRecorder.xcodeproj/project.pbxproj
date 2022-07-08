@@ -22,8 +22,8 @@
 		B7545787286AE34B00EFCDA2 /* DownloadRecordfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7545786286AE34B00EFCDA2 /* DownloadRecordfile.swift */; };
 		B7545789286AE35800EFCDA2 /* DeleteRecordfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7545788286AE35800EFCDA2 /* DeleteRecordfile.swift */; };
 		B78E6BE9286D4B53005AC140 /* LocalFileProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = B78E6BE8286D4B53005AC140 /* LocalFileProtocol.swift */; };
-		B78E6BED286D531F005AC140 /* TimerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = B78E6BEC286D531F005AC140 /* TimerProtocol.swift */; };
-		B78E6BEF286D53EE005AC140 /* UpdateTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = B78E6BEE286D53EE005AC140 /* UpdateTimeInterval.swift */; };
+		B78E6BED286D531F005AC140 /* TimeProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = B78E6BEC286D531F005AC140 /* TimeProtocol.swift */; };
+		B78E6BEF286D53EE005AC140 /* TimeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B78E6BEE286D53EE005AC140 /* TimeHandler.swift */; };
 		B78E6BF1286DA02D005AC140 /* GetFileMetaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B78E6BF0286DA02D005AC140 /* GetFileMetaData.swift */; };
 		B78E6BF3286DBCB1005AC140 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B78E6BF2286DBCB1005AC140 /* GoogleService-Info.plist */; };
 		B7E274972869BA0300FBB977 /* FirebaseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E274962869BA0300FBB977 /* FirebaseStorage.swift */; };
@@ -54,8 +54,8 @@
 		B7545786286AE34B00EFCDA2 /* DownloadRecordfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadRecordfile.swift; sourceTree = "<group>"; };
 		B7545788286AE35800EFCDA2 /* DeleteRecordfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteRecordfile.swift; sourceTree = "<group>"; };
 		B78E6BE8286D4B53005AC140 /* LocalFileProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFileProtocol.swift; sourceTree = "<group>"; };
-		B78E6BEC286D531F005AC140 /* TimerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerProtocol.swift; sourceTree = "<group>"; };
-		B78E6BEE286D53EE005AC140 /* UpdateTimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateTimeInterval.swift; sourceTree = "<group>"; };
+		B78E6BEC286D531F005AC140 /* TimeProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeProtocol.swift; sourceTree = "<group>"; };
+		B78E6BEE286D53EE005AC140 /* TimeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeHandler.swift; sourceTree = "<group>"; };
 		B78E6BF0286DA02D005AC140 /* GetFileMetaData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetFileMetaData.swift; sourceTree = "<group>"; };
 		B78E6BF2286DBCB1005AC140 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B7E274962869BA0300FBB977 /* FirebaseStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorage.swift; sourceTree = "<group>"; };
@@ -123,7 +123,7 @@
 			children = (
 				B7545780286AC79800EFCDA2 /* FirebaseProtocol.swift */,
 				B78E6BE8286D4B53005AC140 /* LocalFileProtocol.swift */,
-				B78E6BEC286D531F005AC140 /* TimerProtocol.swift */,
+				B78E6BEC286D531F005AC140 /* TimeProtocol.swift */,
 			);
 			path = Protocol;
 			sourceTree = "<group>";
@@ -154,7 +154,7 @@
 				B7E274962869BA0300FBB977 /* FirebaseStorage.swift */,
 				12BCEDC1286D3BEF006C1783 /* AudioRecorderHandler.swift */,
 				12BCEDD7286DC9E3006C1783 /* AudioPlayerHandler.swift */,
-				B78E6BEE286D53EE005AC140 /* UpdateTimeInterval.swift */,
+				B78E6BEE286D53EE005AC140 /* TimeHandler.swift */,
 				12BCEDBF286D3AB3006C1783 /* Extension.swift */,
 				B78E6BEA286D506C005AC140 /* FirebaseUtil */,
 				B78E6BEB286D5093005AC140 /* LocalFileUtil */,
@@ -333,7 +333,7 @@
 			files = (
 				DE15E66028604278003DD2F5 /* VoiceMemoListViewController.swift in Sources */,
 				B78E6BE9286D4B53005AC140 /* LocalFileProtocol.swift in Sources */,
-				B78E6BED286D531F005AC140 /* TimerProtocol.swift in Sources */,
+				B78E6BED286D531F005AC140 /* TimeProtocol.swift in Sources */,
 				B738964328703B4B00722EE8 /* LoadingView.swift in Sources */,
 				B78E6BF1286DA02D005AC140 /* GetFileMetaData.swift in Sources */,
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
@@ -352,7 +352,7 @@
 				12C09BC8286FF5E60032500D /* PlayingViewController.swift in Sources */,
 				12BCEDC2286D3BEF006C1783 /* AudioRecorderHandler.swift in Sources */,
 				12BCEDBA286D36D7006C1783 /* LocalFileHandler.swift in Sources */,
-				B78E6BEF286D53EE005AC140 /* UpdateTimeInterval.swift in Sources */,
+				B78E6BEF286D53EE005AC140 /* TimeHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

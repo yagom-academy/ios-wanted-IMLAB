@@ -119,7 +119,6 @@ extension VoiceMemoListViewController : UITableViewDataSource {
         FirebaseStorage.shared.deleteFile(fileName: "voiceRecords_\(fileNameToDelete)")
         self.voiceMemoList.remove(at: indexPath.row)
         tableView.reloadData()
-        
     }
 }
 
@@ -155,6 +154,5 @@ extension VoiceMemoListViewController : UITableViewDelegate {
                 }
             }
         }
-        
     }
 }

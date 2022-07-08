@@ -12,12 +12,12 @@ class AudioRecoderHandler {
     
     var audioRecorder = AVAudioRecorder()
     var localFileHandler : LocalFileProtocol
-    var updateTimeInterval : UpdateTimer
+    var timeHandler : TimeProtocol
     var fileName: String?
     
-    init(handler : LocalFileProtocol, updateTimeInterval : UpdateTimer ){
-        self.localFileHandler = handler
-        self.updateTimeInterval = updateTimeInterval
+    init(localFileHandler : LocalFileProtocol, timeHandler : TimeProtocol ){
+        self.localFileHandler = localFileHandler
+        self.timeHandler = timeHandler
         setupSession()
         setupEngine()
     }
@@ -173,6 +173,7 @@ class AudioRecoderHandler {
     }
     
     func updateTimer(_ time: TimeInterval) -> String {
-        return updateTimeInterval.updateTimer(time)
+        return timeHandler.convertNSTimeToString(time)
     }
 }
+

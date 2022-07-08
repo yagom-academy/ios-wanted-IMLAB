@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol UpdateTimer {
-    func updateTimer(_ time: TimeInterval) -> String
+protocol TimeProtocol {
+    func convertNSTimeToString(_ time: TimeInterval) -> String
 }

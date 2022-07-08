@@ -42,8 +42,8 @@ class RecordingViewController: UIViewController {
     var totalTime : TimeInterval?
     
 
-    let audioRecorderHandler = AudioRecoderHandler(handler: LocalFileHandler(), updateTimeInterval: UpdateTimeInterval())
-    let audioPlayerHandler = AudioPlayerHandler(handler: LocalFileHandler(), updateTimeInterval: UpdateTimeInterval())
+    let audioRecorderHandler = AudioRecoderHandler(localFileHandler: LocalFileHandler(), timeHandler: TimeHandler())
+    let audioPlayerHandler = AudioPlayerHandler(localFileHandler: LocalFileHandler(), timeHandler: TimeHandler())
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -161,22 +161,20 @@ class RecordingViewController: UIViewController {
     }
     
     @objc func updatePlayTime() {
-        let player = audioPlayerHandler.audioPlayer
-        currentPlayTimeLabel.text = audioPlayerHandler.updateTimer(player.currentTime)
-        let time = Float(player.currentTime / (player.duration - 1.0))
-        playProgressBar.setProgress(time, animated: true)
+        currentPlayTimeLabel.text = audioPlayerHandler.currentPlayTime
+        playProgressBar.progress = audioPlayerHandler.progress
     }
     
     @IBAction func goBackwardButtonTapped(_ sender: UIButton) {
         audioPlayerHandler.seek(to: -5.0)
-        currentPlayTimeLabel.text = audioPlayerHandler.currentTime
-        playProgressBar.progress = audioPlayerHandler.playerProgress
+        currentPlayTimeLabel.text = audioPlayerHandler.currentPlayTime
+        playProgressBar.progress = audioPlayerHandler.progress
     }
     
     @IBAction func goForwardButtonTapped(_ sender: UIButton) {
         audioPlayerHandler.seek(to: 5.0)
-        currentPlayTimeLabel.text = audioPlayerHandler.currentTime
-        playProgressBar.progress = audioPlayerHandler.playerProgress
+        currentPlayTimeLabel.text = audioPlayerHandler.currentPlayTime
+        playProgressBar.progress = audioPlayerHandler.progress
     }
     
     func writeWaves(_ input: Float) {
@@ -248,16 +246,5 @@ extension UIScrollView {
         
         // 최종 계산 영역의 크기를 반환
         return totalRect.union(view.frame)
-    }
-}
-
-extension RecordingViewController: AVAudioPlayerDelegate {
-    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        player.stop()
-        self.playButton.setImage(UIImage(systemName: "play"), for: .normal)
-        self.recordingButton.isEnabled = true
-        self.goForwardButton.isEnabled = false
-        self.goBackwardButton.isEnabled = false
-        inPlayMode.toggle()
     }
 }

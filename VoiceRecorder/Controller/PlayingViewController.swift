@@ -20,24 +20,30 @@ class PlayingViewController: UIViewController {
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var goBackwardButton: UIButton!
     @IBOutlet weak var goForwardButton: UIButton!
-    var selectedFileInfo: RecordModel?
+    
     private var progressTimer: Timer?
     private var inPlayMode: Bool = false
+    var selectedFileInfo: RecordModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.currentPlayTimeLabel.text = "00:00"
         guard let fileInfo = selectedFileInfo else { return }
         self.fileNameLabel.text = fileInfo.recordFileName
         self.totalPlayTimeLabel.text = fileInfo.recordTime
+        self.currentPlayTimeLabel.text = audioPlayerHandler.currentPlayTime
         playProgressBar.progress = 0.0
-        audioPlayerHandler.selectPlayFile(self.fileNameLabel.text)
+        audioPlayerHandler.selectAudioFile(self.fileNameLabel.text)
         configureVolumeSlider()
     }
     
-    let audioPlayerHandler = AudioPlayerHandler(
-        handler: LocalFileHandler(),
-        updateTimeInterval: UpdateTimeInterval()
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        audioPlayerHandler.stop()
+    }
+    
+    private let audioPlayerHandler = AudioPlayerHandler(
+        localFileHandler: LocalFileHandler(),
+        timeHandler: TimeHandler()
     )
     
     private func configureVolumeSlider() {
@@ -65,32 +71,30 @@ class PlayingViewController: UIViewController {
     
     @IBAction func goBackwardButtonTapped(_ sender: UIButton) {
         audioPlayerHandler.seek(to: -5.0)
-        playProgressBar.progress = audioPlayerHandler.playerProgress
-        currentPlayTimeLabel.text = audioPlayerHandler.currentTime
+        playProgressBar.progress = audioPlayerHandler.progress
+        currentPlayTimeLabel.text = audioPlayerHandler.currentPlayTime
     }
     
     @IBAction func goForwardButtonTapped(_ sender: UIButton) {
         audioPlayerHandler.seek(to: 5.0)
-        playProgressBar.progress = audioPlayerHandler.playerProgress
-        currentPlayTimeLabel.text = audioPlayerHandler.currentTime
+        playProgressBar.progress = audioPlayerHandler.progress
+        currentPlayTimeLabel.text = audioPlayerHandler.currentPlayTime
     }
     
     @IBAction func playButtonTapped(_ sender: UIButton) {
         inPlayMode.toggle()
         audioPlayerHandler.playOrPause()
-        progressTimer = Timer.scheduledTimer(
-            timeInterval: 1,
-            target: self,
-            selector: #selector(updateProgress),
-            userInfo: nil, repeats: true)
+        progressTimer = Timer.scheduledTimer(timeInterval: 0.05,
+                                             target: self,
+                                             selector: #selector(updateProgress),
+                                             userInfo: nil, repeats: true)
     }
     
     @objc func updateProgress() {
-        currentPlayTimeLabel.text = audioPlayerHandler.currentTime
-        playProgressBar.progress = audioPlayerHandler.playerProgress
+        currentPlayTimeLabel.text = audioPlayerHandler.currentPlayTime
+        playProgressBar.progress = audioPlayerHandler.progress
         if !audioPlayerHandler.isPlaying {
             self.playButton.setImage(UIImage(systemName: "play"), for: .normal)
-            progressTimer?.invalidate()
         } else {
             self.playButton.setImage(UIImage(systemName: "pause"), for: .normal)
         }
