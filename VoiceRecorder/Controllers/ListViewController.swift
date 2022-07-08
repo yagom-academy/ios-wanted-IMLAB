@@ -124,7 +124,6 @@ extension ListViewController: RecordViewControllerDelegate {
 // MARK: - @objc Methods
 private extension ListViewController {
     @objc func beginRefresh(_ sender: UIRefreshControl) {
-        recordList = []
         fetchRecordFile()
         sender.endRefreshing()
     }
