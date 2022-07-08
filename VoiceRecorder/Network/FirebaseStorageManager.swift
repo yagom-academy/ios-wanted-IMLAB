@@ -87,7 +87,7 @@ class FirebaseStorageManager {
     
     func downloadMetaData(filePath: String, completion: @escaping (Result<AudioData, Error>) -> Void) {
         let ref = baseReference.child(filePath)
-        print("filePath: ",filePath)
+        print("filePath in network: ",filePath)
         ref.getMetadata { metaData, error in
             if let error = error {
                 completion(.failure(error))
@@ -98,11 +98,11 @@ class FirebaseStorageManager {
             let fileName = String(filePath.split(separator: "/").last ?? "")
             let splitExtension = String(fileName.split(separator: ".").first ?? "")
             
-            
             let title = data?["title"] ?? String(splitExtension)
             let duration = data?["duration"] ?? "00:00"
+            let url = data?["url"] ?? filePath
             
-            completion(.success(AudioData(url: fileName,title: title, duration: duration)))
+            completion(.success(AudioData(url: url, title: title, duration: duration)))
         }
     }
     
