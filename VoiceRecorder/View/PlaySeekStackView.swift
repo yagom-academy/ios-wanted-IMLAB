@@ -15,29 +15,20 @@ protocol PlaySeekStackViewDelegate: AnyObject {
 
 final class PlaySeekStackView: UIStackView {
     private lazy var backwardButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(UIImage.gobackward, for: .normal)
-        button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: Constants.ButtonSize.regular), forImageIn: .normal)
+        let button = UIButton().makePlaySeekButton(UIImage.gobackward)
         button.addTarget(self, action: #selector(touchBackwardButton), for: .touchUpInside)
-        button.isEnabled = false
         return button
     }()
     
     private lazy var forwardButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(UIImage.goforward, for: .normal)
-        button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: Constants.ButtonSize.regular), forImageIn: .normal)
+        let button = UIButton().makePlaySeekButton(UIImage.goforward)
         button.addTarget(self, action: #selector(touchForwardButton), for: .touchUpInside)
-        button.isEnabled = false
         return button
     }()
     
     private lazy var playPauseButton: UIButton = {
-        let button = UIButton(type: .custom)
-        button.setImage(UIImage.playFill, for: .normal)
-        button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: Constants.ButtonSize.regular), forImageIn: .normal)
+        let button = UIButton().makePlaySeekButton(UIImage.playFill)
         button.addTarget(self, action: #selector(touchPlayPauseButton), for: .touchUpInside)
-        button.isEnabled = false
         return button
     }()
     
