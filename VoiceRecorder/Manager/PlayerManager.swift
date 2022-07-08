@@ -58,6 +58,7 @@ class PlayerManager: PlayerService {
         guard let audioFile = audioFile else {
             return
         }
+
         self.audioFile = audioFile
 
         configureAudioEngine()
