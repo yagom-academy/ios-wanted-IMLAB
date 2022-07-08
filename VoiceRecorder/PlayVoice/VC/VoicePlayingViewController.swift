@@ -56,6 +56,26 @@ class VoicePlayingViewController: UIViewController {
         view.delegate = self
         return view
     }()
+//    
+//    init() {
+//        super.init(frame: CGRectZero, style: UITableViewStyle.Plain)
+//        initialize()
+//    }
+//    required init(coder aDecoder: NSCoder) {
+//        super.init(coder: aDecoder)
+//        initialize()
+//    }
+//    
+//    init(frame: CGRect) {
+//        super.init(frame: frame, style: UITableViewStyle.Plain)
+//        initialize()
+//    }
+//    
+//    override init(frame: CGRect, style: UITableViewStyle) {
+//        super.init(frame: frame, style: style)
+//        initialize()
+//    }
+//    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -119,7 +139,7 @@ class VoicePlayingViewController: UIViewController {
             pitchSegmentController.bottomAnchor.constraint(equalTo: playControlView.topAnchor,constant: -20),
             pitchSegmentController.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             pitchSegmentController.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.9),
-        
+            
         ])
         
     }
