@@ -21,6 +21,7 @@ class RecordDetailViewController: UIViewController {
     @IBOutlet weak var buttonsStackView: UIStackView!
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var cutOffFreqSegmentedControl: UISegmentedControl!
+    @IBOutlet weak var testImageView: UIImageView!
     
     // MARK: - Properties
     
@@ -29,6 +30,7 @@ class RecordDetailViewController: UIViewController {
     private var player : AVAudioPlayer?
     
     private var audioFileURL : URL?
+    private var imageFileURL : URL?
     
     private let readyToRecordButtonImage = UIImage(systemName: "circle.fill")
     private let recordingButtonImage = UIImage(systemName: "square.fill")
@@ -115,6 +117,7 @@ class RecordDetailViewController: UIViewController {
         // 파일 생성
         guard let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
         audioFileURL = fileURL.appendingPathComponent("\(FireStorageManager.File.fileFullName)\(FireStorageManager.File.contentType.audio)")
+        imageFileURL = fileURL.appendingPathComponent("\(FireStorageManager.File.fileFullName)\(FireStorageManager.File.contentType.image)")
         let audioFileURL = fileURL.appendingPathComponent("\(FireStorageManager.File.fileFullName)\(FireStorageManager.File.contentType.audio)")
         let settings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
@@ -172,6 +175,20 @@ class RecordDetailViewController: UIViewController {
         buttonsStackView.isHidden = false
         cutoffLabel.isHidden = false
         cutOffFreqSegmentedControl.isHidden = false
+        captureWaveForm()
+    }
+    
+    func captureWaveForm() {
+        let renderer = UIGraphicsImageRenderer(size: waveView.bounds.size)
+        let image = renderer.image { ctx in
+            self.updateImageToFirebase()
+            waveView.drawHierarchy(in: waveView.bounds, afterScreenUpdates: true)
+        }
+        testImageView.image = image
+    }
+    
+    private func updateImageToFirebase() {
+        FireStorageManager.shared.uploadImage(testImageView.image)
     }
     
     private func showDuration(_ url: URL?) {
