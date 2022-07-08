@@ -44,41 +44,12 @@ final class RecordViewController: UIViewController {
     
     lazy var recordButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "mic.circle.fill"), for: .normal)
+        button.setImage(UIImage.microphoneCustom, for: .normal)
         button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: 50), forImageIn: .normal)
         return button
     }()
     
-    lazy var prevButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(systemName: "gobackward"), for: .normal)
-        button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: 30), forImageIn: .normal)
-        button.isEnabled = false
-        return button
-    }()
-    
-    lazy var nextButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(systemName: "goforward"), for: .normal)
-        button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: 30), forImageIn: .normal)
-        button.isEnabled = false
-        return button
-    }()
-    
-    lazy var playButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(systemName: "play.fill"), for: .normal)
-        button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: 30), forImageIn: .normal)
-        button.isEnabled = false
-        return button
-    }()
-    
-    lazy var controlStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [prevButton,playButton,nextButton])
-        stackView.distribution = .fillEqually
-        
-        return stackView
-    }()
+    var controlStackView: PlaySeekStackView = PlaySeekStackView()
     
     lazy var progressView: UIProgressView = {
         let progressView = UIProgressView()
@@ -91,6 +62,8 @@ final class RecordViewController: UIViewController {
         super.viewDidLoad()
         viewModel.delegate = self
         view.backgroundColor = .secondarySystemGroupedBackground
+        
+        controlStackView.delegate = self
         
         configure()
         
@@ -157,37 +130,23 @@ private extension RecordViewController{
     
     func configureButton(){
         self.recordButton.addTarget(self, action: #selector(didTapRecord(_:)), for: .touchUpInside)
-        self.prevButton.addTarget(self, action: #selector(previusSec), for: .touchUpInside)
-        self.nextButton.addTarget(self, action: #selector(nextSec), for: .touchUpInside)
-        self.playButton.addTarget(self, action: #selector(playPause(_:)), for: .touchUpInside)
+        self.controlStackView.isReady(false)
     }
     
     @objc func didTapRecord(_ sender:UIButton){
         if !viewModel.isRecording {
             viewModel.startRec()
-            sender.setImage(UIImage(systemName: "stop.fill"), for: .normal)
+            sender.setImage(UIImage.recordingStop, for: .normal)
+            
+            controlStackView.isReady(false)
         } else {
             viewModel.stopRec()
-            sender.setImage(UIImage(systemName: "mic.circle.fill"), for: .normal)
+            sender.setImage(UIImage.microPhone, for: .normal)
+            
+            controlStackView.isReady(true)
         }
     }
-    @objc func previusSec() {
-        if viewModel.player.isPlaying {
-            viewModel.seek(front: false)
-        }
-    }
-    @objc func nextSec() {
-        if viewModel.player.isPlaying {
-            viewModel.seek(front: true)
-        }
-    }
-    @objc func playPause(_ sender: UIButton) {
-        if !viewModel.isPlaying {
-            viewModel.playAudio()
-        } else {
-            viewModel.stopAudio()
-        }
-    }
+    
     @objc func changeSampleRate(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case 0:
@@ -212,13 +171,9 @@ private extension RecordViewController{
     func bindRecording() {
         viewModel.$isRecording
             .sink { [weak self] isRecording in
-                self?.recordButton.setImage(UIImage(systemName: isRecording ? "stop.circle":"mic.circle.fill"), for: .normal)
+                self?.recordButton.setImage(isRecording ? UIImage.recordingStop:UIImage.microPhone, for: .normal)
                 self?.meterView.disPlayLink?.isPaused = !isRecording
-                
                 self?.cutOffFrequencySegmentControl.isEnabled = !isRecording
-                self?.prevButton.isEnabled = !isRecording
-                self?.nextButton.isEnabled = !isRecording
-                self?.playButton.isEnabled = !isRecording
             }
             .store(in: &cancellable)
     }
@@ -226,10 +181,8 @@ private extension RecordViewController{
     func bindIsPlaying() {
         viewModel.$isPlaying
             .sink { [weak self] isPlaying in
-                self?.prevButton.isEnabled = isPlaying
-                self?.nextButton.isEnabled = isPlaying
                 self?.recordButton.isEnabled = !isPlaying
-                self?.playButton.setImage(UIImage(systemName: isPlaying ? "pause.fill":"play.fill"), for: .normal)
+                self?.controlStackView.configurePlayPauseButtonState(isPlaying)
             }
             .store(in: &cancellable)
     }
@@ -259,5 +212,27 @@ extension RecordViewController: RecordDrawDelegate {
     
     func uploadSuccess() {
         self.delegate?.uploadSuccess()
+    }
+}
+
+extension RecordViewController: PlaySeekStackViewDelegate {
+    func touchBackwardButton() {
+        if viewModel.player.isPlaying {
+            viewModel.seek(front: false)
+        }
+    }
+    
+    func touchForwardButton() {
+        if viewModel.player.isPlaying {
+            viewModel.seek(front: true)
+        }
+    }
+    
+    func touchPlayPauseButton() {
+        if !viewModel.isPlaying {
+            viewModel.playAudio()
+        } else {
+            viewModel.stopAudio()
+        }
     }
 }

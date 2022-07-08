@@ -16,4 +16,7 @@ extension UIImage {
     static let speakerThreeFill = UIImage(systemName: "speaker.3.fill")
     
     static let microphoneCustom = UIImage(named: "microphone")
+    
+    static let microPhone = UIImage(systemName: "mic.circle.fill")
+    static let recordingStop = UIImage(systemName: "stop.circle")
 }
