@@ -34,7 +34,7 @@
 | 팀원 | 기여한 내용|
 | ---------------------------- | -------------------------------- |
 | Downey| 내용|
-| JMin| 내용|
+| JMin| Firebase 다운로드, 업로드, 삭제기능 구현 <br/> Audio Record 관련 로직 구현 <br/> PlayView UI 구현 <br/> RecordView 기능 구현|
 | Oyat| 내용|
 
 # 프로젝트 소개
@@ -152,7 +152,7 @@
 
 ## Project UML
 <p float="left">
-  <img src= "./images/uml.png" width="1000" />
+<img src= "./images/uml.png" width="1000" />
 </p>
 
 # 고민한 부분
@@ -160,9 +160,45 @@
 ## Downey
 ## Oyat
 ## JMin
+### 1. 플레이 및 레코딩에 사용할 객체 고민
+- 문제점
+  - AVAudioPlayer 및 AVAudioRecorder를 사용할려 했으나 pitch 기능이나 cutoffFrequency기능이 해당 객체에서는 불가능했다
+- 해결법
+  - **AVAudioEngine** 을 사용하여 구현했다
+### 2. Record시 주파수 차단
+- 문제점
+  - cutoff frequency의 작동방식을 잘못이해하고 있었다  
+    나이퀴스트 이론에 따르면 sampleRate는 신호의 두배가 되어야 한다는걸 알고 sampleRate를 조절하면 주파수 차단을 할 수 있겠다고 생각했다
+  - 에일리싱 현상에 의해 나이퀴스트 주파수보다 신호는 녹음이 안되는게 아닌 왜곡이 돼서 녹음이 된다  
+- 해결법
+  - 에일리어싱 현상을 해결할려면 **Low Pass Filter**를 적용시켜줘야한다
+  - **AVAudioUnitEQ**를 audioEngine에 연결해준다음 Low Pass Filter를 적용시켜줘서 해결했다
+- [참고링크](https://m.blog.naver.com/bernardo92/221354727645)
+### 3. 특정 기기에서 녹음시 앱이 죽는 현상
+- 문제점
+  - 기기의 마이크 SampleRate랑 audioEngine의 SampleRate랑 맞지 않아 앱이 죽는 현상이 있다
+- 해결법
+  - 해당 기기의 SampleRate를 audioEngine의 SampleRate로 맞춰주면 해결될거라 생각했다
+  - audioEngine의 outFormat의 format가 녹음하는 기기의 format이라는것을 알고 해당 포맷의 SampleRate로 audioEngine의 SampleRate를 설정해서 해결했다
+### 4. 녹음파일 재생시 파일의 총 재생시간이 끝나지도 않았는데 재생이 중지되는 문제
+- 문제점
+  - 녹음파일의 SampleRate랑 audioEngine의 SampleRate랑 맞지않아 발생하는 문제였다
+  - 현재 재생 구간을 녹음파일의 전체 SampleRate랑 현재 플레이된 타임까지의 SampleRate를 비교하는데 기준이 되는 SampleRate가 달라서 생기는 문제였다
+- 해결법
+  - **AVAudioPlayerNode**의 SampleRate로 audioEngine SampleRate로 설정해서 해결했다
+### 5. 녹음후 재생시 녹음이 이어서 되는 문제
+- 문제점
+  - 녹음시 연결했던 노드들이 플레이시에도 그대로 남아있어 플레이와 동시에 녹음이 진행되어 발생하는 문제였다
+- 해결법
+  - 녹음 및 플레이를 정지했을때 audioEngine의 노드들을 순환하며 탭에서 연결을 끊어줘서 해결했다  
+
+
 
 # 회고
 
 ## Downey
 ## Oyat
 ## JMin
+
+
+
