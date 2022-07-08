@@ -15,7 +15,7 @@ protocol RecordViewControllerDelegate: AnyObject {
 
 class RecordViewController:UIViewController {
     
-    private var viewModel = RecordingViewModel()
+    private var viewModel = RecordViewModel()
     weak var delegate: RecordViewControllerDelegate?
     private var cancellable = Set<AnyCancellable>()
     var timer: Timer?
@@ -72,15 +72,6 @@ class RecordViewController:UIViewController {
         return stackView
     }()
     
-    lazy var volumeBar:UISlider = {
-        let slider = UISlider()
-        slider.setThumbImage(UIImage(systemName: "circle.fill"), for: .normal)
-        slider.maximumValue = 22050.0
-        slider.minimumValue = 20000.0
-        slider.setValue(20000, animated: false)
-        return slider
-    }()
-    
     lazy var progressView:UIProgressView = {
         let progressView = UIProgressView()
         return progressView
@@ -90,21 +81,21 @@ class RecordViewController:UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //        viewModel.delegate = self
+        viewModel.delegate = self
         view.backgroundColor = .secondarySystemGroupedBackground
         
         configure()
         
-        //        bindProgress()
+        bindProgress()
         bindIsPlaying()
         bindRecording()
-//        bindTimer()
+        bindTimer()
     }
     
-//    override func viewDidDisappear(_ animated: Bool) {
-//        super.viewDidDisappear(animated)
-//        delegate?.uploadSuccess()
-//    }
+    //    override func viewDidDisappear(_ animated: Bool) {
+    //        super.viewDidDisappear(animated)
+    //        delegate?.uploadSuccess()
+    //    }
 }
 
 //MARK: - View Configure
@@ -116,7 +107,7 @@ private extension RecordViewController{
     }
     
     func addSubViews(){
-        [controlStackView,recordedTimeLabel,volumeBar,progressView,meterView,recordButton].forEach{
+        [controlStackView,recordedTimeLabel,progressView,meterView,recordButton].forEach{
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
@@ -133,10 +124,6 @@ private extension RecordViewController{
             recordedTimeLabel.topAnchor.constraint(equalTo: meterView.bottomAnchor,constant: 10),
             recordedTimeLabel.heightAnchor.constraint(equalToConstant: 50),
             
-            volumeBar.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 30),
-            volumeBar.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -30),
-            volumeBar.topAnchor.constraint(equalTo: recordedTimeLabel.bottomAnchor,constant: 10),
-            
             progressView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,constant: 30),
             progressView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,constant: -30),
             progressView.bottomAnchor.constraint(equalTo: controlStackView.topAnchor,constant: -20),
@@ -152,49 +139,61 @@ private extension RecordViewController{
     
     func configureButton(){
         self.recordButton.addTarget(self, action: #selector(didTapRecord(_:)), for: .touchUpInside)
-        //        self.prevButton.addTarget(self, action: #selector(previusSec), for: .touchUpInside)
-        //        self.nextButton.addTarget(self, action: #selector(nextSec), for: .touchUpInside)
+        self.prevButton.addTarget(self, action: #selector(previusSec), for: .touchUpInside)
+        self.nextButton.addTarget(self, action: #selector(nextSec), for: .touchUpInside)
         self.playButton.addTarget(self, action: #selector(playPause(_:)), for: .touchUpInside)
-        self.volumeBar.addTarget(self, action: #selector(touchSlider(_:)), for: .valueChanged)
     }
     
     @objc func didTapRecord(_ sender:UIButton){
         if !viewModel.isRecording {
             viewModel.startRec()
+            sender.setImage(UIImage(systemName: "stop.fill"), for: .normal)
+            
+            self.playButton.isEnabled = true
+            self.prevButton.isEnabled = true
+            self.nextButton.isEnabled = true
         } else {
             viewModel.stopRec()
+            sender.setImage(UIImage(systemName: "mic.circle.fill"), for: .normal)
         }
     }
-    //    @objc func previusSec(){
-    //        if viewModel.player.isPlaying {
-    //            viewModel.seek(front: false)
-    //        }
-    //    }
-    //    @objc func nextSec(){
-    //        if viewModel.player.isPlaying {
-    //            viewModel.seek(front: true)
-    //        }
-    //    }
+    @objc func previusSec(){
+        if viewModel.player.isPlaying {
+            viewModel.seek(front: false)
+        }
+    }
+    @objc func nextSec(){
+        if viewModel.player.isPlaying {
+            viewModel.seek(front: true)
+        }
+    }
     @objc func playPause(_ sender:UIButton){
         if !viewModel.isPlaying {
-            viewModel.play()
+            viewModel.playAudio()
         } else {
-            viewModel.pausePlay()
+            viewModel.stopAudio()
         }
     }
-    //
-    @objc func touchSlider(_ sender:UISlider!){
-        viewModel.changeFrequency(value: sender.value)
+    
+    func bindProgress() {
+        viewModel.$progressValue
+            .sink { [weak self] progress in
+                self?.progressView.progress = progress
+            }
+            .store(in: &cancellable)
     }
-    //
-    //    func bindProgress() {
-    //        viewModel.$progressValue
-    //            .sink { [weak self] progress in
-    //                self?.progressView.progress = progress
-    //            }
-    //            .store(in: &cancellable)
-    //    }
-    //
+    
+    func bindRecording() {
+        viewModel.$isRecording
+            .sink { [weak self] isRecording in
+                print(isRecording)
+                self?.recordButton.setImage(UIImage(systemName: isRecording ? "stop.circle":"mic.circle.fill"), for: .normal)
+                self?.meterView.disPlayLink?.isPaused = !isRecording
+                
+            }
+            .store(in: &cancellable)
+    }
+    
     func bindIsPlaying() {
         viewModel.$isPlaying
             .sink { [weak self] isPlaying in
@@ -204,23 +203,16 @@ private extension RecordViewController{
             }
             .store(in: &cancellable)
     }
-    //
-    func bindRecording() {
-        viewModel.$isRecording
-            .sink { [weak self] isRecording in
-                print(isRecording)
-                self?.meterView.disPlayLink?.isPaused = !isRecording
+    
+    
+    
+    func bindTimer() {
+        viewModel.$recordedTime
+            .sink { playTime in
+                self.recordedTimeLabel.text = playTime.elapsedText
             }
             .store(in: &cancellable)
     }
-    //
-    //    func bindTimer() {
-    //        viewModel.$recordedTime
-    //            .sink { playTime in
-    //                self.recordedTimeLabel.text = playTime.elapsedText
-    //            }
-    //            .store(in: &cancellable)
-    //    }
 }
 
 extension RecordViewController: RecordDrawDelegate {

@@ -13,7 +13,7 @@ class HomeViewController: UIViewController {
         tableView.tableFooterView = UIView()
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(HomeTableViewCell.self, forCellReuseIdentifier: HomeTableViewCell.identfier)
+        tableView.register(HomeTableViewCell.self, forCellReuseIdentifier: Constants.HomeTableCellIdentifier)
         tableView.refreshControl = refreshControl
         return tableView
     }()
