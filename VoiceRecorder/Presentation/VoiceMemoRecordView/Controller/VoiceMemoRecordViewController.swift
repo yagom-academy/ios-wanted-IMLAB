@@ -126,7 +126,6 @@ class VoiceMemoRecordViewController: UIViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        configure()
         designUI()
         hiddenPlayRelatedButtons(.record)
         presentationController?.delegate = self
@@ -139,11 +138,6 @@ class VoiceMemoRecordViewController: UIViewController {
         super.viewWillDisappear(true)
         audioRecorder.stopRecord()
         audioPlayer.stopPlay()
-    }
-    
-    private func configure() {
-        
-        self.view.backgroundColor = .systemBackground
     }
     
     // MARK: - UI Design
@@ -164,6 +158,8 @@ class VoiceMemoRecordViewController: UIViewController {
     }
     
     private func designUI() {
+        
+        self.view.backgroundColor = .systemBackground
         
         configureSubviews()
         desigWaveView()
