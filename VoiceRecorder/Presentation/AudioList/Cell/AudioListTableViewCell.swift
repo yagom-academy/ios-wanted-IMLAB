@@ -63,7 +63,10 @@ final class AudioListTableViewCell: UITableViewCell {
         
         guard let duration = audioInformation.duration else { return }
         
+        let minute = Int(duration / 1)
+        let seconds = Int(round((duration - Double(minute)) * 100))
+        
         nameLabel.text = audioInformation.name
-        timeLabel.text = "\(duration)"
+        timeLabel.text = "\(String(format: "%02d", minute)):\(String(format: "%02d", seconds))"
     }
 }
