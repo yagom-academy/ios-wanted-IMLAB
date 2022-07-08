@@ -9,7 +9,10 @@ import AVFoundation
 import Foundation
 
 class PlayerViewModel {
-    private let model = PlayerModel(RecordNetworkManager.shared)
+    private var data: AVAudioFile?
+    private var fileData: FileData?
+    let networkManager: NetworkManager!
+    
     private var audioPlayer: PlayerService!
 
     var pitchViewModel: PitchViewModel!
@@ -17,8 +20,9 @@ class PlayerViewModel {
     var volumeViewModel: VolumeViewModel!
     var playerButtonViewModel: PlayerButtonViewModel!
 
-    init(_ audioPlayer: PlayerService) {
+    init(_ audioPlayer: PlayerService, _ networkManager: NetworkManager) {
         self.audioPlayer = audioPlayer
+        self.networkManager = networkManager
 
         pitchViewModel = PitchViewModel(audioPlayer)
         speedViewModel = SpeedViewModel(audioPlayer)
@@ -26,13 +30,16 @@ class PlayerViewModel {
         playerButtonViewModel = PlayerButtonViewModel(audioPlayer)
     }
 
-    func update(_ filename: String, _ completion: @escaping (Error?) -> Void) {
-        model.update(filename) { error in
-            if let error = error {
+    func update(_ fileData: FileData, _ completion: @escaping (Error?) -> Void) {
+        networkManager.getRecordData(filename: fileData.rawFilename) { result in
+            switch result {
+            case let .success(data):
+                self.data = data.getAVAudioFile()
+                completion(nil)
+            case let .failure(error):
                 completion(error)
-                return
+                break
             }
-            completion(nil)
         }
     }
     
@@ -54,11 +61,11 @@ class PlayerViewModel {
     }
 
     func getFileData() -> FileData? {
-        return model.getFileData()
+        return fileData
     }
 
     func setPlayerItem() {
-        audioPlayer.setAudioFile(model.getAVAudioFile())
+        audioPlayer.setAudioFile(data)
     }
 
     func setPlayerToZero() {
