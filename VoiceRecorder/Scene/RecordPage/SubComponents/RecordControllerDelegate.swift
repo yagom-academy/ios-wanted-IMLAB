@@ -10,5 +10,5 @@ import Foundation
 protocol RecordControllerDelegate {
     func endRecord()
     func startRecord()
-    func completeDownload()
+    func completeUpload()
 }

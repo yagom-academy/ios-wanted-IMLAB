@@ -19,7 +19,11 @@ class CutoffFrequencyView: UIView {
     
     private let frequencySlider: UISlider = {
         let slider = UISlider()
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> feature-record
         slider.minimumValue = 0.0
         slider.maximumValue = 60.0
         

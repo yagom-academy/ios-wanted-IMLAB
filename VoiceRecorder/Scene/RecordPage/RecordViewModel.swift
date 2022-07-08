@@ -28,4 +28,8 @@ class RecordViewModel {
     func resetAudioPlayer() {
         audioPlayer.resetAudio()
     }
+    
+    func resetRecorder() {
+        audioRecorder.resetRecorder()
+    }
 }

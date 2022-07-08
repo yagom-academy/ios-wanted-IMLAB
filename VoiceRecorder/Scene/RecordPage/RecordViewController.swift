@@ -38,6 +38,7 @@ class RecordViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
         viewModel.resetAudioPlayer()
+        viewModel.resetRecorder()
     }
 }
 
@@ -93,7 +94,7 @@ extension RecordViewController: RecordControllerDelegate {
         playControllerView.isHidden = false
     }
     
-    func completeDownload() {
-        self.dismiss(animated: true)
+    func completeUpload() {
+        self.navigationController?.popViewController(animated: true)
     }
 }
