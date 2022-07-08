@@ -27,8 +27,8 @@ class RecordedVoiceListViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         fileManager.delegate = self
+        firestorageManager.delegate = self
         initializeFirebaseAudioFiles()
         setNavgationBarProperties()
         configureRecordedVoiceListLayout()
@@ -36,7 +36,6 @@ class RecordedVoiceListViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         NotificationCenter.default.addObserver(self, selector: #selector(dismissNotification(notification:)), name: .dismissVC, object: nil)
     }
     
@@ -46,20 +45,10 @@ class RecordedVoiceListViewController: UIViewController {
     
     private func initializeFirebaseAudioFiles() {
         firestorageManager.downloadAllRef { [self] result in
-            switch result {
-            case .success(let data) :
-                firestorageManager.downloadMetaData(filePath: data) { [self] metaResult in
-                    switch metaResult {
-                    case .success(let metaDataList) :
-                        audioMetaDataList = metaDataList
-                        sortAudioFiles()
-                        recordedVoiceTableView.reloadData()
-                    case .failure(let error) :
-                        print(error)
-                    }
-                }
-            case .failure(let error) :
-                print(error.localizedDescription)
+            firestorageManager.downloadMetaData(filePath: result) { [self] metaDataList in
+                audioMetaDataList = metaDataList
+                sortAudioFiles()
+                recordedVoiceTableView.reloadData()
             }
         }
     }
@@ -124,7 +113,7 @@ extension RecordedVoiceListViewController: UITableViewDataSource, UITableViewDel
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = recordedVoiceTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! RecordedVoiceTableViewCell
         cell.fetchAudioLabelData(data: audioMetaDataList[indexPath.row])
-        
+
         return cell
     }
     
@@ -154,12 +143,20 @@ extension RecordedVoiceListViewController: UITableViewDataSource, UITableViewDel
     }
 }
 
-extension RecordedVoiceListViewController: FileStatusReceivable {
+extension RecordedVoiceListViewController: FileStatusReceivable, NetworkStatusReceivable {
     
-    func fileManager(_ fileManager: FileManager, error: FileError) {
-        let alert = UIAlertController(title: "파일 에러", message: error.rawValue, preferredStyle: .alert)
+    func firebaseStorageManager(error: Error, desc: NetworkError) {
+        let alert = UIAlertController(title: desc.rawValue, message: error.localizedDescription, preferredStyle: .alert)
         let okAction = UIAlertAction(title: "확인", style: .default)
         alert.addAction(okAction)
         present(alert, animated: true)
     }
+    
+    func fileManager(_ fileManager: FileManager, error: FileError, desc: Error?) {
+        let alert = UIAlertController(title: error.rawValue, message: desc?.localizedDescription, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "확인", style: .default)
+        alert.addAction(okAction)
+        present(alert, animated: true)
+    }
+   
 }

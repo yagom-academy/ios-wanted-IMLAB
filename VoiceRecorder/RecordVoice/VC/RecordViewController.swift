@@ -157,6 +157,7 @@ extension RecordViewController {
 extension RecordViewController: SoundButtonActionDelegate {
     
     func playButtonTouchUpinside(sender: UIButton) {
+        guard soundManager.isEnginePrepared else { return }
         self.soundManager.playNpause()
     }
     
