@@ -8,9 +8,9 @@ import AVFoundation
 
 class RecordedVoiceListViewController: UIViewController {
     
-    var firestorageManager = FirebaseStorageManager()
-    let fileManager = AudioFileManager()
-    var audioList: [AudioData] = []
+    private let firestorageManager = FirebaseStorageManager()
+    private let fileManager = AudioFileManager()
+    var audioMetaDataList: [AudioData] = []
     
     lazy var navigationBar: UINavigationBar = {
         var navigationBar = UINavigationBar()
@@ -29,7 +29,6 @@ class RecordedVoiceListViewController: UIViewController {
         super.viewDidLoad()
         
         initializeFirebaseAudioFiles()
-        sortAudioFiles()
         setNavgationBarProperties()
         configureRecordedVoiceListLayout()
     }
@@ -44,7 +43,27 @@ class RecordedVoiceListViewController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: .dismissVC, object: nil)
     }
     
-    func setNavgationBarProperties() {
+    private func initializeFirebaseAudioFiles() {
+        
+        firestorageManager.downloadAll { result in
+            switch result {
+            case .success(let data) :
+               firestorageManager.downloadMetaData(filePath: data) { result in
+                    self.recordedVoiceTableView.reloadData()
+                }
+            case .failure(let error) :
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    private func sortAudioFiles() {
+        audioList.sort { data1, data2 in
+            return data1.title > data2.title
+        }
+    }
+    
+    private func setNavgationBarProperties() {
 
         let navItem = UINavigationItem(title: "Voice Recorder")
         let doneItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createNewVoiceRecordButtonAction))
@@ -54,7 +73,7 @@ class RecordedVoiceListViewController: UIViewController {
         navigationBar.setItems([navItem], animated: false)
     }
     
-    func configureRecordedVoiceListLayout() {
+    private func configureRecordedVoiceListLayout() {
         
         view.backgroundColor = .white
         
@@ -78,37 +97,19 @@ class RecordedVoiceListViewController: UIViewController {
         ])
     }
     
-    func initializeFirebaseAudioFiles() {
-        self.audioList.removeAll()
-        
-        firestorageManager.downloadAll { result in
-            switch result {
-            case .success(let data) :
-                self.audioList.append(data)
-                self.recordedVoiceTableView.reloadData()
-            case .failure(let error) :
-                print(error.localizedDescription)
-            }
-        }
-    }
     
-    func sortAudioFiles() {
-        audioList.sort { data1, data2 in
-            return data1.title > data2.title
-        }
-    }
+    
+    
     
     @objc func createNewVoiceRecordButtonAction() {
         let recorderVC = RecordViewController()
         self.present(recorderVC, animated: true)
     }
     
+    // TODO: - local에서 추가
     @objc func dismissNotification(notification: NSNotification) {
-        initializeFirebaseAudioFiles()
+        // 파일 추가
         
-        OperationQueue.main.addOperation {
-            self.recordedVoiceTableView.reloadData()
-        }
     }
 }
 
@@ -121,15 +122,14 @@ extension RecordedVoiceListViewController: UITableViewDataSource, UITableViewDel
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = recordedVoiceTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! RecordedVoiceTableViewCell
         
-        sortAudioFiles()
-        cell.setTableViewCellLayout()
+        cell.setTableViewCellLayout() // cell 안으로
         cell.fetchAudioLabelData(data: audioList[indexPath.row])
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let voicePlayVC = VoicePlayingViewController()
+        let voicePlayVC = VoicePlayingViewController() // init시 타이틀 넘김
         voicePlayVC.setTitle(title: audioList[indexPath.item].title)
         let path = "\(audioList[indexPath.item].title).caf"
         let filePath = fileManager.getAudioFilePath(fileName: path)

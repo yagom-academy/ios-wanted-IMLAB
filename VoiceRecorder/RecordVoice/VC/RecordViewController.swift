@@ -10,13 +10,12 @@ import AVFoundation
 
 class RecordViewController: UIViewController {
     
-    var soundManager = SoundManager()
-    var audioFileManager = AudioFileManager()
-    var firebaseStorageManager = FirebaseStorageManager()
-    var date = DateUtil().formatDate()
-    var engine = AVAudioEngine()
+    private var soundManager = SoundManager()
+    private var audioFileManager = AudioFileManager()
+    private var firebaseStorageManager = FirebaseStorageManager()
+    private let date = DateUtil().currentDate
     
-    var isStartRecording: Bool = false
+    private var isStartRecording: Bool = false
     
     var recordButton: UIButton = {
         var button = UIButton()
@@ -41,7 +40,6 @@ class RecordViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setLayout()
         setAudio()
         soundManager.visualDelegate = self
@@ -82,11 +80,11 @@ class RecordViewController: UIViewController {
     }
     
     func setAudio() {
-        requestMicrophoneAccess { [weak self] allowed in
+        requestMicrophoneAccess { [self] allowed in
             if allowed {
                 // 녹음 권한 허용
-                let format = self?.engine.inputNode.outputFormat(forBus: 0)
-                self?.soundManager.configureRecordEngine(format: format!)
+                let url = audioFileManager.getAudioFilePath(fileName: date+".caf")
+                soundManager.initializeSoundManager(url: url, type: .record)
             } else {
                 // 녹음 권한 거부
                 fatalError()
@@ -108,9 +106,9 @@ class RecordViewController: UIViewController {
         isStartRecording = !isStartRecording
         recordButtonToggle()
         
-        let url = audioFileManager.getAudioFilePath(fileName: date+".caf")
+        
         if isStartRecording { // 녹음 시작일 때
-            soundManager.startRecord(filePath: url)
+            soundManager.startRecord()
         } else { // 녹음 끝일 때
             soundManager.stopRecord()
             firebaseStorageManager.uploadAudio(url: url, date: date)
@@ -151,12 +149,12 @@ extension RecordViewController: SoundButtonActionDelegate {
     
     func backwardButtonTouchUpinside(sender: UIButton) {
         print("backwardButton Clicked")
-        soundManager.skip(forwards: false)
+        soundManager.skip(isForwards: false)
     }
     
     func forwardTouchUpinside(sender: UIButton) {
         print("forwardButton Clicked")
-        soundManager.skip(forwards: true)
+        soundManager.skip(isForwards: true)
     }
 }
 

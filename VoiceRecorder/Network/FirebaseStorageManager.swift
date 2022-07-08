@@ -64,50 +64,58 @@ class FirebaseStorageManager {
             }
         }
         
-        // local delete
+        //TODO: - AudioFileManager로
         let item = self.audioFileManager.getAudioFilePath(fileName: urlString)
         try? FileManager.default.removeItem(at: item)
     }
     
-    func downloadAll(completion: @escaping (Result<AudioData, Error>) -> Void) {
-        baseReference.listAll { result, error in
-            if let error = error {
-                print(error.localizedDescription)
-            }
-            
-            if let result = result {
-                for item in result.items {
-                    self.downloadMetaData(filePath: item.name) { result in
-                        switch result {
-                        case .success(let audioData) :
-                            completion(.success(audioData))
-                        case .failure(let error) :
-                            completion(.failure(error))
-                        }
-                    }
-                }
-            }
-        }
-    }
     
-    func downloadMetaData(filePath: String, completion: @escaping (Result<AudioData, Error>) -> Void) {
-        let ref = baseReference.child(filePath)
-        
-        ref.getMetadata { metaData, error in
+    // TODO: - download All AudioData array로 return
+    // 스켈레톤 뷰
+    func downloadAll(completion: @escaping (Result<[StorageReference], Error>) -> Void) {
+        baseReference.listAll { result, error in
             if let error = error {
                 completion(.failure(error))
             }
+            guard let result = result else {
+                return
+            }
+            completion(.success(result.items))
             
-            let data = metaData?.customMetadata
+        }
+    }
+    
+    
+    // TODO: - [AudioData] return
+    // filePaths - array로 파라미터
+    func downloadMetaData(filePath: [StorageReference], completion: @escaping (Result<[AudioData], Error>) -> Void) {
+        var audioList = [AudioData]()
+        for ref in filePath {
             
-            // 파일 이름 메타데이터가 없을 경우 파일 url을 잘라서 이름 양식에 맞춰 리턴
-            let fileName = String(filePath.split(separator: "/").last ?? "")
-            let splitExtension = String(fileName.split(separator: ".").first ?? "")
             
-            let title = data?["title"] ?? String(splitExtension)
-            let duration = data?["duration"] ?? "00:00"
             
-            completion(.success(AudioData(title: title, duration: duration)))
+            
+            
+            baseReference.child(ref.name).getMetadata { metaData, error in
+                if let error = error {
+                    completion(.failure(error))
+                }
+                let data = metaData?.customMetadata
+                // 파일 이름 메타데이터가 없을 경우 파일 url을 잘라서 이름 양식에 맞춰 리턴
+                
+                let title = data?["title"] ?? ""
+                let duration = data?["duration"] ?? "00:00"
+                
+                audioList.append(AudioData(title: title, duration: duration))
+                
+                completion(.success(audioList))
+            }
+            
+            
+            
+            
+            
+            
         }
     }
     

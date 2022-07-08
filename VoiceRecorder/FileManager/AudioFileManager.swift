@@ -11,7 +11,7 @@ class AudioFileManager {
     
     private let fileManager = FileManager.default
     
-    private let directoryPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("Recorded_Voice") // 메인 폴더
+    private let directoryPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("Recorded_Voice")
     
     init() {
         initalizeFileFolder()

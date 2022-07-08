@@ -9,6 +9,8 @@
 import AVKit
 import Accelerate
 
+//TODO: - pitch enum 선언 필요
+
 enum PlayerType {
     case playBack
     case record
@@ -18,12 +20,11 @@ enum EdgeType {
     case end
 }
 
-//TODO: - 리팩 때 프로토콜 이름 수정 SoundManagerStatusReceivable
 protocol Visualizerable {
     func processAudioBuffer(buffer: AVAudioPCMBuffer)
 }
 
-protocol ReceiveSoundManagerStatus {
+protocol SoundManagerStatusReceivable {
     func audioPlayerCurrentStatus(isPlaying: Bool)
     func audioFileInitializeErrorHandler(error: Error)
     func audioEngineInitializeErrorHandler(error: Error)
@@ -31,11 +32,16 @@ protocol ReceiveSoundManagerStatus {
 
 class SoundManager {
     
-    var delegate: ReceiveSoundManagerStatus?
+    // TODO: - play와 record의 프로퍼티 struct로 만들어서 관리
+    
+    var delegate: SoundManagerStatusReceivable?
     var visualDelegate: Visualizerable!
     
     private var isPlaying = false
     private var needFileSchedule = true
+    
+    private var fileUrl: URL!
+    private var audioFile: AVAudioFile!
     
     private let engine = AVAudioEngine()
     
@@ -46,9 +52,6 @@ class SoundManager {
     private let playerNode = AVAudioPlayerNode()
     private let pitchControl = AVAudioUnitTimePitch()
     
-    
-    private let frequencies: [Int] = [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000]
-    
     private lazy var inputNode = engine.inputNode
     private let mixerNode = AVAudioMixerNode()
     
@@ -57,7 +60,6 @@ class SoundManager {
     private var seekFrame: AVAudioFramePosition = 0
     private var currentPosition: AVAudioFramePosition = 0
     private var audioLengthSamples: AVAudioFramePosition = 0
-    private var lastPlayerTime: Double = 0
     
     private var currentFrame: AVAudioFramePosition {
         guard
@@ -69,17 +71,12 @@ class SoundManager {
         return playerTime.sampleTime
     }
     
-    private var audioFile: AVAudioFile!
-    
-    //TODO: - AppDelegate에서 선언
-    init() {
-        try? AVAudioSession.sharedInstance().setCategory(.playAndRecord)
-        try? AVAudioSession.sharedInstance().setActive(true)
-    }
-    
     // MARK: - initialize SoundManager
     func initializeSoundManager(url: URL, type: PlayerType) {
         do {
+            // 모델 밖에서 생성 후 주입
+            guard url != nil else { return }
+            fileUrl = url
             let file = try AVAudioFile(forReading: url)
             let fileFormat = file.processingFormat
             
@@ -92,9 +89,8 @@ class SoundManager {
             if type == .playBack {
                 configurePlayEngine(format: fileFormat)
             } else {
-                configureRecordEngine(format: fileFormat)
+                configureRecordEngine()
             }
-            print("파일 초기화")
         } catch let error as NSError {
             print("파일 초기화 에러")
             delegate?.audioFileInitializeErrorHandler(error: error)
@@ -157,7 +153,7 @@ class SoundManager {
         var convertedFrame = frame
         
         convertedFrame = max(frame, 0)
-        convertedFrame = min(frame, length)
+        convertedFrame = min(convertedFrame, length)
         
         return convertedFrame
     }
@@ -176,10 +172,10 @@ class SoundManager {
         isPlaying.toggle()
     }
     
-    func skip(forwards: Bool) {
+    func skip(isForwards: Bool) {
         let timeToSeek: Double
         
-        if forwards {
+        if isForwards {
             timeToSeek = 5
         } else {
             timeToSeek = -5
@@ -254,11 +250,11 @@ class SoundManager {
         playerNode.removeTap(onBus: 0)
     }
     func changePitchValue(value: Float) {
-        self.pitchControl.pitch = value*2
+        self.pitchControl.pitch = value * 2
     }
     
     func changeVolume(value: Float) {
-        self.playerNode.volume = value*2
+        self.playerNode.volume = value * 2
     }
     
     func changeProgressValue(value: Float) {
@@ -269,14 +265,16 @@ class SoundManager {
 
 extension SoundManager {
     
-    func configureRecordEngine(format: AVAudioFormat) {
+    func configureRecordEngine() {
+        
+        let outputFormat = inputNode.outputFormat(forBus: 0)
         mixerNode.volume = 0
         
         engine.attach(mixerNode)
         engine.attach(eqNode)
         
-        engine.connect(inputNode, to: mixerNode, format: format)
-        engine.connect(mixerNode, to: eqNode, format: format)
+        engine.connect(inputNode, to: mixerNode, format: outputFormat)
+        engine.connect(mixerNode, to: eqNode, format: outputFormat)
     }
     
     
@@ -295,15 +293,15 @@ extension SoundManager {
         eqFilterParameters.frequency = frequency
     }
     
-    func startRecord(filePath: URL) {
+    func startRecord() {
         engine.reset()
         
         let format = inputNode.outputFormat(forBus: 0)
-        configureRecordEngine(format: format)
+        
         setFrequency()
         
         do {
-            audioFile = try createAudioFile(filePath: filePath)
+            audioFile = try createAudioFile(filePath: fileUrl)
         } catch {
             fatalError()
         }
@@ -325,18 +323,7 @@ extension SoundManager {
     }
     func stopRecord() {
         inputNode.removeTap(onBus: 0)
-        
         engine.stop()
-    }
-    
-    func play() {
-        try! engine.start()
-        playerNode.play()
-        print(eqFilterParameters.frequency, "frequency")
-    }
-    
-    func pause() {
-        playerNode.pause()
     }
 }
 

@@ -125,13 +125,13 @@ class VoicePlayingViewController: UIViewController {
     }
     
     func setTitle(title: String) {
-          recordedVoiceTitle.text = title
-      }
-      
-      func fetchRecordedDataFromMainVC(dataUrl: URL) {
-          setSoundManager()
-          soundManager.initializeSoundManager(url: dataUrl, type: .playBack)
-      }
+        recordedVoiceTitle.text = title
+    }
+    
+    func fetchRecordedDataFromMainVC(dataUrl: URL) {
+        setSoundManager()
+        soundManager.initializeSoundManager(url: dataUrl, type: .playBack)
+    }
     
     func setSoundManager() {
         soundManager = SoundManager()
@@ -157,7 +157,6 @@ class VoicePlayingViewController: UIViewController {
         } else {
             soundManager.changePitchValue(value: -150)
         }
-        
     }
 }
 
@@ -169,17 +168,17 @@ extension VoicePlayingViewController: SoundButtonActionDelegate {
     }
     
     func backwardButtonTouchUpinside(sender: UIButton) {
-        soundManager.skip(forwards: false)
+        soundManager.skip(isForwards: false)
     }
     
     func forwardTouchUpinside(sender: UIButton) {
-        soundManager.skip(forwards: true)
+        soundManager.skip(isForwards: true)
     }
 }
 
 
 // MARK: - SoundeManager Delegate
-extension VoicePlayingViewController: ReceiveSoundManagerStatus {
+extension VoicePlayingViewController: SoundManagerStatusReceivable {
     func audioPlayerCurrentStatus(isPlaying: Bool) {
         soundManager.removeTap()
         DispatchQueue.main.async {
