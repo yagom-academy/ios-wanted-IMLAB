@@ -88,6 +88,9 @@ class PlayerButtonViewModel {
             sendToFrequencyView()
         } else {
             interval -= 50
+            if interval < 0 {
+                interval = 0
+            }
             sendWaves = Array(removedWaves[count - 50 ..< count]) + Array(sendWaves[0 ... 49])
             removedWaves = Array(removedWaves[0 ..< count - 50])
             sendToFrequencyView()
@@ -100,7 +103,12 @@ class PlayerButtonViewModel {
         if interval + 50 > waves.count {
             removedWaves += Array(sendWaves[0 ..< (waves.count - interval)])
             interval = waves.count - 1
-            sendWaves = Array(waves[waves.count - 100 ..< waves.count])
+            var startIndex = 0
+            if waves.count >= 100 {
+                startIndex = waves.count - 100
+            }
+            sendWaves = Array(waves[startIndex ..< waves.count])
+
             sendToFrequencyView()
         } else {
             interval += 50
@@ -120,7 +128,7 @@ class PlayerButtonViewModel {
     }
 
     func secondsToString(_ seconds: Int) -> String {
-        if seconds == 0 {
+        if seconds <= 0 {
             return "00:00"
         }
 
