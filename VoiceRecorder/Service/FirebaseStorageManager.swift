@@ -10,10 +10,10 @@ import UIKit
 
 class FirebaseStorageManager {
     static let shared = FirebaseStorageManager()
-    private let folderName = "voiceRecords"
+    private let folderName = Constants.Firebase.foloderName
     private lazy var storage = Storage.storage().reference().child(folderName)
     private let deviceID: String?
-        
+    
     private init() {
         self.deviceID = UIDevice.current.identifierForVendor?.uuidString
     }
@@ -40,34 +40,18 @@ class FirebaseStorageManager {
     }
     
     private func itemDownloadURL(_ item: StorageReference, completion: @escaping (Audio) -> Void) {
-        let title = "\(self.folderName)_" + item.name.replacingOccurrences(of: ".m4a", with: "")
+        let title = "\(self.folderName)_" + item.name.replacingOccurrences(of: Constants.Firebase.fileType, with: "")
         item.downloadURL { url, error in
             guard let url = url, error == nil else {
                 return
             }
-             
+            
             let audio = Audio(title: title, url: url, fileName: item.name)
             completion(audio)
         }
     }
     
-    func uploadData(url: URL, fileName: String, completion: @escaping () -> Void) {
-        guard let deviceID = deviceID else {
-            return
-        }
-        
-        storage.child("\(deviceID)/\(fileName)").putFile(from: url) { result in
-            switch result {
-            case .success(_):
-                print("upload success")
-                completion()
-            case .failure(let error):
-                print(error)
-            }
-        }
-    }
-    
-    func uploadDataSet(data: Data, fileName:String) {
+    func uploadDataSet(data: Data, fileName: String, completion: @escaping () -> Void) {
         guard let deviceID = deviceID else {
             return
         }
@@ -76,20 +60,28 @@ class FirebaseStorageManager {
         storage.child(deviceID).child(fileName)
             .putData(data,metadata: meta) { meta, error in
                 guard error == nil else { return }
-                print(meta?.name)
+                completion()
             }
     }
     
-    func deleteData(title: String) {
+    func deleteData(fileName: String, completion: @escaping () -> Void) {
         guard let deviceID = deviceID else {
             return
         }
         
-        storage.child("\(deviceID)/\(title)").delete { error in
+        storage.child("\(deviceID)/\(fileName)").delete { error in
             if let error = error {
                 print(error.localizedDescription)
             }
-            print("delete success")
+            completion()
+        }
+    }
+    
+    func replaceData(previousFileName: String, data: Data, fileName: String, completion: @escaping () -> Void) {
+        uploadDataSet(data: data, fileName: fileName) {
+            self.deleteData(fileName: previousFileName) {
+                completion()
+            }
         }
     }
 }

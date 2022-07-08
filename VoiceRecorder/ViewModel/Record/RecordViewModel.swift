@@ -23,6 +23,7 @@ class RecordViewModel {
     var player = AVAudioPlayer()
     let recordFormat = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: 44100.0, channels: 1, interleaved: true)
     let recordFileURL = URL(fileURLWithPath: NSTemporaryDirectory().appending("input.m4a"))
+    private var previousFileName = ""
     
     private var displayLink: CADisplayLink?
     
@@ -60,6 +61,9 @@ class RecordViewModel {
     }
     
     func startRec() {
+        // TODO: player 플레이하는 중에 recording start하면 player stop 필요
+        stopAudio()
+        
         recorder.record()
         recorder.isMeteringEnabled = true
         isRecording = recorder.isRecording
@@ -73,7 +77,6 @@ class RecordViewModel {
                 self.delegate?.updateValue(self.nomalizeSoundLevel(level: self.recorder.averagePower(forChannel: 0)))
             }
         }
-        
     }
     
     func stopRec() {
@@ -81,18 +84,29 @@ class RecordViewModel {
         recorder.stop()
         isRecording = recorder.isRecording
         
-        // 원래 녹음 파일을 가지고 있다 -> 지우고 다시 업로드
-        // 지금은 그냥 업로드되고 나시 녹음해도 업로드되고 있지 않음
-        // fileName으로 삭제 업데이트 이루어짐
+        setupAudio()
+        
         let title = DateFormatter().toString(Date())
-        let fileName = title + ".m4a"
+        let fileName = title + Constants.Firebase.fileType
+        var recordData = Data()
         
         do {
-            let recordData = try Data(contentsOf: recordFileURL)
-            storage.uploadDataSet(data: recordData, fileName: fileName)
+            recordData = try Data(contentsOf: recordFileURL)
         } catch {
             print("Could not decode data \(error.localizedDescription)")
         }
+        
+        if previousFileName.isEmpty {
+            storage.uploadDataSet(data: recordData, fileName: fileName) {
+                self.delegate?.uploadSuccess()
+            }
+        } else {
+            storage.replaceData(previousFileName: previousFileName, data: recordData, fileName: fileName) {
+                self.delegate?.uploadSuccess()
+            }
+        }
+        
+        previousFileName = fileName
     }
     
     func setupAudio() {
@@ -105,11 +119,7 @@ class RecordViewModel {
     }
     
     func playAudio() {
-        if player.data == nil {
-            setupAudio()
-        }
-        
-        player.volume = 0.5
+        player.volume = Constants.VolumeSliderSize.half
         player.play()
         displayLink?.isPaused = false
         isPlaying = player.isPlaying

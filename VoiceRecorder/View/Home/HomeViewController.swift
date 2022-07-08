@@ -143,7 +143,6 @@ extension HomeViewController: UITableViewDelegate {
             alertController.addAction(UIAlertAction(title: Constants.AlertActionTitle.cancel, style: .cancel, handler: nil))
             alertController.addAction(UIAlertAction(title: Constants.AlertActionTitle.ok, style: .default, handler: { _ in
                 self.viewModel.deleteAudio(indexPath)
-                tableView.deleteRows(at: [indexPath], with: .fade)
             }))
             present(alertController, animated: true)
         }
