@@ -12,29 +12,27 @@ import UIKit
 class FirebaseStorageManager {
     
     private var baseReference: StorageReference!
-    private let soundManager = SoundManager()
     private let audioFileManager = AudioFileManager()
     
     init() {
         baseReference = Storage.storage().reference()
     }
     
-    func uploadAudio(url: URL, date: String) {
-        let title = date
-        let filePath = "\(title).caf"
-        let data = try! Data(contentsOf: url)
+    func uploadAudio(audioData: Data, audioMetaData: AudioMetaData) {
+        let title = audioMetaData.title
+        let duration = audioMetaData.duration
+        let filePath = audioMetaData.url
         
         let metaData = StorageMetadata()
-        let totalTime = soundManager.totalPlayTime(date: filePath)
-        let duration = soundManager.convertTimeToString(totalTime)
         let customData = [
             "title": title,
-            "duration": duration
+            "duration": duration,
+            "url": filePath
         ]
         metaData.customMetadata = customData
         metaData.contentType = "audio/x-caf"
         
-        baseReference.child(filePath).putData(data, metadata: metaData) { metaData, error in
+        baseReference.child(filePath).putData(audioData, metadata: metaData) { metaData, error in
             if let error = error {
                 print(error.localizedDescription)
                 return
@@ -50,7 +48,6 @@ class FirebaseStorageManager {
                 completion(url)
             }
         }
-        
     }
     
     func deleteAudio(urlString: String) {
@@ -71,32 +68,32 @@ class FirebaseStorageManager {
                 completion(.failure(error))
             }
             if let result = result {
+                print(result.items.count)
                 completion(.success(result.items))
             }
-            
         }
     }
     
-    
-    func downloadMetaData(filePath: [StorageReference], completion: @escaping (Result<[AudioData], Error>) -> Void) {
+    func downloadMetaData(filePath: [StorageReference], completion: @escaping (Result<[AudioMetaData], Error>) -> Void) {
         
-        var audioList = [AudioData]()
-        let metaDataCount = audioList.count
+        var audioMetaDataList = [AudioMetaData]()
         
-        for (idx, ref) in filePath.enumerated() {
+        for ref in filePath {
             baseReference.child(ref.name).getMetadata { metaData, error in
                 if let error = error {
                     completion(.failure(error))
                 }
+                
                 let data = metaData?.customMetadata
                 let title = data?["title"] ?? ""
                 let duration = data?["duration"] ?? "00:00"
+                let url = data?["url"] ?? ""
                 
-                audioList.append(AudioData(title: title, duration: duration))
-            }
-            
-            if metaDataCount == idx {
-                completion(.success(audioList))
+                audioMetaDataList.append(AudioMetaData(title: title, duration: duration, url: url))
+                
+                if audioMetaDataList.count == filePath.count {
+                    completion(.success(audioMetaDataList))
+                }
             }
         }
     }

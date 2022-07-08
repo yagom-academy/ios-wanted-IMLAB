@@ -74,20 +74,20 @@ class SoundManager {
     // MARK: - initialize SoundManager
     func initializeSoundManager(url: URL, type: PlayerType) {
         do {
-            // 모델 밖에서 생성 후 주입
-            guard url != nil else { return }
             fileUrl = url
-            let file = try AVAudioFile(forReading: url)
-            let fileFormat = file.processingFormat
-            
-            audioLengthSamples = file.length
-            audioSampleRate = fileFormat.sampleRate
-            audioPlayDuration = Double(audioLengthSamples) / audioSampleRate
-            
-            audioFile = file
-            
+            // 모델 밖에서 생성 후 주입
             if type == .playBack {
+                
+                let file = try AVAudioFile(forReading: url)
+                let fileFormat = file.processingFormat
+                
+                audioLengthSamples = file.length
+                audioSampleRate = fileFormat.sampleRate
+                audioPlayDuration = Double(audioLengthSamples) / audioSampleRate
+                
+                audioFile = file
                 configurePlayEngine(format: fileFormat)
+                
             } else {
                 configureRecordEngine()
             }
@@ -118,7 +118,6 @@ class SoundManager {
     
     // MARK: - configure PlayerNode
     private func schedulePlayerNode() {
-        
         guard let file = audioFile, needFileSchedule else {
             return
         }
@@ -131,7 +130,6 @@ class SoundManager {
         }
         
         playerNode.installTap(onBus: 0, bufferSize: 1024, format: playerNode.outputFormat(forBus: 0)) { [unowned self] buffer, time in
-            
             guard var currentPosition = getCurrentFrame(lastRenderTime: time) else { return }
             currentPosition = specifyFrameStandard(frame: currentFrame + seekFrame, length: audioLengthSamples)
             
@@ -139,7 +137,6 @@ class SoundManager {
                 resetPlayer(edge: .end)
                 delegate?.audioPlayerCurrentStatus(isPlaying: isPlaying)
             }
-            
         }
     }
     
@@ -149,7 +146,6 @@ class SoundManager {
     }
     
     private func specifyFrameStandard(frame: AVAudioFramePosition, length: AVAudioFramePosition) -> AVAudioFramePosition {
-        
         var convertedFrame = frame
         
         convertedFrame = max(frame, 0)
@@ -159,7 +155,6 @@ class SoundManager {
     }
     
     func playNpause() {
-        
         if isPlaying {
             playerNode.pause()
         } else {
@@ -294,7 +289,7 @@ extension SoundManager {
     }
     
     func startRecord() {
-        engine.reset()
+        //engine.reset()
         
         let format = inputNode.outputFormat(forBus: 0)
         

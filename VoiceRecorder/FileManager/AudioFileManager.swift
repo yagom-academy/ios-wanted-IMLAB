@@ -19,9 +19,7 @@ protocol FileStatusReceivable {
 class AudioFileManager {
     
     var delegate: FileStatusReceivable!
-    
     private let fileManager = FileManager.default
-    
     private let directoryPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("Recorded_Voice")
     
     init() {
