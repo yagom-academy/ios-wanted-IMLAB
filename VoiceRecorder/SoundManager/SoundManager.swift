@@ -21,6 +21,10 @@ class SoundManager: NSObject {
     private lazy var inputNode = engine.inputNode
     private let mixerNode = AVAudioMixerNode()
     
+    private let eqNode = AVAudioUnitEQ(numberOfBands: 1)
+    private lazy var eqFilterParameters: AVAudioUnitEQFilterParameters = eqNode.bands[0] as AVAudioUnitEQFilterParameters
+    private var frequency: Float = 2000
+    
     private let playerNode = AVAudioPlayerNode()
     private let pitchControl = AVAudioUnitTimePitch()
     
@@ -62,8 +66,11 @@ class SoundManager: NSObject {
     func configureRecordEngine(format: AVAudioFormat) {
         mixerNode.volume = 0
         
+        engine.attach(eqNode)
         engine.attach(mixerNode)
-        engine.connect(inputNode, to: mixerNode, format: format)
+        
+        engine.connect(inputNode, to: eqNode, format: format)
+        engine.connect(eqNode, to: mixerNode, format: format)
     }
     
     func configurePlayEngine(format: AVAudioFormat) {
@@ -85,11 +92,18 @@ class SoundManager: NSObject {
         return try AVAudioFile(forReading: filePath)
     }
     
+    private func setFrequency() {
+        eqFilterParameters.filterType = .bandPass
+        eqFilterParameters.bypass = false
+        eqFilterParameters.frequency = frequency
+    }
+    
     func startRecord(filePath: URL) {
         engine.reset()
         
         let format = inputNode.outputFormat(forBus: 0)
         configureRecordEngine(format: format)
+        setFrequency()
         
         do {
             audioFile = try createAudioFile(filePath: filePath)
@@ -97,7 +111,7 @@ class SoundManager: NSObject {
             fatalError()
         }
         
-        mixerNode.installTap(onBus: 0, bufferSize: 4096, format: format) { buffer, time in
+        eqNode.installTap(onBus: 0, bufferSize: 4096, format: format) { buffer, time in
             do {
                 try self.audioFile.write(from: buffer)
             } catch {
@@ -113,7 +127,7 @@ class SoundManager: NSObject {
     }
     
     func stopRecord() {
-        mixerNode.removeTap(onBus: 0)
+        eqNode.removeTap(onBus: 0)
         
         engine.stop()
     }
@@ -121,6 +135,7 @@ class SoundManager: NSObject {
     func play() {
         try! engine.start()
         playerNode.play()
+        print(eqFilterParameters.frequency, "frequency")
     }
     
     func pause() {
