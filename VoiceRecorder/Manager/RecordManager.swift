@@ -82,7 +82,7 @@ class RecordManager: RecordService {
     func startRecord() {
         audioFile = nil
         totalWaveData = [Int]()
-        
+
         let numberOfSamples = waveForms.count
 
         audioFile = Config.getRecordFilePath()
@@ -102,7 +102,7 @@ class RecordManager: RecordService {
             timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { [weak self] _ in
                 guard let self = self else { return }
                 self.recorder?.updateMeters()
-                
+
                 let soundLevel = self.normalizeSoundLevel(self.recorder?.averagePower(forChannel: 0))
 
                 if self.currentSample == numberOfSamples {
@@ -141,23 +141,23 @@ class RecordManager: RecordService {
 
         recorder?.stop()
         recorder = nil
-        
+
         waveForms = [Int](repeating: 0, count: 100)
         currentSample = 0
-        
+
         print(totalWaveData.count)
     }
-    
+
     func getWaveData() -> [Int] {
         return totalWaveData
     }
-    
+
     func resetRecorder() {
         timer?.invalidate()
-        
+
         recorder?.stop()
         recorder = nil
-        
+
         waveForms = [Int](repeating: 0, count: 100)
         currentSample = 0
     }
