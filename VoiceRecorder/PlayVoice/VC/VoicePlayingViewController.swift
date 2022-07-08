@@ -18,23 +18,31 @@ class VoicePlayingViewController: UIViewController {
     
     private var middleAnchorView: UIView = {
         var stackView = UIView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
     
-    private var currentPlayingView: UIView = {
-        var view = UIView()
-        view.backgroundColor = .brown
+    private var visualizer: AudioVisualizeView = {
+        var visualizer = AudioVisualizeView()
+        return visualizer
+    }()
+    
+    private var progressBar: UIProgressView = {
+        var view = UIProgressView()
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
     private var pitchSegmentController: UISegmentedControl = {
         var segment = UISegmentedControl(items: ["일반 목소리", "아기 목소리", "할아버지 목소리"])
+        segment.translatesAutoresizingMaskIntoConstraints = false
         segment.selectedSegmentIndex = 0
         return segment
     }()
     
     private var volumeSlider: UISlider = {
         var slider = UISlider()
+        slider.translatesAutoresizingMaskIntoConstraints = false
         slider.setValue(0.5, animated: true)
         slider.minimumValueImage = UIImage(systemName: "speaker")
         slider.maximumValueImage = UIImage(systemName: "speaker.wave.3")
@@ -44,6 +52,7 @@ class VoicePlayingViewController: UIViewController {
     // Play, for/bacward button
     private lazy var playControlView: PlayControlView = {
         var view = PlayControlView()
+        view.translatesAutoresizingMaskIntoConstraints = false
         view.delegate = self
         return view
     }()
@@ -54,6 +63,7 @@ class VoicePlayingViewController: UIViewController {
         addViewsActionsToVC()
     }
     override func viewWillDisappear(_ animated: Bool) {
+        guard soundManager != nil else { return }
         soundManager.stop()
         soundManager.removeTap()
         playControlView.isSelected = false
@@ -63,15 +73,13 @@ class VoicePlayingViewController: UIViewController {
         
         view.backgroundColor = .white
         
-        middleAnchorView.translatesAutoresizingMaskIntoConstraints = false
-        currentPlayingView.translatesAutoresizingMaskIntoConstraints = false
-        pitchSegmentController.translatesAutoresizingMaskIntoConstraints = false
-        volumeSlider.translatesAutoresizingMaskIntoConstraints = false
-        playControlView.translatesAutoresizingMaskIntoConstraints = false
+        visualizer.translatesAutoresizingMaskIntoConstraints = false
+        //view.addSubview(audioPlotView)
         
         view.addSubview(recordedVoiceTitle)
         view.addSubview(middleAnchorView)
-        middleAnchorView.addSubview(currentPlayingView)
+        middleAnchorView.addSubview(visualizer)
+        middleAnchorView.addSubview(progressBar)
         view.addSubview(pitchSegmentController)
         view.addSubview(volumeSlider)
         view.addSubview(playControlView)
@@ -88,10 +96,15 @@ class VoicePlayingViewController: UIViewController {
             middleAnchorView.topAnchor.constraint(equalTo: recordedVoiceTitle.bottomAnchor),
             middleAnchorView.bottomAnchor.constraint(equalTo: playControlView.topAnchor),
             
-            currentPlayingView.centerYAnchor.constraint(equalTo: middleAnchorView.centerYAnchor).constraintWithMultiplier(0.5),
-            currentPlayingView.centerXAnchor.constraint(equalTo: middleAnchorView.centerXAnchor),
-            currentPlayingView.heightAnchor.constraint(equalToConstant: 100),
-            currentPlayingView.widthAnchor.constraint(equalTo:  middleAnchorView.widthAnchor, multiplier: 0.9),
+            visualizer.centerYAnchor.constraint(equalTo: middleAnchorView.centerYAnchor).constraintWithMultiplier(0.5),
+            visualizer.centerXAnchor.constraint(equalTo: middleAnchorView.centerXAnchor),
+            visualizer.heightAnchor.constraint(equalToConstant: 100),
+            visualizer.widthAnchor.constraint(equalTo:  middleAnchorView.widthAnchor, multiplier: 0.9),
+            
+            progressBar.centerYAnchor.constraint(equalTo: middleAnchorView.centerYAnchor).constraintWithMultiplier(1),
+            progressBar.centerXAnchor.constraint(equalTo: middleAnchorView.centerXAnchor),
+            progressBar.widthAnchor.constraint(equalTo:  middleAnchorView.widthAnchor, multiplier: 0.9),
+            progressBar.heightAnchor.constraint(equalToConstant: 50),
             
             volumeSlider.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             volumeSlider.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
@@ -111,16 +124,19 @@ class VoicePlayingViewController: UIViewController {
         
     }
     
-    func fetchRecordedDataFromMainVC(dataUrl: URL) {
-        print(dataUrl)
-        setSoundManager()
-        recordedVoiceTitle.text = "\(dataUrl.lastPathComponent.split(separator: ".")[0])"
-        soundManager.initializeSoundManager(url: dataUrl, type: .playBack)
-    }
+    func setTitle(title: String) {
+          recordedVoiceTitle.text = title
+      }
+      
+      func fetchRecordedDataFromMainVC(dataUrl: URL) {
+          setSoundManager()
+          soundManager.initializeSoundManager(url: dataUrl, type: .playBack)
+      }
     
     func setSoundManager() {
         soundManager = SoundManager()
         soundManager.delegate = self
+        
     }
     
     func addViewsActionsToVC() {
@@ -130,7 +146,6 @@ class VoicePlayingViewController: UIViewController {
     
     
     @objc func changeVolumeValue() {
-        
         soundManager.changeVolume(value: volumeSlider.value)
     }
     
@@ -171,18 +186,22 @@ extension VoicePlayingViewController: ReceiveSoundManagerStatus {
             self.playControlView.isSelected = isPlaying
             
         }
-        
     }
     
     func audioFileInitializeErrorHandler(error: Error) {
         let alert = UIAlertController(title: "파일 초기화 실패!", message: "오류코드: \(error.localizedDescription)", preferredStyle: .alert)
+        let action = UIAlertAction(title: "확인", style: .default)
+        alert.addAction(action)
         self.present(alert, animated: true)
     }
     
     
     func audioEngineInitializeErrorHandler(error: Error) {
         let alert = UIAlertController(title: "엔진 초기화 실패!", message: "오류코드: \(error.localizedDescription)", preferredStyle: .alert)
+        let action = UIAlertAction(title: "확인", style: .default)
+        alert.addAction(action)
         self.present(alert, animated: true)
     }
     
 }
+
