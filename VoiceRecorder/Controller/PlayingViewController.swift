@@ -20,7 +20,6 @@ class PlayingViewController: UIViewController {
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var goBackwardButton: UIButton!
     @IBOutlet weak var goForwardButton: UIButton!
-    @IBOutlet weak var waveCollectionView: UICollectionView!
     //    @IBOutlet weak var waveScrollView: UIScrollView!
 //    @IBOutlet weak var drawWaveForm: DrawWaveform!
     
@@ -28,7 +27,7 @@ class PlayingViewController: UIViewController {
     private var inPlayMode: Bool = false
     var selectedFileInfo: RecordModel?
     var startPoint = CGPoint(x: 0.0, y: 0.0)
-    
+    var firstindex = 0
     override func viewDidLoad() {
         super.viewDidLoad()
         guard let fileInfo = selectedFileInfo else { return }
@@ -38,10 +37,10 @@ class PlayingViewController: UIViewController {
         playProgressBar.progress = 0.0
         audioPlayerHandler.selectPlayFile(self.fileNameLabel.text)
         configureVolumeSlider()
-        waveCollectionView.dataSource = self
-        let layout = waveCollectionView.collectionViewLayout as! UICollectionViewFlowLayout
-        layout.scrollDirection = .horizontal
+//        let layout = waveCollectionView.collectionViewLayout as! UICollectionViewFlowLayout
+//        layout.scrollDirection = .horizontal
     }
+
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -100,6 +99,9 @@ class PlayingViewController: UIViewController {
     @objc func updateProgress() {
         currentPlayTimeLabel.text = audioPlayerHandler.currentPlayTime
         playProgressBar.progress = audioPlayerHandler.progress
+        firstindex += 1
+//        waveCollectionView.scrollToItem(at: NSIndexPath(item: firstindex, section: 0) as IndexPath, at: .right, animated: true)
+        
         if !audioPlayerHandler.isPlaying {
             self.playButton.setImage(UIImage(systemName: "play"), for: .normal)
         } else {
@@ -108,19 +110,27 @@ class PlayingViewController: UIViewController {
     }
 }
 
-extension PlayingViewController : UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return readFile.points.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "waveCollectionViewCell", for: indexPath) as! waveCollectionViewCell
-        let contentview = cell.contentView
-        let view = UIView(frame: CGRect(x: contentview.frame.midX, y: contentview.frame.midY, width: 5, height: readFile.points[indexPath.row] * 5))
-        view.backgroundColor = .red
-        contentview.addSubview(view)
-        return cell
-    }
-    
-    
-}
+//extension PlayingViewController : UICollectionViewDataSource {
+//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        return readFile.points.count
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "waveCollectionViewCell", for: indexPath) as! waveCollectionViewCell
+//        let contentview = cell.contentView
+//        let view = UIView(frame: CGRect(x: contentview.frame.midX, y: contentview.frame.midY, width: 5, height: readFile.points[indexPath.row] * 10))
+//        let view2 = UIView(frame: CGRect(x: contentview.frame.midX, y: contentview.frame.midY - CGFloat(readFile.points[indexPath.row] * 10), width: 5, height: readFile.points[indexPath.row] * 10))
+//        view.backgroundColor = .red
+//        view2.backgroundColor = .red
+//        contentview.addSubview(view)
+//        contentview.addSubview(view2)
+//        return cell
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+//
+//            return CGSize(width: 5, height: 100)
+//
+//        }
+//
+//}

@@ -84,11 +84,11 @@ class AudioPlayerHandler {
                                       frameCapacity: AVAudioFrameCount(audioFile.length))
             try audioFile.read(into: buffer)
             readFile.arrayFloatValues = Array(UnsafeBufferPointer(start: buffer.floatChannelData?[0], count: Int(buffer.frameLength)))
-            convertToPoints()
             audioFileFrameLength = audioFile.length
             audioFileSampleRate = audioFile.processingFormat.sampleRate
             audioFileTotalPlayTime = Double(audioFileFrameLength) / audioFileSampleRate
             setEngine()
+            convertToPoints()
         } catch {
             print(error.localizedDescription)
         }
