@@ -10,15 +10,17 @@ import AVFoundation
 
 class RecordViewController: UIViewController {
     
-    var soundManager = SoundManager()
-    var audioFileManager = AudioFileManager()
-    var firebaseStorageManager = FirebaseStorageManager()
-    var date = DateUtil().formatDate()
-    var engine = AVAudioEngine()
+    private var soundManager = SoundManager()
+    private var audioFileManager = AudioFileManager()
+    private var firebaseStorageManager = FirebaseStorageManager()
     
-    var isStartRecording: Bool = false
+    private let date = DateUtil().currentDate
+    private lazy var urlString = "\(self.date).caf"
     
-    var recordButton: UIButton = {
+    
+    private var isStartRecording: Bool = false
+    
+    private var recordButton: UIButton = {
         var button = UIButton()
         let largeConfig = UIImage.SymbolConfiguration(pointSize: 50, weight: .regular, scale: .large)
         let largeRecordImage = UIImage(systemName: "circle.fill", withConfiguration: largeConfig)
@@ -41,7 +43,6 @@ class RecordViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setLayout()
         setAudio()
         soundManager.visualDelegate = self
@@ -52,7 +53,7 @@ class RecordViewController: UIViewController {
         NotificationCenter.default.post(name: .dismissVC, object: nil)
     }
     
-    func setLayout() {
+    private func setLayout() {
         view.backgroundColor = .white
         
         recordButton.translatesAutoresizingMaskIntoConstraints = false
@@ -81,12 +82,11 @@ class RecordViewController: UIViewController {
         ])
     }
     
-    func setAudio() {
-        requestMicrophoneAccess { [weak self] allowed in
+    private func setAudio() {
+        requestMicrophoneAccess { [self] allowed in
             if allowed {
-                // 녹음 권한 허용
-                let format = self?.engine.inputNode.outputFormat(forBus: 0)
-                self?.soundManager.configureRecordEngine(format: format!)
+                let localUrl = audioFileManager.getAudioFilePath(fileName: urlString)
+                soundManager.initializeSoundManager(url: localUrl, type: .record)
             } else {
                 // 녹음 권한 거부
                 fatalError()
@@ -94,7 +94,7 @@ class RecordViewController: UIViewController {
         }
     }
     
-    func recordButtonToggle() {
+    private func recordButtonToggle() {
         let largeConfig = UIImage.SymbolConfiguration(pointSize: 50, weight: .regular, scale: .large)
         let largeRecordImage = UIImage(systemName: "circle.fill", withConfiguration: largeConfig)
         let largePauseImage = UIImage(systemName: "square.circle", withConfiguration: largeConfig)
@@ -103,18 +103,29 @@ class RecordViewController: UIViewController {
         self.recordButton.setImage(image, for: .normal)
     }
     
+    private func passData(localUrl : URL) {
+        let data = try! Data(contentsOf: localUrl)
+        let totalTime = soundManager.totalPlayTime(date: date)
+        let duration = soundManager.convertTimeToString(totalTime)
+        let audioMetaData = AudioMetaData(title: date, duration: duration, url: urlString)
+        
+        firebaseStorageManager.uploadAudio(audioData: data, audioMetaData: audioMetaData)
+    }
+    
     // 녹음 시작 & 정지 컨트롤
     @objc private func control() {
         isStartRecording = !isStartRecording
         recordButtonToggle()
         
-        let url = audioFileManager.getAudioFilePath(fileName: date+".caf")
         if isStartRecording { // 녹음 시작일 때
-            soundManager.startRecord(filePath: url)
+            soundManager.startRecord()
         } else { // 녹음 끝일 때
             soundManager.stopRecord()
-            firebaseStorageManager.uploadAudio(url: url, date: date)
-            soundManager.initializeSoundManager(url: url, type: .playBack)
+            
+            let localUrl = audioFileManager.getAudioFilePath(fileName: urlString)
+            print(localUrl)
+            passData(localUrl: localUrl)
+            soundManager.initializeSoundManager(url: localUrl, type: .playBack)
         }
     }
 }
@@ -151,20 +162,18 @@ extension RecordViewController: SoundButtonActionDelegate {
     
     func backwardButtonTouchUpinside(sender: UIButton) {
         print("backwardButton Clicked")
-        soundManager.skip(forwards: false)
+        soundManager.skip(isForwards: false)
     }
     
     func forwardTouchUpinside(sender: UIButton) {
         print("forwardButton Clicked")
-        soundManager.skip(forwards: true)
+        soundManager.skip(isForwards: true)
     }
 }
 
 extension RecordViewController: Visualizerable {
-    func processAudioBuffer(buffer: AVAudioPCMBuffer) {
-
-        visualizer.processAudioData(buffer: buffer)
-        
-    }
     
+    func processAudioBuffer(buffer: AVAudioPCMBuffer) {
+        visualizer.processAudioData(buffer: buffer)
+    }
 }
