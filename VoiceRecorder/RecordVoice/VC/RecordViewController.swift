@@ -123,6 +123,7 @@ class RecordViewController: UIViewController {
             soundManager.stopRecord()
             
             let localUrl = audioFileManager.getAudioFilePath(fileName: urlString)
+            print(localUrl)
             passData(localUrl: localUrl)
             soundManager.initializeSoundManager(url: localUrl, type: .playBack)
         }

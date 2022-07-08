@@ -29,18 +29,11 @@ class RecordedVoiceTableViewCell: UITableViewCell {
         return label
     }()
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        setTableViewCellLayout()
-    }
-
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        // Configure the view for the selected state
     }
     
     func setTableViewCellLayout() {
-        
         labelStackView.translatesAutoresizingMaskIntoConstraints = false
         audioTitle.translatesAutoresizingMaskIntoConstraints = false
         audioPlaytime.translatesAutoresizingMaskIntoConstraints = false
@@ -50,17 +43,16 @@ class RecordedVoiceTableViewCell: UITableViewCell {
         labelStackView.addArrangedSubview(audioPlaytime)
         
         NSLayoutConstraint.activate([
-            
             labelStackView.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             labelStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             labelStackView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.9),
-            labelStackView.heightAnchor.constraint(equalTo: self.heightAnchor),
-            
+            labelStackView.heightAnchor.constraint(equalTo: self.heightAnchor)
         ])
-        
     }
     
     func fetchAudioLabelData(data: AudioMetaData) {
+        setTableViewCellLayout()
+        
         audioTitle.text = data.title
         audioPlaytime.text = data.duration
     }

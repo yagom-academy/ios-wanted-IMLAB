@@ -44,11 +44,18 @@ class RecordedVoiceListViewController: UIViewController {
     }
     
     private func initializeFirebaseAudioFiles() {
-        firestorageManager.downloadAll { result in
+        firestorageManager.downloadAllRef { [self] result in
             switch result {
             case .success(let data) :
-                self.firestorageManager.downloadMetaData(filePath: data) { result in
-                    self.recordedVoiceTableView.reloadData()
+                firestorageManager.downloadMetaData(filePath: data) { [self] metaResult in
+                    switch metaResult {
+                    case .success(let metaDataList) :
+                        audioMetaDataList = metaDataList
+                        sortAudioFiles()
+                        recordedVoiceTableView.reloadData()
+                    case .failure(let error) :
+                        print(error)
+                    }
                 }
             case .failure(let error) :
                 print(error.localizedDescription)
@@ -132,6 +139,7 @@ extension RecordedVoiceListViewController: UITableViewDataSource, UITableViewDel
         firestorageManager.downloadAudio(path, to: filePath) { url in
             voicePlayVC.fetchRecordedDataFromMainVC(dataUrl: filePath)
         }
+        
         self.present(voicePlayVC, animated: true)
     }
 
@@ -141,7 +149,17 @@ extension RecordedVoiceListViewController: UITableViewDataSource, UITableViewDel
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         firestorageManager.deleteAudio(urlString: audioMetaDataList[indexPath.row].url)
+        fileManager.deleteLocalAudioFile(fileName: audioMetaDataList[indexPath.row].url)
         audioMetaDataList.remove(at: indexPath.row)
         recordedVoiceTableView.reloadData()
+    }
+}
+
+extension RecordViewController: FileStatusReceivable {
+    func fileManager(_ fileManager: FileManager, error: FileError) {
+        let alert = UIAlertController(title: "파일 에러", message: error.rawValue, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "확인", style: .default)
+        alert.addAction(okAction)
+        present(alert, animated: true)
     }
 }

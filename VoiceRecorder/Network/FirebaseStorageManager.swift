@@ -60,42 +60,34 @@ class FirebaseStorageManager {
                 print("delete success")
             }
         }
-        
-        //TODO: - AudioFileManager로
-        let item = self.audioFileManager.getAudioFilePath(fileName: urlString)
-        try? FileManager.default.removeItem(at: item)
     }
-    
     
     // TODO: - download All AudioData array로 return
     // 스켈레톤 뷰
-    func downloadAll(completion: @escaping (Result<[StorageReference], Error>) -> Void) {
+    func downloadAllRef(completion: @escaping (Result<[StorageReference], Error>) -> Void) {
         baseReference.listAll { result, error in
             if let error = error {
                 completion(.failure(error))
             }
-            
-            guard let result = result else {
-                return
+            if let result = result {
+                completion(.success(result.items))
             }
-            
-            completion(.success(result.items))
         }
     }
-    
     
     // TODO: - [AudioData] return
     // filePaths - array로 파라미터
     func downloadMetaData(filePath: [StorageReference], completion: @escaping (Result<[AudioMetaData], Error>) -> Void) {
         var audioMetaDataList = [AudioMetaData]()
-        for ref in filePath {
-            
+        let metaDataCount = audioMetaDataList.count
+        
+        for (idx, ref) in filePath.enumerated() {
             baseReference.child(ref.name).getMetadata { metaData, error in
                 if let error = error {
                     completion(.failure(error))
                 }
+                
                 let data = metaData?.customMetadata
-                // 파일 이름 메타데이터가 없을 경우 파일 url을 잘라서 이름 양식에 맞춰 리턴
                 
                 let title = data?["title"] ?? ""
                 let duration = data?["duration"] ?? "00:00"
@@ -103,7 +95,9 @@ class FirebaseStorageManager {
                 
                 audioMetaDataList.append(AudioMetaData(title: title, duration: duration, url: url))
                 
-                completion(.success(audioMetaDataList))
+                if metaDataCount == idx {
+                    completion(.success(audioMetaDataList))
+                }
             }
         }
     }
