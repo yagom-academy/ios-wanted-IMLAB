@@ -10,7 +10,7 @@ class RecordedVoiceListViewController: UIViewController {
     
     private let firestorageManager = FirebaseStorageManager()
     private let fileManager = AudioFileManager()
-    var audioMetaDataList: [AudioData] = []
+    private var audioMetaDataList: [AudioData] = []
     
     lazy var navigationBar: UINavigationBar = {
         var navigationBar = UINavigationBar()
@@ -45,11 +45,18 @@ class RecordedVoiceListViewController: UIViewController {
     
     private func initializeFirebaseAudioFiles() {
         
-        firestorageManager.downloadAll { result in
+        firestorageManager.downloadAllRef { [self] result in
             switch result {
             case .success(let data) :
-               firestorageManager.downloadMetaData(filePath: data) { result in
-                    self.recordedVoiceTableView.reloadData()
+               firestorageManager.downloadMetaData(filePath: data) { [self] metaResult in
+                   switch metaResult {
+                   case .success(let metaDataList) :
+                       audioMetaDataList = metaDataList
+                       sortAudioFiles()
+                       recordedVoiceTableView.reloadData()
+                   case .failure(let error) :
+                       print(error)
+                   }
                 }
             case .failure(let error) :
                 print(error.localizedDescription)
@@ -58,7 +65,7 @@ class RecordedVoiceListViewController: UIViewController {
     }
     
     private func sortAudioFiles() {
-        audioList.sort { data1, data2 in
+        audioMetaDataList.sort { data1, data2 in
             return data1.title > data2.title
         }
     }
@@ -116,22 +123,20 @@ class RecordedVoiceListViewController: UIViewController {
 extension RecordedVoiceListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return audioList.count
+        return audioMetaDataList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = recordedVoiceTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! RecordedVoiceTableViewCell
-        
-        cell.setTableViewCellLayout() // cell 안으로
-        cell.fetchAudioLabelData(data: audioList[indexPath.row])
+        cell.fetchAudioLabelData(data: audioMetaDataList[indexPath.row])
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let voicePlayVC = VoicePlayingViewController() // init시 타이틀 넘김
-        voicePlayVC.setTitle(title: audioList[indexPath.item].title)
-        let path = "\(audioList[indexPath.item].title).caf"
+        voicePlayVC.setTitle(title: audioMetaDataList[indexPath.item].title)
+        let path = "\(audioMetaDataList[indexPath.item].title).caf"
         let filePath = fileManager.getAudioFilePath(fileName: path)
         firestorageManager.downloadAudio(path, to: filePath) { url in
             voicePlayVC.fetchRecordedDataFromMainVC(dataUrl: filePath)
@@ -144,8 +149,18 @@ extension RecordedVoiceListViewController: UITableViewDataSource, UITableViewDel
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        firestorageManager.deleteAudio(urlString: "\(audioList[indexPath.row].title).caf")
-        audioList.remove(at: indexPath.row)
+        firestorageManager.deleteAudio(urlString: "\(audioMetaDataList[indexPath.row].title).caf")
+        fileManager.deleteLocalAudioFile(fileName: audioMetaDataList[indexPath.row].title + ".caf")
+        audioMetaDataList.remove(at: indexPath.row)
         recordedVoiceTableView.reloadData()
+    }
+}
+
+extension RecordViewController: FileStatusReceivable {
+    func fileManager(_ fileManager: FileManager, error: FileError) {
+        let alert = UIAlertController(title: "파일 에러", message: error.rawValue, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "확인", style: .default)
+        alert.addAction(okAction)
+        present(alert, animated: true)
     }
 }
