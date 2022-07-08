@@ -137,9 +137,9 @@
 		F00A2C92286BE8D200ED57A8 /* MISC */ = {
 			isa = PBXGroup;
 			children = (
-				F00A2C93286BE8E400ED57A8 /* NSLayoutConstraint+extension.swift */,
 				F0D766F2286C4A38008A469F /* AVAudioPlayerNode+extension.swift */,
 				688BD86D2877FBF700D9264A /* Notification+extension.swift */,
+				F00A2C93286BE8E400ED57A8 /* NSLayoutConstraint+extension.swift */,
 				F06B925E2872BB7B00A704AF /* DateUtil.swift */,
 				F06B92602872BF7800A704AF /* Data+extension.swift */,
 			);

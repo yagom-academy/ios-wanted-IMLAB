@@ -28,7 +28,8 @@ class RecordedVoiceListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        initalizeFirebaseAudioFiles()
+        initializeFirebaseAudioFiles()
+        sortAudioFiles()
         setNavgationBarProperties()
         configureRecordedVoiceListLayout()
     }
@@ -77,7 +78,7 @@ class RecordedVoiceListViewController: UIViewController {
         ])
     }
     
-    func initalizeFirebaseAudioFiles() {
+    func initializeFirebaseAudioFiles() {
         self.audioList.removeAll()
         
         firestorageManager.downloadAll { result in
@@ -91,13 +92,19 @@ class RecordedVoiceListViewController: UIViewController {
         }
     }
     
+    func sortAudioFiles() {
+        audioList.sort { data1, data2 in
+            return data1.title > data2.title
+        }
+    }
+    
     @objc func createNewVoiceRecordButtonAction() {
         let recorderVC = RecordViewController()
         self.present(recorderVC, animated: true)
     }
     
     @objc func dismissNotification(notification: NSNotification) {
-        initalizeFirebaseAudioFiles()
+        initializeFirebaseAudioFiles()
         
         OperationQueue.main.addOperation {
             self.recordedVoiceTableView.reloadData()
@@ -114,6 +121,7 @@ extension RecordedVoiceListViewController: UITableViewDataSource, UITableViewDel
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = recordedVoiceTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! RecordedVoiceTableViewCell
         
+        sortAudioFiles()
         cell.setTableViewCellLayout()
         cell.fetchAudioLabelData(data: audioList[indexPath.row])
         
