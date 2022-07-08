@@ -109,7 +109,7 @@ class RecordViewController: UIViewController {
             soundManager.startRecord(filePath: url)
         } else { // 녹음 끝일 때
             soundManager.stopRecord()
-            firebaseStorageManager.uploadAudio(url: url)
+            firebaseStorageManager.uploadAudio(url: url, date: date)
             soundManager.initializeSoundManager(url: url, type: .playBack)
         }
     }

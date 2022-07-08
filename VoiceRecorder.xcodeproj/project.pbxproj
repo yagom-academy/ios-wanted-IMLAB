@@ -30,6 +30,7 @@
 		F0D559DC286C1AEB0078BCF3 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D559DB286C1AEB0078BCF3 /* SoundManager.swift */; };
 		F0D559DE286C3A2A0078BCF3 /* sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F0D559DD286C3A2A0078BCF3 /* sound.mp3 */; };
 		F0D766F3286C4A38008A469F /* AVAudioPlayerNode+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D766F2286C4A38008A469F /* AVAudioPlayerNode+extension.swift */; };
+		F0F45B7F286FE8C8006C3F84 /* Recorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F45B7E286FE8C8006C3F84 /* Recorder.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -57,6 +58,7 @@
 		F0D559DB286C1AEB0078BCF3 /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
 		F0D559DD286C3A2A0078BCF3 /* sound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = sound.mp3; path = Assets.xcassets/sound.dataset/sound.mp3; sourceTree = "<group>"; };
 		F0D766F2286C4A38008A469F /* AVAudioPlayerNode+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVAudioPlayerNode+extension.swift"; sourceTree = "<group>"; };
+		F0F45B7E286FE8C8006C3F84 /* Recorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recorder.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */

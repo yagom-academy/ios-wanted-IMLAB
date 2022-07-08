@@ -12,20 +12,20 @@ import UIKit
 class FirebaseStorageManager {
     
     private var baseReference: StorageReference!
-    private let dateUtil = DateUtil()
     private let soundManager = SoundManager()
+    private let audioFileManager = AudioFileManager()
     
     init() {
         baseReference = Storage.storage().reference()
     }
     
-    func uploadAudio(url: URL) {
-        let title = dateUtil.formatDate()
+    func uploadAudio(url: URL, date: String) {
+        let title = date
         let filePath = "\(title).caf"
         let data = try! Data(contentsOf: url)
         
         let metaData = StorageMetadata()
-        let totalTime = soundManager.totalPlayTime()
+        let totalTime = soundManager.totalPlayTime(date: filePath)
         let duration = soundManager.convertTimeToString(totalTime)
         let customData = [
             "title": title,
@@ -54,6 +54,7 @@ class FirebaseStorageManager {
     }
     
     func deleteAudio(urlString: String) {
+        // cloud delete
         baseReference.child(urlString).delete { error in
             if let error = error {
                 print(error.localizedDescription)
@@ -62,6 +63,10 @@ class FirebaseStorageManager {
                 print("delete success")
             }
         }
+        
+        // local delete
+        let item = self.audioFileManager.getAudioFilePath(fileName: urlString)
+        try? FileManager.default.removeItem(at: item)
     }
     
     func downloadAll(completion: @escaping (Result<AudioData, Error>) -> Void) {
@@ -87,11 +92,12 @@ class FirebaseStorageManager {
     
     func downloadMetaData(filePath: String, completion: @escaping (Result<AudioData, Error>) -> Void) {
         let ref = baseReference.child(filePath)
-
+        
         ref.getMetadata { metaData, error in
             if let error = error {
                 completion(.failure(error))
             }
+            
             let data = metaData?.customMetadata
             
             // 파일 이름 메타데이터가 없을 경우 파일 url을 잘라서 이름 양식에 맞춰 리턴
@@ -100,9 +106,8 @@ class FirebaseStorageManager {
             
             let title = data?["title"] ?? String(splitExtension)
             let duration = data?["duration"] ?? "00:00"
-            let url = data?["url"] ?? filePath
             
-            completion(.success(AudioData(url: url, title: title, duration: duration)))
+            completion(.success(AudioData(title: title, duration: duration)))
         }
     }
     

@@ -18,7 +18,6 @@ class AudioFileManager {
     }
     
     private func initalizeFileFolder() {
-        
         guard !fileManager.fileExists(atPath: directoryPath.path) else { return }
         createDic()
     }
