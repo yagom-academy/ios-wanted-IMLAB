@@ -16,6 +16,7 @@
 		B0966F002872DADA00D10EAD /* Notification.Name+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0966EFF2872DADA00D10EAD /* Notification.Name+Extension.swift */; };
 		B096C93D2876A31B00A1ED00 /* AudioRecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B096C93C2876A31B00A1ED00 /* AudioRecodable.swift */; };
 		B096C93F2876A34100A1ED00 /* AudioPlayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B096C93E2876A34100A1ED00 /* AudioPlayable.swift */; };
+		B096C9412878116900A1ED00 /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = B096C9402878116900A1ED00 /* Dependencies.swift */; };
 		B0C058DC286AD73F008426B2 /* VoiceMemoRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C058DB286AD73F008426B2 /* VoiceMemoRecordViewController.swift */; };
 		DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65B28604278003DD2F5 /* AppDelegate.swift */; };
 		DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65D28604278003DD2F5 /* SceneDelegate.swift */; };
@@ -40,6 +41,7 @@
 		B0966EFF2872DADA00D10EAD /* Notification.Name+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Notification.Name+Extension.swift"; sourceTree = "<group>"; };
 		B096C93C2876A31B00A1ED00 /* AudioRecodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecodable.swift; sourceTree = "<group>"; };
 		B096C93E2876A34100A1ED00 /* AudioPlayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayable.swift; sourceTree = "<group>"; };
+		B096C9402878116900A1ED00 /* Dependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dependencies.swift; sourceTree = "<group>"; };
 		B0C058DB286AD73F008426B2 /* VoiceMemoRecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceMemoRecordViewController.swift; sourceTree = "<group>"; };
 		DE15E65828604278003DD2F5 /* VoiceRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE15E65B28604278003DD2F5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -115,6 +117,7 @@
 			isa = PBXGroup;
 			children = (
 				B0966EFF2872DADA00D10EAD /* Notification.Name+Extension.swift */,
+				B096C9402878116900A1ED00 /* Dependencies.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -350,6 +353,7 @@
 				B096C93F2876A34100A1ED00 /* AudioPlayable.swift in Sources */,
 				0EAD22D9286AD8160093E2D0 /* VoiceMemoPlayViewController.swift in Sources */,
 				B0966F002872DADA00D10EAD /* Notification.Name+Extension.swift in Sources */,
+				B096C9412878116900A1ED00 /* Dependencies.swift in Sources */,
 				B096C93D2876A31B00A1ED00 /* AudioRecodable.swift in Sources */,
 				B0540017286D5DD600BB5A34 /* PathFinder.swift in Sources */,
 				B0C058DC286AD73F008426B2 /* VoiceMemoRecordViewController.swift in Sources */,

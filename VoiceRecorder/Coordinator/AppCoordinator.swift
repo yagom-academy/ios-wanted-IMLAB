@@ -11,48 +11,48 @@ import UIKit
 class AppCoordinator: NSObject, Coordinator {
     
     var navigationController: UINavigationController
-    private weak var audioPlayer: AudioPlayable!
-    private weak var audioRecoder: AudioRecodable!
-    private weak var pathFinder: PathFinder!
-    private weak var firebaseManager: FirebaseStorageManager!
+    private var dependencies: Dependencies
     
     init(navigationController: UINavigationController,
-         audioPlayer: AudioPlayable,
-         audioRecoder: AudioRecodable,
-         pathFinder: PathFinder,
-         firebasemanager: FirebaseStorageManager) {
+         dependencies: Dependencies) {
         
         self.navigationController = navigationController
-        self.audioPlayer = audioPlayer
-        self.audioRecoder = audioRecoder
-        self.pathFinder = pathFinder
-        self.firebaseManager = firebasemanager
+        self.dependencies = dependencies
     }
     
     func start() {
         
-        let vc = VoiceMemoListViewController(pathFinder: pathFinder,
-                                             firebaseManager: firebaseManager)
+        let vc = VoiceMemoListViewController(
+            pathFinder: dependencies.pathFinder,
+            firebaseManager: dependencies.firebaseStorageManager
+        )
+        
         vc.coordinator = self
         navigationController.pushViewController(vc, animated: false)
     }
     
     func presentRecordView() {
         
-        let vc = VoiceMemoRecordViewController(pathFinder: pathFinder,
-                                               audioPlayer: audioPlayer,
-                                               audioRecorder: audioRecoder,
-                                               firebaseManager: firebaseManager)
+        let vc = VoiceMemoRecordViewController(
+            pathFinder: dependencies.pathFinder,
+            audioPlayer: dependencies.audioPlayer,
+            audioRecorder: dependencies.audioRecoder,
+            firebaseManager: dependencies.firebaseStorageManager
+        )
+        
         vc.isModalInPresentation = true
         navigationController.present(vc, animated: true)
     }
     
     func presentPlayView(selectedFile: String) {
         
-        let vc = VoiceMemoPlayViewController(audioFileName: selectedFile,
-                                             audioPlayer: audioPlayer,
-                                             pathFinder: pathFinder,
-                                             firebaseManager: firebaseManager)
+        let vc = VoiceMemoPlayViewController(
+            audioFileName: selectedFile,
+            audioPlayer: dependencies.audioPlayer,
+            pathFinder: dependencies.pathFinder,
+            firebaseManager: dependencies.firebaseStorageManager
+        )
+        
         navigationController.present(vc, animated: true)
     }
     

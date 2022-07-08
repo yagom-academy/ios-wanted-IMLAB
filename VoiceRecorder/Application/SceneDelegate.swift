@@ -10,11 +10,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
     var appCoordinator: Coordinator!
-    
-    let audioPlayer = DefaultAudioPlayer()
-    let audioRecoder = DefaultAudioRecoder()
-    let firebaseStorageManager = FirebaseStorageManager.init()
-    var pathFinder : PathFinder!
+    var dependencies : Dependencies!
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
@@ -22,20 +18,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let appWindow = UIWindow(frame:  windowScene.coordinateSpace.bounds)
         appWindow.windowScene = windowScene
         
-        do {
-            pathFinder = try PathFinder()
-        } catch {
-            fatalError(error.localizedDescription)
-        }
         
         requestPermission()
         
+        dependencies = makeDependencies()
+        
         let navigationController = UINavigationController()
         appCoordinator = AppCoordinator(navigationController: navigationController,
-                                        audioPlayer: audioPlayer,
-                                        audioRecoder: audioRecoder,
-                                        pathFinder: pathFinder,
-                                        firebasemanager: firebaseStorageManager)
+                                        dependencies: dependencies)
         appCoordinator.start()
         
         appWindow.rootViewController = navigationController
@@ -43,6 +33,27 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window = appWindow
 
+    }
+    
+    private func makeDependencies() -> Dependencies {
+        
+        let audioPlayer = DefaultAudioPlayer()
+        let audioRecoder = DefaultAudioRecoder()
+        let firebaseStorageManager = FirebaseStorageManager.init()
+        var pathFinder : PathFinder!
+        
+        do {
+            pathFinder = try PathFinder()
+        } catch {
+            fatalError(error.localizedDescription)
+        }
+        
+        
+        return Dependencies.init(audioRecoder: audioRecoder,
+                                 audioPlayer: audioPlayer,
+                                 firebaseStorageManager: firebaseStorageManager,
+                                 pathFinder: pathFinder)
+        
     }
     
     private func configureAudioSession() {
