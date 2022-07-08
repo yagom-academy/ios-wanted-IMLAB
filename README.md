@@ -1,7 +1,7 @@
 # 목차
   1. [Team](#Team)
-     1. 팀원 소개
-     2. 기여한 부분
+     1. [팀원 소개](#팀원-소개)
+     2. [기여한 부분](#기여한-부분)
   2. [프로젝트 소개](#프로젝트-소개)
      1. [목표](#목표)
      2. [사용한 기술](#사용한-기술)
@@ -11,8 +11,8 @@
      4. [사용한 Pattern 소개](#사용한-Pattern-소개)
         - [Coordinator Pattern](#Coordinator-Pattern)
         - [Observer Pattern](#Observer-Pattern)
-     5. [Project UML](#Project UML)
-  3. [고민한 부분](#고민한 부분)
+     5. [Project UML](#Project-UML)
+  3. [고민한 부분](#고민한-부분)
   4. [회고](회고)
   
 ---
