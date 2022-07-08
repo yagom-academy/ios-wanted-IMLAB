@@ -54,7 +54,6 @@ class FirebaseStorageManager {
     }
     
     func deleteAudio(urlString: String) {
-        // cloud delete
         baseReference.child(urlString).delete { error in
             if let error = error {
                 print(error.localizedDescription)
@@ -63,15 +62,9 @@ class FirebaseStorageManager {
                 print("delete success")
             }
         }
-        
-        //TODO: - AudioFileManager로
-        let item = self.audioFileManager.getAudioFilePath(fileName: urlString)
-        try? FileManager.default.removeItem(at: item)
     }
     
     
-    // TODO: - download All AudioData array로 return
-    // 스켈레톤 뷰
     func downloadAllRef(completion: @escaping (Result<[StorageReference], Error>) -> Void) {
         baseReference.listAll { result, error in
             if let error = error {
@@ -85,8 +78,6 @@ class FirebaseStorageManager {
     }
     
     
-    // TODO: - [AudioData] return
-    // filePaths - array로 파라미터
     func downloadMetaData(filePath: [StorageReference], completion: @escaping (Result<[AudioData], Error>) -> Void) {
         
         var audioList = [AudioData]()
