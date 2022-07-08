@@ -33,7 +33,25 @@
 ## 기능 소개
 
 ### App Flow
-  - 앱의 시작부터 각View에서 일어나는 일을 설명, Ex) 셀 터치 하면, 로컬 파일을 확인하여, 없다면 새로 받아와서 PlayView를 Present한다 같은 내용.
+  - all Flow
+  <p float="none">
+  <img src= "./images/AppFlow001.jpg" width="500" />
+  </p>
+
+  - ListView Flow
+  <p float="left">
+  <img src= "./images/AppFlow002.jpeg" width="500"/>
+  </p>
+
+  - RecordView Flow
+  <p float="right">
+  <img src= "./images/AppFlow004.jpeg" width="500"/>  
+  </p>
+
+  - PlayView Flow
+    <p float="left">
+  <img src= "./images/AppFlow003.jpg" width="500"/>
+</p>
   
 ### Demo Gif
   - 첫 화면
