@@ -62,9 +62,22 @@ class FirebaseStorageManager {
                 print("upload success")
                 completion()
             case .failure(let error):
-                print(error.localizedDescription)
+                print(error)
             }
         }
+    }
+    
+    func uploadDataSet(data: Data, fileName:String) {
+        guard let deviceID = deviceID else {
+            return
+        }
+        let meta = StorageMetadata()
+        meta.contentType = "audio/m4a"
+        storage.child(deviceID).child(fileName)
+            .putData(data,metadata: meta) { meta, error in
+                guard error == nil else { return }
+                print(meta?.name)
+            }
     }
     
     func deleteData(title: String) {

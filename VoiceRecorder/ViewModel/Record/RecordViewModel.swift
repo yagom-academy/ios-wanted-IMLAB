@@ -87,21 +87,12 @@ class RecordViewModel {
         let title = DateFormatter().toString(Date())
         let fileName = title + ".m4a"
         
-//        print(fileName)
-        
-//        if previousFileName == "" {
-//            storage.uploadData(url: recordFileURL, fileName: fileName)
-//        } else {
-//            storage.replaceData(title: previousFileName, url: recordFileURL, fileName: fileName)
-//            storage.deleteData(title: previousFileName)
-        storage.uploadData(url: recordFileURL, fileName: fileName) {
-            self.delegate?.uploadSuccess()
+        do {
+            let recordData = try Data(contentsOf: recordFileURL)
+            storage.uploadDataSet(data: recordData, fileName: fileName)
+        } catch {
+            print("Could not decode data \(error.localizedDescription)")
         }
-//        }
-        
-//        previousFileName = fileName
-        
-//        storage.uploadData(url: recordFileURL, fileName: DateFormatter().toString(Date()) + ".m4a")
     }
     
     func setupAudio() {
@@ -114,9 +105,9 @@ class RecordViewModel {
     }
     
     func playAudio() {
-//        if player.data == nil {
+        if player.data == nil {
             setupAudio()
-//        }
+        }
         
         player.volume = 0.5
         player.play()
@@ -186,9 +177,7 @@ class RecordViewModel {
             .store(in: &cancellable)
     }
     
-    @objc func timerCallBack() {
-        number += 1
-    }
+    @objc func timerCallBack() { number += 1 }
     
     private func nomalizeSoundLevel(level:Float) -> CGFloat {
         let level = max(0.2, CGFloat(level) + 50) / 2

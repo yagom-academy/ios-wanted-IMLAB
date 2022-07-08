@@ -91,11 +91,14 @@ class RecordViewController:UIViewController {
         bindRecording()
         bindTimer()
     }
-    
-    //    override func viewDidDisappear(_ animated: Bool) {
-    //        super.viewDidDisappear(animated)
-    //        delegate?.uploadSuccess()
-    //    }
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        print("view did disappear")
+        
+        if viewModel.isRecording {
+            viewModel.stopRec()
+        }
+    }
 }
 
 //MARK: - View Configure
