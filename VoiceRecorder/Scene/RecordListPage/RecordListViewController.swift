@@ -189,7 +189,6 @@ extension RecordListViewController {
 
         guard let indexPath = tableView.indexPathForRow(at: longPressedPoint) else {
             print("fail to find indexPath!")
-            viewModel.endSwapCellTapped()
             return
         }
 
@@ -245,8 +244,10 @@ extension RecordListViewController {
                 BeforeIndexPath.value = indexPath
             }
         case .ended:
-            viewModel.endSwapCellTapped()
-            sortBar.cellChanged()
+            if (sortBar.sortState != .favorite) {
+                viewModel.endSwapCellTapped()
+                sortBar.cellChanged()
+            }
             // 손가락을 떼면 indexPath에 셀이 나타나는 애니메이션
             guard let beforeIndexPath = BeforeIndexPath.value,
                   let cell = tableView.cellForRow(at: beforeIndexPath) else { return }
