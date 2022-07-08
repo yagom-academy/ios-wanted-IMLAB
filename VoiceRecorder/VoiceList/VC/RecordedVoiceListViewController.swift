@@ -123,11 +123,13 @@ extension RecordedVoiceListViewController: UITableViewDataSource, UITableViewDel
         
         let path = audioMetaDataList[indexPath.item].url
         let filePath = fileManager.getAudioFilePath(fileName: path)
-        
-        firestorageManager.downloadAudio(path, to: filePath) { url in
+        if fileManager.isFileExist(atPath: path) {
             voicePlayVC.fetchRecordedDataFromMainVC(dataUrl: filePath)
+        } else {
+            firestorageManager.downloadAudio(path, to: filePath) { url in
+                voicePlayVC.fetchRecordedDataFromMainVC(dataUrl: filePath)
+            }
         }
-        
         self.present(voicePlayVC, animated: true)
     }
 
