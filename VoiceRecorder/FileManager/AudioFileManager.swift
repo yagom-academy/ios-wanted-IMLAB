@@ -10,15 +10,17 @@ import Foundation
 enum FileError: String {
     case canNotDeleteFile = "파일을 지울 수 없습니다."
     case fileDoesNotExit = "경로에 해당 파일이 존재하지 않습니다."
+    case canNotCreateDic = "폴더를 생성할 수 없습니다."
 }
 
 protocol FileStatusReceivable {
-    func fileManager(_ fileManager: FileManager, error: FileError)
+    func fileManager(_ fileManager: FileManager, error: FileError, desc: Error?)
 }
 
 class AudioFileManager {
     
     var delegate: FileStatusReceivable!
+    
     private let fileManager = FileManager.default
     private let directoryPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("Recorded_Voice")
     
@@ -34,8 +36,8 @@ class AudioFileManager {
     private func createDic() {
         do {
             try fileManager.createDirectory(at: directoryPath, withIntermediateDirectories: false)
-        } catch let erorr {
-            print(erorr.localizedDescription)
+        } catch let error {
+            delegate.fileManager(fileManager, error: .canNotCreateDic, desc: error)
         }
     }
     
@@ -48,11 +50,11 @@ class AudioFileManager {
         if fileManager.fileExists(atPath: filePath.path) {
             do {
                 try fileManager.removeItem(at: filePath)
-            } catch {
-                delegate.fileManager(fileManager, error: FileError.canNotDeleteFile)
+            } catch let error {
+                delegate.fileManager(fileManager, error: FileError.canNotDeleteFile, desc: error)
             }
         } else {
-            delegate.fileManager(fileManager, error: FileError.fileDoesNotExit)
+            delegate.fileManager(fileManager, error: FileError.fileDoesNotExit, desc: nil)
         }
     }
 }
