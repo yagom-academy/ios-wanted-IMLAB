@@ -12,7 +12,7 @@ class AudioRecoderHandler {
     
     var audioRecorder = AVAudioRecorder()
     var localFileHandler : LocalFileProtocol
-    var updateTimeInterval : UpdateTimer
+    var timeHandler : TimeProtocol
     var fileName: String?
     var recordTime : String?
     
@@ -27,13 +27,12 @@ class AudioRecoderHandler {
     private var equalizer : AVAudioUnitEQ!
     private var state : Recordingstate = .stopped
     
-    init(handler : LocalFileProtocol, updateTimeInterval : UpdateTimer ){
-        self.localFileHandler = handler
-        self.updateTimeInterval = updateTimeInterval
+    init(localFileHandler : LocalFileProtocol, timeHandler : TimeProtocol ){
+        self.localFileHandler = localFileHandler
+        self.timeHandler = timeHandler
         setupSession()
         setupEngine()
     }
-    
     
     var recordSettings : [String: Any] = [
         AVFormatIDKey: NSNumber(value: kAudioFormatAppleLossless as UInt32),
@@ -124,7 +123,6 @@ class AudioRecoderHandler {
         print(filter.frequency)
     }
     
-    
     private func enableBuiltInMic() {
         // Get the shared audio session.
         let session = AVAudioSession.sharedInstance()
@@ -183,6 +181,7 @@ class AudioRecoderHandler {
     }
     
     func updateTimer(_ time: TimeInterval) -> String {
-        return updateTimeInterval.updateTimer(time)
+        return timeHandler.convertNSTimeToString(time)
     }
 }
+

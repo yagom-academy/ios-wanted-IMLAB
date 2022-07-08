@@ -7,8 +7,8 @@
 
 import Foundation
 
-class UpdateTimeInterval : UpdateTimer {
-    func updateTimer(_ time: TimeInterval) -> String {
+class TimeHandler : TimeProtocol {
+    func convertNSTimeToString(_ time: TimeInterval) -> String {
         let min = Int(time/60)
         let sec = Int(time.truncatingRemainder(dividingBy: 60))
         let strTime = String(format: "%02d:%02d", min, sec)
