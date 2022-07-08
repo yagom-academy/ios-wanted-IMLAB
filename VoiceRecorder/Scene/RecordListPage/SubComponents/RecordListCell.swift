@@ -73,7 +73,6 @@ class RecordListCell: UITableViewCell {
             swipeTapView.isUserInteractionEnabled = true
             let longPressedGesture = UILongPressGestureRecognizer(target: self, action: #selector(swapCellAction(with:)))
             longPressedGesture.minimumPressDuration = 0
-            //        longPressedGesture.delegate = self
             longPressedGesture.delaysTouchesBegan = true
             swipeTapView.addGestureRecognizer(longPressedGesture)
         }

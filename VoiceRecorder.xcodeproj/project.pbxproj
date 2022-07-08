@@ -408,7 +408,6 @@
 				FEA5330C286C3D48002E1169 /* CustomNavigationController.swift in Sources */,
 				FEFCE0902870549F00200AF1 /* RecordListUserDefaults.swift in Sources */,
 				0DD2E0222876AE8000727315 /* UIColor+.swift in Sources */,
-				0D26B1252875B1AB00FE1B04 /* RecordModel.swift in Sources */,
 				0DD2E01928767F2100727315 /* SpeedControlView.swift in Sources */,
 				DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */,
 				FEEC6984286C3B2D002E020F /* RecordNetworkManager.swift in Sources */,

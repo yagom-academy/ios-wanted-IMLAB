@@ -24,7 +24,7 @@ class RecordListViewModel {
         return recordDatas.count
     }
 
-    func update(completion: (() -> Void)? = nil) {
+    func update(completion: ((Result<Void,CustomNetworkError>) -> Void)? = nil) {
         networkManager.getRecordList { [weak self] result in
             guard let self = self else { return }
             switch result {
@@ -36,9 +36,10 @@ class RecordListViewModel {
                     return result
                 }
                 self.recordDatas = self.recordListUserDefaults.update(networkData: parsingData)
-                completion?()
+                completion?(.success(Void()))
             case let .failure(error):
                 // TODO: 에러처리
+                completion?(.failure(error))
                 break
             }
         }
@@ -50,7 +51,6 @@ class RecordListViewModel {
             if isDeleted == true {
                 self.recordDatas = self.recordDatas.filter { $0.fileInfo.rawFilename != filename }
                 completion()
-            } else {
             }
         }
     }
@@ -68,34 +68,25 @@ class RecordListViewModel {
     
     func tappedFavoriteButton(indexPath: IndexPath) {
         recordDatas[indexPath.row].isFavorite = !recordDatas[indexPath.row].isFavorite
-        recordListUserDefaults.save(data: recordDatas)
+        recordListUserDefaults.updateFavoriteState(fileInfo: recordDatas[indexPath.row].fileInfo)
     }
     
     func sortButtonTapped(beforeState: RecordListSortState, afterState: RecordListSortState, completion: @escaping () -> ()) {
         guard beforeState == .favorite || beforeState != afterState else { return }
-        if beforeState == .favorite && afterState != .favorite {
-            update {
-                doSort(afterState)
-            }
-        } else {
-            doSort(afterState)
-        }
         
-        func doSort(_ afterState: RecordListSortState) {
-            self.recordDatas = recordListUserDefaults.getData()
-            switch afterState {
-            case .basic:
-                completion()
-            case .latest:
-                recordDatas.sort(by: sortLatest(a:b:))
-                completion()
-            case .oldest:
-                recordDatas.sort(by: sortOldest(a:b:))
-                completion()
-            case .favorite:
-                recordDatas = recordDatas.filter { $0.isFavorite }
-                completion()
-            }
+        self.recordDatas = recordListUserDefaults.getData()
+        switch afterState {
+        case .basic:
+            completion()
+        case .latest:
+            recordDatas.sort(by: sortLatest(a:b:))
+            completion()
+        case .oldest:
+            recordDatas.sort(by: sortOldest(a:b:))
+            completion()
+        case .favorite:
+            recordDatas = recordDatas.filter { $0.isFavorite }
+            completion()
         }
         
         func sortLatest(a: CellData, b: CellData) -> Bool {
