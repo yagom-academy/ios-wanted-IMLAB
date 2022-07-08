@@ -13,7 +13,7 @@ protocol RecordViewControllerDelegate: AnyObject {
     func uploadSuccess()
 }
 
-final class RecordViewController:UIViewController {
+final class RecordViewController: UIViewController {
     
     private var viewModel = RecordViewModel()
     weak var delegate: RecordViewControllerDelegate?
@@ -80,7 +80,7 @@ final class RecordViewController:UIViewController {
         return stackView
     }()
     
-    lazy var progressView:UIProgressView = {
+    lazy var progressView: UIProgressView = {
         let progressView = UIProgressView()
         return progressView
     }()
@@ -101,7 +101,6 @@ final class RecordViewController:UIViewController {
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        print("view did disappear")
         
         if viewModel.isRecording {
             viewModel.stopRec()
@@ -172,17 +171,17 @@ private extension RecordViewController{
             sender.setImage(UIImage(systemName: "mic.circle.fill"), for: .normal)
         }
     }
-    @objc func previusSec(){
+    @objc func previusSec() {
         if viewModel.player.isPlaying {
             viewModel.seek(front: false)
         }
     }
-    @objc func nextSec(){
+    @objc func nextSec() {
         if viewModel.player.isPlaying {
             viewModel.seek(front: true)
         }
     }
-    @objc func playPause(_ sender:UIButton){
+    @objc func playPause(_ sender: UIButton) {
         if !viewModel.isPlaying {
             viewModel.playAudio()
         } else {

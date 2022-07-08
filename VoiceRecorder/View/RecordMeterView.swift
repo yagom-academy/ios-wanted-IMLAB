@@ -14,7 +14,7 @@ final class RecordMeterView: UIView {
 
     var disPlayLink: CADisplayLink?
     
-    required override init(frame:CGRect) {
+    required override init(frame: CGRect) {
         super.init(frame: frame)
         setUpDisPlayLink()
     }
@@ -28,7 +28,7 @@ final class RecordMeterView: UIView {
         return CAScrollLayer.self
     }
     
-    func setUpDisPlayLink(){
+    func setUpDisPlayLink() {
         self.layer.backgroundColor = UIColor.gray.cgColor
         disPlayLink = CADisplayLink(target: self, selector: #selector(updateDisplay))
         disPlayLink?.add(to: .current, forMode: .common)
