@@ -11,7 +11,7 @@ import MediaPlayer
 
 class PlayingViewController: UIViewController {
     
-    @IBOutlet weak var positionBar: UIView!
+    @IBOutlet weak var waveFormView: DrawWaveform!
     @IBOutlet weak var volumeSliderView: UIView!
     @IBOutlet weak var fileNameLabel: UILabel!
     @IBOutlet weak var soundPitchControl: UISegmentedControl!
@@ -29,6 +29,15 @@ class PlayingViewController: UIViewController {
     var selectedFileInfo: RecordModel?
     var startPoint = CGPoint(x: 0.0, y: 0.0)
     var firstindex = 0
+    
+    var views = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 150))
+    var animation : UIViewPropertyAnimator?
+    
+    func animate() {
+        self.views.frame = CGRect(x: 300, y: 0.0, width: 1, height: 150)
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         guard let fileInfo = selectedFileInfo else { return }
@@ -38,16 +47,21 @@ class PlayingViewController: UIViewController {
         playProgressBar.progress = 0.0
         audioPlayerHandler.selectPlayFile(self.fileNameLabel.text)
         configureVolumeSlider()
-        
-        positionBar.center.x -= waveFormView.bounds.width
+        views.backgroundColor = .black
+        waveFormView.addSubview(views)
+       
+       
 //        let layout = waveCollectionView.collectionViewLayout as! UICollectionViewFlowLayout
 //        layout.scrollDirection = .horizontal
     }
 
-    
+    override func viewDidAppear(_ animated: Bool) {
+       
+    }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         audioPlayerHandler.stop()
+        progressTimer?.invalidate()
     }
     
     private let audioPlayerHandler = AudioPlayerHandler(
@@ -92,21 +106,28 @@ class PlayingViewController: UIViewController {
     
     @IBAction func playButtonTapped(_ sender: UIButton) {
         inPlayMode.toggle()
-        audioPlayerHandler.playOrPause()
+        animation = UIViewPropertyAnimator(duration: audioPlayerHandler.audioFileTotalPlayTime, curve: .linear, animations: {
+            self.animate()
+        })
+        if inPlayMode {
+            audioPlayerHandler.play()
+            animation?.startAnimation()
+        }else {
+            audioPlayerHandler.pause()
+            animation?.pauseAnimation()
+        }
         progressTimer = Timer.scheduledTimer(timeInterval: 0.05,
                                              target: self,
                                              selector: #selector(updateProgress),
                                              userInfo: nil, repeats: true)
+//        UIView.animate(withDuration: audioPlayerHandler.audioFileTotalPlayTime, delay: 0, options: [.curveLinear], animations: {
+//            self.views.frame = CGRect(x: 300, y: 0.0, width: 1, height: 150)
+//        }, completion: nil)
     }
     
     @objc func updateProgress() {
         currentPlayTimeLabel.text = audioPlayerHandler.currentPlayTime
         playProgressBar.progress = audioPlayerHandler.progress
-        firstindex += 1
-//        waveCollectionView.scrollToItem(at: NSIndexPath(item: firstindex, section: 0) as IndexPath, at: .right, animated: true)
-        UIView.animate(withDuration: 0.5, delay: 0, options: [], animations: {
-            self.positionBar.center.x += self.waveFormView.bounds.width
-        }, completion: nil)
         if !audioPlayerHandler.isPlaying {
             self.playButton.setImage(UIImage(systemName: "play"), for: .normal)
         } else {

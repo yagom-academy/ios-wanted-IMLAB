@@ -133,7 +133,11 @@ class RecordingViewController: UIViewController {
     
     @IBAction func playButtonTapped(_ sender: UIButton) {
         inPlayMode.toggle()
-        audioPlayerHandler.playOrPause()
+        if inPlayMode {
+            audioPlayerHandler.play()
+        }else {
+            audioPlayerHandler.pause()
+        }
         if inPlayMode {
             sender.setImage(UIImage(systemName: "pause"), for: .normal)
             progressTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateProgress), userInfo: nil, repeats: true)

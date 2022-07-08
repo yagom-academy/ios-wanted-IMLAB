@@ -27,7 +27,7 @@ class AudioPlayerHandler {
     private var currentFramePosition: AVAudioFramePosition = 0
     private var audioFileFrameLength: AVAudioFramePosition = 0
     private var audioFileSampleRate: Double = 0
-    private var audioFileTotalPlayTime: Double = 0
+    var audioFileTotalPlayTime: Double = 0
     private var needsFileScheduled = true
     private var currentFrame: AVAudioFramePosition {
         guard
@@ -131,19 +131,21 @@ class AudioPlayerHandler {
         }
     }
     
-    func playOrPause() {
+    func play() {
         isPlaying.toggle()
         
-        if audioPlayerNode.isPlaying {
-            displayLink?.isPaused = true
-            audioPlayerNode.pause()
-        } else {
-            displayLink?.isPaused = false
-            if needsFileScheduled {
-                scheduleAudioFile()
-            }
-            audioPlayerNode.play()
+        displayLink?.isPaused = false
+        if needsFileScheduled {
+            scheduleAudioFile()
         }
+        audioPlayerNode.play()
+    }
+    
+    func pause() {
+        isPlaying.toggle()
+        
+        displayLink?.isPaused = true
+        audioPlayerNode.pause()
     }
     
     func stop() {
