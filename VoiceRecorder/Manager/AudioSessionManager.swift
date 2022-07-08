@@ -14,7 +14,7 @@ class AudioSessionManager{
 
     func setAudioSession() {
         do {
-            try audioSession.setCategory(.playAndRecord)
+            try audioSession.setCategory(.playAndRecord, options: .defaultToSpeaker)
             audioSession.requestRecordPermission{ accepted in
                 if accepted {
                     print("permission granted")

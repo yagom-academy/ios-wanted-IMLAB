@@ -20,7 +20,7 @@ struct CNS{
         static let playButton = UIScreen.main.bounds.height/25
         static let recordButton = UIScreen.main.bounds.height/16
         static let fileName = UIScreen.main.bounds.width/25
-        static let tableViewRowHeight = UIScreen.main.bounds.height/18
+        static let tableViewRowHeight = UIScreen.main.bounds.height/15
         static let fileNamesInList = UIScreen.main.bounds.width/25
         static let time = UIScreen.main.bounds.width/13
     }

@@ -14,9 +14,7 @@
 		9F6E7F85287512210096DE3B /* VerticalLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6E7F84287512210096DE3B /* VerticalLineView.swift */; };
 		9F6E7F872875869D0096DE3B /* TimeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6E7F862875869D0096DE3B /* TimeLabel.swift */; };
 		9F6E7F8A287586D10096DE3B /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6E7F89287586D10096DE3B /* Constants.swift */; };
-		9F8E2C3E2873096E009C16BF /* DisplayWaveFormManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8E2C3D2873096D009C16BF /* DisplayWaveFormManager.swift */; };
 		9F99812B286C6D84004AE695 /* DrawWaveFormManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F99812A286C6D84004AE695 /* DrawWaveFormManager.swift */; };
-		9F9DA2ED286C1D84004AE2EA /* RecorderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9DA2EC286C1D84004AE2EA /* RecorderViewModel.swift */; };
 		9FA3152428703D280080E484 /* AudioSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA3152328703D280080E484 /* AudioSessionManager.swift */; };
 		BA6EAE60623159BD72E525BB /* Pods_VoiceRecorder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFBFADDAE47812F2F622743D /* Pods_VoiceRecorder.framework */; };
 		C730AA93286BDFA70004D11C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C730AA92286BDFA70004D11C /* GoogleService-Info.plist */; };
@@ -50,9 +48,7 @@
 		9F6E7F84287512210096DE3B /* VerticalLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalLineView.swift; sourceTree = "<group>"; };
 		9F6E7F862875869D0096DE3B /* TimeLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLabel.swift; sourceTree = "<group>"; };
 		9F6E7F89287586D10096DE3B /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		9F8E2C3D2873096D009C16BF /* DisplayWaveFormManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayWaveFormManager.swift; sourceTree = "<group>"; };
 		9F99812A286C6D84004AE695 /* DrawWaveFormManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawWaveFormManager.swift; sourceTree = "<group>"; };
-		9F9DA2EC286C1D84004AE2EA /* RecorderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecorderViewModel.swift; sourceTree = "<group>"; };
 		9FA3152328703D280080E484 /* AudioSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSessionManager.swift; sourceTree = "<group>"; };
 		C730AA92286BDFA70004D11C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C730AA96286BEAE80004D11C /* FirebaseStorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorageManager.swift; sourceTree = "<group>"; tabWidth = 5; };
@@ -136,7 +132,6 @@
 				C730AAA7286C702B0004D11C /* PlayVoiceManager.swift */,
 				9F02BE6B286D220C007F715D /* RecordVoiceManager.swift */,
 				9FA3152328703D280080E484 /* AudioSessionManager.swift */,
-				9F8E2C3D2873096D009C16BF /* DisplayWaveFormManager.swift */,
 				C7AB10482875AA1E00ED16C5 /* FirebaseStorageDownloadManager.swift */,
 			);
 			path = Manager;
@@ -156,7 +151,6 @@
 			children = (
 				C730AA9D286BF5190004D11C /* VoiceRecordListViewModel.swift */,
 				C730AA9F286BF5400004D11C /* VoiceRecordViewModel.swift */,
-				9F9DA2EC286C1D84004AE2EA /* RecorderViewModel.swift */,
 				C730AAA3286C3F820004D11C /* PlayVoiceViewModel.swift */,
 			);
 			path = ViewModel;
@@ -347,7 +341,6 @@
 				9F6E7F8A287586D10096DE3B /* Constants.swift in Sources */,
 				9F25234128698A9C008A9819 /* VoiceRecorderListTableViewController.swift in Sources */,
 				9F6E7F85287512210096DE3B /* VerticalLineView.swift in Sources */,
-				9F9DA2ED286C1D84004AE2EA /* RecorderViewModel.swift in Sources */,
 				9F25234328699DB4008A9819 /* RecordVoiceViewController.swift in Sources */,
 				C730AA9A286BEB9C0004D11C /* RecordFile.swift in Sources */,
 				9FA3152428703D280080E484 /* AudioSessionManager.swift in Sources */,
@@ -361,7 +354,6 @@
 				9F02BE6C286D220C007F715D /* RecordVoiceManager.swift in Sources */,
 				DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */,
 				C730AAA8286C702B0004D11C /* PlayVoiceManager.swift in Sources */,
-				9F8E2C3E2873096E009C16BF /* DisplayWaveFormManager.swift in Sources */,
 				C7AB0FC62870560100ED16C5 /* SoundPitch.swift in Sources */,
 				C730AA9E286BF5190004D11C /* VoiceRecordListViewModel.swift in Sources */,
 				C7B118CB2876F96100DA4C73 /* Extension_Image.swift in Sources */,
@@ -514,6 +506,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
@@ -533,6 +526,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = net.yagom.VoiceRecorder;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -545,6 +539,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
@@ -564,6 +559,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = net.yagom.VoiceRecorder;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
