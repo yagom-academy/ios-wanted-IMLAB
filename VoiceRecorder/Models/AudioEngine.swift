@@ -16,10 +16,12 @@ class AudioEngine {
     
     // 주파수 * 초 = 프레임
     private var audioSampleRate = 0.0 // 현재 주파수
-    var audioLengthSeconds = 0.0 // 총 길이 (초)
+    private var audioLengthSeconds = 0.0 // 총 길이 (초)
     var seekFrame: AVAudioFramePosition = 0 // 이동할 프레임
     var currentPosition: AVAudioFramePosition = 0 // 현재 프레임
     private var audioLengthSamples: AVAudioFramePosition = 0 // 프레임 총 길이
+    
+    var duration: Double { audioLengthSeconds }
     
     var url: URL?
     var audioFile: AVAudioFile?

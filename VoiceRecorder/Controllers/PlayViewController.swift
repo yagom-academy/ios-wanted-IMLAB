@@ -42,15 +42,13 @@ class PlayViewController: UIViewController {
             self.setupEngine {
                 self.getDecibel {
                     DispatchQueue.main.async {
-                        self.activityIndicator.stopAnimating()
-                        self.enableButton()
+                        self.updateViewDidFinishEngineSetup()
                     }
                 }
             }
         }
         
         
-        graphView.drawBarGraph = true
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
@@ -85,6 +83,7 @@ class PlayViewController: UIViewController {
             engine.pause()
             playerTimer?.invalidate()
         } else {
+            graphView.drawBarGraph = true
             sender.setImage(.pauseFill)
             engine.play()
             playerTimer = Timer.scheduledTimer(
@@ -128,7 +127,7 @@ private extension PlayViewController {
             engine.currentPosition = 0
             engine.seekFrame = 0
             i = 0
-            playerTimeLabel.text = "\(engine.audioLengthSeconds.toStringTimeFormat)"
+            playerTimeLabel.text = "\(engine.duration.toStringTimeFormat)"
             try! engine.setupEngine()
         } else {
             playerTimeLabel.text = "\(engine.getCurrentTime().toStringTimeFormat)"
@@ -146,6 +145,11 @@ private extension PlayViewController {
 private extension PlayViewController {
     func cancelPlaying() {
         engine.stop()
+    }
+    func updateViewDidFinishEngineSetup() {
+        self.playerTimeLabel.text = self.engine.duration.toStringTimeFormat
+        self.activityIndicator.stopAnimating()
+        self.enableButton()
     }
     func configureUI() {
         guard let recordFile = recordFile else { return }

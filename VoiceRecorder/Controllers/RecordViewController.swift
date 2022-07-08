@@ -120,7 +120,7 @@ class RecordViewController: UIViewController {
             
             uploadDecibelData(decibels) { url in
                 let newMetaData = [
-                    MetaData.duration.key: "\(self.engine.audioLengthSeconds.toStringTimeFormat)",
+                    MetaData.duration.key: "\(ceil(self.engine.duration).toStringTimeFormat)",
                     MetaData.eq.key: self.eqSliderValues.joined(separator: " "),
                     MetaData.decibelDataURL.key: url.description
                 ]
@@ -196,7 +196,7 @@ private extension RecordViewController {
             engine.stop()
             engine.currentPosition = 0
             engine.seekFrame = 0
-            recordTimeLabel.text = "\(engine.audioLengthSeconds.toStringTimeFormat)"
+            recordTimeLabel.text = "\(engine.duration.toStringTimeFormat)"
             try! engine.setupEngine()
         } else {
             recordTimeLabel.text = "\(engine.getCurrentTime().toStringTimeFormat)"
