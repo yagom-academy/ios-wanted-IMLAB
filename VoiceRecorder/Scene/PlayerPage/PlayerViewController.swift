@@ -8,7 +8,7 @@
 import UIKit
 
 class PlayerViewController: UIViewController {
-    private let viewModel = PlayerViewModel(PlayerManager.shared)
+    private let viewModel = PlayerViewModel(PlayerManager.shared, RecordNetworkManager.shared)
     private var safearea: UILayoutGuide!
 
     private var waves: [Int] = []
@@ -137,15 +137,13 @@ extension PlayerViewController {
 
 extension PlayerViewController {
     func setData(_ filedata: FileData) {
-        let filename = filedata.rawFilename
-
-        viewModel.update(filename) { error in
+        viewModel.update(filedata) { error in
             if let error = error {
                 self.isInvalidFile()
                 return
             }
 
-            self.getWaveData(filename)
+            self.getWaveData(filedata.rawFilename)
             self.playerButtonView.bindDuration(filedata.duration)
         }
     }

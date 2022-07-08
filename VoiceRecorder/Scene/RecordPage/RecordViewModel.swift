@@ -8,7 +8,6 @@
 import Foundation
 
 class RecordViewModel {
-    private let playerModel = PlayerModel(RecordNetworkManager.shared)
     private var audioPlayer: PlayerService!
     private var audioRecorder: RecordService!
     private var network: NetworkManager!
