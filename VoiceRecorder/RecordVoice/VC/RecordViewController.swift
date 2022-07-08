@@ -13,7 +13,9 @@ class RecordViewController: UIViewController {
     private var soundManager = SoundManager()
     private var audioFileManager = AudioFileManager()
     private var firebaseStorageManager = FirebaseStorageManager()
+    
     private let date = DateUtil().currentDate
+    private lazy var urlString = "\(self.date).caf"
     
     private var isStartRecording: Bool = false
     
@@ -83,8 +85,8 @@ class RecordViewController: UIViewController {
         requestMicrophoneAccess { [self] allowed in
             if allowed {
                 // 녹음 권한 허용
-                let url = audioFileManager.getAudioFilePath(fileName: date+".caf")
-                soundManager.initializeSoundManager(url: url, type: .record)
+                let localUrl = audioFileManager.getAudioFilePath(fileName: urlString)
+                soundManager.initializeSoundManager(url: localUrl, type: .record)
             } else {
                 // 녹음 권한 거부
                 fatalError()
@@ -101,18 +103,28 @@ class RecordViewController: UIViewController {
         self.recordButton.setImage(image, for: .normal)
     }
     
+    private func passData(localUrl : URL) {
+        let data = try! Data(contentsOf: localUrl)
+        let totalTime = soundManager.totalPlayTime(date: date)
+        let duration = soundManager.convertTimeToString(totalTime)
+        let audioMetaData = AudioMetaData(title: date, duration: duration, url: urlString)
+        
+        firebaseStorageManager.uploadAudio(audioData: data, audioMetaData: audioMetaData)
+    }
+    
     // 녹음 시작 & 정지 컨트롤
     @objc private func control() {
         isStartRecording = !isStartRecording
         recordButtonToggle()
         
-        
         if isStartRecording { // 녹음 시작일 때
             soundManager.startRecord()
         } else { // 녹음 끝일 때
             soundManager.stopRecord()
-            firebaseStorageManager.uploadAudio(url: url, date: date)
-            soundManager.initializeSoundManager(url: url, type: .playBack)
+            
+            let localUrl = audioFileManager.getAudioFilePath(fileName: urlString)
+            passData(localUrl: localUrl)
+            soundManager.initializeSoundManager(url: localUrl, type: .playBack)
         }
     }
 }
@@ -159,10 +171,8 @@ extension RecordViewController: SoundButtonActionDelegate {
 }
 
 extension RecordViewController: Visualizerable {
-    func processAudioBuffer(buffer: AVAudioPCMBuffer) {
-
-        visualizer.processAudioData(buffer: buffer)
-        
-    }
     
+    func processAudioBuffer(buffer: AVAudioPCMBuffer) {
+        visualizer.processAudioData(buffer: buffer)
+    }
 }

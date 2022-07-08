@@ -7,15 +7,15 @@
 
 import Foundation
 
-class AudioData: Codable {
-    
+class AudioMetaData: Codable {
     var title: String
     var duration: String
+    var url: String
     
-    init(title: String, duration: String) {
+    init(title: String, duration: String, url: String) {
         self.title = title
         self.duration = duration
+        self.url = url
     }
-    
 }
 

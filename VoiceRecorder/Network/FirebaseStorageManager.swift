@@ -12,29 +12,27 @@ import UIKit
 class FirebaseStorageManager {
     
     private var baseReference: StorageReference!
-    private let soundManager = SoundManager()
     private let audioFileManager = AudioFileManager()
     
     init() {
         baseReference = Storage.storage().reference()
     }
     
-    func uploadAudio(url: URL, date: String) {
-        let title = date
-        let filePath = "\(title).caf"
-        let data = try! Data(contentsOf: url)
+    func uploadAudio(audioData: Data, audioMetaData: AudioMetaData) {
+        let title = audioMetaData.title
+        let duration = audioMetaData.duration
+        let filePath = audioMetaData.url
         
         let metaData = StorageMetadata()
-        let totalTime = soundManager.totalPlayTime(date: filePath)
-        let duration = soundManager.convertTimeToString(totalTime)
         let customData = [
             "title": title,
-            "duration": duration
+            "duration": duration,
+            "url": filePath
         ]
         metaData.customMetadata = customData
         metaData.contentType = "audio/x-caf"
         
-        baseReference.child(filePath).putData(data, metadata: metaData) { metaData, error in
+        baseReference.child(filePath).putData(audioData, metadata: metaData) { metaData, error in
             if let error = error {
                 print(error.localizedDescription)
                 return
@@ -50,7 +48,6 @@ class FirebaseStorageManager {
                 completion(url)
             }
         }
-        
     }
     
     func deleteAudio(urlString: String) {
@@ -77,24 +74,21 @@ class FirebaseStorageManager {
             if let error = error {
                 completion(.failure(error))
             }
+            
             guard let result = result else {
                 return
             }
-            completion(.success(result.items))
             
+            completion(.success(result.items))
         }
     }
     
     
     // TODO: - [AudioData] return
     // filePaths - array로 파라미터
-    func downloadMetaData(filePath: [StorageReference], completion: @escaping (Result<[AudioData], Error>) -> Void) {
-        var audioList = [AudioData]()
+    func downloadMetaData(filePath: [StorageReference], completion: @escaping (Result<[AudioMetaData], Error>) -> Void) {
+        var audioMetaDataList = [AudioMetaData]()
         for ref in filePath {
-            
-            
-            
-            
             
             baseReference.child(ref.name).getMetadata { metaData, error in
                 if let error = error {
@@ -105,18 +99,12 @@ class FirebaseStorageManager {
                 
                 let title = data?["title"] ?? ""
                 let duration = data?["duration"] ?? "00:00"
+                let url = data?["url"] ?? ""
                 
-                audioList.append(AudioData(title: title, duration: duration))
+                audioMetaDataList.append(AudioMetaData(title: title, duration: duration, url: url))
                 
-                completion(.success(audioList))
+                completion(.success(audioMetaDataList))
             }
-            
-            
-            
-            
-            
-            
         }
     }
-    
 }

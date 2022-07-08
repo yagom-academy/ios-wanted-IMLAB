@@ -118,7 +118,6 @@ class SoundManager {
     
     // MARK: - configure PlayerNode
     private func schedulePlayerNode() {
-        
         guard let file = audioFile, needFileSchedule else {
             return
         }
@@ -131,7 +130,6 @@ class SoundManager {
         }
         
         playerNode.installTap(onBus: 0, bufferSize: 1024, format: playerNode.outputFormat(forBus: 0)) { [unowned self] buffer, time in
-            
             guard var currentPosition = getCurrentFrame(lastRenderTime: time) else { return }
             currentPosition = specifyFrameStandard(frame: currentFrame + seekFrame, length: audioLengthSamples)
             
@@ -139,7 +137,6 @@ class SoundManager {
                 resetPlayer(edge: .end)
                 delegate?.audioPlayerCurrentStatus(isPlaying: isPlaying)
             }
-            
         }
     }
     
@@ -149,7 +146,6 @@ class SoundManager {
     }
     
     private func specifyFrameStandard(frame: AVAudioFramePosition, length: AVAudioFramePosition) -> AVAudioFramePosition {
-        
         var convertedFrame = frame
         
         convertedFrame = max(frame, 0)
@@ -159,7 +155,6 @@ class SoundManager {
     }
     
     func playNpause() {
-        
         if isPlaying {
             playerNode.pause()
         } else {
