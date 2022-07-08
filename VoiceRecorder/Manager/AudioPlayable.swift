@@ -179,12 +179,7 @@ class DefaultAudioPlayer: AudioManager, AudioPlayable {
                                  startingFrame: seekFrame,
                                  frameCount: frameCount,
                                  at: nil
-                ) { [unowned self] in
-                    
-                    if seekFrame >= audioLengthSamples {
-                        validateStopPlayBack(isSkip: isSkip)
-                    }
-                }
+                )
         }
         
         isSkip = false
