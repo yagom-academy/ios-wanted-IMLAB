@@ -85,8 +85,8 @@ class RecordedVoiceListViewController: UIViewController {
     }
     
     @objc func createNewVoiceRecordButtonAction() {
-        //let recorderVC = RecordViewController()
-        //self.present(recorderVC, animated: true)
+        let recorderVC = RecordViewController()
+        self.present(recorderVC, animated: true)
     }
 }
 
@@ -107,8 +107,14 @@ extension RecordedVoiceListViewController: UITableViewDataSource, UITableViewDel
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let voicePlayVC = VoicePlayingViewController()
-        let url = fileManager.getAudioFilePath(fileName: audioList[indexPath.item].title)
-        voicePlayVC.fetchRecordedDataFromMainVC(dataUrl: url)
+        voicePlayVC.setTitle(title: audioList[indexPath.item].title)
+        
+        let downloadUrl = audioList[indexPath.item].url
+        let localUrl = audioList[indexPath.item].url
+        let filePath = fileManager.getAudioFilePath(fileName: localUrl)
+        firestorageManager.downloadAudio(downloadUrl, to: filePath) { url in
+            voicePlayVC.fetchRecordedDataFromMainVC(dataUrl: filePath)
+        }
         self.present(voicePlayVC, animated: true)
     }
 
