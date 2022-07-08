@@ -15,7 +15,7 @@ final class HomeViewController: UIViewController {
         LoadingIndicator.showLoading()
         homeViewModel.reset()
         setFirebaseNetworkErrorHandler()
-        setDataBinding()
+        setData()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -29,29 +29,35 @@ final class HomeViewController: UIViewController {
         setTableView()
         setConstraints()
     }
-    
-
 }
 
 private extension HomeViewController {
     
     func setNavigationBar() {
         title = "Voice Memos"
-        let audioCreationButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didTapAddButton))
+        let audioCreationButton = UIBarButtonItem(
+            barButtonSystemItem: .add,
+            target: self,
+            action: #selector(addButtonDidTap))
         navigationItem.rightBarButtonItem = audioCreationButton
     }
     
-    @objc func didTapAddButton() {
+    @objc func addButtonDidTap() {
         let audioCreationViewController = CreateAudioViewController()
         navigationController?.pushViewController(audioCreationViewController, animated: true)
     }
     
     func setTableView(){
         let tableView = UITableView(frame: .zero, style: .plain)
-        tableView.register(HomeTableViewCell.self, forCellReuseIdentifier: HomeTableViewCell.id)
+        tableView.register(
+            HomeTableViewCell.self,
+            forCellReuseIdentifier: HomeTableViewCell.id)
         homeTableView = tableView
         homeTableView?.refreshControl = UIRefreshControl()
-        homeTableView?.refreshControl?.addTarget(self, action: #selector(pullToRefresh(_:)), for: .valueChanged)
+        homeTableView?.refreshControl?.addTarget(
+            self,
+            action: #selector(pullToRefresh(_:)),
+            for: .valueChanged)
         homeTableView?.translatesAutoresizingMaskIntoConstraints = false
         homeTableView?.delegate = self
         homeTableView?.dataSource = self
@@ -59,7 +65,7 @@ private extension HomeViewController {
     
     @objc func pullToRefresh(_ sender: Any) {
         homeViewModel.reset()
-        setDataBinding()
+        setData()
         homeTableView?.refreshControl?.endRefreshing()
     }
     
@@ -74,37 +80,46 @@ private extension HomeViewController {
         ])
     }
     
-    func setDataBinding() {
+    func setData() {
         let group = DispatchGroup()
-        DispatchQueue.global().async {
+        DispatchQueue.global().async { [weak self] in
             group.enter()
-            self.homeViewModel.fetchAudioTitles { isSucceed in
-                if isSucceed{
-                    group.leave()
-                }
+            self?.homeViewModel.fetchAudioTitles {
+                group.leave()
             }
             group.wait()
-            
             DispatchQueue.main.async {
-                self.homeTableView?.reloadData()
+                self?.homeTableView?.reloadData()
             }
-            
-            self.homeViewModel.fetchMetaData()
-       
-        
+            self?.homeViewModel.fetchMetaData{
+                self?.bindData()
+            }
+        }
+    }
+    
+    func bindData() {
         self.homeViewModel.audioData.values.forEach({
             $0.bind { [weak self] metadata in
                 DispatchQueue.main.async {
-                    guard let filename = metadata.filename, let index = self?.homeViewModel.audioTitles.firstIndex(of: filename) else {return}
-                    self?.homeTableView?.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+                    guard let filename = metadata.filename,
+                        let index = self?.homeViewModel.audioTitles.firstIndex(of: filename)
+                    else {
+                        return
+                    }
+                    self?.homeTableView?.reloadRows(
+                        at: [IndexPath(row: index, section: 0)],
+                        with: .automatic)
                 }
             }})
-        }
     }
     
     func setFirebaseNetworkErrorHandler() {
         self.homeViewModel.errorHandler = { error in
-            Alert.present(title: nil, message: error.localizedDescription, actions: .ok(nil), from: self)
+            Alert.present(
+                title: nil,
+                message: error.localizedDescription,
+                actions: .ok(nil),
+                from: self)
         }
     }
 }
@@ -112,9 +127,15 @@ private extension HomeViewController {
 
 extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.id) as? HomeTableViewCell else {return UITableViewCell()}
+    func tableView(
+        _ tableView: UITableView,
+        cellForRowAt indexPath: IndexPath
+        ) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: HomeTableViewCell.id) as? HomeTableViewCell
+        else {
+            return UITableViewCell()
+        }
         
         let model = homeViewModel[indexPath]
         cell.configure(model: model)
@@ -124,7 +145,6 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         homeViewModel.audioData.count
     }
-    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let data = homeViewModel[indexPath] else {return}
@@ -137,8 +157,10 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
         }
     }
     
-    
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(
+        _ tableView: UITableView,
+        commit editingStyle: UITableViewCell.EditingStyle,
+        forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             homeViewModel.remove(indexPath: indexPath){ isRemoved in
                 if isRemoved{

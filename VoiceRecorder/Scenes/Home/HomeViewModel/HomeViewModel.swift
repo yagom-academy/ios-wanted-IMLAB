@@ -8,12 +8,27 @@
 import Foundation
 
 final class HomeViewModel {
-    
-    private (set) var audioTitles: [String] = []
+
+    private (set) var audioTitles: [String] = [] {
+        didSet{
+            self.audioTitles.forEach({
+                self.audioData.updateValue(
+                    Observable<AudioPresentation>(
+                        AudioPresentation(
+                            filename: nil,
+                            createdDate: nil,
+                            length: nil)),forKey: $0)
+            })
+        }
+    }
     private var audioPresentation: [AudioPresentation] = []
     private (set) var audioData: [String: Observable<AudioPresentation>] = [:]
-    //private var networkService: FirebaseService = FirebaseService()
+    private var networkService: NetworkServiceable
     var errorHandler : ((Error) -> Void)?
+    
+    init(networkSerivce: NetworkServiceable = Firebase()) {
+        self.networkService = networkSerivce
+    }
     
     subscript(_ indexPath: IndexPath) -> AudioPresentation? {
         guard !audioTitles.isEmpty else {return nil}
@@ -22,31 +37,28 @@ final class HomeViewModel {
         return data
     }
     
-    func fetchAudioTitles(completion: @escaping (Bool) -> Void) {
-        FirebaseService.fetchAll { [weak self] result in
+    func fetchAudioTitles(completion: @escaping () -> Void) {
+        networkService.fetchAll { [weak self] result in
             switch result {
             case .success(let data):
-                data.items.forEach({
-                    self?.audioTitles.append($0.name)
-                    self?.audioData.updateValue(Observable<AudioPresentation>(AudioPresentation(filename: nil, createdDate: nil, length: nil)), forKey: $0.name)
-                })
-                completion(true)
+                self?.audioTitles = data
+                completion()
             case .failure(let error):
                 self?.errorHandler?(error)
             }
         }
     }
     
-    func fetchMetaData(){
+    func fetchMetaData(completion: @escaping () -> Void){
         let group = DispatchGroup()
         DispatchQueue.global().async {
             self.audioTitles.forEach({
                 group.enter()
                 let endPoint = EndPoint(fileName: $0)
-                FirebaseService.featchMetaData(endPoint: endPoint) {[weak self] result in
+                self.networkService.featchMetaData(endPoint: endPoint) {[weak self] result in
                     switch result {
                     case .success(let metadata):
-                        self?.audioPresentation.append(metadata.toDomain())
+                        self?.audioPresentation.append(metadata)
                     case .failure(let error):
                         self?.errorHandler?(error)
                     }
@@ -55,27 +67,37 @@ final class HomeViewModel {
             })
             group.notify(queue: .main) {
                 self.sortByDate()
+                completion()
             }
         }
     }
     
     func sortByDate() {
             self.audioTitles = self.audioTitles.sorted(by: { (val1, val2) in
-                guard let index1 = self.audioPresentation.firstIndex(where: {$0.filename == val1}) else {return false}
-                guard let index2 = self.audioPresentation.firstIndex(where: {$0.filename == val2}) else {return false}
-                return self.audioPresentation[index1].createdDate?.compare(self.audioPresentation[index2].createdDate ?? Date()) == .orderedDescending
+                guard let index1 = self.audioPresentation.firstIndex(where: {$0.filename == val1})
+                else {
+                    return false
+                }
+                guard let index2 = self.audioPresentation.firstIndex(where: {$0.filename == val2})
+                else {
+                    return false
+                }
+                return self.audioPresentation[index1].createdDate?.compare(
+                    self.audioPresentation[index2].createdDate ?? Date()) == .orderedDescending
             })
             self.audioTitles.forEach({ title in
-                guard let index = audioPresentation.firstIndex(where: {$0.filename == title})  else {return}
+                guard let index = audioPresentation.firstIndex(
+                    where: {$0.filename == title})  else {return}
                 self.audioData[title]?.value = audioPresentation[index]
             })
-
     }
     
-    func enquireForURL(_ audioRepresentation: AudioPresentation, completion: @escaping (URL?) -> Void) {
+    func enquireForURL(
+        _ audioRepresentation: AudioPresentation,
+        completion: @escaping (URL?) -> Void) {
         guard let fileName = audioRepresentation.filename else {return}
         let endPoint = EndPoint(fileName: fileName)
-        FirebaseService.makeURL(endPoint: endPoint) { result in
+        networkService.makeURL(endPoint: endPoint) { result in
             switch result {
             case .success(let url):
                 completion(url)
@@ -88,7 +110,7 @@ final class HomeViewModel {
     func remove(indexPath: IndexPath, completion: @escaping (Bool) -> Void) {
         let title = audioTitles[indexPath.item]
         let audioInfo = AudioInfo(id: title, data: nil, metadata: nil)
-        FirebaseService.delete(audio: audioInfo) { [weak self] error in
+        networkService.delete(audio: audioInfo) { [weak self] error in
             if let error = error as? NSError {
                 print(error)
                 completion(false)
