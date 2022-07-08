@@ -45,16 +45,15 @@ class SoundManager {
     private var audioFile: AVAudioFile!
     
     private let engine = AVAudioEngine()
+    private lazy var inputNode = engine.inputNode
+    private let mixerNode = AVAudioMixerNode()
     
+    var frequency: Float = 40000
     private let eqNode = AVAudioUnitEQ(numberOfBands: 1)
     private lazy var eqFilterParameters: AVAudioUnitEQFilterParameters = eqNode.bands[0] as AVAudioUnitEQFilterParameters
-    private var frequency: Float = 2000
     
     private let playerNode = AVAudioPlayerNode()
     private let pitchControl = AVAudioUnitTimePitch()
-    
-    private lazy var inputNode = engine.inputNode
-    private let mixerNode = AVAudioMixerNode()
     
     private var audioSampleRate: Double = 0
     private var audioPlayDuration: Double = 0
@@ -126,7 +125,6 @@ class SoundManager {
         }
         needFileSchedule = false
         seekFrame = 0
-        
         
         playerNode.scheduleFile(file, at: nil) { [self] in
             self.needFileSchedule = true
@@ -243,10 +241,10 @@ class SoundManager {
         resetPlayer(edge: .end)
     }
     
-    
     func removeTap() {
         playerNode.removeTap(onBus: 0)
     }
+    
     func changePitchValue(value: Float) {
         self.pitchControl.pitch = value * 2
     }
@@ -263,16 +261,16 @@ class SoundManager {
 
 extension SoundManager {
     
+    // MARK: - Set Engine
     func configureRecordEngine() {
-        
-        let outputFormat = inputNode.outputFormat(forBus: 0)
+        let format = inputNode.outputFormat(forBus: 0)
         mixerNode.volume = 0
         
         engine.attach(mixerNode)
         engine.attach(eqNode)
         
-        engine.connect(inputNode, to: mixerNode, format: outputFormat)
-        engine.connect(mixerNode, to: eqNode, format: outputFormat)
+        engine.connect(inputNode, to: eqNode, format: format)
+        engine.connect(eqNode, to: mixerNode, format: format)
     }
     
     
@@ -292,12 +290,9 @@ extension SoundManager {
     }
     
     func startRecord() {
-        engine.reset()
         isEnginePrepared = true
         
         let format = inputNode.outputFormat(forBus: 0)
-        
-        setFrequency()
         
         do {
             audioFile = try createAudioFile(filePath: fileUrl)
@@ -305,8 +300,9 @@ extension SoundManager {
             fatalError()
         }
         
-        inputNode.installTap(onBus: 0, bufferSize: 4096, format: format) { buffer, time in
+        mixerNode.installTap(onBus: 0, bufferSize: 4096, format: format) { buffer, time in
             do {
+                self.setFrequency()
                 try self.audioFile.write(from: buffer)
                 self.visualDelegate.processAudioBuffer(buffer: buffer)
             } catch {
@@ -320,8 +316,9 @@ extension SoundManager {
             fatalError()
         }
     }
+    
     func stopRecord() {
-        inputNode.removeTap(onBus: 0)
+        mixerNode.removeTap(onBus: 0)
         engine.stop()
         isEnginePrepared = false
     }
