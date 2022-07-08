@@ -39,6 +39,10 @@ class SoundManager {
     
     private let engine = AVAudioEngine()
     
+    private let eqNode = AVAudioUnitEQ(numberOfBands: 1)
+    private lazy var eqFilterParameters: AVAudioUnitEQFilterParameters = eqNode.bands[0] as AVAudioUnitEQFilterParameters
+    private var frequency: Float = 2000
+    
     private let playerNode = AVAudioPlayerNode()
     private let pitchControl = AVAudioUnitTimePitch()
     
@@ -95,7 +99,6 @@ class SoundManager {
             print("파일 초기화 에러")
             delegate?.audioFileInitializeErrorHandler(error: error)
         }
-        
     }
     
     // MARK: - Set Engine
@@ -270,7 +273,10 @@ extension SoundManager {
         mixerNode.volume = 0
         
         engine.attach(mixerNode)
+        engine.attach(eqNode)
+        
         engine.connect(inputNode, to: mixerNode, format: format)
+        engine.connect(mixerNode, to: eqNode, format: format)
     }
     
     
@@ -282,11 +288,19 @@ extension SoundManager {
     private func getAudioFile(filePath: URL) throws -> AVAudioFile {
         return try AVAudioFile(forReading: filePath)
     }
+    
+    private func setFrequency() {
+        eqFilterParameters.filterType = .bandPass
+        eqFilterParameters.bypass = false
+        eqFilterParameters.frequency = frequency
+    }
+    
     func startRecord(filePath: URL) {
         engine.reset()
         
         let format = inputNode.outputFormat(forBus: 0)
         configureRecordEngine(format: format)
+        setFrequency()
         
         do {
             audioFile = try createAudioFile(filePath: filePath)
@@ -294,11 +308,10 @@ extension SoundManager {
             fatalError()
         }
         
-        mixerNode.installTap(onBus: 0, bufferSize: 4096, format: format) { [self] buffer, time in
+        inputNode.installTap(onBus: 0, bufferSize: 4096, format: format) { buffer, time in
             do {
-       
                 try self.audioFile.write(from: buffer)
-                visualDelegate.processAudioBuffer(buffer: buffer)
+                self.visualDelegate.processAudioBuffer(buffer: buffer)
             } catch {
                 print("[error] : startRecord")
             }
@@ -311,7 +324,7 @@ extension SoundManager {
         }
     }
     func stopRecord() {
-        mixerNode.removeTap(onBus: 0)
+        inputNode.removeTap(onBus: 0)
         
         engine.stop()
     }
@@ -319,6 +332,7 @@ extension SoundManager {
     func play() {
         try! engine.start()
         playerNode.play()
+        print(eqFilterParameters.frequency, "frequency")
     }
     
     func pause() {

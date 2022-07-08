@@ -48,6 +48,10 @@ class RecordViewController: UIViewController {
         recordButton.addTarget(self, action: #selector(control), for: .touchUpInside)
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        NotificationCenter.default.post(name: .dismissVC, object: nil)
+    }
+    
     func setLayout() {
         view.backgroundColor = .white
         
@@ -77,15 +81,6 @@ class RecordViewController: UIViewController {
         ])
     }
     
-    func recordButtonToggle() {
-        let largeConfig = UIImage.SymbolConfiguration(pointSize: 50, weight: .regular, scale: .large)
-        let largeRecordImage = UIImage(systemName: "circle.fill", withConfiguration: largeConfig)
-        let largePauseImage = UIImage(systemName: "square.circle", withConfiguration: largeConfig)
-        
-        let image = self.isStartRecording ? largePauseImage : largeRecordImage
-        self.recordButton.setImage(image, for: .normal)
-    }
-    
     func setAudio() {
         requestMicrophoneAccess { [weak self] allowed in
             if allowed {
@@ -97,6 +92,15 @@ class RecordViewController: UIViewController {
                 fatalError()
             }
         }
+    }
+    
+    func recordButtonToggle() {
+        let largeConfig = UIImage.SymbolConfiguration(pointSize: 50, weight: .regular, scale: .large)
+        let largeRecordImage = UIImage(systemName: "circle.fill", withConfiguration: largeConfig)
+        let largePauseImage = UIImage(systemName: "square.circle", withConfiguration: largeConfig)
+        
+        let image = self.isStartRecording ? largePauseImage : largeRecordImage
+        self.recordButton.setImage(image, for: .normal)
     }
     
     // 녹음 시작 & 정지 컨트롤

@@ -28,14 +28,20 @@ class RecordedVoiceListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        initalizeFirebaseAudioFiles()
+        initializeFirebaseAudioFiles()
+        sortAudioFiles()
         setNavgationBarProperties()
         configureRecordedVoiceListLayout()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("view Will Appear")
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(dismissNotification(notification:)), name: .dismissVC, object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: .dismissVC, object: nil)
     }
     
     func setNavgationBarProperties() {
@@ -72,7 +78,9 @@ class RecordedVoiceListViewController: UIViewController {
         ])
     }
     
-    func initalizeFirebaseAudioFiles() {
+    func initializeFirebaseAudioFiles() {
+        self.audioList.removeAll()
+        
         firestorageManager.downloadAll { result in
             switch result {
             case .success(let data) :
@@ -84,9 +92,23 @@ class RecordedVoiceListViewController: UIViewController {
         }
     }
     
+    func sortAudioFiles() {
+        audioList.sort { data1, data2 in
+            return data1.title > data2.title
+        }
+    }
+    
     @objc func createNewVoiceRecordButtonAction() {
         let recorderVC = RecordViewController()
         self.present(recorderVC, animated: true)
+    }
+    
+    @objc func dismissNotification(notification: NSNotification) {
+        initializeFirebaseAudioFiles()
+        
+        OperationQueue.main.addOperation {
+            self.recordedVoiceTableView.reloadData()
+        }
     }
 }
 
@@ -99,6 +121,7 @@ extension RecordedVoiceListViewController: UITableViewDataSource, UITableViewDel
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = recordedVoiceTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! RecordedVoiceTableViewCell
         
+        sortAudioFiles()
         cell.setTableViewCellLayout()
         cell.fetchAudioLabelData(data: audioList[indexPath.row])
         
