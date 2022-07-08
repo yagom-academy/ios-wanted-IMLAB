@@ -11,7 +11,7 @@
      4. [사용한 Pattern 소개](#사용한-Pattern-소개)
         - [Coordinator Pattern](#Coordinator-Pattern)
         - [Observer Pattern](#Observer-Pattern)
-     5. 객체 역할 소개
+     5. [객체 역할 소개](#객체-역할-소개)
         - [View 관련](#View-관련)
         - [Manger 관련](#Manger-관련)
      6. [Project UML](#Project-UML)
@@ -154,6 +154,7 @@
 <p float="left">
   <img src= "./images/uml.png" width="1000" />
 </p>
+
 # 고민한 부분
 
 ## Downey
