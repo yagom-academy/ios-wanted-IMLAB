@@ -39,7 +39,7 @@ class PlayerManager: PlayerService {
     private var audioFile: AVAudioFile?
     private var audioPlayer = AVAudioPlayerNode()
 
-    private let audioEngine = AVAudioEngine()
+    private var audioEngine = AVAudioEngine()
     private let pitchControl = AVAudioUnitTimePitch()
     private let speedControl = AVAudioUnitVarispeed()
 
@@ -58,6 +58,7 @@ class PlayerManager: PlayerService {
         guard let audioFile = audioFile else {
             return
         }
+        resetAudio()
         self.audioFile = audioFile
 
         configureAudioEngine()
@@ -269,7 +270,7 @@ class PlayerManager: PlayerService {
     func checkIsFinished() -> Bool {
         guard let nodeTime: AVAudioTime = audioPlayer.lastRenderTime,
               let playerTime: AVAudioTime = audioPlayer.playerTime(forNodeTime: nodeTime) else {
-            return true
+            return false
         }
 
         let currentSeconds = Double(Double(playerTime.sampleTime) / playerTime.sampleRate) + (Double(currentPosition) / audioSampleRate)

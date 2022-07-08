@@ -81,6 +81,7 @@ class RecordManager: RecordService {
 
     func startRecord() {
         audioFile = nil
+        totalWaveData = [Int]()
         
         let numberOfSamples = waveForms.count
 
