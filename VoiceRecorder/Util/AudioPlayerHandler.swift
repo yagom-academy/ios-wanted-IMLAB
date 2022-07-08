@@ -48,7 +48,7 @@ class AudioPlayerHandler {
         setUpDisplayLink()
     }
     
-    func selectAudioFile(_ fileName: String?,_ isRecordFile : Bool = false) {
+    func selectPlayFile(_ fileName: String?,_ isRecordFile : Bool = false) {
         if fileName == nil {
             let latestRecordFileName = localFileHandler.getLatestFileName()
             let latestRecordFileURL = localFileHandler.localFileURL.appendingPathComponent(latestRecordFileName)
@@ -104,13 +104,7 @@ class AudioPlayerHandler {
         audioEngine.connect(audioPlayerNode, to: audioUnitTimePitch, format: audioFile.processingFormat)
         audioEngine.connect(audioUnitTimePitch, to: audioEngine.outputNode, format: audioFile.processingFormat)
         audioEngine.connect(audioUnitTimePitch, to: audioEngine.mainMixerNode, format: buffer.format)
-        
-        //        audioEngine.attach(audioUnitTimePitch)
-        
-        //        audioEngine.connect(audioPlayerNode, to: audioUnitTimePitch, format: audioFile.processingFormat)
-        //        audioEngine.connect(audioUnitTimePitch, to: audioEngine.outputNode, format: audioFile.processingFormat)
-        
-        //        audioPlayerNode.volume = 5.0
+ 
         audioPlayerNode.stop()
         audioPlayerNode.scheduleFile(audioFile, at: nil)
         

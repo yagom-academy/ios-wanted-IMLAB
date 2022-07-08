@@ -14,18 +14,6 @@ class AudioRecoderHandler {
     var localFileHandler : LocalFileProtocol
     var timeHandler : TimeProtocol
     var fileName: String?
-    var recordTime : String?
-    
-    enum Recordingstate {
-        case recording
-        case paused
-        case stopped
-    }
-    
-    private var audioEngine : AVAudioEngine!
-    private var mixerNode : AVAudioMixerNode!
-    private var equalizer : AVAudioUnitEQ!
-    private var state : Recordingstate = .stopped
     
     init(localFileHandler : LocalFileProtocol, timeHandler : TimeProtocol ){
         self.localFileHandler = localFileHandler
@@ -52,6 +40,10 @@ class AudioRecoderHandler {
             print(error.localizedDescription)
         }
     }
+    
+    private var mixerNode : AVAudioMixerNode!
+    private var audioEngine : AVAudioEngine!
+    private var equalizer : AVAudioUnitEQ!
     
     private func setupEngine() {
         audioEngine = AVAudioEngine()

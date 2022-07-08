@@ -49,7 +49,10 @@ class VoiceMemoListViewController: UIViewController, FinishRecord {
             switch result {
             case .success(let fileList) :
                 var count = 0
-                if fileList.count == 0 { return }
+                if fileList.count == 0 {
+                    self.loadingView.isLoading = false
+                    self.navigationController?.navigationBar.isHidden = false
+                    return }
                 for fileName in fileList {
                     FirebaseStorage.shared.getFileMetaData(fileName: fileName) { result in
                         switch result {
