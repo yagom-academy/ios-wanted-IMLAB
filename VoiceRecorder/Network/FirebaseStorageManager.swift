@@ -61,7 +61,6 @@ class FirebaseStorageManager {
         }
     }
     
-    
     func downloadAllRef(completion: @escaping (Result<[StorageReference], Error>) -> Void) {
         baseReference.listAll { result, error in
             if let error = error {

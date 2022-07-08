@@ -28,6 +28,7 @@ class RecordedVoiceListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        fileManager.delegate = self
         initializeFirebaseAudioFiles()
         setNavgationBarProperties()
         configureRecordedVoiceListLayout()
@@ -109,8 +110,8 @@ class RecordedVoiceListViewController: UIViewController {
     
     // TODO: - local에서 추가
     @objc func dismissNotification(notification: NSNotification) {
-        // 파일 추가
-        
+        audioMetaDataList.removeAll()
+        initializeFirebaseAudioFiles()
     }
 }
 
@@ -153,7 +154,8 @@ extension RecordedVoiceListViewController: UITableViewDataSource, UITableViewDel
     }
 }
 
-extension RecordViewController: FileStatusReceivable {
+extension RecordedVoiceListViewController: FileStatusReceivable {
+    
     func fileManager(_ fileManager: FileManager, error: FileError) {
         let alert = UIAlertController(title: "파일 에러", message: error.rawValue, preferredStyle: .alert)
         let okAction = UIAlertAction(title: "확인", style: .default)
