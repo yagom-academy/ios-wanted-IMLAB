@@ -4,6 +4,7 @@
 //
 
 import UIKit
+import AVKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -18,6 +19,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.rootViewController = mainVC
         window?.makeKeyAndVisible()
         
+    }
+    
+    func setAudioSession() {
+        try? AVAudioSession.sharedInstance().setCategory(.playAndRecord)
+        try? AVAudioSession.sharedInstance().setActive(true)
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

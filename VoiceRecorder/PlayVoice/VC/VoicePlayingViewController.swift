@@ -56,6 +56,26 @@ class VoicePlayingViewController: UIViewController {
         view.delegate = self
         return view
     }()
+//    
+//    init() {
+//        super.init(frame: CGRectZero, style: UITableViewStyle.Plain)
+//        initialize()
+//    }
+//    required init(coder aDecoder: NSCoder) {
+//        super.init(coder: aDecoder)
+//        initialize()
+//    }
+//    
+//    init(frame: CGRect) {
+//        super.init(frame: frame, style: UITableViewStyle.Plain)
+//        initialize()
+//    }
+//    
+//    override init(frame: CGRect, style: UITableViewStyle) {
+//        super.init(frame: frame, style: style)
+//        initialize()
+//    }
+//    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -119,19 +139,19 @@ class VoicePlayingViewController: UIViewController {
             pitchSegmentController.bottomAnchor.constraint(equalTo: playControlView.topAnchor,constant: -20),
             pitchSegmentController.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             pitchSegmentController.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.9),
-        
+            
         ])
         
     }
     
     func setTitle(title: String) {
-          recordedVoiceTitle.text = title
-      }
-      
-      func fetchRecordedDataFromMainVC(dataUrl: URL) {
-          setSoundManager()
-          soundManager.initializeSoundManager(url: dataUrl, type: .playBack)
-      }
+        recordedVoiceTitle.text = title
+    }
+    
+    func fetchRecordedDataFromMainVC(dataUrl: URL) {
+        setSoundManager()
+        soundManager.initializeSoundManager(url: dataUrl, type: .playBack)
+    }
     
     func setSoundManager() {
         soundManager = SoundManager()
@@ -157,7 +177,6 @@ class VoicePlayingViewController: UIViewController {
         } else {
             soundManager.changePitchValue(value: -150)
         }
-        
     }
 }
 
@@ -169,17 +188,17 @@ extension VoicePlayingViewController: SoundButtonActionDelegate {
     }
     
     func backwardButtonTouchUpinside(sender: UIButton) {
-        soundManager.skip(forwards: false)
+        soundManager.skip(isForwards: false)
     }
     
     func forwardTouchUpinside(sender: UIButton) {
-        soundManager.skip(forwards: true)
+        soundManager.skip(isForwards: true)
     }
 }
 
 
 // MARK: - SoundeManager Delegate
-extension VoicePlayingViewController: ReceiveSoundManagerStatus {
+extension VoicePlayingViewController: SoundManagerStatusReceivable {
     func audioPlayerCurrentStatus(isPlaying: Bool) {
         soundManager.removeTap()
         DispatchQueue.main.async {
