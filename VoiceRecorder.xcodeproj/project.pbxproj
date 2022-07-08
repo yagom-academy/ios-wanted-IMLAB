@@ -31,6 +31,7 @@
 		C7B118C72876F8FD00DA4C73 /* Extension_TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B118C62876F8FD00DA4C73 /* Extension_TimeInterval.swift */; };
 		C7B118C92876F91F00DA4C73 /* Extension_String.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B118C82876F91F00DA4C73 /* Extension_String.swift */; };
 		C7B118CB2876F96100DA4C73 /* Extension_Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B118CA2876F96100DA4C73 /* Extension_Image.swift */; };
+		C7B118E22878108A00DA4C73 /* DeletePopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B118E12878108A00DA4C73 /* DeletePopupView.swift */; };
 		DE15E65C28604278003DD2F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65B28604278003DD2F5 /* AppDelegate.swift */; };
 		DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE15E65D28604278003DD2F5 /* SceneDelegate.swift */; };
 		DE15E66328604278003DD2F5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66128604278003DD2F5 /* Main.storyboard */; };
@@ -64,6 +65,7 @@
 		C7B118C62876F8FD00DA4C73 /* Extension_TimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension_TimeInterval.swift; sourceTree = "<group>"; };
 		C7B118C82876F91F00DA4C73 /* Extension_String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension_String.swift; sourceTree = "<group>"; };
 		C7B118CA2876F96100DA4C73 /* Extension_Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension_Image.swift; sourceTree = "<group>"; };
+		C7B118E12878108A00DA4C73 /* DeletePopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletePopupView.swift; sourceTree = "<group>"; };
 		DE15E65828604278003DD2F5 /* VoiceRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE15E65B28604278003DD2F5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DE15E65D28604278003DD2F5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 				9F6E7F82287511C50096DE3B /* WaveFormImageView.swift */,
 				9F6E7F84287512210096DE3B /* VerticalLineView.swift */,
 				9F6E7F862875869D0096DE3B /* TimeLabel.swift */,
+				C7B118E12878108A00DA4C73 /* DeletePopupView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -344,6 +347,7 @@
 				9F25234328699DB4008A9819 /* RecordVoiceViewController.swift in Sources */,
 				C730AA9A286BEB9C0004D11C /* RecordFile.swift in Sources */,
 				9FA3152428703D280080E484 /* AudioSessionManager.swift in Sources */,
+				C7B118E22878108A00DA4C73 /* DeletePopupView.swift in Sources */,
 				9F6E7F872875869D0096DE3B /* TimeLabel.swift in Sources */,
 				C7B118C92876F91F00DA4C73 /* Extension_String.swift in Sources */,
 				C77F4C2D2869925900B2646E /* VoiceRecordTableViewCell.swift in Sources */,

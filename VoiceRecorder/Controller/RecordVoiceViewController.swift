@@ -314,7 +314,9 @@ class RecordVoiceViewController: UIViewController {
 extension RecordVoiceViewController : DrawWaveFormManagerDelegate {
     
     func moveWaveFormView(_ step: CGFloat) {
-        self.waveFormCanvasView.transform = CGAffineTransform(translationX: -step, y: 0)
+        UIView.animate(withDuration: 1/14, animations: {
+            self.waveFormCanvasView.transform = CGAffineTransform(translationX: -step, y: 0)
+        })
     }
     
     func resetWaveFormView() {

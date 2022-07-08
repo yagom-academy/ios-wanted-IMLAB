@@ -9,6 +9,12 @@ import UIKit
 
 class VoiceRecorderListTableViewController: UITableViewController {
 
+    var statusView : DeletePopupView = {
+        let statusView = DeletePopupView()
+        statusView.translatesAutoresizingMaskIntoConstraints = false
+        return statusView
+    }()
+    
     var addButton: UIBarButtonItem = {
         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action:nil)
         return addButton
@@ -89,7 +95,20 @@ class VoiceRecorderListTableViewController: UITableViewController {
         if editingStyle == .delete {
             self.firebaseStorageManger.deleteRecord(fileName : voiceRecodeFile.fileName, fileLength: voiceRecodeFile.fileLength) {
                 self.updateTableViewList()
+                self.statusView.completeDelete(){
+                    self.view.viewWithTag(102)?.removeFromSuperview()
+                }
+                
             }
+            view.addSubview(statusView)
+            statusView.tag = 102
+            print(statusView.bounds.height)
+            statusView.showView()
+            NSLayoutConstraint.activate([
+                statusView.topAnchor.constraint(equalTo:view.safeAreaLayoutGuide.topAnchor),
+                statusView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+                statusView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            ])
         }
     }
     
