@@ -27,6 +27,12 @@ class RecordViewController: UIViewController {
         return button
     }()
     
+    private var visualizer: AudioVisualizeView = {
+        var visualizer = AudioVisualizeView()
+        visualizer.translatesAutoresizingMaskIntoConstraints = false
+        return visualizer
+    }()
+    
     private lazy var playControlView: PlayControlView = {
         var view = PlayControlView()
         view.delegate = self
@@ -38,7 +44,7 @@ class RecordViewController: UIViewController {
         
         setLayout()
         setAudio()
-        
+        soundManager.visualDelegate = self
         recordButton.addTarget(self, action: #selector(control), for: .touchUpInside)
     }
     
@@ -54,8 +60,15 @@ class RecordViewController: UIViewController {
         
         view.addSubview(recordButton)
         view.addSubview(playControlView)
+        view.addSubview(visualizer)
         
         NSLayoutConstraint.activate([
+            
+            visualizer.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            visualizer.centerYAnchor.constraint(equalTo: view.centerYAnchor).constraintWithMultiplier(0.5),
+            visualizer.heightAnchor.constraint(equalToConstant: 200),
+            visualizer.widthAnchor.constraint(equalTo: view.widthAnchor),
+            
             recordButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             recordButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),
             recordButton.widthAnchor.constraint(equalToConstant: 80),
@@ -67,7 +80,7 @@ class RecordViewController: UIViewController {
             playControlView.heightAnchor.constraint(equalToConstant: 100)
         ])
     }
-
+    
     func setAudio() {
         requestMicrophoneAccess { [weak self] allowed in
             if allowed {
@@ -101,7 +114,7 @@ class RecordViewController: UIViewController {
         } else { // 녹음 끝일 때
             soundManager.stopRecord()
             firebaseStorageManager.uploadAudio(url: url, date: date)
-            soundManager.initializedEngine(url: url)
+            soundManager.initializeSoundManager(url: url, type: .playBack)
         }
     }
 }
@@ -133,20 +146,25 @@ extension RecordViewController {
 extension RecordViewController: SoundButtonActionDelegate {
     
     func playButtonTouchUpinside(sender: UIButton) {
-        if sender.isSelected {
-            soundManager.pause()
-        } else {
-            DispatchQueue.main.async {
-                self.soundManager.play()
-            }
-        }
+        self.soundManager.playNpause()
     }
     
     func backwardButtonTouchUpinside(sender: UIButton) {
         print("backwardButton Clicked")
+        soundManager.skip(forwards: false)
     }
     
     func forwardTouchUpinside(sender: UIButton) {
         print("forwardButton Clicked")
+        soundManager.skip(forwards: true)
     }
+}
+
+extension RecordViewController: Visualizerable {
+    func processAudioBuffer(buffer: AVAudioPCMBuffer) {
+
+        visualizer.processAudioData(buffer: buffer)
+        
+    }
+    
 }

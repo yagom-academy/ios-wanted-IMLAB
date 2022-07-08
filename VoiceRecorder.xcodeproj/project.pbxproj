@@ -18,6 +18,8 @@
 		F00A2C91286BE36800ED57A8 /* VoicePlayingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00A2C90286BE36800ED57A8 /* VoicePlayingViewController.swift */; };
 		F00A2C94286BE8E400ED57A8 /* NSLayoutConstraint+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00A2C93286BE8E400ED57A8 /* NSLayoutConstraint+extension.swift */; };
 		F00A2C98286BEF6C00ED57A8 /* PlayControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00A2C97286BEF6C00ED57A8 /* PlayControlView.swift */; };
+		F018C29D2877FB6000D7C9BE /* AudioVisualizeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F018C29C2877FB6000D7C9BE /* AudioVisualizeView.swift */; };
+		F018C2A12877FC7900D7C9BE /* AudioPlotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F018C2A02877FC7900D7C9BE /* AudioPlotView.swift */; };
 		F06B92492870572400A704AF /* RecordedVoiceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06B92482870572400A704AF /* RecordedVoiceListViewController.swift */; };
 		F06B924D2870575A00A704AF /* RecordedVoiceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06B924C2870575A00A704AF /* RecordedVoiceTableViewCell.swift */; };
 		F06B92562872A07C00A704AF /* FireStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06B92542872A07C00A704AF /* FireStorageService.swift */; };
@@ -44,6 +46,8 @@
 		F00A2C90286BE36800ED57A8 /* VoicePlayingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoicePlayingViewController.swift; sourceTree = "<group>"; };
 		F00A2C93286BE8E400ED57A8 /* NSLayoutConstraint+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSLayoutConstraint+extension.swift"; sourceTree = "<group>"; };
 		F00A2C97286BEF6C00ED57A8 /* PlayControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayControlView.swift; sourceTree = "<group>"; };
+		F018C29C2877FB6000D7C9BE /* AudioVisualizeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioVisualizeView.swift; sourceTree = "<group>"; };
+		F018C2A02877FC7900D7C9BE /* AudioPlotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlotView.swift; sourceTree = "<group>"; };
 		F06B92482870572400A704AF /* RecordedVoiceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordedVoiceListViewController.swift; sourceTree = "<group>"; };
 		F06B924C2870575A00A704AF /* RecordedVoiceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordedVoiceTableViewCell.swift; sourceTree = "<group>"; };
 		F06B92542872A07C00A704AF /* FireStorageService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FireStorageService.swift; sourceTree = "<group>"; };
@@ -104,6 +108,7 @@
 		DE15E65A28604278003DD2F5 /* VoiceRecorder */ = {
 			isa = PBXGroup;
 			children = (
+				F018C29B2877FB4700D7C9BE /* Visualizer */,
 				F06B925B2872BA4D00A704AF /* Model */,
 				F06B92582872A66C00A704AF /* FileManager */,
 				F06B92532872A06000A704AF /* Network */,
@@ -158,6 +163,15 @@
 				F00A2C90286BE36800ED57A8 /* VoicePlayingViewController.swift */,
 			);
 			path = VC;
+			sourceTree = "<group>";
+		};
+		F018C29B2877FB4700D7C9BE /* Visualizer */ = {
+			isa = PBXGroup;
+			children = (
+				F018C29C2877FB6000D7C9BE /* AudioVisualizeView.swift */,
+				F018C2A02877FC7900D7C9BE /* AudioPlotView.swift */,
+			);
+			path = Visualizer;
 			sourceTree = "<group>";
 		};
 		F06B9247287056F500A704AF /* VoiceList */ = {
@@ -308,6 +322,8 @@
 				DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */,
 				F06B92572872A07C00A704AF /* FirebaseStorageManager.swift in Sources */,
 				F06B924D2870575A00A704AF /* RecordedVoiceTableViewCell.swift in Sources */,
+				F018C2A12877FC7900D7C9BE /* AudioPlotView.swift in Sources */,
+				F018C29D2877FB6000D7C9BE /* AudioVisualizeView.swift in Sources */,
 				F06B92562872A07C00A704AF /* FireStorageService.swift in Sources */,
 				F0D766F3286C4A38008A469F /* AVAudioPlayerNode+extension.swift in Sources */,
 				68E116D92872B82B00E962FD /* RecordViewController.swift in Sources */,
@@ -451,7 +467,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 4YMA7W8T46;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VoiceRecorder/Info.plist;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Microphone permission is requried to record audio";
@@ -480,7 +496,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 4YMA7W8T46;
+				DEVELOPMENT_TEAM = QA5P85RJWN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VoiceRecorder/Info.plist;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Microphone permission is requried to record audio";
@@ -494,7 +510,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = net.yagom.VoiceRecorder;
+				PRODUCT_BUNDLE_IDENTIFIER = net.YaggomVoiceRecorder;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

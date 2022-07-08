@@ -1,9 +1,3 @@
-//
-//  VoicePlayingViewController.swift
-//  VoiceRecorder
-//
-//  Created by 신의연 on 2022/06/29.
-//
 
 import UIKit
 import AVFoundation
@@ -11,39 +5,44 @@ import AVKit
 
 class VoicePlayingViewController: UIViewController {
     
-    var soundManager: SoundManager!
+    private var soundManager: SoundManager!
     
-    // title Label
-    private lazy var recordedVoiceTitle: UILabel = {
+    private var recordedVoiceTitle: UILabel = {
         var label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 20)
         label.textAlignment = .center
         label.text = "Test Text"
         return label
     }()
     
-    // middle view stackView
-    private lazy var middleAnchorView: UIView = {
+    private var middleAnchorView: UIView = {
         var stackView = UIView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
     
-    // currentPlayView
-    private lazy var currentPlayingView: UIView = {
-        var view = UIView()
-        view.backgroundColor = .brown
+    private var visualizer: AudioVisualizeView = {
+        var visualizer = AudioVisualizeView()
+        return visualizer
+    }()
+    
+    private var progressBar: UIProgressView = {
+        var view = UIProgressView()
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    // segment and volume View
-    private lazy var pitchSegmentController: UISegmentedControl = {
+    private var pitchSegmentController: UISegmentedControl = {
         var segment = UISegmentedControl(items: ["일반 목소리", "아기 목소리", "할아버지 목소리"])
+        segment.translatesAutoresizingMaskIntoConstraints = false
         segment.selectedSegmentIndex = 0
         return segment
     }()
     
-    private lazy var volumeSlider: UISlider = {
+    private var volumeSlider: UISlider = {
         var slider = UISlider()
+        slider.translatesAutoresizingMaskIntoConstraints = false
         slider.setValue(0.5, animated: true)
         slider.minimumValueImage = UIImage(systemName: "speaker")
         slider.maximumValueImage = UIImage(systemName: "speaker.wave.3")
@@ -53,6 +52,7 @@ class VoicePlayingViewController: UIViewController {
     // Play, for/bacward button
     private lazy var playControlView: PlayControlView = {
         var view = PlayControlView()
+        view.translatesAutoresizingMaskIntoConstraints = false
         view.delegate = self
         return view
     }()
@@ -63,23 +63,23 @@ class VoicePlayingViewController: UIViewController {
         addViewsActionsToVC()
     }
     override func viewWillDisappear(_ animated: Bool) {
-        //soundManager.stopPlayer()
+        guard soundManager != nil else { return }
+        soundManager.stop()
+        soundManager.removeTap()
+        playControlView.isSelected = false
     }
     
     private func configureLayoutOfVoicePlayVC() {
         
         view.backgroundColor = .white
         
-        recordedVoiceTitle.translatesAutoresizingMaskIntoConstraints = false
-        middleAnchorView.translatesAutoresizingMaskIntoConstraints = false
-        currentPlayingView.translatesAutoresizingMaskIntoConstraints = false
-        pitchSegmentController.translatesAutoresizingMaskIntoConstraints = false
-        volumeSlider.translatesAutoresizingMaskIntoConstraints = false
-        playControlView.translatesAutoresizingMaskIntoConstraints = false
+        visualizer.translatesAutoresizingMaskIntoConstraints = false
+        //view.addSubview(audioPlotView)
         
         view.addSubview(recordedVoiceTitle)
         view.addSubview(middleAnchorView)
-        middleAnchorView.addSubview(currentPlayingView)
+        middleAnchorView.addSubview(visualizer)
+        middleAnchorView.addSubview(progressBar)
         view.addSubview(pitchSegmentController)
         view.addSubview(volumeSlider)
         view.addSubview(playControlView)
@@ -96,10 +96,15 @@ class VoicePlayingViewController: UIViewController {
             middleAnchorView.topAnchor.constraint(equalTo: recordedVoiceTitle.bottomAnchor),
             middleAnchorView.bottomAnchor.constraint(equalTo: playControlView.topAnchor),
             
-            currentPlayingView.centerYAnchor.constraint(equalTo: middleAnchorView.centerYAnchor).constraintWithMultiplier(0.5),
-            currentPlayingView.centerXAnchor.constraint(equalTo: middleAnchorView.centerXAnchor),
-            currentPlayingView.heightAnchor.constraint(equalToConstant: 100),
-            currentPlayingView.widthAnchor.constraint(equalTo:  middleAnchorView.widthAnchor, multiplier: 0.9),
+            visualizer.centerYAnchor.constraint(equalTo: middleAnchorView.centerYAnchor).constraintWithMultiplier(0.5),
+            visualizer.centerXAnchor.constraint(equalTo: middleAnchorView.centerXAnchor),
+            visualizer.heightAnchor.constraint(equalToConstant: 100),
+            visualizer.widthAnchor.constraint(equalTo:  middleAnchorView.widthAnchor, multiplier: 0.9),
+            
+            progressBar.centerYAnchor.constraint(equalTo: middleAnchorView.centerYAnchor).constraintWithMultiplier(1),
+            progressBar.centerXAnchor.constraint(equalTo: middleAnchorView.centerXAnchor),
+            progressBar.widthAnchor.constraint(equalTo:  middleAnchorView.widthAnchor, multiplier: 0.9),
+            progressBar.heightAnchor.constraint(equalToConstant: 50),
             
             volumeSlider.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             volumeSlider.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
@@ -120,17 +125,18 @@ class VoicePlayingViewController: UIViewController {
     }
     
     func setTitle(title: String) {
-        recordedVoiceTitle.text = title
-    }
-    
-    func fetchRecordedDataFromMainVC(dataUrl: URL) {
-        setSoundManager()
-        soundManager.initializedEngine(url: dataUrl)
-    }
+          recordedVoiceTitle.text = title
+      }
+      
+      func fetchRecordedDataFromMainVC(dataUrl: URL) {
+          setSoundManager()
+          soundManager.initializeSoundManager(url: dataUrl, type: .playBack)
+      }
     
     func setSoundManager() {
         soundManager = SoundManager()
         soundManager.delegate = self
+        
     }
     
     func addViewsActionsToVC() {
@@ -140,63 +146,62 @@ class VoicePlayingViewController: UIViewController {
     
     
     @objc func changeVolumeValue() {
-        //soundManager.changeVolume(value: volumeSlider.value)
+        soundManager.changeVolume(value: volumeSlider.value)
     }
     
     @objc func changePitchValue() {
         if pitchSegmentController.selectedSegmentIndex == 0 {
-            //soundManager.changePitchValue(value: 0)
+            soundManager.changePitchValue(value: 0)
         } else if pitchSegmentController.selectedSegmentIndex == 1 {
-            //soundManager.changePitchValue(value: 50)
+            soundManager.changePitchValue(value: 150)
         } else {
-            //soundManager.changePitchValue(value: -50)
+            soundManager.changePitchValue(value: -150)
         }
         
     }
 }
 
 // MARK: - Sound Control Button Delegate
-
 extension VoicePlayingViewController: SoundButtonActionDelegate {
     
     func playButtonTouchUpinside(sender: UIButton) {
-        if sender.isSelected {
-            soundManager.pause()
-        } else {
-            DispatchQueue.main.async {
-                self.soundManager.play()
-            }
-        }
+        soundManager.playNpause()
     }
     
     func backwardButtonTouchUpinside(sender: UIButton) {
-        print("backwardButton Clicked")
-        
-        //soundManager.seek(to: true)
+        soundManager.skip(forwards: false)
     }
     
     func forwardTouchUpinside(sender: UIButton) {
-        //soundManager.seek(to: false)
+        soundManager.skip(forwards: true)
     }
 }
 
 
 // MARK: - SoundeManager Delegate
-
 extension VoicePlayingViewController: ReceiveSoundManagerStatus {
-    func observeAudioPlayerDidFinishPlaying(_ player: AVAudioPlayerNode) {
-        
+    func audioPlayerCurrentStatus(isPlaying: Bool) {
+        soundManager.removeTap()
         DispatchQueue.main.async {
-            self.playControlView.playButton.isSelected = false // 멘토님께 질문 - 접근 방식이
+            self.playControlView.isSelected = isPlaying
             
-            // 임시 초기화 다시 함수와 data형식에 맞춰서 프로퍼티 만들어야함 06.30 이후 업데이트 예정
-            let filePath = Bundle.main.path(forResource: "sound", ofType: ".mp3")
-            let fileUrl = URL(fileURLWithPath: filePath!)
-            //self.soundManager.stopPlayer()
-            //self.soundManager.initializedEngine(url: fileUrl)
         }
-        
     }
+    
+    func audioFileInitializeErrorHandler(error: Error) {
+        let alert = UIAlertController(title: "파일 초기화 실패!", message: "오류코드: \(error.localizedDescription)", preferredStyle: .alert)
+        let action = UIAlertAction(title: "확인", style: .default)
+        alert.addAction(action)
+        self.present(alert, animated: true)
+    }
+    
+    
+    func audioEngineInitializeErrorHandler(error: Error) {
+        let alert = UIAlertController(title: "엔진 초기화 실패!", message: "오류코드: \(error.localizedDescription)", preferredStyle: .alert)
+        let action = UIAlertAction(title: "확인", style: .default)
+        alert.addAction(action)
+        self.present(alert, animated: true)
+    }
+    
 }
-
 
