@@ -72,9 +72,6 @@ class RecordingViewController: UIViewController {
     @IBAction func recordingButtonTapped(_ sender: UIButton) {
         if inRecordMode {
             
-            currentPlayTimeLabel.text = "00:00"
-            endPlayTimeLabel.text = "00:00"
-            
             pencil.removeAllPoints()
             waveLayer.removeFromSuperlayer()
             
@@ -84,15 +81,19 @@ class RecordingViewController: UIViewController {
                 startPoint = CGPoint(x: 6, y: waveformView.bounds.midY)
             }
             
+            currentPlayTimeLabel.text = "00:00"
+            endPlayTimeLabel.text = "00:00"
+            playProgressBar.progress = 0
+            
             sender.controlFlashAnimate(recordingMode: true)
             self.playButton.isEnabled = false
+            self.goForwardButton.isEnabled = false
+            self.goBackwardButton.isEnabled = false
             do {
                 try audioRecorderHandler.startRecording()
             } catch {
                 print(error.localizedDescription)
             }
-            
-//            audioRecorderHandler.startRecord()
             self.recordTimer = Timer.scheduledTimer(timeInterval: 0.1,
                                                       target: self,
                                                       selector: #selector(updateRecordTime),
@@ -145,11 +146,12 @@ class RecordingViewController: UIViewController {
     }
     
     @objc func updateProgress() {
-        currentPlayTimeLabel.text = audioPlayerHandler.currentTime
-        playProgressBar.progress = audioPlayerHandler.playerProgress
+        currentPlayTimeLabel.text = audioPlayerHandler.currentPlayTime
+        playProgressBar.progress = audioPlayerHandler.progress
         if !audioPlayerHandler.isPlaying {
             self.playButton.setImage(UIImage(systemName: "play"), for: .normal)
             self.recordingButton.isEnabled = true
+            self.inPlayMode = false
             progressTimer?.invalidate()
         } else {
             self.playButton.setImage(UIImage(systemName: "pause"), for: .normal)

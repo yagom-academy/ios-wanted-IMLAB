@@ -32,7 +32,7 @@ class PlayingViewController: UIViewController {
         self.totalPlayTimeLabel.text = fileInfo.recordTime
         self.currentPlayTimeLabel.text = audioPlayerHandler.currentPlayTime
         playProgressBar.progress = 0.0
-        audioPlayerHandler.selectAudioFile(self.fileNameLabel.text)
+        audioPlayerHandler.selectPlayFile(self.fileNameLabel.text)
         configureVolumeSlider()
     }
     
