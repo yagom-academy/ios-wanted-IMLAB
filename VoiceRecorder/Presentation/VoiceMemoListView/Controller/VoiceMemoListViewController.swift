@@ -13,7 +13,7 @@ class VoiceMemoListViewController: UIViewController {
     private let firebaseManager: FirebaseStorageManager!
     
     weak var coordinator: AppCoordinator?
-    private var voiceMemoListAllData: [String] = []
+    private var voiceMemoListAllDatas: [String] = []
     
     private lazy var tableView: UITableView = {
         
@@ -23,9 +23,9 @@ class VoiceMemoListViewController: UIViewController {
         return tableView
     }()
     
-    private lazy var rightButton: UIBarButtonItem = {
+    private lazy var presentRecordViewButton: UIBarButtonItem = {
         
-        let button = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTouched))
+        let button = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(presentRecordViewButtonTouched))
         return button
     }()
     
@@ -49,7 +49,7 @@ class VoiceMemoListViewController: UIViewController {
         configureTableView()
         designUI()
         fetchFirebaseListAll()
-        NotificationCenter.default.addObserver(self, selector: #selector(recordViewUploadComplete(_:)), name: .recordViewUploadComplete, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(fetchRecordFileListAll(_:)), name: .recordFileUploadComplete, object: nil)
     }
     
 }
@@ -64,7 +64,7 @@ extension VoiceMemoListViewController {
             
             switch result {
             case .success(let voiceMemoList):
-                self.voiceMemoListAllData = voiceMemoList
+                self.voiceMemoListAllDatas = voiceMemoList
                 DispatchQueue.main.async { [unowned self] in
                     
                     tableView.reloadData()
@@ -74,7 +74,7 @@ extension VoiceMemoListViewController {
             }
         }
     }
-
+    
     private func convertSecondToMinute(time: String) -> String {
         
         guard let time = Int(time) else { return ""}
@@ -85,12 +85,12 @@ extension VoiceMemoListViewController {
     
     // MARK: - Objc Method
     
-    @objc private func addButtonTouched() {
+    @objc private func presentRecordViewButtonTouched() {
         
         self.coordinator?.presentRecordView()
     }
     
-    @objc func recordViewUploadComplete(_ sender: NSNotification) {
+    @objc func fetchRecordFileListAll(_ sender: NSNotification) {
         
         DispatchQueue.main.async {
             
@@ -115,12 +115,12 @@ extension VoiceMemoListViewController {
         
         view.backgroundColor = .systemBackground
         self.navigationItem.title = "Voice Memos"
-        navigationController?.navigationBar.topItem?.rightBarButtonItem = rightButton
+        navigationController?.navigationBar.topItem?.rightBarButtonItem = presentRecordViewButton
         view.addSubview(tableView)
-        designTableView()
+        setConstraintsOfTableView()
     }
     
-    private func designTableView() {
+    private func setConstraintsOfTableView() {
         
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -132,11 +132,38 @@ extension VoiceMemoListViewController {
     
 }
 
-extension VoiceMemoListViewController: UITableViewDelegate, UITableViewDataSource {
+extension VoiceMemoListViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let filePathFromStorage = voiceMemoListAllDatas[indexPath.row]
+        let fileNameWithoutDirectory = filePathFromStorage.components(separatedBy: "/").dropFirst().joined(separator: "/")
+        let isExist = pathFinder.checkLocalIsExist(fileName: fileNameWithoutDirectory)
+        
+        if !isExist {
+            firebaseManager.fetchVoiceMemoAtFirebase(with: fileNameWithoutDirectory,
+                                                     localPath: pathFinder.getPath(fileName: fileNameWithoutDirectory)
+            ) { result in
+                
+                switch result {
+                case .success(_):
+                    self.coordinator?.presentPlayView(selectedFile: fileNameWithoutDirectory)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+        } else {
+            self.coordinator?.presentPlayView(selectedFile: fileNameWithoutDirectory)
+        }
+    }
+    
+}
+
+extension VoiceMemoListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return voiceMemoListAllData.count
+        return voiceMemoListAllDatas.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -145,7 +172,7 @@ extension VoiceMemoListViewController: UITableViewDelegate, UITableViewDataSourc
             return UITableViewCell()
         }
         
-        let name = voiceMemoListAllData[indexPath.row].description
+        let name = voiceMemoListAllDatas[indexPath.row].description
         cell.selectionStyle = .none
         
         firebaseManager.getMetaData(fileName: name) { result in
@@ -167,32 +194,9 @@ extension VoiceMemoListViewController: UITableViewDelegate, UITableViewDataSourc
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        let filePathFromStorage = voiceMemoListAllData[indexPath.row]
-        let fileNameWithoutDirectory = filePathFromStorage.components(separatedBy: "/").dropFirst().joined(separator: "/")
-        let isExist = pathFinder.checkLocalIsExist(fileName: fileNameWithoutDirectory)
-        
-        if !isExist {
-            firebaseManager.fetchVoiceMemoAtFirebase(with: fileNameWithoutDirectory,
-                                                     localPath: pathFinder.getPath(fileName: fileNameWithoutDirectory)
-            ) { result in
-                
-                switch result {
-                case .success(_):
-                    self.coordinator?.presentPlayView(selectedFile: fileNameWithoutDirectory)
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-            }
-        } else {
-            self.coordinator?.presentPlayView(selectedFile: fileNameWithoutDirectory)
-        }
-    }
-    
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         
-        let filePathFromStorage = voiceMemoListAllData[indexPath.row]
+        let filePathFromStorage = voiceMemoListAllDatas[indexPath.row]
         let fileNameWithoutDirectory = filePathFromStorage.components(separatedBy: "/").dropFirst().joined(separator: "/")
         let isExist = pathFinder.checkLocalIsExist(fileName: fileNameWithoutDirectory)
         
@@ -206,7 +210,7 @@ extension VoiceMemoListViewController: UITableViewDelegate, UITableViewDataSourc
                 
                 switch result {
                 case .success(_):
-                    voiceMemoListAllData.remove(at: indexPath.row)
+                    voiceMemoListAllDatas.remove(at: indexPath.row)
                     tableView.deleteRows(at: [indexPath], with: .fade)
                 case .failure(let error):
                     print(error.localizedDescription)
@@ -214,5 +218,4 @@ extension VoiceMemoListViewController: UITableViewDelegate, UITableViewDataSourc
             }
         }
     }
-    
 }

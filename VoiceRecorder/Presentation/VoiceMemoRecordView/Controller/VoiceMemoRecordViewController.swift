@@ -251,21 +251,17 @@ extension VoiceMemoRecordViewController {
         firebaseManager
             .uploadVoiceMemoToFirebase(with: pathFinder.lastUsedUrl,
                                        fileName: pathFinder.lastUsedFileName,
-                                       playTime: audioRecorder.getPlayTime(filePath:pathFinder.lastUsedUrl)) { [weak self] result in
+                                       playTime: audioRecorder.getPlayTime(filePath:pathFinder.lastUsedUrl)) { result in
             
             switch result {
             case .success(_):
-                self?.validateUploadFinish()
+                NotificationCenter.default.post(name: .recordFileUploadComplete, object: nil)
             case .failure(let error):
                 print(error.localizedDescription)
             }
         }
     }
     
-    private func validateUploadFinish() {
-        
-        NotificationCenter.default.post(name: .recordViewUploadComplete, object: nil)
-    }
 }
 
 // MARK: - objc Method

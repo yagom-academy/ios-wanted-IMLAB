@@ -34,7 +34,7 @@ class VoiceMemoCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        designUI()
+        setConstraintsOfUI()
     }
     
     required init?(coder: NSCoder) {
@@ -48,7 +48,7 @@ class VoiceMemoCell: UITableViewCell {
 
 extension VoiceMemoCell {
     
-    private func designUI() {
+    private func setConstraintsOfUI() {
         contentView.addSubview(fileTitleLabel)
         NSLayoutConstraint.activate([
             fileTitleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
