@@ -19,6 +19,10 @@ enum EdgeType {
 }
 
 //TODO: - 리팩 때 프로토콜 이름 수정 SoundManagerStatusReceivable
+protocol Visualizerable {
+    func processAudioBuffer(buffer: AVAudioPCMBuffer)
+}
+
 protocol ReceiveSoundManagerStatus {
     func audioPlayerCurrentStatus(isPlaying: Bool)
     func audioFileInitializeErrorHandler(error: Error)
@@ -28,17 +32,21 @@ protocol ReceiveSoundManagerStatus {
 class SoundManager {
     
     var delegate: ReceiveSoundManagerStatus?
+    var visualDelegate: Visualizerable!
     
     private var isPlaying = false
     private var needFileSchedule = true
     
     private let engine = AVAudioEngine()
-    private let mixerNode = AVAudioMixerNode()
+    
     private let playerNode = AVAudioPlayerNode()
     private let pitchControl = AVAudioUnitTimePitch()
     
     
     private let frequencies: [Int] = [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000]
+    
+    private lazy var inputNode = engine.inputNode
+    private let mixerNode = AVAudioMixerNode()
     
     private var audioSampleRate: Double = 0
     private var audioPlayDuration: Double = 0
@@ -54,7 +62,6 @@ class SoundManager {
         else {
             return 0
         }
-        
         return playerTime.sampleTime
     }
     
@@ -68,16 +75,14 @@ class SoundManager {
     
     // MARK: - initialize SoundManager
     func initializeSoundManager(url: URL, type: PlayerType) {
-        print("파일 들어옴")
         do {
-            print("file 맞니")
             let file = try AVAudioFile(forReading: url)
             let fileFormat = file.processingFormat
             
             audioLengthSamples = file.length
             audioSampleRate = fileFormat.sampleRate
             audioPlayDuration = Double(audioLengthSamples) / audioSampleRate
-            print("audio Length \(audioLengthSamples) audioSampleRate \(audioSampleRate) \(audioPlayDuration)")
+            
             audioFile = file
             
             if type == .playBack {
@@ -85,8 +90,7 @@ class SoundManager {
             } else {
                 configureRecordEngine(format: fileFormat)
             }
-            
-            
+            print("파일 초기화")
         } catch let error as NSError {
             print("파일 초기화 에러")
             delegate?.audioFileInitializeErrorHandler(error: error)
@@ -96,7 +100,6 @@ class SoundManager {
     
     // MARK: - Set Engine
     private func configurePlayEngine(format: AVAudioFormat) {
-        print("엔진 셋업")
         engine.reset()
         engine.attach(playerNode)
         engine.attach(pitchControl)
@@ -113,18 +116,6 @@ class SoundManager {
         }
     }
     
-    private func configureRecordEngine(format: AVAudioFormat) {
-        engine.reset()
-        engine.attach(mixerNode)
-        engine.connect(engine.inputNode, to: mixerNode, format: format)
-        engine.prepare()
-        
-        do {
-            try engine.start()
-        } catch let e as NSError {
-            delegate?.audioEngineInitializeErrorHandler(error: e)
-        }
-    }
     
     // MARK: - configure PlayerNode
     private func schedulePlayerNode() {
@@ -267,4 +258,78 @@ class SoundManager {
         self.playerNode.volume = value*2
     }
     
+    func changeProgressValue(value: Float) {
+        self.seek(to: Double(value))
+    }
+    
+}
+
+extension SoundManager {
+    
+    func configureRecordEngine(format: AVAudioFormat) {
+        mixerNode.volume = 0
+        
+        engine.attach(mixerNode)
+        engine.connect(inputNode, to: mixerNode, format: format)
+    }
+    
+    
+    private func createAudioFile(filePath: URL) throws -> AVAudioFile {
+        let format = inputNode.outputFormat(forBus: 0)
+        return try AVAudioFile(forWriting: filePath, settings: format.settings)
+    }
+    
+    private func getAudioFile(filePath: URL) throws -> AVAudioFile {
+        return try AVAudioFile(forReading: filePath)
+    }
+    func startRecord(filePath: URL) {
+        engine.reset()
+        
+        let format = inputNode.outputFormat(forBus: 0)
+        configureRecordEngine(format: format)
+        
+        do {
+            audioFile = try createAudioFile(filePath: filePath)
+        } catch {
+            fatalError()
+        }
+        
+        mixerNode.installTap(onBus: 0, bufferSize: 4096, format: format) { [self] buffer, time in
+            do {
+                let inputNode = engine.inputNode
+                let inputFormat = inputNode.outputFormat(forBus: 0)
+                let outputFormat = AVAudioFormat(commonFormat: .pcmFormatInt16,
+                                                 sampleRate: Double(20000),
+                                                 channels: 1, interleaved: true)!
+                
+                guard let formatConverter =  AVAudioConverter(from:inputFormat, to: outputFormat) else { return }
+
+                
+                try self.audioFile.write(from: buffer)
+                visualDelegate.processAudioBuffer(buffer: buffer)
+            } catch {
+                print("[error] : startRecord")
+            }
+        }
+        
+        do {
+            try engine.start()
+        } catch {
+            fatalError()
+        }
+    }
+    func stopRecord() {
+        mixerNode.removeTap(onBus: 0)
+        
+        engine.stop()
+    }
+    
+    func play() {
+        try! engine.start()
+        playerNode.play()
+    }
+    
+    func pause() {
+        playerNode.pause()
+    }
 }
