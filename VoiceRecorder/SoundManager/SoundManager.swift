@@ -34,6 +34,7 @@ class SoundManager {
     var delegate: ReceiveSoundManagerStatus?
     var visualDelegate: Visualizerable!
     
+    var isEnginePrepared = false
     private var isPlaying = false
     private var needFileSchedule = true
     
@@ -103,6 +104,7 @@ class SoundManager {
     
     // MARK: - Set Engine
     private func configurePlayEngine(format: AVAudioFormat) {
+        
         engine.reset()
         engine.attach(playerNode)
         engine.attach(pitchControl)
@@ -111,6 +113,7 @@ class SoundManager {
         engine.connect(pitchControl, to: engine.mainMixerNode, format: engine.mainMixerNode.outputFormat(forBus: 0))
         
         engine.prepare()
+        isEnginePrepared = true
         
         do {
             try engine.start()
@@ -297,6 +300,7 @@ extension SoundManager {
     
     func startRecord(filePath: URL) {
         engine.reset()
+        isEnginePrepared = true
         
         let format = inputNode.outputFormat(forBus: 0)
         configureRecordEngine(format: format)
@@ -327,6 +331,7 @@ extension SoundManager {
         inputNode.removeTap(onBus: 0)
         
         engine.stop()
+        isEnginePrepared = false
     }
     
     func play() {
