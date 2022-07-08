@@ -21,8 +21,11 @@ class RecordViewModel {
     let storage = FirebaseStorageManager.shared
     var recorder = AVAudioRecorder()
     var player = AVAudioPlayer()
-    let recordFormat = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: 44100.0, channels: 1, interleaved: true)
+    var recordFormat = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: 44100.0, channels: 1, interleaved: true)
     let recordFileURL = URL(fileURLWithPath: NSTemporaryDirectory().appending("input.m4a"))
+    
+    private var recordedData: Data?
+    var isResume = false
     
     private var displayLink: CADisplayLink?
     
@@ -48,18 +51,18 @@ class RecordViewModel {
         do {
             try AVAudioSession.sharedInstance().setCategory(.playAndRecord,mode: .default,options: .defaultToSpeaker)
             try AVAudioSession.sharedInstance().setActive(true)
-            // TODO: - !
-            recorder = try AVAudioRecorder(url: recordFileURL, format: recordFormat!)
-            recorder.prepareToRecord()
 
-            print(recorder.settings)
+            if let format = recordFormat {
+                recorder = try AVAudioRecorder(url: recordFileURL, format: format)
+                recorder.prepareToRecord()
+            }
         } catch {
             print("Error in prepare Recoder")
-            print("Could not Prepare Recorder \(error)")
         }
     }
     
     func startRec() {
+        self.recordedData = nil
         recorder.record()
         recorder.isMeteringEnabled = true
         isRecording = recorder.isRecording
@@ -73,6 +76,8 @@ class RecordViewModel {
                 self.delegate?.updateValue(self.nomalizeSoundLevel(level: self.recorder.averagePower(forChannel: 0)))
             }
         }
+        
+        isResume = false
         
     }
     
@@ -95,17 +100,10 @@ class RecordViewModel {
         }
     }
     
-    func setupAudio() {
-        do {
-            player = try AVAudioPlayer(data: getDataFrom())
-            player.numberOfLoops = 0
-        } catch {
-            print("Fail to play audio")
-        }
-    }
+
     
     func playAudio() {
-        if player.data == nil {
+        if !isResume {
             setupAudio()
         }
         
@@ -113,8 +111,21 @@ class RecordViewModel {
         player.play()
         displayLink?.isPaused = false
         isPlaying = player.isPlaying
+        isResume = player.isPlaying
     }
     
+    func setupAudio() {
+        do {
+            getDataFrom()
+            guard let recordedData = recordedData else {
+                return
+            }
+            player = try AVAudioPlayer(data: recordedData)
+            player.numberOfLoops = 0
+        } catch {
+            print("Fail to play audio")
+        }
+    }
     
     func stopAudio() {
         player.pause()
@@ -122,12 +133,17 @@ class RecordViewModel {
         displayLink?.isPaused = true
     }
     
-    func getDataFrom() -> Data {
+    func getDataFrom() {
         guard let data = try? Data(contentsOf: recordFileURL) else {
             print("Data is Not Unwrapping")
-            return Data()
+            return
         }
-        return data
+        self.recordedData = data
+    }
+    
+    func changeSampleRate(_ rate: Double) {
+        self.recordFormat = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: rate, channels: 1, interleaved: true)
+        prepareRecorder()
     }
     
     func setupDisplayLink() {

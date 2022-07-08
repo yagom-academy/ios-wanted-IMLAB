@@ -20,6 +20,7 @@ class RecordViewController:UIViewController {
     private var cancellable = Set<AnyCancellable>()
     var timer: Timer?
     var timerNumber: Int = 0
+    let segmentItem: [String] = ["20kHz", "30kHz", "40kHz"]
     
     lazy var meterView: RecordMeterView = {
         let view = RecordMeterView(frame: .zero)
@@ -32,6 +33,13 @@ class RecordViewController:UIViewController {
         label.text = PlayerTime.zero.elapsedText
         label.textColor = .black
         return label
+    }()
+    
+    lazy var cutOffFrequencySegmentControl: UISegmentedControl = {
+        let segment = UISegmentedControl(items: segmentItem)
+        segment.selectedSegmentIndex = 0
+        segment.addTarget(self, action: #selector(changeSampleRate(_:)), for: .valueChanged)
+        return segment
     }()
     
     lazy var recordButton: UIButton = {
@@ -98,6 +106,10 @@ class RecordViewController:UIViewController {
         if viewModel.isRecording {
             viewModel.stopRec()
         }
+        
+        if viewModel.isPlaying {
+            viewModel.stopAudio()
+        }
     }
 }
 
@@ -110,7 +122,7 @@ private extension RecordViewController{
     }
     
     func addSubViews(){
-        [controlStackView,recordedTimeLabel,progressView,meterView,recordButton].forEach{
+        [controlStackView,recordedTimeLabel,cutOffFrequencySegmentControl,progressView,meterView,recordButton].forEach{
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
@@ -126,6 +138,10 @@ private extension RecordViewController{
             recordedTimeLabel.centerXAnchor.constraint(equalTo: meterView.centerXAnchor),
             recordedTimeLabel.topAnchor.constraint(equalTo: meterView.bottomAnchor,constant: 10),
             recordedTimeLabel.heightAnchor.constraint(equalToConstant: 50),
+            
+            cutOffFrequencySegmentControl.bottomAnchor.constraint(equalTo: progressView.topAnchor,constant: -30),
+            cutOffFrequencySegmentControl.leadingAnchor.constraint(equalTo: progressView.leadingAnchor),
+            cutOffFrequencySegmentControl.trailingAnchor.constraint(equalTo: progressView.trailingAnchor),
             
             progressView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,constant: 30),
             progressView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,constant: -30),
@@ -151,10 +167,6 @@ private extension RecordViewController{
         if !viewModel.isRecording {
             viewModel.startRec()
             sender.setImage(UIImage(systemName: "stop.fill"), for: .normal)
-            
-            self.playButton.isEnabled = true
-            self.prevButton.isEnabled = true
-            self.nextButton.isEnabled = true
         } else {
             viewModel.stopRec()
             sender.setImage(UIImage(systemName: "mic.circle.fill"), for: .normal)
@@ -177,6 +189,18 @@ private extension RecordViewController{
             viewModel.stopAudio()
         }
     }
+    @objc func changeSampleRate(_ sender: UISegmentedControl) {
+        switch sender.selectedSegmentIndex {
+        case 0:
+            viewModel.changeSampleRate(20000.0)
+        case 1:
+            viewModel.changeSampleRate(30000.0)
+        case 2:
+            viewModel.changeSampleRate(40000.0)
+        default:
+            viewModel.changeSampleRate(44100.0)
+        }
+    }
     
     func bindProgress() {
         viewModel.$progressValue
@@ -189,10 +213,13 @@ private extension RecordViewController{
     func bindRecording() {
         viewModel.$isRecording
             .sink { [weak self] isRecording in
-                print(isRecording)
                 self?.recordButton.setImage(UIImage(systemName: isRecording ? "stop.circle":"mic.circle.fill"), for: .normal)
                 self?.meterView.disPlayLink?.isPaused = !isRecording
                 
+                self?.cutOffFrequencySegmentControl.isEnabled = !isRecording
+                self?.prevButton.isEnabled = !isRecording
+                self?.nextButton.isEnabled = !isRecording
+                self?.playButton.isEnabled = !isRecording
             }
             .store(in: &cancellable)
     }
@@ -202,6 +229,7 @@ private extension RecordViewController{
             .sink { [weak self] isPlaying in
                 self?.prevButton.isEnabled = isPlaying
                 self?.nextButton.isEnabled = isPlaying
+                self?.recordButton.isEnabled = !isPlaying
                 self?.playButton.setImage(UIImage(systemName: isPlaying ? "pause.fill":"play.fill"), for: .normal)
             }
             .store(in: &cancellable)
