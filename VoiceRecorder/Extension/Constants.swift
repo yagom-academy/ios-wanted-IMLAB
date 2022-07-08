@@ -37,6 +37,11 @@ struct Constants {
         static let grandfather = "할아버지 목소리"
     }
     
+    struct Firebase {
+        static let foloderName = "voiceRecords"
+        static let fileType = ".mp4"
+    }
+    
     struct ButtonSize {
         static let regular = 32.0
     }
