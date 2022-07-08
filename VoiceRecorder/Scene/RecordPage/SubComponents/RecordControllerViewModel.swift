@@ -50,10 +50,10 @@ struct RecordControllerViewModel {
         return audioRecorder.dateToFileName(Date())
     }
 
-    func saveRecord(_ file: String) {
+    func saveRecord(_ file: String, _ completion: ((Bool) -> Void)?) {
         let waves = generateMetadata()
 
-        return network.saveRecord(filename: file, waves: waves, completion: nil)
+        return network.saveRecord(filename: file, waves: waves, completion: completion)
     }
 
     func generateMetadata() -> [String: String] {

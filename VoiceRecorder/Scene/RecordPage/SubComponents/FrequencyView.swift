@@ -48,7 +48,7 @@ class FrequencyView: UIView {
         context.setLineWidth(3)
         context.setStrokeColor(color)
 
-        let centerY: CGFloat = 150
+        let centerY: CGFloat = self.frame.height / 2
 
         for i in 0 ..< waveForms.count {
             let firstX = bar * barWidth

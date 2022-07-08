@@ -16,6 +16,7 @@ protocol RecordService {
     func startRecord()
     func endRecord()
     func getWaveData() -> [Int]
+    func resetRecorder()
 }
 
 class RecordManager: RecordService {
@@ -24,11 +25,12 @@ class RecordManager: RecordService {
     var recorder: AVAudioRecorder?
     var audioFile: URL!
     var timer: Timer?
-
     var waveForms = [Int](repeating: 0, count: 100)
+    var currentSample = 0
+
     var totalWaveData = [Int]()
 
-    var cutValue = 0
+    var cutValue = 60
 
     private init() {
         NotificationCenter.default.addObserver(self, selector: #selector(sendCutValue(_:)), name: Notification.Name("SendCutValue"), object: nil)
@@ -79,8 +81,7 @@ class RecordManager: RecordService {
 
     func startRecord() {
         audioFile = nil
-
-        var currentSample = 0
+        
         let numberOfSamples = waveForms.count
 
         audioFile = Config.getRecordFilePath()
@@ -100,10 +101,10 @@ class RecordManager: RecordService {
             timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { [weak self] _ in
                 guard let self = self else { return }
                 self.recorder?.updateMeters()
-
+                
                 let soundLevel = self.normalizeSoundLevel(self.recorder?.averagePower(forChannel: 0))
 
-                if currentSample == numberOfSamples {
+                if self.currentSample == numberOfSamples {
                     self.waveForms.removeFirst()
                     if soundLevel > self.cutValue {
                         self.waveForms.append(1)
@@ -114,18 +115,18 @@ class RecordManager: RecordService {
                     }
                 } else {
                     if soundLevel < self.cutValue {
-                        self.waveForms[currentSample] = soundLevel
+                        self.waveForms[self.currentSample] = soundLevel
                         self.totalWaveData.append(soundLevel)
                     } else {
-                        self.waveForms[currentSample] = 1
+                        self.waveForms[self.currentSample] = 1
                         self.totalWaveData.append(1)
                     }
                 }
 
-                if currentSample < numberOfSamples {
-                    currentSample += 1
+                if self.currentSample < numberOfSamples {
+                    self.currentSample += 1
                 }
-                if self.recorder?.isRecording ?? true {
+                if self.recorder?.isRecording ?? false {
                     NotificationCenter.default.post(name: Notification.Name("SendWaveform"), object: self.waveForms, userInfo: nil)
                 }
             })
@@ -140,12 +141,23 @@ class RecordManager: RecordService {
         recorder?.stop()
         recorder = nil
         
-        print(totalWaveData.count)
-
         waveForms = [Int](repeating: 0, count: 100)
+        currentSample = 0
+        
+        print(totalWaveData.count)
     }
     
     func getWaveData() -> [Int] {
         return totalWaveData
+    }
+    
+    func resetRecorder() {
+        timer?.invalidate()
+        
+        recorder?.stop()
+        recorder = nil
+        
+        waveForms = [Int](repeating: 0, count: 100)
+        currentSample = 0
     }
 }

@@ -24,7 +24,7 @@ class RecordControllerView: UIView {
         return button
     }()
 
-    private lazy var downloadButton: UIButton = {
+    private lazy var uploadButton: UIButton = {
         let button = UIButton()
         button.setImage(systemName: "arrow.down.circle", state: .normal)
         button.isEnabled = false
@@ -32,7 +32,7 @@ class RecordControllerView: UIView {
         button.widthAnchor.constraint(equalToConstant: 30).isActive = true
         button.heightAnchor.constraint(equalToConstant: 30).isActive = true
 
-        button.addTarget(self, action: #selector(didTapDownloadButton), for: .touchUpInside)
+        button.addTarget(self, action: #selector(didTapUploadButton), for: .touchUpInside)
         return button
     }()
     
@@ -51,21 +51,25 @@ class RecordControllerView: UIView {
         sender.isSelected = !sender.isSelected
 
         if sender.isSelected {
-            self.downloadButton.isEnabled = false
+            self.uploadButton.isEnabled = false
             viewModel.startRecord()
             delegate?.startRecord()
         } else {
             viewModel.endRecord()
             viewModel.setAudioFile()
-            self.downloadButton.isEnabled = true
+            self.uploadButton.isEnabled = true
             delegate?.endRecord()
         }
     }
     
-    @objc func didTapDownloadButton() {
+    @objc func didTapUploadButton() {
         let file = viewModel.dateToFileName() + "+" + viewModel.duration()
-        viewModel.saveRecord(file)
-        delegate?.completeDownload()
+        viewModel.saveRecord(file) { [weak self] complete in
+            guard let self = self else { return }
+            if complete {
+                self.delegate?.completeUpload()
+            }
+        }
     }
 }
 
@@ -77,7 +81,7 @@ extension RecordControllerView {
     private func layout() {
         [
             recordButton,
-            downloadButton,
+            uploadButton,
         ].forEach {
             addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -86,7 +90,7 @@ extension RecordControllerView {
         recordButton.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         recordButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -50).isActive = true
 
-        downloadButton.bottomAnchor.constraint(equalTo: recordButton.bottomAnchor).isActive = true
-        downloadButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -30).isActive = true
+        uploadButton.bottomAnchor.constraint(equalTo: recordButton.bottomAnchor).isActive = true
+        uploadButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -30).isActive = true
     }
 }
