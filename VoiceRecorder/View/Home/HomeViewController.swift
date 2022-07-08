@@ -8,6 +8,10 @@ import AVFAudio
 import Combine
 
 final class HomeViewController: UIViewController {
+    enum Home {
+        static let navigationTitle = "음성 메모장"
+    }
+    
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
         tableView.tableFooterView = UIView()
@@ -53,7 +57,7 @@ private extension HomeViewController {
     }
     
     func configureNavigation() {
-        navigationItem.title = Constants.Home.navigationTitle
+        navigationItem.title = Home.navigationTitle
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(touchAddButton))
     }
     
@@ -80,15 +84,17 @@ private extension HomeViewController {
         
         switch session.recordPermission {
         case .granted:
-            let recordController = RecordViewController()
-            recordController.delegate = self
-            present(recordController, animated: true)
+            presentRecordViewController()
         case .denied:
             let alertController = UIAlertController(title: Constants.AlertActionTitle.empty, message: Constants.AlertControllerTitle.microphoneRequest, preferredStyle: .alert)
             alertController.addAction(UIAlertAction(title: Constants.AlertActionTitle.ok, style: .default, handler: nil))
             present(alertController, animated: true)
         case .undetermined:
-            session.requestRecordPermission { _ in }
+            session.requestRecordPermission { granted in
+                if granted {
+                    self.presentRecordViewController()
+                }
+            }
         default: break
         }
     }
@@ -105,6 +111,14 @@ private extension HomeViewController {
                 self.tableView.reloadData()
             }
             .store(in: &cancellable)
+    }
+    
+    func presentRecordViewController() {
+        DispatchQueue.main.async {
+            let recordController = RecordViewController()
+            recordController.delegate = self
+            self.present(recordController, animated: true)
+        }
     }
 }
 

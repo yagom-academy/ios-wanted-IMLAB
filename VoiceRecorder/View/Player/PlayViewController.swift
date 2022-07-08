@@ -9,6 +9,13 @@ import UIKit
 import Combine
 
 final class PlayViewController: UIViewController {
+    
+    enum SegmentedControlItems {
+        static let normal = "일반 목소리"
+        static let baby = "아기 목소리"
+        static let grandfather = "할아버지 목소리"
+    }
+    
     private var audio: Audio? {
         didSet {
             guard let audio = audio else {
@@ -38,7 +45,7 @@ final class PlayViewController: UIViewController {
     private let progressTimeView = ProgressTimeView()
     
     private lazy var pitchSegmentedControl: UISegmentedControl = {
-        let items: [String] = [Constants.SegmentedControlItems.normal, Constants.SegmentedControlItems.baby, Constants.SegmentedControlItems.grandfather]
+        let items: [String] = [SegmentedControlItems.normal, SegmentedControlItems.baby, SegmentedControlItems.grandfather]
         let segmentedControl = UISegmentedControl(items: items)
         segmentedControl.selectedSegmentIndex = 0
         segmentedControl.addTarget(self, action: #selector(pitchSegmentedControlValueChanged(_:)), for: .valueChanged)
@@ -110,7 +117,7 @@ private extension PlayViewController {
     }
     
     func configureView() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
     }
     
     func configureDelegate() {

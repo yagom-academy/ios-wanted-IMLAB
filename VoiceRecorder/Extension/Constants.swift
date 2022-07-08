@@ -12,14 +12,6 @@ struct Constants {
         static let home = String(describing: HomeTableViewCell.self)
     }
     
-    struct TimeLabelText {
-        static let zero = "00:00"
-    }
-    
-    struct Home {
-        static let navigationTitle = "음성 메모장"
-    }
-    
     struct AlertActionTitle {
         static let cancel = "취소"
         static let ok = "확인"
@@ -29,12 +21,6 @@ struct Constants {
     struct AlertControllerTitle {
         static let microphoneRequest = "설정에서 마이크 권한을 허용해주세요."
         static let recordFileRemove = "녹음파일 삭제"
-    }
-    
-    struct SegmentedControlItems {
-        static let normal = "일반 목소리"
-        static let baby = "아기 목소리"
-        static let grandfather = "할아버지 목소리"
     }
     
     struct Firebase {
@@ -50,4 +36,3 @@ struct Constants {
         static let half: Float = 0.5
     }
 }
-

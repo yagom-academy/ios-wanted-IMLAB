@@ -8,6 +8,10 @@
 import UIKit
 
 final class ProgressTimeView: UIStackView {
+    enum TimeLabelText {
+        static let zero = "00:00"
+    }
+    
     private let progressView: UIProgressView = {
         let progressView = UIProgressView()
         return progressView
@@ -15,13 +19,13 @@ final class ProgressTimeView: UIStackView {
     
     private let playTimeLabel: UILabel = {
         let label = UILabel()
-        label.text = Constants.TimeLabelText.zero
+        label.text = TimeLabelText.zero
         return label
     }()
     
     private let playTimeRemainLabel: UILabel = {
         let label = UILabel()
-        label.text = Constants.TimeLabelText.zero
+        label.text = TimeLabelText.zero
         return label
     }()
     
