@@ -107,11 +107,8 @@ class PlayerManager: PlayerService {
                 guard let self = self else {
                     return
                 }
-
                 if self.checkIsFinished() {
-                    DispatchQueue.main.async {
-                        self.setPlayerToZero()
-                    }
+                    self.setPlayerToZero()
                 }
             }
 
@@ -128,17 +125,28 @@ class PlayerManager: PlayerService {
     }
 
     func setPlayerToZero() {
-        audioPlayer.stop()
-        audioEngine.stop()
+        // UI 와 관련없는 작업을 main 스레드로 보내면,
+        // 작업이 오래걸리면 너무 느리게 보일 수 있다.
+        // UI 와 관련된 작업은 main 에 태우는게 옳다!!!!
 
-        seekFrame = 0
-        currentPosition = 0
+        DispatchQueue.global().async { [weak self] in
+            guard let self = self else {
+                return
+            }
 
-        configureAudioEngine()
+            self.audioPlayer.stop()
+            self.audioEngine.stop()
 
-        NotificationCenter.default.post(name: NSNotification.Name("PlayerDidEnded"), object: nil)
+            self.seekFrame = 0
+            self.currentPosition = 0
 
-        NotificationCenter.default.post(name: NSNotification.Name("SendWaveform"), object: Array(repeating: 1, count: 100))
+            self.configureAudioEngine()
+        }
+
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: NSNotification.Name("PlayerDidEnded"), object: nil)
+            NotificationCenter.default.post(name: NSNotification.Name("SendWaveform"), object: Array(repeating: 1, count: 100))
+        }
     }
 
     // 재생
@@ -200,9 +208,7 @@ class PlayerManager: PlayerService {
                 }
 
                 if self.checkIsFinished() {
-                    DispatchQueue.main.async {
-                        self.setPlayerToZero()
-                    }
+                    self.setPlayerToZero()
                 }
             }
 
