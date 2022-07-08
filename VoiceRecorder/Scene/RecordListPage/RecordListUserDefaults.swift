@@ -9,6 +9,7 @@ import Foundation
 
 class RecordListUserDefaults {
     static let shared = RecordListUserDefaults()
+    private var cache:[CellData] = []
     private init() { }
     
     private let userDefaults = UserDefaults(suiteName: "recordData")
@@ -24,6 +25,7 @@ class RecordListUserDefaults {
         if let savedData = userDefaults?.object(forKey: "recordData") as? Data {
             let decoder = JSONDecoder()
             let savedObject = try? decoder.decode([CellData].self, from: savedData)
+            cache = savedObject ?? []
             return savedObject ?? []
         }
         return []
@@ -36,5 +38,15 @@ class RecordListUserDefaults {
         let result = frontList + backList
         save(data: result)
         return result
+    }
+    
+    func updateFavoriteState(fileInfo: FileData) {
+        for i in 0..<cache.count {
+            if (cache[i].fileInfo.rawFilename == fileInfo.rawFilename) {
+                cache[i].isFavorite = !cache[i].isFavorite
+                break
+            }
+        }
+        save(data: cache)
     }
 }

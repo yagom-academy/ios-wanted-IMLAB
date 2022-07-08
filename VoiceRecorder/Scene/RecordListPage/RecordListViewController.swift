@@ -31,10 +31,7 @@ class RecordListViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewModel.update {
-            self.tableView.reloadData()
-            self.sortBar.viewWillAppear()
-        }
+        didPullToRefresh()
     }
 
     private func attribute() {
@@ -100,7 +97,6 @@ extension RecordListViewController: UITableViewDataSource, UITableViewDelegate {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: RecordListCell.identifier, for: indexPath) as? RecordListCell else {
             return UITableViewCell()
         }
-        
         cell.setData(data: viewModel.getCellData(indexPath), indexPath: indexPath)
         cell.addSwapCellTapGesture(action: handleLongPress(with:_:))
         cell.addFavoriteMarkAction(action: handleFavoriteButton(indexPath:))
@@ -140,10 +136,18 @@ extension RecordListViewController {
     }
 
     @objc private func didPullToRefresh() {
-        viewModel.update(completion: {
-            self.tableView.reloadData()
-            self.sortBar.viewWillAppear()
-            self.tableView.refreshControl?.endRefreshing()
+        viewModel.update(completion: { result in
+            switch result {
+            case .success():
+                self.tableView.reloadData()
+                self.sortBar.viewWillAppear()
+                self.tableView.refreshControl?.endRefreshing()
+            case .failure(let error):
+                let alert = UIAlertController(title: "", message: error.description, preferredStyle: .alert)
+                let action = UIAlertAction(title: "확인", style: .default)
+                alert.addAction(action)
+                self.present(alert, animated: true)
+            }
         })
     }
 }
