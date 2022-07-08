@@ -7,6 +7,7 @@
 
 import Foundation
 import AVFoundation
+import Accelerate
 import MediaPlayer
 
 class AudioPlayerHandler {
@@ -82,6 +83,8 @@ class AudioPlayerHandler {
             buffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat,
                                       frameCapacity: AVAudioFrameCount(audioFile.length))
             try audioFile.read(into: buffer)
+            readFile.arrayFloatValues = Array(UnsafeBufferPointer(start: buffer.floatChannelData?[0], count: Int(buffer.frameLength)))
+            convertToPoints()
             audioFileFrameLength = audioFile.length
             audioFileSampleRate = audioFile.processingFormat.sampleRate
             audioFileTotalPlayTime = Double(audioFileFrameLength) / audioFileSampleRate
@@ -212,6 +215,44 @@ class AudioPlayerHandler {
         let time = Double(currentFramePosition) / audioFileSampleRate
         let convertedTime = updateTimer(time)
         currentPlayTime = convertedTime
+    }
+    
+    func readArray( array:[Float]){
+        readFile.arrayFloatValues = array
+    }
+    
+    func convertToPoints() {
+        var processingBuffer = [Float](repeating: 0.0,
+                                       count: Int(readFile.arrayFloatValues.count))
+        let sampleCount = vDSP_Length(readFile.arrayFloatValues.count)
+        //print(sampleCount)
+        vDSP_vabs(readFile.arrayFloatValues, 1, &processingBuffer, 1, sampleCount);
+        // print(processingBuffer)
+        
+        var multiplier = 1.0
+        print(multiplier)
+        if multiplier < 1{
+            multiplier = 1.0
+        }
+
+        let samplesPerPixel = Int(300 * multiplier)
+        let filter = [Float](repeating: 1.0 / Float(samplesPerPixel),
+                             count: Int(samplesPerPixel))
+        let downSampledLength = Int(readFile.arrayFloatValues.count / samplesPerPixel)
+        var downSampledData = [Float](repeating:0.0,
+                                      count:downSampledLength)
+        vDSP_desamp(processingBuffer,
+                    vDSP_Stride(samplesPerPixel),
+                    filter, &downSampledData,
+                    vDSP_Length(downSampledLength),
+                    vDSP_Length(samplesPerPixel))
+        
+        // print(" DOWNSAMPLEDDATA: \(downSampledData.count)")
+        
+        //convert [Float] to [CGFloat] array
+        readFile.points = downSampledData.map{CGFloat($0) * 50}
+        
+        print(readFile.points)
     }
     
     func updateTimer(_ time: TimeInterval) -> String {

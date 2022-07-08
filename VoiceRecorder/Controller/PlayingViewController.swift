@@ -20,10 +20,14 @@ class PlayingViewController: UIViewController {
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var goBackwardButton: UIButton!
     @IBOutlet weak var goForwardButton: UIButton!
+    @IBOutlet weak var waveCollectionView: UICollectionView!
+    //    @IBOutlet weak var waveScrollView: UIScrollView!
+//    @IBOutlet weak var drawWaveForm: DrawWaveform!
     
     private var progressTimer: Timer?
     private var inPlayMode: Bool = false
     var selectedFileInfo: RecordModel?
+    var startPoint = CGPoint(x: 0.0, y: 0.0)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +38,9 @@ class PlayingViewController: UIViewController {
         playProgressBar.progress = 0.0
         audioPlayerHandler.selectPlayFile(self.fileNameLabel.text)
         configureVolumeSlider()
+        waveCollectionView.dataSource = self
+        let layout = waveCollectionView.collectionViewLayout as! UICollectionViewFlowLayout
+        layout.scrollDirection = .horizontal
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -99,4 +106,21 @@ class PlayingViewController: UIViewController {
             self.playButton.setImage(UIImage(systemName: "pause"), for: .normal)
         }
     }
+}
+
+extension PlayingViewController : UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return readFile.points.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "waveCollectionViewCell", for: indexPath) as! waveCollectionViewCell
+        let contentview = cell.contentView
+        let view = UIView(frame: CGRect(x: contentview.frame.midX, y: contentview.frame.midY, width: 5, height: readFile.points[indexPath.row] * 5))
+        view.backgroundColor = .red
+        contentview.addSubview(view)
+        return cell
+    }
+    
+    
 }
