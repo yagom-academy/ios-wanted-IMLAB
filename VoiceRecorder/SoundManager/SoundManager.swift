@@ -279,7 +279,7 @@ extension SoundManager {
         return try AVAudioFile(forWriting: filePath, settings: format.settings)
     }
     
-    private func getAudioFile(filePath: URL) throws -> AVAudioFile {
+    func getAudioFile(filePath: URL) throws -> AVAudioFile {
         return try AVAudioFile(forReading: filePath)
     }
     
@@ -328,15 +328,8 @@ extension SoundManager {
     
     // - MARK: playTime
     
-    func totalPlayTime(date: String) -> Double {
-        let audioFileManager = AudioFileManager()
-        let url = audioFileManager.getAudioFilePath(fileName: date)
-        do {
-            audioFile = try getAudioFile(filePath: url)
-        } catch {
-            print("[error] : totalPlayTime")
-        }
-        
+    func totalPlayTime(audioFile: AVAudioFile) -> Double {
+       
         let length = audioFile.length
         let sampleRate = audioFile.processingFormat.sampleRate
         let audioPlayTime = Double(length) / sampleRate
@@ -344,15 +337,4 @@ extension SoundManager {
         return audioPlayTime
     }
     
-    func convertTimeToString(_ seconds: TimeInterval) -> String {
-        if seconds.isNaN {
-            return "00:00"
-        }
-        
-        let min = Int(seconds / 60)
-        let sec = Int(seconds.truncatingRemainder(dividingBy: 60))
-        let strTime = String(format: "%02d:%02d", min, sec)
-        
-        return strTime
-    }
 }
