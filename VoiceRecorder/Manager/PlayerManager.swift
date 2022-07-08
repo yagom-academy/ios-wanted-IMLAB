@@ -211,7 +211,6 @@ class PlayerManager: PlayerService {
                     self.setPlayerToZero()
                 }
             }
-
             if wasPlaying {
                 audioPlayer.play()
             }

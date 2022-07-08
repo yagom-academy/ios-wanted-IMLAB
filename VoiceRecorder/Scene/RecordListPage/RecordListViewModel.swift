@@ -17,6 +17,10 @@ class RecordListViewModel {
     }
 
     func getCellData(_ indexPath: IndexPath) -> CellData {
+        //TODO: 셀범위밖처리 [x] => 셀범위 너무 확신 x
+//        guard let indexPath.row < recordDatas.count else {
+//            throw Error
+//        }
         return recordDatas[indexPath.row]
     }
 

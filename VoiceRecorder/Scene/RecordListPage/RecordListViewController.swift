@@ -12,7 +12,7 @@ class RecordListViewController: UIViewController {
     private let sortBar = RecordListSortBar()
     private let tableView = UITableView()
     private let viewModel = RecordListViewModel(networkManager:  RecordNetworkManager.shared)
-
+    
     struct Math {
         static let sortBarHeightMultiplier: Double = 0.05
         static let tableViewHeightMultiplier: Double = 0.9
@@ -87,10 +87,9 @@ class RecordListViewController: UIViewController {
 }
 
 // MARK: - UITableViewDataSource, UITableViewDelegate 메서드
-
 extension RecordListViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.getCellTotalCount()
+            return viewModel.getCellTotalCount()
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -128,7 +127,6 @@ extension RecordListViewController: UITableViewDataSource, UITableViewDelegate {
 }
 
 // MARK: - 테이블뷰를 당겼을 때 새로고침시키는 메서드
-
 extension RecordListViewController {
     private func setRefresh() {
         tableView.refreshControl = UIRefreshControl()
@@ -174,7 +172,7 @@ extension RecordListViewController {
 //MARK: - 셀이동 이벤트
 extension RecordListViewController {
     private func handleLongPress(with sender: UILongPressGestureRecognizer, _ toCenterPoint: CGPoint) {
-        swapByPress(with: sender, toCenterPoint: toCenterPoint)
+            swapByPress(with: sender, toCenterPoint: toCenterPoint)
     }
 
     func swapByPress(with sender: UILongPressGestureRecognizer, toCenterPoint: CGPoint) {
@@ -255,7 +253,7 @@ extension RecordListViewController {
             cell.alpha = 0.0
             
             // Snapshot이 사라지고 셀이 나타내는 애니메이션 부여
-            UIView.animate(withDuration: 0.3) {
+            UIView.animate(withDuration: 0) {
                 CellSnapshotView.value?.center = cell.center
                 CellSnapshotView.value?.transform = CGAffineTransform.identity
                 CellSnapshotView.value?.alpha = 1.0
