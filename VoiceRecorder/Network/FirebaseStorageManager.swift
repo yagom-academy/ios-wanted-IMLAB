@@ -87,7 +87,7 @@ class FirebaseStorageManager {
     
     func downloadMetaData(filePath: String, completion: @escaping (Result<AudioData, Error>) -> Void) {
         let ref = baseReference.child(filePath)
-        print("filePath in network: ",filePath)
+
         ref.getMetadata { metaData, error in
             if let error = error {
                 completion(.failure(error))
