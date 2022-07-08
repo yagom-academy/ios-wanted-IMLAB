@@ -69,7 +69,9 @@ class AudioVisualizeView: UIScrollView {
         
         let rmsValue = rms(data: channelData, frameLength: UInt(frames))
         audioPlotView.waveforms.append(Int(rmsValue))
+        
         DispatchQueue.main.async { [self] in
+            udpateVisualizerContentSize()
             self.audioPlotView.setNeedsDisplay()
         }
     }

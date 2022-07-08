@@ -44,7 +44,7 @@ class AudioPlotView: UIView {
     
     override init (frame : CGRect) {
         super.init(frame : frame)
-        self.backgroundColor = UIColor.clear
+        self.backgroundColor = UIColor.lightGray
         caLayer = CAShapeLayer()
         caLayer.strokeColor = UIColor.red.cgColor
         caLayer.lineWidth = 1
@@ -55,6 +55,7 @@ class AudioPlotView: UIView {
     
     required init?(coder decoder: NSCoder) {
         super.init(coder: decoder)
+        self.backgroundColor = UIColor.lightGray
         caLayer = CAShapeLayer()
         caLayer.strokeColor = UIColor.red.cgColor
         caLayer.lineWidth = 1
