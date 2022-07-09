@@ -71,7 +71,7 @@ class VoiceMemoViewController: UIViewController {
                      durationTime = duration.minuteSecond
                 }
             } catch {
-                print("<getFileDuration Error> - \(error.localizedDescription)")
+                print("Error: <getFileDuration> - \(error.localizedDescription)")
             }
             return durationTime
         }

@@ -68,7 +68,7 @@ class RecordDetailViewController: UIViewController {
                 do {
                     try FileManager.default.removeItem(at: audioFileURL)
                 } catch {
-                    print(error)
+                    print("Error: <RecordDetail viewDidDisappear> -  \(error.localizedDescription)")
                 }
             }
             currentFileName = nil
@@ -93,8 +93,7 @@ class RecordDetailViewController: UIViewController {
                 }
             })
         } catch let error {
-            // TODO: 에러 핸들링
-            print(error.localizedDescription)
+            print("Error: <setupAudioRecorder> -  \(error.localizedDescription)")
         }
     }
     
@@ -106,7 +105,7 @@ class RecordDetailViewController: UIViewController {
                     FireStorageManager.shared.deleteRecording(currentFileName)
                 }
             } catch {
-                print(error)
+                print("Error: <startRecording> -  \(error.localizedDescription)")
             }
         }
         // TODO: fileURL refactoring
@@ -136,7 +135,6 @@ class RecordDetailViewController: UIViewController {
             cutOffFreqSegmentedControl.isHidden = true
         } catch {
             print("Error: <start recording> - \(error.localizedDescription)")
-//            finishRecording(success: false, audioFileURL)
         }
         
         drawingWave()
