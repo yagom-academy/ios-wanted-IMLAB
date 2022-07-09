@@ -254,7 +254,6 @@ extension RecordViewController : SliderEvnetDelegate {
     func sliderEventValueChanged(sender: UISlider) {
         soundManager.setFrequencyValue(value: sender.value)
     }
-    
 }
 
 extension RecordViewController: SoundManagerStatusReceivable {

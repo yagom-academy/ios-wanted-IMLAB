@@ -19,9 +19,7 @@ enum PlayType {
 class AudioPlotView: UIView {
 
     var delegate: VisualizerStatusReceivable!
-    
     var caLayer: CAShapeLayer!
-
     var barWidth: CGFloat = 4.0
     
     var active = false {
@@ -36,7 +34,6 @@ class AudioPlotView: UIView {
     }
     
     private var color = UIColor.gray.cgColor
-    
     var waveforms = [Float]()
     var count = 0
     
@@ -158,7 +155,6 @@ class AudioPlotView: UIView {
           
             caLayer.path = path.cgPath
             self.setNeedsLayout()
-            
         }
     }
 }
