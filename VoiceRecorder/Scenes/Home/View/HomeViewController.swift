@@ -169,6 +169,7 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
       return UITableViewCell()
     }
     
+
     let model = homeViewModel[indexPath]
     cell.configure(model: model)
     return cell
@@ -187,6 +188,7 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
       let playScene = PlayViewController()
       playScene.playViewModel.url = url
       self.navigationController?.pushViewController(playScene, animated: true)
+
     }
   }
   
