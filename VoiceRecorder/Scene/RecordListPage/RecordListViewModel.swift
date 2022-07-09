@@ -75,8 +75,6 @@ class RecordListViewModel {
     }
     
     func sortButtonTapped(beforeState: RecordListSortState, afterState: RecordListSortState, completion: @escaping () -> ()) {
-        guard beforeState == .favorite || beforeState != afterState else { return }
-        
         self.recordDatas = recordListUserDefaults.getData()
         switch afterState {
         case .basic:
