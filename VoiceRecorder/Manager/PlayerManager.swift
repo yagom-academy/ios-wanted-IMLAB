@@ -14,7 +14,7 @@ protocol PlayerService {
     func setAudioFile(_ audioFile: AVAudioFile?)
 
     func resetAudio()
-    
+
     func attachAudioEngine()
     func scheduleAudioPlayer()
     func configureAudioEngine()
@@ -116,8 +116,11 @@ class PlayerManager: PlayerService {
                 guard let self = self else {
                     return
                 }
+
                 if self.checkIsFinished() {
-                    self.setPlayerToZero()
+                    DispatchQueue.main.async {
+                        self.setPlayerToZero()
+                    }
                 }
             }
 
@@ -144,19 +147,14 @@ class PlayerManager: PlayerService {
                 return
             }
 
-            self.audioPlayer.stop()
-            self.audioEngine.stop()
+        seekFrame = 0
+        currentPosition = 0
 
-            self.seekFrame = 0
-            self.currentPosition = 0
+        configureAudioEngine()
 
-            self.configureAudioEngine()
-        }
+        NotificationCenter.default.post(name: NSNotification.Name("PlayerDidEnded"), object: nil)
 
-        DispatchQueue.main.async {
-            NotificationCenter.default.post(name: NSNotification.Name("PlayerDidEnded"), object: nil)
-            NotificationCenter.default.post(name: NSNotification.Name("SendWaveform"), object: Array(repeating: 1, count: 100))
-        }
+        NotificationCenter.default.post(name: NSNotification.Name("SendWaveform"), object: Array(repeating: 1, count: 100))
     }
 
     // 재생
@@ -218,10 +216,11 @@ class PlayerManager: PlayerService {
                 }
 
                 if self.checkIsFinished() {
-                    self.setPlayerToZero()
+                    DispatchQueue.main.async {
+                        self.setPlayerToZero()
+                    }
                 }
             }
-
             if wasPlaying {
                 audioPlayer.play()
             }

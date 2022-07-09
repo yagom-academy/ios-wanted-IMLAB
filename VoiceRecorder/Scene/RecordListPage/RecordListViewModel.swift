@@ -16,7 +16,10 @@ class RecordListViewModel {
         self.networkManager = networkManager
     }
 
-    func getCellData(_ indexPath: IndexPath) -> CellData {
+    func getCellData(_ indexPath: IndexPath) -> CellData? {
+        guard indexPath.row < recordDatas.count else {
+            return nil
+        }
         return recordDatas[indexPath.row]
     }
 

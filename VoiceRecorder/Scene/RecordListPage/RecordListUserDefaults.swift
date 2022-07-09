@@ -8,21 +8,24 @@
 import Foundation
 
 class RecordListUserDefaults {
+    private let SUITENAME:String = "recordData"
     static let shared = RecordListUserDefaults()
     private var cache:[CellData] = []
-    private init() { }
+    private let userDefaults:UserDefaults?
     
-    private let userDefaults = UserDefaults(suiteName: "recordData")
+    private init() {
+        userDefaults = UserDefaults(suiteName: SUITENAME)
+    }
 
     func save(data: [CellData]) {
         let encoder = JSONEncoder()
         if let encoded = try? encoder.encode(data) {
-            self.userDefaults?.setValue(encoded, forKey: "recordData")
+            self.userDefaults?.setValue(encoded, forKey: SUITENAME)
         }
     }
     
     func getData() -> [CellData] {
-        if let savedData = userDefaults?.object(forKey: "recordData") as? Data {
+        if let savedData = userDefaults?.object(forKey: SUITENAME) as? Data {
             let decoder = JSONDecoder()
             let savedObject = try? decoder.decode([CellData].self, from: savedData)
             cache = savedObject ?? []

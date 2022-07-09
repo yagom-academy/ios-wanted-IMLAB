@@ -112,8 +112,6 @@ struct RecordNetworkManager: NetworkManager {
                     return
                 }
 
-                // MARK: Prefix가 뭐지?
-
                 for _prefix in data.prefixes {
                     print(_prefix)
                 }

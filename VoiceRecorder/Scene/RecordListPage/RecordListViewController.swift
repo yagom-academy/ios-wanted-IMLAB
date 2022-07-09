@@ -12,7 +12,7 @@ class RecordListViewController: UIViewController {
     private let sortBar = RecordListSortBar()
     private let tableView = UITableView()
     private let viewModel = RecordListViewModel(networkManager:  RecordNetworkManager.shared)
-
+    
     struct Math {
         static let sortBarHeightMultiplier: Double = 0.05
         static let tableViewHeightMultiplier: Double = 0.9
@@ -23,6 +23,7 @@ class RecordListViewController: UIViewController {
         attribute()
         layout()
         setRefresh()
+        AddNavigationbarRightItem()
     }
 
     required init?(coder: NSCoder) {
@@ -31,14 +32,15 @@ class RecordListViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        didPullToRefresh()
+        refreshTableViewCell()
     }
+}
 
+//MARK: - attribute, layout 메서드
+extension RecordListViewController {
     private func attribute() {
         title = "녹음파일 리스트"
         view.backgroundColor = ThemeColor.blue100
-
-        AddNavigationbarRightItem()
 
         containerStackView.axis = .vertical
         containerStackView.distribution = .equalSpacing
@@ -53,16 +55,6 @@ class RecordListViewController: UIViewController {
 
         tableView.reloadData()
         tableView.backgroundColor = .clear
-    }
-
-    private func AddNavigationbarRightItem() {
-        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(presentRecordPage))
-        navigationItem.rightBarButtonItems = [addButton]
-    }
-
-    @objc private func presentRecordPage() {
-        let vc = RecordViewController()
-        navigationController?.pushViewController(vc, animated: true)
     }
 
     private func layout() {
@@ -86,20 +78,20 @@ class RecordListViewController: UIViewController {
     }
 }
 
-// MARK: - UITableViewDataSource, UITableViewDelegate 메서드
-
+// MARK: - UITableView DataSource, Delegate 메서드
 extension RecordListViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.getCellTotalCount()
+            return viewModel.getCellTotalCount()
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: RecordListCell.identifier, for: indexPath) as? RecordListCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: RecordListCell.identifier, for: indexPath)  as? RecordListCell,
+              let data = viewModel.getCellData(indexPath) else {
             return UITableViewCell()
         }
-        cell.setData(data: viewModel.getCellData(indexPath), indexPath: indexPath)
-        cell.addSwapCellTapGesture(action: handleLongPress(with:_:))
-        cell.addFavoriteMarkAction(action: handleFavoriteButton(indexPath:))
+        
+        cell.delegate = self
+        cell.setData(data: data, indexPath: indexPath)
         
         return cell
     }
@@ -118,24 +110,50 @@ extension RecordListViewController: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let data = viewModel.getCellData(indexPath)
+        guard let data = viewModel.getCellData(indexPath) else {
+            return
+        }
         let vc = PlayerViewController()
-
         vc.setData(data.fileInfo)
-
         navigationController?.pushViewController(vc, animated: true)
     }
 }
 
-// MARK: - 테이블뷰를 당겼을 때 새로고침시키는 메서드
+//MARK: - RecordListCell(셀) Delegate 메서드
+extension RecordListViewController: RecordListCellDelegate {
+    func tappedFavoriteMark(_ indexPath: IndexPath) {
+        viewModel.tappedFavoriteButton(indexPath: indexPath)
+        tableView.reloadData()
+        sortBar.viewWillAppear()
+    }
+    
+    func beginSwapCellLongTapGesture(_ sender: UILongPressGestureRecognizer, _ toCenterPoint: CGPoint) {
+        swapByPress(with: sender, toCenterPoint: toCenterPoint)
+    }
+}
 
+
+// MARK: - 오른쪽 네비게이션아이템 추가하는 메서드
+extension RecordListViewController {
+    private func AddNavigationbarRightItem() {
+        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(presentRecordPage))
+        navigationItem.rightBarButtonItems = [addButton]
+    }
+
+    @objc private func presentRecordPage() {
+        let vc = RecordViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+}
+
+// MARK: - 셀데이터를 새로고침시키는 메서드(+테이블뷰를 당겼을 때)
 extension RecordListViewController {
     private func setRefresh() {
         tableView.refreshControl = UIRefreshControl()
-        tableView.refreshControl?.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
+        tableView.refreshControl?.addTarget(self, action: #selector(refreshTableViewCell), for: .valueChanged)
     }
 
-    @objc private func didPullToRefresh() {
+    @objc private func refreshTableViewCell() {
         viewModel.update(completion: { result in
             switch result {
             case .success():
@@ -152,7 +170,7 @@ extension RecordListViewController {
     }
 }
 
-//MARK: - 셀정렬버튼
+//MARK: - 셀정렬버튼 이벤트 메서드
 extension RecordListViewController: RecordListSortBarDelegate {
     func sortButtonTapped(sortState: RecordListSortState) {
         viewModel.sortButtonTapped(beforeState: sortBar.sortState, afterState: sortState, completion: { [weak self] in
@@ -161,22 +179,8 @@ extension RecordListViewController: RecordListSortBarDelegate {
     }
 }
 
-
-//MARK: - 즐겨찾기 버튼 이벤트
-extension RecordListViewController {
-    private func handleFavoriteButton(indexPath: IndexPath) {
-        viewModel.tappedFavoriteButton(indexPath: indexPath)
-        tableView.reloadData()
-        sortBar.viewWillAppear()
-    }
-}
-
 //MARK: - 셀이동 이벤트
 extension RecordListViewController {
-    private func handleLongPress(with sender: UILongPressGestureRecognizer, _ toCenterPoint: CGPoint) {
-        swapByPress(with: sender, toCenterPoint: toCenterPoint)
-    }
-
     func swapByPress(with sender: UILongPressGestureRecognizer, toCenterPoint: CGPoint) {
         let tableViewWidth: CGFloat = tableView.contentSize.width
         let tableViewHeight: CGFloat = tableView.contentSize.height
@@ -254,8 +258,8 @@ extension RecordListViewController {
             cell.isHidden = false
             cell.alpha = 0.0
             
-            // Snapshot이 사라지고 셀이 나타내는 애니메이션 부여
-            UIView.animate(withDuration: 0.3) {
+            // 더블클릭, 오른쪽으로 끌어당겼을 때 Snapshot이 사라지는 버그방지
+            UIView.animate(withDuration: 0) {
                 CellSnapshotView.value?.center = cell.center
                 CellSnapshotView.value?.transform = CGAffineTransform.identity
                 CellSnapshotView.value?.alpha = 1.0
