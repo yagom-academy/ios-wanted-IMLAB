@@ -70,7 +70,7 @@ class PlayingViewController: UIViewController {
     }
     
     @IBAction func goBackwardButtonTapped(_ sender: UIButton) {
-        audioPlayerHandler.seek(to: -5.0)
+        audioPlayerHandler.skip(to: -5.0)
         movePoint = 300 * CGFloat(audioPlayerHandler.progress)
         positionBar.frame = CGRect(x: movePoint, y: 0, width: 1, height: 150)
         if movePoint <= 0 {
@@ -80,7 +80,7 @@ class PlayingViewController: UIViewController {
     }
     
     @IBAction func goForwardButtonTapped(_ sender: UIButton) {
-        audioPlayerHandler.seek(to: 5.0)
+        audioPlayerHandler.skip(to: 5.0)
         movePoint = 300 * CGFloat(audioPlayerHandler.progress)
         positionBar.frame = CGRect(x: movePoint, y: 0, width: 1, height: 150)
         if movePoint >= 300 {
