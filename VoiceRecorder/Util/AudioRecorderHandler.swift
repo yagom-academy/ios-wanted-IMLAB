@@ -11,22 +11,43 @@ import AVFoundation
 
 class AudioRecoderHandler {
     
-    var audioRecod : AVAudioRecorder!
-    var localFileHandler : LocalFileProtocol
-    var timeHandler : TimeProtocol
-    var fileName: String?
-    var recordFormat = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: 44100.0, channels: 1, interleaved: true)
-    let recordFileURL = URL(fileURLWithPath: NSTemporaryDirectory().appending("input.m4a"))
-//    var averagePowerForChannel0 : Float = -100.0
-//    var averagePowerForChannel1 : Float = -100.0
     
+    private var localFileHandler : LocalFileProtocol
+    private var timeHandler : TimeProtocol
+    private var upLoadFirebase : FirebaseStorageUpload?
+    private var mixerNode : AVAudioMixerNode!
+    private var audioEngine : AVAudioEngine!
+    private var equalizer : AVAudioUnitEQ!
+    private var fileName: String?
+    
+    private var recordFormat = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: 44100.0, channels: 1, interleaved: true)
+    private let recordFileURL = URL(fileURLWithPath: NSTemporaryDirectory().appending("input.m4a"))
+    
+    private var audioRecoder : AVAudioRecorder!
     
     init(localFileHandler : LocalFileProtocol, timeHandler : TimeProtocol ){
         self.localFileHandler = localFileHandler
         self.timeHandler = timeHandler
-        audioRecod = AVAudioRecorder()
+        upLoadFirebase = FirebaseStorageUpload(UploadRecordfile())
+        audioRecoder = AVAudioRecorder()
         setupSession()
         setupEngine()
+    }
+    
+    var Recoder : AVAudioRecorder {
+        get {
+            return audioRecoder
+        }
+    }
+    
+    var saveFileName : String {
+        get {
+            guard let fileName = fileName else {
+                return ""
+            }
+
+            return fileName
+        }
     }
     
     private func setupSession() {
@@ -36,7 +57,7 @@ class AudioRecoderHandler {
             try session.setCategory(.playAndRecord, mode: .default)
             try session.setActive(true,options: .notifyOthersOnDeactivation)
             if let recordFormat = recordFormat {
-                audioRecod = try AVAudioRecorder(url: recordFileURL, format: recordFormat)
+                audioRecoder = try AVAudioRecorder(url: recordFileURL, format: recordFormat)
             }
             AVAudioSession.sharedInstance().requestRecordPermission { allowed in
                 DispatchQueue.main.async {
@@ -52,10 +73,6 @@ class AudioRecoderHandler {
             print(error.localizedDescription)
         }
     }
-    
-    private var mixerNode : AVAudioMixerNode!
-    private var audioEngine : AVAudioEngine!
-    private var equalizer : AVAudioUnitEQ!
     
     private func setupEngine() {
         audioEngine = AVAudioEngine()
@@ -105,14 +122,13 @@ class AudioRecoderHandler {
 
         let file = try AVAudioFile(forWriting: documentURL.appendingPathComponent(fileName), settings: format.settings)
         tapNode.installTap(onBus: 0, bufferSize: 4096, format: format) { buffer, time in
-            try? file.write(from: buffer)            
+            try? file.write(from: buffer)
         }
         
         try audioEngine.start()
         
-        
-        audioRecod.record()
-        audioRecod.isMeteringEnabled = true
+        audioRecoder.record()
+        audioRecoder.isMeteringEnabled = true
     }
     
     func stopRecording(totalTime: String) {
@@ -120,7 +136,7 @@ class AudioRecoderHandler {
         audioEngine.stop()
         guard let recordFileName = self.fileName else { return }
         let recordFileURL = localFileHandler.localFileURL.appendingPathComponent(recordFileName)
-        FirebaseStorage.shared.uploadFile(fileUrl: recordFileURL, fileName: recordFileName, totalTime: totalTime)
+        upLoadFirebase?.uploadFile(fileUrl: recordFileURL, fileName: recordFileName, totalTime: totalTime)
     }
     
     func setFrequency(frequency : Float) {
@@ -130,23 +146,6 @@ class AudioRecoderHandler {
         filter.bypass = false
         
         print(filter.frequency)
-    }
-    
-    private func enableBuiltInMic() {
-        // Get the shared audio session.
-        let session = AVAudioSession.sharedInstance()
-        // Find the built-in microphone input.
-        guard let availableInputs = session.availableInputs,
-              let builtInMicInput = availableInputs.first(where: { $0.portType == .builtInMic }) else {
-            print("The device must have a built-in microphone.")
-            return
-        }
-        // Make the built-in microphone input the preferred input.
-        do {
-            try session.setPreferredInput(builtInMicInput)
-        } catch {
-            print("Unable to set the built-in mic as the preferred input.")
-        }
     }
     
     func updateTimer(_ time: TimeInterval) -> String {

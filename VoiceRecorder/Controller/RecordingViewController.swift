@@ -147,7 +147,7 @@ class RecordingViewController: UIViewController {
     
     private func finishedRecord() {
         
-        guard let fileName = audioRecorderHandler.fileName else { return }
+        let fileName = audioRecorderHandler.saveFileName
         let recordTotalTime = audioRecorderHandler.updateTimer(totalTime!)
         audioRecorderHandler.stopRecording(totalTime: recordTotalTime)
         audioPlayerHandler.selectPlayFile(fileName,true)
@@ -160,8 +160,8 @@ class RecordingViewController: UIViewController {
     @objc func updateRecordTime() {
         recordCurrentTime += 0.1
         totalTime = TimeInterval(recordCurrentTime)
-        audioRecorderHandler.audioRecod.updateMeters()
-        writeWaves(audioRecorderHandler.audioRecod.averagePower(forChannel: 0))
+        audioRecorderHandler.Recoder.updateMeters()
+        writeWaves(audioRecorderHandler.Recoder.averagePower(forChannel: 0))
 
         if let totalTime = totalTime {
             self.totalRecordTimeLabel.text = audioRecorderHandler.updateTimer(totalTime)
