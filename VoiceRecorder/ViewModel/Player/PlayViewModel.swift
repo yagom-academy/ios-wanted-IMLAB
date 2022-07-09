@@ -12,7 +12,7 @@ import Combine
 
 final class PlayViewModel {
     private var url: URL
-    
+        
     private var audioPlayer: AVAudioPlayerNode = {
         let audioPlayer = AVAudioPlayerNode()
         audioPlayer.volume = Constants.VolumeSliderSize.half
@@ -66,7 +66,7 @@ final class PlayViewModel {
             
             setupAudioEngine()
         } catch {
-            print("AudioFile Error: \(error.localizedDescription)")
+            debugPrint("AudioFile Error: \(error.localizedDescription)")
         }
     }
     
@@ -84,7 +84,7 @@ final class PlayViewModel {
             setupPlayerTime()
             playerIsReady = true
         } catch {
-            print("AudioEngine Error: \(error.localizedDescription)")
+            debugPrint("AudioEngine Error: \(error.localizedDescription)")
         }
     }
     

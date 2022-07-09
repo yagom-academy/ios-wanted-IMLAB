@@ -166,8 +166,19 @@ private extension PlayViewController {
                 self?.viewModel = PlayViewModel(url: url)
                 self?.bind()
             case .failure(let error):
-                print(error.localizedDescription)
+                debugPrint(error.localizedDescription)
+                self?.showAlertController()
             }
+        }
+    }
+    
+    func showAlertController() {
+        DispatchQueue.main.async {
+            let alertController = UIAlertController(title: Constants.Alert.error, message: Constants.Alert.empty, preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: Constants.Alert.ok, style: .default, handler: { _ in
+                self.dismiss(animated: true)
+            }))
+            self.present(alertController, animated: true)
         }
     }
     
@@ -202,6 +213,14 @@ private extension PlayViewController {
     }
 }
 
+// MARK: - Public
+
+extension PlayViewController {
+    func configureAudio(_ audio: Audio) {
+        self.audio = audio
+    }
+}
+
 // MARK: - PlaySeekStackViewDelegate
 
 extension PlayViewController: PlaySeekStackViewDelegate {
@@ -215,13 +234,5 @@ extension PlayViewController: PlaySeekStackViewDelegate {
     
     func touchPlayPauseButton() {
         viewModel?.togglePlaying()
-    }
-}
-
-// MARK: - Public
-
-extension PlayViewController {
-    func configureAudio(_ audio: Audio) {
-        self.audio = audio
     }
 }

@@ -12,15 +12,11 @@ struct Constants {
         static let home = String(describing: HomeTableViewCell.self)
     }
     
-    struct AlertActionTitle {
+    struct Alert {
         static let cancel = "취소"
         static let ok = "확인"
         static let empty = ""
-    }
-    
-    struct AlertControllerTitle {
-        static let microphoneRequest = "설정에서 마이크 권한을 허용해주세요."
-        static let recordFileRemove = "녹음파일 삭제"
+        static let error = "오류 발생"
     }
     
     struct Firebase {

@@ -31,7 +31,7 @@ final class HomeViewModel {
             case .success(let audio):
                 self.audios.append(audio)
             case .failure(let error):
-                print(error.localizedDescription)
+                debugPrint(error.localizedDescription)
             }
             
             self.audios.sort { $0.title < $1.title }

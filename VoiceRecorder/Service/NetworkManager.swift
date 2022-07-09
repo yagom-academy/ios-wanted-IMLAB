@@ -8,6 +8,10 @@
 import Foundation
 
 final class NetworkManager {
+    enum NetworkConstants {
+        static let fileName = "Record.m4a"
+    }
+    
     static let shared = NetworkManager()
     
     private init() { }
@@ -16,13 +20,17 @@ final class NetworkManager {
         guard let documentURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
             return
         }
-        let fileURL = documentURL.appendingPathComponent("Record.m4a")
+        let fileURL = documentURL.appendingPathComponent(NetworkConstants.fileName)
         
         URLSession.shared.downloadTask(with: url) { localUrl, response, error in
-            guard let localUrl = localUrl, error == nil else {
-                //TODO: - Error 처리 하기
+            guard let localUrl = localUrl else {
                 return
             }
+            
+            if let error = error {
+                completion(.failure(error))
+            }
+            
             do {
                 if FileManager.default.fileExists(atPath: fileURL.path) {
                     try FileManager.default.removeItem(at: fileURL)

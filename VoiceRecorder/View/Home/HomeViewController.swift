@@ -8,8 +8,10 @@ import AVFAudio
 import Combine
 
 final class HomeViewController: UIViewController {
-    enum Home {
+    enum HomeConstants {
         static let navigationTitle = "음성 메모장"
+        static let alertMicrophoneTitle = "설정에서 마이크 권한을 허용해주세요."
+        static let alertRemoveRecordTitle = "녹음파일 삭제"
     }
     
     private lazy var tableView: UITableView = {
@@ -57,7 +59,7 @@ private extension HomeViewController {
     }
     
     func configureNavigation() {
-        navigationItem.title = Home.navigationTitle
+        navigationItem.title = HomeConstants.navigationTitle
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(touchAddButton))
     }
     
@@ -86,8 +88,8 @@ private extension HomeViewController {
         case .granted:
             presentRecordViewController()
         case .denied:
-            let alertController = UIAlertController(title: Constants.AlertActionTitle.empty, message: Constants.AlertControllerTitle.microphoneRequest, preferredStyle: .alert)
-            alertController.addAction(UIAlertAction(title: Constants.AlertActionTitle.ok, style: .default, handler: nil))
+            let alertController = UIAlertController(title: Constants.Alert.empty, message: HomeConstants.alertMicrophoneTitle, preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: Constants.Alert.ok, style: .default, handler: nil))
             present(alertController, animated: true)
         case .undetermined:
             session.requestRecordPermission { granted in
@@ -152,9 +154,9 @@ extension HomeViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let alertController = UIAlertController(title: Constants.AlertControllerTitle.recordFileRemove, message: nil, preferredStyle: .alert)
-            alertController.addAction(UIAlertAction(title: Constants.AlertActionTitle.cancel, style: .cancel, handler: nil))
-            alertController.addAction(UIAlertAction(title: Constants.AlertActionTitle.ok, style: .default, handler: { _ in
+            let alertController = UIAlertController(title: HomeConstants.alertRemoveRecordTitle, message: nil, preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: Constants.Alert.cancel, style: .cancel, handler: nil))
+            alertController.addAction(UIAlertAction(title: Constants.Alert.ok, style: .default, handler: { _ in
                 self.viewModel.deleteAudio(indexPath)
             }))
             present(alertController, animated: true)
