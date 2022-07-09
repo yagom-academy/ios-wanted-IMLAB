@@ -20,6 +20,7 @@
      4. [사용한 Pattern 소개](#사용한-Pattern-소개)
         - [Coordinator Pattern](#Coordinator-Pattern)
         - [Observer Pattern](#Observer-Pattern)
+        - [Delegate Pattern](#Delegate-Pattern)
      5. [객체 역할 소개](#객체-역할-소개)
         - [View 관련](#View-관련)
         - [Manger 관련](#Manger-관련)
