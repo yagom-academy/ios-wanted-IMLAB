@@ -71,14 +71,15 @@ class AudioPlotView: UIView {
             layer.transform = transform
         }
     }
+    
     public func shiftWaveform() {
         guard let sublayers = self.layer.sublayers else { return }
         for layer in sublayers {
             let transform  = CATransform3DTranslate(layer.transform, -5, 0, 0)
             layer.transform = transform
         }
-        
     }
+    
     func shiftBackward(value: CGFloat) {
         guard let sublayers = self.layer.sublayers else { return }
         for layer in sublayers {
@@ -86,11 +87,12 @@ class AudioPlotView: UIView {
             let transform  = CATransform3DTranslate(layer.transform, value, 0, 0)
             layer.transform = transform
         }
-        
     }
+    
     func move() {
         caLayer.scroll(CGPoint(x: 100, y: 300))
     }
+    
     override func draw(_ rect: CGRect) {
         shiftWaveform()
         count += 1
@@ -117,5 +119,4 @@ class AudioPlotView: UIView {
       
         caLayer.path = path.cgPath
     }
-    
 }

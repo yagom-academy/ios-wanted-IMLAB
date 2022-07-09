@@ -73,11 +73,12 @@ class AudioVisualizeView: UIScrollView {
             self.audioPlotView.setNeedsDisplay()
         }
     }
+    
     func udpateVisualizerContentSize() {
         self.contentSize.width += 5
     }
+    
     func getWaveformData() -> [Int] {
         return audioPlotView.waveforms
     }
-    
 }

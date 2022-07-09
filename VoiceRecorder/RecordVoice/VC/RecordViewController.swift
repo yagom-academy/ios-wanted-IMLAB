@@ -17,6 +17,7 @@ class RecordViewController: UIViewController {
     private let date = DateUtil().currentDate
     private lazy var urlString = "\(self.date).caf"
     
+    //private let recordAuthorizationStatus
     private var isStartRecording: Bool = false
     
     private var visualizer: AudioVisualizeView = {
@@ -54,6 +55,14 @@ class RecordViewController: UIViewController {
         frequencyControlView.delegate = self
         
         recordButton.addTarget(self, action: #selector(controlRecord), for: .touchUpInside)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        requestMicrophoneAccess { [self] allowed in
+            if !allowed {
+                requestMicrophoneAccessDeniedHandler()
+            }
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -98,13 +107,33 @@ class RecordViewController: UIViewController {
     
     private func setAudio() {
         requestMicrophoneAccess { [self] allowed in
-            if allowed {
-                let localUrl = audioFileManager.getAudioFilePath(fileName: urlString)
-                soundManager.initializeSoundManager(url: localUrl, type: .record)
-            } else {
-                print("녹음 권한이 거부되었습니다.")
+            guard allowed == true else {
+                DispatchQueue.main.async {
+                    self.dismiss(animated: true)
+                }
+                return
+            }
+            
+            let localUrl = audioFileManager.getAudioFilePath(fileName: urlString)
+            soundManager.initializeSoundManager(url: localUrl, type: .record)
+        }
+    }
+    
+    private func requestMicrophoneAccessDeniedHandler() {
+        let alert = UIAlertController(title: "녹음 권한 거부", message: "녹음 권한을 설정해주세요.", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "확인", style: .default) { _ in
+            DispatchQueue.main.async {
+                if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(settingsURL,
+                                              options: [:],
+                                              completionHandler: nil)
+                }
             }
         }
+        let cancleAction = UIAlertAction(title: "취소", style: .cancel)
+        alert.addAction(okAction)
+        alert.addAction(cancleAction)
+        self.present(alert, animated: true)
     }
     
     private func recordButtonToggle() {
