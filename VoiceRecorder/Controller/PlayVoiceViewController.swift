@@ -98,6 +98,9 @@ class PlayVoiceViewController: UIViewController{
         autolayOut()
         firebaseDownloadManager.delegate = self
         playAndPauseButton.isEnabled = false
+        forwardFive.isEnabled = false
+        backwardFive.isEnabled = false
+        selectedPitchSegment.isEnabled = false
         firebaseDownloadManager.downloadFile()
     }
     
@@ -196,6 +199,9 @@ extension PlayVoiceViewController : FirebaseDownloadManagerDelegate{
     func downloadComplete(url: URL){
         waveFormView.imageView.load(url: url) { [weak self] in
             self?.playAndPauseButton.isEnabled = true
+            self?.forwardFive.isEnabled = true
+            self?.backwardFive.isEnabled = true
+            self?.selectedPitchSegment.isEnabled = true
             self?.playVoiceViewModel.isDownloading = false
         }
         playVoiceManager = PlayVoiceManager()
