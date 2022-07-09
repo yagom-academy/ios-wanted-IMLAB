@@ -47,7 +47,7 @@ class VoiceMemoListViewController: UIViewController {
         
         super.viewDidLoad()
         configureTableView()
-        designUI()
+        configureViewController()
         fetchFirebaseListAll()
         NotificationCenter.default.addObserver(self, selector: #selector(fetchRecordFileListAll(_:)), name: .recordFileUploadComplete, object: nil)
     }
@@ -111,7 +111,7 @@ extension VoiceMemoListViewController {
         tableView.dataSource = self
     }
     
-    private func designUI() {
+    private func configureViewController() {
         
         view.backgroundColor = .systemBackground
         self.navigationItem.title = "Voice Memos"

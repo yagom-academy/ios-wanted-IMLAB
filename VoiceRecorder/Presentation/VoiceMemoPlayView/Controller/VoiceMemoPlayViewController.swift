@@ -139,7 +139,7 @@ class VoiceMemoPlayViewController: UIViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        designUI()
+        configureViewController()
         
         audioPlayer.delegate = self
         NotificationCenter.default.addObserver(self, selector: #selector(audioPlaybackTimeIsOver(_:)), name: .audioPlaybackTimeIsOver, object: nil)
@@ -264,25 +264,25 @@ extension VoiceMemoPlayViewController {
         }
     }
     
-    private func designUI() {
+    private func configureViewController() {
         
         view.backgroundColor = .systemBackground
         configureSubViews()
         self.titleLabel.text = audioFileName ?? "PlayView"
         
-        designTitleLabel()
-        designVolumeLabel()
-        designVolumeSlider()
-        designWaveFormView()
-        designGrayTransparentView()
-        designPlayOrPauseButton()
-        designPitchSegmentedController()
-        designPlayButtonStackView()
-        designSkipForward5SecondButton()
-        designSkipBackward5SecondButton()
+        setConstraintsOfTitleLabel()
+        setConstraintsOfVolumeLabel()
+        setConstraintsOfVolumeSlider()
+        setConstraintsOfWaveFormView()
+        setConstraintsOfGrayTransparentView()
+        setConstraintsOfPlayOrPauseButton()
+        setConstraintsOfPitchSegmentedController()
+        setConstraintsOfPlayButtonStackView()
+        setConstraintsOfSkipForward5SecondButton()
+        setConstraintsOfSkipBackward5SecondButton()
     }
     
-    private func designTitleLabel() {
+    private func setConstraintsOfTitleLabel() {
         
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
@@ -290,7 +290,7 @@ extension VoiceMemoPlayViewController {
         ])
     }
     
-    private func designWaveFormView() {
+    private func setConstraintsOfWaveFormView() {
         
         NSLayoutConstraint.activate([
             waveFormView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -301,7 +301,7 @@ extension VoiceMemoPlayViewController {
         ])
     }
     
-    private func designGrayTransparentView() {
+    private func setConstraintsOfGrayTransparentView() {
         
         grayTransparentViewWidthConstant = grayTransparentView.widthAnchor.constraint(equalToConstant: 0)
         NSLayoutConstraint.activate([
@@ -313,7 +313,7 @@ extension VoiceMemoPlayViewController {
         ])
     }
     
-    private func designPitchSegmentedController() {
+    private func setConstraintsOfPitchSegmentedController() {
         
         NSLayoutConstraint.activate([
             pitchSegmentedController.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -323,7 +323,7 @@ extension VoiceMemoPlayViewController {
         ])
     }
     
-    private func designVolumeLabel() {
+    private func setConstraintsOfVolumeLabel() {
         
         NSLayoutConstraint.activate([
             volumeLabel.leadingAnchor.constraint(equalTo: pitchSegmentedController.leadingAnchor),
@@ -331,7 +331,7 @@ extension VoiceMemoPlayViewController {
         ])
     }
     
-    private func designVolumeSlider() {
+    private func setConstraintsOfVolumeSlider() {
         
         NSLayoutConstraint.activate([
             volumeSlider.widthAnchor.constraint(equalTo: waveFormView.widthAnchor),
@@ -340,7 +340,7 @@ extension VoiceMemoPlayViewController {
         ])
     }
     
-    private func designPlayButtonStackView() {
+    private func setConstraintsOfPlayButtonStackView() {
         
         NSLayoutConstraint.activate([
             playButtonStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -348,7 +348,7 @@ extension VoiceMemoPlayViewController {
         ])
     }
     
-    private func designPlayOrPauseButton() {
+    private func setConstraintsOfPlayOrPauseButton() {
         
         NSLayoutConstraint.activate([
             playOrPauseButton.widthAnchor.constraint(equalToConstant: 40),
@@ -356,7 +356,7 @@ extension VoiceMemoPlayViewController {
         ])
     }
     
-    private func designSkipForward5SecondButton() {
+    private func setConstraintsOfSkipForward5SecondButton() {
         
         NSLayoutConstraint.activate([
             skipForward5SecondButton.widthAnchor.constraint(equalTo: playOrPauseButton.widthAnchor),
@@ -364,7 +364,7 @@ extension VoiceMemoPlayViewController {
         ])
     }
     
-    private func designSkipBackward5SecondButton() {
+    private func setConstraintsOfSkipBackward5SecondButton() {
         
         NSLayoutConstraint.activate([
             skipBackward5SecondButton.widthAnchor.constraint(equalTo: playOrPauseButton.widthAnchor),

@@ -126,7 +126,7 @@ class VoiceMemoRecordViewController: UIViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        designUI()
+        configureViewController()
         hiddenPlayRelatedButtons(.record)
         presentationController?.delegate = self
         audioRecorder.delegate = self
@@ -157,19 +157,19 @@ class VoiceMemoRecordViewController: UIViewController {
         }
     }
     
-    private func designUI() {
+    private func configureViewController() {
         
         self.view.backgroundColor = .systemBackground
         
         configureSubviews()
-        desigWaveView()
-        designCutOffLabel()
-        designSlider()
-        designPlayTimeLabel()
-        designButtons()
+        setConstraintsOfWaveView()
+        setConstraintsOfCutOffLabel()
+        setConstraintsOfSlider()
+        setConstraintsOfPlayTimeLabel()
+        setConstraintsOfButtons()
     }
     
-    private func desigWaveView() {
+    private func setConstraintsOfWaveView() {
         
         NSLayoutConstraint.activate([
             waveFormView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: view.frame.height * 0.1),
@@ -179,7 +179,7 @@ class VoiceMemoRecordViewController: UIViewController {
         ])
     }
     
-    private func designCutOffLabel() {
+    private func setConstraintsOfCutOffLabel() {
         
         NSLayoutConstraint.activate([
             cutoffFrequencyLabel.topAnchor.constraint(equalTo: waveFormView.safeAreaLayoutGuide.bottomAnchor, constant: 30),
@@ -189,7 +189,7 @@ class VoiceMemoRecordViewController: UIViewController {
         ])
     }
     
-    private func designSlider() {
+    private func setConstraintsOfSlider() {
         
         NSLayoutConstraint.activate([
             cutOffFrequencySlider.topAnchor.constraint(equalTo: cutoffFrequencyLabel.safeAreaLayoutGuide.bottomAnchor, constant: 16),
@@ -198,7 +198,7 @@ class VoiceMemoRecordViewController: UIViewController {
         ])
     }
     
-    private func designPlayTimeLabel() {
+    private func setConstraintsOfPlayTimeLabel() {
         
         NSLayoutConstraint.activate([
             playTimeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -207,7 +207,7 @@ class VoiceMemoRecordViewController: UIViewController {
         ])
     }
     
-    private func designButtons() {
+    private func setConstraintsOfButtons() {
         
         NSLayoutConstraint.activate([
             playButtonStackView.topAnchor.constraint(equalTo:playTimeLabel.safeAreaLayoutGuide.bottomAnchor, constant: 35),
