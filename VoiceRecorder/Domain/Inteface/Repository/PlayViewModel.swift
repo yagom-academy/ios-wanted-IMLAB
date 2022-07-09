@@ -8,36 +8,16 @@
 import UIKit
 import AVFoundation
 
-final class PlayViewModel {
+final class PlayViewModel: AudioPlayViewModelable {
     
     var audioInformation: AudioInformation
     var currentTime: Observable<Double> = Observable(.zero)
-    private var audioPlayManager: AudioPlayManager
+    var audioPlayManager: AudioPlayManager
     
     init(audioInformation: AudioInformation) {
         self.audioInformation = audioInformation
         self.audioPlayManager = AudioPlayManager(audioURL: audioInformation.fileURL)
         audioPlayManager.delegate = self
-    }
-    
-    func changePitch(to voice: Int) {
-        audioPlayManager.changePitch(to: voice)
-    }
-    
-    func controlVolume(to volume: Float) {
-        audioPlayManager.controlVolume(to: volume)
-    }
-    
-    func move(seconds: Double) {
-        audioPlayManager.seek(to: seconds)
-    }
-    
-    func play() {
-        audioPlayManager.play()
-    }
-    
-    func pause() {
-        audioPlayManager.pause()
     }
 }
 
