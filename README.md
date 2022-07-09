@@ -44,6 +44,10 @@ Firebase Storage를 활용해 녹음 파일을 관리할 수 있는 녹음기 �
 
 ## 화면 3
 - 숭어
+  - 재생 시 현재 위치를 UIProgressView로 표현
+  - 5초 전, 후 탐색
+  - 볼륨 조절
+  - 음의 pitch값을 이용해 목소리 변형
 
 # 회고
 ## 미니
@@ -75,7 +79,36 @@ Recorder와 Player에서 제어를 하는 함수는 ViewModel에 존재하였고
 <img src="./스크린샷/회고3_mini.png">
 <br><br>
 그래서, 위와 같이 Delegate 패턴을 사용하여서 데이터를 View에 주고, 파형을 그리는 View에 데이터를 업데이트 하는 방법을 사용하였다.
+
 ## 숭어
+### 1. PlaySeekStackView Delegate 패턴 활용
+- 공통된 UI를 하나의 View로 구현
+- 버튼을 public 처리 및 직접 addTarget을 구현
+- 접근해서 원하지 않는 기능을 수정할 수 있다는 문제 발생
+![숭어회고1](https://github.com/hhhan0315/ios-wanted-VoiceRecorder/blob/main/스크린샷/숭어회고/숭어_회고_1.png)
+![숭어회고1_2](https://github.com/hhhan0315/ios-wanted-VoiceRecorder/blob/main/스크린샷/숭어회고/숭어_회고_1_2.png)
+![숭어회고1_3](https://github.com/hhhan0315/ios-wanted-VoiceRecorder/blob/main/스크린샷/숭어회고/숭어_회고_1_3.png)
+- 버튼을 private 처리 및 delegate로 전달
+
+### 2. Data Binding Combine 활용
+- ViewController에서 UI 부분은 남기고 비즈니스 로직 부분은 ViewModel로 분리
+- 데이터 변경을 알려줄 Data Binding 구현 필요
+- 초기에는 Observable 클래스 활용
+![숭어회고2](https://github.com/hhhan0315/ios-wanted-VoiceRecorder/blob/main/스크린샷/숭어회고/숭어_회고_2_1.png)
+![숭어회고2_1](https://github.com/hhhan0315/ios-wanted-VoiceRecorder/blob/main/스크린샷/숭어회고/숭어_회고_2_2.png)
+- Combine으로 변경
+
+### 3. NameSpace
+- 중복되는 문자열 사용 및 관리 문제 발생
+![숭어회고3](https://github.com/hhhan0315/ios-wanted-VoiceRecorder/blob/main/스크린샷/숭어회고/숭어_회고_3_1.png)
+![숭어회고3_2](https://github.com/hhhan0315/ios-wanted-VoiceRecorder/blob/main/스크린샷/숭어회고/숭어_회고_3_2.png)
+- NameSpace : 관련 있는 값을 모아두는 공간
+- String 문자열을 NameSpace로 만들기
+- struct & static 변수 활용
+  - 인스턴스를 할 수 있다는 단점
+- enum & static 변수 활용
+  - 초기화를 막을 수 있다.
+  - enum은 type이기 때문에 중복이 발생할 수 있다.
 
 # 커밋 메시지
 - Convention
