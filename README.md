@@ -27,7 +27,7 @@
 
 |**Create Audio 화면 전환 및 파일 업로드**|**파일 삭제**|**서버 연결이 끊어질시 에러 핸들링**|
 |---|---|---|
-|<img src="https://user-images.githubusercontent.com/36659877/178035835-1653603a-4376-4df2-8c64-52be71299c2d.gif" width="200" height="400"/>|<img src="https://user-images.githubusercontent.com/36659877/178037351-6eb6099b-ba96-447c-af96-0f6728fa3aca.gif" width="200" height="400"/>|<img src="https://user-images.githubusercontent.com/36659877/178036138-aa307f24-19bf-4f9d-a406-596631f6155f.gif" width="200" height="400"/>|
+|<img src="https://user-images.githubusercontent.com/55118858/178104089-f5eb6fdb-8ba4-4a67-8296-20934c740295.gif" width="200" height="400"/>|<img src="https://user-images.githubusercontent.com/36659877/178037351-6eb6099b-ba96-447c-af96-0f6728fa3aca.gif" width="200" height="400"/>|<img src="https://user-images.githubusercontent.com/36659877/178036138-aa307f24-19bf-4f9d-a406-596631f6155f.gif" width="200" height="400"/>|
 
 
 
@@ -53,6 +53,15 @@
 - [x] Segment Control를 통해 Pitch 값을 변경할 수 있습니다.
 
 ### CreateAudio 화면
+
+| 녹음 시작 및 중지 | 버튼 비활성화 | 재녹음시 파일 대채 |
+|:---:|:---:|:---:|
+|<img src="https://user-images.githubusercontent.com/55118858/178103715-b0277b3b-ccca-47f2-9a26-f518ab13d9e0.gif" width="200" height="400"/>| <img src="https://user-images.githubusercontent.com/55118858/178103709-bf003bab-ee07-48ef-97bb-ec6e6191b12f.gif" width="200" height="400"/>| <img src="https://user-images.githubusercontent.com/55118858/178103707-9e5afa98-c8c2-4165-86dd-de67929ad7b4.gif" width="200" height="400"/> |
+
+| 녹음 재생,일시정지,5초 전/후 이동 | 녹음 저장 |
+|:---:|:---:|
+|<img src="https://user-images.githubusercontent.com/55118858/178103712-c0db6eb8-0925-4b1b-9cec-31638ca7f5d7.gif" width="200" height="400"/>| <img src="https://user-images.githubusercontent.com/55118858/178103713-3492e3bb-6821-4b48-8a88-d2ede6313005.gif" width="200" height="400"/>|
+ 
 - [x] 녹음 버튼을 이용해 녹음 진행/정지를 할 수 있습니다.
 - [x] 재생 버튼등을 이용해 녹음 완료된 파일을 재생/정지, 5초 전/후를 조절할 수 있습니다.
 - [x] 녹음 중이거나 재생을 할때 파형을 그려줍니다. 
@@ -61,3 +70,4 @@
 - [x] 재 녹음시 새로운 녹음 파일로 대체됩니다.
 - [x] Done 버튼을 이용해 녹음을 저장 할 수 있습니다.
 - [x] Cancel 버튼을 이용해 녹음을 저장 하지 않고 되돌아 갈 수 있습니다.
+
