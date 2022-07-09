@@ -19,7 +19,12 @@ final class PlayViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        addSubViewTarget()
+        generateWaveForm()
+        bindWithViewModel()
+    }
+    
+    override func setupView() {
         let splitAudioInformationName = viewModel?.audioInformation.name.split(separator: "_")
         
         let year = splitAudioInformationName![3]
@@ -28,10 +33,6 @@ final class PlayViewController: BaseViewController {
         let time = splitAudioInformationName![4].split(separator: ".")[0]
         
         playView.titleLabel.text = "20\(year). \(month). \(day) \(time)"
-        
-        addSubViewTarget()
-        generateWaveForm()
-        bindWithViewModel()
     }
     
     private func addSubViewTarget() {
