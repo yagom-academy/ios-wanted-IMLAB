@@ -14,14 +14,13 @@ class RecordDetailViewController: UIViewController {
     
     // MARK: - IBOutlet
     
-    @IBOutlet weak var waveView: UIView!
+    @IBOutlet weak var waveFormCanvasView: UIView!
     @IBOutlet weak var cutoffLabel: UILabel!
     @IBOutlet weak var recordingTimeLabel: UILabel!
     @IBOutlet weak var recordButton: UIButton!
     @IBOutlet weak var buttonsStackView: UIStackView!
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var cutOffFreqSegmentedControl: UISegmentedControl!
-    @IBOutlet weak var testImageView: UIImageView!
     
     // MARK: - Properties
     
@@ -41,22 +40,22 @@ class RecordDetailViewController: UIViewController {
     private var timer : Timer?
     private var recordingTimer : Timer?
     
-    private var sampeRate : Int?
+    private var samplerate : Int?
     
-    private lazy var pencil = UIBezierPath(rect: waveView.bounds)
-    private lazy var firstPoint = CGPoint(x: waveView.bounds.midX, y: waveView.bounds.midY)
+    private lazy var pencil = UIBezierPath()
+    private lazy var firstPoint = CGPoint(x: waveFormCanvasView.bounds.midX, y: waveFormCanvasView.bounds.midY)
     private lazy var jump : CGFloat = (firstPoint.x)/200
     private let waveLayer = CAShapeLayer()
     private var traitLength : CGFloat!
     private var start : CGPoint!
-    
-    
+    var translationX : Double = 0.0
+        
     // MARK: - LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         buttonsStackView.isHidden = true
-        
+        waveFormCanvasView.frame.size.width = CGFloat(FP_INFINITE)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -80,9 +79,9 @@ class RecordDetailViewController: UIViewController {
     private func setupAudioRecorder() {
         recordingSession = AVAudioSession.sharedInstance()
         do {
-            try recordingSession?.setCategory(.playAndRecord, mode: .default)
+            try recordingSession?.setCategory(.playAndRecord, mode: .default, options: .allowBluetooth)
             try recordingSession?.setActive(true)
-            try recordingSession?.setPreferredSampleRate(Double(sampeRate ?? 0))
+            try recordingSession?.setPreferredSampleRate(Double(samplerate ?? 8000))
             recordingSession?.requestRecordPermission({ [unowned self] allowed in
                 DispatchQueue.main.async {
                     if allowed {
@@ -150,11 +149,11 @@ class RecordDetailViewController: UIViewController {
     }
     
     private func drawingWave() {
-        var translationX = 0.0
+        translationX = 0.0
         timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
             UIView.animate(withDuration: 0.01, delay: 0, options: [.curveLinear]) {
-                self.waveView.transform = CGAffineTransform(translationX: translationX, y: 0)
-                translationX -= self.jump
+                self.waveFormCanvasView.transform = CGAffineTransform(translationX: self.translationX, y: 0)
+                self.translationX -= self.jump
             }
             self.audioRecorder?.updateMeters()
             // write waveforms
@@ -168,6 +167,7 @@ class RecordDetailViewController: UIViewController {
         showDuration(url)
         uploadRecordDataToFirebase(url)
         captureWaveForm()
+        print(audioFileURL)
         
         // Change UI
         recordButton.setImage(readyToRecordButtonImage, for: .normal)
@@ -188,18 +188,17 @@ class RecordDetailViewController: UIViewController {
         }
     }
     
-    func captureWaveForm() {
-        let size = CGSize(width: waveView.bounds.width, height: waveView.bounds.height)
-        let renderer = UIGraphicsImageRenderer(size: size)
-        let image = renderer.image { ctx in
-            waveView.drawHierarchy(in: waveView.bounds, afterScreenUpdates: true)
-        }
-        testImageView.image = image
-        downloadImageInLocal(image.jpegData(compressionQuality: 1.0))
-    }
     
-    private func updateImageToFirebase() {
-        FireStorageManager.shared.uploadImage(testImageView.image)
+    func captureWaveForm() {
+        let size = CGRect(x: waveFormCanvasView.bounds.midX, y: waveFormCanvasView.bounds.minY, width: translationX.magnitude, height: waveFormCanvasView.bounds.height)
+        let renderer = UIGraphicsImageRenderer(bounds: size)
+//        let image = renderer.image { ctx in
+//            waveFormCanvasView.drawHierarchy(in: waveFormCanvasView.bounds, afterScreenUpdates: true)
+//        }
+        let image = renderer.image { rendererContext in
+            waveFormCanvasView.layer.render(in: rendererContext.cgContext)
+        }
+        downloadImageInLocal(image.jpegData(compressionQuality: 1.0))
     }
     
     private func showDuration(_ url: URL?) {
@@ -295,8 +294,9 @@ class RecordDetailViewController: UIViewController {
             
             waveLayer.lineWidth = jump
             
-            waveView.layer.addSublayer(waveLayer)
-//            waveView.setNeedsDisplay()
+            waveFormCanvasView.layer.addSublayer(waveLayer)
+            waveLayer.contentsCenter = waveFormCanvasView.frame
+//            waveFormCanvasView.setNeedsDisplay()
             
             start = CGPoint(x: start.x + jump, y: start.y)
         }
@@ -337,13 +337,13 @@ class RecordDetailViewController: UIViewController {
         
         switch selectedVoiceValue {
         case 0:
-            sampeRate = 8000
+            samplerate = 8000
         case 1:
-            sampeRate = 16000
+            samplerate = 16000
         case 2:
-            sampeRate = 32000
+            samplerate = 32000
         default:
-            sampeRate = 44100
+            samplerate = 44100
         }
     }
 }
