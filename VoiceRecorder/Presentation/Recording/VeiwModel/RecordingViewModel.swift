@@ -9,12 +9,21 @@ import Foundation
 import AVFAudio
 import AVFoundation
 
+protocol RecordingViewModelDelegate: AnyObject {
+
+    func recordingUploaded(_ audioInformation: AudioInformation)
+}
+
 final class RecordingViewModel {
+    
+    weak var delegate: RecordingViewModelDelegate?
     
     var repository = FirebaseRepository()
     var audioRecorder: AVAudioRecorder?
     
     private var endPoint: FirebaseRepository.AudioName?
+    private var data: Data?
+    private var soundEffect: AVAudioPlayer?
     
     var recordURL: URL = {
         let documentsURL: URL = {
@@ -51,11 +60,6 @@ final class RecordingViewModel {
         }
     }
     
-    func upload(from url: URL) {
-        let endPoint = repository.upload(from: url)
-        self.endPoint = endPoint
-    }
-    
     func record() {
         if let recorder: AVAudioRecorder = self.audioRecorder {
             let audioSession: AVAudioSession = AVAudioSession.sharedInstance()
@@ -78,5 +82,45 @@ final class RecordingViewModel {
                 print(error.localizedDescription)
             }
         }
+    }
+    
+    func upload(from url: URL) {
+        let endPoint = repository.upload(from: url)
+        self.endPoint = endPoint
+    }
+    
+    func download() {
+        do {
+            data = try Data(contentsOf: recordURL)
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+
+    func recordingFinished() {
+        guard let name = endPoint,
+              let data = data else { return }
+
+        let audioInformation = AudioInformation(
+            name: name,
+            data: data,
+            fileURL: recordURL,
+            duration: convertToDuration(from: data)
+        )
+
+        delegate?.recordingUploaded(audioInformation)
+    }
+    
+    private func convertToDuration(from data: Data) -> TimeInterval {
+        do {
+            try soundEffect = AVAudioPlayer(data: data)
+            guard let sound = soundEffect else {
+                return .zero
+            }
+            return sound.duration
+        } catch {
+            print(error.localizedDescription)
+        }
+        return .zero
     }
 }
