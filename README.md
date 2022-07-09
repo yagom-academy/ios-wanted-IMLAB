@@ -28,7 +28,7 @@
 ## 🛠 라이브러리
 |라이브러리|Version|Tool|
 |-------|-------|----|
-|FirebaseStorage|`8.15.`|`CocoaPod`|
+|FirebaseStorage|`8.15`|`CocoaPod`|
 
 <br>
 
@@ -40,32 +40,11 @@
 
 <br>
 
-#### VoiceMemoVC(1st page)
-1. AVFoundation
-    - AVAudioPlayer를 이용해서 각 녹음파일의 총 시간(duration) 표시
+||VoiceMemoVC(1st page)|RecordDetailVC(2nd page)|PlayingVC(3rd page)|
+|-----|-----|---|-----|
+|Seocho<br>(조성빈)|1. 앱 실행시 FireStorage로 부터 받아온 데이터 tableView에 표현|1. 파형: recording파일의 averagePower를 이용해서 Wave form을 그림 <br><br>  2. 녹음: AVAudioRecorder를 사용해서 구현 <br><br> 3.cutoff frequency: AVAudioSession의 setPreferredSampleRate을 이용해서 구현|1. FireStorage로 부터 파형 image 받아오기|
+|Peppo<br>(이병훈)|  1. tableView 리스트 삭제 (Local, FireStorage) 동기화 <br><br> 2.tableView pull시 데이터 받아오기 및 예외처리  <br><br>  |1. AVAudioPlayer로 해당 파일에 접근하여 오디오 시간(duration) 표기 <br><br> 2. AutoLayout 적용 (StoryBoard) <br><br> 3. 파형 시작위치 조정|1. AVAudioEngine, Node, File을 사용한 플레이어 생성 <br><br> 2. AVAudioUnitTimePitch를 이용한 목소리 보정 <br><br> 3. AVAudioFramePosition으로 오디오 파일 시간 값조정 및 5초전/후 구현 <br><br> 4. AudioPlayerNode의 volume값 조절 |
 
-2. TableView
-    - TableView를 사용해서 각 파일들 나열
-    - Refresh Control을 사용하여 데이터 Fetch
-
-<br>
-
-#### RecordDetailVC(2nd page)
-
-1. AVFoundation
-    - AVAudioSession을 통해 Input setting
-    - AVAudioRecorder를 통해 recorder 생성
-
-2. CGPoint, CGFloat, UIBezierPath
-    - View의 값들을 이용해서 파형 그리기
-
-#### PlayingVC(3rd page)
-
-1. AVFoundation
-      - AVAudioEngine
-      - AVAudioPlayerNode
-      - AVAudioUnitTimePitch
-          1. 목소리 변조
 
 <br>
 
@@ -125,7 +104,7 @@ Branch를 생성하기 전 [노션페이지](https://good-pirate-c9d.notion.site
 
 </br>
 
-## 🍗  Commit Message Convention
+##  Commit Message Convention
 
 #### 1️⃣ 기본 형식
 prefix는 Issue에 있는 Prefix와 동일하게 사용한다.
@@ -148,7 +127,3 @@ prefix는 Issue에 있는 Prefix와 동일하게 사용한다.
 
 </br>
 
-## 🌀  Code Covention
-
-[StyleShare/swift-style-guide](https://github.com/StyleShare/swift-style-guide) 를 기본으로 따르고 필요에 따라 추가한다.
-Footer
