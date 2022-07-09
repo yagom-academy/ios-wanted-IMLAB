@@ -34,5 +34,15 @@
 
 ### Play 화면
 
+| 음악 파형 및 세팅 | 오디오 플레이 화면 | Pitch 조절 |
+|:---:|:---:|:---:|
+|<img src="https://user-images.githubusercontent.com/88618825/178092212-8ca8b829-c535-4703-9e88-653fca1776c6.gif" width="200" height="400"/>| <img src="https://user-images.githubusercontent.com/88618825/178092214-c441633b-db59-4cc8-9c19-e62a3f6a3a05.gif" width="200" height="400"/>| <img src="https://user-images.githubusercontent.com/88618825/178092216-adaa0097-22fd-4d12-b6c6-ebc73c8672c2.gif" width="200" height="400"/> |
+ 
+- [x] 메인화면에서 선택된 녹음파일의 파형을 그려줍니다.
+- [x] 버튼을 이용해 재생/정지, 5초 전,후를 조절할 수 있습니다.
+- [x] 슬라이더를 통해 재생 위치를 변경할 수 있습니다.
+- [x] 슬라이더를 통해 볼륨을 조절할 수 있습니다.
+- [x] Segment Control를 통해 Pitch 값을 변경할 수 있습니다.
+
 ### CreateAudio 화면
 
