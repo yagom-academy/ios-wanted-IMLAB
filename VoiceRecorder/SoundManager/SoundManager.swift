@@ -43,8 +43,6 @@ protocol SoundManagerStatusReceivable {
 
 class SoundManager {
     
-    // TODO: - play와 record의 프로퍼티 struct로 만들어서 관리
-    
     var delegate: SoundManagerStatusReceivable?
     var recordVisualizerDelegate: RecordingVisualizerable!
     var playBackVisualizerDelegate: PlaybackVisualizerable!
@@ -60,7 +58,7 @@ class SoundManager {
     private lazy var inputNode = engine.inputNode
     private let mixerNode = AVAudioMixerNode()
     
-    var frequency: Float = 40000
+    private var frequency: Float = 40000
     private let eqNode = AVAudioUnitEQ(numberOfBands: 1)
     private lazy var eqFilterParameters: AVAudioUnitEQFilterParameters = eqNode.bands[0] as AVAudioUnitEQFilterParameters
     
@@ -68,7 +66,6 @@ class SoundManager {
     private let pitchControl = AVAudioUnitTimePitch()
     
     private var audioSampleRate: Double = 0
-    private var audioPlayDuration: Double = 0
     private var seekFrame: AVAudioFramePosition = 0
     private var currentPosition: AVAudioFramePosition = 0
     private var audioLengthSamples: AVAudioFramePosition = 0
@@ -144,7 +141,7 @@ class SoundManager {
             guard var currentPosition = getCurrentFrame(lastRenderTime: time) else { return }
             
             currentPosition = specifyFrameStandard(frame: currentFrame + seekFrame, length: audioLengthSamples)
-            print(Float(currentPosition)/Float(audioLengthSamples)*10)
+            
             if currentPosition >= audioLengthSamples {
                 resetPlayer(edge: .end)
             } else {
@@ -304,6 +301,10 @@ extension SoundManager {
         eqFilterParameters.frequency = frequency
     }
     
+    func setFrequencyValue(value: Float) {
+        frequency = value
+    }
+    
     func startRecord() {
         isEnginePrepared = true
         
@@ -320,8 +321,8 @@ extension SoundManager {
                 self.setFrequency()
                 try self.audioFile.write(from: buffer)
                 self.recordVisualizerDelegate.processAudioBuffer(buffer: buffer)
-            } catch {
-                print("[error] : startRecord")
+            } catch let error {
+                self.delegate!.audioFileInitializeErrorHandler(error: error)
             }
         }
         
@@ -342,7 +343,7 @@ extension SoundManager {
 extension SoundManager {
     
     func totalPlayTime(audioFile: AVAudioFile) -> Double {
-       
+        
         let length = audioFile.length
         let sampleRate = audioFile.processingFormat.sampleRate
         let audioPlayTime = Double(length) / sampleRate
