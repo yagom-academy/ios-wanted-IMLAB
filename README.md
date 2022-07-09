@@ -1,6 +1,7 @@
 # 빌드 방법
 1. 프로젝트의 폴더에서 pod install
-2. Target에서, Signing & Capabilities에서 Team 
+2. Target에서, Signing & Capabilities에서 Team 수정
+3. 빌드
 
 ## 개발 환경
   - xcode : Version 13.4.1 (13F100)
