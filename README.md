@@ -56,11 +56,11 @@
 
 | 녹음 시작 및 중지 | 버튼 비활성화 | 재녹음시 파일 대채 |
 |:---:|:---:|:---:|
-|<img src="https://user-images.githubusercontent.com/55118858/178103715-b0277b3b-ccca-47f2-9a26-f518ab13d9e0.gif" width="200" height="400"/>| <img src="https://user-images.githubusercontent.com/55118858/178103709-bf003bab-ee07-48ef-97bb-ec6e6191b12f.gif" width="200" height="400"/>| <img src="https://user-images.githubusercontent.com/55118858/178103707-9e5afa98-c8c2-4165-86dd-de67929ad7b4.gif" width="200" height="400"/> |
+|<img src="https://user-images.githubusercontent.com/55118858/178104570-2aa3045d-16cf-4848-b0db-d46856c7df6c.gif" width="200" height="400"/>| <img src="https://user-images.githubusercontent.com/55118858/178104762-e256cbfd-e551-4361-a22b-a2f31f2ddc67.gif" width="200" height="400"/>| <img src="https://user-images.githubusercontent.com/55118858/178104586-b6614c71-9ee6-480c-b701-0c33c367259b.gif" width="200" height="400"/> |
 
 | 녹음 재생,일시정지,5초 전/후 이동 | 녹음 저장 |
 |:---:|:---:|
-|<img src="https://user-images.githubusercontent.com/55118858/178103712-c0db6eb8-0925-4b1b-9cec-31638ca7f5d7.gif" width="200" height="400"/>| <img src="https://user-images.githubusercontent.com/55118858/178103713-3492e3bb-6821-4b48-8a88-d2ede6313005.gif" width="200" height="400"/>|
+|<img src="https://user-images.githubusercontent.com/55118858/178104880-71236441-05fd-4d6a-8647-e9df473fa5ff.gif" width="200" height="400"/>| <img src="https://user-images.githubusercontent.com/55118858/178103713-3492e3bb-6821-4b48-8a88-d2ede6313005.gif" width="200" height="400"/>|
  
 - [x] 녹음 버튼을 이용해 녹음 진행 및 정지를 할 수 있습니다.
 - [x] 재생 버튼등을 이용해 녹음 완료된 파일을 재생/정지, 5초 전/후를 조절할 수 있습니다.
@@ -70,4 +70,3 @@
 - [x] 재 녹음시 새로운 녹음 파일로 대체됩니다.
 - [x] Done 버튼을 이용해 녹음을 저장 할 수 있습니다.
 - [x] Cancel 버튼을 이용해 녹음을 저장 하지 않고 되돌아 갈 수 있습니다.
-
