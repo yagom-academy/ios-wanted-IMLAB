@@ -8,8 +8,6 @@
 import UIKit
 import AVFAudio
 import Accelerate
-import Foundation
-import AVFoundation
 
 class AudioVisualizeView: UIScrollView {
     
@@ -78,13 +76,6 @@ class AudioVisualizeView: UIScrollView {
         ])
     }
     
-    private func rms(data: UnsafeMutablePointer<Float>, frameLength: UInt) -> Float {
-        var val : Float = 0
-        vDSP_measqv(data, 1, &val, frameLength)
-        val *= 1000
-        return val
-    }
-    
     func processAudioData(buffer: AVAudioPCMBuffer) {
         guard let channelData = buffer.floatChannelData else { return }
         let channelDataValue = channelData.pointee
@@ -93,15 +84,10 @@ class AudioVisualizeView: UIScrollView {
         let rmsValue = rms(data: channelDataValue, frameLength: UInt(frames))
         audioPlotView.waveforms.append(rmsValue)
         
-        
         DispatchQueue.main.async { [self] in
             udpateVisualizerContentSize()
             self.audioPlotView.setNeedsDisplay()
         }
-    }
-    
-    private func udpateVisualizerContentSize() {
-        self.contentSize.width += 5
     }
     
     func getWaveformData() -> [Float] {
@@ -123,7 +109,6 @@ class AudioVisualizeView: UIScrollView {
             let bottomOffset = CGPoint(x: self.contentSize.width - self.bounds.size.width, y: 0)
             self.setContentOffset(bottomOffset, animated: false)
         }
-        
     }
     
     func operateVisualizerMove(value: Float, audioLenth: Float, centerViewMargin: CGFloat) {
@@ -137,5 +122,16 @@ class AudioVisualizeView: UIScrollView {
                 self.setContentOffset(CGPoint(x: Int(self.bounds.minX) - 20, y: 0), animated: true)
             }
         }
+    }
+    
+    private func rms(data: UnsafeMutablePointer<Float>, frameLength: UInt) -> Float {
+        var val : Float = 0
+        vDSP_measqv(data, 1, &val, frameLength)
+        val *= 1000
+        return val
+    }
+    
+    private func udpateVisualizerContentSize() {
+        self.contentSize.width += 5
     }
 }

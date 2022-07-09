@@ -35,7 +35,7 @@ class AudioPlotView: UIView {
         }
     }
     
-    var color = UIColor.gray.cgColor
+    private var color = UIColor.gray.cgColor
     
     var waveforms = [Float]()
     var count = 0
