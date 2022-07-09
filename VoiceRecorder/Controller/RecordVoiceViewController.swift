@@ -142,6 +142,9 @@ class RecordVoiceViewController: UIViewController{
             print("recording stop")
         }else{
             recordVoiceManager.startRecording()
+            if playVoiceManager.isPlay{
+                playVoiceManager.closeAudio()
+            }
             drawWaveFormManager.startDrawing(of: recordVoiceManager.recorder!, in: waveFormCanvasView)
             record_start_stop_button.setImage(UIImage(systemName: "stop.fill"), for: .normal)
             record_start_stop_button.tintColor = .black

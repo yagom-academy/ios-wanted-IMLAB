@@ -94,6 +94,7 @@ class VoiceRecorderListTableViewController: UITableViewController{
         let voiceRecodeFile = voiceRecordListViewModel.ListAtIndex(index: indexPath.row)
         if editingStyle == .delete {
             self.firebaseStorageManger.deleteRecord(fileName : voiceRecodeFile.fileName, fileLength: voiceRecodeFile.fileLength) {
+                tableView.cellForRow(at: indexPath)?.isUserInteractionEnabled = false
                 self.updateTableViewList()
                 self.statusView.completeDelete(){
                     self.view.viewWithTag(102)?.removeFromSuperview()
