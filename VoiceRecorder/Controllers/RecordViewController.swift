@@ -116,17 +116,44 @@ class RecordViewController: UIViewController {
             
             activityIndicator.startAnimating()
             
-            uploadDecibelData(decibels) { url in
-                let newMetaData = [
-                    MetaData.duration.key: "\(ceil(self.engine.duration).toStringTimeFormat)",
-                    MetaData.eq.key: self.eqSliderValues.joined(separator: " "),
-                    MetaData.decibelDataURL.key: url.description
-                ]
-                self.previousDecibels = self.decibels
-                self.decibels = []
-                self.uploadFile(data, fileName: self.recordDate ?? "제목 없음", newMetaData: newMetaData) {
-                    self.activityIndicator.stopAnimating()
-                    self.setupButton(isHidden: false)
+            uploadDecibelData(decibels) { result in
+                switch result {
+                case .success(let url):
+                    let newMetaData = [
+                        MetaData.duration.key: "\(ceil(self.engine.duration).toStringTimeFormat)",
+                        MetaData.eq.key: self.eqSliderValues.joined(separator: " "),
+                        MetaData.decibelDataURL.key: url.description
+                    ]
+                    self.previousDecibels = self.decibels
+                    self.decibels = []
+                    self.uploadFile(
+                        data,
+                        fileName: self.recordDate ?? "제목 없음",
+                        newMetaData: newMetaData
+                    ) { error in
+                        if error != nil {
+                            UIAlertController.showOKAlert(
+                                self,
+                                title: "ERROR",
+                                message: "업로드에 실패 했습니다.",
+                                handler: { _ in
+                                    self.dismiss(animated: true)
+                                }
+                            )
+                            return
+                        }
+                        self.activityIndicator.stopAnimating()
+                        self.setupButton(isHidden: false)
+                    }
+                case .failure(_):
+                    UIAlertController.showOKAlert(
+                        self,
+                        title: "ERROR",
+                        message: "업로드에 실패 했습니다.",
+                        handler: { _ in
+                            self.dismiss(animated: true)
+                        }
+                    )
                 }
             }
         } else {
@@ -246,13 +273,16 @@ private extension RecordViewController {
         let session = AVAudioSession.sharedInstance()
         guard let inputPorts = session.availableInputs,
               let builtInMic = inputPorts.first(where: { $0.portType == .builtInMic }) else {
-            print("The device must have a built-in microphone.")
             return
         }
         do {
             try session.setPreferredInput(builtInMic)
         } catch {
-            print("Unable to set the built-in mic as the preferred input.")
+            UIAlertController.showOKAlert(
+                self,
+                title: "마이크 설정", message: "마이크 권한 설정해주세요.") { _ in
+                    self.openSetting()
+                }
         }
     }
 }
@@ -278,10 +308,13 @@ private extension RecordViewController {
     func requestRecord() {
         recordingSession.requestRecordPermission({ allowed in
             DispatchQueue.main.async {
-                if allowed {
-                    print("allowed record")
-                } else {
-                    self.openSetting()
+                if !allowed {
+                    UIAlertController.showOKAlert(
+                        self,
+                        title: "마이크 권한",
+                        message: "마이크 권한을 설정해주세요.",
+                        handler: { _ in self.openSetting() }
+                    )
                 }
             }
         })
@@ -317,13 +350,16 @@ private extension RecordViewController {
         counter = 0.0
     }
     
-    func uploadDecibelData(_ decibels: [Int], completion: @escaping (URL) -> Void) {
+    func uploadDecibelData(
+        _ decibels: [Int],
+        completion: @escaping (Result<URL, Error>) -> Void
+    ) {
         StorageManager.shared.decibelUpload(decibels) { result in
             switch result {
             case .success(let url):
-                completion(url)
+                completion(.success(url))
             case .failure(let error):
-                print("ERROR \(error)🍺")
+                completion(.failure(error))
             }
         }
     }
@@ -332,7 +368,7 @@ private extension RecordViewController {
         _ data: Data,
         fileName: String,
         newMetaData: [String: String],
-        didFinish completion: @escaping () -> Void
+        didFinish completion: @escaping (Error?) -> Void
     ) {
         StorageManager.shared.upload(
             data: data,
@@ -341,11 +377,10 @@ private extension RecordViewController {
         ) { result in
             switch result {
             case .success(_):
-                print("저장 성공🎉")
                 self.delegate?.recordView(didFinishRecord: true)
-                completion()
+                completion(nil)
             case .failure(let error):
-                print("ERROR \(error.localizedDescription)🌡🌡")
+                completion(error)
             }
         }
     }
@@ -367,5 +402,4 @@ private extension RecordViewController {
     func setupEngine() {
         guard (try? engine.setupEngine()) != nil else { return }
     }
-    
 }

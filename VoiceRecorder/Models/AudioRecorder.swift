@@ -36,7 +36,7 @@ class AudioRecorder {
         do {
             recorder = try AVAudioRecorder(url: path, settings: settings)
         } catch {
-            print("ERROR 👍🏻")
+            return
         }
     }
     

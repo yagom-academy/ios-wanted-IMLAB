@@ -104,7 +104,6 @@ class StorageManager {
         
         decibelRef.putData(data) { _, error in
             if let error = error {
-                print(error, "🐻")
                 completion(.failure(error))
                 return
             }

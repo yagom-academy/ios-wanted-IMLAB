@@ -149,8 +149,13 @@ private extension ListViewController {
                 self.recordList += (recordFile)
                 self.recordListTableView.reloadData()
                 self.activityIndicator.stopAnimating()
-            case .failure(let error):
-                print("ERROR \(error.localizedDescription)🐸")
+            case .failure(_):
+                UIAlertController.showOKAlert(
+                    self,
+                    title: "ERROR",
+                    message: "파일을 불러오는데 실패 했습니다.",
+                    handler: nil
+                )
             }
         }
     }
@@ -165,8 +170,13 @@ private extension ListViewController {
             case .success(_ ):
                 self.recordList.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .fade)
-            case .failure(let error):
-                print(error.localizedDescription)
+            case .failure(_):
+                UIAlertController.showOKAlert(
+                    self,
+                    title: "ERROR",
+                    message: "파일 삭제에 실패 했습니다.",
+                    handler: nil
+                )
             }
         }
     }

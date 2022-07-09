@@ -17,29 +17,24 @@ class LocalFileManager {
         self.recordModel = recordModel
     }
     
-    func downloadToLocal(didFinish completion: @escaping () -> Void) {
+    func downloadToLocal(didFinish completion: @escaping (Error?) -> Void) {
         network.fetchData(url: recordModel.url) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let data):
                 do {
                     try data.write(to: self.audioPath)
-                    completion()
+                    completion(nil)
                 } catch {
-                    print("ERROR \(error.localizedDescription)👛")
+                    completion(error)
                 }
             case .failure(let error):
-                print("ERROR \(error.localizedDescription)🌻")
+                completion(error)
             }
         }
     }
     func deleteToLocal() {
-        
-        do {
-            try fileManager.removeItem(at: audioPath)
-        } catch {
-            print(error)
-        }
+        guard (try? fileManager.removeItem(at: audioPath)) != nil else { return }
     }
 }
 

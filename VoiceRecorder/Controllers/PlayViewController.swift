@@ -39,17 +39,41 @@ class PlayViewController: UIViewController {
         super.viewDidLoad()
         configureUI()
         activityIndicator.startAnimating()
-        setUpLocalFileManger {
-            self.setupEngine {
-                self.getDecibel {
+        setUpLocalFileManger { error in
+            if error != nil {
+                UIAlertController.showOKAlert(
+                    self,
+                    title: "ERROR",
+                    message: "로컬 저장에 실패 했습니다.",
+                    handler: { _ in
+                        self.dismiss(animated: true)
+                    }
+                )
+            }
+            self.setupEngine { error in
+                if error != nil {
+                    UIAlertController.showOKAlert(
+                        self,
+                        title: "ERROR",
+                        message: "파일 정보를 불러오는데 실패했습니다.",
+                        handler: nil
+                    )
+                }
+                self.getDecibel { error in
+                    if error != nil {
+                        UIAlertController.showOKAlert(
+                            self,
+                            title: "ERROR",
+                            message: "파일 정보를 불러오는데 실패했습니다.",
+                            handler: nil
+                        )
+                    }
                     DispatchQueue.main.async {
                         self.updateViewDidFinishEngineSetup()
                     }
                 }
             }
         }
-        
-        
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
@@ -127,7 +151,7 @@ private extension PlayViewController {
             engine.seekFrame = 0
             i = 0
             playerTimeLabel.text = "\(engine.duration.toStringTimeFormat)"
-            setupEngine()
+            guard (try? engine.setupEngine()) != nil else { return }
         } else {
             playerTimeLabel.text = "\(engine.getCurrentTime().toStringTimeFormat)"
         }
@@ -175,7 +199,7 @@ private extension PlayViewController {
         playBackButton.isEnabled = true
         playForwardButton.isEnabled = true
     }
-    func setupEngine(didFinish completion: @escaping () -> Void) {
+    func setupEngine(didFinish completion: @escaping (Error?) -> Void) {
         guard let recordFile = recordFile,
               let eqString = recordFile.metaData[MetaData.eq.key] else { return }
         let gains = eqString.split(separator: " ").map { String($0) }.map { Float($0) ?? 0.0 }
@@ -184,18 +208,26 @@ private extension PlayViewController {
         engine.gains = gains
         do {
             try engine.setupEngine()
-            completion()
+            completion(nil)
         } catch {
-            print("ERROR \(error.localizedDescription)🌔")
+            completion(error)
         }
+        guard (try? engine.setupEngine()) != nil else { return }
     }
-    func setUpLocalFileManger(didFinish completion: @escaping () -> Void) {
+    func setUpLocalFileManger(didFinish completion: @escaping (Error?) -> Void) {
         guard let recordFile = recordFile else { return }
         localFileManager = LocalFileManager(recordModel: recordFile)
-        localFileManager?.downloadToLocal { completion() }
+        localFileManager?.downloadToLocal { error in
+            if error != nil {
+                completion(error)
+                return
+            }
+            completion(nil)
+            return
+        }
     }
     
-    func getDecibel(completion: @escaping () -> Void) {
+    func getDecibel(completion: @escaping (Error?) -> Void) {
         guard let urlString = recordFile?.metaData[MetaData.decibelDataURL.key],
               let url = URL(string: urlString) else { return }
         
@@ -204,15 +236,12 @@ private extension PlayViewController {
             case .success(let data):
                 let decibelArr = JSONDecoder.decode([Int].self, data: data) ?? []
                 self.decibels = decibelArr
-                completion()
+                completion(nil)
                 return
             case .failure(let error):
-                print("ERROR \(error)🐶🐶")
+                completion(error)
                 return
             }
         }
-    }
-    func setupEngine() {
-        guard (try? engine.setupEngine()) != nil else { return }
     }
 }
