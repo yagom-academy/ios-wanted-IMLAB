@@ -11,6 +11,12 @@ import Accelerate
 
 //TODO: - pitch enum 선언 필요
 
+enum PitchVariable: Int {
+    case middle = 0
+    case row = -150
+    case high = 150
+}
+
 enum PlayerType {
     case playBack
     case record
@@ -20,8 +26,13 @@ enum EdgeType {
     case end
 }
 
-protocol Visualizerable {
+protocol RecordingVisualizerable {
     func processAudioBuffer(buffer: AVAudioPCMBuffer)
+    
+}
+
+protocol PlaybackVisualizerable {
+    func operatingwaveProgression(progress: Float)
 }
 
 protocol SoundManagerStatusReceivable {
@@ -35,7 +46,8 @@ class SoundManager {
     // TODO: - play와 record의 프로퍼티 struct로 만들어서 관리
     
     var delegate: SoundManagerStatusReceivable?
-    var visualDelegate: Visualizerable!
+    var recordVisualizerDelegate: RecordingVisualizerable!
+    var playBackVisualizerDelegate: PlaybackVisualizerable!
     
     var isEnginePrepared = false
     private var isPlaying = false
@@ -74,6 +86,8 @@ class SoundManager {
     // MARK: - initialize SoundManager
     func initializeSoundManager(url: URL, type: PlayerType) {
         do {
+            engine.reset()
+            playerNode.reset()
             fileUrl = url
             // 모델 밖에서 생성 후 주입
             if type == .playBack {
@@ -132,7 +146,10 @@ class SoundManager {
         
         playerNode.installTap(onBus: 0, bufferSize: 1024, format: playerNode.outputFormat(forBus: 0)) { [unowned self] buffer, time in
             guard var currentPosition = getCurrentFrame(lastRenderTime: time) else { return }
+            
             currentPosition = specifyFrameStandard(frame: currentFrame + seekFrame, length: audioLengthSamples)
+            
+            playBackVisualizerDelegate.operatingwaveProgression(progress: Float(currentPosition)/Float(audioLengthSamples))
             
             if currentPosition >= audioLengthSamples {
                 resetPlayer(edge: .end)
@@ -150,12 +167,13 @@ class SoundManager {
         var convertedFrame = frame
         
         convertedFrame = max(frame, 0)
-        convertedFrame = min(convertedFrame, length)
+        convertedFrame = min(frame, length)
         
         return convertedFrame
     }
     
     func playNpause() {
+        print(isPlaying)
         if isPlaying {
             playerNode.pause()
         } else {
@@ -196,6 +214,8 @@ class SoundManager {
             playerNode.scheduleFile(audioFile, at: nil)
             if wasPlaying {
                 playerNode.play()
+            } else {
+                isPlaying = false
             }
             
         } else if currentPosition < audioLengthSamples {
@@ -217,6 +237,7 @@ class SoundManager {
             }
             
         } else {
+            playBackVisualizerDelegate.operatingwaveProgression(progress: 0)
             resetPlayer(edge: .end)
             delegate?.audioPlayerCurrentStatus(isPlaying: isPlaying)
         }
@@ -245,8 +266,8 @@ class SoundManager {
         playerNode.removeTap(onBus: 0)
     }
     
-    func changePitchValue(value: Float) {
-        self.pitchControl.pitch = value * 2
+    func changePitchValue(value: PitchVariable) {
+        self.pitchControl.pitch = Float(value.rawValue * 2)
     }
     
     func changeVolume(value: Float) {
@@ -304,7 +325,7 @@ extension SoundManager {
             do {
                 self.setFrequency()
                 try self.audioFile.write(from: buffer)
-                self.visualDelegate.processAudioBuffer(buffer: buffer)
+                self.recordVisualizerDelegate.processAudioBuffer(buffer: buffer)
             } catch {
                 print("[error] : startRecord")
             }
@@ -325,8 +346,6 @@ extension SoundManager {
 }
 
 extension SoundManager {
-    
-    // - MARK: playTime
     
     func totalPlayTime(audioFile: AVAudioFile) -> Double {
        
