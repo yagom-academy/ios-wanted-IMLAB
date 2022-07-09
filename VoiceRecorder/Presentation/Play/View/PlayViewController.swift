@@ -21,6 +21,15 @@ final class PlayViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let splitAudioInformationName = viewModel?.audioInformation.name.split(separator: "_")
+        
+        let year = splitAudioInformationName![3]
+        let month = splitAudioInformationName![2]
+        let day = splitAudioInformationName![1]
+        let time = splitAudioInformationName![4].split(separator: ".")[0]
+        
+        playView.titleLabel.text = "20\(year). \(month). \(day) \(time)"
+        
         playView.startButton.addTarget(self, action: #selector(startButtonTapped), for: .touchUpInside)
         
         playView.goBackrward5Button.addTarget(self, action: #selector(move5SecondsBackward), for: .touchUpInside)
