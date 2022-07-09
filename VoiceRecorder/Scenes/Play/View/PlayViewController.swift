@@ -127,7 +127,7 @@ class PlayViewController: UIViewController {
   func backButtonclicked() {
     playViewModel.back()
   }
-
+  
   @objc
   func forwardButtonClicked() {
     playViewModel.forward()

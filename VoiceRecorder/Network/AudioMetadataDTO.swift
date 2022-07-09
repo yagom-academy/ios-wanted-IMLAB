@@ -9,10 +9,10 @@ import Foundation
 import FirebaseStorage
 
 extension StorageMetadata {
-    func toDomain() -> AudioPresentation  {
-        return AudioPresentation(filename: self.name,
-                                   createdDate: self.timeCreated ?? Date(),
-                                   length: self.customMetadata?[CustomMetadata.fullLength])
-    }
+  func toDomain() -> AudioPresentation  {
+    return AudioPresentation(filename: self.name,
+                             createdDate: self.timeCreated ?? Date(),
+                             length: self.customMetadata?[CustomMetadata.fullLength])
+  }
 }
 

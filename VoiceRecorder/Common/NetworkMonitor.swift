@@ -9,24 +9,24 @@ import Foundation
 import Network
 
 final class NetworkMonitor {
-    
-    static let shared = NetworkMonitor()
-    
-    private init () {}
-    
-    let monitor = NWPathMonitor()
-    
-    func startMonitoring(completion: @escaping (NetworkError) -> Void) {
-        monitor.start(queue: .global())
-        self.monitor.pathUpdateHandler = { path in
-            if path.status == .unsatisfied {
-                completion(.lostConnection)
-            }
-        }
+  
+  static let shared = NetworkMonitor()
+  
+  private init () {}
+  
+  let monitor = NWPathMonitor()
+  
+  func startMonitoring(completion: @escaping (NetworkError) -> Void) {
+    monitor.start(queue: .global())
+    self.monitor.pathUpdateHandler = { path in
+      if path.status == .unsatisfied {
+        completion(.lostConnection)
+      }
     }
-
-    func stopMonitoring() {
-        monitor.cancel()
-    }
-    
+  }
+  
+  func stopMonitoring() {
+    monitor.cancel()
+  }
+  
 }

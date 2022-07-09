@@ -10,9 +10,9 @@ import Foundation
 import FirebaseStorage
 
 struct AudioInfo {
-    let id: String
-    let data: Data?
-    let metadata: StorageMetadata?
+  let id: String
+  let data: Data?
+  let metadata: StorageMetadata?
 }
 
 
