@@ -63,23 +63,15 @@ class PlayerManager: PlayerService {
         }
         self.audioFile = audioFile
 
-        if audioEngine.isRunning {
-            audioPlayer.stop()
-            audioEngine.stop()
-            scheduleAudioPlayer()
-        } else {
-            configureAudioEngine()
-        }
+        audioPlayer = AVAudioPlayerNode()
+        configureAudioEngine()
     }
 
     func resetAudio() {
         audioFile = nil
 
-        audioEngine.stop()
+//        audioEngine.stop()
         audioPlayer.stop()
-
-        audioEngine.reset()
-        audioPlayer.reset()
 
         pitchControl.pitch = 0
 
@@ -146,7 +138,7 @@ class PlayerManager: PlayerService {
                 return
             }
             self.audioPlayer.stop()
-            self.audioEngine.stop()
+//            self.audioEngine.stop()
 
             self.seekFrame = 0
             self.currentPosition = 0
