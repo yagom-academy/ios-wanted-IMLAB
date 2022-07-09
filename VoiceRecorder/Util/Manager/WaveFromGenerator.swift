@@ -61,7 +61,7 @@ final class WaveFormGenerator {
         context.setLineWidth(1.8)
         
         let max: CGFloat = CGFloat(samples.max() ?? 0)
-        let heightNormalizationFactor = imageSize.height / max / 4
+        let heightNormalizationFactor = imageSize.height / max / 8
         let widthNormalizationFactor = imageSize.width / CGFloat(samples.count)
         for index in 0 ..< samples.count {
             let pixel = CGFloat(samples[index]) * heightNormalizationFactor

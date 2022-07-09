@@ -19,7 +19,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.windowScene = windowScene
         
         let rootViewController = AudioListViewController()
+        let recordingViewModel = RecordingViewModel()
+        let audioListViewModel = AudioListViewModel(recordingViewModel: recordingViewModel)
         let recordPermissionManager: RecordPermissionManageable = RecordPermissionManager()
+        rootViewController.viewModel = audioListViewModel
         rootViewController.recordPermissionManager = recordPermissionManager
         window?.rootViewController = UINavigationController(
             rootViewController: rootViewController

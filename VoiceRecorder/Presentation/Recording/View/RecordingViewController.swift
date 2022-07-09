@@ -15,18 +15,10 @@ final class RecordingViewController: BaseViewController {
     private let recordingView = RecordingView()
 
     private var isRecording: Bool = false
+    private var isPlaying: Bool = false
 
-    let viewModel = RecordingViewModel()
+    var viewModel: RecordingViewModel?
     var recordPermissionManager: RecordPermissionManageable?
-
-    init(recordPermissionManager: RecordPermissionManageable) {
-        self.recordPermissionManager = recordPermissionManager
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     override func loadView() {
         self.view = recordingView
@@ -35,16 +27,12 @@ final class RecordingViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         addSubviewTarget()
-        
-        recordingView.startButton.addTarget(self, action: #selector(playButtonTapped), for: .touchUpInside)
-        
-       
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        viewModel.recordURL.removeAllCachedResourceValues()
-    }
+//    override func viewDidDisappear(_ animated: Bool) {
+//        super.viewDidDisappear(animated)
+//        viewModel?.recordURL.removeAllCachedResourceValues()
+//    }
 
     private func record() {
         recordPermissionManager?.requestMicrophoneAccess { [weak self] allowed in
@@ -52,9 +40,9 @@ final class RecordingViewController: BaseViewController {
             if allowed {
                 self.isRecording.toggle()
                 self.showPlayButton()
-                self.viewModel.allowed()
+                self.viewModel?.allowed()
                 if self.isRecording {
-                    self.viewModel.record()
+                    self.viewModel?.record()
                 } else {
                     self.upload()
                 }
@@ -94,22 +82,20 @@ final class RecordingViewController: BaseViewController {
     }
 
     private func upload() {
-        var recordURL = self.viewModel.recordURL
+        guard let recordURL = self.viewModel?.recordURL else { return }
         self.alert { [weak self] _ in
             guard let self = self else { return }
-            self.viewModel.upload(from: recordURL)
+            self.viewModel?.upload(from: recordURL)
+            self.viewModel?.download()
+            self.viewModel?.recordingFinished()
         } cancelHandler: { _ in
             print("cancel record saving")
-            recordURL.removeAllCachedResourceValues()
         }
-        self.viewModel.stopRecording()
+        self.viewModel?.stopRecording()
     }
 
     private func addSubviewTarget() {
-        recordingView.recordButton.addTarget(
-            self,
-            action: #selector(recordingButtonTapped),
-            for: .touchUpInside
-        )
+        recordingView.recordButton.addTarget(self, action: #selector(recordingButtonTapped), for: .touchUpInside)
+        recordingView.startButton.addTarget(self, action: #selector(playButtonTapped), for: .touchUpInside)
     }
 }

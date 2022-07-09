@@ -13,8 +13,7 @@ final class AudioListViewController: BaseViewController {
     
     var backgroundView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
     
-    let viewModel = AudioListViewModel<FirebaseRepository>()
-    
+    var viewModel: AudioListViewModel?
     var recordPermissionManager: RecordPermissionManageable?
     
     override func loadView() {
@@ -24,10 +23,6 @@ final class AudioListViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         bind()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
     }
     
     override func setupView() {
@@ -46,13 +41,13 @@ final class AudioListViewController: BaseViewController {
     }
     
     private func bind() {
-        viewModel.downloadAll {
+        viewModel?.downloadAll {
             DispatchQueue.main.async {
                 self.detachActivityIndicator()
             }
         }
         
-        viewModel.audioInformation.bind { [weak self] _ in
+        viewModel?.audioInformation.bind { [weak self] _ in
             guard let self = self else { return }
             DispatchQueue.main.async {
                 self.audioListView.tableView.reloadData()
@@ -73,7 +68,9 @@ extension AudioListViewController {
     @objc func plusButtonTapped() {
         guard let recordPermissionManager = recordPermissionManager else { return }
         
-        let recordingViewController = RecordingViewController(recordPermissionManager: recordPermissionManager)
+        let recordingViewController = RecordingViewController()
+        recordingViewController.viewModel = viewModel?.recordingViewModel
+        recordingViewController.recordPermissionManager = recordPermissionManager
         
         self.present(recordingViewController, animated: true)
     }
@@ -89,11 +86,12 @@ extension AudioListViewController {
 
 extension AudioListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.audioInformation.value.count
+        return viewModel?.audioInformation.value.count ?? .zero
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: AudioListTableViewCell.identifier, for: indexPath) as? AudioListTableViewCell else { return UITableViewCell() }
+        guard let viewModel = viewModel else { return UITableViewCell() }
         
         cell.configureCell(audioInformation: viewModel.audioInformation.value[indexPath.row])
         cell.selectionStyle = .none
@@ -104,10 +102,12 @@ extension AudioListViewController: UITableViewDataSource {
 
 extension AudioListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let viewModel = viewModel else { return }
         self.presentPlayView(audioInformation: viewModel.audioInformation.value[indexPath.row])
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        guard let viewModel = viewModel else { return }
         if editingStyle == .delete {
             viewModel.delete(name: viewModel.audioInformation.value[indexPath.row].name)
             viewModel.audioInformation.value.remove(at: indexPath.row)

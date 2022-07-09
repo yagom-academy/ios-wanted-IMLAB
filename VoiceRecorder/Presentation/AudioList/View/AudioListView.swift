@@ -10,7 +10,6 @@ import UIKit
 final class AudioListView: UIView {
     
     lazy var activityIndicator: UIActivityIndicatorView = {
-        
         let activityIndicator = UIActivityIndicatorView()
         activityIndicator.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
         activityIndicator.center = self.center

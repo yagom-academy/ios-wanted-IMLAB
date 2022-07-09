@@ -9,11 +9,17 @@ import Foundation
 import AVFoundation
 import AVFAudio
 
-class AudioListViewModel<Repository: AudioRepository> {
+class AudioListViewModel {
     
     private let repository = FirebaseRepository()
     private var soundEffect: AVAudioPlayer?
+    let recordingViewModel: RecordingViewModel
     let audioInformation: Observable<[AudioInformation]> = Observable([])
+    
+    init(recordingViewModel: RecordingViewModel) {
+        self.recordingViewModel = recordingViewModel
+        recordingViewModel.delegate = self
+    }
     
     func downloadAll(completion: @escaping () -> ()) {
         Task.init {
@@ -62,5 +68,11 @@ class AudioListViewModel<Repository: AudioRepository> {
             print(error.localizedDescription)
         }
         return .zero
+    }
+}
+
+extension AudioListViewModel: RecordingViewModelDelegate {
+    func recordingUploaded(_ audioInformation: AudioInformation) {
+        self.audioInformation.value.append(audioInformation)
     }
 }
