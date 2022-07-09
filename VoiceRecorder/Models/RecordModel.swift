@@ -13,11 +13,4 @@ struct RecordModel: Equatable, Hashable {
     let name: String
     let url: URL
     let metaData: [String: String]
-    
-    var audioPlayer: AudioPlayer {
-        let player = AudioPlayer()
-        player.url = url
-        player.setupPlayer()
-        return player
-    }
 }
