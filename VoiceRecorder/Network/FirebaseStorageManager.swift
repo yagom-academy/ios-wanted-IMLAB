@@ -77,7 +77,6 @@ class FirebaseStorageManager {
         baseReference.listAll { [unowned self] result, error in
             if let error = error {
                 delegate.firebaseStorageManager(error: error, desc: .allReferenceFailed)
-                
             }
             if let result = result {
                 completion(result.items)
