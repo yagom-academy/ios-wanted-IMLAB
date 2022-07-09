@@ -119,7 +119,6 @@ extension RecordedVoiceListViewController: UITableViewDataSource, UITableViewDel
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let voicePlayVC = VoicePlayingViewController(title: audioMetaDataList[indexPath.item].title)
-        
         let audioMetaData = audioMetaDataList[indexPath.item]
         let path = audioMetaDataList[indexPath.item].url
         let filePath = fileManager.getAudioFilePath(fileName: path)
@@ -130,7 +129,6 @@ extension RecordedVoiceListViewController: UITableViewDataSource, UITableViewDel
                 voicePlayVC.fetchRecordedDataFromMainVC(audioData: audioMetaData, fileUrl: filePath)
             }
         }
-        print("present")
         self.present(voicePlayVC, animated: true)
     }
     
