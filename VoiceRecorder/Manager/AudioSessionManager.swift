@@ -12,28 +12,28 @@ class AudioSessionManager{
     
     private let audioSession = AVAudioSession.sharedInstance()
     
-    func setAudioSession() {
-        do {
+    func setAudioSession(){
+        do{
             try audioSession.setCategory(.playAndRecord, options: .defaultToSpeaker)
             audioSession.requestRecordPermission{ accepted in
                 if accepted {
                     print("permission granted")
                 }
             }
-        } catch {
+        }catch{
             print("audioSession error: \(error.localizedDescription)")
         }
     }
     
-    func setSampleRate(_ sampleRate : Double) {
-        do {
+    func setSampleRate(_ sampleRate : Double){
+        do{
             try audioSession.setPreferredSampleRate(sampleRate)
-        } catch {
+        }catch{
             print("audioSession error: \(error.localizedDescription)")
         }
     }
     
-    func getSampleRate() -> Double {
+    func getSampleRate()->Double{
         return audioSession.sampleRate
     }
 }

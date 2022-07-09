@@ -7,7 +7,7 @@
 
 import UIKit
 
-class VoiceRecordTableViewCell: UITableViewCell {
+class VoiceRecordTableViewCell: UITableViewCell{
     
     static let g_identifier = "VoiceRecordListCell"
     
@@ -25,17 +25,17 @@ class VoiceRecordTableViewCell: UITableViewCell {
         return voiceRecordLengthLabel
     }()
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?){
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setContentView()
         autoLayout()
     }
     
-    required init?(coder: NSCoder) {
+    required init?(coder: NSCoder){
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func awakeFromNib() {
+    override func awakeFromNib(){
         super.awakeFromNib()
         setContentView()
         autoLayout()
@@ -56,7 +56,7 @@ class VoiceRecordTableViewCell: UITableViewCell {
         ])
     }
     
-    override func setSelected(_ selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool){
         super.setSelected(selected, animated: animated)
         
         

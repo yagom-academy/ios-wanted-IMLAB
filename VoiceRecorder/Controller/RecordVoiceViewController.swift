@@ -16,7 +16,7 @@ enum AudioStatus {
 import UIKit
 import AVFoundation
 
-class RecordVoiceViewController: UIViewController {
+class RecordVoiceViewController: UIViewController{
     
     weak var delegate : RecordVoiceDelegate?
     var recordVoiceManager : RecordVoiceManager!
@@ -123,8 +123,8 @@ class RecordVoiceViewController: UIViewController {
         return backwardFive
     }()
     
-    @objc func tab_record_start_stop_Button() {
-        if recordVoiceManager.isRecording() {
+    @objc func tab_record_start_stop_Button(){
+        if recordVoiceManager.isRecording(){
             var time = progressTimeLabel.text!
             if !isHour{
                 time = time[0..<5]
@@ -140,7 +140,7 @@ class RecordVoiceViewController: UIViewController {
             record_start_stop_button.tintColor = .red
             updateUI(when: .afterRecording)
             print("recording stop")
-        } else {
+        }else{
             recordVoiceManager.startRecording()
             drawWaveFormManager.startDrawing(of: recordVoiceManager.recorder!, in: waveFormCanvasView)
             record_start_stop_button.setImage(UIImage(systemName: "stop.fill"), for: .normal)
@@ -150,12 +150,12 @@ class RecordVoiceViewController: UIViewController {
         }
     }
     
-    @objc func sliderValueChanged() {
+    @objc func sliderValueChanged(){
         audioSessionManager.setSampleRate(Double(frequencySlider.value))
         frequencyLabel.text = "cutoff frequency: \(Int(audioSessionManager.getSampleRate()))Hz"
     }
     
-    override func viewDidLoad() {
+    override func viewDidLoad(){
         super.viewDidLoad()
         drawWaveFormManager.delegate = self
         recordVoiceManager.delegate = self
@@ -167,7 +167,7 @@ class RecordVoiceViewController: UIViewController {
         setUI()
     }
     
-    func setView() {
+    func setView(){
         self.view.addSubview(waveFormBackgroundView)
         self.view.addSubview(waveFormCanvasView)
         self.view.addSubview(waveFormImageView)
@@ -188,7 +188,7 @@ class RecordVoiceViewController: UIViewController {
         
     }
     
-    func autoLayout() {
+    func autoLayout(){
         NSLayoutConstraint.activate([
             
             progressTimeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -227,7 +227,7 @@ class RecordVoiceViewController: UIViewController {
         view.bringSubviewToFront(verticalLineView)
     }
     
-    func setUI() {
+    func setUI(){
         frequencyLabel.text = "cutoff frequency: \(Int(audioSessionManager.getSampleRate()))Hz"
         frequencySlider.value = CNS.sampleRate.max
         record_start_stop_button.setImage(UIImage(systemName: "circle.fill"), for: .normal)
@@ -237,7 +237,7 @@ class RecordVoiceViewController: UIViewController {
         verticalLineView.isHidden = true
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
+    override func viewDidDisappear(_ animated: Bool){
         if recordVoiceManager.isRecording(){
             recordVoiceManager.stopRecording() {
                 self.drawWaveFormManager.stopDrawing(in: self.waveFormCanvasView)
@@ -249,7 +249,7 @@ class RecordVoiceViewController: UIViewController {
         playVoiceManager.closeAudio()
     }
     
-    func updateUI(when status : AudioStatus) {
+    func updateUI(when status : AudioStatus){
         switch status {
         case .beforeRecording:
             UIView.animate(withDuration: 0.2) {
@@ -311,53 +311,53 @@ class RecordVoiceViewController: UIViewController {
 
 // MARK: DrawWaveFormManagerDelegate
 
-extension RecordVoiceViewController : DrawWaveFormManagerDelegate {
+extension RecordVoiceViewController : DrawWaveFormManagerDelegate{
     
-    func moveWaveFormView(_ step: CGFloat) {
+    func moveWaveFormView(_ step: CGFloat){
         UIView.animate(withDuration: 1/14, animations: {
             self.waveFormCanvasView.transform = CGAffineTransform(translationX: -step, y: 0)
         })
     }
     
-    func resetWaveFormView() {
+    func resetWaveFormView(){
         self.waveFormCanvasView.transform = CGAffineTransform(translationX: 0, y: 0)
     }
 }
 
 // MARK: RecordVoiceManagerDelegate
 
-extension RecordVoiceViewController : RecordVoiceManagerDelegate {
-    func updateCurrentTime(_ currentTime : TimeInterval) {
+extension RecordVoiceViewController : RecordVoiceManagerDelegate{
+    func updateCurrentTime(_ currentTime : TimeInterval){
         self.progressTimeLabel.text = currentTime.getStringTimeInterval()
     }
 }
 
 extension RecordVoiceViewController : PlayVoiceDelegate{
-    func displayCurrentTime(_ currentPosition: AVAudioFramePosition, _ audioLengthSamples: AVAudioFramePosition, _ audioFileLengthSecond: Double) {
+    func displayCurrentTime(_ currentPosition: AVAudioFramePosition, _ audioLengthSamples: AVAudioFramePosition, _ audioFileLengthSecond: Double){
         var currentTime : Double
         if currentPosition <= 0 {
             currentTime = 0
-        } else if currentPosition >= audioLengthSamples {
+        }else if currentPosition >= audioLengthSamples {
             currentTime = audioFileLengthSecond
-        } else {
+        }else{
             currentTime = (Double(currentPosition)/Double(audioLengthSamples)) * audioFileLengthSecond
         }
         self.progressTimeLabel.setText(currentTime)
     }
     
-    func displayWaveForm(to currentPosition: AVAudioFramePosition, in audioLengthSamples: AVAudioFramePosition) {
+    func displayWaveForm(to currentPosition: AVAudioFramePosition, in audioLengthSamples: AVAudioFramePosition){
         var newX : CGFloat
         if currentPosition <= 0 {
             newX = 0
-        } else if currentPosition >= audioLengthSamples {
+        }else if currentPosition >= audioLengthSamples {
             newX = self.waveFormImageView.image?.size.width ?? 0
-        } else {
+        }else{
             newX = (self.waveFormImageView.image?.size.width ?? 0) * CGFloat(currentPosition) / CGFloat(audioLengthSamples)
         }
         self.waveFormImageView.transform = CGAffineTransform(translationX: -newX, y: 0)
     }
     
-    func playEndTime() {
+    func playEndTime(){
         playVoiceManager.isPlay = false
         DispatchQueue.main.async {
             self.recordFile_play_PauseButton.setImage(UIImage(systemName: "play"), for: .normal)

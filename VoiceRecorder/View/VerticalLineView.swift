@@ -7,20 +7,20 @@
 
 import UIKit
 
-class VerticalLineView: UIView {
+class VerticalLineView: UIView{
     
     private var path: UIBezierPath!
     private var shape: CAShapeLayer!
     
-    override init(frame: CGRect) {
+    override init(frame: CGRect){
         super.init(frame: frame)
     }
     
-    required init?(coder: NSCoder) {
+    required init?(coder: NSCoder){
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func draw(_ rect: CGRect) {
+    override func draw(_ rect: CGRect){
         let upperCenter = CGPoint(x: 0, y: 0)
         let bottomCenter = CGPoint(x: 0, y: frame.height)
         

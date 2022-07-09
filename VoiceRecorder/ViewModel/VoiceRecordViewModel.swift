@@ -5,7 +5,7 @@ struct VoiceRecordViewModel{
     
     var recordFile : RecordFile
     
-    init(recordFile : RecordFile) {
+    init(recordFile : RecordFile){
         self.recordFile = recordFile
     }
     

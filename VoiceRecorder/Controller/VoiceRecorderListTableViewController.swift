@@ -7,7 +7,7 @@
 
 import UIKit
 
-class VoiceRecorderListTableViewController: UITableViewController {
+class VoiceRecorderListTableViewController: UITableViewController{
     
     var statusView : DeletePopupView = {
         let statusView = DeletePopupView()
@@ -24,14 +24,14 @@ class VoiceRecorderListTableViewController: UITableViewController {
     var voiceRecordListViewModel : VoiceRecordListViewModel = VoiceRecordListViewModel(voiceRecordList: [])
     var selectRecord : VoiceRecordViewModel?
     
-    override func viewDidLoad() {
+    override func viewDidLoad(){
         super.viewDidLoad()
         setUp()
         updateTableViewList()
         configureRefreshControl()
     }
     
-    func setUp() {
+    func setUp(){
         navigationItem.title = "Voice Memos"
         setAddBarButton()
         setTableView()
@@ -50,37 +50,37 @@ class VoiceRecorderListTableViewController: UITableViewController {
         
     }
     
-    func setAddBarButton() {
+    func setAddBarButton(){
         addButton.target = self
         addButton.action = #selector(tabAddButton)
         self.navigationItem.rightBarButtonItem = addButton
     }
     
-    @objc func tabAddButton() {
+    @objc func tabAddButton(){
         self.performSegue(withIdentifier: "RecordVoice", sender: self)
     }
     
-    func setTableView() {
+    func setTableView(){
         tableView.register(VoiceRecordTableViewCell.self, forCellReuseIdentifier: VoiceRecordTableViewCell.g_identifier)
         tableView.rowHeight = CNS.size.tableViewRowHeight
     }
     
-    func configureRefreshControl() {
+    func configureRefreshControl(){
         self.tableView.refreshControl = UIRefreshControl()
         self.tableView.refreshControl?.addTarget(self, action: #selector(updateTableViewList), for: .valueChanged)
     }
     
     // MARK: - Table view data source
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView)->Int{
         return 1
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int)->Int{
         return self.voiceRecordListViewModel.numOfList()
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath)->UITableViewCell{
         let voiceRecodeFile = voiceRecordListViewModel.ListAtIndex(index: indexPath.row)
         guard let cell = tableView.dequeueReusableCell(withIdentifier: VoiceRecordTableViewCell.g_identifier, for: indexPath) as? VoiceRecordTableViewCell else {
             fatalError()
@@ -90,7 +90,7 @@ class VoiceRecorderListTableViewController: UITableViewController {
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath){
         let voiceRecodeFile = voiceRecordListViewModel.ListAtIndex(index: indexPath.row)
         if editingStyle == .delete {
             self.firebaseStorageManger.deleteRecord(fileName : voiceRecodeFile.fileName, fileLength: voiceRecodeFile.fileLength) {
@@ -113,12 +113,12 @@ class VoiceRecorderListTableViewController: UITableViewController {
         }
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         selectRecord = voiceRecordListViewModel.ListAtIndex(index: indexPath.row)
         self.performSegue(withIdentifier: "PlayVoice", sender: self)
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?){
         if segue.identifier == "PlayVoice"{
             let vc = segue.destination as! PlayVoiceViewController
             if let selectRecord = selectRecord {

@@ -8,7 +8,7 @@
 import UIKit
 import AVFoundation
 
-class PlayVoiceViewController: UIViewController {
+class PlayVoiceViewController: UIViewController{
     
     var playVoiceManager : PlayVoiceManager!
     var playVoiceViewModel : PlayVoiceViewModel!
@@ -104,7 +104,7 @@ class PlayVoiceViewController: UIViewController {
         return fileNameLabel
     }()
     
-    override func viewDidLoad() {
+    override func viewDidLoad(){
         super.viewDidLoad()
         setView()
         autolayOut()
@@ -219,7 +219,7 @@ class PlayVoiceViewController: UIViewController {
 }
 
 extension PlayVoiceViewController : FirebaseDownloadManagerDelegate{
-    func downloadComplete(url: URL) {
+    func downloadComplete(url: URL){
         waveFormImageView.load(url: url) { [weak self] in
             self?.playAndPauseButton.isEnabled = true
             self?.playVoiceViewModel.isDownloading = false
@@ -233,33 +233,32 @@ extension PlayVoiceViewController : FirebaseDownloadManagerDelegate{
 }
 
 extension PlayVoiceViewController : PlayVoiceDelegate{
-    func displayCurrentTime(_ currentPosition: AVAudioFramePosition, _ audioLengthSamples: AVAudioFramePosition, _ audioFileLengthSecond: Double) {
+    func displayCurrentTime(_ currentPosition: AVAudioFramePosition, _ audioLengthSamples: AVAudioFramePosition, _ audioFileLengthSecond: Double){
         var currentTime : Double
         if currentPosition <= 0 {
             currentTime = 0
-        } else if currentPosition >= audioLengthSamples {
+        }else if currentPosition >= audioLengthSamples {
             currentTime = audioFileLengthSecond
-        } else {
+        }else{
             currentTime = (Double(currentPosition)/Double(audioLengthSamples)) * audioFileLengthSecond
         }
         self.progressTimeLabel.setText(currentTime)
     }
     
-    
-    func playEndTime() {
+    func playEndTime(){
         playVoiceManager.isPlay = false
         DispatchQueue.main.async {
             self.playAndPauseButton.setImage(UIImage(systemName: "play"), for: .normal)
         }
     }
     
-    func displayWaveForm(to currentPosition : AVAudioFramePosition, in audioLengthSamples : AVAudioFramePosition) {
+    func displayWaveForm(to currentPosition : AVAudioFramePosition, in audioLengthSamples : AVAudioFramePosition){
         var newX : CGFloat
         if currentPosition <= 0 {
             newX = 0
-        } else if currentPosition >= audioLengthSamples {
+        }else if currentPosition >= audioLengthSamples {
             newX = self.waveFormImageView.image?.size.width ?? 0
-        } else {
+        }else{
             newX = (self.waveFormImageView.image?.size.width ?? 0) * CGFloat(currentPosition) / CGFloat(audioLengthSamples)
         }
         self.waveFormImageView.transform = CGAffineTransform(translationX: -newX, y: 0)

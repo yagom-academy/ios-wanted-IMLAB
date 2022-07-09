@@ -1,6 +1,6 @@
 import UIKit
 
-class DeletePopupView: UIView {
+class DeletePopupView: UIView{
     
     let statusLabel : UILabel = {
         let statusLabel = UILabel()
@@ -8,7 +8,7 @@ class DeletePopupView: UIView {
         return statusLabel
     }()
     
-    override init(frame: CGRect) {
+    override init(frame: CGRect){
         super.init(frame: frame)
         self.alpha = 0.0
         setUp()
@@ -16,7 +16,7 @@ class DeletePopupView: UIView {
         self.layoutIfNeeded()
     }
     
-    required init?(coder: NSCoder) {
+    required init?(coder: NSCoder){
         fatalError("init(coder:) has not been implemented")
     }
     

@@ -7,15 +7,15 @@
 
 import UIKit
 
-class WaveFormImageView: UIImageView {
+class WaveFormImageView: UIImageView{
     
-    override init(frame: CGRect) {
+    override init(frame: CGRect){
         super.init(frame: frame)
         self.frame.size.width = CGFloat(FP_INFINITE)
         self.contentMode = .left
     }
     
-    required init?(coder: NSCoder) {
+    required init?(coder: NSCoder){
         fatalError("init(coder:) has not been implemented")
     }
 }

@@ -1,7 +1,7 @@
 import Foundation
 import FirebaseStorage
 
-class FirebaseStorageManager {
+class FirebaseStorageManager{
     let storage = Storage.storage()
     
     func uploadRecord(time : String, completion : @escaping ()->Void){
@@ -92,7 +92,7 @@ class FirebaseStorageManager {
         }
     }
     
-    deinit {
+    deinit{
         print("Close firebase manager")
     }
 }

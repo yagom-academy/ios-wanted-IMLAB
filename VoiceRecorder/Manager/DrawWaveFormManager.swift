@@ -8,7 +8,7 @@
 import UIKit
 import AVFoundation
 
-protocol DrawWaveFormManagerDelegate : AnyObject {
+protocol DrawWaveFormManagerDelegate : AnyObject{
     func moveWaveFormView(_ step: CGFloat)
     func resetWaveFormView()
 }
@@ -34,13 +34,13 @@ class DrawWaveFormManager{
         })
     }
     
-    func stopDrawing(in view : UIView) {
+    func stopDrawing(in view : UIView){
         timer.invalidate()
         waveFormImage = getUIImage(from: view)
         saveImageInLocal(waveFormImage)
     }
     
-    func getWaveFormImage() -> UIImage {
+    func getWaveFormImage()->UIImage{
         return waveFormImage
     }
     
@@ -56,13 +56,13 @@ class DrawWaveFormManager{
         step = 0
     }
     
-    private func removeWaveForm() {
+    private func removeWaveForm(){
         pencil.removeAllPoints()
         waveLayer.removeFromSuperlayer()
         delegate?.resetWaveFormView()
     }
     
-    private func drawWaveForm(_ input : Float, in view : UIView) {
+    private func drawWaveForm(_ input : Float, in view : UIView){
         let newInput = pow(10, input / 20)
         let viewHeight = view.bounds.height
         let maxTraitLength = (viewHeight/2) - 10
@@ -93,7 +93,7 @@ class DrawWaveFormManager{
         
     }
     
-    private func getUIImage(from view: UIView) -> UIImage {
+    private func getUIImage(from view: UIView)->UIImage{
         let resizedBounds = CGRect(x: view.bounds.maxX, y: view.bounds.minY, width: step, height: view.bounds.height)
         let renderer = UIGraphicsImageRenderer(bounds: resizedBounds)
         return renderer.image { rendererContext in
@@ -102,14 +102,14 @@ class DrawWaveFormManager{
     }
     
     
-    private func saveImageInLocal(_ imageUI: UIImage) {
+    private func saveImageInLocal(_ imageUI: UIImage){
         let imageFileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("myWaveForm.png")
         let imageData = imageUI.pngData()
-        do {
+        do{
             try imageData?.write(to: imageFileURL)
         }
-        catch {
+        catch{
             print("error - saveImageInLocal")
         }
     }

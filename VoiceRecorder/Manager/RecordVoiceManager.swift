@@ -27,16 +27,16 @@ class RecordVoiceManager{
             AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
         ]
         
-        do {
+        do{
             try recorder = AVAudioRecorder(url: soundFileURL, settings: recordSettings)
             recorder?.prepareToRecord()
             recorder?.isMeteringEnabled = true
-        } catch {
+        }catch{
             print("audioSession Error: \(error.localizedDescription)")
         }
     }
     
-    func startRecording() {
+    func startRecording(){
         timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true, block: { timer in
             self.delegate?.updateCurrentTime(self.recorder?.currentTime ?? 0)
         })
@@ -44,13 +44,13 @@ class RecordVoiceManager{
         
     }
     
-    func stopRecording(completion : @escaping ()->Void) {
+    func stopRecording(completion : @escaping ()->Void){
         self.recorder?.stop()
         timer?.invalidate()
         completion()
     }
     
-    func isRecording() -> Bool {
+    func isRecording()->Bool{
         return self.recorder?.isRecording ?? false
     }
     

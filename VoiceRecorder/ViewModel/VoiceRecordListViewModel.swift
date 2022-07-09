@@ -4,7 +4,7 @@ import Foundation
 struct VoiceRecordListViewModel{
     var voiceRecordList : [RecordFile]
     
-    func numOfList() -> Int{
+    func numOfList()->Int{
         return self.voiceRecordList.count
     }
     
