@@ -68,7 +68,7 @@ class RecordDetailViewController: UIViewController {
                 do {
                     try FileManager.default.removeItem(at: audioFileURL)
                 } catch {
-                    print("Error: <view did disappear> - \(error.localizedDescription)")
+                    print("Error: <RecordDetail viewDidDisappear> -  \(error.localizedDescription)")
                 }
             }
             currentFileName = nil
@@ -93,7 +93,7 @@ class RecordDetailViewController: UIViewController {
                 }
             })
         } catch let error {
-            print("Error: <setup audio recorder> - \(error.localizedDescription)")
+            print("Error: <setupAudioRecorder> -  \(error.localizedDescription)")
         }
     }
     
@@ -114,6 +114,7 @@ class RecordDetailViewController: UIViewController {
                 try FileManager.default.removeItem(at: imageFileURL)
             } catch {
                 print("Error: <delete origin image file> - \(error.localizedDescription)")
+
             }
         }
     }
@@ -314,6 +315,8 @@ class RecordDetailViewController: UIViewController {
     
     private func getRecordingTime() {
         var totalSecond : TimeInterval = 0.0
+        recordingTimeLabel.text = totalSecond.minuteSecond
+        
         recordingTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
             totalSecond += 1.0
             self.recordingTimeLabel.text = totalSecond.minuteSecond

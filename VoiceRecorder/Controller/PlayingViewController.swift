@@ -102,7 +102,7 @@ class PlayingViewController: UIViewController {
             
             configureEngine(with: format)
         } catch {
-            print("Error: <setupAudio the audio file> -  \(error.localizedDescription)")
+            print("Error: <setupAudio> -  \(error.localizedDescription)")
         }
         
     }
@@ -124,7 +124,7 @@ class PlayingViewController: UIViewController {
             
             scheduleAudioFile()
         } catch {
-            print("Error starting the player: \(error.localizedDescription)")
+            print("Error: <setupAudio> - \(error.localizedDescription)")
         }
         
     }
@@ -167,7 +167,6 @@ class PlayingViewController: UIViewController {
         let offset = AVAudioFramePosition(time * audioSampleRate)
         seekFrame = currentPosition + offset
         seekFrame = max(seekFrame, 0)
-//        seekFrame = min(seekFrame, audioLengthSamples)
         currentPosition = seekFrame
         
         let wasPlaying = audioPlayer.isPlaying
@@ -186,7 +185,6 @@ class PlayingViewController: UIViewController {
             ) {
                 self.needsFileScheduled = true
             }
-            
             if wasPlaying {
                 audioPlayer.play()
             }
