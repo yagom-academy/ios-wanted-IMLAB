@@ -18,6 +18,7 @@ struct RecordControllerViewModel {
         self.audioRecorder = audioRecorder
         self.network = network
     }
+    
     func setAudioFile() {
         guard let audioFile = audioRecorder.audioFile else {
             return

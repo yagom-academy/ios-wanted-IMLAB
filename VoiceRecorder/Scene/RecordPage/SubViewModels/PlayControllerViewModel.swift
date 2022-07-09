@@ -62,7 +62,6 @@ class PlayControllerViewModel {
         }
 
         sendToFrequencyView()
-
         interval += 1
     }
 

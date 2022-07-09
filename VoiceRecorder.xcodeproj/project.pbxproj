@@ -121,12 +121,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0486179B287920B7009487A6 /* SubViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				FE4734812876605D00B753FB /* RecordControllerViewModel.swift */,
+				FE47347F28765EF200B753FB /* PlayControllerViewModel.swift */,
+			);
+			path = SubViewModels;
+			sourceTree = "<group>";
+		};
 		04FF93A2286C126700EB34B6 /* RecordPage */ = {
 			isa = PBXGroup;
 			children = (
+				0486179B287920B7009487A6 /* SubViewModels */,
 				0D8172DF286D67F10009E8AA /* SubComponents */,
 				04FF9393286BEEFB00EB34B6 /* RecordViewController.swift */,
 				0D26B1212875393A00FE1B04 /* RecordViewModel.swift */,
+				FE473483287661BC00B753FB /* RecordControllerDelegate.swift */,
 			);
 			path = RecordPage;
 			sourceTree = "<group>";
@@ -171,10 +182,7 @@
 				04FF939C286C003500EB34B6 /* FrequencyView.swift */,
 				04FF939E286C004200EB34B6 /* CutoffFrequencyView.swift */,
 				04FF93A0286C004C00EB34B6 /* RecordControllerView.swift */,
-				FE473483287661BC00B753FB /* RecordControllerDelegate.swift */,
-				FE4734812876605D00B753FB /* RecordControllerViewModel.swift */,
 				FE47347D28765D0500B753FB /* PlayControllerView.swift */,
-				FE47347F28765EF200B753FB /* PlayControllerViewModel.swift */,
 			);
 			path = SubComponents;
 			sourceTree = "<group>";

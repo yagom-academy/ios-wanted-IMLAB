@@ -11,7 +11,6 @@ import UIKit
 protocol RecordService {
     var audioFile: URL! { get }
     func initRecordSession()
-    func normalizeSoundLevel(_ level: Float?) -> Int
     func dateToFileName(_ date: Date) -> String
     func startRecord()
     func endRecord()
@@ -25,12 +24,11 @@ class RecordManager: RecordService {
     var recorder: AVAudioRecorder?
     var audioFile: URL!
     var timer: Timer?
+    
     var waveForms = [Int](repeating: 0, count: 100)
-    var currentSample = 0
-
     var totalWaveData = [Int]()
-
-    var cutValue = 60
+    private var currentSample = 0
+    private var cutValue = 60
 
     private init() {
         NotificationCenter.default.addObserver(self, selector: #selector(sendCutValue(_:)), name: Notification.Name("SendCutValue"), object: nil)
@@ -60,7 +58,7 @@ class RecordManager: RecordService {
         }
     }
 
-    func normalizeSoundLevel(_ level: Float?) -> Int {
+    private func normalizeSoundLevel(_ level: Float?) -> Int {
         guard let level = level else { return 0 }
         let lowLevel: Float = -70
         let highLevel: Float = -10
