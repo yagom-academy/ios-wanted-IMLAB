@@ -11,11 +11,13 @@ import AVFoundation
 final class PlayViewModel {
     
     var audioInformation: AudioInformation
-    var audioPlayManager: AudioPlayManager
+    var currentTime: Observable<Double> = Observable(.zero)
+    private var audioPlayManager: AudioPlayManager
     
     init(audioInformation: AudioInformation) {
         self.audioInformation = audioInformation
         self.audioPlayManager = AudioPlayManager(audioURL: audioInformation.fileURL)
+        audioPlayManager.delegate = self
     }
     
     func changePitch(to voice: Int) {
@@ -37,5 +39,13 @@ final class PlayViewModel {
     func pause() {
         audioPlayManager.pause()
     }
+}
 
+// MARK: - AudioPlayDelegate
+
+extension PlayViewModel: AudioPlayDelegate {
+    
+    func updateCurrentTime() {
+        currentTime.value = audioPlayManager.currentTime
+    }
 }
