@@ -80,10 +80,10 @@ class PlayingViewController: UIViewController {
         guard let fileName = fileName else {
             return
         }
-
-        if let directory = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false) {
-            waveFormImageView.image = UIImage(contentsOfFile: URL(fileURLWithPath: directory.absoluteString).appendingPathComponent(fileName).path)
-        }
+        guard let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {return}
+        let imageFullUrl = URL(fileURLWithPath: directory.absoluteString).appendingPathComponent("\(fileName)\(FireStorageManager.File.contentType.image)").path
+        guard let image = UIImage(contentsOfFile: imageFullUrl) else {return}
+        waveFormImageView.image = image
     }
     
     private func setupAudio() {
