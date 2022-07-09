@@ -31,12 +31,9 @@ class RecordViewController: UIViewController {
         return view
     }()
     
-    private var sliderFrequency: UISlider = {
-        let slider = UISlider()
-        slider.minimumValue = 20000
-        slider.maximumValue = 40000
-        slider.value = 30000
-        return slider
+    private var frequencyControlView: FrequencyControlView = {
+        var view = FrequencyControlView()
+        return view
     }()
     
     private var recordButton: UIButton = {
@@ -54,9 +51,9 @@ class RecordViewController: UIViewController {
         setLayout()
         setAudio()
         soundManager.visualDelegate = self
+        frequencyControlView.delegate = self
         
         recordButton.addTarget(self, action: #selector(controlRecord), for: .touchUpInside)
-        sliderFrequency.addTarget(self, action: #selector(onChangeValueSlider(sender:)), for: UIControl.Event.valueChanged)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -67,12 +64,12 @@ class RecordViewController: UIViewController {
         view.backgroundColor = .white
         
         playControlView.translatesAutoresizingMaskIntoConstraints = false
-        sliderFrequency.translatesAutoresizingMaskIntoConstraints = false
+        frequencyControlView.translatesAutoresizingMaskIntoConstraints = false
         recordButton.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(visualizer)
         view.addSubview(playControlView)
-        view.addSubview(sliderFrequency)
+        view.addSubview(frequencyControlView)
         view.addSubview(recordButton)
         
         NSLayoutConstraint.activate([
@@ -87,10 +84,10 @@ class RecordViewController: UIViewController {
             playControlView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.8),
             playControlView.heightAnchor.constraint(equalToConstant: 100),
             
-            sliderFrequency.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            sliderFrequency.topAnchor.constraint(equalTo: playControlView.bottomAnchor, constant: 40),
-            sliderFrequency.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.8),
-            sliderFrequency.heightAnchor.constraint(equalToConstant: 30),
+            frequencyControlView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            frequencyControlView.topAnchor.constraint(equalTo: playControlView.bottomAnchor, constant: 40),
+            frequencyControlView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.8),
+            frequencyControlView.heightAnchor.constraint(equalToConstant: 80),
             
             recordButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             recordButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),
@@ -144,10 +141,6 @@ class RecordViewController: UIViewController {
             soundManager.initializeSoundManager(url: localUrl, type: .playBack)
         }
     }
-    
-    @objc func onChangeValueSlider(sender: UISlider) {
-        soundManager.frequency = sender.value
-    }
 }
 
 extension RecordViewController {
@@ -174,6 +167,13 @@ extension RecordViewController {
     }
 }
 
+extension RecordViewController: Visualizerable {
+    
+    func processAudioBuffer(buffer: AVAudioPCMBuffer) {
+        visualizer.processAudioData(buffer: buffer)
+    }
+}
+
 extension RecordViewController: SoundButtonActionDelegate {
     
     func playButtonTouchUpinside(sender: UIButton) {
@@ -192,9 +192,9 @@ extension RecordViewController: SoundButtonActionDelegate {
     }
 }
 
-extension RecordViewController: Visualizerable {
+extension RecordViewController : SliderEvnetDelegate {
     
-    func processAudioBuffer(buffer: AVAudioPCMBuffer) {
-        visualizer.processAudioData(buffer: buffer)
+    func sliderEventValueChanged(sender: UISlider) {
+        soundManager.frequency = sender.value
     }
 }
