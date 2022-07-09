@@ -128,13 +128,13 @@ class RecordingViewController: UIViewController {
     }
     
     @IBAction func goBackwardButtonTapped(_ sender: UIButton) {
-        audioPlayerHandler.seek(to: -5.0)
+        audioPlayerHandler.skip(to: -5.0)
         currentPlayTimeLabel.text = audioPlayerHandler.currentPlayTime
         playProgressBar.progress = audioPlayerHandler.progress
     }
     
     @IBAction func goForwardButtonTapped(_ sender: UIButton) {
-        audioPlayerHandler.seek(to: 5.0)
+        audioPlayerHandler.skip(to: 5.0)
         currentPlayTimeLabel.text = audioPlayerHandler.currentPlayTime
         playProgressBar.progress = audioPlayerHandler.progress
     }

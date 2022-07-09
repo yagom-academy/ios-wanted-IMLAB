@@ -108,8 +108,14 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="BdX-iR-Xml">
                                 <rect key="frame" x="57" y="172" width="300" height="552"/>
                                 <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TotalRecordingTimeLabel" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y8P-W7-Nca">
+                                        <rect key="frame" x="53.5" y="0.0" width="193.5" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                     <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wBO-IG-LvN">
-                                        <rect key="frame" x="0.0" y="0.0" width="300" height="150"/>
+                                        <rect key="frame" x="0.0" y="60.5" width="300" height="150"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eg2-m4-YQx">
                                                 <rect key="frame" x="0.0" y="0.0" width="300" height="150"/>
@@ -131,7 +137,7 @@
                                         <viewLayoutGuide key="frameLayoutGuide" id="eIB-xi-vOM"/>
                                     </scrollView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="ASO-Dk-b5S">
-                                        <rect key="frame" x="0.0" y="190" width="300" height="58.5"/>
+                                        <rect key="frame" x="0.0" y="250.5" width="300" height="58.5"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cutoff Freq." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qSk-LG-8XE">
                                                 <rect key="frame" x="0.0" y="0.0" width="91.5" height="20.5"/>
@@ -152,12 +158,6 @@
                                             <constraint firstItem="xM2-uk-oVq" firstAttribute="leading" secondItem="ASO-Dk-b5S" secondAttribute="leading" id="SEE-88-YCY"/>
                                         </constraints>
                                     </stackView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TotalRecordingTimeLabel" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y8P-W7-Nca">
-                                        <rect key="frame" x="53.5" y="288.5" width="193.5" height="20.5"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="4Ku-cP-yII">
                                         <rect key="frame" x="0.0" y="349" width="300" height="30"/>
                                         <subviews>
@@ -229,8 +229,8 @@
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                         <state key="normal">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <imageReference key="image" image="circle.inset.filled" catalog="system" symbolScale="default"/>
-                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="50" scale="default" weight="semibold"/>
+                                            <imageReference key="image" image="mic.circle.fill" catalog="system" symbolScale="default"/>
+                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="50" scale="default" weight="regular"/>
                                         </state>
                                         <connections>
                                             <action selector="recordingButtonTapped:" destination="X5L-vM-0v8" eventType="touchUpInside" id="Ud8-Q7-axf"/>
@@ -400,9 +400,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="circle.inset.filled" catalog="system" width="128" height="121"/>
         <image name="gobackward.5" catalog="system" width="121" height="128"/>
         <image name="goforward.5" catalog="system" width="121" height="128"/>
+        <image name="mic.circle.fill" catalog="system" width="128" height="121"/>
         <image name="pause" catalog="system" width="88" height="128"/>
         <image name="play" catalog="system" width="120" height="128"/>
         <image name="plus" catalog="system" width="128" height="113"/>
