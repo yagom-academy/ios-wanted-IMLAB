@@ -254,13 +254,3 @@ func uploadAudio(audioData: Data, audioMetaData: AudioMetaData) {
 ```
 
 <br>
-
-## 📱 UI
-
-| 권한 설정 | 녹음 뷰 | 리스트 업데이트 |
-| ------ | ------ | ------ |
-| ![sesacFriends_Onboarding](https://user-images.githubusercontent.com/61327153/156191700-4d10d392-3a1b-4e5e-9225-8ddc875494f8.gif) | ![sesacFriends_auth](https://user-images.githubusercontent.com/61327153/156191653-09da23b4-31dd-4ee7-ad54-000f2cac4b8a.gif) | ![sesacFriends_Signup](https://user-images.githubusercontent.com/61327153/156191706-f6145205-e9a6-4e1e-b6ea-4413e2e70a05.gif) |
-
-| 재생 뷰 진입 | 재생 | 5초 전후 |
-| ------ | ------ | ------ |
-| ![sesacFriends_profile](https://user-images.githubusercontent.com/61327153/156191702-ae62096f-3c02-4a06-9d35-8d509f9c5ac5.gif) | ![sesacFriends_matching](https://user-images.githubusercontent.com/61327153/156191684-42cae2d8-8a84-4a53-be36-9a9306b9c8d5.gif) | ![sesacFriends_chatting](https://user-images.githubusercontent.com/61327153/156191671-3323415e-e421-48f4-b330-20a9025a4b1d.gif) |
