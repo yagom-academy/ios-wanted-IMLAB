@@ -108,7 +108,8 @@ class AudioPlayerHandler {
         audioEngine.connect(audioPlayerNode, to: audioUnitTimePitch, format: audioFile.processingFormat)
         audioEngine.connect(audioUnitTimePitch, to: audioEngine.outputNode, format: audioFile.processingFormat)
         audioEngine.connect(audioUnitTimePitch, to: audioEngine.mainMixerNode, format: buffer.format)
- 
+        
+        audioPlayerNode.volume = 5.0
         audioPlayerNode.stop()
         audioPlayerNode.scheduleFile(audioFile, at: nil)
         
@@ -122,6 +123,10 @@ class AudioPlayerHandler {
     
     func changePitch(to pitch: Float) {
         audioUnitTimePitch.pitch = pitch
+    }
+    
+    func changeVolume(to volume: Float) {
+        audioPlayerNode.volume = volume
     }
     
     private func scheduleAudioFile() {

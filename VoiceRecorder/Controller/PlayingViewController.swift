@@ -12,7 +12,6 @@ import MediaPlayer
 class PlayingViewController: UIViewController {
     
     @IBOutlet weak var waveFormView: DrawWaveform!
-    @IBOutlet weak var volumeSliderView: UIView!
     @IBOutlet weak var fileNameLabel: UILabel!
     @IBOutlet weak var soundPitchControl: UISegmentedControl!
     @IBOutlet weak var currentPlayTimeLabel: UILabel!
@@ -20,8 +19,7 @@ class PlayingViewController: UIViewController {
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var goBackwardButton: UIButton!
     @IBOutlet weak var goForwardButton: UIButton!
-    //    @IBOutlet weak var waveScrollView: UIScrollView!
-//    @IBOutlet weak var drawWaveForm: DrawWaveform!
+    @IBOutlet weak var volumeSlider: UISlider!
     
     private var progressTimer: Timer?
     private var inPlayMode: Bool = false
@@ -38,18 +36,10 @@ class PlayingViewController: UIViewController {
         self.totalPlayTimeLabel.text = fileInfo.recordTime
         self.currentPlayTimeLabel.text = audioPlayerHandler.currentPlayTime
         audioPlayerHandler.selectPlayFile(self.fileNameLabel.text)
-        configureVolumeSlider()
         positionBar.backgroundColor = .black
         waveFormView.addSubview(positionBar)
-       
-       
-//        let layout = waveCollectionView.collectionViewLayout as! UICollectionViewFlowLayout
-//        layout.scrollDirection = .horizontal
     }
-
-    override func viewDidAppear(_ animated: Bool) {
-       
-    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         audioPlayerHandler.stop()
@@ -60,11 +50,6 @@ class PlayingViewController: UIViewController {
         localFileHandler: LocalFileHandler(),
         timeHandler: TimeHandler()
     )
-    
-    private func configureVolumeSlider() {
-        let volumeView = MPVolumeView(frame: volumeSliderView.bounds)
-        volumeSliderView.addSubview(volumeView)
-    }
     
     private func setButton(enable: Bool) {
         goBackwardButton.isEnabled = enable
@@ -137,29 +122,8 @@ class PlayingViewController: UIViewController {
             self.playButton.setImage(UIImage(systemName: "pause"), for: .normal)
         }
     }
+    
+    @IBAction func volumeChanged(_ sender: UISlider) {
+        audioPlayerHandler.changeVolume(to: sender.value)
+    }
 }
-
-//extension PlayingViewController : UICollectionViewDataSource {
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return readFile.points.count
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "waveCollectionViewCell", for: indexPath) as! waveCollectionViewCell
-//        let contentview = cell.contentView
-//        let view = UIView(frame: CGRect(x: contentview.frame.midX, y: contentview.frame.midY, width: 5, height: readFile.points[indexPath.row] * 10))
-//        let view2 = UIView(frame: CGRect(x: contentview.frame.midX, y: contentview.frame.midY - CGFloat(readFile.points[indexPath.row] * 10), width: 5, height: readFile.points[indexPath.row] * 10))
-//        view.backgroundColor = .red
-//        view2.backgroundColor = .red
-//        contentview.addSubview(view)
-//        contentview.addSubview(view2)
-//        return cell
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//
-//            return CGSize(width: 5, height: 100)
-//
-//        }
-//
-//}

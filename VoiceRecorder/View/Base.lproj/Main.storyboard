@@ -285,7 +285,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="47" translatesAutoresizingMaskIntoConstraints="NO" id="jVz-As-2vE">
-                                <rect key="frame" x="57" y="576" width="300" height="206"/>
+                                <rect key="frame" x="57" y="596" width="300" height="186"/>
                                 <subviews>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="VjU-pj-Gei">
                                         <rect key="frame" x="0.0" y="0.0" width="300" height="32"/>
@@ -327,17 +327,17 @@
                                             </button>
                                         </subviews>
                                     </stackView>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="STt-MF-5Xp">
-                                        <rect key="frame" x="0.0" y="156" width="300" height="50"/>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="50" id="YPQ-Xa-x5v"/>
-                                            <constraint firstAttribute="width" constant="300" id="s5P-h9-hkD"/>
-                                        </constraints>
-                                    </view>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="5" minValue="0.0" maxValue="10" minimumValueImage="speaker" catalog="system" maximumValueImage="speaker.wave.2" translatesAutoresizingMaskIntoConstraints="NO" id="Ncm-t4-m2I">
+                                        <rect key="frame" x="-2" y="156" width="304" height="31"/>
+                                        <connections>
+                                            <action selector="volumeChanged:" destination="9DQ-7z-LBd" eventType="valueChanged" id="u4o-jq-23X"/>
+                                        </connections>
+                                    </slider>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="Ncm-t4-m2I" secondAttribute="trailing" id="JpU-1W-Dyu"/>
                                     <constraint firstAttribute="width" constant="300" id="UV8-El-9q2"/>
+                                    <constraint firstItem="Ncm-t4-m2I" firstAttribute="leading" secondItem="jVz-As-2vE" secondAttribute="leading" id="uAy-Na-2Da"/>
                                 </constraints>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2ua-NB-Yvn" customClass="DrawWaveform" customModule="VoiceRecorder" customModuleProvider="target">
@@ -390,7 +390,7 @@
                         <outlet property="playButton" destination="cpy-m0-jJ9" id="fYI-aL-N1u"/>
                         <outlet property="soundPitchControl" destination="VjU-pj-Gei" id="3qh-ok-tcD"/>
                         <outlet property="totalPlayTimeLabel" destination="5MX-UE-EBA" id="Cfm-33-vcS"/>
-                        <outlet property="volumeSliderView" destination="STt-MF-5Xp" id="v2N-yx-wyF"/>
+                        <outlet property="volumeSlider" destination="Ncm-t4-m2I" id="2uB-9F-bxr"/>
                         <outlet property="waveFormView" destination="2ua-NB-Yvn" id="AJe-5g-c9Q"/>
                     </connections>
                 </viewController>
@@ -406,6 +406,8 @@
         <image name="pause" catalog="system" width="88" height="128"/>
         <image name="play" catalog="system" width="120" height="128"/>
         <image name="plus" catalog="system" width="128" height="113"/>
+        <image name="speaker" catalog="system" width="128" height="124"/>
+        <image name="speaker.wave.2" catalog="system" width="128" height="90"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
