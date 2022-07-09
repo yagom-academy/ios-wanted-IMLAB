@@ -32,7 +32,7 @@ protocol RecordingVisualizerable {
 }
 
 protocol PlaybackVisualizerable {
-    func operatingwaveProgression(progress: Float)
+    func operatingwaveProgression(progress: Float, audioLength: Float)
 }
 
 protocol SoundManagerStatusReceivable {
@@ -89,7 +89,7 @@ class SoundManager {
             engine.reset()
             playerNode.reset()
             fileUrl = url
-            // 모델 밖에서 생성 후 주입
+            
             if type == .playBack {
                 
                 let file = try AVAudioFile(forReading: url)
@@ -97,17 +97,13 @@ class SoundManager {
                 
                 audioLengthSamples = file.length
                 audioSampleRate = fileFormat.sampleRate
-                audioPlayDuration = Double(audioLengthSamples) / audioSampleRate
-                
                 audioFile = file
                 configurePlayEngine(format: fileFormat)
                 
             } else {
                 configureRecordEngine()
             }
-        } catch let error as NSError {
-            print("파일 초기화 에러")
-            delegate?.audioFileInitializeErrorHandler(error: error)
+        } catch let error as NSError {            delegate?.audioFileInitializeErrorHandler(error: error)
         }
     }
     
@@ -148,12 +144,11 @@ class SoundManager {
             guard var currentPosition = getCurrentFrame(lastRenderTime: time) else { return }
             
             currentPosition = specifyFrameStandard(frame: currentFrame + seekFrame, length: audioLengthSamples)
-            
-            playBackVisualizerDelegate.operatingwaveProgression(progress: Float(currentPosition)/Float(audioLengthSamples))
-            
+            print(Float(currentPosition)/Float(audioLengthSamples)*10)
             if currentPosition >= audioLengthSamples {
                 resetPlayer(edge: .end)
-                delegate?.audioPlayerCurrentStatus(isPlaying: isPlaying)
+            } else {
+                playBackVisualizerDelegate.operatingwaveProgression(progress: Float(currentPosition)/Float(audioLengthSamples), audioLength: Float(audioLengthSamples))
             }
         }
     }
@@ -173,7 +168,6 @@ class SoundManager {
     }
     
     func playNpause() {
-        print(isPlaying)
         if isPlaying {
             playerNode.pause()
         } else {
@@ -237,9 +231,7 @@ class SoundManager {
             }
             
         } else {
-            playBackVisualizerDelegate.operatingwaveProgression(progress: 0)
             resetPlayer(edge: .end)
-            delegate?.audioPlayerCurrentStatus(isPlaying: isPlaying)
         }
     }
     
@@ -254,6 +246,8 @@ class SoundManager {
         case .end:
             needFileSchedule = true
             isPlaying = false
+            delegate?.audioPlayerCurrentStatus(isPlaying: isPlaying)
+            playBackVisualizerDelegate.operatingwaveProgression(progress: 0, audioLength: Float(audioLengthSamples))
         }
     }
     
