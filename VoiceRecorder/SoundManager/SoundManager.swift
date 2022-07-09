@@ -11,6 +11,12 @@ import Accelerate
 
 //TODO: - pitch enum 선언 필요
 
+enum PitchVariable: Int {
+    case middle = 0
+    case row = -150
+    case high = 150
+}
+
 enum PlayerType {
     case playBack
     case record
@@ -20,8 +26,13 @@ enum EdgeType {
     case end
 }
 
-protocol Visualizerable {
+protocol RecordingVisualizerable {
     func processAudioBuffer(buffer: AVAudioPCMBuffer)
+    
+}
+
+protocol PlaybackVisualizerable {
+    func operatingwaveProgression(progress: Float, audioLength: Float)
 }
 
 protocol SoundManagerStatusReceivable {
@@ -35,7 +46,8 @@ class SoundManager {
     // TODO: - play와 record의 프로퍼티 struct로 만들어서 관리
     
     var delegate: SoundManagerStatusReceivable?
-    var visualDelegate: Visualizerable!
+    var recordVisualizerDelegate: RecordingVisualizerable!
+    var playBackVisualizerDelegate: PlaybackVisualizerable!
     
     var isEnginePrepared = false
     private var isPlaying = false
@@ -74,8 +86,10 @@ class SoundManager {
     // MARK: - initialize SoundManager
     func initializeSoundManager(url: URL, type: PlayerType) {
         do {
+            engine.reset()
+            playerNode.reset()
             fileUrl = url
-            // 모델 밖에서 생성 후 주입
+            
             if type == .playBack {
                 
                 let file = try AVAudioFile(forReading: url)
@@ -83,17 +97,13 @@ class SoundManager {
                 
                 audioLengthSamples = file.length
                 audioSampleRate = fileFormat.sampleRate
-                audioPlayDuration = Double(audioLengthSamples) / audioSampleRate
-                
                 audioFile = file
                 configurePlayEngine(format: fileFormat)
                 
             } else {
                 configureRecordEngine()
             }
-        } catch let error as NSError {
-            print("파일 초기화 에러")
-            delegate?.audioFileInitializeErrorHandler(error: error)
+        } catch let error as NSError {            delegate?.audioFileInitializeErrorHandler(error: error)
         }
     }
     
@@ -132,11 +142,13 @@ class SoundManager {
         
         playerNode.installTap(onBus: 0, bufferSize: 1024, format: playerNode.outputFormat(forBus: 0)) { [unowned self] buffer, time in
             guard var currentPosition = getCurrentFrame(lastRenderTime: time) else { return }
-            currentPosition = specifyFrameStandard(frame: currentFrame + seekFrame, length: audioLengthSamples)
             
+            currentPosition = specifyFrameStandard(frame: currentFrame + seekFrame, length: audioLengthSamples)
+            print(Float(currentPosition)/Float(audioLengthSamples)*10)
             if currentPosition >= audioLengthSamples {
                 resetPlayer(edge: .end)
-                delegate?.audioPlayerCurrentStatus(isPlaying: isPlaying)
+            } else {
+                playBackVisualizerDelegate.operatingwaveProgression(progress: Float(currentPosition)/Float(audioLengthSamples), audioLength: Float(audioLengthSamples))
             }
         }
     }
@@ -150,7 +162,7 @@ class SoundManager {
         var convertedFrame = frame
         
         convertedFrame = max(frame, 0)
-        convertedFrame = min(convertedFrame, length)
+        convertedFrame = min(frame, length)
         
         return convertedFrame
     }
@@ -196,6 +208,8 @@ class SoundManager {
             playerNode.scheduleFile(audioFile, at: nil)
             if wasPlaying {
                 playerNode.play()
+            } else {
+                isPlaying = false
             }
             
         } else if currentPosition < audioLengthSamples {
@@ -218,7 +232,6 @@ class SoundManager {
             
         } else {
             resetPlayer(edge: .end)
-            delegate?.audioPlayerCurrentStatus(isPlaying: isPlaying)
         }
     }
     
@@ -233,6 +246,8 @@ class SoundManager {
         case .end:
             needFileSchedule = true
             isPlaying = false
+            delegate?.audioPlayerCurrentStatus(isPlaying: isPlaying)
+            playBackVisualizerDelegate.operatingwaveProgression(progress: 0, audioLength: Float(audioLengthSamples))
         }
     }
     
@@ -245,8 +260,8 @@ class SoundManager {
         playerNode.removeTap(onBus: 0)
     }
     
-    func changePitchValue(value: Float) {
-        self.pitchControl.pitch = value * 2
+    func changePitchValue(value: PitchVariable) {
+        self.pitchControl.pitch = Float(value.rawValue * 2)
     }
     
     func changeVolume(value: Float) {
@@ -279,7 +294,7 @@ extension SoundManager {
         return try AVAudioFile(forWriting: filePath, settings: format.settings)
     }
     
-    private func getAudioFile(filePath: URL) throws -> AVAudioFile {
+    func getAudioFile(filePath: URL) throws -> AVAudioFile {
         return try AVAudioFile(forReading: filePath)
     }
     
@@ -304,7 +319,7 @@ extension SoundManager {
             do {
                 self.setFrequency()
                 try self.audioFile.write(from: buffer)
-                self.visualDelegate.processAudioBuffer(buffer: buffer)
+                self.recordVisualizerDelegate.processAudioBuffer(buffer: buffer)
             } catch {
                 print("[error] : startRecord")
             }
@@ -326,17 +341,8 @@ extension SoundManager {
 
 extension SoundManager {
     
-    // - MARK: playTime
-    
-    func totalPlayTime(date: String) -> Double {
-        let audioFileManager = AudioFileManager()
-        let url = audioFileManager.getAudioFilePath(fileName: date)
-        do {
-            audioFile = try getAudioFile(filePath: url)
-        } catch {
-            print("[error] : totalPlayTime")
-        }
-        
+    func totalPlayTime(audioFile: AVAudioFile) -> Double {
+       
         let length = audioFile.length
         let sampleRate = audioFile.processingFormat.sampleRate
         let audioPlayTime = Double(length) / sampleRate
@@ -344,15 +350,4 @@ extension SoundManager {
         return audioPlayTime
     }
     
-    func convertTimeToString(_ seconds: TimeInterval) -> String {
-        if seconds.isNaN {
-            return "00:00"
-        }
-        
-        let min = Int(seconds / 60)
-        let sec = Int(seconds.truncatingRemainder(dividingBy: 60))
-        let strTime = String(format: "%02d:%02d", min, sec)
-        
-        return strTime
-    }
 }

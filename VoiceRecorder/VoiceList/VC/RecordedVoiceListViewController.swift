@@ -24,7 +24,7 @@ class RecordedVoiceListViewController: UIViewController {
         tableView.delegate = self
         return tableView
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -57,7 +57,7 @@ class RecordedVoiceListViewController: UIViewController {
         let doneItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createNewVoiceRecordButtonAction))
         
         navItem.rightBarButtonItem = doneItem
-
+        
         navigationBar.setItems([navItem], animated: false)
     }
     
@@ -101,26 +101,25 @@ extension RecordedVoiceListViewController: UITableViewDataSource, UITableViewDel
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = recordedVoiceTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! RecordedVoiceTableViewCell
         cell.fetchAudioLabelData(data: audioMetaDataList[indexPath.row])
-
+        
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let voicePlayVC = VoicePlayingViewController() // init시 타이틀 넘김
-        voicePlayVC.setTitle(title: audioMetaDataList[indexPath.item].title)
-        
+        let voicePlayVC = VoicePlayingViewController(title: audioMetaDataList[indexPath.item].title)
+        let audioMetaData = audioMetaDataList[indexPath.item]
         let path = audioMetaDataList[indexPath.item].url
         let filePath = fileManager.getAudioFilePath(fileName: path)
         if fileManager.isFileExist(atPath: path) {
-            voicePlayVC.fetchRecordedDataFromMainVC(dataUrl: filePath)
+            voicePlayVC.fetchRecordedDataFromMainVC(audioData: audioMetaData, fileUrl: filePath)
         } else {
             firebaseStorageManager.downloadAudio(path, to: filePath) { url in
-                voicePlayVC.fetchRecordedDataFromMainVC(dataUrl: filePath)
+                voicePlayVC.fetchRecordedDataFromMainVC(audioData: audioMetaData, fileUrl: filePath)
             }
         }
         self.present(voicePlayVC, animated: true)
     }
-
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 50
     }

@@ -26,13 +26,14 @@ class RecordViewController: UIViewController {
     private var isStartRecording: Bool = false
     
     private var visualizer: AudioVisualizeView = {
-        var visualizer = AudioVisualizeView()
+        var visualizer = AudioVisualizeView(playType: .record)
         visualizer.translatesAutoresizingMaskIntoConstraints = false
         return visualizer
     }()
     
     private lazy var playControlView: PlayControlView = {
         var view = PlayControlView()
+        view.isPlayButtonActivate = false
         view.delegate = self
         return view
     }()
@@ -51,12 +52,19 @@ class RecordViewController: UIViewController {
         return button
     }()
     
+    private var processSlider: UISlider = {
+        var slider = UISlider()
+        return slider
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setLayout()
         setAudio()
-        soundManager.visualDelegate = self
+        soundManager.recordVisualizerDelegate = self
+        soundManager.playBackVisualizerDelegate = self
+        soundManager.delegate = self
         frequencyControlView.delegate = self
         
         recordButton.addTarget(self, action: #selector(controlRecord), for: .touchUpInside)
@@ -147,27 +155,49 @@ class RecordViewController: UIViewController {
     }
     
     private func passData(localUrl : URL) {
-        let data = try! Data(contentsOf: localUrl)
-        let totalTime = soundManager.totalPlayTime(date: date)
-        let duration = soundManager.convertTimeToString(totalTime)
-        let audioMetaData = AudioMetaData(title: date, duration: duration, url: urlString)
+        do {
+            let data = try Data(contentsOf: localUrl)
+            let audioFile = try soundManager.getAudioFile(filePath: localUrl)
+            let totalTime = soundManager.totalPlayTime(audioFile: audioFile)
+            let duration = convertTimeToString(totalTime)
+            let wavefrom = visualizer.getWaveformData()
+            let audioMetaData = AudioMetaData(title: date, duration: duration, url: urlString, waveforms: wavefrom)
+            
+            firebaseStorageManager.uploadAudio(audioData: data, audioMetaData: audioMetaData)
+            delegate.sendMetaData(audioMetaData: audioMetaData)
         
-        firebaseStorageManager.uploadAudio(audioData: data, audioMetaData: audioMetaData)
-        delegate.sendMetaData(audioMetaData: audioMetaData)
+        } catch let error {
+            audioDataConvertingErrorHandler(error: error)
+        }
     }
+    
+    func convertTimeToString(_ seconds: TimeInterval) -> String {
+        if seconds.isNaN {
+            return "00:00"
+        }
+        
+        let min = Int(seconds / 60)
+        let sec = Int(seconds.truncatingRemainder(dividingBy: 60))
+        let strTime = String(format: "%02d:%02d", min, sec)
+        
+        return strTime
+    }
+    
     
     // 녹음 시작 & 정지 컨트롤
     @objc private func controlRecord() {
         isStartRecording = !isStartRecording
+        playControlView.isPlayButtonActivate = !isStartRecording
+        visualizer.isTouchable = !isStartRecording
         recordButtonToggle()
         
         if isStartRecording { // 녹음 시작일 때
             soundManager.startRecord()
         } else { // 녹음 끝일 때
             soundManager.stopRecord()
-            
+            playControlView.isPlayButtonActivate = !isStartRecording
+            visualizer.isTouchable = !isStartRecording
             let localUrl = audioFileManager.getAudioFilePath(fileName: urlString)
-            print(localUrl)
             passData(localUrl: localUrl)
             soundManager.initializeSoundManager(url: localUrl, type: .playBack)
         }
@@ -198,7 +228,7 @@ extension RecordViewController {
     }
 }
 
-extension RecordViewController: Visualizerable {
+extension RecordViewController: RecordingVisualizerable {
     
     func processAudioBuffer(buffer: AVAudioPCMBuffer) {
         visualizer.processAudioData(buffer: buffer)
@@ -209,23 +239,64 @@ extension RecordViewController: SoundButtonActionDelegate {
     
     func playButtonTouchUpinside(sender: UIButton) {
         guard soundManager.isEnginePrepared else { return }
-        self.soundManager.playNpause()
+        visualizer.moveToStartingPoint()
+        soundManager.playNpause()
     }
     
     func backwardButtonTouchUpinside(sender: UIButton) {
-        print("backwardButton Clicked")
         soundManager.skip(isForwards: false)
     }
     
     func forwardTouchUpinside(sender: UIButton) {
-        print("forwardButton Clicked")
         soundManager.skip(isForwards: true)
     }
 }
 
+extension RecordViewController: PlaybackVisualizerable {
+    
+    func operatingwaveProgression(progress: Float, audioLength: Float) {
+        DispatchQueue.main.async { [self] in
+            visualizer.operateVisualizerMove(value: progress, audioLenth: audioLength, centerViewMargin: visualizer.frame.minX)
+        }
+    }
+}
+    
 extension RecordViewController : SliderEvnetDelegate {
     
     func sliderEventValueChanged(sender: UISlider) {
         soundManager.frequency = sender.value
+    }
+    
+}
+
+extension RecordViewController: SoundManagerStatusReceivable {
+    
+    func audioPlayerCurrentStatus(isPlaying: Bool) {
+        soundManager.removeTap()
+        DispatchQueue.main.async {
+            self.playControlView.isSelected = isPlaying
+            self.visualizer.moveToStartingPoint()
+        }
+    }
+    
+    func audioFileInitializeErrorHandler(error: Error) {
+        let alert = UIAlertController(title: "파일 초기화 실패!", message: "오류코드: \(error.localizedDescription)", preferredStyle: .alert)
+        let action = UIAlertAction(title: "확인", style: .default)
+        alert.addAction(action)
+        self.present(alert, animated: true)
+    }
+    
+    func audioEngineInitializeErrorHandler(error: Error) {
+        let alert = UIAlertController(title: "엔진 초기화 실패!", message: "오류코드: \(error.localizedDescription)", preferredStyle: .alert)
+        let action = UIAlertAction(title: "확인", style: .default)
+        alert.addAction(action)
+        self.present(alert, animated: true)
+    }
+    
+    func audioDataConvertingErrorHandler(error: Error) {
+        let alert = UIAlertController(title: "오디오 데이터 변환 실패", message: "오류코드: \(error.localizedDescription)", preferredStyle: .alert)
+        let action = UIAlertAction(title: "확인", style: .default)
+        alert.addAction(action)
+        self.present(alert, animated: true)
     }
 }

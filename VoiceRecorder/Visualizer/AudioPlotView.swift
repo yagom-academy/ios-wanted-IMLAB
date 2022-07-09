@@ -7,21 +7,23 @@
 
 import UIKit
 
-protocol a {
-    func d()
+protocol VisualizerStatusReceivable {
+    func visualizer(auidoPlotView: UIView)
+}
+
+enum PlayType {
+    case playback
+    case record
 }
 
 class AudioPlotView: UIView {
-    
-    var delegate: a!
+
+    var delegate: VisualizerStatusReceivable!
     
     var caLayer: CAShapeLayer!
-    // MARK: - Vars
-    
-    /// Bar width
+
     var barWidth: CGFloat = 4.0
     
-    /// Indicate that waveform should draw active/inactive state
     var active = false {
         didSet {
             if self.active {
@@ -33,14 +35,27 @@ class AudioPlotView: UIView {
         }
     }
     
-    /// Color for bars
     var color = UIColor.gray.cgColor
     
-    /// Given waveforms
-    var waveforms = [Int]()
+    var waveforms = [Float]()
     var count = 0
     
-    // MARK: - Init
+    init(playType: PlayType) {
+        super.init(frame: .zero)
+        self.backgroundColor = UIColor.clear
+        caLayer = CAShapeLayer()
+        caLayer.strokeColor = UIColor.red.cgColor
+        caLayer.lineWidth = 1
+        caLayer.cornerRadius = 0.5
+        self.layer.addSublayer(caLayer)
+        switch playType {
+        case .playback:
+            self.transform = CGAffineTransform(scaleX: 1, y: -1)
+        case .record:
+            self.transform = CGAffineTransform(scaleX: -1, y: 1)
+        }
+        
+    }
     
     override init (frame : CGRect) {
         super.init(frame : frame)
@@ -55,6 +70,7 @@ class AudioPlotView: UIView {
     
     required init?(coder decoder: NSCoder) {
         super.init(coder: decoder)
+        self.backgroundColor = UIColor.clear
         caLayer = CAShapeLayer()
         caLayer.strokeColor = UIColor.red.cgColor
         caLayer.lineWidth = 1
@@ -62,16 +78,7 @@ class AudioPlotView: UIView {
         self.layer.addSublayer(caLayer)
         self.transform = CGAffineTransform(scaleX: -1, y: 1)
     }
-        
-    public func shiftWaveform(value: CGFloat) {
-        guard let sublayers = self.layer.sublayers else { return }
-        for layer in sublayers {
-            layer.transform = CATransform3DTranslate(layer.transform, 0, 0, 0)
-            let transform  = CATransform3DTranslate(layer.transform, value, 0, 0)
-            layer.transform = transform
-        }
-    }
-    
+ 
     public func shiftWaveform() {
         guard let sublayers = self.layer.sublayers else { return }
         for layer in sublayers {
@@ -80,20 +87,28 @@ class AudioPlotView: UIView {
         }
     }
     
-    func shiftBackward(value: CGFloat) {
+    func shiftForward() {
         guard let sublayers = self.layer.sublayers else { return }
         for layer in sublayers {
-            layer.transform = CATransform3DTranslate(layer.transform, 0, 0, 0)
-            let transform  = CATransform3DTranslate(layer.transform, value, 0, 0)
+            let transform  = CATransform3DTranslate(layer.transform, -1, 0, 0)
             layer.transform = transform
         }
     }
     
-    func move() {
-        caLayer.scroll(CGPoint(x: 100, y: 300))
+    func importWaveformData(waveData: [Float]) {
+        waveforms = waveData
+        drawPlaybackWaveForm()
+    }
+    
+    func exportWaveformData() -> [Float] {
+        return waveforms
     }
     
     override func draw(_ rect: CGRect) {
+        drawRecordingWaveForm()
+    }
+    
+    func drawRecordingWaveForm() {
         shiftWaveform()
         count += 1
     
@@ -107,16 +122,43 @@ class AudioPlotView: UIView {
     
         guard var wave = waveforms.last else { return }
         
-        if (Int(wave) <= 2) {
+        if (wave) <= 2 {
             wave = 2
         }
         
-        let startX = Int(self.bounds.width/2) + 5*count
-        let startY = Int(self.bounds.origin.y) + Int(self.bounds.height)/2
+        let startX = Float(self.bounds.width) / 2 + 5 * Float(count)
+        let startY = self.bounds.origin.y + self.bounds.height/2
         
-        path.move(to: CGPoint(x: startX, y: startY + wave))
-        path.addLine(to: CGPoint(x: startX, y: startY - wave))
+        path.move(to: CGPoint(x: CGFloat(startX), y: startY + CGFloat(wave)))
+        path.addLine(to: CGPoint(x: CGFloat(startX), y: startY - CGFloat(wave)))
       
         caLayer.path = path.cgPath
+    }
+    
+    func drawPlaybackWaveForm() {
+        for i in waveforms {
+            count+=1
+            let path: UIBezierPath!
+            
+            if let ppath = caLayer.path {
+                path = UIBezierPath(cgPath: ppath)
+            } else {
+                path = UIBezierPath()
+            }
+            
+            var wave = i
+            if (wave) <= 2 {
+                wave = 2
+            }
+            let startX = Float(self.bounds.width) / 2 + 5 * Float(-count) + 15
+            let startY = self.bounds.origin.y + self.bounds.height/2
+            
+            path.move(to: CGPoint(x: CGFloat(startX), y: startY + CGFloat(wave)))
+            path.addLine(to: CGPoint(x: CGFloat(startX), y: startY - CGFloat(wave)))
+          
+            caLayer.path = path.cgPath
+            self.setNeedsLayout()
+            
+        }
     }
 }
