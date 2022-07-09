@@ -51,7 +51,7 @@ final class FirebaseStorageManager {
         }
     }
     
-    func uploadDataSet(data: Data, fileName: String, completion: @escaping () -> Void) {
+    func uploadData(data: Data, fileName: String, completion: @escaping () -> Void) {
         guard let deviceID = deviceID else {
             return
         }
@@ -78,7 +78,7 @@ final class FirebaseStorageManager {
     }
     
     func replaceData(previousFileName: String, data: Data, fileName: String, completion: @escaping () -> Void) {
-        uploadDataSet(data: data, fileName: fileName) {
+        uploadData(data: data, fileName: fileName) {
             self.deleteData(fileName: previousFileName) {
                 completion()
             }

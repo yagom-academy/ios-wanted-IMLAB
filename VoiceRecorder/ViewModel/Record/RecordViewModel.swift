@@ -98,7 +98,7 @@ final class RecordViewModel {
         }
         
         if previousFileName.isEmpty {
-            storage.uploadDataSet(data: recordData, fileName: fileName) {
+            storage.uploadData(data: recordData, fileName: fileName) {
                 self.delegate?.uploadSuccess()
             }
         } else {
