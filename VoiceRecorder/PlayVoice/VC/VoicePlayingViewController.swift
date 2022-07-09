@@ -124,9 +124,11 @@ class VoicePlayingViewController: UIViewController {
         
         view.addSubview(recordedVoiceTitle)
         view.addSubview(middleAnchorView)
+        
         middleAnchorView.addSubview(visualizer)
         middleAnchorView.addSubview(centerLine)
         middleAnchorView.addSubview(progressBar)
+        
         view.addSubview(pitchSegmentController)
         view.addSubview(volumeSlider)
         view.addSubview(playControlView)
@@ -254,7 +256,12 @@ extension VoicePlayingViewController: PlaybackVisualizerable {
     
     func operatingwaveProgression(progress: Float, audioLength: Float) {
         DispatchQueue.main.async { [self] in
-            progressBar.progress = progress
+            if progress < 0 {
+                progressBar.progress = 0
+            } else {
+                progressBar.progress = progress
+            }
+            
             visualizer.operateVisualizerMove(value: progress, audioLenth: audioLength, centerViewMargin: visualizer.frame.maxX)
         }
     }

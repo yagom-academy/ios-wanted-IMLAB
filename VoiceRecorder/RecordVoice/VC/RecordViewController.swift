@@ -32,8 +32,18 @@ class RecordViewController: UIViewController {
         return visualizer
     }()
     
+    private var centerLine: UIView = {
+        var view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.borderWidth = 1
+        view.layer.borderColor = CGColor.init(red: 255, green: 255, blue: 255, alpha: 1)
+            return view
+    }()
+    
     private lazy var playControlView: PlayControlView = {
         var view = PlayControlView()
+        view.translatesAutoresizingMaskIntoConstraints = false
         view.isPlayButtonActivate = false
         view.delegate = self
         return view
@@ -41,21 +51,18 @@ class RecordViewController: UIViewController {
     
     private var frequencyControlView: FrequencyControlView = {
         var view = FrequencyControlView()
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
     private var recordButton: UIButton = {
         let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
         let largeConfig = UIImage.SymbolConfiguration(pointSize: 50, weight: .regular, scale: .large)
         let largeRecordImage = UIImage(systemName: "circle.fill", withConfiguration: largeConfig)
         button.setImage(largeRecordImage, for: .normal)
         button.tintColor = .systemRed
         return button
-    }()
-    
-    private var processSlider: UISlider = {
-        var slider = UISlider()
-        return slider
     }()
     
     override func viewDidLoad() {
@@ -82,11 +89,8 @@ class RecordViewController: UIViewController {
     private func setLayout() {
         view.backgroundColor = .white
         
-        playControlView.translatesAutoresizingMaskIntoConstraints = false
-        frequencyControlView.translatesAutoresizingMaskIntoConstraints = false
-        recordButton.translatesAutoresizingMaskIntoConstraints = false
-        
         view.addSubview(visualizer)
+        view.addSubview(centerLine)
         view.addSubview(playControlView)
         view.addSubview(frequencyControlView)
         view.addSubview(recordButton)
@@ -97,6 +101,11 @@ class RecordViewController: UIViewController {
             visualizer.centerYAnchor.constraint(equalTo: view.centerYAnchor).constraintWithMultiplier(0.5),
             visualizer.widthAnchor.constraint(equalTo: view.widthAnchor),
             visualizer.heightAnchor.constraint(equalToConstant: 200),
+            
+            centerLine.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            centerLine.centerYAnchor.constraint(equalTo: visualizer.centerYAnchor),
+            centerLine.heightAnchor.constraint(equalTo: visualizer.heightAnchor, constant: 20),
+            centerLine.widthAnchor.constraint(equalToConstant: 1),
             
             playControlView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             playControlView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -174,16 +183,16 @@ class RecordViewController: UIViewController {
     
     // 녹음 시작 & 정지 컨트롤
     @objc private func controlRecord() {
-        isStartRecording = !isStartRecording
+        isStartRecording.toggle()
         playControlView.isPlayButtonActivate = !isStartRecording
         visualizer.isTouchable = !isStartRecording
         recordButtonToggle()
         
-        if isStartRecording { // 녹음 시작일 때
+        if isStartRecording {
             soundManager.startRecord()
-        } else { // 녹음 끝일 때
+        } else {
             soundManager.stopRecord()
-            playControlView.isPlayButtonActivate = !isStartRecording
+            playControlView.isPlayButtonActivate = true
             visualizer.isTouchable = !isStartRecording
             let localUrl = audioFileManager.getAudioFilePath(fileName: urlString)
             passData(localUrl: localUrl)
@@ -244,7 +253,7 @@ extension RecordViewController: PlaybackVisualizerable {
     
     func operatingwaveProgression(progress: Float, audioLength: Float) {
         DispatchQueue.main.async { [self] in
-            visualizer.operateVisualizerMove(value: progress, audioLenth: audioLength, centerViewMargin: visualizer.frame.minX)
+            visualizer.operateVisualizerMove(value: progress, audioLenth: audioLength, centerViewMargin: visualizer.frame.maxX)
         }
     }
 }
