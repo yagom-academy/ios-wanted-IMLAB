@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>819373888601-u88idforeja2r7al5nmhlc8t2e3or1vs.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.819373888601-u88idforeja2r7al5nmhlc8t2e3or1vs</string>
+	<key>API_KEY</key>
+	<string>AIzaSyABkKROmlLT7TRgq9W9DDKeXsvDnhm4KUU</string>
+	<key>GCM_SENDER_ID</key>
+	<string>819373888601</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>net.yagom.VoiceRecorderJMim</string>
+	<key>PROJECT_ID</key>
+	<string>voicememo-a447f</string>
+	<key>STORAGE_BUCKET</key>
+	<string>voicememo-a447f.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:819373888601:ios:ac6724e68df398b3dd4d48</string>
+</dict>
+</plist>
