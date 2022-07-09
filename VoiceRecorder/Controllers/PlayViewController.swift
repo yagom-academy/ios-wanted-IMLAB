@@ -90,7 +90,7 @@ class PlayViewController: UIViewController {
             playerTimer = Timer.scheduledTimer(
                 timeInterval: 0.01,
                 target: self,
-                selector: #selector(update),
+                selector: #selector(updatePlayerTimer),
                 userInfo: nil,
                 repeats: true
             )
@@ -117,7 +117,7 @@ class PlayViewController: UIViewController {
 
 // MARK: - @objc Methods
 private extension PlayViewController {
-    @objc func update() {
+    @objc func updatePlayerTimer() {
         if engine.isFinish() {
             playButton.setImage(.play)
             isPlay = false
@@ -127,7 +127,7 @@ private extension PlayViewController {
             engine.seekFrame = 0
             i = 0
             playerTimeLabel.text = "\(engine.duration.toStringTimeFormat)"
-            try! engine.setupEngine()
+            setupEngine()
         } else {
             playerTimeLabel.text = "\(engine.getCurrentTime().toStringTimeFormat)"
         }
@@ -211,5 +211,8 @@ private extension PlayViewController {
                 return
             }
         }
+    }
+    func setupEngine() {
+        guard (try? engine.setupEngine()) != nil else { return }
     }
 }

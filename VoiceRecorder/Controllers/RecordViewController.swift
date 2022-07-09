@@ -112,11 +112,7 @@ class RecordViewController: UIViewController {
             graphView.reset()
             guard let data = recorder.data else { return }
             engine.url = fileName
-            do {
-                try engine.setupEngine()
-            } catch {
-                print(error)
-            }
+            setupEngine()
             
             activityIndicator.startAnimating()
             
@@ -145,14 +141,14 @@ class RecordViewController: UIViewController {
             recorderTimer = Timer.scheduledTimer(
                 timeInterval: 0.01,
                 target: self,
-                selector: #selector(update),
+                selector: #selector(updateRecordTimer),
                 userInfo: nil,
                 repeats: true
             )
             waveTimer = Timer.scheduledTimer(
                 timeInterval: stepDuration,
                 target: self,
-                selector: #selector(update3),
+                selector: #selector(updateGraphTimer),
                 userInfo: nil,
                 repeats: true
             )
@@ -189,7 +185,7 @@ class RecordViewController: UIViewController {
             playerTimer = Timer.scheduledTimer(
                 timeInterval: 0.01,
                 target: self,
-                selector: #selector(update2),
+                selector: #selector(updateRecordPlayerTimer),
                 userInfo: nil,
                 repeats: true
             )
@@ -201,11 +197,11 @@ class RecordViewController: UIViewController {
 
 // MARK: - @objc Methods
 private extension RecordViewController {
-    @objc func update() {
+    @objc func updateRecordTimer() {
         counter += 0.01
         recordTimeLabel.text = "\(counter.toStringTimeFormat)"
     }
-    @objc func update2() {
+    @objc func updateRecordPlayerTimer() {
         if engine.isFinish() {
             playButton.setImage(.play)
             isPlay = false
@@ -215,7 +211,7 @@ private extension RecordViewController {
             engine.seekFrame = 0
             i = 0
             recordTimeLabel.text = "\(engine.duration.toStringTimeFormat)"
-            try! engine.setupEngine()
+            setupEngine()
         } else {
             recordTimeLabel.text = "\(engine.getCurrentTime().toStringTimeFormat)"
         }
@@ -236,10 +232,9 @@ private extension RecordViewController {
             i += 1
         }
     }
-    @objc func update3() {
+    @objc func updateGraphTimer() {
         recorder.updateMeters()
         let value = pow(Double(10), (0.05 * Double(recorder.averagePower))) * 110
-        print(value)
         decibels.append(Int(value))
         if value > 160 {
             self.graphView.animateNewValue(CGFloat(graphView.maxValue), duration: self.stepDuration)
@@ -367,6 +362,10 @@ private extension RecordViewController {
         eq1040HzSlider.thumbTintColor = isEnabled ? .white : .clear
         eq2500HzSlider.thumbTintColor = isEnabled ? .white : .clear
         eq7500HzSlider.thumbTintColor = isEnabled ? .white : .clear
+    }
+    
+    func setupEngine() {
+        guard (try? engine.setupEngine()) != nil else { return }
     }
     
 }
