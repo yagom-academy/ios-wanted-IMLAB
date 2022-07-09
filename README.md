@@ -255,6 +255,6 @@ func uploadAudio(audioData: Data, audioMetaData: AudioMetaData) {
 
 ## 📱 UI
 
-| 녹음 & 리스트 업데이트 | 녹음 | 5초 전후 |
+| 녹음 & 리스트 업데이트 | 재생 | 5초 전후 |
 | ------ | ------ | ------ |
 | ![Simulator Screen Recording - iPhone 11 Pro - 2022-07-09 at 23 54 00](https://user-images.githubusercontent.com/36326157/178111050-d7648abb-ef63-4ab3-949f-a671efd0e5c7.gif) | ![Simulator Screen Recording - iPhone 11 Pro - 2022-07-09 at 23 55 00](https://user-images.githubusercontent.com/36326157/178111047-21e9b0c4-70be-4c44-9ea8-cc8bf0fd7bdb.gif) |![Simulator Screen Recording - iPhone 11 Pro - 2022-07-09 at 23 52 48](https://user-images.githubusercontent.com/36326157/178111076-ac749808-eb35-4f34-9e95-6574fd86ba6e.gif) |
