@@ -81,11 +81,11 @@ class RecordManager: RecordService {
         let fileName = formatter.string(from: Date())
         return fileName
     }
-
+    
     func startRecord() {
         totalTime = 0
-        audioFile = nil
         totalWaveData = [Int]()
+        audioFile = nil
 
         let numberOfSamples = waveForms.count
 
@@ -93,7 +93,7 @@ class RecordManager: RecordService {
 
         let recordSettings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
-            AVSampleRateKey: 16000,
+            AVSampleRateKey: 44100,
             AVNumberOfChannelsKey: 2,
             AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue,
         ]
