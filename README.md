@@ -47,10 +47,8 @@ Firebase Storage를 활용해 녹음 파일을 관리할 수 있는 녹음기 �
 
 # 회고
 ## 미니
-// 2. Combine 사용에 대한 고민 Observable 클래스에서 Combine으로 변경 하여 사용
-// 3. AVAudioEngine vs AVAudioRecorder cut off frequency
-1. AVAudioEngine vs AVAudioRecorder
-<br>
+
+### 1. AVAudioEngine vs AVAudioRecorder
 처음 Recorder를 생성할 당시, 파형을 그리기 위해서는 AVAudioEngine을 활용하여 녹음 기능을 구현하였다. 하지만, Engine을 구성하는 부분에서 throw init과 Engine 구성에서의 throw 구문으로 인해서 사용자에게 좋지 못한 상황이 발생할 수 있다고 생각을 하였다. 사용자에게 확실하게 기능이 작동할 수 있는 Recorder를 사용하였다. 
 <br><br>
 <img src="./스크린샷/회고1_mini.png">
@@ -59,8 +57,7 @@ Firebase Storage를 활용해 녹음 파일을 관리할 수 있는 녹음기 �
 <br><br>
 위와 같이 다양하게 고민을 하는 과정에서 많은 것을 얻었다. 기능 정의서의 나온것에 대한 정리를 먼저 하지 못한 잘못을 깨달았다. 한 화면에 들어가는 기능을 정리하고 이에 따른 프레임 워크나 라이브러리를 정하는 과정이 우선적으로 필요하다고 느꼈다. 추후, AVAudioEngine을 사용하여 EQ를 조절하여서 RecordViewModel을 업데이트 해보는 것이다.
 
-2. Combine 사용에 대한 고민 Observable 클래스에서 Combine으로 변경 하여 사용
-<br>
+### 2. Combine 사용에 대한 고민 Observable 클래스에서 Combine으로 변경 하여 사용
 Recorder와 Player에서 제어를 하는 함수는 ViewModel에 존재하였고, 이에 대한 버튼은 ViewController에 존재하였다. 이에 대한 상태를 변경하는 과정에서 많은 메소드들이 필요하였고, 이에 대한 메소드 분리를 하는 방법이 생각나지 않았다. 이로 인해서 Observable을 생성하여 사용을 하려고 하였다. 하지만, Combine을 사용하는 방법도 있었다. 이로 인해서 숭어와 함께 고민을 하였다.
 <br><br>
 <img src="./스크린샷/회고2-1_mini.png">
@@ -71,8 +68,8 @@ Recorder와 Player에서 제어를 하는 함수는 ViewModel에 존재하였고
 <br><br>
 위와 같이 Published 변수들에 대한 바인딩을 수행하였다. 위와 같은 방법은 ViewModel의 변수에 대한 상태를 감지 하는 것이지만, 각 Button들에 대한 상태를 관찰할 수 있는 방법을 수행하지 못한 것이 부족하다고 생각 들었다. 그래서 앞으로 Combine에 대한 공부를 하여서 리팩토링을 진행해볼 예정이다.
 <br><br>
-3. 파형 생성시 Delegate 패턴 사용
-<br><br>
+
+### 3. 파형 생성시 Delegate 패턴 사용
 파형에 대한 데이터를 생성하는 곳은 RecordViewModel에서 생성하였다. 하지만, MVVM의 원칙을 지키기 위해서 View에 데이터를 넘겨줘야 하는 상황이었다. 이에 대해서 "Combine을 사용할 것인가?", "Delegate를 사용할 것인가?", "View를 그리는 함수를 ViewModel에 만들 것인가?"와 같은 다양한 고민을 했다. Combine의 사용은 어떤 상황에서 발생할지 정확히 알기가 어렵다는 판단을 하였고, ViewModel에 생성을 하는 방법을 생각했지만, View를 그리는 메소드를 갖는 것은 MVVM에서 적절하지 않다고 판단하였다.
 <br><br>
 <img src="./스크린샷/회고3_mini.png">
