@@ -53,7 +53,7 @@ class RecordListCell: UITableViewCell {
     }
 }
 
-//MARK: 클릭, 탭제스쳐 이벤트 메서드
+//MARK: - 클릭, 탭제스쳐 이벤트 메서드
 extension RecordListCell {
     func addFavoriteMarkAction() {
         favoriteMark.addTarget(self, action: #selector(tappedFavoriteMarkAction), for: .touchUpInside)
@@ -82,7 +82,7 @@ extension RecordListCell {
     }
 }
 
-//MARK: attribute, layout 메서드
+//MARK: - attribute, layout 메서드
 extension RecordListCell {
     private func attribute() {
         selectionStyle = .none
