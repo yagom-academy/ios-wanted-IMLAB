@@ -225,7 +225,7 @@ class RecordVoiceViewController: UIViewController{
         if recordVoiceManager.isRecording(){
             recordVoiceManager.stopRecording() {
                 self.drawWaveFormManager.stopDrawing(in: self.waveFormCanvasView)
-                FirebaseStorageManager().uploadRecord(time: self.progressTimeLabel.text!) {
+                FirebaseStorageManager().uploadRecord(time: self.progressTimeLabel.text![0..<5]) {
                     self.delegate?.updateList()
                 }
             }
