@@ -1,10 +1,10 @@
 ## 목차
 1. [프로젝트 소개](https://github.com/Kim-Junhwan/ios-wanted-VoiceRecorder#1-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EC%86%8C%EA%B0%9C)
 2. [팀원 소개](https://github.com/Kim-Junhwan/ios-wanted-VoiceRecorder#2-%ED%8C%80%EC%9B%90-%EC%86%8C%EA%B0%9C)
-3. [구현 화면](https://github.com/Kim-Junhwan/ios-wanted-VoiceRecorder#2-%ED%8C%80%EC%9B%90-%EC%86%8C%EA%B0%9C)
+3. [구현 화면](https://github.com/Kim-Junhwan/ios-wanted-VoiceRecorder#3-%EA%B5%AC%ED%98%84-%ED%99%94%EB%A9%B4)
 4. [담당 파트](https://github.com/Kim-Junhwan/ios-wanted-VoiceRecorder#4-%EB%8B%B4%EB%8B%B9-%ED%8C%8C%ED%8A%B8)
-5. 고민한 부분
-6. [개발 과정](https://github.com/Kim-Junhwan/ios-wanted-VoiceRecorder#5-%EA%B0%9C%EB%B0%9C-%EA%B3%BC%EC%A0%95)
+5. [고민한 부분](https://github.com/Kim-Junhwan/ios-wanted-VoiceRecorder#5-%EA%B3%A0%EB%AF%BC%ED%95%9C-%EB%B6%80%EB%B6%84)
+6. [개발 과정](https://github.com/Kim-Junhwan/ios-wanted-VoiceRecorder#6-%EA%B0%9C%EB%B0%9C-%EA%B3%BC%EC%A0%95)
 
 
 
