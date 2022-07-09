@@ -339,16 +339,3 @@ extension SoundManager {
         isEnginePrepared = false
     }
 }
-
-extension SoundManager {
-    
-    func totalPlayTime(audioFile: AVAudioFile) -> Double {
-        
-        let length = audioFile.length
-        let sampleRate = audioFile.processingFormat.sampleRate
-        let audioPlayTime = Double(length) / sampleRate
-        
-        return audioPlayTime
-    }
-    
-}
