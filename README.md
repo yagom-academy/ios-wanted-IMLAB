@@ -4,11 +4,11 @@
 3. [구현 화면](https://github.com/Kim-Junhwan/ios-wanted-VoiceRecorder#3-%EA%B5%AC%ED%98%84-%ED%99%94%EB%A9%B4)
 4. [담당 파트](https://github.com/Kim-Junhwan/ios-wanted-VoiceRecorder#4-%EB%8B%B4%EB%8B%B9-%ED%8C%8C%ED%8A%B8)
 5. [고민한 부분](https://github.com/Kim-Junhwan/ios-wanted-VoiceRecorder#5-%EA%B3%A0%EB%AF%BC%ED%95%9C-%EB%B6%80%EB%B6%84)
-    - 여러개의 녹음파일을 디바이스가 로컬 파일로 가지고 있을지, 아니면 하나의 파일만 가지고 있을지 고민
-    - 오디오 파일이 끝까지 재생되면 다시 처음으로 돌아가는 기능을 어떻게 구현할 것인가
-    - 파일이 완전히 다운로드 되기 이전에 녹음을 재생하는 뷰가 이전 파일을 재생하는 문제
-    - 파형 이미지를 어떻게 구현할지
-    - 아이폰 실제 기기의 sample rate가 바뀌지 않는 문제
+    - [여러개의 녹음파일을 디바이스가 로컬 파일로 가지고 있을지, 아니면 하나의 파일만 가지고 있을지 고민](https://github.com/Kim-Junhwan/ios-wanted-VoiceRecorder#%EC%97%AC%EB%9F%AC%EA%B0%9C%EC%9D%98-%EB%85%B9%EC%9D%8C%ED%8C%8C%EC%9D%BC%EC%9D%84-%EB%94%94%EB%B0%94%EC%9D%B4%EC%8A%A4%EA%B0%80-%EB%A1%9C%EC%BB%AC-%ED%8C%8C%EC%9D%BC%EB%A1%9C-%EA%B0%80%EC%A7%80%EA%B3%A0-%EC%9E%88%EC%9D%84%EC%A7%80-%EC%95%84%EB%8B%88%EB%A9%B4-%ED%95%98%EB%82%98%EC%9D%98-%ED%8C%8C%EC%9D%BC%EB%A7%8C-%EA%B0%80%EC%A7%80%EA%B3%A0-%EC%9E%88%EC%9D%84%EC%A7%80-%EA%B3%A0%EB%AF%BC)
+    - [오디오 파일이 끝까지 재생되면 다시 처음으로 돌아가는 기능을 어떻게 구현할 것인가](https://github.com/Kim-Junhwan/ios-wanted-VoiceRecorder#%EC%98%A4%EB%94%94%EC%98%A4-%ED%8C%8C%EC%9D%BC%EC%9D%B4-%EB%81%9D%EA%B9%8C%EC%A7%80-%EC%9E%AC%EC%83%9D%EB%90%98%EB%A9%B4-%EB%8B%A4%EC%8B%9C-%EC%B2%98%EC%9D%8C%EC%9C%BC%EB%A1%9C-%EB%8F%8C%EC%95%84%EA%B0%80%EB%8A%94-%EA%B8%B0%EB%8A%A5%EC%9D%84-%EC%96%B4%EB%96%BB%EA%B2%8C-%EA%B5%AC%ED%98%84%ED%95%A0-%EA%B2%83%EC%9D%B8%EA%B0%80)
+    - [파일이 완전히 다운로드 되기 이전에 녹음을 재생하는 뷰가 이전 파일을 재생하는 문제](https://github.com/Kim-Junhwan/ios-wanted-VoiceRecorder#%ED%8C%8C%EC%9D%BC%EC%9D%B4-%EC%99%84%EC%A0%84%ED%9E%88-%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C-%EB%90%98%EA%B8%B0-%EC%9D%B4%EC%A0%84%EC%97%90-%EB%85%B9%EC%9D%8C%EC%9D%84-%EC%9E%AC%EC%83%9D%ED%95%98%EB%8A%94-%EB%B7%B0%EA%B0%80-%EC%9D%B4%EC%A0%84-%ED%8C%8C%EC%9D%BC%EC%9D%84-%EC%9E%AC%EC%83%9D%ED%95%98%EB%8A%94-%EB%AC%B8%EC%A0%9C)
+    - [파형 이미지를 어떻게 구현할지](https://github.com/Kim-Junhwan/ios-wanted-VoiceRecorder#%ED%8C%8C%ED%98%95-%EC%9D%B4%EB%AF%B8%EC%A7%80%EB%A5%BC-%EC%96%B4%EB%96%BB%EA%B2%8C-%EA%B5%AC%ED%98%84%ED%95%A0%EC%A7%80)
+    - [아이폰 실제 기기의 sample rate가 바뀌지 않는 문제](https://github.com/Kim-Junhwan/ios-wanted-VoiceRecorder#%EC%95%84%EC%9D%B4%ED%8F%B0-%EC%8B%A4%EC%A0%9C-%EA%B8%B0%EA%B8%B0%EC%9D%98-sample-rate%EA%B0%80-%EB%B0%94%EB%80%8C%EC%A7%80-%EC%95%8A%EB%8A%94-%EB%AC%B8%EC%A0%9C)
 6. [개발 과정](https://github.com/Kim-Junhwan/ios-wanted-VoiceRecorder#6-%EA%B0%9C%EB%B0%9C-%EA%B3%BC%EC%A0%95)
 
 
