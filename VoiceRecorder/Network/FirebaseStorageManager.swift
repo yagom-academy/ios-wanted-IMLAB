@@ -7,7 +7,6 @@
 
 import Foundation
 import FirebaseStorage
-import UIKit
 
 enum NetworkError: String {
     case uploadFailed = "오디오 파일을 서버에 업로드 할 수 없습니다."
