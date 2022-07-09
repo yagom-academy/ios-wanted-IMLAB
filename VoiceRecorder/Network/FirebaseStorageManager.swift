@@ -99,6 +99,7 @@ class FirebaseStorageManager {
                 let duration = data?["duration"] ?? "00:00"
                 let url = data?["url"] ?? title + ".caf"
                 let waveforms = data?["waveforms"]?.components(separatedBy: " ").map{Float($0)!} ?? []
+                
                 audioMetaDataList.append(AudioMetaData(title: title, duration: duration, url: url, waveforms: waveforms))
                 
                 if audioMetaDataList.count == filePath.count {
