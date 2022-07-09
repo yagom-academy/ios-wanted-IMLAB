@@ -20,9 +20,17 @@
 
 ## 기능 구현 
 ### Home 화면
-| **로드 완료 된 홈화면**|**Play 화면 전환**|**Create Audio 화면 전환 및 파일 업로드**|**파일 삭제**|**서버 연결이 끊어질시 에러 핸들링**|
-|---|---|---|---|---|
-|<img src="https://user-images.githubusercontent.com/36659877/178033770-a0234859-1114-473b-8b1f-ba909157aa9e.png" width="200" height="400"/>|<img src="https://user-images.githubusercontent.com/36659877/178035769-052679e5-09a6-4edc-80cd-9446c5dc6632.gif" width="200" height="400"/>|<img src="https://user-images.githubusercontent.com/36659877/178035835-1653603a-4376-4df2-8c64-52be71299c2d.gif" width="200" height="400"/>|<img src="https://user-images.githubusercontent.com/36659877/178037351-6eb6099b-ba96-447c-af96-0f6728fa3aca.gif" width="200" height="400"/>|<img src="https://user-images.githubusercontent.com/36659877/178036138-aa307f24-19bf-4f9d-a406-596631f6155f.gif" width="200" height="400"/>|
+| **로드 완료 된 홈화면**|**Play 화면 전환**|
+|---|---|
+|<img src="https://user-images.githubusercontent.com/36659877/178033770-a0234859-1114-473b-8b1f-ba909157aa9e.png" width="200" height="400"/>|<img src="https://user-images.githubusercontent.com/36659877/178035769-052679e5-09a6-4edc-80cd-9446c5dc6632.gif" width="200" height="400"/>
+
+
+|**Create Audio 화면 전환 및 파일 업로드**|**파일 삭제**|**서버 연결이 끊어질시 에러 핸들링**|
+|---|---|---|
+|<img src="https://user-images.githubusercontent.com/36659877/178035835-1653603a-4376-4df2-8c64-52be71299c2d.gif" width="200" height="400"/>|<img src="https://user-images.githubusercontent.com/36659877/178037351-6eb6099b-ba96-447c-af96-0f6728fa3aca.gif" width="200" height="400"/>|<img src="https://user-images.githubusercontent.com/36659877/178036138-aa307f24-19bf-4f9d-a406-596631f6155f.gif" width="200" height="400"/>|
+
+
+
 
 - [x] 파일명은 “현재 위치 _ 생성된 시간을 초 단위까지” 로 표시합니다.
 - [x] 파일은 마지막으로 업로드된 파일부터 보여줍니다. 
