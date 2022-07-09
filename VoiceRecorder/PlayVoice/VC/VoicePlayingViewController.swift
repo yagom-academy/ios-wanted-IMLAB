@@ -158,7 +158,7 @@ class VoicePlayingViewController: UIViewController {
             progressBar.centerYAnchor.constraint(equalTo: middleAnchorView.centerYAnchor).constraintWithMultiplier(1),
             progressBar.centerXAnchor.constraint(equalTo: middleAnchorView.centerXAnchor),
             progressBar.widthAnchor.constraint(equalTo:  middleAnchorView.widthAnchor, multiplier: 0.9),
-            progressBar.heightAnchor.constraint(equalToConstant: 50),
+            progressBar.heightAnchor.constraint(equalToConstant: 10),
             
             volumeSlider.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             volumeSlider.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
