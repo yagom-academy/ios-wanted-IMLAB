@@ -27,6 +27,7 @@
 		B7545785286AE33D00EFCDA2 /* UploadRecordfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7545784286AE33D00EFCDA2 /* UploadRecordfile.swift */; };
 		B7545787286AE34B00EFCDA2 /* DownloadRecordfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7545786286AE34B00EFCDA2 /* DownloadRecordfile.swift */; };
 		B7545789286AE35800EFCDA2 /* DeleteRecordfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7545788286AE35800EFCDA2 /* DeleteRecordfile.swift */; };
+		B7587DCC2879C326002FF9B6 /* RecordWaveForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7587DCB2879C326002FF9B6 /* RecordWaveForm.swift */; };
 		B770CD4F287827FC0064CDC5 /* readFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B770CD4E287827FC0064CDC5 /* readFile.swift */; };
 		B770CD51287857760064CDC5 /* DrawWaveform.swift in Sources */ = {isa = PBXBuildFile; fileRef = B770CD50287857760064CDC5 /* DrawWaveform.swift */; };
 		B78E6BE9286D4B53005AC140 /* LocalFileProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = B78E6BE8286D4B53005AC140 /* LocalFileProtocol.swift */; };
@@ -64,6 +65,7 @@
 		B7545784286AE33D00EFCDA2 /* UploadRecordfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadRecordfile.swift; sourceTree = "<group>"; };
 		B7545786286AE34B00EFCDA2 /* DownloadRecordfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadRecordfile.swift; sourceTree = "<group>"; };
 		B7545788286AE35800EFCDA2 /* DeleteRecordfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteRecordfile.swift; sourceTree = "<group>"; };
+		B7587DCB2879C326002FF9B6 /* RecordWaveForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordWaveForm.swift; sourceTree = "<group>"; };
 		B770CD4E287827FC0064CDC5 /* readFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = readFile.swift; sourceTree = "<group>"; };
 		B770CD50287857760064CDC5 /* DrawWaveform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawWaveform.swift; sourceTree = "<group>"; };
 		B78E6BE8286D4B53005AC140 /* LocalFileProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFileProtocol.swift; sourceTree = "<group>"; };
@@ -180,6 +182,7 @@
 				12BCEDC1286D3BEF006C1783 /* AudioRecorderHandler.swift */,
 				12BCEDD7286DC9E3006C1783 /* AudioPlayerHandler.swift */,
 				B770CD50287857760064CDC5 /* DrawWaveform.swift */,
+				B7587DCB2879C326002FF9B6 /* RecordWaveForm.swift */,
 				B78E6BEE286D53EE005AC140 /* TimeHandler.swift */,
 				12BCEDBF286D3AB3006C1783 /* Extension.swift */,
 				B78E6BEA286D506C005AC140 /* FirebaseUtil */,
@@ -371,6 +374,7 @@
 				B7545789286AE35800EFCDA2 /* DeleteRecordfile.swift in Sources */,
 				12BCEDC0286D3AB3006C1783 /* Extension.swift in Sources */,
 				12BCEDB0286D25D1006C1783 /* RecordingViewController.swift in Sources */,
+				B7587DCC2879C326002FF9B6 /* RecordWaveForm.swift in Sources */,
 				B719A8AA28797667002EE021 /* FirebaseStorageUpload.swift in Sources */,
 				B7202645286BEB2400466FBA /* GetFileList.swift in Sources */,
 				B7545781286AC79800EFCDA2 /* FirebaseProtocol.swift in Sources */,

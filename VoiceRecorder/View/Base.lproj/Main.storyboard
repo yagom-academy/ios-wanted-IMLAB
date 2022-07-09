@@ -117,7 +117,7 @@
                                     <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wBO-IG-LvN">
                                         <rect key="frame" x="0.0" y="60.5" width="300" height="150"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eg2-m4-YQx">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eg2-m4-YQx" customClass="RecordWaveForm" customModule="VoiceRecorder" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="300" height="150"/>
                                                 <color key="backgroundColor" red="0.94101941590000004" green="0.93623608349999998" blue="0.95626169439999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             </view>
