@@ -23,12 +23,16 @@
 |![스크린샷 2022-07-05 오후 12 39 28](https://user-images.githubusercontent.com/66169740/177245353-2c07bcd1-ffee-4d2d-923b-f1867aba606d.png)|![스크린샷 2022-07-05 오후 12 39 49](https://user-images.githubusercontent.com/66169740/177245382-ce7471c7-0401-4eb9-97de-1b59bef22d7f.png)|
 
 
+
+
 </br></br>
 # 3. 구현 화면
 
 | 첫번째 화면 - 녹음 List View| 두번째 화면 - 녹음 및 확인 뷰 | 세번째 화면 - 재생 뷰 |
 |:---:|:---:|:---:|
 |![화면_기록_2022-07-09_오후_3_29_25_AdobeExpress](https://user-images.githubusercontent.com/66169740/178095558-90b06648-8589-4dfb-81c5-30dd7df14c61.gif)|![화면_기록_2022-07-09_오후_3_29_25_AdobeExpress (4)](https://user-images.githubusercontent.com/66169740/178095665-01baadd9-7a9d-4675-854b-dce30baf8b0f.gif)|![화면_기록_2022-07-09_오후_3_29_25_AdobeExpress (3)](https://user-images.githubusercontent.com/66169740/178095703-35212a18-6d47-4806-874e-1275ce6d3dd7.gif)|
+
+
 
 
 </br></br>
@@ -66,6 +70,9 @@
 - `AVAudioEngine`을 이용해 음악 재생
 - `AudioEngine`의 `AVAudioUnitTimePitch`를 이용하여 음의 pitch값을 이용해 목소리변형 재생
 
+
+
+</br></br>
 # 5. 고민한 부분
 ### 여러개의 녹음파일을 디바이스가 로컬 파일로 가지고 있을지, 아니면 하나의 파일만 가지고 있을지
 ```
@@ -84,5 +91,8 @@
 - 실제 녹음 어플의 경우와 비슷하게 하는 편이 사용자 경험상 좋을 것이라고 판단
 - 구현 방법에 대해 팀원과 논의하여 결정
 
+
+
+</br></br>
 # 6. 개발 과정
 [노션링크](https://broken-redcurrant-2ce.notion.site/dc233bcf874c4ab191fe50244a0bacad)
