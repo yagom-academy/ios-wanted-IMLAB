@@ -36,7 +36,7 @@ class VoiceMemoPlayViewController: UIViewController {
     
     private let pitchSegmentedController: UISegmentedControl = {
         
-        let segmentItems = ["일반 목소리", "아기 목소리", " 할아버지 목소리"]
+        let segmentItems = AudioPitchMode.allCases.map({$0.rawValue})
         let segment = UISegmentedControl(items: segmentItems)
         segment.selectedSegmentIndex = 0
         segment.addTarget(nil, action: #selector(pitchChangeSegmentedControllerTouched(_:)), for: .valueChanged)
@@ -148,7 +148,7 @@ class VoiceMemoPlayViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
 
         super.viewWillDisappear(true)
-        audioPlayer.stopPlay()
+        audioPlayer.stop()
         audioPlayer.pitchMode = .basic
     }
     
@@ -185,9 +185,9 @@ extension VoiceMemoPlayViewController {
             
             sender.isSelected.toggle()
             if sender.isSelected {
-                audioPlayer.startPlay(fileURL: path)
+                audioPlayer.start(fileURL: path)
             } else {
-                audioPlayer.pausePlay()
+                audioPlayer.pause()
             }
         }
     }
@@ -223,7 +223,7 @@ extension VoiceMemoPlayViewController {
     @objc private func audioPlaybackTimeIsOver(_ sender: NSNotification) {
         
         playOrPauseButtonTouched(playOrPauseButton)
-        audioPlayer.stopPlay()
+        audioPlayer.stop()
     }
     
 }

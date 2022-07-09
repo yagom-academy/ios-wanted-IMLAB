@@ -17,7 +17,7 @@ class VoiceMemoRecordViewController: UIViewController {
     // MARK: - Properties
     
     private let pathFinder: PathFinder!
-    private let audioRecorder: AudioRecodable!
+    private let audioRecorder: AudioRecordable!
     private let audioPlayer: AudioPlayable!
     private let firebaseManager: FirebaseStorageManager!
     
@@ -108,7 +108,7 @@ class VoiceMemoRecordViewController: UIViewController {
     
     init(pathFinder: PathFinder,
          audioPlayer: AudioPlayable,
-         audioRecorder: AudioRecodable,
+         audioRecorder: AudioRecordable,
          firebaseManager: FirebaseStorageManager) {
         
         self.pathFinder = pathFinder
@@ -136,8 +136,8 @@ class VoiceMemoRecordViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         
         super.viewWillDisappear(true)
-        audioRecorder.stopRecord()
-        audioPlayer.stopPlay()
+        audioRecorder.stop()
+        audioPlayer.stop()
     }
     
     // MARK: - UI Design
@@ -276,11 +276,11 @@ extension VoiceMemoRecordViewController {
             waveFormView.restartWaveForm()
             playTimeLabel.text = ""
             hiddenPlayRelatedButtons(.record)
-            audioRecorder.startRecord(filePath: pathFinder.getPathWithTime())
-            audioPlayer.stopPlay()
+            audioRecorder.start(filePath: pathFinder.getPathWithTime())
+            audioPlayer.stop()
         } else {
             hiddenPlayRelatedButtons(.play)
-            audioRecorder.stopRecord()
+            audioRecorder.stop()
             playTimeLabel.text = convertSecondToMinute()
             uploadVoiceMemoToFirebaseStorage()
         }
@@ -291,9 +291,9 @@ extension VoiceMemoRecordViewController {
         sender.isSelected.toggle()
         
         if sender.isSelected {
-            audioPlayer.startPlay(fileURL: pathFinder.lastUsedUrl)
+            audioPlayer.start(fileURL: pathFinder.lastUsedUrl)
         } else {
-            audioPlayer.pausePlay()
+            audioPlayer.pause()
         }
     }
     
@@ -317,7 +317,7 @@ extension VoiceMemoRecordViewController {
         DispatchQueue.main.async { [unowned self] in
             
             playOrPauseButton.isSelected = false
-            audioPlayer.stopPlay()
+            audioPlayer.stop()
         }
     }
     

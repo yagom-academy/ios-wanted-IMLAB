@@ -14,7 +14,7 @@
 		5A0231B2EB486B3F62CF4659 /* Pods_VoiceRecorder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2163F30A9B1B9D86A1CE8B04 /* Pods_VoiceRecorder.framework */; };
 		B0540017286D5DD600BB5A34 /* PathFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0540016286D5DD600BB5A34 /* PathFinder.swift */; };
 		B0966F002872DADA00D10EAD /* Notification.Name+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0966EFF2872DADA00D10EAD /* Notification.Name+Extension.swift */; };
-		B096C93D2876A31B00A1ED00 /* AudioRecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B096C93C2876A31B00A1ED00 /* AudioRecodable.swift */; };
+		B096C93D2876A31B00A1ED00 /* AudioRecordable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B096C93C2876A31B00A1ED00 /* AudioRecordable.swift */; };
 		B096C93F2876A34100A1ED00 /* AudioPlayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B096C93E2876A34100A1ED00 /* AudioPlayable.swift */; };
 		B096C9412878116900A1ED00 /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = B096C9402878116900A1ED00 /* Dependencies.swift */; };
 		B0C058DC286AD73F008426B2 /* VoiceMemoRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C058DB286AD73F008426B2 /* VoiceMemoRecordViewController.swift */; };
@@ -39,7 +39,7 @@
 		94C8CB0AF00BF4C86F3AC7FA /* Pods-VoiceRecorder.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VoiceRecorder.debug.xcconfig"; path = "Target Support Files/Pods-VoiceRecorder/Pods-VoiceRecorder.debug.xcconfig"; sourceTree = "<group>"; };
 		B0540016286D5DD600BB5A34 /* PathFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathFinder.swift; sourceTree = "<group>"; };
 		B0966EFF2872DADA00D10EAD /* Notification.Name+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Notification.Name+Extension.swift"; sourceTree = "<group>"; };
-		B096C93C2876A31B00A1ED00 /* AudioRecodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecodable.swift; sourceTree = "<group>"; };
+		B096C93C2876A31B00A1ED00 /* AudioRecordable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecordable.swift; sourceTree = "<group>"; };
 		B096C93E2876A34100A1ED00 /* AudioPlayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayable.swift; sourceTree = "<group>"; };
 		B096C9402878116900A1ED00 /* Dependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dependencies.swift; sourceTree = "<group>"; };
 		B0C058DB286AD73F008426B2 /* VoiceMemoRecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceMemoRecordViewController.swift; sourceTree = "<group>"; };
@@ -90,7 +90,7 @@
 				0EEFBFE72869C7D700AD8075 /* FirebaseStorageManager.swift */,
 				B0540016286D5DD600BB5A34 /* PathFinder.swift */,
 				0E927B76286EBCB2006E82E2 /* AudioManager.swift */,
-				B096C93C2876A31B00A1ED00 /* AudioRecodable.swift */,
+				B096C93C2876A31B00A1ED00 /* AudioRecordable.swift */,
 				B096C93E2876A34100A1ED00 /* AudioPlayable.swift */,
 			);
 			path = Manager;
@@ -354,7 +354,7 @@
 				0EAD22D9286AD8160093E2D0 /* VoiceMemoPlayViewController.swift in Sources */,
 				B0966F002872DADA00D10EAD /* Notification.Name+Extension.swift in Sources */,
 				B096C9412878116900A1ED00 /* Dependencies.swift in Sources */,
-				B096C93D2876A31B00A1ED00 /* AudioRecodable.swift in Sources */,
+				B096C93D2876A31B00A1ED00 /* AudioRecordable.swift in Sources */,
 				B0540017286D5DD600BB5A34 /* PathFinder.swift in Sources */,
 				B0C058DC286AD73F008426B2 /* VoiceMemoRecordViewController.swift in Sources */,
 				0EEFBFE82869C7D700AD8075 /* FirebaseStorageManager.swift in Sources */,

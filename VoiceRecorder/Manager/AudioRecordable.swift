@@ -13,17 +13,17 @@ protocol AudioBufferLiveDataDelegate: AnyObject {
     func communicationBufferData(bufferData: Float)
 }
 
-protocol AudioRecodable: AudioManager {
+protocol AudioRecordable: AudioManager {
     
     var delegate: AudioBufferLiveDataDelegate? { get set }
     var cutOffFrequency: Float { get set }
     
-    func startRecord(filePath: URL)
-    func stopRecord()
+    func start(filePath: URL)
+    func stop()
     
 }
 
-class DefaultAudioRecoder: AudioManager, AudioRecodable {
+class DefaultAudioRecorder: AudioManager, AudioRecordable {
     
     // MARK: - Properties
     private lazy var audioEQ = AVAudioUnitEQ(numberOfBands: 1)
@@ -100,7 +100,7 @@ class DefaultAudioRecoder: AudioManager, AudioRecodable {
         }
     }
     
-    func startRecord(filePath: URL) {
+    func start(filePath: URL) {
         
         audioEngine.reset()
         
@@ -117,7 +117,7 @@ class DefaultAudioRecoder: AudioManager, AudioRecodable {
     }
     
     /// 레코딩 완료
-    func stopRecord() {
+    func stop() {
         
         audioEngine.stop()
         removeEngineNodes()
@@ -129,17 +129,17 @@ class DefaultAudioRecoder: AudioManager, AudioRecodable {
         
         guard let channelData = buffer.floatChannelData else { return 0 }
         let channelDataValue = channelData.pointee
-        let channelDataArrayValue = stride(from: 0,
+        let channelDataValues = stride(from: 0,
                                            to: Int(buffer.stride),
                                            by: buffer.stride)
             .map { channelDataValue[$0] }
         
-        let rms = sqrt(channelDataArrayValue.map { return $0 * $0 }.reduce(0, +) / Float(buffer.frameLength))
-        let avgPower = 20 * log10(rms)
+        let rootMeanSquare = sqrt(channelDataValues.map { return $0 * $0 }.reduce(0, +) / Float(buffer.frameLength))
+        let averagePower = 20 * log10(rootMeanSquare)
         
-        let meterLevel = scalePower(power: avgPower)
+        let volumeLevel = scalePower(power: averagePower)
         
-        return meterLevel
+        return volumeLevel
     }
     
 }

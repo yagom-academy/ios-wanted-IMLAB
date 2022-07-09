@@ -8,7 +8,7 @@
 import Foundation
 
 struct Dependencies {
-    let audioRecoder: AudioRecodable
+    let audioRecoder: AudioRecordable
     let audioPlayer: AudioPlayable
     let firebaseStorageManager: FirebaseStorageManager
     let pathFinder: PathFinder

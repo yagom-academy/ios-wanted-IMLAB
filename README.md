@@ -38,9 +38,11 @@
 | Oyat| 내용|
 
 # 프로젝트 소개
+
 ## 목표
-> 요구사항에 적합한 녹음 앱 개발
+> firebaseStorage와 연동하며, 재생 및 녹음 기능과 다수의 관련 부가기능을 제공하는 App    
 > 외부 라이브러리 : __FirebaseStorage Only!__
+
 ## 사용한 기술
 `Coordinator Pattern` `Observer Pattern` `Delegate Pattern`
 `Code-based UI` `MVC` `Dependency inversion`

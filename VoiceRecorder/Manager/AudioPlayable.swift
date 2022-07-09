@@ -19,17 +19,19 @@ protocol AudioPlayable: AudioManager {
     var pitchMode: AudioPitchMode { get set }
     var delegate: PlaybackTimeTrackerable? { get set}
     
-    func startPlay(fileURL: URL)
-    func stopPlay()
-    func pausePlay()
+    func start(fileURL: URL)
+    func stop()
+    func pause()
     func skip(for second: Double, filePath: URL)
     func controlVolume(newValue: Float)
     func calculateBufferGraphData(width: CGFloat, filePath: URL) -> [Float]?
 }
 
-enum AudioPitchMode {
+enum AudioPitchMode: String, CaseIterable {
     
-    case baby, basic, grandFather
+    case basic = "일반 목소리"
+    case baby = "아기 목소리"
+    case grandFather = "할아버지 목소리"
     
     var pitchValue: Float {
         
@@ -62,7 +64,7 @@ class DefaultAudioPlayer: AudioManager, AudioPlayable {
     
     // MARK: - Play Prepare Methods
     
-    private func preparePlayEngine(_ filePath: URL) {
+    private func prepareEngine(_ filePath: URL) {
         
         var audioFile: AVAudioFile
         
@@ -116,11 +118,11 @@ class DefaultAudioPlayer: AudioManager, AudioPlayable {
     
     // MARK: - Play methods
     
-    func startPlay(fileURL: URL) {
+    func start(fileURL: URL) {
         
         if !audioEngine.isRunning {
             audioEngine.reset()
-            preparePlayEngine(fileURL)
+            prepareEngine(fileURL)
             preparePlay(filePath: fileURL)
             
             do {
@@ -132,14 +134,14 @@ class DefaultAudioPlayer: AudioManager, AudioPlayable {
         audioPlayerNode.play()
     }
     
-    func stopPlay() {
+    func stop() {
         
         audioEngine.stop()
         seekFrame = 0
         removeEngineNodes()
     }
     
-    func pausePlay() {
+    func pause() {
         
         audioPlayerNode.pause()
     }
@@ -225,42 +227,43 @@ class DefaultAudioPlayer: AudioManager, AudioPlayable {
             fatalError()
         }
         
-        guard let audioBuffer = getChannelData(audioFile: audioFile),
-              let channelData = audioBuffer.floatChannelData else {
+        guard let audioPCMBuffer = getChannelData(audioFile: audioFile),
+              let channelData = audioPCMBuffer.floatChannelData else {
             return nil
         }
         
         do {
-            try audioFile.read(into: audioBuffer)
+            try audioFile.read(into: audioPCMBuffer)
         } catch {
             return nil
         }
         
-        let channels = Int(audioBuffer.format.channelCount)
+        let channelCount = Int(audioPCMBuffer.format.channelCount)
         let renderSamples = 0..<Int(audioFile.length)
         let samplePerPoint = renderSamples.count / Int(width)
         
-        var arr = [Float]()
+        var volumeLevels = [Float]()
         
         for point in 0..<Int(width) {
-            for channel in 0..<channels {
-                let pointer = channelData[channel].advanced(by: renderSamples.lowerBound + Int((point * samplePerPoint)))
-                let stride = vDSP_Stride(audioBuffer.stride)
+            for channel in 0..<channelCount {
+                let pointer = channelData[channel].advanced(by: renderSamples.lowerBound + Int(point * samplePerPoint))
+                let stride = vDSP_Stride(audioPCMBuffer.stride)
                 let length = vDSP_Length(samplePerPoint)
                 
                 var minValue: Float = 0
                 var maxValue: Float = 0
+                
                 vDSP_minv(pointer, stride, &minValue, length)
                 vDSP_maxv(pointer, stride, &maxValue, length)
                 
-                let rms = (sqrt(minValue * minValue) + sqrt(maxValue * maxValue)) / 2
-                let avgPower = 30 * log10(rms)
-                let meterLevel = self.scalePower(power: avgPower)
-                arr.append(meterLevel)
+                let rootMeanSquare = (sqrt(minValue * minValue) + sqrt(maxValue * maxValue)) / 2
+                let averagePower = 30 * log10(rootMeanSquare)
+                let volumeLevel = self.scalePower(power: averagePower)
+                volumeLevels.append(volumeLevel)
             }
         }
         
-        return arr
+        return volumeLevels
     }
     
     /// 재생중인 audioFile의 현재 PlayerTime의 FramePosition을 반환

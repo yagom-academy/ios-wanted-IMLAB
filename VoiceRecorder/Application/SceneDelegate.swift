@@ -18,7 +18,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let appWindow = UIWindow(frame:  windowScene.coordinateSpace.bounds)
         appWindow.windowScene = windowScene
         
-        
         requestPermission()
         
         dependencies = makeDependencies()
@@ -32,13 +31,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         appWindow.makeKeyAndVisible()
         
         window = appWindow
-
     }
     
     private func makeDependencies() -> Dependencies {
         
         let audioPlayer = DefaultAudioPlayer()
-        let audioRecoder = DefaultAudioRecoder()
+        let audioRecoder = DefaultAudioRecorder()
         let firebaseStorageManager = FirebaseStorageManager.init()
         var pathFinder : PathFinder!
         
