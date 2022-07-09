@@ -8,14 +8,14 @@
 import Foundation
 
 struct CustomMetadata {
-    let length: String
-    
-    func toDict() -> [String:String] {
-        return [CustomMetadata.fullLength: length]
-    }
+  let length: String
+
+  func toDict() -> [String:String] {
+    return [CustomMetadata.fullLength: length]
+  }
 }
 
 extension CustomMetadata{
-    static let fullLength = "fullLength"
-    static let fileType = "audio/mpeg"
+  static let fullLength = "fullLength"
+  static let fileType = "audio/mpeg"
 }
