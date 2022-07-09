@@ -13,7 +13,7 @@ class VoiceMemoListViewController: UIViewController {
     private let firebaseManager: FirebaseStorageManager!
     
     weak var coordinator: AppCoordinator?
-    private var voiceMemoListAllDatas: [String] = []
+    private var storageSaveDatas: [String] = []
     
     private lazy var tableView: UITableView = {
         
@@ -64,7 +64,7 @@ extension VoiceMemoListViewController {
             
             switch result {
             case .success(let voiceMemoList):
-                self.voiceMemoListAllDatas = voiceMemoList
+                self.storageSaveDatas = voiceMemoList
                 DispatchQueue.main.async { [unowned self] in
                     
                     tableView.reloadData()
@@ -136,7 +136,7 @@ extension VoiceMemoListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let filePathFromStorage = voiceMemoListAllDatas[indexPath.row]
+        let filePathFromStorage = storageSaveDatas[indexPath.row]
         let fileNameWithoutDirectory = filePathFromStorage.components(separatedBy: "/").dropFirst().joined(separator: "/")
         let isExist = pathFinder.checkLocalIsExist(fileName: fileNameWithoutDirectory)
         
@@ -163,7 +163,7 @@ extension VoiceMemoListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return voiceMemoListAllDatas.count
+        return storageSaveDatas.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -172,7 +172,7 @@ extension VoiceMemoListViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let name = voiceMemoListAllDatas[indexPath.row].description
+        let name = storageSaveDatas[indexPath.row].description
         cell.selectionStyle = .none
         
         firebaseManager.getMetaData(fileName: name) { result in
@@ -196,7 +196,7 @@ extension VoiceMemoListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         
-        let filePathFromStorage = voiceMemoListAllDatas[indexPath.row]
+        let filePathFromStorage = storageSaveDatas[indexPath.row]
         let fileNameWithoutDirectory = filePathFromStorage.components(separatedBy: "/").dropFirst().joined(separator: "/")
         let isExist = pathFinder.checkLocalIsExist(fileName: fileNameWithoutDirectory)
         
@@ -210,7 +210,7 @@ extension VoiceMemoListViewController: UITableViewDataSource {
                 
                 switch result {
                 case .success(_):
-                    voiceMemoListAllDatas.remove(at: indexPath.row)
+                    storageSaveDatas.remove(at: indexPath.row)
                     tableView.deleteRows(at: [indexPath], with: .fade)
                 case .failure(let error):
                     print(error.localizedDescription)
