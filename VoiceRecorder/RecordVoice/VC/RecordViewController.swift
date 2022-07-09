@@ -171,7 +171,7 @@ class RecordViewController: UIViewController {
         }
     }
     
-    func convertTimeToString(_ seconds: TimeInterval) -> String {
+    private func convertTimeToString(_ seconds: TimeInterval) -> String {
         if seconds.isNaN {
             return "00:00"
         }
@@ -264,7 +264,7 @@ extension RecordViewController: PlaybackVisualizerable {
 extension RecordViewController : SliderEvnetDelegate {
     
     func sliderEventValueChanged(sender: UISlider) {
-        soundManager.frequency = sender.value
+        soundManager.setFrequencyValue(value: sender.value)
     }
     
 }
