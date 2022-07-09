@@ -3,7 +3,9 @@
 2. [팀원 소개](https://github.com/Kim-Junhwan/ios-wanted-VoiceRecorder#2-%ED%8C%80%EC%9B%90-%EC%86%8C%EA%B0%9C)
 3. [구현 화면](https://github.com/Kim-Junhwan/ios-wanted-VoiceRecorder#2-%ED%8C%80%EC%9B%90-%EC%86%8C%EA%B0%9C)
 4. [담당 파트](https://github.com/Kim-Junhwan/ios-wanted-VoiceRecorder#4-%EB%8B%B4%EB%8B%B9-%ED%8C%8C%ED%8A%B8)
-5. [개발 과정](https://github.com/Kim-Junhwan/ios-wanted-VoiceRecorder#5-%EA%B0%9C%EB%B0%9C-%EA%B3%BC%EC%A0%95)
+5. 고민한 부분
+6. [개발 과정](https://github.com/Kim-Junhwan/ios-wanted-VoiceRecorder#5-%EA%B0%9C%EB%B0%9C-%EA%B3%BC%EC%A0%95)
+
 
 
 </br></br>
@@ -64,5 +66,23 @@
 - `AVAudioEngine`을 이용해 음악 재생
 - `AudioEngine`의 `AVAudioUnitTimePitch`를 이용하여 음의 pitch값을 이용해 목소리변형 재생
 
-# 5. 개발 과정
+# 5. 고민한 부분
+### 여러개의 녹음파일을 디바이스가 로컬 파일로 가지고 있을지, 아니면 하나의 파일만 가지고 있을지
+```
+→ 하나의 파일만으로 하기로 결정
+```
+- 한번에 하나의 파일만 재생,그리고 녹음 가능
+- 녹음할때는 녹음만 가능함, 재생 불가
+- 한번에 하나의 재생/녹음만 가능하면 여러개의 로컬 파일을 가지고 있을 이유가 없음. 
+- Firebase Storage를 단순히 저장만하고 끝내는게 아닌, Firebase Storage를 최대한 이용하여 앱을 개발하는것에 의의를 둠
+
+### 파형 이미지를 어떻게 구현할지
+```
+→ 실제 녹음 어플과 비슷하게 구현하기 위해 파형이 그려지는 view의 width를 Infinity로 설정하여 view를 이동시키면서 그리기로 결정
+```
+- 과제 요구사항에 제시된 이미지대로 구현하면 긴 시간 녹음할 경우 파형이 상당히 뭉쳐서 보이게 됨
+- 실제 녹음 어플의 경우와 비슷하게 하는 편이 사용자 경험상 좋을 것이라고 판단
+- 구현 방법에 대해 팀원과 논의하여 결정
+
+# 6. 개발 과정
 [노션링크](https://broken-redcurrant-2ce.notion.site/dc233bcf874c4ab191fe50244a0bacad)
