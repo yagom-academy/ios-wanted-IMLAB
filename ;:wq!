@@ -1,0 +1,23 @@
+[#30] chore: HomeViewModel Observable entity StorageMetadata  -> AudioRepresentation 로 수정
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# Date:      Fri Jul 1 15:15:32 2022 +0900
+# Committer: TaeKyeongKim <kaikim@Kaiui-MacBookPro.local>
+#
+# On branch feature/Home
+# Your branch is ahead of 'origin/feature/Home' by 23 commits.
+#   (use "git push" to publish your local commits)
+#
+# Changes to be committed:
+#	modified:   VoiceRecorder.xcodeproj/project.pbxproj
+#	modified:   VoiceRecorder/Common/TimeFormatter.swift
+#	modified:   VoiceRecorder/Entity/AudioRepresentation.swift
+#	modified:   VoiceRecorder/Network/AudioMetadataDTO.swift
+#	modified:   VoiceRecorder/Scenes/Home/HomeViewModel/HomeViewModel.swift
+#	deleted:    VoiceRecorder/Scenes/Home/Repository/ShowAudioInfoRepository.swift
+#
+# Changes not staged for commit:
+#	modified:   VoiceRecorder/Scenes/Home/HomeViewModel/HomeViewModel.swift
+#
