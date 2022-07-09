@@ -19,6 +19,7 @@ class PlayerButtonViewModel {
     private var timer: Timer?
     var interval = 0
     var currentTime = 0
+    var duration = 0
 
     init(_ audioPlayer: PlayerService) {
         self.audioPlayer = audioPlayer
@@ -123,8 +124,18 @@ class PlayerButtonViewModel {
         audioPlayer.setAudioFile(audioFile)
     }
 
-    func duration() -> String {
-        return audioPlayer.duration()
+//    func duration() -> String {
+//        return audioPlayer.duration()
+//    }
+    func setDuration(_ label: String) {
+        let separated = label.split(separator: ":").map { Int(String($0))! }
+        let result = separated[0] * 60 + separated[1]
+        
+        self.duration = result
+    }
+    
+    func timeInRange() -> Bool {
+        return currentTime <= duration
     }
 
     func secondsToString(_ seconds: Int) -> String {

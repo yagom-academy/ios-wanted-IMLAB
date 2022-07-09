@@ -10,30 +10,34 @@ import UIKit
 class FrequencyView: UIView {
     private var barWidth: CGFloat = 4.0
     private var color = ThemeColor.blue600.cgColor
-    
+
     private var waveForms = [Int](repeating: 0, count: 100) {
         didSet {
             setNeedsDisplay()
         }
     }
-    
-    override init (frame: CGRect) {
+
+    override init(frame: CGRect) {
         super.init(frame: frame)
-        
+
         NotificationCenter.default.addObserver(self, selector: #selector(sendWaveformNotification(_:)), name: Notification.Name("SendWaveform"), object: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - Notification Selector function
-    
+
     @objc func sendWaveformNotification(_ notification: Notification) {
         guard let wave = notification.object as? [Int] else { return }
-        self.waveForms = wave
+        waveForms = wave
     }
     
+    func removeObserver() {
+        NotificationCenter.default.removeObserver(self, name: Notification.Name("SendWaveform"), object: nil)
+    }
+
     override func draw(_ rect: CGRect) {
         guard let context = UIGraphicsGetCurrentContext() else {
             return
@@ -47,7 +51,7 @@ class FrequencyView: UIView {
         context.setLineWidth(3)
         context.setStrokeColor(color)
 
-        let centerY: CGFloat = self.frame.height / 2
+        let centerY: CGFloat = frame.height / 2
 
         for i in 0 ..< waveForms.count {
             let firstX = bar * barWidth
@@ -59,7 +63,7 @@ class FrequencyView: UIView {
             context.move(to: CGPoint(x: firstX, y: centerY))
             context.addLine(to: CGPoint(x: firstX, y: secondY))
             context.strokePath()
-            
+
             bar += 1
         }
     }

@@ -9,7 +9,7 @@ import Foundation
 
 class PlayControllerViewModel {
     private var audioPlayer: PlayerService
-    
+
     private var waves: [Int] = []
     private var removedWaves: [Int] = []
     private var sendWaves: [Int] = Array(repeating: 0, count: 100)
@@ -20,19 +20,25 @@ class PlayControllerViewModel {
 
     init(_ audioPlayer: PlayerService) {
         self.audioPlayer = audioPlayer
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(getWaves(_:)), name: Notification.Name("GetTotlaWaves"), object: nil)
-        
+
+        NotificationCenter.default.addObserver(self, selector: #selector(getWaves(_:)), name: Notification.Name("GetTotalWaves"), object: nil)
+
         DispatchQueue.main.async {
             NotificationCenter.default.post(name: Notification.Name("SendWaveform"), object: self.sendWaves)
         }
     }
-    
+
     @objc func getWaves(_ notification: Notification) {
         guard let waves = notification.object as? [Int] else { return }
         self.waves = waves
     }
-    
+
+    func removeObserver() {
+        timer?.invalidate()
+
+        NotificationCenter.default.removeObserver(self, name: Notification.Name("GetTotalWaves"), object: nil)
+    }
+
     func playPauseAudio() -> Bool {
         if audioPlayer.isPlaying {
             audioPlayer.pausePlayer()
@@ -53,7 +59,7 @@ class PlayControllerViewModel {
             interval = 0
             sendWaves = Array(repeating: 1, count: 100)
         }
-        
+
         if interval >= sendWaves.count {
             removedWaves.append(sendWaves.removeFirst())
             sendWaves.append(waves[interval])

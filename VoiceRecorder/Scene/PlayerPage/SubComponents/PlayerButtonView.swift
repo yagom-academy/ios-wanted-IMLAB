@@ -127,7 +127,7 @@ class PlayerButtonView: UIView {
     }
 
     deinit {
-        viewModel.resetViewModel()
+        resetSettings()
     }
 }
 
@@ -141,6 +141,11 @@ extension PlayerButtonView {
     func bindDuration(_ duration: String) {
         currentTimeLabel.text = "00:00"
         durationLabel.text = "/ \(duration)"
+        viewModel.setDuration(duration)
+    }
+
+    func resetSettings() {
+        viewModel.resetViewModel()
     }
 
     private func attribute() {
@@ -191,7 +196,10 @@ extension PlayerButtonView {
 
     @objc private func onTimeFires() {
         viewModel.incrementCurrentTime(1)
-        currentTimeLabel.text = viewModel.secondsToString(viewModel.getCurrentTime())
+
+        if viewModel.timeInRange() {
+            currentTimeLabel.text = viewModel.secondsToString(viewModel.getCurrentTime())
+        }
     }
 
     @objc private func onTappedPlayPauseButton(sender: UIButton) {

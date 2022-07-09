@@ -16,7 +16,6 @@ class PlayerViewModel {
     private var audioPlayer: PlayerService!
 
     var pitchViewModel: PitchViewModel!
-    var speedViewModel: SpeedViewModel!
     var volumeViewModel: VolumeViewModel!
     var playerButtonViewModel: PlayerButtonViewModel!
 
@@ -25,7 +24,6 @@ class PlayerViewModel {
         self.networkManager = networkManager
 
         pitchViewModel = PitchViewModel(audioPlayer)
-        speedViewModel = SpeedViewModel(audioPlayer)
         volumeViewModel = VolumeViewModel(audioPlayer)
         playerButtonViewModel = PlayerButtonViewModel(audioPlayer)
     }

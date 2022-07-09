@@ -39,6 +39,7 @@ class RecordViewController: UIViewController {
         super.viewWillDisappear(true)
         viewModel.resetAudioPlayer()
         viewModel.resetRecorder()
+        playControllerView.resetSettings()
     }
 }
 

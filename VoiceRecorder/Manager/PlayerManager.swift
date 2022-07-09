@@ -61,10 +61,10 @@ class PlayerManager: PlayerService {
         guard let audioFile = audioFile else {
             return
         }
-
         self.audioFile = audioFile
 
         if audioEngine.isRunning {
+            audioPlayer.stop()
             scheduleAudioPlayer()
         } else {
             configureAudioEngine()
@@ -139,10 +139,6 @@ class PlayerManager: PlayerService {
     }
 
     func setPlayerToZero() {
-        // UI 와 관련없는 작업을 main 스레드로 보내면,
-        // 작업이 오래걸리면 너무 느리게 보일 수 있다.
-        // UI 와 관련된 작업은 main 에 태우는게 옳다!!!!
-
         DispatchQueue.global().async { [weak self] in
             guard let self = self else {
                 return
@@ -159,7 +155,7 @@ class PlayerManager: PlayerService {
 
         DispatchQueue.main.async {
             NotificationCenter.default.post(name: NSNotification.Name("PlayerDidEnded"), object: nil)
-//            NotificationCenter.default.post(name: NSNotification.Name("SendWaveform"), object: Array(repeating: 1, count: 100))
+            NotificationCenter.default.post(name: NSNotification.Name("SendWaveform"), object: Array(repeating: 1, count: 100))
         }
     }
 

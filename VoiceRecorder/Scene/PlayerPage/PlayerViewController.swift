@@ -31,7 +31,6 @@ class PlayerViewController: UIViewController {
 
     private let frequencyView = FrequencyView(frame: .zero)
     private let pitchControlView = PitchControlView(frame: .zero)
-    private let speedControlView = SpeedControlView(frame: .zero)
     private let volumeControlView = VolumeControlView(frame: .zero)
     private let playerButtonView = PlayerButtonView(frame: .zero)
 
@@ -55,6 +54,8 @@ class PlayerViewController: UIViewController {
         super.viewWillDisappear(true)
 
         viewModel.resetAudioPlayer()
+        frequencyView.removeObserver()
+        playerButtonView.resetSettings()
     }
 }
 
@@ -64,7 +65,6 @@ extension PlayerViewController {
     private func bind() {
         playerButtonView.bind(viewModel.playerButtonViewModel)
         pitchControlView.bind(viewModel.pitchViewModel)
-        speedControlView.bind(viewModel.speedViewModel)
         volumeControlView.bind(viewModel.volumeViewModel)
     }
 

@@ -35,6 +35,10 @@ class RecordManager: RecordService {
     private init() {
         NotificationCenter.default.addObserver(self, selector: #selector(sendCutValue(_:)), name: Notification.Name("SendCutValue"), object: nil)
     }
+    
+    deinit {
+        timer?.invalidate()
+    }
 
     @objc func sendCutValue(_ notification: Notification) {
         guard let value = notification.object as? Float else { return }
@@ -145,7 +149,7 @@ class RecordManager: RecordService {
         waveForms = [Int](repeating: 0, count: 100)
         currentSample = 0
 
-        NotificationCenter.default.post(name: Notification.Name("GetTotlaWaves"), object: self.totalWaveData)
+        NotificationCenter.default.post(name: Notification.Name("GetTotalWaves"), object: self.totalWaveData)
     }
 
     func getWaveData() -> [Int] {

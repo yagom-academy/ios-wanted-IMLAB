@@ -10,7 +10,7 @@ import UIKit
 
 class PlayControllerView: UIStackView {
     private var viewModel: PlayControllerViewModel!
-    
+
     private lazy var backwardButton: UIButton = {
         let button = UIButton()
         button.setImage(systemName: "gobackward.5", state: .normal)
@@ -41,25 +41,26 @@ class PlayControllerView: UIStackView {
 
         return button
     }()
-    
+
     init() {
         super.init(frame: CGRect.zero)
-        
+
         NotificationCenter.default.addObserver(self, selector: #selector(playerDidEnded), name: NSNotification.Name("PlayerDidEnded"), object: nil)
-        
+
         attribute()
         layout()
     }
-    
+
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    //MARK: - Action 함수
+
+    // MARK: - Action 함수
+
     @objc private func playerDidEnded() {
         playButton.isSelected = false
     }
-    
+
     @objc func didTapBackwardButton(sender: UIButton) {
         viewModel.goBackward()
     }
@@ -71,29 +72,33 @@ class PlayControllerView: UIStackView {
     @objc func didTapPlayButton(sender: UIButton) {
         sender.isSelected = viewModel.playPauseAudio()
     }
-    
+
     func bind(_ viewModel: PlayControllerViewModel) {
         self.viewModel = viewModel
     }
-    
-    private func attribute() {
-        self.axis = .horizontal
-        self.distribution = .equalSpacing
-        self.spacing = 40
-        self.isHidden = true
+
+    func resetSettings() {
+        viewModel.removeObserver()
     }
-    
+
+    private func attribute() {
+        axis = .horizontal
+        distribution = .equalSpacing
+        spacing = 40
+        isHidden = true
+    }
+
     private func layout() {
         [backwardButton, playButton, forwardButton].forEach {
             self.addArrangedSubview($0)
         }
-        
+
         backwardButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
         backwardButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        
+
         playButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
         playButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        
+
         forwardButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
         forwardButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
     }
