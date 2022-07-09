@@ -118,9 +118,7 @@ class PlayerManager: PlayerService {
                 }
 
                 if self.checkIsFinished() {
-                    DispatchQueue.main.async {
-                        self.setPlayerToZero()
-                    }
+                    self.setPlayerToZero()
                 }
             }
 
@@ -146,15 +144,20 @@ class PlayerManager: PlayerService {
             guard let self = self else {
                 return
             }
+            self.audioPlayer.stop()
+            self.audioEngine.stop()
 
-        seekFrame = 0
-        currentPosition = 0
+            self.seekFrame = 0
+            self.currentPosition = 0
 
-        configureAudioEngine()
+            self.configureAudioEngine()
+        }
 
-        NotificationCenter.default.post(name: NSNotification.Name("PlayerDidEnded"), object: nil)
+        DispatchQueue.main.async { 
+            NotificationCenter.default.post(name: NSNotification.Name("PlayerDidEnded"), object: nil)
 
-        NotificationCenter.default.post(name: NSNotification.Name("SendWaveform"), object: Array(repeating: 1, count: 100))
+            NotificationCenter.default.post(name: NSNotification.Name("SendWaveform"), object: Array(repeating: 1, count: 100))
+        }
     }
 
     // 재생
@@ -216,9 +219,7 @@ class PlayerManager: PlayerService {
                 }
 
                 if self.checkIsFinished() {
-                    DispatchQueue.main.async {
-                        self.setPlayerToZero()
-                    }
+                    self.setPlayerToZero()
                 }
             }
             if wasPlaying {
