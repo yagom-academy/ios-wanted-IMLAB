@@ -252,12 +252,14 @@ class RecordVoiceViewController: UIViewController{
     func updateUI(when status : AudioStatus){
         switch status {
         case .beforeRecording:
+            self.record_start_stop_button.isEnabled = false
             UIView.animate(withDuration: 0.2) {
                 self.recordFile_ButtonStackView.alpha = 0.0
             } completion: { _ in
                 UIView.animate(withDuration: 0.3) {
                     self.recordFile_ButtonStackView.isHidden = true
                 }
+                self.record_start_stop_button.isEnabled = true
             }
             frequencySlider.isEnabled = false
             frequencySlider.tintColor = .darkGray
