@@ -18,8 +18,8 @@ class PlayingViewController: UIViewController {
     @IBOutlet weak var volumeControlSlider: UISlider!
     @IBOutlet weak var voiceChangeSegmentedControl: UISegmentedControl!
     @IBOutlet weak var playButton: UIButton!
-    @IBOutlet weak var waveImageView: UIImageView!
     @IBOutlet weak var positionProgressView: UIProgressView!
+    @IBOutlet weak var waveFormImageView: UIImageView!
     
     // MARK: - Properties
     
@@ -62,7 +62,7 @@ class PlayingViewController: UIViewController {
         setupAudio()
         setupDisplayLink()
         titleLabel.text = fileName
-        drawWaveForm()
+        getImageFromLocal(fileName)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -76,16 +76,13 @@ class PlayingViewController: UIViewController {
     
     // MARK: - Methods
     
-    func drawWaveForm() {
-        guard let fileURL = fileURL else {return}
-        let scale = UIScreen.main.scale; // 기기의 해상도
-        let imageSizeInPixel =  CGSize(width: waveImageView.bounds.width * scale, height : waveImageView.bounds.height * scale);
-        generateWaveformImage(audioURL: fileURL, imageSizeInPixel: imageSizeInPixel, waveColor: UIColor.gray) {[weak self] (waveFormImage) in
-            if let waveFormImage = waveFormImage {
-                self?.waveImageView.image = waveFormImage;
-            } else {
-                print("Error: <draw waveform> - not exist waveform image")
-            }
+    private func getImageFromLocal(_ fileName : String?) {
+        guard let fileName = fileName else {
+            return
+        }
+
+        if let directory = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false) {
+            waveFormImageView.image = UIImage(contentsOfFile: URL(fileURLWithPath: directory.absoluteString).appendingPathComponent(fileName).path)
         }
     }
     
@@ -105,7 +102,7 @@ class PlayingViewController: UIViewController {
             
             configureEngine(with: format)
         } catch {
-            print("Error: <setupAudio the audio file> -  \(error.localizedDescription)")
+            print("Error: <setupAudio> -  \(error.localizedDescription)")
         }
         
     }
@@ -127,7 +124,7 @@ class PlayingViewController: UIViewController {
             
             scheduleAudioFile()
         } catch {
-            print("Error starting the player: \(error.localizedDescription)")
+            print("Error: <setupAudio> - \(error.localizedDescription)")
         }
         
     }
@@ -170,7 +167,6 @@ class PlayingViewController: UIViewController {
         let offset = AVAudioFramePosition(time * audioSampleRate)
         seekFrame = currentPosition + offset
         seekFrame = max(seekFrame, 0)
-//        seekFrame = min(seekFrame, audioLengthSamples)
         currentPosition = seekFrame
         
         let wasPlaying = audioPlayer.isPlaying
@@ -189,7 +185,6 @@ class PlayingViewController: UIViewController {
             ) {
                 self.needsFileScheduled = true
             }
-            
             if wasPlaying {
                 audioPlayer.play()
             }

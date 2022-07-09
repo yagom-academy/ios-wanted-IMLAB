@@ -21,6 +21,7 @@ class RecordDetailViewController: UIViewController {
     @IBOutlet weak var buttonsStackView: UIStackView!
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var cutOffFreqSegmentedControl: UISegmentedControl!
+    @IBOutlet weak var testImageView: UIImageView!
     
     // MARK: - Properties
     
@@ -67,7 +68,7 @@ class RecordDetailViewController: UIViewController {
                 do {
                     try FileManager.default.removeItem(at: audioFileURL)
                 } catch {
-                    print(error)
+                    print("Error: <RecordDetail viewDidDisappear> -  \(error.localizedDescription)")
                 }
             }
             currentFileName = nil
@@ -92,8 +93,7 @@ class RecordDetailViewController: UIViewController {
                 }
             })
         } catch let error {
-            // TODO: 에러 핸들링
-            print(error.localizedDescription)
+            print("Error: <setupAudioRecorder> -  \(error.localizedDescription)")
         }
     }
     
@@ -102,10 +102,10 @@ class RecordDetailViewController: UIViewController {
             do {
                 try FileManager.default.removeItem(at: audioFileURL)
                 if let currentFileName = currentFileName {
-                    FireStorageManager.shared.deleteItem(currentFileName)
+                    FireStorageManager.shared.deleteRecording(currentFileName)
                 }
             } catch {
-                print(error)
+                print("Error: <startRecording> -  \(error.localizedDescription)")
             }
         }
         // TODO: fileURL refactoring
@@ -135,7 +135,6 @@ class RecordDetailViewController: UIViewController {
             cutOffFreqSegmentedControl.isHidden = true
         } catch {
             print("Error: <start recording> - \(error.localizedDescription)")
-//            finishRecording(success: false, audioFileURL)
         }
         
         drawingWave()
@@ -166,12 +165,39 @@ class RecordDetailViewController: UIViewController {
         writeWaves(0, false)
         showDuration(url)
         uploadRecordDataToFirebase(url)
+        captureWaveForm()
         
         // Change UI
         recordButton.setImage(readyToRecordButtonImage, for: .normal)
         buttonsStackView.isHidden = false
         cutoffLabel.isHidden = false
         cutOffFreqSegmentedControl.isHidden = false
+    }
+    
+    func downloadImageInLocal(_ data : Data?) {
+        guard let data = data, let currentFileName = currentFileName else {
+            return
+        }
+        guard let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {return}
+        do {
+            try data.write(to: directory.appendingPathComponent("\(currentFileName)\(FireStorageManager.File.contentType.image)"))
+        } catch {
+            print("Error: <downloadImageInLocal> - \(error.localizedDescription)")
+        }
+    }
+    
+    func captureWaveForm() {
+        let size = CGSize(width: waveView.bounds.width, height: waveView.bounds.height)
+        let renderer = UIGraphicsImageRenderer(size: size)
+        let image = renderer.image { ctx in
+            waveView.drawHierarchy(in: waveView.bounds, afterScreenUpdates: true)
+        }
+        testImageView.image = image
+        downloadImageInLocal(image.jpegData(compressionQuality: 1.0))
+    }
+    
+    private func updateImageToFirebase() {
+        FireStorageManager.shared.uploadImage(testImageView.image)
     }
     
     private func showDuration(_ url: URL?) {

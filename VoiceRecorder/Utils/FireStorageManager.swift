@@ -15,12 +15,14 @@ class FireStorageManager {
     enum File {
         enum Ref {
             static let recordDir: String = "recording/"
+            static let imageDir: String = "image/"
         }
         enum Path {
             static var fileName = ""
         }
         enum contentType {
             static let audio: String = ".m4a"
+            static let image: String = ".jpeg"
         }
         static var fileFullName: String {
             return ("recording\(Path.fileName)")
@@ -34,6 +36,18 @@ class FireStorageManager {
     let storage = Storage.storage()
     
     // MARK: - Methods
+    
+    func uploadImage(_ image: UIImage?) {
+        guard let image = image else {
+            return
+        }
+        let storageRef = storage.reference()
+        let metadata = StorageMetadata()
+        metadata.contentType = "image/jpeg"
+        let imageRef = storageRef.child("\(File.Ref.imageDir)\(File.fileFullName)")
+        guard let data = image.jpegData(compressionQuality: 1.0) else {return}
+        imageRef.putData(data, metadata: metadata)
+    }
     
     func uploadData(_ url: URL?) {
         guard let url = url else {
@@ -87,7 +101,7 @@ class FireStorageManager {
         }
     }
     
-    func deleteItem(_ name : String) {
+    func deleteRecording(_ name : String) {
         let storageRef = storage.reference()
         let fileRef = storageRef.child("\(File.Ref.recordDir)\(name)")
         fileRef.delete()
