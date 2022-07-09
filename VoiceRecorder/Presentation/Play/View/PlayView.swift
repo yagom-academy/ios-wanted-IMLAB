@@ -9,10 +9,16 @@ import UIKit
 
 final class PlayView: UIView, ViewPresentable {
     
-    private let titleLabel: UILabel = {
+    let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.preferredFont(forTextStyle: .body)
         return label
+    }()
+    
+    let waveLineView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .blue
+        return view
     }()
     
     let audioWaveScrollView: UIScrollView = {
@@ -99,11 +105,11 @@ final class PlayView: UIView, ViewPresentable {
         audioWaveImageView.translatesAutoresizingMaskIntoConstraints = false
         audioWaveScrollView.addSubview(audioWaveImageView)
 
-        [titleLabel, audioWaveScrollView, verticalStackView, volumeLabel].forEach {
+        [titleLabel, audioWaveScrollView, verticalStackView, volumeLabel, waveLineView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             addSubview($0)
         }
-        
+    
         [segmentedContoller, slider, playButtonHorizontalStackView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             verticalStackView.addArrangedSubview($0)
@@ -124,6 +130,11 @@ final class PlayView: UIView, ViewPresentable {
             audioWaveScrollView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
             audioWaveScrollView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10),
             audioWaveScrollView.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.4),
+            
+            waveLineView.heightAnchor.constraint(equalTo: audioWaveScrollView.heightAnchor),
+            waveLineView.widthAnchor.constraint(equalToConstant: 1),
+            waveLineView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            waveLineView.centerYAnchor.constraint(equalTo: audioWaveScrollView.centerYAnchor),
             
             audioWaveImageView.leadingAnchor.constraint(equalTo: audioWaveScrollView.centerXAnchor),
             audioWaveImageView.trailingAnchor.constraint(equalTo: audioWaveScrollView.trailingAnchor),
