@@ -236,12 +236,14 @@ class RecordVoiceViewController: UIViewController{
     func updateUI(when status : AudioStatus){
         switch status {
         case .beforeRecording:
+            self.record_start_stop_button.isEnabled = false
             UIView.animate(withDuration: 0.2) {
                 self.recordFile_ButtonStackView.alpha = 0.0
             } completion: { _ in
                 UIView.animate(withDuration: 0.3) {
                     self.recordFile_ButtonStackView.isHidden = true
                 }
+                self.record_start_stop_button.isEnabled = true
             }
             frequencySlider.isEnabled = false
             frequencySlider.tintColor = .darkGray
@@ -263,8 +265,10 @@ class RecordVoiceViewController: UIViewController{
         case .beforePlaying:
             waveFormCanvasView.isHidden = true
             waveFormView.isHidden = false
+            record_start_stop_button.isEnabled = false
             recordFile_play_PauseButton.setImage(UIImage(systemName: "pause"), for: .normal)
         case .afterPlaying:
+            record_start_stop_button.isEnabled = true
             recordFile_play_PauseButton.setImage(UIImage(systemName: "play"), for: .normal)
         default:
             break
@@ -338,7 +342,7 @@ extension RecordVoiceViewController : PlayVoiceDelegate{
     func playEndTime(){
         playVoiceManager.isPlay = false
         DispatchQueue.main.async {
-            self.recordFile_play_PauseButton.setImage(UIImage(systemName: "play"), for: .normal)
+            self.updateUI(when: .afterPlaying)
         }
     }
 }
