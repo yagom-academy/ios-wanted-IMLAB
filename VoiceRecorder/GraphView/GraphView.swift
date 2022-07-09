@@ -49,7 +49,7 @@ class GraphView: UIView {
 
     func doInitSetup() {
         guard let layer = self.layer as? CAShapeLayer else { return }
-        layer.strokeColor = UIColor(red: 0, green: 0, blue: 0.5, alpha: 1).cgColor
+        layer.strokeColor = UIColor.systemRed.cgColor
         layer.fillColor = UIColor.clear.cgColor
         layer.lineWidth = 2
         layer.lineCap = .round
