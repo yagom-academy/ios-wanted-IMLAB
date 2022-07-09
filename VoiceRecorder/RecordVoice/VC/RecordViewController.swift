@@ -8,7 +8,13 @@
 import UIKit
 import AVFoundation
 
+protocol PassMetaDataDelegate {
+    func sendMetaData(audioMetaData: AudioMetaData)
+}
+
 class RecordViewController: UIViewController {
+    
+    var delegate: PassMetaDataDelegate!
     
     private var soundManager = SoundManager()
     private var audioFileManager = AudioFileManager()
@@ -17,7 +23,6 @@ class RecordViewController: UIViewController {
     private let date = DateUtil().currentDate
     private lazy var urlString = "\(self.date).caf"
     
-    //private let recordAuthorizationStatus
     private var isStartRecording: Bool = false
     
     private var visualizer: AudioVisualizeView = {
@@ -63,10 +68,6 @@ class RecordViewController: UIViewController {
                 requestMicrophoneAccessDeniedHandler()
             }
         }
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        NotificationCenter.default.post(name: .dismissVC, object: nil)
     }
     
     private func setLayout() {
@@ -152,6 +153,7 @@ class RecordViewController: UIViewController {
         let audioMetaData = AudioMetaData(title: date, duration: duration, url: urlString)
         
         firebaseStorageManager.uploadAudio(audioData: data, audioMetaData: audioMetaData)
+        delegate.sendMetaData(audioMetaData: audioMetaData)
     }
     
     // 녹음 시작 & 정지 컨트롤
