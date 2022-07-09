@@ -31,7 +31,7 @@ class RecordListViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        didPullToRefresh()
+        refreshTableViewCell()
     }
 
     private func attribute() {
@@ -93,11 +93,13 @@ extension RecordListViewController: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: RecordListCell.identifier, for: indexPath) as? RecordListCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: RecordListCell.identifier, for: indexPath)  as? RecordListCell,
+              let data = viewModel.getCellData(indexPath) else {
             return UITableViewCell()
         }
-        cell.setData(data: viewModel.getCellData(indexPath), indexPath: indexPath)
+        
         cell.delegate = self
+        cell.setData(data: data, indexPath: indexPath)
         
         return cell
     }
@@ -116,11 +118,11 @@ extension RecordListViewController: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let data = viewModel.getCellData(indexPath)
+        guard let data = viewModel.getCellData(indexPath) else {
+            return
+        }
         let vc = PlayerViewController()
-
         vc.setData(data.fileInfo)
-
         navigationController?.pushViewController(vc, animated: true)
     }
 }
@@ -129,10 +131,10 @@ extension RecordListViewController: UITableViewDataSource, UITableViewDelegate {
 extension RecordListViewController {
     private func setRefresh() {
         tableView.refreshControl = UIRefreshControl()
-        tableView.refreshControl?.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
+        tableView.refreshControl?.addTarget(self, action: #selector(refreshTableViewCell), for: .valueChanged)
     }
 
-    @objc private func didPullToRefresh() {
+    @objc private func refreshTableViewCell() {
         viewModel.update(completion: { result in
             switch result {
             case .success():
@@ -169,8 +171,6 @@ extension RecordListViewController: RecordListCellDelegate {
     func beginSwapCellLongTapGesture(_ sender: UILongPressGestureRecognizer, _ toCenterPoint: CGPoint) {
         swapByPress(with: sender, toCenterPoint: toCenterPoint)
     }
-    
-    
 }
 
 //MARK: - 셀이동 이벤트

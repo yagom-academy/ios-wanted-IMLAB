@@ -8,9 +8,6 @@
 import UIKit
 
 class RecordListViewModel {
-    enum CellError: Error {
-        case outOfIndexError
-    }
     private var recordDatas: [CellData] = []
     private var networkManager: NetworkManager
     private let recordListUserDefaults = RecordListUserDefaults.shared
@@ -19,11 +16,11 @@ class RecordListViewModel {
         self.networkManager = networkManager
     }
 
-    func getCellData(_ indexPath: IndexPath) throws -> CellData {
+    func getCellData(_ indexPath: IndexPath) -> CellData? {
         //TODO: 셀범위밖처리 [x] => 셀범위 너무 확신 x
-//        guard indexPath.row < recordDatas.count else {
-//            throw CellError.outOfIndexError
-//        }
+        guard indexPath.row < recordDatas.count else {
+            return nil
+        }
         return recordDatas[indexPath.row]
     }
 

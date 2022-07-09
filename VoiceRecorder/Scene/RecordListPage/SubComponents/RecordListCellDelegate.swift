@@ -5,7 +5,6 @@
 //  Created by 김기림 on 2022/07/09.
 //
 
-import Foundation
 import UIKit
 
 protocol RecordListCellDelegate {
