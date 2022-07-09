@@ -33,7 +33,6 @@ class RecordedVoiceListViewController: UIViewController {
         initializeFirebaseAudioFiles()
         setNavgationBarProperties()
         configureRecordedVoiceListLayout()
-        
     }
     
     private func initializeFirebaseAudioFiles() {
