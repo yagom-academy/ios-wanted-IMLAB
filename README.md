@@ -1,9 +1,9 @@
 ## 목차
-1. [프로젝트 소개](https://github.com/Kim-Junhwan/ios-wanted-VoiceRecorder/edit/main/README.md#%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EC%86%8C%EA%B0%9C)
-2. [팀원 소개](https://github.com/Kim-Junhwan/ios-wanted-VoiceRecorder/edit/main/README.md#%ED%8C%80%EC%9B%90-%EC%86%8C%EA%B0%9C)
-3. [구현 화면](https://github.com/Kim-Junhwan/ios-wanted-VoiceRecorder/edit/main/README.md#%EA%B5%AC%ED%98%84-%ED%99%94%EB%A9%B4)
-4. [담당 파트](https://github.com/Kim-Junhwan/ios-wanted-VoiceRecorder/edit/main/README.md#%EB%8B%B4%EB%8B%B9-%ED%8C%8C%ED%8A%B8)
-5. [개발과정](https://github.com/Kim-Junhwan/ios-wanted-VoiceRecorder/edit/main/README.md#%EB%8B%B4%EB%8B%B9-%ED%8C%8C%ED%8A%B8)
+1. [프로젝트 소개](https://github.com/Kim-Junhwan/ios-wanted-VoiceRecorder#1-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EC%86%8C%EA%B0%9C)
+2. [팀원 소개](https://github.com/Kim-Junhwan/ios-wanted-VoiceRecorder#2-%ED%8C%80%EC%9B%90-%EC%86%8C%EA%B0%9C)
+3. [구현 화면](https://github.com/Kim-Junhwan/ios-wanted-VoiceRecorder#2-%ED%8C%80%EC%9B%90-%EC%86%8C%EA%B0%9C)
+4. [담당 파트](https://github.com/Kim-Junhwan/ios-wanted-VoiceRecorder#4-%EB%8B%B4%EB%8B%B9-%ED%8C%8C%ED%8A%B8)
+5. [개발 과정](https://github.com/Kim-Junhwan/ios-wanted-VoiceRecorder#5-%EA%B0%9C%EB%B0%9C%EA%B3%BC%EC%A0%95)
 
 
 </br></br>
@@ -64,5 +64,5 @@
 - `AVAudioEngine`을 이용해 음악 재생
 - `AudioEngine`의 `AVAudioUnitTimePitch`를 이용하여 음의 pitch값을 이용해 목소리변형 재생
 
-# 5. 개발과정
+# 5. 개발 과정
 [노션링크](https://broken-redcurrant-2ce.notion.site/dc233bcf874c4ab191fe50244a0bacad)
