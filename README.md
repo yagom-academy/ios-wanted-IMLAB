@@ -1,3 +1,11 @@
+# 빌드 방법
+1. 프로젝트의 폴더에서 pod install
+2. Target에서, Signing & Capabilities에서 Team 
+
+## 개발 환경
+  - xcode : Version 13.4.1 (13F100)
+  - deployment Target : 15.0
+ 
 # 목차
   1. [Team](#Team)
      1. [팀원 소개](#팀원-소개)
