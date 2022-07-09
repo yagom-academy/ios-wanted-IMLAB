@@ -20,6 +20,8 @@
 		DFDF5198286EC0D0000E55EC /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFDF5197286EC0D0000E55EC /* Observable.swift */; };
 		DFDF51A0286EE670000E55EC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DFDF519F286EE670000E55EC /* GoogleService-Info.plist */; };
 		DFDF52292875191E000E55EC /* AudioRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFDF52282875191E000E55EC /* AudioRepository.swift */; };
+		DFDF5266287990F2000E55EC /* WaveFromGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFDF5265287990F2000E55EC /* WaveFromGenerator.swift */; };
+		DFDF52682879984C000E55EC /* AudioPlayViewModelable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFDF52672879984C000E55EC /* AudioPlayViewModelable.swift */; };
 		EC11323528754CE500D7C4B6 /* AudioListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC11323428754CE500D7C4B6 /* AudioListTableViewCell.swift */; };
 		EC1132382875565A00D7C4B6 /* AudioListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1132372875565A00D7C4B6 /* AudioListViewModel.swift */; };
 		EC11323D28782B7300D7C4B6 /* RecordingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC11323C28782B7300D7C4B6 /* RecordingViewModel.swift */; };
@@ -50,6 +52,8 @@
 		DFDF5197286EC0D0000E55EC /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		DFDF519F286EE670000E55EC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		DFDF52282875191E000E55EC /* AudioRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRepository.swift; sourceTree = "<group>"; };
+		DFDF5265287990F2000E55EC /* WaveFromGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveFromGenerator.swift; sourceTree = "<group>"; };
+		DFDF52672879984C000E55EC /* AudioPlayViewModelable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayViewModelable.swift; sourceTree = "<group>"; };
 		EC11323428754CE500D7C4B6 /* AudioListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioListTableViewCell.swift; sourceTree = "<group>"; };
 		EC1132372875565A00D7C4B6 /* AudioListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioListViewModel.swift; sourceTree = "<group>"; };
 		EC11323C28782B7300D7C4B6 /* RecordingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingViewModel.swift; sourceTree = "<group>"; };
@@ -84,6 +88,7 @@
 			children = (
 				96065C7A2876F99D0023FC72 /* AudioPlayManager.swift */,
 				EC11324128790A1F00D7C4B6 /* RecordPermissionManager.swift */,
+				DFDF5265287990F2000E55EC /* WaveFromGenerator.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -278,6 +283,7 @@
 			isa = PBXGroup;
 			children = (
 				ECB8A5DF286BED1B00B1D363 /* ViewPresentable.swift */,
+				DFDF52672879984C000E55EC /* AudioPlayViewModelable.swift */,
 			);
 			path = Protocol;
 			sourceTree = "<group>";
@@ -322,8 +328,8 @@
 		ECB8A5E5286BED7100B1D363 /* Play */ = {
 			isa = PBXGroup;
 			children = (
-				965DB1102875ACCA00A8C0DE /* ViewModel */,
 				965DB10F2875ACBA00A8C0DE /* View */,
+				965DB1102875ACCA00A8C0DE /* ViewModel */,
 			);
 			path = Play;
 			sourceTree = "<group>";
@@ -423,12 +429,14 @@
 				96065C7B2876F99D0023FC72 /* AudioPlayManager.swift in Sources */,
 				DF6408EC286D651400567DAC /* FirebaseRepository.swift in Sources */,
 				ECB8A5EF286BED9800B1D363 /* RecordingView.swift in Sources */,
+				DFDF5266287990F2000E55EC /* WaveFromGenerator.swift in Sources */,
 				EC1132402878FFEB00D7C4B6 /* Alert ++ Extension.swift in Sources */,
 				ECB8A5ED286BED8F00B1D363 /* PlayView.swift in Sources */,
 				DF6408D1286C23DA00567DAC /* AudioInformation.swift in Sources */,
 				EC1132382875565A00D7C4B6 /* AudioListViewModel.swift in Sources */,
 				DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */,
 				ECB8A5E7286BED7A00B1D363 /* AudioListViewController.swift in Sources */,
+				DFDF52682879984C000E55EC /* AudioPlayViewModelable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

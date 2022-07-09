@@ -96,6 +96,7 @@ extension AudioListViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: AudioListTableViewCell.identifier, for: indexPath) as? AudioListTableViewCell else { return UITableViewCell() }
         
         cell.configureCell(audioInformation: viewModel.audioInformation.value[indexPath.row])
+        cell.selectionStyle = .none
         
         return cell
     }
