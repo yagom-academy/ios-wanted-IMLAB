@@ -93,27 +93,30 @@ class FireStorageManager {
     func downloadToLocal(urls: [StorageReference]
                          ,completion: @escaping ([URL]) -> Void
     ) {
-    
         var items: [String] = []
         let stringUri: [String] = urls.map { "\($0)" }
-        for uri in stringUri {
-            let storageRef = self.storage.reference(forURL: uri)
-            // 긴 uri 에서 "recording_2022_06_30_20:12:51" 끝 부분만 가져오기 위함
-            let findIndex = uri.index(uri.endIndex, offsetBy: -29)
-            let fileName = "\(uri[findIndex...]).m4a"
-            guard let localPath = FileManager.default.urls(
-                for: .documentDirectory,
-                in: .userDomainMask
-            )
-                .first?.appendingPathComponent(fileName) else { return }
-            
-            storageRef.write(toFile: localPath) { url, error in
-                if let url = url {
-                    items.append(url.absoluteString)
+        if stringUri.isEmpty == true {
+            completion([])
+        } else {
+            for uri in stringUri {
+                let storageRef = self.storage.reference(forURL: uri)
+                // 긴 uri 에서 "recording_2022_06_30_20:12:51" 끝 부분만 가져오기 위함
+                let findIndex = uri.index(uri.endIndex, offsetBy: -29)
+                let fileName = "\(uri[findIndex...]).m4a"
+                guard let localPath = FileManager.default.urls(
+                    for: .documentDirectory,
+                    in: .userDomainMask
+                )
+                    .first?.appendingPathComponent(fileName) else { return }
+                
+                storageRef.write(toFile: localPath) { url, error in
+                    if let url = url {
+                        items.append(url.absoluteString)
+                    }
+                    let sortedItems = items.sorted()
+                    let itemsToURL = sortedItems.compactMap { URL(string: $0) }
+                    completion(itemsToURL)
                 }
-                let sortedItems = items.sorted()
-                let itemsToURL = sortedItems.compactMap { URL(string: $0) }
-                completion(itemsToURL)
             }
         }
     }

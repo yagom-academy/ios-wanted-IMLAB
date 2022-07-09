@@ -68,7 +68,7 @@ class VoiceMemoViewController: UIViewController {
             do {
                 player = try AVAudioPlayer.init(contentsOf: url)
                 if let duration = player?.duration {
-                     durationTime = duration.minuteSecond
+                    durationTime = duration.minuteSecond
                 }
             } catch {
                 print("Error: <getFileDuration> - \(error.localizedDescription)")
@@ -106,7 +106,7 @@ extension VoiceMemoViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: VoiceMemoTableViewCell.identifier, for: indexPath) as? VoiceMemoTableViewCell else { return UITableViewCell() }
-
+        
         cell.timelineLabel.text = fileNames[indexPath.row]
         cell.durationLabel.text = fileDurations[indexPath.row]
         return cell
