@@ -171,7 +171,7 @@ class RecordViewController: UIViewController {
         }
     }
     
-    func convertTimeToString(_ seconds: TimeInterval) -> String {
+    private func convertTimeToString(_ seconds: TimeInterval) -> String {
         if seconds.isNaN {
             return "00:00"
         }
