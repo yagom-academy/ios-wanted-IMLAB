@@ -104,6 +104,7 @@ extension RecordedVoiceListViewController: UITableViewDataSource, UITableViewDel
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         let voicePlayVC = VoicePlayingViewController(title: audioMetaDataList[indexPath.item].title)
         let audioMetaData = audioMetaDataList[indexPath.item]
         let path = audioMetaDataList[indexPath.item].url
@@ -116,6 +117,7 @@ extension RecordedVoiceListViewController: UITableViewDataSource, UITableViewDel
             }
         }
         self.present(voicePlayVC, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

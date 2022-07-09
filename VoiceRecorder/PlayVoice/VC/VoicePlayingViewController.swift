@@ -7,6 +7,22 @@ class VoicePlayingViewController: UIViewController {
     private var soundManager: SoundManager!
     var audioData = AudioMetaData(title: "", duration: "", url: "", waveforms: [])
     
+    private var loadingIndicator: UIActivityIndicatorView = {
+        var indicator = UIActivityIndicatorView()
+        indicator.style = .large
+        return indicator
+    }()
+    
+    private var blurEffect: UIBlurEffect = {
+        var blurEffect = UIBlurEffect(style: .dark)
+        return blurEffect
+    }()
+    
+    private var visualEffectView: UIVisualEffectView = {
+        var visualEffectView = UIVisualEffectView()
+        return visualEffectView
+    }()
+    
     private var centerLine: UIView = {
         var view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -59,7 +75,6 @@ class VoicePlayingViewController: UIViewController {
         return slider
     }()
     
-    // Play, for/bacward button
     private lazy var playControlView: PlayControlView = {
         var view = PlayControlView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -78,14 +93,17 @@ class VoicePlayingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(#function)
         configureLayoutOfVoicePlayVC()
         addViewsActionsToVC()
-        DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + 0.01) { [self] in
+        
+        DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + 1) { [self] in
             DispatchQueue.main.async { [self] in
                 visualizer.setWaveformData(waveDataArray: audioData.waveforms)
+                visualEffectView.removeFromSuperview()
+                loadingIndicator.stopAnimating()
             }
         }
+        loadingIndicator.startAnimating()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -96,6 +114,10 @@ class VoicePlayingViewController: UIViewController {
     }
     
     private func configureLayoutOfVoicePlayVC() {
+        
+        visualEffectView.effect = blurEffect
+        visualEffectView.frame = view.frame
+        loadingIndicator.center = view.center
         
         view.backgroundColor = .white
         
@@ -108,8 +130,11 @@ class VoicePlayingViewController: UIViewController {
         view.addSubview(volumeSlider)
         view.addSubview(playControlView)
         
+        view.addSubview(visualEffectView)
+        view.addSubview(loadingIndicator)
+        
         NSLayoutConstraint.activate([
-            
+        
             recordedVoiceTitle.topAnchor.constraint(equalTo: view.topAnchor, constant: 10),
             recordedVoiceTitle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             recordedVoiceTitle.widthAnchor.constraint(equalTo: view.widthAnchor),

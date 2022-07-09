@@ -28,7 +28,6 @@
 		F06B925D2872BA6B00A704AF /* AudioMetaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06B925C2872BA6B00A704AF /* AudioMetaData.swift */; };
 		F06B925F2872BB7B00A704AF /* DateUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06B925E2872BB7B00A704AF /* DateUtil.swift */; };
 		F0D559DC286C1AEB0078BCF3 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D559DB286C1AEB0078BCF3 /* SoundManager.swift */; };
-		F0D559DE286C3A2A0078BCF3 /* sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F0D559DD286C3A2A0078BCF3 /* sound.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,7 +53,6 @@
 		F06B925C2872BA6B00A704AF /* AudioMetaData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioMetaData.swift; sourceTree = "<group>"; };
 		F06B925E2872BB7B00A704AF /* DateUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateUtil.swift; sourceTree = "<group>"; };
 		F0D559DB286C1AEB0078BCF3 /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
-		F0D559DD286C3A2A0078BCF3 /* sound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = sound.mp3; path = Assets.xcassets/sound.dataset/sound.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,22 +111,16 @@
 		DE15E65A28604278003DD2F5 /* VoiceRecorder */ = {
 			isa = PBXGroup;
 			children = (
+				F0D7EFEE2879A89400E39107 /* Application */,
 				F018C29B2877FB4700D7C9BE /* Visualizer */,
 				F06B925B2872BA4D00A704AF /* Model */,
 				F06B92582872A66C00A704AF /* FileManager */,
 				F06B92532872A06000A704AF /* Network */,
 				F06B9247287056F500A704AF /* VoiceList */,
 				F0D559DA286C1AD30078BCF3 /* SoundManager */,
-				F00A2C92286BE8D200ED57A8 /* MISC */,
 				68BF990F286F1A9B00BE55CF /* RecordVoice */,
 				F00A2C8F286BE20400ED57A8 /* PlayVoice */,
-				DE15E65B28604278003DD2F5 /* AppDelegate.swift */,
-				DE15E65D28604278003DD2F5 /* SceneDelegate.swift */,
-				F0D559DD286C3A2A0078BCF3 /* sound.mp3 */,
-				DE15E66428604279003DD2F5 /* Assets.xcassets */,
-				DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */,
-				DE15E66928604279003DD2F5 /* Info.plist */,
-				68F5665B286ED6560068A5CE /* GoogleService-Info.plist */,
+				F0D7EFED2879A85900E39107 /* Shared */,
 			);
 			path = VoiceRecorder;
 			sourceTree = "<group>";
@@ -140,15 +132,6 @@
 				F00A2C95286BEEB400ED57A8 /* View */,
 			);
 			path = PlayVoice;
-			sourceTree = "<group>";
-		};
-		F00A2C92286BE8D200ED57A8 /* MISC */ = {
-			isa = PBXGroup;
-			children = (
-				F00A2C93286BE8E400ED57A8 /* NSLayoutConstraint+extension.swift */,
-				F06B925E2872BB7B00A704AF /* DateUtil.swift */,
-			);
-			path = MISC;
 			sourceTree = "<group>";
 		};
 		F00A2C95286BEEB400ED57A8 /* View */ = {
@@ -234,6 +217,28 @@
 			path = SoundManager;
 			sourceTree = "<group>";
 		};
+		F0D7EFED2879A85900E39107 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				F00A2C93286BE8E400ED57A8 /* NSLayoutConstraint+extension.swift */,
+				F06B925E2872BB7B00A704AF /* DateUtil.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		F0D7EFEE2879A89400E39107 /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				DE15E65B28604278003DD2F5 /* AppDelegate.swift */,
+				DE15E65D28604278003DD2F5 /* SceneDelegate.swift */,
+				DE15E66428604279003DD2F5 /* Assets.xcassets */,
+				DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */,
+				DE15E66928604279003DD2F5 /* Info.plist */,
+				68F5665B286ED6560068A5CE /* GoogleService-Info.plist */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -300,7 +305,6 @@
 			files = (
 				DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */,
 				DE15E66528604279003DD2F5 /* Assets.xcassets in Resources */,
-				F0D559DE286C3A2A0078BCF3 /* sound.mp3 in Resources */,
 				68F5665C286ED6560068A5CE /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -469,7 +473,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = QA5P85RJWN;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = VoiceRecorder/Info.plist;
+				INFOPLIST_FILE = VoiceRecorder/Application/Info.plist;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Microphone permission is requried to record audio";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -498,7 +502,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = QA5P85RJWN;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = VoiceRecorder/Info.plist;
+				INFOPLIST_FILE = VoiceRecorder/Application/Info.plist;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Microphone permission is requried to record audio";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
