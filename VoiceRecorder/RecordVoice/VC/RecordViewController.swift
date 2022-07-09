@@ -264,7 +264,7 @@ extension RecordViewController: PlaybackVisualizerable {
 extension RecordViewController : SliderEvnetDelegate {
     
     func sliderEventValueChanged(sender: UISlider) {
-        soundManager.frequency = sender.value
+        soundManager.setFrequencyValue(value: sender.value)
     }
     
 }
