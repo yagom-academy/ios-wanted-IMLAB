@@ -40,6 +40,9 @@ class RecordControllerView: UIView {
         super.init(frame: .zero)
         viewModel.initRecordSession()
         layout()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(disableRecordButton(_:)), name: Notification.Name("playButtonStatus"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(playerDidEnded), name: NSNotification.Name("PlayerDidEnded"), object: nil)
     }
 
     required init?(coder: NSCoder) {
@@ -47,6 +50,18 @@ class RecordControllerView: UIView {
     }
 
     // MARK: - Action
+    @objc func playerDidEnded() {
+        recordButton.isEnabled = true
+    }
+    
+    @objc func disableRecordButton(_ notification: Notification) {
+        guard let isPlaying = notification.object as? Bool else {
+            return
+        }
+        
+        self.recordButton.isEnabled = !isPlaying
+    }
+    
     @objc func didTapRecordButton(sender: UIButton) {
         sender.isSelected = !sender.isSelected
 

@@ -64,8 +64,8 @@ class PlayerManager: PlayerService {
         self.audioFile = audioFile
 
         if audioEngine.isRunning {
-            audioEngine.stop()
             audioPlayer.stop()
+            audioEngine.stop()
             scheduleAudioPlayer()
         } else {
             configureAudioEngine()
