@@ -62,7 +62,7 @@ class PlayingViewController: UIViewController {
         setupAudio()
         setupDisplayLink()
         titleLabel.text = fileName
-        getImageFromLocal(fileName)
+        getImageFromFiresbase(fileName)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -76,14 +76,10 @@ class PlayingViewController: UIViewController {
     
     // MARK: - Methods
     
-    private func getImageFromLocal(_ fileName : String?) {
-        guard let fileName = fileName else {
-            return
+    private func getImageFromFiresbase(_ fileName : String?) {
+        FireStorageManager.shared.downloadImage(fileName) { image in
+            self.waveFormImageView.image = image
         }
-        guard let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {return}
-        let imageFullUrl = URL(fileURLWithPath: directory.absoluteString).appendingPathComponent("\(fileName)\(FireStorageManager.File.contentType.image)").path
-        guard let image = UIImage(contentsOfFile: imageFullUrl) else {return}
-        waveFormImageView.image = image
     }
     
     private func setupAudio() {

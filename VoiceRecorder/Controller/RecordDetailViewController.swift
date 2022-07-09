@@ -73,6 +73,9 @@ class RecordDetailViewController: UIViewController {
             }
             currentFileName = nil
         }
+        if currentFileName != nil {
+            
+        }
     }
     
     // MARK: - Methods
@@ -103,18 +106,10 @@ class RecordDetailViewController: UIViewController {
                 try FileManager.default.removeItem(at: audioFileURL)
                 if let currentFileName = currentFileName {
                     FireStorageManager.shared.deleteRecording(currentFileName)
+                    FireStorageManager.shared.deleteImage(currentFileName)
                 }
             } catch {
                 print("Error: <delete origin audio file> - \(error.localizedDescription)")
-            }
-        }
-        if let imageFileURL = imageFileURL {
-            do {
-                print("in?")
-                try FileManager.default.removeItem(at: imageFileURL)
-            } catch {
-                print("Error: <delete origin image file> - \(error.localizedDescription)")
-
             }
         }
     }
@@ -187,20 +182,8 @@ class RecordDetailViewController: UIViewController {
         cutOffFreqSegmentedControl.isHidden = false
     }
     
-    func downloadImageInLocal(_ data : Data?) {
-        guard let data = data, let currentFileName = currentFileName else {
-            return
-        }
-        guard let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {return}
-        imageFileURL = directory.appendingPathComponent("\(currentFileName)\(FireStorageManager.File.contentType.image)")
-        guard let imageFileURL = imageFileURL else {
-            return
-        }
-        do {
-            try data.write(to: imageFileURL)
-        } catch {
-            print("Error: <downloadImageInLocal> - \(error.localizedDescription)")
-        }
+    func uploadImageToFirebase(_ image : UIImage?) {
+        FireStorageManager.shared.uploadImage(image)
     }
     
     
@@ -210,7 +193,7 @@ class RecordDetailViewController: UIViewController {
         let image = renderer.image { rendererContext in
             waveFormCanvasView.layer.render(in: rendererContext.cgContext)
         }
-        downloadImageInLocal(image.jpegData(compressionQuality: 1.0))
+        uploadImageToFirebase(image)
     }
     
     private func showDuration(_ url: URL?) {

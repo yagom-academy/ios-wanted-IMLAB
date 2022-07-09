@@ -49,6 +49,23 @@ class FireStorageManager {
         imageRef.putData(data, metadata: metadata)
     }
     
+    func downloadImage(_ name : String?, completion: @escaping (UIImage?) -> Void) {
+        guard let name = name else {
+            return
+        }
+        let storageRef = storage.reference()
+        let imageRef = storageRef.child("image/\(name)")
+        
+        print(imageRef)
+        imageRef.getData(maxSize: 1 * 1024 * 1024) { data, error in
+            if let error = error {
+                print("Error: <downloadImage> - \(error.localizedDescription)")
+            } else if let data = data {
+                completion(UIImage(data: data))
+            }
+        }
+    }
+    
     func uploadData(_ url: URL?) {
         guard let url = url else {
             return
@@ -104,6 +121,12 @@ class FireStorageManager {
     func deleteRecording(_ name : String) {
         let storageRef = storage.reference()
         let fileRef = storageRef.child("\(File.Ref.recordDir)\(name)")
+        fileRef.delete()
+    }
+    
+    func deleteImage(_ name : String) {
+        let storageRef = storage.reference()
+        let fileRef = storageRef.child("\(File.Ref.imageDir)\(name)")
         fileRef.delete()
     }
 }

@@ -114,12 +114,10 @@ extension VoiceMemoViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let urlToString : String = audioLocalUrls[indexPath.row].absoluteString
-            guard let reNameLocalUrl = URL(string: urlToString.replacingOccurrences(of: ".m4a", with: ".jpeg")) else {return}
             FireStorageManager.shared.deleteRecording(fileNames[indexPath.row])
+            FireStorageManager.shared.deleteImage(fileNames[indexPath.row])
             do {
                 try FileManager.default.removeItem(at: audioLocalUrls[indexPath.row])
-                try FileManager.default.removeItem(at: reNameLocalUrl)
             } catch {
                 print("Error: <tableView firebase delete> - \(error.localizedDescription)")
             }
