@@ -20,15 +20,13 @@ class PlayingViewController: UIViewController {
     @IBOutlet weak var goBackwardButton: UIButton!
     @IBOutlet weak var goForwardButton: UIButton!
     @IBOutlet weak var volumeSlider: UISlider!
-    
+    private var movePoint = 0.0
+    private var positionBar = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 150))
     private var progressTimer: Timer?
     private var inPlayMode: Bool = false
+    
     var selectedFileInfo: RecordModel?
-    var startPoint = CGPoint(x: 0.0, y: 0.0)
-    var movePoint = 0.0
-    
-    var positionBar = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 150))
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         guard let fileInfo = selectedFileInfo else { return }
@@ -56,6 +54,16 @@ class PlayingViewController: UIViewController {
         goForwardButton.isEnabled = enable
     }
     
+    private func movePositionBar() {
+        movePoint = 300 * CGFloat(audioPlayerHandler.progress)
+        positionBar.frame = CGRect(x: movePoint, y: 0, width: 1, height: 150)
+        if movePoint <= 0 {
+            positionBar.frame = CGRect(x: 0, y: 0, width: 1, height: 150)
+        } else if movePoint >= 300 {
+            positionBar.frame = CGRect(x: 300, y: 0, width: 1, height: 150)
+        }
+    }
+    
     @IBAction func changePitch(_ sender: UISegmentedControl) {
         switch soundPitchControl.selectedSegmentIndex {
         case 0:
@@ -71,21 +79,13 @@ class PlayingViewController: UIViewController {
     
     @IBAction func goBackwardButtonTapped(_ sender: UIButton) {
         audioPlayerHandler.skip(to: -5.0)
-        movePoint = 300 * CGFloat(audioPlayerHandler.progress)
-        positionBar.frame = CGRect(x: movePoint, y: 0, width: 1, height: 150)
-        if movePoint <= 0 {
-            positionBar.frame = CGRect(x: 0, y: 0, width: 1, height: 150)
-        }
+        movePositionBar()
         currentPlayTimeLabel.text = audioPlayerHandler.currentPlayTime
     }
     
     @IBAction func goForwardButtonTapped(_ sender: UIButton) {
         audioPlayerHandler.skip(to: 5.0)
-        movePoint = 300 * CGFloat(audioPlayerHandler.progress)
-        positionBar.frame = CGRect(x: movePoint, y: 0, width: 1, height: 150)
-        if movePoint >= 300 {
-            positionBar.frame = CGRect(x: 300, y: 0, width: 1, height: 150)
-        }
+        movePositionBar()
         currentPlayTimeLabel.text = audioPlayerHandler.currentPlayTime
     }
     
