@@ -145,7 +145,7 @@ extension PlayerButtonView {
     }
 
     func resetSettings() {
-        viewModel.resetViewModel()
+        viewModel.removeObserver()
     }
 
     private func attribute() {

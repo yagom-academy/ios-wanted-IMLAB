@@ -130,7 +130,6 @@ extension PlayerViewController {
 extension PlayerViewController {
     // 재생상태 초기화
     @objc private func audioDidEnd(notification: NSNotification) {
-        print("player ended!")
         viewModel.setPlayerToZero()
     }
 }

@@ -12,7 +12,7 @@ class PlayControllerViewModel {
 
     private var waves: [Int] = []
     private var removedWaves: [Int] = []
-    private var sendWaves: [Int] = Array(repeating: 0, count: 100)
+    private var sendWaves: [Int] = Array(repeating: 1, count: 100)
 
     private var timer: Timer?
     var interval = 0
@@ -59,15 +59,12 @@ class PlayControllerViewModel {
             interval = 0
             sendWaves = Array(repeating: 1, count: 100)
         }
-
-        if interval >= sendWaves.count {
-            removedWaves.append(sendWaves.removeFirst())
-            sendWaves.append(waves[interval])
-        } else {
-            sendWaves[interval] = waves[interval]
-        }
+        
+        removedWaves.append(sendWaves.removeFirst())
+        sendWaves.append(waves[interval])
 
         sendToFrequencyView()
+        
         interval += 1
     }
 
@@ -79,9 +76,44 @@ class PlayControllerViewModel {
 
     func goBackward() {
         audioPlayer.skip(-)
+        
+        let count = removedWaves.count
+
+        if count < 50 {
+            interval -= count
+            sendWaves = removedWaves + Array(sendWaves[0 ..< 100 - count])
+            removedWaves.removeAll()
+            sendToFrequencyView()
+        } else {
+            interval -= 50
+            if interval < 0 {
+                interval = 0
+            }
+            sendWaves = Array(removedWaves[count - 50 ..< count]) + Array(sendWaves[0 ... 49])
+            removedWaves = Array(removedWaves[0 ..< count - 50])
+            sendToFrequencyView()
+        }
     }
 
     func goForward() {
         audioPlayer.skip(+)
+        
+        if interval + 50 > waves.count {
+            removedWaves += Array(sendWaves[0 ..< (waves.count - interval)])
+            interval = waves.count - 1
+            var startIndex = 0
+            if waves.count >= 100 {
+                startIndex = waves.count - 100
+            }
+            sendWaves = Array(waves[startIndex ..< waves.count])
+
+            sendToFrequencyView()
+        } else {
+            interval += 50
+            removedWaves += Array(sendWaves[0 ..< 50])
+            sendWaves = Array(sendWaves[50 ..< 100]) + Array(waves[interval - 50 ..< interval])
+
+            sendToFrequencyView()
+        }
     }
 }

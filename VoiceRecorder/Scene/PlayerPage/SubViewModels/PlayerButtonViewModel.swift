@@ -36,7 +36,7 @@ class PlayerButtonViewModel {
         self.waves = waves
     }
 
-    func resetViewModel() {
+    func removeObserver() {
         timer?.invalidate()
 
         NotificationCenter.default.removeObserver(self, name: Notification.Name("GetWaves"), object: nil)
@@ -124,9 +124,6 @@ class PlayerButtonViewModel {
         audioPlayer.setAudioFile(audioFile)
     }
 
-//    func duration() -> String {
-//        return audioPlayer.duration()
-//    }
     func setDuration(_ label: String) {
         let separated = label.split(separator: ":").map { Int(String($0))! }
         let result = separated[0] * 60 + separated[1]
