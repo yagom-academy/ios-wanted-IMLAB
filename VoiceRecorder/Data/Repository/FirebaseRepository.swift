@@ -54,7 +54,7 @@ final class FirebaseRepository: AudioRepository {
         let metadata = StorageMetadata()
         metadata.contentType = Audio.contentType
         let fileName
-        = "\(Audio.currentLocation)_\(Date.now.toString(dateFormat: Audio.fileNameFormat)).\(Audio.format)"
+        = "\(Audio.currentLocation)_\(Date.now.toString(dateFormat: Audio.fileNameFormat))\(Audio.format)"
         let audioReference = Storage.storage().reference().child(fileName)
         
         audioReference.putFile(from: fileURL, metadata: metadata)

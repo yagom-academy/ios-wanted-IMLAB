@@ -15,6 +15,7 @@ final class RecordingViewController: BaseViewController {
     private let recordingView = RecordingView()
 
     private var isRecording: Bool = false
+    private var isPlaying: Bool = false
 
     var viewModel: RecordingViewModel?
     var recordPermissionManager: RecordPermissionManageable?
@@ -28,10 +29,10 @@ final class RecordingViewController: BaseViewController {
         addSubviewTarget()
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        viewModel?.recordURL.removeAllCachedResourceValues()
-    }
+//    override func viewDidDisappear(_ animated: Bool) {
+//        super.viewDidDisappear(animated)
+//        viewModel?.recordURL.removeAllCachedResourceValues()
+//    }
 
     private func record() {
         recordPermissionManager?.requestMicrophoneAccess { [weak self] allowed in

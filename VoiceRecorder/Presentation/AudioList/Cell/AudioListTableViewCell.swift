@@ -13,7 +13,6 @@ final class AudioListTableViewCell: UITableViewCell {
     
     lazy var nameLabel: UILabel = {
         let label = UILabel()
-        
         label.font = UIFont.preferredFont(forTextStyle: .body)
         label.text = "dateLabel"
         
@@ -22,7 +21,6 @@ final class AudioListTableViewCell: UITableViewCell {
     
     lazy var timeLabel: UILabel = {
         let label = UILabel()
-        
         label.font = UIFont.preferredFont(forTextStyle: .callout)
         label.text = "time label"
         
@@ -63,8 +61,8 @@ final class AudioListTableViewCell: UITableViewCell {
         
         guard let duration = audioInformation.duration else { return }
         
-        let minute = Int(duration / 1)
-        let seconds = Int(round((duration - Double(minute)) * 100))
+        let minute = Int(duration / 60.0)
+        let seconds = Int(Int(duration) % 60)
         
         nameLabel.text = audioInformation.name
         timeLabel.text = "\(String(format: "%02d", minute)):\(String(format: "%02d", seconds))"
