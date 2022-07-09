@@ -29,6 +29,7 @@ class RecordDetailViewController: UIViewController {
     private var player : AVAudioPlayer?
     
     private var audioFileURL : URL?
+    private var imageFileURL : URL?
     
     private let readyToRecordButtonImage = UIImage(systemName: "circle.fill")
     private let recordingButtonImage = UIImage(systemName: "square.fill")
@@ -67,7 +68,7 @@ class RecordDetailViewController: UIViewController {
                 do {
                     try FileManager.default.removeItem(at: audioFileURL)
                 } catch {
-                    print(error)
+                    print("Error: <view did disappear> - \(error.localizedDescription)")
                 }
             }
             currentFileName = nil
@@ -92,12 +93,11 @@ class RecordDetailViewController: UIViewController {
                 }
             })
         } catch let error {
-            // TODO: 에러 핸들링
-            print(error.localizedDescription)
+            print("Error: <setup audio recorder> - \(error.localizedDescription)")
         }
     }
     
-    private func startRecording() {
+    private func deleteOriginFile() {
         if let audioFileURL = audioFileURL {
             do {
                 try FileManager.default.removeItem(at: audioFileURL)
@@ -105,9 +105,21 @@ class RecordDetailViewController: UIViewController {
                     FireStorageManager.shared.deleteRecording(currentFileName)
                 }
             } catch {
-                print(error)
+                print("Error: <delete origin audio file> - \(error.localizedDescription)")
             }
         }
+        if let imageFileURL = imageFileURL {
+            do {
+                print("in?")
+                try FileManager.default.removeItem(at: imageFileURL)
+            } catch {
+                print("Error: <delete origin image file> - \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    private func startRecording() {
+        deleteOriginFile()
         // TODO: fileURL refactoring
         let fileName = DataFormatter.makeFileName()
         FireStorageManager.File.Path.fileName = fileName
@@ -135,7 +147,6 @@ class RecordDetailViewController: UIViewController {
             cutOffFreqSegmentedControl.isHidden = true
         } catch {
             print("Error: <start recording> - \(error.localizedDescription)")
-//            finishRecording(success: false, audioFileURL)
         }
         
         drawingWave()
@@ -167,7 +178,6 @@ class RecordDetailViewController: UIViewController {
         showDuration(url)
         uploadRecordDataToFirebase(url)
         captureWaveForm()
-        print(audioFileURL)
         
         // Change UI
         recordButton.setImage(readyToRecordButtonImage, for: .normal)
@@ -181,8 +191,12 @@ class RecordDetailViewController: UIViewController {
             return
         }
         guard let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {return}
+        imageFileURL = directory.appendingPathComponent("\(currentFileName)\(FireStorageManager.File.contentType.image)")
+        guard let imageFileURL = imageFileURL else {
+            return
+        }
         do {
-            try data.write(to: directory.appendingPathComponent("\(currentFileName)\(FireStorageManager.File.contentType.image)"))
+            try data.write(to: imageFileURL)
         } catch {
             print("Error: <downloadImageInLocal> - \(error.localizedDescription)")
         }
@@ -192,9 +206,6 @@ class RecordDetailViewController: UIViewController {
     func captureWaveForm() {
         let size = CGRect(x: waveFormCanvasView.bounds.midX, y: waveFormCanvasView.bounds.minY, width: translationX.magnitude, height: waveFormCanvasView.bounds.height)
         let renderer = UIGraphicsImageRenderer(bounds: size)
-//        let image = renderer.image { ctx in
-//            waveFormCanvasView.drawHierarchy(in: waveFormCanvasView.bounds, afterScreenUpdates: true)
-//        }
         let image = renderer.image { rendererContext in
             waveFormCanvasView.layer.render(in: rendererContext.cgContext)
         }
@@ -296,7 +307,6 @@ class RecordDetailViewController: UIViewController {
             
             waveFormCanvasView.layer.addSublayer(waveLayer)
             waveLayer.contentsCenter = waveFormCanvasView.frame
-//            waveFormCanvasView.setNeedsDisplay()
             
             start = CGPoint(x: start.x + jump, y: start.y)
         }
