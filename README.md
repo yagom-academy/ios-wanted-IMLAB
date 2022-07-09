@@ -7,7 +7,7 @@
 ## 팀원
 우지|Cobugi
 :-:|:-:
-![]()|![]()
+![우지](https://avatars.githubusercontent.com/u/95316662?v=4)|![]()
 
 ## 결과
 첫 번째 화면|두 번째 화면|세 번째 화면
