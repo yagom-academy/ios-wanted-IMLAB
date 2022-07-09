@@ -24,7 +24,6 @@ final class RecordViewController: UIViewController {
     
     lazy var meterView: RecordMeterView = {
         let view = RecordMeterView(frame: .zero)
-        view.backgroundColor = .secondarySystemBackground
         return view
     }()
     
@@ -71,6 +70,7 @@ final class RecordViewController: UIViewController {
         bindIsPlaying()
         bindRecording()
         bindTimer()
+        bindError()
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
@@ -160,6 +160,16 @@ private extension RecordViewController{
         }
     }
     
+    func showAlertController() {
+        DispatchQueue.main.async {
+            let alertController = UIAlertController(title: Constants.Alert.error, message: Constants.Alert.empty, preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: Constants.Alert.ok, style: .default, handler: { _ in
+                self.dismiss(animated: true)
+            }))
+            self.present(alertController, animated: true)
+        }
+    }
+    
     func bindProgress() {
         viewModel.$progressValue
             .sink { [weak self] progress in
@@ -193,6 +203,17 @@ private extension RecordViewController{
         viewModel.$recordedTime
             .sink { playTime in
                 self.recordedTimeLabel.text = playTime.elapsedText
+            }
+            .store(in: &cancellable)
+    }
+    
+    func bindError() {
+        viewModel.$isShowErrorAlert
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isShowError in
+                if isShowError {
+                    self?.showAlertController()
+                }
             }
             .store(in: &cancellable)
     }

@@ -29,7 +29,7 @@ final class RecordMeterView: UIView {
     }
     
     func setUpDisPlayLink() {
-        self.layer.backgroundColor = UIColor.gray.cgColor
+        self.layer.backgroundColor = UIColor.secondarySystemGroupedBackground.cgColor
         disPlayLink = CADisplayLink(target: self, selector: #selector(updateDisplay))
         disPlayLink?.add(to: .current, forMode: .common)
         disPlayLink?.isPaused = true
@@ -72,10 +72,10 @@ final class RecordMeterView: UIView {
     }
     
     private func calNormal(input:CGFloat) -> CGFloat{
-        if input < 10 {
-            return 1
-        } else if input > 190 {
-            return 190
+        let maxHeight = self.layer.frame.height
+        
+        if input > maxHeight {
+            return maxHeight
         } else {
             return input
         }

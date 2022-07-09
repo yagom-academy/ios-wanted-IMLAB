@@ -37,11 +37,12 @@ final class RecordViewModel {
     @Published var isRecording: Bool = false
     @Published var number: Int = 0
     @Published var recordedTime: PlayerTime = .zero
+    @Published var isShowErrorAlert = false
     
     private var cancellable = Set<AnyCancellable>()
     
     weak var delegate: RecordDrawDelegate?
-
+    
     
     init() {
         prepareRecorder()
@@ -50,15 +51,18 @@ final class RecordViewModel {
     
     func prepareRecorder() {
         do {
-            try AVAudioSession.sharedInstance().setCategory(.playAndRecord,mode: .default,options: .defaultToSpeaker)
+            try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .default, options: .defaultToSpeaker)
             try AVAudioSession.sharedInstance().setActive(true)
-
-            if let format = recordFormat {
-                recorder = try AVAudioRecorder(url: recordFileURL, format: format)
-                recorder.prepareToRecord()
-            }
+            
+            guard let format = recordFormat else { return }
+            
+            let settingRecorder = try AVAudioRecorder(url: recordFileURL, format: format)
+            self.recorder = settingRecorder
+            recorder.prepareToRecord()
         } catch {
-            print("Error in prepare Recoder")
+            debugPrint("Error in prepare Recorder \n\(error.localizedDescription)")
+            isShowErrorAlert = true
+            
         }
     }
     
@@ -94,7 +98,8 @@ final class RecordViewModel {
         do {
             recordData = try Data(contentsOf: recordFileURL)
         } catch {
-            print("Could not decode data \(error.localizedDescription)")
+            debugPrint("Could not decode data \(error.localizedDescription)")
+            isShowErrorAlert = true
         }
         
         if previousFileName.isEmpty {
@@ -109,8 +114,6 @@ final class RecordViewModel {
         
         previousFileName = fileName
     }
-    
-
     
     func playAudio() {
         if !isResume {
