@@ -17,9 +17,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
         window?.windowScene = windowScene
+        
+        let rootViewController = AudioListViewController()
+        let recordPermissionManager: RecordPermissionManageable = RecordPermissionManager()
+        rootViewController.recordPermissionManager = recordPermissionManager
         window?.rootViewController = UINavigationController(
-            rootViewController: AudioListViewController()
+            rootViewController: rootViewController
         )
+        
         window?.makeKeyAndVisible()
     }
 }

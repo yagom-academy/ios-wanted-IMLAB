@@ -16,7 +16,7 @@ final class RecordingViewModel {
     
     private var endPoint: FirebaseRepository.AudioName?
     
-    var recordURL: URL {
+    var recordURL: URL = {
         let documentsURL: URL = {
             let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
             return paths[0]
@@ -24,7 +24,7 @@ final class RecordingViewModel {
         let fileName = UUID().uuidString + ".m4a"
         let url = documentsURL.appendingPathComponent(fileName)
         return url
-    }
+    }()
     
     init() {
         setupRecorder()
