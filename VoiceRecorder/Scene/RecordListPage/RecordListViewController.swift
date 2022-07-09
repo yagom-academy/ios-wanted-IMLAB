@@ -86,7 +86,7 @@ class RecordListViewController: UIViewController {
     }
 }
 
-// MARK: - UITableViewDataSource, UITableViewDelegate 메서드
+// MARK: - UITableView DataSource, Delegate 메서드
 extension RecordListViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
             return viewModel.getCellTotalCount()
@@ -97,8 +97,7 @@ extension RecordListViewController: UITableViewDataSource, UITableViewDelegate {
             return UITableViewCell()
         }
         cell.setData(data: viewModel.getCellData(indexPath), indexPath: indexPath)
-        cell.addSwapCellTapGesture(action: handleLongPress(with:_:))
-        cell.addFavoriteMarkAction(action: handleFavoriteButton(indexPath:))
+        cell.delegate = self
         
         return cell
     }
@@ -159,22 +158,23 @@ extension RecordListViewController: RecordListSortBarDelegate {
     }
 }
 
-
-//MARK: - 즐겨찾기 버튼 이벤트
-extension RecordListViewController {
-    private func handleFavoriteButton(indexPath: IndexPath) {
+//MARK: - RecordListCell Delegate 메서드
+extension RecordListViewController: RecordListCellDelegate {
+    func tappedFavoriteMark(_ indexPath: IndexPath) {
         viewModel.tappedFavoriteButton(indexPath: indexPath)
         tableView.reloadData()
         sortBar.viewWillAppear()
     }
+    
+    func beginSwapCellLongTapGesture(_ sender: UILongPressGestureRecognizer, _ toCenterPoint: CGPoint) {
+        swapByPress(with: sender, toCenterPoint: toCenterPoint)
+    }
+    
+    
 }
 
 //MARK: - 셀이동 이벤트
 extension RecordListViewController {
-    private func handleLongPress(with sender: UILongPressGestureRecognizer, _ toCenterPoint: CGPoint) {
-            swapByPress(with: sender, toCenterPoint: toCenterPoint)
-    }
-
     func swapByPress(with sender: UILongPressGestureRecognizer, toCenterPoint: CGPoint) {
         let tableViewWidth: CGFloat = tableView.contentSize.width
         let tableViewHeight: CGFloat = tableView.contentSize.height
@@ -252,7 +252,7 @@ extension RecordListViewController {
             cell.isHidden = false
             cell.alpha = 0.0
             
-            // Snapshot이 사라지고 셀이 나타내는 애니메이션 부여
+            // 더블클릭, 오른쪽으로 끌어당겼을 때 Snapshot이 사라지는 버그방지
             UIView.animate(withDuration: 0) {
                 CellSnapshotView.value?.center = cell.center
                 CellSnapshotView.value?.transform = CGAffineTransform.identity

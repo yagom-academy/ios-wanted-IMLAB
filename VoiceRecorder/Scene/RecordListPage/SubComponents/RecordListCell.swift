@@ -9,21 +9,14 @@ import UIKit
 
 class RecordListCell: UITableViewCell {
     static let identifier = "RecordListCell"
+    var delegate: RecordListCellDelegate?
     private var indexPath: IndexPath?
 
-    private var isSetSwapGesture: Bool = false
-    private var swapGestureAction: ((_ sender: UILongPressGestureRecognizer, _ toCenterPoint: CGPoint) -> Void)?
-    private var isSetFavoriteMarkAction: Bool = false
-    private var favoriteMarkAction: ((_ indexPath: IndexPath) -> Void)?
-
     private let container = UIStackView()
-
     private let favoriteMark = UIButton()
-
     private let labelContainer = UIStackView()
     private let titleLabel = UILabel()
     private let durationLabel = UILabel()
-
     private let swipeTapView = UIImageView(image: UIImage(systemName: "text.justify"))
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -31,10 +24,17 @@ class RecordListCell: UITableViewCell {
 
         attribute()
         layout()
+        addFavoriteMarkAction()
+        addSwapCellTapGesture()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        delegate = nil
     }
     
     override func layoutSubviews() {
@@ -49,41 +49,41 @@ class RecordListCell: UITableViewCell {
         durationLabel.text = data.fileInfo.duration
         let favoritMarkTitle = data.isFavorite ? "★" : "☆"
         favoriteMark.setTitle(favoritMarkTitle, for: .normal)
+        
     }
+}
 
-    func addFavoriteMarkAction(action: ((_ indexPath: IndexPath) -> Void)?) {
-        if isSetFavoriteMarkAction == false {
-            isSetFavoriteMarkAction = true
-            favoriteMarkAction = action
-            favoriteMark.addTarget(self, action: #selector(tappedFavoriteMarkAction), for: .touchUpInside)
-        }
+//MARK: 클릭, 탭제스쳐 이벤트 메서드
+extension RecordListCell {
+    func addFavoriteMarkAction() {
+        favoriteMark.addTarget(self, action: #selector(tappedFavoriteMarkAction), for: .touchUpInside)
+        
     }
 
     @objc func tappedFavoriteMarkAction() {
         guard let indexPath = indexPath else {
             return
         }
-        favoriteMarkAction?(indexPath)
+        delegate?.tappedFavoriteMark(indexPath)
     }
-
-    func addSwapCellTapGesture(action: @escaping (_ sender: UILongPressGestureRecognizer, _ toCenterPoint: CGPoint) -> Void) {
-        if isSetSwapGesture == false {
-            isSetSwapGesture = true
-            swapGestureAction = action
-            swipeTapView.isUserInteractionEnabled = true
-            let longPressedGesture = UILongPressGestureRecognizer(target: self, action: #selector(swapCellAction(with:)))
-            longPressedGesture.minimumPressDuration = 0
-            longPressedGesture.delaysTouchesBegan = true
-            swipeTapView.addGestureRecognizer(longPressedGesture)
-        }
+    
+    func addSwapCellTapGesture() {
+        swipeTapView.isUserInteractionEnabled = true
+        let longPressedGesture = UILongPressGestureRecognizer(target: self, action: #selector(swapCellAction(with:)))
+        longPressedGesture.minimumPressDuration = 0
+        longPressedGesture.delaysTouchesBegan = true
+        swipeTapView.addGestureRecognizer(longPressedGesture)
     }
 
     @objc func swapCellAction(with sender: UILongPressGestureRecognizer) {
         let pointAtCell = sender.location(in: self)
         let toCenterPoint = CGPoint(x: pointAtCell.x - frame.width / 2, y: pointAtCell.y - frame.height / 2)
-        swapGestureAction?(sender, toCenterPoint)
+        delegate?.beginSwapCellLongTapGesture(sender, toCenterPoint)
     }
+}
 
+//MARK: attribute, layout 메서드
+extension RecordListCell {
     private func attribute() {
         selectionStyle = .none
         backgroundColor = .clear

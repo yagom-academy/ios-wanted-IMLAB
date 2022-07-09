@@ -37,6 +37,7 @@
 		DE15E66528604279003DD2F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66428604279003DD2F5 /* Assets.xcassets */; };
 		DE15E66828604279003DD2F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE15E66628604279003DD2F5 /* LaunchScreen.storyboard */; };
 		FE178319287592BA00DEB555 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = FE178318287592BA00DEB555 /* FirebaseStorage */; };
+		FE1D598D2878F55200443617 /* RecordListCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1D598C2878F55200443617 /* RecordListCellDelegate.swift */; };
 		FE47347E28765D0500B753FB /* PlayControllerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE47347D28765D0500B753FB /* PlayControllerView.swift */; };
 		FE47348028765EF200B753FB /* PlayControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE47347F28765EF200B753FB /* PlayControllerViewModel.swift */; };
 		FE4734822876605D00B753FB /* RecordControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4734812876605D00B753FB /* RecordControllerViewModel.swift */; };
@@ -89,6 +90,7 @@
 		DE15E66428604279003DD2F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DE15E66728604279003DD2F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DE15E66928604279003DD2F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FE1D598C2878F55200443617 /* RecordListCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListCellDelegate.swift; sourceTree = "<group>"; };
 		FE47347D28765D0500B753FB /* PlayControllerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayControllerView.swift; sourceTree = "<group>"; };
 		FE47347F28765EF200B753FB /* PlayControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayControllerViewModel.swift; sourceTree = "<group>"; };
 		FE4734812876605D00B753FB /* RecordControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordControllerViewModel.swift; sourceTree = "<group>"; };
@@ -282,6 +284,7 @@
 			isa = PBXGroup;
 			children = (
 				FEEC6980286C3AEE002E020F /* RecordListCell.swift */,
+				FE1D598C2878F55200443617 /* RecordListCellDelegate.swift */,
 				FE47348528768E8D00B753FB /* RecordListSortBar.swift */,
 				FE4734872876906F00B753FB /* RecordListSortBarDelegate.swift */,
 			);
@@ -376,6 +379,7 @@
 				FEEC6981286C3AEE002E020F /* RecordListCell.swift in Sources */,
 				0DFCD72F2872C13900F31EBA /* PitchViewModel.swift in Sources */,
 				FEEC697E286C3ACF002E020F /* RecordListViewModel.swift in Sources */,
+				FE1D598D2878F55200443617 /* RecordListCellDelegate.swift in Sources */,
 				0DFCD7322872C15300F31EBA /* VolumeViewModel.swift in Sources */,
 				0DCB66CA28704D3E00800B1C /* PitchControlView.swift in Sources */,
 				FE473484287661BC00B753FB /* RecordControllerDelegate.swift in Sources */,
