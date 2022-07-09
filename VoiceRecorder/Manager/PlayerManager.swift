@@ -64,6 +64,7 @@ class PlayerManager: PlayerService {
         self.audioFile = audioFile
 
         if audioEngine.isRunning {
+            audioEngine.stop()
             audioPlayer.stop()
             scheduleAudioPlayer()
         } else {
@@ -153,7 +154,7 @@ class PlayerManager: PlayerService {
             self.configureAudioEngine()
         }
 
-        DispatchQueue.main.async { 
+        DispatchQueue.main.async {
             NotificationCenter.default.post(name: NSNotification.Name("PlayerDidEnded"), object: nil)
 
             NotificationCenter.default.post(name: NSNotification.Name("SendWaveform"), object: Array(repeating: 1, count: 100))

@@ -98,7 +98,6 @@ extension PlayerViewController {
             playerButtonView,
             volumeControlView,
             pitchControlView,
-//            speedControlView,
         ]
 
         mainStackViewItems.forEach {
@@ -113,9 +112,9 @@ extension PlayerViewController {
             playerButtonView.heightAnchor.constraint(equalToConstant: 80),
             volumeControlView.heightAnchor.constraint(equalToConstant: 30),
             pitchControlView.heightAnchor.constraint(equalToConstant: 30),
-//            speedControlView.heightAnchor.constraint(equalToConstant: 20),
         ]
 
+        mainStackView.setCustomSpacing(10, after: frequencyView)
         mainStackView.setCustomSpacing(80, after: fileNameLabel)
         mainStackView.setCustomSpacing(30, after: playerButtonView)
         mainStackView.setCustomSpacing(30, after: volumeControlView)
@@ -141,6 +140,7 @@ extension PlayerViewController {
                 self.isInvalidFile()
                 return
             }
+            self.fileNameLabel.text = filedata.filename
 
             self.getWaveData(filedata.rawFilename)
             self.playerButtonView.bindDuration(filedata.duration)
@@ -165,9 +165,6 @@ extension PlayerViewController {
 
     func configurePlayer() {
         let fileData = viewModel.getFileData()
-
-        fileNameLabel.text = fileData?.filename
-
         viewModel.setPlayerItem()
     }
 

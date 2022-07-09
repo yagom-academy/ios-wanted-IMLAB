@@ -28,7 +28,7 @@ class PlayerViewModel {
         playerButtonViewModel = PlayerButtonViewModel(audioPlayer)
     }
 
-    func update(_ fileData: FileData, _ completion: @escaping (Error?) -> Void) {
+    func update(_ fileData: FileData, _ completion: @escaping (Error?) -> Void) {        
         networkManager.getRecordData(filename: fileData.rawFilename) { result in
             switch result {
             case let .success(data):
