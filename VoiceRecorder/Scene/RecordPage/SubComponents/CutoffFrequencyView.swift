@@ -17,11 +17,10 @@ class CutoffFrequencyView: UIView {
         return label
     }()
 
-    private let frequencySlider: UISlider = {
+    private lazy var frequencySlider: UISlider = {
         let slider = UISlider()
         slider.minimumValue = 0.0
         slider.maximumValue = 60.0
-
         slider.value = 60.0
 
         slider.addTarget(self, action: #selector(didChangeSlider(_:)), for: .valueChanged)
