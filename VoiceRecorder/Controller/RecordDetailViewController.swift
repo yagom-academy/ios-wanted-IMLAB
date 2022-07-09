@@ -276,6 +276,8 @@ class RecordDetailViewController: UIViewController {
     
     private func getRecordingTime() {
         var totalSecond : TimeInterval = 0.0
+        recordingTimeLabel.text = totalSecond.minuteSecond
+        
         recordingTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
             totalSecond += 1.0
             self.recordingTimeLabel.text = totalSecond.minuteSecond
