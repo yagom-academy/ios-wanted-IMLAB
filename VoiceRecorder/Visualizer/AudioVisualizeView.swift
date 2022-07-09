@@ -58,6 +58,7 @@ class AudioVisualizeView: UIScrollView {
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        
         setAudioPlotView()
         fatalError("init(coder:) has not been implemented")
     }
@@ -72,7 +73,6 @@ class AudioVisualizeView: UIScrollView {
             audioPlotView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             audioPlotView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             audioPlotView.heightAnchor.constraint(equalTo: self.heightAnchor)
-            
         ])
     }
     

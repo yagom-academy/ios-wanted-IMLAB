@@ -6,7 +6,6 @@
 //
 
 class AudioMetaData {
-    
     var title: String
     var duration: String
     var url: String

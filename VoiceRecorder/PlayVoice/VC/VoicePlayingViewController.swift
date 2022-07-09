@@ -83,8 +83,9 @@ class VoicePlayingViewController: UIViewController {
     }()
     
     init(title: String) {
-        recordedVoiceTitle.text = title
         super.init(nibName: nil, bundle: nil)
+        
+        recordedVoiceTitle.text = title
     }
     
     required init?(coder: NSCoder) {
@@ -93,6 +94,7 @@ class VoicePlayingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         configureLayoutOfVoicePlayVC()
         addViewsActionsToVC()
         
@@ -114,7 +116,6 @@ class VoicePlayingViewController: UIViewController {
     }
     
     private func configureLayoutOfVoicePlayVC() {
-        
         visualEffectView.effect = blurEffect
         visualEffectView.frame = view.frame
         loadingIndicator.center = view.center
@@ -175,9 +176,7 @@ class VoicePlayingViewController: UIViewController {
             pitchSegmentController.bottomAnchor.constraint(equalTo: playControlView.topAnchor,constant: -20),
             pitchSegmentController.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             pitchSegmentController.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.9),
-            
         ])
-        
     }
     
     func fetchRecordedDataFromMainVC(audioData: AudioMetaData, fileUrl: URL) {
@@ -228,7 +227,6 @@ extension VoicePlayingViewController: SoundButtonActionDelegate {
     }
 }
 
-
 // MARK: - SoundeManager Delegate
 extension VoicePlayingViewController: SoundManagerStatusReceivable {
     func audioPlayerCurrentStatus(isPlaying: Bool) {
@@ -252,7 +250,6 @@ extension VoicePlayingViewController: SoundManagerStatusReceivable {
         alert.addAction(action)
         self.present(alert, animated: true)
     }
-    
 }
 
 extension VoicePlayingViewController: PlaybackVisualizerable {
@@ -268,5 +265,4 @@ extension VoicePlayingViewController: PlaybackVisualizerable {
             visualizer.operateVisualizerMove(value: progress, audioLenth: audioLength, centerViewMargin: visualizer.frame.maxX)
         }
     }
-    
 }

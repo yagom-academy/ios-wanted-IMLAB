@@ -16,9 +16,10 @@ class RecordViewController: UIViewController {
     
     var delegate: PassMetaDataDelegate!
     
-    private var soundManager = SoundManager()
-    private var audioFileManager = AudioFileManager()
-    private var firebaseStorageManager = FirebaseStorageManager()
+    private let soundManager = SoundManager()
+    private let audioFileManager = AudioFileManager()
+    private let firebaseStorageManager = FirebaseStorageManager()
+    private let playTime = PlayTime()
     
     private let date = DateUtil().currentDate
     private lazy var urlString = "\(self.date).caf"
@@ -167,8 +168,8 @@ class RecordViewController: UIViewController {
         do {
             let data = try Data(contentsOf: localUrl)
             let audioFile = try soundManager.getAudioFile(filePath: localUrl)
-            let totalTime = soundManager.totalPlayTime(audioFile: audioFile)
-            let duration = convertTimeToString(totalTime)
+            let totalTime = playTime.totalPlayTime(audioFile: audioFile)
+            let duration = playTime.convertTimeToString(totalTime)
             let wavefrom = visualizer.getWaveformData()
             let audioMetaData = AudioMetaData(title: date, duration: duration, url: urlString, waveforms: wavefrom)
             
@@ -180,18 +181,7 @@ class RecordViewController: UIViewController {
         }
     }
     
-    private func convertTimeToString(_ seconds: TimeInterval) -> String {
-        if seconds.isNaN {
-            return "00:00"
-        }
-        
-        let min = Int(seconds / 60)
-        let sec = Int(seconds.truncatingRemainder(dividingBy: 60))
-        let strTime = String(format: "%02d:%02d", min, sec)
-        
-        return strTime
-    }
-    
+    // 녹음 시작 & 정지 컨트롤
     @objc private func controlRecord() {
         isStartRecording.toggle()
         playControlView.isPlayButtonActivate = !isStartRecording
@@ -273,7 +263,6 @@ extension RecordViewController : SliderEvnetDelegate {
     func sliderEventValueChanged(sender: UISlider) {
         soundManager.setFrequencyValue(value: sender.value)
     }
-    
 }
 
 extension RecordViewController: SoundManagerStatusReceivable {

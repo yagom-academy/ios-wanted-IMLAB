@@ -33,6 +33,7 @@ class FrequencyControlView: UIStackView {
     
     init() {
         super.init(frame: .zero)
+        
         configureProperties()
         setLayoutOfFrequencyControlView()
         addTargetToSlider()
@@ -49,7 +50,6 @@ class FrequencyControlView: UIStackView {
     }
     
     private func setLayoutOfFrequencyControlView() {
-        
         sliderFrequency.translatesAutoresizingMaskIntoConstraints = false
         sliderLabel.translatesAutoresizingMaskIntoConstraints = false
         
