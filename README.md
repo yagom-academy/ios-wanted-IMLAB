@@ -33,35 +33,9 @@
 
 | 팀원 | 기여한 내용|
 | ---------------------------- | -------------------------------- |
-| Downey| 
-팀 일정 및 작업 공수 조정 <br />
-앱의 패턴 및 아키텍쳐 객체 구현 방법 리딩 <br />
-코드 리팩토링 리드 <br />
-AudioManager 객체 역할 분리 <br />
-의존 객체 전달 container 구현 <br />
-의존관계에 dependency injection 구현 <br />
-pathfinder 객체 구현 <br />
-DefaultAudioPlayer 기능 구현 <br />
-VoiceMemoPlayerView 기능 구현 <br />
-VoiceMemoRecoderView UI 구현|
-| JMin| 
-로직 버그 픽스 및 리팩토링 <br />
-FirebaseManager 다운로드, 업로드, 삭제 기능 구현<br />
-DefaultAudioRecorder 기능 구현<br />
-VoiceMemoPlayerView UI구현<br />
-VoiceMemoRecoderView 기능 구현<br />
-waveFormView 구현 (Pair Programming) |
-| Oyat| 
-VoiceMemoListView UI 구현 <br />
-VoiceMemoListView의 tableView dataSource, delegate 구현<br />
-Coordinator Pattern 구현 <br />
-DefaultAudioPlayer의 Volume조절 기능 구현<br />
-FirebaseStorageManager의 MetaData 주입 및 가져오기 기능 구현 <br />
-녹음 완료 후 테이블뷰 리로드 notification 적용 <br />
-셀 스와이프해서 삭제시 firebaseStorage, 로컬에서 파일 삭제 기능 구현 <br />
-waveFormView 구현 (Pair Programming) <br />
-FirebaseStorageManager의 Singleton Pattern 제거 <br />
-FirebaseStorage의 녹음 파일에 재생 시간 메타데이터 주입 기능 구현|
+| Downey|- 팀 일정 및 작업 공수 조정 <br />- 앱의 패턴 및 아키텍쳐 객체 구현 방법 리딩 <br />- 코드 리팩토링 리드 <br />- AudioManager 객체 역할 분리 <br />- 의존 객체 전달 container 구현 <br />- 의존관계에 dependency injection 구현 <br />- pathfinder 객체 구현 <br />- DefaultAudioPlayer 기능 구현 <br />- VoiceMemoPlayerView 기능 구현 <br />- VoiceMemoRecoderView UI 구현|
+| JMin| - 로직 버그 픽스 및 리팩토링 <br />- FirebaseManager 다운로드, 업로드, 삭제 기능 구현<br />- DefaultAudioRecorder 기능 구현<br />- VoiceMemoPlayerView UI구현<br />- VoiceMemoRecoderView 기능 구현<br />- waveFormView 구현 (Pair Programming) |
+| Oyat| - VoiceMemoListView UI 구현 <br />- VoiceMemoListView의 tableView dataSource, delegate 구현<br />- Coordinator Pattern 구현 <br />- DefaultAudioPlayer의 Volume조절 기능 구현<br />- FirebaseStorageManager의 MetaData 주입 및 가져오기 기능 구현 <br />- 녹음 완료 후 테이블뷰 리로드 notification 적용 <br />- 셀 스와이프해서 삭제시 firebaseStorage, 로컬에서 파일 삭제 기능 구현 <br />- waveFormView 구현 (Pair Programming) <br />- FirebaseStorageManager의 Singleton Pattern 제거 <br />- FirebaseStorage의 녹음 파일에 재생 시간 메타데이터 주입 기능 구현|
 
 # 프로젝트 소개
 
