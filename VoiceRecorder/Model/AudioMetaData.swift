@@ -7,7 +7,7 @@
 
 import Foundation
 
-class AudioMetaData: Codable {
+class AudioMetaData {
     var title: String
     var duration: String
     var url: String
