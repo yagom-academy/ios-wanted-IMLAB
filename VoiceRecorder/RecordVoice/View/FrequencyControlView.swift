@@ -19,8 +19,8 @@ class FrequencyControlView: UIStackView {
     private var sliderFrequency: UISlider = {
         let slider = UISlider()
         slider.minimumValue = 20000
-        slider.maximumValue = 40000
-        slider.value = 30000
+        slider.maximumValue = 26000
+        slider.value = 23000
         return slider
     }()
     
