@@ -32,23 +32,17 @@ class RecordVoiceViewController: UIViewController{
         return waveFormCanvasView
     }()
     
-    var verticalLineView : VerticalLineView = {
-        let verticalLineView = VerticalLineView()
-        verticalLineView.translatesAutoresizingMaskIntoConstraints = false
-        return verticalLineView
-    }()
-    
-    let waveFormImageView : WaveFormImageView = {
-        let waveFormImageView = WaveFormImageView(frame: CGRect())
-        waveFormImageView.translatesAutoresizingMaskIntoConstraints = false
-        return waveFormImageView
-    }()
-    
-    var waveFormBackgroundView : UIView = {
+    let waveFormBackgroundView : UIView = {
         let waveFormBackgroundView = UIView()
         waveFormBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         waveFormBackgroundView.backgroundColor = .systemGray6
         return waveFormBackgroundView
+    }()
+    
+    var waveFormView : WaveFormView = {
+        let waveFormView = WaveFormView()
+        waveFormView.translatesAutoresizingMaskIntoConstraints = false
+        return waveFormView
     }()
     
     let frequencyLabel : UILabel = {
@@ -170,13 +164,10 @@ class RecordVoiceViewController: UIViewController{
     func setView(){
         self.view.addSubview(waveFormBackgroundView)
         self.view.addSubview(waveFormCanvasView)
-        self.view.addSubview(waveFormImageView)
-        self.view.addSubview(verticalLineView)
-        
+        self.view.addSubview(waveFormView)
         self.view.addSubview(frequencyLabel)
         self.view.addSubview(frequencySlider)
         self.view.addSubview(progressTimeLabel)
-        
         self.view.addSubview(buttonStackView)
         self.view.addSubview(recordFile_ButtonStackView)
         for item in [ backwardFive, recordFile_play_PauseButton, forwardFive ]{
@@ -191,29 +182,24 @@ class RecordVoiceViewController: UIViewController{
     func autoLayout(){
         NSLayoutConstraint.activate([
             
-            progressTimeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            progressTimeLabel.bottomAnchor.constraint(equalTo: waveFormImageView.topAnchor, constant: -CNS.autoLayout.minConstant),
-            
             waveFormBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             waveFormBackgroundView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: CNS.autoLayout.waveFormHeightMP),
             waveFormBackgroundView.widthAnchor.constraint(equalTo: view.widthAnchor),
             waveFormBackgroundView.bottomAnchor.constraint(equalTo: view.centerYAnchor),
             
+            waveFormView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            waveFormView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: CNS.autoLayout.waveFormHeightMP),
+            waveFormView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            waveFormView.bottomAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            progressTimeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            progressTimeLabel.bottomAnchor.constraint(equalTo: waveFormView.topAnchor, constant: -CNS.autoLayout.minConstant),
+            
             waveFormCanvasView.widthAnchor.constraint(equalTo: view.widthAnchor),
             waveFormCanvasView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: CNS.autoLayout.waveFormHeightMP),
             waveFormCanvasView.bottomAnchor.constraint(equalTo: view.centerYAnchor),
             
-            waveFormImageView.leadingAnchor.constraint(equalTo: view.centerXAnchor),
-            waveFormImageView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            waveFormImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: CNS.autoLayout.waveFormHeightMP),
-            waveFormImageView.bottomAnchor.constraint(equalTo: view.centerYAnchor),
-            
-            verticalLineView.leadingAnchor.constraint(equalTo: view.centerXAnchor),
-            verticalLineView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            verticalLineView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: CNS.autoLayout.waveFormHeightMP),
-            verticalLineView.bottomAnchor.constraint(equalTo: view.centerYAnchor),
-            
-            frequencyLabel.topAnchor.constraint(equalTo: verticalLineView.bottomAnchor, constant: CNS.autoLayout.standardConstant),
+            frequencyLabel.topAnchor.constraint(equalTo: waveFormView.bottomAnchor, constant: CNS.autoLayout.standardConstant),
             frequencyLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: CNS.autoLayout.standardWidthMP),
             frequencyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
@@ -224,7 +210,6 @@ class RecordVoiceViewController: UIViewController{
             buttonStackView.topAnchor.constraint(equalTo: frequencySlider.bottomAnchor, constant: CNS.autoLayout.standardConstant),
             buttonStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
         ])
-        view.bringSubviewToFront(verticalLineView)
     }
     
     func setUI(){
@@ -233,8 +218,7 @@ class RecordVoiceViewController: UIViewController{
         record_start_stop_button.setImage(UIImage(systemName: "circle.fill"), for: .normal)
         record_start_stop_button.tintColor = .red
         recordFile_ButtonStackView.isHidden = true
-        waveFormImageView.isHidden = true
-        verticalLineView.isHidden = true
+        waveFormView.isHidden = true
     }
     
     override func viewDidDisappear(_ animated: Bool){
@@ -262,8 +246,7 @@ class RecordVoiceViewController: UIViewController{
             frequencySlider.isEnabled = false
             frequencySlider.tintColor = .darkGray
             waveFormCanvasView.isHidden = false
-            waveFormImageView.isHidden = true
-            verticalLineView.isHidden = true
+            waveFormView.isHidden = true
         case .afterRecording:
             UIView.animate(withDuration: 0.3) {
                 self.recordFile_ButtonStackView.isHidden = false
@@ -274,13 +257,12 @@ class RecordVoiceViewController: UIViewController{
             }
             frequencySlider.isEnabled = true
             frequencySlider.tintColor = .systemBlue
-            waveFormImageView.image = drawWaveFormManager.getWaveFormImage()
+            waveFormView.imageView.image = drawWaveFormManager.getWaveFormImage()
             progressTimeLabel.setText(playVoiceManager.getAudioFileLengthSecond())
             recordFile_play_PauseButton.setImage(UIImage(systemName: "play"), for: .normal)
         case .beforePlaying:
             waveFormCanvasView.isHidden = true
-            waveFormImageView.isHidden = false
-            verticalLineView.isHidden = false
+            waveFormView.isHidden = false
             recordFile_play_PauseButton.setImage(UIImage(systemName: "pause"), for: .normal)
         case .afterPlaying:
             recordFile_play_PauseButton.setImage(UIImage(systemName: "play"), for: .normal)
@@ -309,8 +291,6 @@ class RecordVoiceViewController: UIViewController{
     
 }
 
-// MARK: DrawWaveFormManagerDelegate
-
 extension RecordVoiceViewController : DrawWaveFormManagerDelegate{
     
     func moveWaveFormView(_ step: CGFloat){
@@ -323,8 +303,6 @@ extension RecordVoiceViewController : DrawWaveFormManagerDelegate{
         self.waveFormCanvasView.transform = CGAffineTransform(translationX: 0, y: 0)
     }
 }
-
-// MARK: RecordVoiceManagerDelegate
 
 extension RecordVoiceViewController : RecordVoiceManagerDelegate{
     func updateCurrentTime(_ currentTime : TimeInterval){
@@ -350,11 +328,11 @@ extension RecordVoiceViewController : PlayVoiceDelegate{
         if currentPosition <= 0 {
             newX = 0
         }else if currentPosition >= audioLengthSamples {
-            newX = self.waveFormImageView.image?.size.width ?? 0
+            newX = self.waveFormView.imageView.image?.size.width ?? 0
         }else{
-            newX = (self.waveFormImageView.image?.size.width ?? 0) * CGFloat(currentPosition) / CGFloat(audioLengthSamples)
+            newX = (self.waveFormView.imageView.image?.size.width ?? 0) * CGFloat(currentPosition) / CGFloat(audioLengthSamples)
         }
-        self.waveFormImageView.transform = CGAffineTransform(translationX: -newX, y: 0)
+        self.waveFormView.imageView.transform = CGAffineTransform(translationX: -newX, y: 0)
     }
     
     func playEndTime(){

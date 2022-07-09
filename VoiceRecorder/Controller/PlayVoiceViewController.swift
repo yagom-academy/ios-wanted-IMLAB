@@ -20,18 +20,6 @@ class PlayVoiceViewController: UIViewController{
         return progressTimeLabel
     }()
     
-    var verticalLineView : VerticalLineView = {
-        let verticalLineView = VerticalLineView()
-        verticalLineView.translatesAutoresizingMaskIntoConstraints = false
-        return verticalLineView
-    }()
-    
-    var waveFormImageView : WaveFormImageView = {
-        let waveFormImageView = WaveFormImageView(frame: CGRect())
-        waveFormImageView.translatesAutoresizingMaskIntoConstraints = false
-        return waveFormImageView
-    }()
-    
     lazy var selectedPitchSegment : UISegmentedControl = {
         let selectedPitchSegment = UISegmentedControl(items: [CNS.pitch.normal, CNS.pitch.baby, CNS.pitch.grandfather])
         selectedPitchSegment.translatesAutoresizingMaskIntoConstraints = false
@@ -40,12 +28,12 @@ class PlayVoiceViewController: UIViewController{
         return selectedPitchSegment
     }()
     
-    var waveFormBackgroundView : UIView = {
-        let waveFormBackgroundView = UIView()
-        waveFormBackgroundView.translatesAutoresizingMaskIntoConstraints = false
-        waveFormBackgroundView.backgroundColor = .systemGray6
-        return waveFormBackgroundView
+    var waveFormView : WaveFormView = {
+        let waveFormView = WaveFormView()
+        waveFormView.translatesAutoresizingMaskIntoConstraints = false
+        return waveFormView
     }()
+    
     
     var timeControlButtonStackView : UIStackView = {
         let timeControlButtonStackView = UIStackView()
@@ -116,9 +104,7 @@ class PlayVoiceViewController: UIViewController{
     func setView(){
         self.view.addSubview(fileNameLabel)
         self.view.addSubview(progressTimeLabel)
-        self.view.addSubview(verticalLineView)
-        self.view.addSubview(waveFormImageView)
-        self.view.addSubview(waveFormBackgroundView)
+        self.view.addSubview(waveFormView)
         self.view.addSubview(selectedPitchSegment)
         self.view.addSubview(volumeTextLabel)
         self.view.addSubview(volumeSlider)
@@ -134,26 +120,16 @@ class PlayVoiceViewController: UIViewController{
             fileNameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             fileNameLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: CNS.autoLayout.standardConstant),
             
-            progressTimeLabel.bottomAnchor.constraint(equalTo: waveFormImageView.topAnchor, constant: -CNS.autoLayout.minConstant),
+            waveFormView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            waveFormView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: CNS.autoLayout.waveFormHeightMP),
+            waveFormView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            waveFormView.bottomAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            progressTimeLabel.bottomAnchor.constraint(equalTo: waveFormView.topAnchor, constant: -CNS.autoLayout.minConstant),
             progressTimeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
-            waveFormBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            waveFormBackgroundView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: CNS.autoLayout.waveFormHeightMP),
-            waveFormBackgroundView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            waveFormBackgroundView.bottomAnchor.constraint(equalTo: view.centerYAnchor),
-            
-            waveFormImageView.leadingAnchor.constraint(equalTo: view.centerXAnchor),
-            waveFormImageView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            waveFormImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: CNS.autoLayout.waveFormHeightMP),
-            waveFormImageView.bottomAnchor.constraint(equalTo: view.centerYAnchor),
-            
-            verticalLineView.leadingAnchor.constraint(equalTo: view.centerXAnchor),
-            verticalLineView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            verticalLineView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: CNS.autoLayout.waveFormHeightMP),
-            verticalLineView.bottomAnchor.constraint(equalTo: view.centerYAnchor),
-            
             selectedPitchSegment.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            selectedPitchSegment.topAnchor.constraint(equalTo: waveFormImageView.bottomAnchor, constant: CNS.autoLayout.standardConstant),
+            selectedPitchSegment.topAnchor.constraint(equalTo: waveFormView.bottomAnchor, constant: CNS.autoLayout.standardConstant),
             
             volumeTextLabel.topAnchor.constraint(equalTo: selectedPitchSegment.bottomAnchor, constant: CNS.autoLayout.standardConstant),
             volumeTextLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: CNS.autoLayout.standardWidthMP),
@@ -167,8 +143,6 @@ class PlayVoiceViewController: UIViewController{
             playAndPauseButton.centerYAnchor.constraint(equalTo: volumeSlider.bottomAnchor, constant: CNS.autoLayout.standardConstant),
             
         ])
-        view.bringSubviewToFront(waveFormImageView)
-        view.bringSubviewToFront(verticalLineView)
     }
     
     func setUIText(){
@@ -220,7 +194,7 @@ class PlayVoiceViewController: UIViewController{
 
 extension PlayVoiceViewController : FirebaseDownloadManagerDelegate{
     func downloadComplete(url: URL){
-        waveFormImageView.load(url: url) { [weak self] in
+        waveFormView.imageView.load(url: url) { [weak self] in
             self?.playAndPauseButton.isEnabled = true
             self?.playVoiceViewModel.isDownloading = false
         }
@@ -257,11 +231,11 @@ extension PlayVoiceViewController : PlayVoiceDelegate{
         if currentPosition <= 0 {
             newX = 0
         }else if currentPosition >= audioLengthSamples {
-            newX = self.waveFormImageView.image?.size.width ?? 0
+            newX = self.waveFormView.imageView.image?.size.width ?? 0
         }else{
-            newX = (self.waveFormImageView.image?.size.width ?? 0) * CGFloat(currentPosition) / CGFloat(audioLengthSamples)
+            newX = (self.waveFormView.imageView.image?.size.width ?? 0) * CGFloat(currentPosition) / CGFloat(audioLengthSamples)
         }
-        self.waveFormImageView.transform = CGAffineTransform(translationX: -newX, y: 0)
+        self.waveFormView.imageView.transform = CGAffineTransform(translationX: -newX, y: 0)
     }
 }
 

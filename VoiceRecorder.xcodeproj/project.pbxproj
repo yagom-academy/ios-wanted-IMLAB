@@ -10,7 +10,7 @@
 		9F02BE6C286D220C007F715D /* RecordVoiceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F02BE6B286D220C007F715D /* RecordVoiceManager.swift */; };
 		9F25234128698A9C008A9819 /* VoiceRecorderListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F25234028698A9C008A9819 /* VoiceRecorderListTableViewController.swift */; };
 		9F25234328699DB4008A9819 /* RecordVoiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F25234228699DB4008A9819 /* RecordVoiceViewController.swift */; };
-		9F6E7F83287511C50096DE3B /* WaveFormImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6E7F82287511C50096DE3B /* WaveFormImageView.swift */; };
+		9F6E7F83287511C50096DE3B /* WaveFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6E7F82287511C50096DE3B /* WaveFormView.swift */; };
 		9F6E7F85287512210096DE3B /* VerticalLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6E7F84287512210096DE3B /* VerticalLineView.swift */; };
 		9F6E7F872875869D0096DE3B /* TimeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6E7F862875869D0096DE3B /* TimeLabel.swift */; };
 		9F6E7F8A287586D10096DE3B /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6E7F89287586D10096DE3B /* Constants.swift */; };
@@ -45,7 +45,7 @@
 		9F02BE6B286D220C007F715D /* RecordVoiceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordVoiceManager.swift; sourceTree = "<group>"; };
 		9F25234028698A9C008A9819 /* VoiceRecorderListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRecorderListTableViewController.swift; sourceTree = "<group>"; };
 		9F25234228699DB4008A9819 /* RecordVoiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordVoiceViewController.swift; sourceTree = "<group>"; };
-		9F6E7F82287511C50096DE3B /* WaveFormImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveFormImageView.swift; sourceTree = "<group>"; };
+		9F6E7F82287511C50096DE3B /* WaveFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveFormView.swift; sourceTree = "<group>"; };
 		9F6E7F84287512210096DE3B /* VerticalLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalLineView.swift; sourceTree = "<group>"; };
 		9F6E7F862875869D0096DE3B /* TimeLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLabel.swift; sourceTree = "<group>"; };
 		9F6E7F89287586D10096DE3B /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -101,7 +101,7 @@
 		9F6E7F7D287511240096DE3B /* View */ = {
 			isa = PBXGroup;
 			children = (
-				9F6E7F82287511C50096DE3B /* WaveFormImageView.swift */,
+				9F6E7F82287511C50096DE3B /* WaveFormView.swift */,
 				9F6E7F84287512210096DE3B /* VerticalLineView.swift */,
 				9F6E7F862875869D0096DE3B /* TimeLabel.swift */,
 				C7B118E12878108A00DA4C73 /* DeletePopupView.swift */,
@@ -361,7 +361,7 @@
 				C7AB0FC62870560100ED16C5 /* SoundPitch.swift in Sources */,
 				C730AA9E286BF5190004D11C /* VoiceRecordListViewModel.swift in Sources */,
 				C7B118CB2876F96100DA4C73 /* Extension_Image.swift in Sources */,
-				9F6E7F83287511C50096DE3B /* WaveFormImageView.swift in Sources */,
+				9F6E7F83287511C50096DE3B /* WaveFormView.swift in Sources */,
 				C730AA97286BEAE80004D11C /* FirebaseStorageManager.swift in Sources */,
 				DE15E65E28604278003DD2F5 /* SceneDelegate.swift in Sources */,
 				C7B118C72876F8FD00DA4C73 /* Extension_TimeInterval.swift in Sources */,
@@ -513,7 +513,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = VZN39283H6;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VoiceRecorder/Info.plist;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "\"Use Mic to record\"";
@@ -546,7 +546,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = VZN39283H6;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VoiceRecorder/Info.plist;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "\"Use Mic to record\"";
