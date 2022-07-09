@@ -35,6 +35,15 @@ final class RecordingViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         addSubviewTarget()
+        
+        recordingView.startButton.addTarget(self, action: #selector(playButtonTapped), for: .touchUpInside)
+        
+       
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        viewModel.recordURL.removeAllCachedResourceValues()
     }
 
     private func record() {
@@ -42,6 +51,7 @@ final class RecordingViewController: BaseViewController {
             guard let self = self else { return }
             if allowed {
                 self.isRecording.toggle()
+                self.showPlayButton()
                 self.viewModel.allowed()
                 if self.isRecording {
                     self.viewModel.record()
@@ -53,9 +63,34 @@ final class RecordingViewController: BaseViewController {
             }
         }
     }
+    
+    private func showPlayButton() {
+        if isRecording {
+            UIView.animate(withDuration: 0.1) {
+                self.alphaOfButtons(value: 0)
+            }
+        } else {
+            UIView.animate(withDuration: 0.1) {
+                self.alphaOfButtons(value: 1)
+            }
+        }
+    }
+    
+    private func alphaOfButtons(value:CGFloat){
+        [recordingView.goforward5Button,recordingView.startButton,recordingView.goBackward5Button].forEach {
+            $0.alpha = value
+            $0.isEnabled = value == 0 ? false : true
+        }
+
+    }
 
     @objc private func recordingButtonTapped() {
         record()
+    }
+    
+    @objc private func playButtonTapped(sender: UIButton) {
+        
+        sender.setImage(UIImage(systemName: "pause"), for: .normal)
     }
 
     private func upload() {

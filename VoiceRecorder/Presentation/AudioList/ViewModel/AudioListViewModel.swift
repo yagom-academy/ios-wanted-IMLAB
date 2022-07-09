@@ -15,7 +15,7 @@ class AudioListViewModel<Repository: AudioRepository> {
     private var soundEffect: AVAudioPlayer?
     let audioInformation: Observable<[AudioInformation]> = Observable([])
     
-    func downloadAll() {
+    func downloadAll(completion: @escaping () -> ()) {
         Task.init {
             let names = try await repository.fetchAll()
             
@@ -26,6 +26,7 @@ class AudioListViewModel<Repository: AudioRepository> {
                 audioInformations.append(audio)
             }
             audioInformation.value = audioInformations
+            completion()
         }
     }
     
