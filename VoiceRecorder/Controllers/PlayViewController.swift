@@ -30,8 +30,9 @@ class PlayViewController: UIViewController {
     private let engine = AudioEngine()
     
     private var decibels = [Int]()
+    private var i = 0
     private var stepDuration = 0.05
-    private var buffer = LastNItemsBuffer<CGFloat>.init(count: 80)
+    private var buffer = LastNItemsBuffer<CGFloat>.init(count: 100)
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -112,8 +113,6 @@ class PlayViewController: UIViewController {
         engine.changeVolume(sender.value)
         volumeTextLabel.text = "volume \(Int(sender.value * 100))%"
     }
-    
-    var i = 0
 }
 
 // MARK: - @objc Methods
@@ -135,7 +134,17 @@ private extension PlayViewController {
         
         if i < decibels.count {
             let value = decibels[i]
-            graphView.animateNewValue(CGFloat(value), duration: self.stepDuration)
+            if value > 160 {
+                self.graphView.animateNewValue(
+                    CGFloat(graphView.maxValue),
+                    duration: self.stepDuration
+                )
+            } else {
+                self.graphView.animateNewValue(
+                    CGFloat(value),
+                    duration: self.stepDuration
+                )
+            }
             i += 1
         }
     }

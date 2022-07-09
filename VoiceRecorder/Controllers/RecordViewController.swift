@@ -45,7 +45,7 @@ class RecordViewController: UIViewController {
     private var playerTimer: Timer?
     private var waveTimer: Timer?
     private var counter = 0.0
-    private var buffer = LastNItemsBuffer<CGFloat>.init(count: 80)
+    private var buffer = LastNItemsBuffer<CGFloat>.init(count: 100)
     
     private let stepDuration = 0.01
     private let engine = AudioEngine()
@@ -53,6 +53,8 @@ class RecordViewController: UIViewController {
     private let audioSession = AVAudioSession.sharedInstance()
     
     private var decibels = [Int]()
+    private var previousDecibels = [Int]()
+    private var i = 0
     
     private lazy var eqSliderValues: [String] = [
         eq75HzSlider,
@@ -107,6 +109,7 @@ class RecordViewController: UIViewController {
             sender.setImage(.circleFill)
             endRecord()
             blockEQSlider(isEnabled: true)
+            graphView.reset()
             guard let data = recorder.data else { return }
             engine.url = fileName
             do {
@@ -123,6 +126,7 @@ class RecordViewController: UIViewController {
                     MetaData.eq.key: self.eqSliderValues.joined(separator: " "),
                     MetaData.decibelDataURL.key: url.description
                 ]
+                self.previousDecibels = self.decibels
                 self.decibels = []
                 self.uploadFile(data, fileName: self.recordDate ?? "제목 없음", newMetaData: newMetaData) {
                     self.activityIndicator.stopAnimating()
@@ -158,10 +162,20 @@ class RecordViewController: UIViewController {
     
     @IBAction func didTapPlayBack5Button(_ sender: UIButton) {
         engine.skip(forwards: false)
+        graphView.reset()
+        i -= 500
+        if i < 0 {
+            i = 0
+        }
     }
     
     @IBAction func didTapPlayForward5Button(_ sender: UIButton) {
         engine.skip(forwards: true)
+        graphView.reset()
+        i += 500
+        if i >= previousDecibels.count {
+            i = previousDecibels.count - 1
+        }
     }
     
     @IBAction func didTapPlayPauseButton(_ sender: UIButton) {
@@ -199,15 +213,32 @@ private extension RecordViewController {
             engine.stop()
             engine.currentPosition = 0
             engine.seekFrame = 0
+            i = 0
             recordTimeLabel.text = "\(engine.duration.toStringTimeFormat)"
             try! engine.setupEngine()
         } else {
             recordTimeLabel.text = "\(engine.getCurrentTime().toStringTimeFormat)"
         }
+        if i < previousDecibels.count {
+            graphView.drawBarGraph = true
+            let value = previousDecibels[i]
+            if value > 160 {
+                self.graphView.animateNewValue(
+                    CGFloat(graphView.maxValue),
+                    duration: self.stepDuration
+                )
+            } else {
+                self.graphView.animateNewValue(
+                    CGFloat(value),
+                    duration: self.stepDuration
+                )
+            }
+            i += 1
+        }
     }
     @objc func update3() {
         recorder.updateMeters()
-        let value = pow(Double(10), (0.05 * Double(recorder.averagePower))) * 100
+        let value = pow(Double(10), (0.05 * Double(recorder.averagePower))) * 110
         print(value)
         decibels.append(Int(value))
         if value > 160 {
