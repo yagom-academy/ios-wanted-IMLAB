@@ -14,9 +14,9 @@ class RecordDetailViewController: UIViewController {
     
     // MARK: - IBOutlet
     
-    @IBOutlet weak var waveView: UIView!
+    @IBOutlet weak var waveFormCanvasView: UIView!
     @IBOutlet weak var cutoffLabel: UILabel!
-    @IBOutlet weak var durationLabel: UILabel!
+    @IBOutlet weak var recordingTimeLabel: UILabel!
     @IBOutlet weak var recordButton: UIButton!
     @IBOutlet weak var buttonsStackView: UIStackView!
     @IBOutlet weak var playButton: UIButton!
@@ -24,37 +24,39 @@ class RecordDetailViewController: UIViewController {
     
     // MARK: - Properties
     
-    var recordingSession: AVAudioSession?
-    var audioRecorder: AVAudioRecorder?
-    var player : AVAudioPlayer?
+    private var recordingSession: AVAudioSession?
+    private var audioRecorder: AVAudioRecorder?
+    private var player : AVAudioPlayer?
     
-    var audioFileURL : URL?
+    private var audioFileURL : URL?
+    private var imageFileURL : URL?
     
-    let readyToRecordButtonImage = UIImage(systemName: "circle.fill")
-    let recordingButtonImage = UIImage(systemName: "square.fill")
+    private let readyToRecordButtonImage = UIImage(systemName: "circle.fill")
+    private let recordingButtonImage = UIImage(systemName: "square.fill")
+    private let playButtonImage = UIImage(systemName: "play.fill")
+    private let pauseButtonImage = UIImage(systemName: "pause.fill")
     
-    let playButtonImage = UIImage(systemName: "play.fill")
-    let pauseButtonImage = UIImage(systemName: "pause.fill")
+    private var currentFileName : String?
     
-    var currentFileName : String?
+    private var timer : Timer?
+    private var recordingTimer : Timer?
     
-    var timer : Timer?
-    lazy var pencil = UIBezierPath(rect: waveView.bounds)
-    lazy var firstPoint = CGPoint(x: waveView.bounds.midX, y: waveView.bounds.midY)
-    lazy var jump : CGFloat = (firstPoint.x)/200
-    let waveLayer = CAShapeLayer()
-    var traitLength : CGFloat!
-    var start : CGPoint!
-    var sampeRate : Int?
-    var recordingTimer : Timer?
+    private var samplerate : Int?
     
-    
+    private lazy var pencil = UIBezierPath()
+    private lazy var firstPoint = CGPoint(x: waveFormCanvasView.bounds.midX, y: waveFormCanvasView.bounds.midY)
+    private lazy var jump : CGFloat = (firstPoint.x)/200
+    private let waveLayer = CAShapeLayer()
+    private var traitLength : CGFloat!
+    private var start : CGPoint!
+    var translationX : Double = 0.0
+        
     // MARK: - LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         buttonsStackView.isHidden = true
-        
+        waveFormCanvasView.frame.size.width = CGFloat(FP_INFINITE)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -66,22 +68,24 @@ class RecordDetailViewController: UIViewController {
                 do {
                     try FileManager.default.removeItem(at: audioFileURL)
                 } catch {
-                    print(error)
+                    print("Error: <RecordDetail viewDidDisappear> -  \(error.localizedDescription)")
                 }
             }
             currentFileName = nil
         }
+        if currentFileName != nil {
+            
+        }
     }
-    
     
     // MARK: - Methods
     
-    func setupAudioRecorder() {
+    private func setupAudioRecorder() {
         recordingSession = AVAudioSession.sharedInstance()
         do {
-            try recordingSession?.setCategory(.playAndRecord, mode: .default)
+            try recordingSession?.setCategory(.playAndRecord, mode: .default, options: .allowBluetooth)
             try recordingSession?.setActive(true)
-            try recordingSession?.setPreferredSampleRate(Double(sampeRate ?? 0))
+            try recordingSession?.setPreferredSampleRate(Double(samplerate ?? 8000))
             recordingSession?.requestRecordPermission({ [unowned self] allowed in
                 DispatchQueue.main.async {
                     if allowed {
@@ -92,38 +96,43 @@ class RecordDetailViewController: UIViewController {
                 }
             })
         } catch let error {
-            // TODO: 에러 핸들링
-            print(error.localizedDescription)
+            print("Error: <setupAudioRecorder> -  \(error.localizedDescription)")
         }
     }
     
-    func startRecording() {
+    private func deleteOriginFile() {
         if let audioFileURL = audioFileURL {
             do {
                 try FileManager.default.removeItem(at: audioFileURL)
                 if let currentFileName = currentFileName {
-                    FireStorageManager.shared.deleteItem(currentFileName)
+                    FireStorageManager.shared.deleteRecording(currentFileName)
+                    FireStorageManager.shared.deleteImage(currentFileName)
                 }
             } catch {
-                print(error)
+                print("Error: <delete origin audio file> - \(error.localizedDescription)")
             }
         }
+    }
+    
+    private func startRecording() {
+        deleteOriginFile()
+        // TODO: fileURL refactoring
         let fileName = DataFormatter.makeFileName()
-        FireStorageManager.RecordFileString.Path.fileName = fileName
-        currentFileName = FireStorageManager.RecordFileString.fileFullName
+        FireStorageManager.File.Path.fileName = fileName
+        currentFileName = FireStorageManager.File.fileFullName
         // 파일 생성
         guard let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
-        audioFileURL = fileURL.appendingPathComponent("\(FireStorageManager.RecordFileString.fileFullName)\(FireStorageManager.RecordFileString.contentType.audio)")
-        let audioFileURL = fileURL.appendingPathComponent("\(FireStorageManager.RecordFileString.fileFullName)\(FireStorageManager.RecordFileString.contentType.audio)")
+        audioFileURL = fileURL.appendingPathComponent("\(FireStorageManager.File.fileFullName)\(FireStorageManager.File.contentType.audio)")
+        let audioFileURL = fileURL.appendingPathComponent("\(FireStorageManager.File.fileFullName)\(FireStorageManager.File.contentType.audio)")
         let settings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
             AVSampleRateKey: 12000,
             AVNumberOfChannelsKey: 1,
             AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue,
         ]
-        pencil.removeAllPoints()
-        waveLayer.removeFromSuperlayer()
-        writeWaves(0, false)
+        
+        initDrawingWave()
+
         do {
             audioRecorder = try AVAudioRecorder(url: audioFileURL, settings: settings)
             audioRecorder?.record() // 이것의 상태를 조건으로 다른 것 control하는 듯
@@ -133,15 +142,25 @@ class RecordDetailViewController: UIViewController {
             cutoffLabel.isHidden = true
             cutOffFreqSegmentedControl.isHidden = true
         } catch {
-            finishRecording(success: false, audioFileURL)
+            print("Error: <start recording> - \(error.localizedDescription)")
         }
-        var translationX = 0.0
-        getRecordingTime()
         
+        drawingWave()
+        getRecordingTime()
+    }
+    
+    private func initDrawingWave() {
+        pencil.removeAllPoints()
+        waveLayer.removeFromSuperlayer()
+        writeWaves(0, false)
+    }
+    
+    private func drawingWave() {
+        translationX = 0.0
         timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
             UIView.animate(withDuration: 0.01, delay: 0, options: [.curveLinear]) {
-                self.waveView.transform = CGAffineTransform(translationX: translationX, y: 0)
-                translationX -= self.jump
+                self.waveFormCanvasView.transform = CGAffineTransform(translationX: self.translationX, y: 0)
+                self.translationX -= self.jump
             }
             self.audioRecorder?.updateMeters()
             // write waveforms
@@ -149,46 +168,56 @@ class RecordDetailViewController: UIViewController {
             self.writeWaves(averagePower ?? 0.0, true)
         }
     }
-    
-    func changeViewToImage() -> UIImage {
-        let renderer = UIGraphicsImageRenderer(size: waveView.bounds.size)
-        return renderer.image {context in
-            waveView.layer.render(in: context.cgContext)
-        }
-    }
 
-    func finishRecording(success: Bool, _ url: URL?) {
+    private func finishRecording(success: Bool, _ url: URL?) {
         writeWaves(0, false)
         showDuration(url)
         uploadRecordDataToFirebase(url)
+        captureWaveForm()
+        
+        // Change UI
         recordButton.setImage(readyToRecordButtonImage, for: .normal)
         buttonsStackView.isHidden = false
         cutoffLabel.isHidden = false
         cutOffFreqSegmentedControl.isHidden = false
     }
     
-    func showDuration(_ url: URL?) {
+    func uploadImageToFirebase(_ image : UIImage?) {
+        FireStorageManager.shared.uploadImage(image)
+    }
+    
+    
+    func captureWaveForm() {
+        let size = CGRect(x: waveFormCanvasView.bounds.midX, y: waveFormCanvasView.bounds.minY, width: translationX.magnitude, height: waveFormCanvasView.bounds.height)
+        let renderer = UIGraphicsImageRenderer(bounds: size)
+        let image = renderer.image { rendererContext in
+            waveFormCanvasView.layer.render(in: rendererContext.cgContext)
+        }
+        uploadImageToFirebase(image)
+    }
+    
+    private func showDuration(_ url: URL?) {
         var durationTime: String = ""
         guard let url = url else { return }
         
         do {
             player = try AVAudioPlayer(contentsOf: url)
             player?.delegate = self
-            // 여기서 그림이랑 재생시간 계속 리로드
+            
             if let duration = player?.duration {
                 durationTime = duration.minuteSecond
-                durationLabel.text = durationTime
+                recordingTimeLabel.text = durationTime
             }
         } catch {
-            print("<finishRecording Error> -\(error.localizedDescription)")
+            print("Error: <finishRecording> - \(error.localizedDescription)")
         }
     }
     
-    func uploadRecordDataToFirebase(_ url: URL?) {
+    private func uploadRecordDataToFirebase(_ url: URL?) {
         FireStorageManager.shared.uploadData(url)
     }
     
-    func showSettingViewController() {
+    private func showSettingViewController() {
         let alert = UIAlertController(title: "접근권한", message: "마이크 접근권한이 필요합니다.", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { _ in
             guard let settingsUrl = URL(string: UIApplication.openSettingsURLString),
@@ -202,9 +231,10 @@ class RecordDetailViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    func playSound() {
+    private func playSound() {
         if player?.isPlaying == false {
             player?.play()
+            
             playButton.setImage(pauseButtonImage, for: .normal)
             recordButton.isHidden = true
             cutoffLabel.isHidden = true
@@ -212,6 +242,7 @@ class RecordDetailViewController: UIViewController {
         } else {
             player?.pause()
             player?.prepareToPlay()
+            
             playButton.setImage(playButtonImage, for: .normal)
             recordButton.isHidden = false
             cutoffLabel.isHidden = false
@@ -219,7 +250,7 @@ class RecordDetailViewController: UIViewController {
         }
     }
     
-    func writeWaves(_ input: Float, _ bool : Bool) {
+    private func writeWaves(_ input: Float, _ bool : Bool) {
         if !bool {
             start = firstPoint
             if timer != nil || audioRecorder != nil {
@@ -258,20 +289,20 @@ class RecordDetailViewController: UIViewController {
             
             waveLayer.lineWidth = jump
             
-            waveView.layer.addSublayer(waveLayer)
-            waveLayer.contentsCenter = waveView.frame
-            
-            waveView.setNeedsDisplay()
+            waveFormCanvasView.layer.addSublayer(waveLayer)
+            waveLayer.contentsCenter = waveFormCanvasView.frame
             
             start = CGPoint(x: start.x + jump, y: start.y)
         }
     }
     
-    func getRecordingTime() {
+    private func getRecordingTime() {
         var totalSecond : TimeInterval = 0.0
+        recordingTimeLabel.text = totalSecond.minuteSecond
+        
         recordingTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
             totalSecond += 1.0
-            self.durationLabel.text = totalSecond.minuteSecond
+            self.recordingTimeLabel.text = totalSecond.minuteSecond
         }
     }
     
@@ -302,13 +333,13 @@ class RecordDetailViewController: UIViewController {
         
         switch selectedVoiceValue {
         case 0:
-            sampeRate = 8000
+            samplerate = 8000
         case 1:
-            sampeRate = 16000
+            samplerate = 16000
         case 2:
-            sampeRate = 32000
+            samplerate = 32000
         default:
-            sampeRate = 44100
+            samplerate = 44100
         }
     }
 }

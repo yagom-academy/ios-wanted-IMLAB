@@ -16,12 +16,12 @@ class VoiceMemoViewController: UIViewController {
     
     // MARK: - Properties
     
-    var localUrls: [URL] = []
-    var fileNames: [String] = []
-    var fileDurations: [String] = []
-    var isFetching: Bool = false
+    private var audioLocalUrls: [URL] = []
+    private var fileNames: [String] = []
+    private var fileDurations: [String] = []
+    private var isFetching: Bool = false
     
-    var player: AVAudioPlayer?
+    private var player: AVAudioPlayer?
     
     // MARK: - LifeCycles
     
@@ -32,13 +32,11 @@ class VoiceMemoViewController: UIViewController {
         fetchRecordingData()
     }
     
-    // MARK: - IBActions
-    
     // MARK: - Methods
     
-    func fetchRecordingData() {
+    private func fetchRecordingData() {
         FireStorageManager.shared.fetchData { results in
-            self.localUrls = results
+            self.audioLocalUrls = results
             self.createFileName(urls: results)
             self.getFileDuration(urls: results)
             DispatchQueue.main.async {
@@ -52,7 +50,7 @@ class VoiceMemoViewController: UIViewController {
         }
     }
     
-    func createFileName(urls: [URL]) {
+    private func createFileName(urls: [URL]) {
         fileNames = urls.map { url -> String in
             let urlToString = url.absoluteString
             let findIndex = urlToString.index(urlToString.endIndex, offsetBy: -33)
@@ -62,7 +60,7 @@ class VoiceMemoViewController: UIViewController {
         }
     }
     
-    func getFileDuration(urls: [URL]) {
+    private func getFileDuration(urls: [URL]) {
         
         fileDurations = urls.map { url -> String in
             var durationTime: String = ""
@@ -70,17 +68,17 @@ class VoiceMemoViewController: UIViewController {
             do {
                 player = try AVAudioPlayer.init(contentsOf: url)
                 if let duration = player?.duration {
-                     durationTime = duration.minuteSecond
+                    durationTime = duration.minuteSecond
                 }
             } catch {
-                print("<getFileDuration Error> - \(error.localizedDescription)")
+                print("Error: <getFileDuration> - \(error.localizedDescription)")
             }
             return durationTime
         }
     }
     
     
-    func configureTableView() {
+    private func configureTableView() {
         
         let cell = UINib(nibName: VoiceMemoTableViewCell.identifier, bundle: nil)
         voiceMemoTableView.register(cell, forCellReuseIdentifier: VoiceMemoTableViewCell.identifier)
@@ -103,28 +101,27 @@ class VoiceMemoViewController: UIViewController {
 
 extension VoiceMemoViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return localUrls.count
+        return audioLocalUrls.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: VoiceMemoTableViewCell.identifier, for: indexPath) as? VoiceMemoTableViewCell else { return UITableViewCell() }
-
+        
         cell.timelineLabel.text = fileNames[indexPath.row]
         cell.durationLabel.text = fileDurations[indexPath.row]
         return cell
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        
         if editingStyle == .delete {
-            
-            FireStorageManager.shared.deleteItem(fileNames[indexPath.row])
+            FireStorageManager.shared.deleteRecording(fileNames[indexPath.row])
+            FireStorageManager.shared.deleteImage(fileNames[indexPath.row])
             do {
-                try FileManager.default.removeItem(at: localUrls[indexPath.row])
+                try FileManager.default.removeItem(at: audioLocalUrls[indexPath.row])
             } catch {
                 print("Error: <tableView firebase delete> - \(error.localizedDescription)")
             }
-            localUrls.remove(at: indexPath.row)
+            audioLocalUrls.remove(at: indexPath.row)
             fileNames.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
@@ -135,7 +132,7 @@ extension VoiceMemoViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let playingVC = self.storyboard?.instantiateViewController(withIdentifier: PlayingViewController.identifier) as? PlayingViewController else {return}
         playingVC.fileName = fileNames[indexPath.row]
-        playingVC.fileURL = localUrls[indexPath.row]
+        playingVC.fileURL = audioLocalUrls[indexPath.row]
         present(playingVC, animated: true)
     }
     
