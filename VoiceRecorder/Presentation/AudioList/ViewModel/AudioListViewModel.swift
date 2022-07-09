@@ -29,6 +29,12 @@ class AudioListViewModel<Repository: AudioRepository> {
         }
     }
     
+    func delete(name endpoint: String){
+        Task.init {
+            try await repository.delete(endpoint)
+        }
+    }
+    
     private func mapper(from name: String) async throws -> AudioInformation {
         let data = try await repository.download(from: name)
         let fileURL = repository.putDataLocally(from: name)
