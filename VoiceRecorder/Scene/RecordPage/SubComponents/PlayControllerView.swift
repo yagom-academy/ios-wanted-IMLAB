@@ -71,6 +71,9 @@ class PlayControllerView: UIStackView {
 
     @objc func didTapPlayButton(sender: UIButton) {
         sender.isSelected = viewModel.playPauseAudio()
+        let isPlaying = sender.isSelected
+        
+        NotificationCenter.default.post(name: Notification.Name("playButtonStatus"), object: isPlaying)
     }
 
     func bind(_ viewModel: PlayControllerViewModel) {
