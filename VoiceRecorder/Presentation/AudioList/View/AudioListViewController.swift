@@ -13,6 +13,8 @@ final class AudioListViewController: BaseViewController {
     
     let viewModel = AudioListViewModel<FirebaseRepository>()
     
+    var recordPermissionManager: RecordPermissionManageable?
+    
     override func loadView() {
         self.view = audioListView
     }
@@ -52,7 +54,11 @@ final class AudioListViewController: BaseViewController {
 
 extension AudioListViewController {
     @objc func plusButtonTapped() {
+        guard let recordPermissionManager = recordPermissionManager else { return }
         
+        let recordingViewController = RecordingViewController(recordPermissionManager: recordPermissionManager)
+        
+        self.present(recordingViewController, animated: true)
     }
     
     func presentPlayView(audioInformation: AudioInformation) {
