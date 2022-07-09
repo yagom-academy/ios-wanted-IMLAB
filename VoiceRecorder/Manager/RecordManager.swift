@@ -83,6 +83,7 @@ class RecordManager: RecordService {
     }
 
     func startRecord() {
+        totalTime = 0
         audioFile = nil
         totalWaveData = [Int]()
 
