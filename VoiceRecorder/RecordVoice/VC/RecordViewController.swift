@@ -20,7 +20,7 @@ class RecordViewController: UIViewController {
     private var isStartRecording: Bool = false
     
     private var visualizer: AudioVisualizeView = {
-        var visualizer = AudioVisualizeView()
+        var visualizer = AudioVisualizeView(playType: .record)
         visualizer.translatesAutoresizingMaskIntoConstraints = false
         return visualizer
     }()
@@ -49,13 +49,19 @@ class RecordViewController: UIViewController {
         return button
     }()
     
+    private var processSlider: UISlider = {
+        var slider = UISlider()
+        return slider
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setLayout()
         setAudio()
-        soundManager.visualDelegate = self
-        
+        soundManager.recordVisualizerDelegate = self
+        soundManager.playBackVisualizerDelegate = self
+        soundManager.delegate = self
         recordButton.addTarget(self, action: #selector(controlRecord), for: .touchUpInside)
         sliderFrequency.addTarget(self, action: #selector(onChangeValueSlider(sender:)), for: UIControl.Event.valueChanged)
     }
@@ -126,7 +132,8 @@ class RecordViewController: UIViewController {
             let audioFile = try soundManager.getAudioFile(filePath: localUrl)
             let totalTime = soundManager.totalPlayTime(audioFile: audioFile)
             let duration = convertTimeToString(totalTime)
-            let audioMetaData = AudioMetaData(title: date, duration: duration, url: urlString)
+            let wavefrom = visualizer.getWaveformData()
+            let audioMetaData = AudioMetaData(title: date, duration: duration, url: urlString, waveforms: wavefrom)
             
             firebaseStorageManager.uploadAudio(audioData: data, audioMetaData: audioMetaData)
         } catch {
@@ -151,6 +158,7 @@ class RecordViewController: UIViewController {
     @objc private func controlRecord() {
         isStartRecording = !isStartRecording
         playControlView.isPlayButtonActivate = !isStartRecording
+        visualizer.isTouchable = !isStartRecording
         recordButtonToggle()
         
         if isStartRecording { // 녹음 시작일 때
@@ -158,6 +166,7 @@ class RecordViewController: UIViewController {
         } else { // 녹음 끝일 때
             soundManager.stopRecord()
             playControlView.isPlayButtonActivate = !isStartRecording
+            visualizer.isTouchable = !isStartRecording
             let localUrl = audioFileManager.getAudioFilePath(fileName: urlString)
             passData(localUrl: localUrl)
             soundManager.initializeSoundManager(url: localUrl, type: .playBack)
@@ -197,23 +206,55 @@ extension RecordViewController: SoundButtonActionDelegate {
     
     func playButtonTouchUpinside(sender: UIButton) {
         guard soundManager.isEnginePrepared else { return }
-        self.soundManager.playNpause()
+        visualizer.moveToStartingPoint()
+        soundManager.playNpause()
     }
     
     func backwardButtonTouchUpinside(sender: UIButton) {
-        print("backwardButton Clicked")
         soundManager.skip(isForwards: false)
     }
     
     func forwardTouchUpinside(sender: UIButton) {
-        print("forwardButton Clicked")
         soundManager.skip(isForwards: true)
     }
 }
 
-extension RecordViewController: Visualizerable {
+extension RecordViewController: RecordingVisualizerable, PlaybackVisualizerable {
+    
+    func operatingwaveProgression(progress: Float, audioLength: Float) {
+        DispatchQueue.main.async { [self] in
+            visualizer.operateVisualizerMove(value: progress, audioLenth: audioLength, centerViewMargin: visualizer.frame.minX)
+        }
+    }
     
     func processAudioBuffer(buffer: AVAudioPCMBuffer) {
         visualizer.processAudioData(buffer: buffer)
     }
+    
+}
+
+extension RecordViewController: SoundManagerStatusReceivable {
+    
+    func audioPlayerCurrentStatus(isPlaying: Bool) {
+        soundManager.removeTap()
+        DispatchQueue.main.async {
+            self.playControlView.isSelected = isPlaying
+            self.visualizer.moveToStartingPoint()
+        }
+    }
+    
+    func audioFileInitializeErrorHandler(error: Error) {
+        let alert = UIAlertController(title: "파일 초기화 실패!", message: "오류코드: \(error.localizedDescription)", preferredStyle: .alert)
+        let action = UIAlertAction(title: "확인", style: .default)
+        alert.addAction(action)
+        self.present(alert, animated: true)
+    }
+    
+    func audioEngineInitializeErrorHandler(error: Error) {
+        let alert = UIAlertController(title: "엔진 초기화 실패!", message: "오류코드: \(error.localizedDescription)", preferredStyle: .alert)
+        let action = UIAlertAction(title: "확인", style: .default)
+        alert.addAction(action)
+        self.present(alert, animated: true)
+    }
+    
 }
