@@ -25,18 +25,21 @@ final class RecordingView: UIView, ViewPresentable {
     let goforward5Button: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "goforward.5"), for: .normal)
+        button.alpha = 0
         return button
     }()
     
     let goBackward5Button: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "gobackward.5"), for: .normal)
+        button.alpha = 0
         return button
     }()
     
     let startButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "play"), for: .normal)
+        button.alpha = 0
         return button
     }()
     

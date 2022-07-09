@@ -8,8 +8,9 @@
 import UIKit
 
 final class PlayView: UIView, ViewPresentable {
-    
+
     let titleLabel: UILabel = {
+
         let label = UILabel()
         label.font = UIFont.preferredFont(forTextStyle: .body)
         return label

@@ -11,6 +11,8 @@ final class AudioListViewController: BaseViewController {
     
     private let audioListView = AudioListView()
     
+    var backgroundView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
+    
     let viewModel = AudioListViewModel<FirebaseRepository>()
     
     var recordPermissionManager: RecordPermissionManageable?
@@ -22,6 +24,10 @@ final class AudioListViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         bind()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
     }
     
     override func setupView() {
@@ -40,7 +46,11 @@ final class AudioListViewController: BaseViewController {
     }
     
     private func bind() {
-        viewModel.downloadAll()
+        viewModel.downloadAll {
+            DispatchQueue.main.async {
+                self.detachActivityIndicator()
+            }
+        }
         
         viewModel.audioInformation.bind { [weak self] _ in
             guard let self = self else { return }
@@ -50,6 +60,13 @@ final class AudioListViewController: BaseViewController {
         }
     }
     
+    private func detachActivityIndicator() {
+        if audioListView.activityIndicator.isAnimating {
+            audioListView.activityIndicator.stopAnimating()
+        }
+        backgroundView.removeFromSuperview()
+        audioListView.activityIndicator.removeFromSuperview()
+    }
 }
 
 extension AudioListViewController {
