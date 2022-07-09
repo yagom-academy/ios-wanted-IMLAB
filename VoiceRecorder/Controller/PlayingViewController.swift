@@ -15,7 +15,6 @@ class PlayingViewController: UIViewController {
     @IBOutlet weak var volumeSliderView: UIView!
     @IBOutlet weak var fileNameLabel: UILabel!
     @IBOutlet weak var soundPitchControl: UISegmentedControl!
-    @IBOutlet weak var playProgressBar: UIProgressView!
     @IBOutlet weak var currentPlayTimeLabel: UILabel!
     @IBOutlet weak var totalPlayTimeLabel: UILabel!
     @IBOutlet weak var playButton: UIButton!
@@ -28,15 +27,9 @@ class PlayingViewController: UIViewController {
     private var inPlayMode: Bool = false
     var selectedFileInfo: RecordModel?
     var startPoint = CGPoint(x: 0.0, y: 0.0)
-    var firstindex = 0
+    var movePoint = 0.0
     
-    var views = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 150))
-    var animation : UIViewPropertyAnimator?
-    
-    func animate() {
-        self.views.frame = CGRect(x: 300, y: 0.0, width: 1, height: 150)
-    }
-    
+    var positionBar = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 150))
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,11 +37,10 @@ class PlayingViewController: UIViewController {
         self.fileNameLabel.text = fileInfo.recordFileName
         self.totalPlayTimeLabel.text = fileInfo.recordTime
         self.currentPlayTimeLabel.text = audioPlayerHandler.currentPlayTime
-        playProgressBar.progress = 0.0
         audioPlayerHandler.selectPlayFile(self.fileNameLabel.text)
         configureVolumeSlider()
-        views.backgroundColor = .black
-        waveFormView.addSubview(views)
+        positionBar.backgroundColor = .black
+        waveFormView.addSubview(positionBar)
        
        
 //        let layout = waveCollectionView.collectionViewLayout as! UICollectionViewFlowLayout
@@ -94,43 +86,54 @@ class PlayingViewController: UIViewController {
     
     @IBAction func goBackwardButtonTapped(_ sender: UIButton) {
         audioPlayerHandler.seek(to: -5.0)
-        playProgressBar.progress = audioPlayerHandler.progress
+        movePoint = 300 * CGFloat(audioPlayerHandler.progress)
+        positionBar.frame = CGRect(x: movePoint, y: 0, width: 1, height: 150)
+        if movePoint <= 0 {
+            positionBar.frame = CGRect(x: 0, y: 0, width: 1, height: 150)
+        }
         currentPlayTimeLabel.text = audioPlayerHandler.currentPlayTime
     }
     
     @IBAction func goForwardButtonTapped(_ sender: UIButton) {
         audioPlayerHandler.seek(to: 5.0)
-        playProgressBar.progress = audioPlayerHandler.progress
+        movePoint = 300 * CGFloat(audioPlayerHandler.progress)
+        positionBar.frame = CGRect(x: movePoint, y: 0, width: 1, height: 150)
+        if movePoint >= 300 {
+            positionBar.frame = CGRect(x: 300, y: 0, width: 1, height: 150)
+        }
         currentPlayTimeLabel.text = audioPlayerHandler.currentPlayTime
     }
     
     @IBAction func playButtonTapped(_ sender: UIButton) {
         inPlayMode.toggle()
-        animation = UIViewPropertyAnimator(duration: audioPlayerHandler.audioFileTotalPlayTime, curve: .linear, animations: {
-            self.animate()
-        })
+       
         if inPlayMode {
+            if audioPlayerHandler.isfinished {
+                movePoint = 0
+                positionBar.frame = CGRect(x: 0, y: 0, width: 1, height: 150)
+            }
+            if progressTimer != nil {
+                progressTimer?.invalidate()
+            }
+            progressTimer = Timer.scheduledTimer(timeInterval: 0.05,
+                                                 target: self,
+                                                 selector: #selector(updateProgress),
+                                                 userInfo: nil, repeats: true)
             audioPlayerHandler.play()
-            animation?.startAnimation()
         }else {
             audioPlayerHandler.pause()
-            animation?.pauseAnimation()
         }
-        progressTimer = Timer.scheduledTimer(timeInterval: 0.05,
-                                             target: self,
-                                             selector: #selector(updateProgress),
-                                             userInfo: nil, repeats: true)
-//        UIView.animate(withDuration: audioPlayerHandler.audioFileTotalPlayTime, delay: 0, options: [.curveLinear], animations: {
-//            self.views.frame = CGRect(x: 300, y: 0.0, width: 1, height: 150)
-//        }, completion: nil)
+        
     }
     
     @objc func updateProgress() {
         currentPlayTimeLabel.text = audioPlayerHandler.currentPlayTime
-        playProgressBar.progress = audioPlayerHandler.progress
         if !audioPlayerHandler.isPlaying {
+            inPlayMode = false
             self.playButton.setImage(UIImage(systemName: "play"), for: .normal)
         } else {
+            movePoint = 300 * CGFloat(audioPlayerHandler.progress)
+            positionBar.frame = CGRect(x: movePoint, y: 0, width: 1, height: 150)
             self.playButton.setImage(UIImage(systemName: "pause"), for: .normal)
         }
     }
