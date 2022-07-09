@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		688035EB287916F300DC9047 /* FrequencyControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 688035EA287916F300DC9047 /* FrequencyControlView.swift */; };
 		688BD86E2877FBF700D9264A /* Notification+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 688BD86D2877FBF700D9264A /* Notification+extension.swift */; };
 		68E116D92872B82B00E962FD /* RecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68E116D82872B82B00E962FD /* RecordViewController.swift */; };
 		68F5662C286BD2FC0068A5CE /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 68F5662B286BD2FC0068A5CE /* FirebaseStorage */; };
@@ -34,6 +35,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		688035EA287916F300DC9047 /* FrequencyControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrequencyControlView.swift; sourceTree = "<group>"; };
 		688BD86D2877FBF700D9264A /* Notification+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+extension.swift"; sourceTree = "<group>"; };
 		68E116D82872B82B00E962FD /* RecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewController.swift; sourceTree = "<group>"; };
 		68F5665B286ED6560068A5CE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -73,10 +75,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		688035E92879164800DC9047 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				688035EA287916F300DC9047 /* FrequencyControlView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		68BF990F286F1A9B00BE55CF /* RecordVoice */ = {
 			isa = PBXGroup;
 			children = (
 				68BF9910286F1AB400BE55CF /* VC */,
+				688035E92879164800DC9047 /* View */,
 			);
 			path = RecordVoice;
 			sourceTree = "<group>";
@@ -313,6 +324,7 @@
 				688BD86E2877FBF700D9264A /* Notification+extension.swift in Sources */,
 				F00A2C91286BE36800ED57A8 /* VoicePlayingViewController.swift in Sources */,
 				F06B92612872BF7800A704AF /* Data+extension.swift in Sources */,
+				688035EB287916F300DC9047 /* FrequencyControlView.swift in Sources */,
 				F0D559DC286C1AEB0078BCF3 /* SoundManager.swift in Sources */,
 				F06B925D2872BA6B00A704AF /* AudioMetaData.swift in Sources */,
 				F06B925A2872A68400A704AF /* AudioFileManager.swift in Sources */,

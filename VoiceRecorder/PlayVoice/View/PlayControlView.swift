@@ -69,8 +69,8 @@ class PlayControlView: UIStackView {
     override init(frame: CGRect) {
         super.init(frame: .zero)
         configureProperties()
-        addTargetToButtons()
         setLayoutOfPlayControlView()
+        addTargetToButtons()
     }
     
     required init(coder: NSCoder) {

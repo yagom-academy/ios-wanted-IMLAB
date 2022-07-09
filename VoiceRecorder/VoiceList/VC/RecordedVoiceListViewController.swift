@@ -8,7 +8,7 @@ import AVFoundation
 
 class RecordedVoiceListViewController: UIViewController {
     
-    private let firestorageManager = FirebaseStorageManager()
+    private let firebaseStorageManager = FirebaseStorageManager()
     private let fileManager = AudioFileManager()
     private var audioMetaDataList: [AudioMetaData] = []
     
@@ -27,25 +27,18 @@ class RecordedVoiceListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         fileManager.delegate = self
-        firestorageManager.delegate = self
+        firebaseStorageManager.delegate = self
+        
         initializeFirebaseAudioFiles()
         setNavgationBarProperties()
         configureRecordedVoiceListLayout()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        NotificationCenter.default.addObserver(self, selector: #selector(dismissNotification(notification:)), name: .dismissVC, object: nil)
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self, name: .dismissVC, object: nil)
-    }
-    
     private func initializeFirebaseAudioFiles() {
-        firestorageManager.downloadAllRef { [self] result in
-            firestorageManager.downloadMetaData(filePath: result) { [self] metaDataList in
+        firebaseStorageManager.downloadAllRef { [self] result in
+            firebaseStorageManager.downloadMetaData(filePath: result) { [self] metaDataList in
                 audioMetaDataList = metaDataList
                 sortAudioFiles()
                 recordedVoiceTableView.reloadData()
@@ -93,14 +86,9 @@ class RecordedVoiceListViewController: UIViewController {
     }
     
     @objc func createNewVoiceRecordButtonAction() {
-        let recorderVC = RecordViewController()
-        self.present(recorderVC, animated: true)
-    }
-    
-    // TODO: - local에서 추가
-    @objc func dismissNotification(notification: NSNotification) {
-        audioMetaDataList.removeAll()
-        initializeFirebaseAudioFiles()
+        let recordVC = RecordViewController()
+        recordVC.delegate = self
+        self.present(recordVC, animated: true)
     }
 }
 
@@ -125,7 +113,7 @@ extension RecordedVoiceListViewController: UITableViewDataSource, UITableViewDel
         if fileManager.isFileExist(atPath: path) {
             voicePlayVC.fetchRecordedDataFromMainVC(audioData: audioMetaData, fileUrl: filePath)
         } else {
-            firestorageManager.downloadAudio(path, to: filePath) { url in
+            firebaseStorageManager.downloadAudio(path, to: filePath) { url in
                 voicePlayVC.fetchRecordedDataFromMainVC(audioData: audioMetaData, fileUrl: filePath)
             }
         }
@@ -137,7 +125,7 @@ extension RecordedVoiceListViewController: UITableViewDataSource, UITableViewDel
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        firestorageManager.deleteAudio(urlString: audioMetaDataList[indexPath.row].url)
+        firebaseStorageManager.deleteAudio(urlString: audioMetaDataList[indexPath.row].url)
         fileManager.deleteLocalAudioFile(fileName: audioMetaDataList[indexPath.row].url)
         audioMetaDataList.remove(at: indexPath.row)
         recordedVoiceTableView.reloadData()
@@ -159,5 +147,13 @@ extension RecordedVoiceListViewController: FileStatusReceivable, NetworkStatusRe
         alert.addAction(okAction)
         present(alert, animated: true)
     }
+}
+
+extension RecordedVoiceListViewController: PassMetaDataDelegate {
     
+    func sendMetaData(audioMetaData: AudioMetaData) {
+        audioMetaDataList.append(audioMetaData)
+        sortAudioFiles()
+        recordedVoiceTableView.reloadData()
+    }
 }

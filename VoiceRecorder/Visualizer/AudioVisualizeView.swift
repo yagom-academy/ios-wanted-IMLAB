@@ -138,5 +138,4 @@ class AudioVisualizeView: UIScrollView {
             }
         }
     }
-    
 }

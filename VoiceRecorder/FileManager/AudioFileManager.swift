@@ -46,7 +46,6 @@ class AudioFileManager {
     }
     
     func isFileExist(atPath: String) -> Bool {
-        print(directoryPath.appendingPathComponent(atPath).path)
         return fileManager.fileExists(atPath: directoryPath.appendingPathComponent(atPath).path)
     }
     
