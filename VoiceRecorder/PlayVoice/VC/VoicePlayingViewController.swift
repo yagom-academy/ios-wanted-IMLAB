@@ -160,13 +160,13 @@ class VoicePlayingViewController: UIViewController {
         soundManager.initializeSoundManager(url: fileUrl, type: .playBack)
     }
     
-    func setSoundManager() {
+    private func setSoundManager() {
         soundManager = SoundManager()
         soundManager.delegate = self
         soundManager.playBackVisualizerDelegate = self
     }
     
-    func addViewsActionsToVC() {
+    private func addViewsActionsToVC() {
         volumeSlider.addTarget(self, action: #selector(changeVolumeValue), for: .valueChanged)
         pitchSegmentController.addTarget(self, action: #selector(changePitchValue), for: .valueChanged)
     }
