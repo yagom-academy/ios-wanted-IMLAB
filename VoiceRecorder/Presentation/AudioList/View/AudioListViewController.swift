@@ -88,4 +88,13 @@ extension AudioListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.presentPlayView(audioInformation: viewModel.audioInformation.value[indexPath.row])
     }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            viewModel.delete(name: viewModel.audioInformation.value[indexPath.row].name)
+            viewModel.audioInformation.value.remove(at: indexPath.row)
+            tableView.reloadData()
+        }
+    }
+
 }
