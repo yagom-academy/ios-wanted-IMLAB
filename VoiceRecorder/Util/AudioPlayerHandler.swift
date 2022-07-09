@@ -28,6 +28,7 @@ class AudioPlayerHandler {
     private var audioFileFrameLength: AVAudioFramePosition = 0
     private var audioFileSampleRate: Double = 0
     var audioFileTotalPlayTime: Double = 0
+    var isfinished = false
     private var needsFileScheduled = true
     private var currentFrame: AVAudioFramePosition {
         guard
@@ -133,7 +134,9 @@ class AudioPlayerHandler {
     
     func play() {
         isPlaying.toggle()
-        
+        if isfinished {
+            isfinished.toggle()
+        }
         displayLink?.isPaused = false
         if needsFileScheduled {
             scheduleAudioFile()
@@ -200,7 +203,7 @@ class AudioPlayerHandler {
         
         if currentFramePosition >= audioFileFrameLength {
             audioPlayerNode.stop()
-            
+            isfinished = true
             seekFrame = 0
             if audioPlayerNode.isPlaying {
                 currentFramePosition = 0
@@ -211,7 +214,6 @@ class AudioPlayerHandler {
             isPlaying = false
             displayLink?.isPaused = true
         }
-        
         progress = Float(Double(currentFramePosition) / Double(audioFileFrameLength))
         
         let time = Double(currentFramePosition) / audioFileSampleRate

@@ -285,7 +285,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="47" translatesAutoresizingMaskIntoConstraints="NO" id="jVz-As-2vE">
-                                <rect key="frame" x="57" y="489.5" width="300" height="292.5"/>
+                                <rect key="frame" x="57" y="576" width="300" height="206"/>
                                 <subviews>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="VjU-pj-Gei">
                                         <rect key="frame" x="0.0" y="0.0" width="300" height="32"/>
@@ -298,33 +298,8 @@
                                             <action selector="changePitch:" destination="9DQ-7z-LBd" eventType="valueChanged" id="BcG-4h-YWo"/>
                                         </connections>
                                     </segmentedControl>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="6py-Qc-iYd">
-                                        <rect key="frame" x="0.0" y="78" width="300" height="39.5"/>
-                                        <subviews>
-                                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4KN-1J-mU2">
-                                                <rect key="frame" x="0.0" y="0.0" width="300" height="4"/>
-                                            </progressView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="66" translatesAutoresizingMaskIntoConstraints="NO" id="M9g-55-nB9">
-                                                <rect key="frame" x="0.0" y="19" width="300" height="20.5"/>
-                                                <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="afS-5W-Cf3">
-                                                        <rect key="frame" x="0.0" y="0.0" width="117" height="20.5"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                        <nil key="textColor"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5MX-UE-EBA">
-                                                        <rect key="frame" x="183" y="0.0" width="117" height="20.5"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                        <nil key="textColor"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                </subviews>
-                                            </stackView>
-                                        </subviews>
-                                    </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="N02-up-ppd">
-                                        <rect key="frame" x="62.5" y="164.5" width="175" height="31"/>
+                                        <rect key="frame" x="62.5" y="78" width="175" height="31"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hSO-br-dYr">
                                                 <rect key="frame" x="0.0" y="0.0" width="45" height="31"/>
@@ -353,7 +328,7 @@
                                         </subviews>
                                     </stackView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="STt-MF-5Xp">
-                                        <rect key="frame" x="0.0" y="242.5" width="300" height="50"/>
+                                        <rect key="frame" x="0.0" y="156" width="300" height="50"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="YPQ-Xa-x5v"/>
@@ -362,9 +337,7 @@
                                     </view>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="6py-Qc-iYd" firstAttribute="leading" secondItem="jVz-As-2vE" secondAttribute="leading" id="Bl9-vr-LqS"/>
                                     <constraint firstAttribute="width" constant="300" id="UV8-El-9q2"/>
-                                    <constraint firstAttribute="trailing" secondItem="6py-Qc-iYd" secondAttribute="trailing" id="VQX-Fm-EWO"/>
                                 </constraints>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2ua-NB-Yvn" customClass="DrawWaveform" customModule="VoiceRecorder" customModuleProvider="target">
@@ -375,6 +348,26 @@
                                     <constraint firstAttribute="height" constant="150" id="Lz3-qb-kXS"/>
                                 </constraints>
                             </view>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="66" translatesAutoresizingMaskIntoConstraints="NO" id="M9g-55-nB9">
+                                <rect key="frame" x="57" y="369" width="300" height="20.5"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="afS-5W-Cf3">
+                                        <rect key="frame" x="0.0" y="0.0" width="117" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5MX-UE-EBA">
+                                        <rect key="frame" x="183" y="0.0" width="117" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="300" id="dvv-96-QWC"/>
+                                </constraints>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="cKT-NR-Ran"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -385,6 +378,8 @@
                             <constraint firstItem="Fr1-YX-kWG" firstAttribute="top" secondItem="cKT-NR-Ran" secondAttribute="top" constant="40" id="gF1-Ni-BDu"/>
                             <constraint firstItem="jVz-As-2vE" firstAttribute="centerX" secondItem="6lg-m5-uDI" secondAttribute="centerX" id="j8w-ei-JE3"/>
                             <constraint firstItem="2ua-NB-Yvn" firstAttribute="top" secondItem="Fr1-YX-kWG" secondAttribute="bottom" constant="94.5" id="kFG-wh-U5d"/>
+                            <constraint firstItem="M9g-55-nB9" firstAttribute="centerX" secondItem="cKT-NR-Ran" secondAttribute="centerX" id="lnD-3d-iEz"/>
+                            <constraint firstItem="M9g-55-nB9" firstAttribute="top" secondItem="2ua-NB-Yvn" secondAttribute="bottom" constant="20" id="vHz-JH-9Gg"/>
                         </constraints>
                     </view>
                     <connections>
@@ -393,7 +388,6 @@
                         <outlet property="goBackwardButton" destination="hSO-br-dYr" id="rc8-oy-pee"/>
                         <outlet property="goForwardButton" destination="MOa-KV-VDJ" id="MCN-Vq-5Wm"/>
                         <outlet property="playButton" destination="cpy-m0-jJ9" id="fYI-aL-N1u"/>
-                        <outlet property="playProgressBar" destination="4KN-1J-mU2" id="2Q1-Mt-tAw"/>
                         <outlet property="soundPitchControl" destination="VjU-pj-Gei" id="3qh-ok-tcD"/>
                         <outlet property="totalPlayTimeLabel" destination="5MX-UE-EBA" id="Cfm-33-vcS"/>
                         <outlet property="volumeSliderView" destination="STt-MF-5Xp" id="v2N-yx-wyF"/>
