@@ -142,9 +142,6 @@ class RecordVoiceViewController: UIViewController{
             print("recording stop")
         }else{
             recordVoiceManager.startRecording()
-            if playVoiceManager.isPlay{
-                playVoiceManager.closeAudio()
-            }
             drawWaveFormManager.startDrawing(of: recordVoiceManager.recorder!, in: waveFormCanvasView)
             record_start_stop_button.setImage(UIImage(systemName: "stop.fill"), for: .normal)
             record_start_stop_button.tintColor = .black
@@ -286,8 +283,10 @@ class RecordVoiceViewController: UIViewController{
             waveFormCanvasView.isHidden = true
             waveFormImageView.isHidden = false
             verticalLineView.isHidden = false
+            record_start_stop_button.isEnabled = false
             recordFile_play_PauseButton.setImage(UIImage(systemName: "pause"), for: .normal)
         case .afterPlaying:
+            record_start_stop_button.isEnabled = true
             recordFile_play_PauseButton.setImage(UIImage(systemName: "play"), for: .normal)
         default:
             break
@@ -365,7 +364,8 @@ extension RecordVoiceViewController : PlayVoiceDelegate{
     func playEndTime(){
         playVoiceManager.isPlay = false
         DispatchQueue.main.async {
-            self.recordFile_play_PauseButton.setImage(UIImage(systemName: "play"), for: .normal)
+            self.updateUI(when: .afterPlaying)
+            //self.recordFile_play_PauseButton.setImage(UIImage(systemName: "play"), for: .normal)
         }
     }
 }
