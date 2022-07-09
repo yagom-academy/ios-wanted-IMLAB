@@ -136,7 +136,8 @@ final class RecordViewModel {
             player = try AVAudioPlayer(data: recordedData)
             player.numberOfLoops = 0
         } catch {
-            print("Fail to play audio")
+            debugPrint("Fail to play audio \(error.localizedDescription)")
+            isShowErrorAlert = true
         }
     }
     
@@ -148,7 +149,7 @@ final class RecordViewModel {
     
     func getDataFrom() {
         guard let data = try? Data(contentsOf: recordFileURL) else {
-            print("Data is Not Unwrapping")
+            debugPrint("Fail to decode Data")
             return
         }
         self.recordedData = data
