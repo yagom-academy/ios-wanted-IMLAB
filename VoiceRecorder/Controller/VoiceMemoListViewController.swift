@@ -8,9 +8,13 @@ import UIKit
 class VoiceMemoListViewController: UIViewController, FinishRecord {
     
     @IBOutlet weak var recordFileListTableView: UITableView!
-    
+    var getFirebaseFileList : FirebaseStorageGetFileList?
+    var getFirebaseFileMetaData : FirebaseStorageGetFileMetatData?
+    var deleteFirebaseFile : FirebaseStorageDelete?
+    var downloadFirebaseFile : FirebaseStorageDownload?
     var voiceMemoList: [RecordModel] = [RecordModel]()
     var localFileHandlder = LocalFileHandler()
+    
     private let loadingView: LoadingView = {
         let view = LoadingView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -21,6 +25,12 @@ class VoiceMemoListViewController: UIViewController, FinishRecord {
         super.viewDidLoad()
         navigationController?.navigationBar.isHidden = true
         self.loadingView.isLoading = true
+        getFirebaseFileList = FirebaseStorageGetFileList(GetFileList())
+        getFirebaseFileMetaData = FirebaseStorageGetFileMetatData(GetFileMetaData())
+        deleteFirebaseFile = FirebaseStorageDelete(DeleteRecordfile())
+        downloadFirebaseFile = FirebaseStorageDownload(DownloadRecordfile())
+        
+        
         self.view.addSubview(self.loadingView)
         
         NSLayoutConstraint.activate([
@@ -45,7 +55,7 @@ class VoiceMemoListViewController: UIViewController, FinishRecord {
     }
     
     func getFirebaseStorageFileList() {
-        FirebaseStorage.shared.getFileList { result in
+        getFirebaseFileList?.getFileList{ result in
             switch result {
             case .success(let fileList) :
                 var count = 0
@@ -54,7 +64,7 @@ class VoiceMemoListViewController: UIViewController, FinishRecord {
                     self.navigationController?.navigationBar.isHidden = false
                     return }
                 for fileName in fileList {
-                    FirebaseStorage.shared.getFileMetaData(fileName: fileName) { result in
+                    self.getFirebaseFileMetaData?.getFileMetaData(fileName: fileName) { result in
                         switch result {
                         case .success(let totalTime) :
                             count += 1
@@ -116,7 +126,7 @@ extension VoiceMemoListViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         let fileNameToDelete = self.voiceMemoList[indexPath.row].recordFileName
-        FirebaseStorage.shared.deleteFile(fileName: "voiceRecords_\(fileNameToDelete)")
+        deleteFirebaseFile?.deleteFile(fileName: "voiceRecords_\(fileNameToDelete)")
         self.voiceMemoList.remove(at: indexPath.row)
         tableView.reloadData()
     }
@@ -132,10 +142,11 @@ extension VoiceMemoListViewController : UITableViewDelegate {
         let isFileExist = localFileHandlder.checkFileExists(fileName: name)
         if isFileExist {
             present(playingVC, animated: true)
+            
         } else {
             navigationController?.navigationBar.isHidden = true
             self.loadingView.isLoading = true
-            FirebaseStorage.shared.downloadFile(fileName: "voiceRecords_\(name)") { result in
+            downloadFirebaseFile?.downloadFile(fileName: "voiceRecords_\(name)") { result in
                 switch result {
                 case .success(let fileName) :
                     let subFileName = self.subStringFileName(fileName: fileName)

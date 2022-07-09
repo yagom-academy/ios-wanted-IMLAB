@@ -27,23 +27,23 @@ class RecordingViewController: UIViewController {
     
     weak var delegate : FinishRecord?
     
-    lazy var pencil = UIBezierPath(rect: waveformView.bounds)
-    var waveLayer = CAShapeLayer()
-    var traitLength : CGFloat?
-    lazy var startPoint : CGPoint = CGPoint(x: 6, y: self.waveformView.bounds.midY)
+    private lazy var pencil = UIBezierPath(rect: waveformView.bounds)
+    private var waveLayer = CAShapeLayer()
+    private var traitLength : CGFloat?
+    private lazy var startPoint : CGPoint = CGPoint(x: 6, y: self.waveformView.bounds.midY)
     
-    var progressTimer: Timer!
-    var recordTimer : Timer!
-    var inRecordMode = true
-    var inPlayMode = false
-    var durationTime = 0.0
-    var currentTime = 0.0
-    var recordCurrentTime = 0.0
-    var totalTime : TimeInterval?
+    private var progressTimer: Timer!
+    private var recordTimer : Timer!
+    private var inRecordMode = true
+    private var inPlayMode = false
+    private var durationTime = 0.0
+    private var currentTime = 0.0
+    private var recordCurrentTime = 0.0
+    private var totalTime : TimeInterval?
     
 
-    let audioRecorderHandler = AudioRecoderHandler(localFileHandler: LocalFileHandler(), timeHandler: TimeHandler())
-    let audioPlayerHandler = AudioPlayerHandler(localFileHandler: LocalFileHandler(), timeHandler: TimeHandler())
+    private let audioRecorderHandler = AudioRecoderHandler(localFileHandler: LocalFileHandler(), timeHandler: TimeHandler())
+    private let audioPlayerHandler = AudioPlayerHandler(localFileHandler: LocalFileHandler(), timeHandler: TimeHandler())
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,12 +61,6 @@ class RecordingViewController: UIViewController {
         if !inRecordMode {
             finishedRecord()
         }
-    }
-    
-    func setButton(_ enable: Bool) {
-        self.recordingButton.isEnabled = enable
-        self.goBackwardButton.isEnabled = enable
-        self.goForwardButton.isEnabled = enable
     }
     
     @IBAction func recordingButtonTapped(_ sender: UIButton) {
@@ -111,7 +105,47 @@ class RecordingViewController: UIViewController {
         inRecordMode.toggle()
     }
     
-    func finishedRecord() {
+    @IBAction func playButtonTapped(_ sender: UIButton) {
+        inPlayMode.toggle()
+        if inPlayMode {
+            audioPlayerHandler.play()
+        }else {
+            audioPlayerHandler.pause()
+        }
+        if inPlayMode {
+            sender.setImage(UIImage(systemName: "pause"), for: .normal)
+            progressTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateProgress), userInfo: nil, repeats: true)
+            self.recordingButton.isEnabled = false
+        } else {
+            sender.setImage(UIImage(systemName: "play"), for: .normal)
+            self.recordingButton.isEnabled = true
+        }
+        
+    }
+    
+    @IBAction func setCutoffFreucy(_ sender: UISlider) {
+        audioRecorderHandler.setFrequency(frequency: sender.value)
+    }
+    
+    @IBAction func goBackwardButtonTapped(_ sender: UIButton) {
+        audioPlayerHandler.seek(to: -5.0)
+        currentPlayTimeLabel.text = audioPlayerHandler.currentPlayTime
+        playProgressBar.progress = audioPlayerHandler.progress
+    }
+    
+    @IBAction func goForwardButtonTapped(_ sender: UIButton) {
+        audioPlayerHandler.seek(to: 5.0)
+        currentPlayTimeLabel.text = audioPlayerHandler.currentPlayTime
+        playProgressBar.progress = audioPlayerHandler.progress
+    }
+    
+    private func setButton(_ enable: Bool) {
+        self.recordingButton.isEnabled = enable
+        self.goBackwardButton.isEnabled = enable
+        self.goForwardButton.isEnabled = enable
+    }
+    
+    private func finishedRecord() {
         
         guard let fileName = audioRecorderHandler.fileName else { return }
         let recordTotalTime = audioRecorderHandler.updateTimer(totalTime!)
@@ -134,24 +168,6 @@ class RecordingViewController: UIViewController {
         }
     }
     
-    @IBAction func playButtonTapped(_ sender: UIButton) {
-        inPlayMode.toggle()
-        if inPlayMode {
-            audioPlayerHandler.play()
-        }else {
-            audioPlayerHandler.pause()
-        }
-        if inPlayMode {
-            sender.setImage(UIImage(systemName: "pause"), for: .normal)
-            progressTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateProgress), userInfo: nil, repeats: true)
-            self.recordingButton.isEnabled = false
-        } else {
-            sender.setImage(UIImage(systemName: "play"), for: .normal)
-            self.recordingButton.isEnabled = true
-        }
-        
-    }
-    
     @objc func updateProgress() {
         currentPlayTimeLabel.text = audioPlayerHandler.currentPlayTime
         playProgressBar.progress = audioPlayerHandler.progress
@@ -164,27 +180,6 @@ class RecordingViewController: UIViewController {
         } else {
             self.playButton.setImage(UIImage(systemName: "pause"), for: .normal)
         }
-    }
-    
-    @IBAction func setCutoffFreucy(_ sender: UISlider) {
-        audioRecorderHandler.setFrequency(frequency: sender.value)
-    }
-    
-    @objc func updatePlayTime() {
-        currentPlayTimeLabel.text = audioPlayerHandler.currentPlayTime
-        playProgressBar.progress = audioPlayerHandler.progress
-    }
-    
-    @IBAction func goBackwardButtonTapped(_ sender: UIButton) {
-        audioPlayerHandler.seek(to: -5.0)
-        currentPlayTimeLabel.text = audioPlayerHandler.currentPlayTime
-        playProgressBar.progress = audioPlayerHandler.progress
-    }
-    
-    @IBAction func goForwardButtonTapped(_ sender: UIButton) {
-        audioPlayerHandler.seek(to: 5.0)
-        currentPlayTimeLabel.text = audioPlayerHandler.currentPlayTime
-        playProgressBar.progress = audioPlayerHandler.progress
     }
     
     func writeWaves(_ input: Float) {
