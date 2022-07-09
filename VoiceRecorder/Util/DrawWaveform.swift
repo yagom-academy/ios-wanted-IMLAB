@@ -74,7 +74,7 @@ class DrawWaveform: UIView {
         
         //If you want to stroke it with a Orange color with alpha2
         UIColor.orange.set()
-        aPath2.stroke(with: CGBlendMode.normal, alpha: 0.5)
+        aPath2.stroke()
         //   aPath.stroke()
         
         //If you want to fill it as well

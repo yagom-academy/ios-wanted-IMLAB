@@ -126,6 +126,9 @@ class RecordingViewController: UIViewController {
     @objc func updateRecordTime() {
         recordCurrentTime += 0.1
         totalTime = TimeInterval(recordCurrentTime)
+        audioRecorderHandler.audioRecod.updateMeters()
+        writeWaves(audioRecorderHandler.audioRecod.averagePower(forChannel: 0))
+
         if let totalTime = totalTime {
             self.totalRecordTimeLabel.text = audioRecorderHandler.updateTimer(totalTime)
         }
@@ -152,6 +155,7 @@ class RecordingViewController: UIViewController {
     @objc func updateProgress() {
         currentPlayTimeLabel.text = audioPlayerHandler.currentPlayTime
         playProgressBar.progress = audioPlayerHandler.progress
+       
         if !audioPlayerHandler.isPlaying {
             self.playButton.setImage(UIImage(systemName: "play"), for: .normal)
             self.recordingButton.isEnabled = true
@@ -192,6 +196,8 @@ class RecordingViewController: UIViewController {
             scrollView.setContentOffset(CGPoint(x: 0.0, y: 0.0), animated: true)
         }
         
+        print(input)
+        
         if input < -55 {
             traitLength = 0.2
         } else if input < -40 && input > -55 {
@@ -216,7 +222,7 @@ class RecordingViewController: UIViewController {
         pencil.move(to: startPoint)
         pencil.addLine(to: CGPoint(x: startPoint.x, y: startPoint.y - traitLength))
         
-        waveLayer.strokeColor = UIColor.red.cgColor
+        waveLayer.strokeColor = UIColor.orange.cgColor
         
         waveLayer.path = pencil.cgPath
         waveLayer.fillColor = UIColor.clear.cgColor

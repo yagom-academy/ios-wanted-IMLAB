@@ -6,17 +6,25 @@
 //
 
 import Foundation
+import Accelerate
 import AVFoundation
 
 class AudioRecoderHandler {
     
+    var audioRecod : AVAudioRecorder!
     var localFileHandler : LocalFileProtocol
     var timeHandler : TimeProtocol
     var fileName: String?
+    var recordFormat = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: 44100.0, channels: 1, interleaved: true)
+    let recordFileURL = URL(fileURLWithPath: NSTemporaryDirectory().appending("input.m4a"))
+//    var averagePowerForChannel0 : Float = -100.0
+//    var averagePowerForChannel1 : Float = -100.0
+    
     
     init(localFileHandler : LocalFileProtocol, timeHandler : TimeProtocol ){
         self.localFileHandler = localFileHandler
         self.timeHandler = timeHandler
+        audioRecod = AVAudioRecorder()
         setupSession()
         setupEngine()
     }
@@ -27,6 +35,19 @@ class AudioRecoderHandler {
         do {
             try session.setCategory(.playAndRecord, mode: .default)
             try session.setActive(true,options: .notifyOthersOnDeactivation)
+            if let recordFormat = recordFormat {
+                audioRecod = try AVAudioRecorder(url: recordFileURL, format: recordFormat)
+            }
+            AVAudioSession.sharedInstance().requestRecordPermission { allowed in
+                DispatchQueue.main.async {
+                    if allowed {
+                        
+                    } else {
+                        //mic disabled!
+                    }
+                }
+            }
+            
         } catch {
             print(error.localizedDescription)
         }
@@ -81,12 +102,17 @@ class AudioRecoderHandler {
         guard let fileName = fileName else {
             return
         }
+
         let file = try AVAudioFile(forWriting: documentURL.appendingPathComponent(fileName), settings: format.settings)
         tapNode.installTap(onBus: 0, bufferSize: 4096, format: format) { buffer, time in
-            try? file.write(from: buffer)
+            try? file.write(from: buffer)            
         }
         
         try audioEngine.start()
+        
+        
+        audioRecod.record()
+        audioRecod.isMeteringEnabled = true
     }
     
     func stopRecording(totalTime: String) {
