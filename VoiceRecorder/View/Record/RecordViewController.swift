@@ -30,7 +30,8 @@ final class RecordViewController: UIViewController {
     lazy var recordedTimeLabel: UILabel = {
         let label = UILabel()
         label.text = PlayerTime.zero.elapsedText
-        label.textColor = .black
+        label.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
+        label.textColor = .label
         return label
     }()
     
@@ -45,6 +46,7 @@ final class RecordViewController: UIViewController {
         let button = UIButton()
         button.setImage(UIImage.microphoneCustom, for: .normal)
         button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: 50), forImageIn: .normal)
+        button.tintColor = UIColor.systemRed
         return button
     }()
     

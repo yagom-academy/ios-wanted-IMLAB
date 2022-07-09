@@ -11,6 +11,7 @@ extension UIButton {
     func makePlaySeekButton(_ image: UIImage?) -> UIButton {
         self.setImage(image, for: .normal)
         self.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration.init(pointSize: Constants.ButtonSize.regular), forImageIn: .normal)
+        self.tintColor = .label
         self.isEnabled = false
         return self
     }
