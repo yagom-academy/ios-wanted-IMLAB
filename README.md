@@ -12,7 +12,7 @@
 ## 결과
 첫 번째 화면|두 번째 화면|세 번째 화면
 :-:|:-:|:-:
-![]()|![]()|![]()
+![VoiceRecorder1](/ResultImage/VoiceRecorder1.gif)|![VoiceRecorder2](/ResultImage/VoiceRecorder2.gif)|![VoiceRecorder3](/ResultImage/VoiceRecorder3.gif)
 
 ## 라이브러리
 - FirebaseStorage - SPM
@@ -55,7 +55,10 @@
     
 ## 회고
 - ### 우지
-    - 
+    - git에 대한 이해도가 부족했었는데 이번 기회에 여러가지를 접해볼 수 있어서 좋았다.
+    - 오디오플레이어에서 오디오엔진으로 변경하는 과정을 통해 기능 명세서를 명확하게 파악하고 프로젝트를 진행하는 것이 중요하다고 다시 한번 체감했다.
+    - 혼자 프로젝트를 진행한 적만 있어 코드컨벤션, 커밋메세지 등 처음 접하는 부분들이 많았는데 같은 프로젝트를 협업하는데 좋은 가이드가 됐던 프로젝트였다.
+    - 공식문서 활용 및 Swift 문법 등 아직까지 부족한 부분이 많다고 느꼈으며 프로젝트 중 부족한 점들은 주어진 시간내 보완해 다음 프로젝트에 적용하는 것이 단기적인 목표이다.
 - ### Cobugi
     - `AVAudioPlayer`, `AVAudioRecorder` VS `AVAudioEngine`
         - 개발 초기에 AVAudioPlayer로 오디오 재생을 구현했다가 cutoff Frequency를 구현하는 단계에서 AVAudioEngine의 필요성을 깨닫고 AVAudioPlayer 코드를 전면 수정했다. 기능 구현만을 목적으로 하지 않고 충분한 자료조사가 뒷받침되어야 한다고 몸소 느꼈다.
