@@ -6,7 +6,7 @@
 <br>
 
 ## 🧑‍💻 Developers
-|서초(조성빈)|Peppo(이병훈)|
+|Seocho(조성빈)|Peppo(이병훈)|
 |---|---|
 |<img width = "200" alt= "서초(조성빈)" src = "https://user-images.githubusercontent.com/64088377/177668277-f9db3eb2-b252-4795-9eec-4f8cc5e10304.jpeg">|<img width = "200" alt= "Peppo(이병훈)" src = "https://user-images.githubusercontent.com/64088377/177667367-3c9650d1-f89a-45dc-bc65-d249deedd39b.jpg">|
 
