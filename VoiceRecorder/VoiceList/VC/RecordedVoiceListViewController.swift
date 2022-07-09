@@ -34,6 +34,7 @@ class RecordedVoiceListViewController: UIViewController {
         initializeFirebaseAudioFiles()
         setNavgationBarProperties()
         configureRecordedVoiceListLayout()
+        
     }
     
     private func initializeFirebaseAudioFiles() {
@@ -43,12 +44,6 @@ class RecordedVoiceListViewController: UIViewController {
                 sortAudioFiles()
                 recordedVoiceTableView.reloadData()
             }
-        }
-    }
-    
-    private func sortAudioFiles() {
-        audioMetaDataList.sort { data1, data2 in
-            return data1.title > data2.title
         }
     }
     
@@ -83,6 +78,10 @@ class RecordedVoiceListViewController: UIViewController {
             recordedVoiceTableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             recordedVoiceTableView.widthAnchor.constraint(equalTo: view.widthAnchor)
         ])
+    }
+    
+    private func sortAudioFiles() {
+        audioMetaDataList.sort { $0.title > $1.title }
     }
     
     @objc func createNewVoiceRecordButtonAction() {
