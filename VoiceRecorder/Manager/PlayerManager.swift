@@ -14,6 +14,9 @@ protocol PlayerService {
     func setAudioFile(_ audioFile: AVAudioFile?)
 
     func resetAudio()
+    
+    func attachAudioEngine()
+    func scheduleAudioPlayer()
     func configureAudioEngine()
     func setPlayerToZero()
 
@@ -58,10 +61,14 @@ class PlayerManager: PlayerService {
         guard let audioFile = audioFile else {
             return
         }
-        resetAudio()
+
         self.audioFile = audioFile
 
-        configureAudioEngine()
+        if audioEngine.isRunning {
+            scheduleAudioPlayer()
+        } else {
+            configureAudioEngine()
+        }
     }
 
     func resetAudio() {
@@ -84,11 +91,7 @@ class PlayerManager: PlayerService {
         setVolume(0.5)
     }
 
-    func configureAudioEngine() {
-        guard let audioFile = audioFile else {
-            return
-        }
-
+    func attachAudioEngine() {
         audioEngine.attach(audioPlayer)
         audioEngine.attach(pitchControl)
         audioEngine.attach(speedControl)
@@ -96,6 +99,12 @@ class PlayerManager: PlayerService {
         audioEngine.connect(audioPlayer, to: speedControl, format: nil)
         audioEngine.connect(speedControl, to: pitchControl, format: nil)
         audioEngine.connect(pitchControl, to: audioEngine.mainMixerNode, format: nil)
+    }
+
+    func scheduleAudioPlayer() {
+        guard let audioFile = audioFile else {
+            return
+        }
 
         do {
             audioPlayer.scheduleFile(
@@ -124,6 +133,11 @@ class PlayerManager: PlayerService {
         }
     }
 
+    func configureAudioEngine() {
+        attachAudioEngine()
+        scheduleAudioPlayer()
+    }
+
     func setPlayerToZero() {
         // UI 와 관련없는 작업을 main 스레드로 보내면,
         // 작업이 오래걸리면 너무 느리게 보일 수 있다.
@@ -145,7 +159,7 @@ class PlayerManager: PlayerService {
 
         DispatchQueue.main.async {
             NotificationCenter.default.post(name: NSNotification.Name("PlayerDidEnded"), object: nil)
-            NotificationCenter.default.post(name: NSNotification.Name("SendWaveform"), object: Array(repeating: 1, count: 100))
+//            NotificationCenter.default.post(name: NSNotification.Name("SendWaveform"), object: Array(repeating: 1, count: 100))
         }
     }
 
