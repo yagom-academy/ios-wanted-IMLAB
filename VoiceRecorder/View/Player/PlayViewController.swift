@@ -210,6 +210,14 @@ private extension PlayViewController {
                 self.progressTimeView.configureTimeText(playerTime)
             }
             .store(in: &cancellable)
+        
+        viewModel?.$isError
+            .sink { isError in
+                if isError {
+                    self.showAlertController()
+                }
+            }
+            .store(in: &cancellable)
     }
 }
 

@@ -45,6 +45,7 @@ final class PlayViewModel {
     @Published var playerIsReady = false
     @Published var playerIsPlaying = false
     @Published var playerTime: PlayerTime = .zero
+    @Published var isError = false
     
     init(url: URL) {
         self.url = url
@@ -67,6 +68,7 @@ final class PlayViewModel {
             setupAudioEngine()
         } catch {
             debugPrint("AudioFile Error: \(error.localizedDescription)")
+            isError = true
         }
     }
     
@@ -85,6 +87,7 @@ final class PlayViewModel {
             playerIsReady = true
         } catch {
             debugPrint("AudioEngine Error: \(error.localizedDescription)")
+            isError = true
         }
     }
     
