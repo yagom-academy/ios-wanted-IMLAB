@@ -70,3 +70,11 @@
 - [x] 재 녹음시 새로운 녹음 파일로 대체됩니다.
 - [x] Done 버튼을 이용해 녹음을 저장 할 수 있습니다.
 - [x] Cancel 버튼을 이용해 녹음을 저장 하지 않고 되돌아 갈 수 있습니다.
+
+### 그 외
+
+| 녹음 권한 거절 | 녹음 권한 허용 |
+|:---:|:---:|
+|<img src="https://user-images.githubusercontent.com/55118858/178107546-1976203d-f7b8-465e-b609-bb8321dc7d77.gif" width="200" height="400"/>| <img src="https://user-images.githubusercontent.com/55118858/178107540-cb0124af-c9df-4984-9fc0-8cbda658dff1.gif" width="200" height="400"/>|
+- [x] 녹음 권한 요청 거절시 시스템 환경으로 이동합니다. 권한 허용없이는 녹음을 할 수 없습니다.
+- [x] 녹음 권한 요청 허용시 녹음화면으로 갈 수 있습니다.
