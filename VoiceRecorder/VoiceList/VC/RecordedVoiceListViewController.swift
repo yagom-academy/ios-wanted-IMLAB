@@ -56,7 +56,6 @@ class RecordedVoiceListViewController: UIViewController {
     }
     
     private func configureRecordedVoiceListLayout() {
-        
         view.backgroundColor = .white
         
         navigationBar.translatesAutoresizingMaskIntoConstraints = false
@@ -104,11 +103,11 @@ extension RecordedVoiceListViewController: UITableViewDataSource, UITableViewDel
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
         let voicePlayVC = VoicePlayingViewController(title: audioMetaDataList[indexPath.item].title)
         let audioMetaData = audioMetaDataList[indexPath.item]
         let path = audioMetaDataList[indexPath.item].url
         let filePath = fileManager.getAudioFilePath(fileName: path)
+        
         if fileManager.isFileExist(atPath: path) {
             voicePlayVC.fetchRecordedDataFromMainVC(audioData: audioMetaData, fileUrl: filePath)
         } else {

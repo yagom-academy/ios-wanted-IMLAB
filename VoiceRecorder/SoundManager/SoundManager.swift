@@ -5,7 +5,6 @@
 //  Created by 신의연 on 2022/06/29.
 //
 
-
 import AVKit
 import Accelerate
 
@@ -28,7 +27,6 @@ enum EdgeType {
 
 protocol RecordingVisualizerable {
     func processAudioBuffer(buffer: AVAudioPCMBuffer)
-    
 }
 
 protocol PlaybackVisualizerable {
@@ -123,7 +121,6 @@ class SoundManager {
             delegate?.audioEngineInitializeErrorHandler(error: e)
         }
     }
-    
     
     // MARK: - configure PlayerNode
     private func schedulePlayerNode() {
@@ -268,7 +265,6 @@ class SoundManager {
     func changeProgressValue(value: Float) {
         self.seek(to: Double(value))
     }
-    
 }
 
 extension SoundManager {
@@ -284,7 +280,6 @@ extension SoundManager {
         engine.connect(inputNode, to: eqNode, format: format)
         engine.connect(eqNode, to: mixerNode, format: format)
     }
-    
     
     private func createAudioFile(filePath: URL) throws -> AVAudioFile {
         let format = inputNode.outputFormat(forBus: 0)
