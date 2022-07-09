@@ -70,6 +70,12 @@
 
 <br>
 
+## 📖 DataFlow
+
+<left><img width="700" src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/bf7e08e5-e134-4947-920f-5c266db1e79c/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-07-09_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_6.14.39.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220709%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220709T143359Z&X-Amz-Expires=86400&X-Amz-Signature=587d6941575607d22e7dc1ab2ee30afd3a10b61fd877756bc2b5889608f1a682&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22%25E1%2584%2589%25E1%2585%25B3%25E1%2584%258F%25E1%2585%25B3%25E1%2584%2585%25E1%2585%25B5%25E1%2586%25AB%25E1%2584%2589%25E1%2585%25A3%25E1%2586%25BA%25202022-07-09%2520%25E1%2584%258B%25E1%2585%25A9%25E1%2584%2592%25E1%2585%25AE%25206.14.39.png%22&x-id=GetObject" alt="wireframe"/><left>
+
+<br>
+
 ## ⚠️ 이슈
 
 - Visualizer 구현시 scrollView 내부에서 Layer를 그릴시 scrollView contentSize를 늘려도 정방향으로 늘어남으로 인해 원하는 방향으로 스크롤 불가
@@ -105,7 +111,7 @@ init(playType: PlayType) {
 
 ```
 
-<br/>
+<br>
 
 - 기존 방식: 서버에서 downloadAllRef()를 통해 모든 데이터에 대한 주소를 가져와 개별 데이터 통신 성공시마다 반환
     
@@ -150,6 +156,23 @@ func downloadMetaData(filePath: [StorageReference], completion: @escaping ([Audi
     }
 ```
 
+<br>
+
+- Visualizer를 포함한 VC에서 present 될 시 layer를 그리는 뷰 지정이 제대로 되지 않는 이슈
+    
+    → DispatchQueue를 통해서 view가 올라올때 0.01초를 기다렸다가 그려줌으로써 해결
+    
+
+```swift
+DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + 1) { [self] in
+		DispatchQueue.main.async { [self] in
+		    visualizer.setWaveformData(waveDataArray: audioData.waveforms)
+        visualEffectView.removeFromSuperview()
+        loadingIndicator.stopAnimating()
+    }
+}
+loadingIndicator.startAnimating()
+```
 <br>
 
 ## 💼 리팩토링
@@ -234,7 +257,10 @@ func uploadAudio(audioData: Data, audioMetaData: AudioMetaData) {
 
 ## 📱 UI
 
-<br>
+| 권한 설정 | 녹음 뷰 | 리스트 업데이트 |
+| ------ | ------ | ------ |
+| ![sesacFriends_Onboarding](https://user-images.githubusercontent.com/61327153/156191700-4d10d392-3a1b-4e5e-9225-8ddc875494f8.gif) | ![sesacFriends_auth](https://user-images.githubusercontent.com/61327153/156191653-09da23b4-31dd-4ee7-ad54-000f2cac4b8a.gif) | ![sesacFriends_Signup](https://user-images.githubusercontent.com/61327153/156191706-f6145205-e9a6-4e1e-b6ea-4413e2e70a05.gif) |
 
-## 📝 회고
-
+| 재생 뷰 진입 | 재생 | 5초 전후 |
+| ------ | ------ | ------ |
+| ![sesacFriends_profile](https://user-images.githubusercontent.com/61327153/156191702-ae62096f-3c02-4a06-9d35-8d509f9c5ac5.gif) | ![sesacFriends_matching](https://user-images.githubusercontent.com/61327153/156191684-42cae2d8-8a84-4a53-be36-9a9306b9c8d5.gif) | ![sesacFriends_chatting](https://user-images.githubusercontent.com/61327153/156191671-3323415e-e421-48f4-b330-20a9025a4b1d.gif) |
