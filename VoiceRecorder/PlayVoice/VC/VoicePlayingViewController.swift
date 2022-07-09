@@ -59,7 +59,6 @@ class VoicePlayingViewController: UIViewController {
         return slider
     }()
     
-    // Play, for/bacward button
     private lazy var playControlView: PlayControlView = {
         var view = PlayControlView()
         view.translatesAutoresizingMaskIntoConstraints = false
