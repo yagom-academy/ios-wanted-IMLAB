@@ -29,7 +29,7 @@ class RecordingViewController: UIViewController {
     
     private var progressTimer: Timer!
     private var recordTimer : Timer!
-    private var inRecordMode = false
+    private var inRecordMode = true
     private var inPlayMode = false
     private var durationTime = 0.0
     private var currentTime = 0.0
@@ -59,15 +59,43 @@ class RecordingViewController: UIViewController {
     }
     
     @IBAction func recordingButtonTapped(_ sender: UIButton) {
-        inRecordMode.toggle()
         if inRecordMode {
-            setInRecordMode()
             sender.controlFlashAnimate(recordingMode: true)
+           
+            
+            if recordTimer != nil {
+                recordTimer.invalidate()
+                scrollView.setContentOffset(CGPoint(x: waveformView.frame.minX, y: 0.0), animated:false)
+            }
+            
+            currentPlayTimeLabel.text = "00:00"
+            endPlayTimeLabel.text = "00:00"
+            playProgressBar.progress = 0
+            
+            sender.controlFlashAnimate(recordingMode: true)
+            self.playButton.isEnabled = false
+            self.goForwardButton.isEnabled = false
+            self.goBackwardButton.isEnabled = false
+            do {
+                try audioRecorderHandler.startRecording()
+            } catch {
+                print("Error - Fail to start Recording \(error)")
+            }
+            self.recordTimer = Timer.scheduledTimer(timeInterval: 0.1,
+                                                      target: self,
+                                                      selector: #selector(updateRecordTime),
+                                                      userInfo: nil,
+                                                      repeats: true)
+            RunLoop.main.add(recordTimer, forMode: .common)
+            
         } else {
-            setNotInRecordMode()
             sender.controlFlashAnimate(recordingMode: false)
+            self.playButton.isEnabled = true
+            self.goForwardButton.isEnabled = true
+            self.goBackwardButton.isEnabled = true
+            finishedRecord()
         }
-        
+        inRecordMode.toggle()
     }
     
     @IBAction func playButtonTapped(_ sender: UIButton) {
@@ -114,36 +142,7 @@ class RecordingViewController: UIViewController {
         recordCurrentTime = 0.0
         recordTimer.invalidate()
     }
-    
-    private func setInRecordMode() {
-            if recordTimer != nil {
-                recordTimer.invalidate()
-                waveformView.resetWaves(scrollview: self.scrollView)
-            }
 
-            currentPlayTimeLabel.text = "00:00"
-            endPlayTimeLabel.text = "00:00"
-            playProgressBar.progress = 0
-            setButton(false)
-        
-            do {
-                try audioRecorderHandler.startRecording()
-            } catch {
-                print("Error - Fail to start Recording \(error)")
-            }
-            self.recordTimer = Timer.scheduledTimer(timeInterval: 0.1,
-                                                      target: self,
-                                                      selector: #selector(updateRecordTime),
-                                                      userInfo: nil,
-                                                      repeats: true)
-            RunLoop.main.add(recordTimer, forMode: .common)
-        }
-
-        private func setNotInRecordMode() {
-            setButton(true)
-            finishedRecord()
-        }
-    
     private func setInPlayMode() {
             audioPlayerHandler.play()
             progressTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateProgress), userInfo: nil, repeats: true)

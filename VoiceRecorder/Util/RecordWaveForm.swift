@@ -59,7 +59,7 @@ class RecordWaveForm: UIView {
            pencil.move(to: startPoint)
            pencil.addLine(to: CGPoint(x: startPoint.x, y: startPoint.y - traitLength))
 
-           waveLayer.strokeColor = UIColor.blue.cgColor
+           waveLayer.strokeColor = UIColor.orange.cgColor
 
            waveLayer.path = pencil.cgPath
            waveLayer.fillColor = UIColor.clear.cgColor

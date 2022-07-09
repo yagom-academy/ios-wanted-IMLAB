@@ -43,9 +43,9 @@
 	<dict>
 		<key>UILaunchScreen</key>
 		<dict/>
-		<key>UIImageName</key>
-		<string>symbol2</string>
 	</dict>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
