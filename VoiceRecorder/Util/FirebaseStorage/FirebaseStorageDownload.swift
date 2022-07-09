@@ -20,7 +20,7 @@ class FirebaseStorageDownload {
             case .success(let fileUrl) :
                 hander(.success(fileUrl))
             case .failure(let error) :
-                print(error)
+                print("Error - downloadFile \(error)")
             }
         }
     }

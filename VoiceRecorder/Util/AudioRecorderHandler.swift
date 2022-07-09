@@ -70,7 +70,7 @@ class AudioRecoderHandler {
             }
             
         } catch {
-            print(error.localizedDescription)
+            print("Error - setupSession \(error)")
         }
     }
     

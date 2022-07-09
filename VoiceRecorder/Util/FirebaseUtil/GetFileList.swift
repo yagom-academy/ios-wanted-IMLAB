@@ -14,7 +14,7 @@ class GetFileList : FirebaseStoreFileList {
         let storageReference = Storage.storage().reference().child("voiceRecords")
         storageReference.listAll { result, error in
             if let error = error {
-                print(error.localizedDescription)
+                print("Error - Fail to get List \(error)")
                 return
             }
             

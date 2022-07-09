@@ -27,7 +27,7 @@ struct LocalFileHandler : LocalFileProtocol {
             let latestFile = list.last ?? "파일이 존재하지 않습니다"
             latestFileName = latestFile
         } catch let error {
-            print(error.localizedDescription)
+            print("Error - getLatestFileName \(error)")
         }
         return latestFileName
     }

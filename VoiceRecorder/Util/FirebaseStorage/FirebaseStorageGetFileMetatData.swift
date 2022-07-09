@@ -20,7 +20,7 @@ class FirebaseStorageGetFileMetatData {
             case .success(let totalTime) :
                 handler(.success(totalTime))
             case .failure(let error) :
-                print(error.localizedDescription)
+                print("Error - getFileMetaData \(error)")
             }
         }
     }

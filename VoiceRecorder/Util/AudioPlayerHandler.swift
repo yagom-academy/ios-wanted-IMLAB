@@ -91,7 +91,7 @@ class AudioPlayerHandler {
             setEngine()
             convertToPoints()
         } catch {
-            print(error.localizedDescription)
+            print("Error - setupAudio \(error)")
         }
     }
     
@@ -117,7 +117,7 @@ class AudioPlayerHandler {
             try audioEngine.start()
             scheduleAudioFile()
         } catch {
-            print(error.localizedDescription)
+            print("Error - setEngine \(error)")
         }
     }
     

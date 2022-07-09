@@ -13,7 +13,7 @@ class GetFileMetaData : FirebaseStoreFileMetaData {
         let storageReference = Storage.storage().reference().child("\(fileName)")
         storageReference.getMetadata { metadata, error in
             if let error = error {
-                print(error.localizedDescription)
+                print("Error - Fail to get metadata \(error)")
             }
             guard let totalTime = metadata?.customMetadata?["totalTime"] else { handler(.success("00:00")); return }
             handler(.success(totalTime))

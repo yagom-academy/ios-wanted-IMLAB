@@ -20,7 +20,7 @@ class FirebaseStorageGetFileList {
             case .success(let filePaths) :
                 handler(.success(filePaths))
             case .failure(let error) :
-                print(error)
+                print("Error - getFileList \(error)")
             }
         }
     }

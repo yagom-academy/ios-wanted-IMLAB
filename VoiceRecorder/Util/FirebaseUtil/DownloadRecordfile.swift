@@ -18,7 +18,7 @@ class DownloadRecordfile : FirebaseStoreDownload {
         
         let downloadTask = islandRef.write(toFile: fileUrl) { url, error in
             if let error = error {
-                print(error.localizedDescription)
+                print("Error - Download Fail \(error)")
                 return
             }
             if let url = url {
@@ -28,7 +28,7 @@ class DownloadRecordfile : FirebaseStoreDownload {
         
         downloadTask.observe(.failure) { snapshot in
             if let error = snapshot.error {
-                print("Download Fail", error.localizedDescription)
+                print("Error - Download Fail \(error)")
                 return
             }
         }

@@ -14,7 +14,7 @@ class DeleteRecordfile : FirebaseStoreDelete {
         let desertRef = storageRef.child("voiceRecords").child(fileName)
         desertRef.delete { error in
           if let error = error {
-              print(error.localizedDescription)
+              print("Error - deleteOnTheFirebase \(error)")
               return
           } 
         }

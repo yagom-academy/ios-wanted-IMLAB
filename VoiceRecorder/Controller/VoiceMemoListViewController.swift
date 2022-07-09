@@ -81,12 +81,12 @@ class VoiceMemoListViewController: UIViewController, FinishRecord {
                                 }
                             }
                         case .failure(let error) :
-                            print(error.localizedDescription)
+                            print("Error - Fail to get metadata \(error)")
                         }
                     }
                 }
             case .failure(let error) :
-                print(error.localizedDescription)
+                print("Error - Fail to get list \(error)")
             }
         }
     }
@@ -161,7 +161,7 @@ extension VoiceMemoListViewController : UITableViewDelegate {
                     }
                     
                 case .failure(let error) :
-                    print(error.localizedDescription)
+                    print("Error - Download Fail \(error)")
                 }
             }
         }

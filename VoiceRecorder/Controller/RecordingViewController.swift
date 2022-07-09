@@ -86,7 +86,7 @@ class RecordingViewController: UIViewController {
             do {
                 try audioRecorderHandler.startRecording()
             } catch {
-                print(error.localizedDescription)
+                print("Error - Fail to start Recording \(error)")
             }
             self.recordTimer = Timer.scheduledTimer(timeInterval: 0.1,
                                                       target: self,

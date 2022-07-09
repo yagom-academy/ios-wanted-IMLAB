@@ -20,18 +20,18 @@ class UploadRecordfile : FirebaseStoreUpload {
             let audioData = try Data(contentsOf: fileUrl)
             let uploadTask = recordRef.putData(audioData, metadata: uploadMetadata) { data, error in
                 if let error = error {
-                    print(error.localizedDescription)
+                    print("Error - UploadFail \(error)")
                     return
                 }
             }
             
             uploadTask.observe(.failure) { snapshot in
                 if let error = snapshot.error {
-                    print("Uplaod-Fail",error.localizedDescription)
+                    print("Error - UploadFail \(error)")
                 }
             }
         } catch {
-            print(error.localizedDescription)
+            print("Error - uploadToFirebase \(error)")
         }
     }
     
