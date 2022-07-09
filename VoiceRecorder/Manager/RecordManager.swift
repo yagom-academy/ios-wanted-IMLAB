@@ -27,6 +27,7 @@ class RecordManager: RecordService {
     
     var waveForms = [Int](repeating: 0, count: 100)
     var totalWaveData = [Int]()
+    private var totalTime: Float = 0
     private var currentSample = 0
     private var cutValue = 60
 
@@ -106,6 +107,7 @@ class RecordManager: RecordService {
                 self.recorder?.updateMeters()
 
                 let soundLevel = self.normalizeSoundLevel(self.recorder?.averagePower(forChannel: 0))
+                self.totalTime += 0.1
 
                 if self.currentSample == numberOfSamples {
                     self.waveForms.removeFirst()
@@ -142,12 +144,15 @@ class RecordManager: RecordService {
         timer?.invalidate()
 
         recorder?.stop()
+        let timeString = floatToString(totalTime)
+
         recorder = nil
 
         waveForms = [Int](repeating: 0, count: 100)
         currentSample = 0
 
         NotificationCenter.default.post(name: Notification.Name("GetTotalWaves"), object: self.totalWaveData)
+        NotificationCenter.default.post(name: Notification.Name("SendRecordTime"), object: timeString)
     }
 
     func getWaveData() -> [Int] {
@@ -162,5 +167,31 @@ class RecordManager: RecordService {
 
         waveForms = [Int](repeating: 0, count: 100)
         currentSample = 0
+    }
+    
+    private func floatToString(_ time: Float?) -> String {
+        guard let time = time else { return "00:00" }
+        
+        var str = ""
+        let totalTime = Int(round(time))
+        
+        let min = totalTime / 60
+        let sec = totalTime % 60
+        
+        if min < 10 {
+            str += "0\(String(min))"
+        } else {
+            str += "\(String(min))"
+        }
+        
+        str += ":"
+        
+        if sec < 10 {
+            str += "0\(String(sec))"
+        } else {
+            str += "\(String(sec))"
+        }
+        
+        return str
     }
 }

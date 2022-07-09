@@ -26,12 +26,12 @@ class RecordControllerView: UIView {
 
     private lazy var uploadButton: UIButton = {
         let button = UIButton()
-        button.setImage(systemName: "arrow.up.circle", state: .normal)
+        button.setImage(systemName: "arrow.up.circle.fill", state: .normal)
         button.isEnabled = false
         button.tintColor = .label
-        button.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 30).isActive = true
-
+        button.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        
         button.addTarget(self, action: #selector(didTapUploadButton), for: .touchUpInside)
         return button
     }()

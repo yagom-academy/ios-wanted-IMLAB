@@ -8,6 +8,7 @@
 import UIKit
 
 class CutoffFrequencyView: UIView {
+    
     private let cutoffLabel: UILabel = {
         let label = UILabel()
         label.text = "cutoff freqency"
@@ -27,10 +28,20 @@ class CutoffFrequencyView: UIView {
 
         return slider
     }()
+    
+    private let recordTimeLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 18, weight: .semibold)
+        label.textColor = .label
+        label.text = "00:00"
+        
+        return label
+    }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
+        NotificationCenter.default.addObserver(self, selector: #selector(sendRecordTimeNotification(_:)), name: Notification.Name("SendRecordTime"), object: nil)
         layout()
     }
 
@@ -44,13 +55,19 @@ class CutoffFrequencyView: UIView {
 
         NotificationCenter.default.post(name: Notification.Name("SendCutValue"), object: cutValue, userInfo: nil)
     }
+    
+    @objc func sendRecordTimeNotification(_ notification: Notification) {
+        guard let time = notification.object as? String else { return }
+        recordTimeLabel.text = time
+    }
 }
 
 extension CutoffFrequencyView {
     private func layout() {
         [
             cutoffLabel,
-            frequencySlider
+            frequencySlider,
+            recordTimeLabel
         ].forEach {
             addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -64,5 +81,8 @@ extension CutoffFrequencyView {
         frequencySlider.topAnchor.constraint(equalTo: cutoffLabel.bottomAnchor, constant: 8).isActive = true
         frequencySlider.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: inset).isActive = true
         frequencySlider.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -inset).isActive = true
+        
+        recordTimeLabel.topAnchor.constraint(equalTo: frequencySlider.bottomAnchor, constant: 8).isActive = true
+        recordTimeLabel.centerXAnchor.constraint(equalTo: frequencySlider.centerXAnchor).isActive = true
     }
 }
