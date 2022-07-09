@@ -54,8 +54,10 @@ class SoundManager {
     private var fileUrl: URL!
     private var audioFile: AVAudioFile!
     
+    private let recordEngine = AVAudioEngine()
+    
     private let engine = AVAudioEngine()
-    private lazy var inputNode = engine.inputNode
+    private lazy var inputNode = recordEngine.inputNode
     private let mixerNode = AVAudioMixerNode()
     
     private var frequency: Float = 40000
@@ -138,15 +140,16 @@ class SoundManager {
         }
         
         playerNode.installTap(onBus: 0, bufferSize: 1024, format: playerNode.outputFormat(forBus: 0)) { [unowned self] buffer, time in
-            guard var currentPosition = getCurrentFrame(lastRenderTime: time) else { return }
             
-            currentPosition = specifyFrameStandard(frame: currentFrame + seekFrame, length: audioLengthSamples)
+            
+            currentPosition = currentFrame + seekFrame
+            currentPosition = max(currentPosition, 0)
+            currentPosition = min(currentPosition, audioLengthSamples)
             
             if currentPosition >= audioLengthSamples {
                 resetPlayer(edge: .end)
-            } else {
-                playBackVisualizerDelegate.operatingwaveProgression(progress: Float(currentPosition)/Float(audioLengthSamples), audioLength: Float(audioLengthSamples))
             }
+            playBackVisualizerDelegate.operatingwaveProgression(progress: Float(currentPosition)/Float(audioLengthSamples), audioLength: Float(audioLengthSamples))
         }
     }
     
@@ -154,16 +157,7 @@ class SoundManager {
         guard let playerTime = playerNode.playerTime(forNodeTime: lastRenderTime) else { return nil }
         return playerTime.sampleTime
     }
-    
-    private func specifyFrameStandard(frame: AVAudioFramePosition, length: AVAudioFramePosition) -> AVAudioFramePosition {
-        var convertedFrame = frame
-        
-        convertedFrame = max(frame, 0)
-        convertedFrame = min(frame, length)
-        
-        return convertedFrame
-    }
-    
+   
     func playNpause() {
         if isPlaying {
             playerNode.pause()
@@ -194,23 +188,24 @@ class SoundManager {
         
         let offset = AVAudioFramePosition(time * audioSampleRate)
         seekFrame = currentPosition + offset
-        currentPosition = specifyFrameStandard(frame: seekFrame, length: audioLengthSamples)
+        seekFrame = max(seekFrame, 0)
+        seekFrame = min(seekFrame, audioLengthSamples)
+        currentPosition = seekFrame
         
         let wasPlaying = playerNode.isPlaying
-        
         playerNode.stop()
         
-        if currentPosition < 0 {
-            resetPlayer(edge: .start)
-            playerNode.scheduleFile(audioFile, at: nil)
-            if wasPlaying {
-                playerNode.play()
-            } else {
-                isPlaying = false
+        if currentPosition < audioLengthSamples {
+            
+            currentPosition = currentFrame + seekFrame
+            currentPosition = max(currentPosition, 0)
+            currentPosition = min(currentPosition, audioLengthSamples)
+            
+            if currentPosition >= audioLengthSamples {
+                playerNode.stop()
+                resetPlayer(edge: .end)
+                
             }
-            
-        } else if currentPosition < audioLengthSamples {
-            
             needFileSchedule = false
             
             let frameCount = AVAudioFrameCount(audioLengthSamples - seekFrame)
@@ -278,11 +273,11 @@ extension SoundManager {
         let format = inputNode.outputFormat(forBus: 0)
         mixerNode.volume = 0
         
-        engine.attach(mixerNode)
-        engine.attach(eqNode)
+        recordEngine.attach(mixerNode)
+        recordEngine.attach(eqNode)
         
-        engine.connect(inputNode, to: eqNode, format: format)
-        engine.connect(eqNode, to: mixerNode, format: format)
+        recordEngine.connect(inputNode, to: eqNode, format: format)
+        recordEngine.connect(eqNode, to: mixerNode, format: format)
     }
     
     
@@ -327,7 +322,7 @@ extension SoundManager {
         }
         
         do {
-            try engine.start()
+            try recordEngine.start()
         } catch {
             fatalError()
         }
@@ -335,7 +330,7 @@ extension SoundManager {
     
     func stopRecord() {
         mixerNode.removeTap(onBus: 0)
-        engine.stop()
+        recordEngine.stop()
         isEnginePrepared = false
     }
 }
