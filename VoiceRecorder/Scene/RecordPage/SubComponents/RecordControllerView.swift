@@ -26,7 +26,7 @@ class RecordControllerView: UIView {
 
     private lazy var uploadButton: UIButton = {
         let button = UIButton()
-        button.setImage(systemName: "arrow.down.circle", state: .normal)
+        button.setImage(systemName: "arrow.up.circle", state: .normal)
         button.isEnabled = false
         button.tintColor = .label
         button.widthAnchor.constraint(equalToConstant: 30).isActive = true
@@ -63,6 +63,7 @@ class RecordControllerView: UIView {
     }
     
     @objc func didTapUploadButton() {
+        self.uploadButton.isEnabled = false
         let file = viewModel.dateToFileName() + "+" + viewModel.duration()
         viewModel.saveRecord(file) { [weak self] complete in
             guard let self = self else { return }

@@ -145,7 +145,7 @@ class RecordManager: RecordService {
         waveForms = [Int](repeating: 0, count: 100)
         currentSample = 0
 
-        print(totalWaveData.count)
+        NotificationCenter.default.post(name: Notification.Name("GetTotlaWaves"), object: self.totalWaveData)
     }
 
     func getWaveData() -> [Int] {
